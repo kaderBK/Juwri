@@ -1,0 +1,59 @@
+{%- comment -%}
+  Room card (library v1, B1c) for hotels / stays. Rooms are catalogue items.
+  Amenities come from the description when it is written as a list
+  separated by "·", "•" or "|" (e.g. "King bed · Balcony · Free Wi-Fi");
+  any other description shows as text. CTA: Book (data-mb-add, when the
+  store takes orders) or, when ordering is off, the owner's booking link.
+  Params: item (ItemDrop), heading_tag ('h3'), show_amenities (bool),
+  per_night (bool), booking_url (vetted https:// or /path, may be '').
+{%- endcomment -%}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign desc = item.description | strip_html | strip
+  assign list = desc | replace: '•', '·' | replace: '|', '·'
+  assign amenities = list | split: '·'
+  assign amenity_count = amenities | size
+  assign as_list = false
+  if show_amenities and amenity_count > 1
+    assign as_list = true
+  endif
+  assign out = false
+  if item.is_sold_out or item.stock_status == 'out'
+    assign out = true
+  endif
+-%}
+<article class="mbs-card-room{% if out %} is-out{% endif %}" data-mb-item="{{ item.id }}" data-mb-name="{{ item.name | escape }}" data-mb-price="{{ item.price }}" data-mb-rating="{{ item.rating }}">
+  <div class="mbs-card-room__media">
+    {%- if item.image -%}
+      {%- assign img = item.image | media_url: 'menu' -%}
+      {%- render 'media', src: img, alt: item.name, width: 800, height: 500, class: 'mbs-card-room__img', priority: false, sizes: '(min-width: 960px) 460px, 100vw' -%}
+    {%- endif -%}
+    {%- if item.is_popular -%}<span class="mbs-card-room__flag">{{ 'Popular' | t }}</span>{%- endif -%}
+  </div>
+  <div class="mbs-card-room__body">
+    <{{ tag }} class="mbs-card-room__name"><a class="mbs-card-room__link" href="?item={{ item.id }}" data-mb-open="{{ item.id }}">{{ item.name | escape }}</a></{{ tag }}>
+    {%- if item.rating_count > 0 -%}
+    <p class="mbs-card-room__rating">{%- render 'icon', name: 'star', size: 14 -%}<bdi>{{ item.rating }}</bdi> <span>(<bdi>{{ item.rating_count }}</bdi>)</span></p>
+    {%- endif -%}
+    {%- if as_list -%}
+    <ul class="mbs-card-room__amenities" role="list" aria-label="{{ 'Amenities' | t }}">
+      {%- for a in amenities limit: 6 -%}
+        {%- assign amenity = a | strip -%}
+        {%- if amenity != '' -%}<li class="mbs-card-room__amenity">{{ amenity | escape }}</li>{%- endif -%}
+      {%- endfor -%}
+    </ul>
+    {%- elsif desc != '' -%}
+    <p class="mbs-card-room__desc">{{ desc | truncate: 140 | escape }}</p>
+    {%- endif -%}
+    <div class="mbs-card-room__foot">
+      <p class="mbs-card-room__price"><bdi data-mb-money="{{ item.price }}">{{ item.price | money }}</bdi>{% if per_night %} <span class="mbs-card-room__unit">{{ 'per night' | t }}</span>{% endif %}</p>
+      {%- if flags.allow_order -%}
+      <button type="button" class="mbs-card-room__book" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}"{% if out %} disabled{% endif %}>
+        {%- if out -%}{{ 'Unavailable' | t }}{%- else -%}{{ vocab.add_to_cart | escape }}{%- endif -%}
+      </button>
+      {%- elsif booking_url != '' -%}
+      <a class="mbs-card-room__book" href="{{ booking_url | escape }}">{{ vocab.add_to_cart | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

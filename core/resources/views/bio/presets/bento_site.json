@@ -1,0 +1,28 @@
+{
+  "slug": "bento_site",
+  "starter": "social_grid",
+  "name": "Bento Site",
+  "family": "bento",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#f1f2f4",
+    "--ink": "#1c1e24",
+    "--muted": "#7c8090",
+    "--card": "#ffffff",
+    "--btn-bg": "#ffffff",
+    "--btn-fg": "#1c1e24",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#3d6df2",
+    "--accent-ink": "#ffffff",
+    "--icon-fg": "#3d6df2",
+    "--radius": "20px",
+    "--shadow": "0 2px 8px rgba(20,25,40,.07)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

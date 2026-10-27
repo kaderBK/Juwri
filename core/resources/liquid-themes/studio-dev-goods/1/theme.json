@@ -1,0 +1,11 @@
+{
+  "name": "Studio Dev Goods",
+  "slug": "studio-dev-goods",
+  "version": "1.0.0",
+  "author": "juwri",
+  "description": "Developer reference theme for the Theme Studio section library v1 — goods, services, stays and parts sections. Uses commerce runtime v2. Not a marketplace theme.",
+  "min_platform_version": "2.0",
+  "source": "liquid",
+  "library": "1",
+  "commerce_runtime": "v2"
+}

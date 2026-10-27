@@ -1,0 +1,81 @@
+{%- comment -%}
+  Testimonials (library v1): quotes the OWNER types in (not platform
+  reviews — those live in the reviews section). Blocks: quote, author,
+  detail, rating 0-5 (0 hides the stars). Blocks without a quote are
+  skipped and the section renders nothing until one has text, so a fresh
+  preset never shows made-up praise.
+{%- endcomment -%}
+{%- liquid
+  assign shown = 0
+  for block in section.blocks
+    if block.type == 'testimonial'
+      assign q = block.settings.quote | strip
+      if q != ''
+        assign shown = shown | plus: 1
+      endif
+    endif
+  endfor
+  assign heading = section.settings.heading | strip
+-%}
+{%- if shown > 0 -%}
+<section class="mbs-testimonials mbs-testimonials--{{ section.settings.layout | escape }}" aria-labelledby="mbs-testimonials-{{ section.id | escape }}">
+  <h2 class="mbs-testimonials__title" id="mbs-testimonials-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- else -%}{{ 'What customers say' | t }}{%- endif -%}</h2>
+  <ul class="mbs-testimonials__list" role="list">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'testimonial' -%}
+        {%- assign q = block.settings.quote | strip -%}
+        {%- if q != '' -%}
+          {%- assign author = block.settings.author | strip -%}
+          {%- assign detail = block.settings.detail | strip -%}
+          {%- assign stars = block.settings.rating | default: 0 | at_least: 0 | at_most: 5 | round -%}
+          <li class="mbs-testimonials__item">
+            <figure class="mbs-testimonials__card">
+              {%- if stars > 0 -%}
+                <p class="mbs-testimonials__stars" role="img" aria-label="{{ 'Rating' | t }}: {{ stars }} / 5">{%- for i in (1..stars) -%}{%- render 'icon', name: 'star', size: 16 -%}{%- endfor -%}</p>
+              {%- endif -%}
+              <blockquote class="mbs-testimonials__quote"><p>{{ q | escape | newline_to_br }}</p></blockquote>
+              {%- if author != '' or detail != '' -%}
+                <figcaption class="mbs-testimonials__by">
+                  {%- if author != '' -%}<b class="mbs-testimonials__author">{{ author | escape }}</b>{%- endif -%}
+                  {%- if detail != '' -%}<span class="mbs-testimonials__detail">{{ detail | escape }}</span>{%- endif -%}
+                </figcaption>
+              {%- endif -%}
+            </figure>
+          </li>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "group": "trust",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = What customers say)", "default": "" },
+    { "id": "layout", "type": "select", "label": "Layout", "options": [
+      { "value": "grid", "label": "Grid" },
+      { "value": "carousel", "label": "Swipe row" }
+    ], "default": "grid" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "limit": 12,
+      "settings": [
+        { "id": "quote", "type": "textarea", "label": "Quote", "default": "" },
+        { "id": "author", "type": "text", "label": "Name", "default": "" },
+        { "id": "detail", "type": "text", "label": "Detail (e.g. city or occasion)", "default": "" },
+        { "id": "rating", "type": "range", "label": "Stars (0 = hide)", "min": 0, "max": 5, "step": 1, "default": 5 }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Testimonials", "blocks": [ { "type": "testimonial" }, { "type": "testimonial" }, { "type": "testimonial" } ] }
+  ]
+}
+{% endschema %}

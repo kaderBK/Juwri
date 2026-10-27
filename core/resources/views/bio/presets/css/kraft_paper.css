@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--kraft_paper{background-image:radial-gradient(rgba(74,54,32,.08) 1px,transparent 1.4px),radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.4px);background-size:11px 11px,17px 17px;background-position:0 0,6px 8px}
+.bio--kraft_paper .bio-name{font-family:'Fraunces',serif}
+.bio--kraft_paper .bio-avatar{border:2.5px solid #4a3620;transform:rotate(-5deg);background:rgba(255,251,240,.5)}
+.bio--kraft_paper .bio-link:hover{transform:translate(-1.5px,-1.5px);box-shadow:4px 4px 0 rgba(74,54,32,.35)}
+.bio--kraft_paper .bio-link__icon{border:1.5px dashed #a4632a}
+.bio--kraft_paper .bio-socials a{border:1.5px solid #4a3620;box-shadow:2px 2px 0 rgba(74,54,32,.35)}

@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'Nous utilisons des cookies',
+    'cookie.body' => 'Les cookies essentiels font fonctionner :brand. Avec votre consentement, nous utilisons aussi des cookies d\'analyse pour comprendre comment le site est utilisé. Aucun cookie marketing n\'est déposé sans votre consentement. [Politique de confidentialité](/privacy)',
+    'cookie.accept' => 'Accepter l\'analyse',
+    'cookie.reject' => 'Essentiels uniquement',
+    'cookie.settings' => 'Paramètres des cookies',
+    'cookie.settings.essential' => 'Essentiels (toujours actifs)',
+    'cookie.settings.analytics' => 'Analyse : nous aide à améliorer le site',
+    'cookie.settings.marketing' => 'Marketing : mesure nos campagnes',
+    'cookie.save' => 'Enregistrer mes choix',
+    'signup.accept' => 'J\'accepte les [Conditions d\'abonnement](/terms), l\'[Avenant sur le traitement des données](/legal/dpa) et la [Politique d\'utilisation acceptable](/legal/aup).',
+    'signup.business' => 'Je confirme m\'inscrire pour une entreprise, et non en tant que consommateur.',
+    'signup.privacy' => 'Nous utilisons vos informations pour gérer votre compte, comme décrit dans notre [Politique de confidentialité](/privacy).',
+    'signup.marketing_optin' => 'Envoyez-moi les nouveautés et conseils produit par e-mail (désinscription possible à tout moment).',
+    'checkout.accept' => 'En payant, vous acceptez les [Conditions d\'abonnement](/terms). Les forfaits se renouvellent automatiquement ; vous pouvez résilier à tout moment dans les Paramètres.',
+    'checkout.vat' => 'Les prix s\'entendent hors TVA, le cas échéant.',
+    'pharmacy.gate' => 'La vente de médicaments n\'est possible que dans les pays que nous avons activés. Téléversez vos documents de licence pour publier. Les médicaments sur ordonnance et les substances contrôlées sont interdits.',
+    'footer.legal' => 'Mentions légales',
+    'footer.terms' => 'Conditions d\'abonnement',
+    'footer.privacy' => 'Politique de confidentialité',
+    'footer.dpa' => 'Avenant sur le traitement des données',
+    'footer.aup' => 'Politique d\'utilisation acceptable',
+    'footer.sla' => 'Niveaux de service et assistance',
+    'footer.subprocessors' => 'Sous-traitants ultérieurs',
+    'footer.security' => 'Sécurité',
+    'footer.free_reseller' => 'Conditions du palier revendeur gratuit',
+    'footer.status' => 'État du système',
+    'footer.trademarks' => 'Politique relative aux marques',
+    'footer.licensing' => 'Licences open source',
+    'footer.company' => 'JUWRI LTD · Société n° 14363043 · 128 City Road, London, EC1V 2NX, Royaume-Uni',
+    'footer.copyright' => '© 2026 JUWRI LTD. juwri est open source sous licence AGPL-3.0.',
+    'footer.powered' => 'Propulsé par juwri',
+    'footer.contact' => 'Contact',
+    'footer.language' => 'Langue',
+    'legal.version' => 'Version :version · En vigueur depuis le :date',
+    'legal.updated' => 'Dernière mise à jour : :date · Résumé en langage clair — ne constitue pas un avis juridique',
+    'legal.translation_note' => 'Cette traduction arabe est fournie pour faciliter la lecture. La version anglaise fait foi.',
+    'legal.changes' => 'Nous donnons un préavis d\'au moins 30 jours avant toute modification importante de ces documents.',
+    'legal.contact' => 'Questions : legal@juwri.com',
+    'mail.terms_changed.subject' => 'Nous mettons à jour les Conditions de juwri le :date',
+    'mail.renewal.subject' => 'Votre forfait juwri se renouvelle le :date',
+    'mail.payment_failed.subject' => 'Action requise : le paiement juwri a échoué',
+    'mail.suspension_warning.subject' => 'Vos services juwri seront suspendus dans 7 jours',
+    'mail.breach_notice.subject' => 'Avis de sécurité important concernant votre compte juwri',
+    'mail.export_window.subject' => 'Vos données peuvent être exportées jusqu\'au :date',
+    'mail.reseller_winddown_reseller.subject' => 'Votre compte revendeur doit être renouvelé : vos boutiques sont menacées',
+    'mail.reseller_winddown_store.subject' => 'Changements sur la plateforme qui fait fonctionner votre boutique',
+    'signup.accept_required' => 'Veuillez accepter les Conditions d\'abonnement, l\'Avenant sur le traitement des données et la Politique d\'utilisation acceptable pour continuer.',
+    'signup.business_required' => 'Veuillez confirmer que vous vous inscrivez pour une entreprise.',
+    'legal.reaccept.upcoming' => 'Nous mettons à jour les documents suivants le :date : :documents. Veuillez lire la nouvelle version et l\'accepter.',
+    'legal.reaccept.updated' => 'Nous avons mis à jour les documents suivants : :documents. Veuillez lire la nouvelle version et l\'accepter.',
+    'legal.reaccept.accept' => 'J\'accepte',
+    'legal.reaccept.done' => 'Merci. Votre acceptation a été enregistrée.',
+    'legal.english_only' => 'Ce document est publié en anglais.',
+];

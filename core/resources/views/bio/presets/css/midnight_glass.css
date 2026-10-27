@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--midnight_glass{background-image:radial-gradient(300px 300px at 85% 4%,rgba(255,122,41,.34),transparent 65%),radial-gradient(340px 300px at 0% 30%,rgba(147,66,245,.3),transparent 65%),radial-gradient(280px 260px at 70% 78%,rgba(255,64,129,.16),transparent 60%),linear-gradient(180deg,#120a1c,#0b0710 55%)}
+.bio--midnight_glass .bio-link{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.bio--midnight_glass .bio-link:hover{border-color:rgba(255,178,107,.55);background:rgba(255,255,255,.09)}
+.bio--midnight_glass .bio-name{font-family:'Unbounded',sans-serif;letter-spacing:.01em}
+.bio--midnight_glass .bio-avatar{background:conic-gradient(from 210deg,#ff7a29,#9342f5,#ff4081,#ff7a29);padding:3px}
+.bio--midnight_glass .bio-avatar img,.bio--midnight_glass .bio-avatar span{width:100%;height:100%;border-radius:50%;background:#160d20;display:grid;place-items:center}

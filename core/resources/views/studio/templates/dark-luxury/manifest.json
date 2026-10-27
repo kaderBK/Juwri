@@ -1,0 +1,31 @@
+{
+    "name": "Dark Luxury",
+    "aspects": [
+        "a4",
+        "letter",
+        "story"
+    ],
+    "colors": {
+        "accent": "#c9a24b",
+        "bg": "#14161a",
+        "text": "#ece7db"
+    },
+    "fonts": [
+        {
+            "family": "serif-stack",
+            "stack": "Didot, 'Playfair Display', Georgia, 'Amiri', 'Geeza Pro', serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 22,
+        "columns": 2,
+        "desc_max_chars": 90
+    },
+    "art_brief": "deep charcoal with subtle marble veining and faint scattered gold dust",
+    "rtl": true,
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ]
+}

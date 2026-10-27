@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--photo_hero .bio-link{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.bio--photo_hero .bio-link:hover{background:rgba(255,255,255,.15)}
+.bio--photo_hero .bio-socials a{background:transparent;color:#a8a8b4}

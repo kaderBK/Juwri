@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+# Least privilege: jobs only read the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP 8.4 (composer, Pint, PHPStan, Pest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ":memory:"
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # 2.31.1
+        with:
+          php-version: "8.4"
+          extensions: mbstring, pdo, sqlite3, gd, zip, exif, bcmath
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict --no-check-publish --working-dir=core
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --working-dir=core
+
+      - name: Prepare environment
+        working-directory: core
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # The tree is not fully Pint-clean (legacy files), so Pint checks the PHP files a pull request changes.
+      - name: Pint --test (changed PHP files)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: origin/${{ github.base_ref }}
+        run: |
+          git fetch --no-tags origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+          bash .github/scripts/pint-changed.sh
+
+      - name: PHPStan
+        working-directory: core
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G
+
+      - name: Pest (sqlite)
+        working-directory: core
+        run: php artisan test --parallel --colors=always --exclude-group=platform-e2e
+
+  node:
+    name: Node 20 (build and tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: "20"
+
+      - name: Section library stylesheet is up to date
+        run: node tools/liquid-library/build.mjs --check
+
+      - name: Desktop bridge install and tests
+        working-directory: desktop
+        run: |
+          npm ci --no-audit --no-fund
+          npm test

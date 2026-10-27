@@ -1,0 +1,134 @@
+{
+    "name": "Car parts",
+    "description": "A dark, technical parts counter: fitment search first, then search, categories and a product grid with part numbers.",
+    "vertical": "carparts",
+    "priority": "browse",
+    "tokens": {
+        "colors.primary": "#f2b705",
+        "colors.background": "#121417",
+        "colors.surface": "#1c2025",
+        "colors.text": "#eef1f4",
+        "colors.accent": "#ffb454",
+        "layout.radius": "soft",
+        "layout.density": "compact"
+    },
+    "font_pair": "geist-inter",
+    "translations": {
+        "ar": {
+            "name": "قطع غيار السيارات",
+            "description": "واجهة قطع غيار داكنة وتقنية: البحث حسب المركبة أولًا، ثم البحث والتصنيفات وشبكة منتجات بأرقام القطع."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "split",
+                    "sticky": true
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "minimal-text",
+                    "height": "s",
+                    "align": "start"
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "products"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog"
+                ]
+            },
+            "fitment": {
+                "type": "fitment-search",
+                "settings": {
+                    "mode": "filter",
+                    "show_part_number": true
+                }
+            },
+            "search": {
+                "type": "search-bar",
+                "settings": {
+                    "sticky": true
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "chips",
+                    "sticky": false,
+                    "show_count": true
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "products": {
+                "type": "product-grid",
+                "settings": {
+                    "image_ratio": "square",
+                    "columns_desktop": 4,
+                    "show_sku": true,
+                    "show_filters": true,
+                    "show_sort": true
+                }
+            },
+            "status": {
+                "type": "store-status",
+                "settings": []
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "hours": {
+                "type": "hours",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "bar"
+                }
+            }
+        },
+        "order": [
+            "header",
+            "hero",
+            "fitment",
+            "search",
+            "catnav",
+            "offers",
+            "products",
+            "status",
+            "reviews",
+            "location",
+            "hours",
+            "footer",
+            "cart-bar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

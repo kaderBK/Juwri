@@ -1,0 +1,41 @@
+{%- comment -%}
+  Photo card (library v1): 4:3 image on top, name, description, badges,
+  rating, price and the add button. The name is the card's deep link
+  (?item=ID + data-mb-open) and its hit area is stretched over the card;
+  the favourite and add buttons sit above it.
+  `catalog: true` marks the card for the runtime's search / filter / sort
+  (data-mb-item + name/price/rating/diet attributes) — only the main
+  catalogue sets it, so rails and strips stay put while the diner filters.
+  Shared card parts — the stretched name link, favourite + add buttons, the
+  sold-out label and card images (mbs-card-photo__link / __fav / __add /
+  __out / __img) — are styled once in card-photo.css and reused by the
+  other card snippets, which only add their own layout.
+  Params: item, allow_order, show_desc, show_rating, show_badges,
+  show_image, show_fav, catalog, eager (bool: first image above the fold).
+{%- endcomment -%}
+<article class="mbs-card-photo{% if item.is_sold_out %} is-out{% endif %}"{% if catalog %} data-mb-item="{{ item.id }}" data-mb-name="{{ item.name | escape }}" data-mb-price="{{ item.price }}" data-mb-rating="{{ item.rating }}"{% if item.is_popular %} data-mb-popular{% endif %}{% if item.is_vegan %} data-mb-veg{% endif %}{% if item.is_halal %} data-mb-halal{% endif %}{% if item.is_gluten_free %} data-mb-gf{% endif %}{% if item.is_daily_special %} data-mb-special{% endif %}{% endif %}>
+  {%- if show_image -%}
+  <div class="mbs-card-photo__media">
+    {%- if item.image -%}
+      {%- assign src = item.image | media_url: 'menu' -%}
+      {%- capture img_class -%}mbs-card-photo__img{% if item.is_sold_out %} mbs-card-photo__img--out{% endif %}{%- endcapture -%}
+      {%- render 'media', src: src, alt: item.name, width: 600, height: 450, class: img_class, priority: eager, sizes: '(min-width: 768px) 320px, 50vw' -%}
+    {%- endif -%}
+    {%- if show_fav -%}<button type="button" class="mbs-card-photo__fav" data-mb-fav="{{ item.id }}" aria-pressed="false" aria-label="{{ 'Save to favorites' | t }}: {{ item.name | escape }}">{%- render 'icon', name: 'heart', size: 18 -%}</button>{%- endif -%}
+  </div>
+  {%- endif -%}
+  <div class="mbs-card-photo__body">
+    <h3 class="mbs-card-photo__name"><a class="mbs-card-photo__link" href="?item={{ item.id }}" data-mb-open="{{ item.id }}">{{ item.name | escape }}</a></h3>
+    {%- if show_badges -%}{%- render 'badges', item: item, offer: true -%}{%- endif -%}
+    {%- if show_desc and item.description -%}<p class="mbs-card-photo__desc">{{ item.description | escape }}</p>{%- endif -%}
+    {%- if show_rating -%}{%- render 'rating-stars', rating: item.rating, count: item.rating_count -%}{%- endif -%}
+    <div class="mbs-card-photo__foot">
+      {%- render 'price', amount: item.price, original: item.original_price, from: item.has_variants -%}
+      {%- if item.is_sold_out -%}
+        <span class="mbs-card-photo__out">{{ 'Sold out' | t }}</span>
+      {%- elsif allow_order -%}
+        <button type="button" class="mbs-card-photo__add" data-mb-add="{{ item.id }}" aria-label="{{ 'Add' | t }}: {{ item.name | escape }}"></button>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

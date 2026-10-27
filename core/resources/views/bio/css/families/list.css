@@ -1,0 +1,12 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* list family — centered profile + vertical stack of link cards. Fully token-driven;
+   presets supply colours/fonts/radius/shadow and (optionally) --link-justify / --icon-display
+   / --arrow-display to switch between art-directed cards and simple app-style buttons. */
+.fam-list .bio-in{padding:54px 22px 0;text-align:center}
+.fam-list .bio-name{font-family:var(--font-display,inherit)}
+.fam-list .bio-blocks{text-align:start;margin-top:6px}
+.fam-list .bio-block{margin-bottom:var(--gap,12px)}
+.fam-list .bio-socials{margin-top:18px}
+.fam-list .bio-feat{margin-top:8px}

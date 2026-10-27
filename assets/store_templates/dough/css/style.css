@@ -1,0 +1,1864 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   dough — charcoal & cream pizza post_template · production stylesheet
+   Faithful port of rev/dough/demo.css (phone-frame scaffold removed;
+   scoped under .dough so it owns the whole viewport inside layout.blade).
+   palette: charcoal #17181C · cream #F2EDE4 · lavender #C9CAD8
+            orange #F2995E · sage #A9C0A2 · ink #1A1B1E
+   ═══════════════════════════════════════════════════════════ */
+
+.dough{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is dough's own value,
+     kept as the var() fallback so a store that customized nothing — or a render
+     with no token include — is byte-identical to today. Each mapped literal equals
+     the matching colors.* schema default (theme.json), so emission-is-overrides-only
+     guarantees parity. The dough SCHEMA maps the "background" role to the warm
+     cream page surface (#F2EDE4), not to the fixed charcoal app chrome. */
+  --charcoal:#17181C;                /* app viewport chrome, not the background role; keep literal */
+  --charcoal-2:#1E2025;
+  --cream:var(--tc-background, #F2EDE4);
+  --cream-2:#E9E2D4;                 /* hand-tuned darker cream tint; keep literal */
+  /* text drawn on the charcoal surfaces (onboarding, OTP, menu pill, banners) —
+     stays light in BOTH palettes, unlike --cream which is a surface token */
+  --on-dark:#F2EDE4;
+  --panel:var(--tc-surface, #FFFFFF);   /* cart/checkout panel — same surface role as --card */
+  --lav:#C9CAD8;
+  --lav-2:#BDBECF;
+  --card:var(--tc-surface, #FFFFFF);
+  --doodle:#E8DFCE;
+  /* ink */
+  --ink:var(--tc-text, #1A1B1E);
+  --ink-2:#5F5B54;                   /* secondary/tertiary ink, hand-tuned; keep literal */
+  --ink-3:#6E6A63;
+  --line:rgba(26,27,30,.09);
+  --line-2:rgba(26,27,30,.16);
+  --stroke-2:rgba(26,27,30,.16);
+  /* brand accents — dough's PRIMARY is its orange (rule: the brand orange maps to
+     primary, never to the semantic accent role). Its SECONDARY brand is the sage
+     (positive/loyalty), mapped to the accent role. The -deep / -ink companions are
+     hand-tuned shade + on-fill pairs whose derived token stops differ materially,
+     so they stay literal. */
+  --orange:var(--tc-primary, #F2995E);
+  --orange-deep:#E07F3F;             /* hand-tuned deep; derived primary-600 differs, keep */
+  --orange-ink:#422814;              /* ink drawn ON orange fills; keep literal */
+  --sage:var(--tc-accent, #A9C0A2);
+  --sage-deep:#7E9B76;               /* hand-tuned deep; derived accent-600 differs, keep */
+  --sage-ink:#22301E;                /* ink drawn ON sage washes; keep literal */
+  --red:#D96A57;                     /* genuine error/status hue, NOT a brand role; keep literal */
+  /* radius — card stays literal: dough's 22px matches no RADIUS_SCALE step
+     (round derives --tr-card:18px, adopting it would shrink every untouched
+     card 4px and break parity). --r-pill (999px) DOES match every non-"none"
+     pill step, so it adopts the token; big/sheet stay literal (no token match). */
+  --r-card:22px;
+  --r-big:28px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:30px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-pill:30; --z-scrim:40; --z-sheet:50; --z-search:55; --z-toast:60; --z-fly:70; --z-onboard:80;
+  /* type — body follows the self-hosted pairing (WI-T2); dough's schema exposes
+     no fonts.pair control, so --tf-body is never emitted and these degrade to
+     dough's own stacks (a pure no-op today, forward-compatible if a pair is
+     added). --tf-body always ends in the pairing's Arabic family, so RTL
+     (--font-ar) can share it safely. dough has no separate display face. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Manrope",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+/* ── page chrome: the app owns the whole viewport ────────── */
+html:has(.dough),body:has(.dough){height:100%;background:#101014}
+body:has(.dough){margin:0;overflow:hidden}
+/* the layout's floating WhatsApp widget clashes with dough's own chrome */
+body:has(.dough) #whatsapp-chat-widget{display:none}
+
+.dough,.dough *{margin:0;padding:0;box-sizing:border-box}
+.dough{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;isolation:isolate;
+  font-family:var(--font-ui);
+  background:var(--charcoal);
+  color:var(--on-dark);
+  -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: the off-stage views sit at translateX(±26%) and make this
+     box scrollable — focusing an input inside one (search, OTP) let the browser
+     scroll the whole shell sideways and strand the app off-viewport. clip never
+     scrolls. */
+  overflow:clip;
+}
+[dir="rtl"] .dough,[dir="rtl"] .dough input,[dir="rtl"] .dough button,[dir="rtl"] .dough textarea,[dir="rtl"] .dough select{font-family:var(--font-ar)}
+.dough img{display:block;max-width:100%}
+.dough button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dough input,.dough textarea,.dough select{
+  font:inherit;color:var(--ink);background:var(--card);
+  border:1px solid var(--line-2);border-radius:15px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease);
+}
+.dough input::placeholder,.dough textarea::placeholder{color:var(--ink-3)}
+.dough input:focus,.dough textarea:focus,.dough select:focus{border-color:var(--ink)}
+.dough ::-webkit-scrollbar{display:none}
+
+/* icons */
+.dough .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.dough .ic-xs{width:15px;height:15px}
+
+/* ── app shell & view router ─────────────────────────── */
+.dough .views{position:relative;flex:1;min-height:0}
+
+.dough .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--cream);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .dough .view{transform:translateX(-26%)}
+.dough .view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.dough .view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .dough .view.is-under{transform:translateX(9%) scale(.985)}
+
+.dough .view[data-view="cart"],.dough .view[data-view="checkout"]{background:var(--panel)}
+.dough .view[data-view="item"]{background:var(--lav)}
+.dough .view[data-view="otp"]{background:var(--charcoal)}
+
+.dough .view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.dough .view-scroll.flush{padding:0}
+.dough .tail-space{height:118px}
+.dough .tail-space.tall{height:36px}
+
+.dough .page-head{display:flex;align-items:center;gap:12px;padding:14px 2px 16px}
+.dough .page-head h1{font-size:24px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.dough .page-head.sub{padding-top:10px}
+.dough .count-badge{
+  min-width:26px;height:26px;border-radius:50%;padding:0 7px;
+  background:var(--sage);color:var(--sage-ink);
+  font-size:12.5px;font-weight:800;display:grid;place-items:center;
+  transition:transform .25s var(--ease-pop);
+}
+.dough .count-badge.bump{animation:dgh-badge-bump .45s var(--ease-pop)}
+@keyframes dgh-badge-bump{40%{transform:scale(1.4)}}
+
+/* generic circle button (cream surfaces) */
+.dough .circlebtn,.dough .fab{
+  position:relative;width:44px;height:44px;flex:none;border-radius:50%;
+  background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink);text-decoration:none;
+  box-shadow:0 4px 14px -8px rgba(26,27,30,.25);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.dough .circlebtn:active,.dough .fab:active{transform:scale(.9)}
+.dough .circlebtn.lav{background:rgba(255,255,255,.72);backdrop-filter:blur(6px);border-color:transparent}
+.dough .circlebtn.dark{background:transparent;border:1px solid rgba(232,223,206,.35);color:var(--on-dark);box-shadow:none}
+[dir="rtl"] .dough .circlebtn.back .ic,[dir="rtl"] .dough .fab.back .ic{transform:scaleX(-1)}
+/* the header cart button showed a bare dot while the nav pill showed a number */
+.dough .bag-count{
+  position:absolute;top:-3px;inset-inline-end:-3px;
+  min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--sage);color:var(--sage-ink);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;outline:2px solid var(--cream);
+}
+
+/* ── doodles (shared: onboarding + otp) ──────────────── */
+.dough .doodle-field{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.dough .doodle-field .dd{position:absolute;stroke:var(--doodle);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+.dough .dd-a{width:88px;height:88px;top:20%;inset-inline-end:7%;animation:dgh-dd-float 8s ease-in-out infinite alternate}
+.dough .dd-b{width:74px;height:74px;top:34%;inset-inline-start:7%;animation:dgh-dd-float 9.5s ease-in-out .8s infinite alternate-reverse}
+.dough .dd-c{width:52px;height:52px;top:7%;inset-inline-start:14%;animation:dgh-dd-spin 26s linear infinite}
+.dough .dd-d{width:84px;height:84px;bottom:30%;inset-inline-end:10%;animation:dgh-dd-float 7s ease-in-out .4s infinite alternate}
+.dough .dd-e{width:34px;height:34px;top:47%;inset-inline-end:26%;animation:dgh-dd-spin 18s linear infinite reverse}
+.dough .dd-f{width:60px;height:60px;bottom:47%;inset-inline-start:6%;animation:dgh-dd-float 10s ease-in-out 1.2s infinite alternate-reverse}
+.dough .dd-g{width:20px;height:20px;top:24%;inset-inline-start:44%;animation:dgh-dd-float 6s ease-in-out infinite alternate}
+@keyframes dgh-dd-float{to{transform:translateY(-16px) rotate(6deg)}}
+@keyframes dgh-dd-spin{to{rotate:360deg}}
+
+/* ── onboarding ──────────────────────────────────────── */
+.dough .onboard{
+  position:absolute;inset:0;z-index:var(--z-onboard);
+  background:var(--charcoal);color:var(--on-dark);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 30px calc(34px + env(safe-area-inset-bottom));
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+.dough .onboard.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.dough .ob-brand{position:absolute;top:64px;inset-inline-start:30px;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.dough .ob-brand i{font-style:normal;color:var(--orange)}
+.dough .ob-skip{
+  position:absolute;top:52px;inset-inline-end:20px;
+  padding:12px 18px;min-height:44px;border-radius:var(--r-pill);
+  border:1px solid rgba(232,223,206,.25);
+  font-size:12.5px;font-weight:600;color:rgba(232,223,206,.75);
+}
+.dough .ob-copy{margin-bottom:56px}
+.dough .ob-title{
+  font-size:47px;font-weight:300;line-height:1.13;letter-spacing:-.02em;
+  color:var(--on-dark);
+}
+.dough .ob-title span{display:block;opacity:0;transform:translateY(26px);animation:dgh-ob-line .7s var(--ease) forwards}
+.dough .ob-title span:nth-child(2){animation-delay:.1s}
+.dough .ob-title span:nth-child(3){animation-delay:.2s}
+/* A locale may break its headline into more lines than English does — keep the stagger. */
+.dough .ob-title span:nth-child(4){animation-delay:.3s}
+.dough .ob-title span:nth-child(5){animation-delay:.4s}
+@keyframes dgh-ob-line{to{opacity:1;transform:none}}
+.dough .ob-sub{margin-top:18px;font-size:13.5px;color:rgba(232,223,206,.55);max-width:30ch;opacity:0;animation:dgh-ob-line .7s var(--ease) .34s forwards}
+.dough .ob-foot{display:flex;align-items:center;justify-content:space-between}
+.dough .ob-dots{display:flex;gap:8px;align-items:center}
+.dough .ob-dots i{width:8px;height:8px;border-radius:var(--r-pill);background:rgba(232,223,206,.35);transition:width .45s var(--ease),background .45s var(--ease)}
+.dough .ob-dots i.is-on{width:28px;background:var(--on-dark)}
+.dough .ob-next{
+  width:64px;height:64px;border-radius:50%;
+  border:1px solid rgba(232,223,206,.4);color:var(--on-dark);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.dough .ob-next:active{transform:scale(.9)}
+.dough .ob-next:hover{background:rgba(232,223,206,.06)}
+[dir="rtl"] .dough .ob-next .ic{transform:scaleX(-1)}
+
+/* ── home ────────────────────────────────────────────── */
+.dough .home-top{display:flex;align-items:center;gap:10px;padding:12px 2px 4px}
+.dough .hello{flex:1;min-width:0;text-align:start;display:grid;gap:2px}
+.dough .hello-hi{font-size:13px;font-weight:500;color:var(--ink-3)}
+.dough .hello-big{font-size:23px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+/* open/closed status chip under the store name */
+.dough .open-chip{justify-self:start;display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:3px 10px;border-radius:var(--r-pill);font-size:11px;font-weight:800;background:rgba(126,155,118,.16);color:var(--sage-deep)}
+.dough .open-chip i{width:7px;height:7px;border-radius:var(--r-pill);background:var(--sage-deep)}
+.dough .open-chip.closed{background:rgba(217,106,87,.15);color:var(--red)}
+.dough .open-chip.closed i{background:var(--red)}
+
+/* brand / follow row (F2, ported from crave) — crave's green verified/CTA
+   accent is remapped to dough's own --orange primary token below. */
+.dough .brand-row{display:flex;align-items:center;gap:12px;padding:10px 2px 4px}
+.dough .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1.5px solid var(--line-2)}
+.dough .brand-logo img{width:100%;height:100%;object-fit:cover}
+.dough .brand-info{flex:1;min-width:0}
+.dough .brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.dough .brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = an actual seal medallion (filled brand seal + white check). */
+.dough .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.dough .verified-badge .vb-seal{width:17px;height:17px;display:block}
+.dough .verified-badge .vb-seal-fill{fill:var(--orange)}
+.dough .verified-badge .vb-seal-check{fill:#fff}
+/* Explicit sheet close button (top corner); wired in JS (dough closes via scrim,
+   not the grab bar). Generic so any sheet can carry one. */
+.dough .sheet .sheet-x{
+  position:absolute;inset-block-start:12px;inset-inline-end:14px;
+  width:34px;height:34px;margin:0;border-radius:50%;border:0;
+  background:var(--cream-2);color:var(--ink-2);display:grid;place-items:center;
+  cursor:pointer;z-index:2;
+}
+.dough .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.dough .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover hero (crave-parity fold-in), light theme: the greeting flips to white
+   over the cover, a dark top scrim keeps it legible, and the band fades to the
+   cream page bg. No cover / toggle off = the wrap is not emitted. ── */
+.dough .dough-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:150px}
+.dough .dough-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--cream-2)}
+.dough .dough-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.dough .dough-cover-scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.08) 46%),
+  linear-gradient(180deg, transparent 26%, var(--cream) 96%);}
+.dough .dough-cover .home-top{position:relative;z-index:2}
+.dough .dough-cover .hello-hi,.dough .dough-cover .hello-big{color:#fff}
+.dough .dough-cover .open-chip{color:#fff}
+.dough .dough-cover .home-top .circlebtn{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* ── collapsing header ── */
+.dough .cv-menu-sentinel{display:block;block-size:1px;inline-size:1px;pointer-events:none}
+.dough .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;
+  background:var(--card);box-shadow:0 6px 18px rgba(0,0,0,.14);
+  border-block-end:1px solid var(--cream-2);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .28s var(--ease);
+}
+.dough .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.dough .cv-condensed-logo{width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;background:var(--cream-2);display:grid;place-items:center}
+.dough .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.dough .cv-condensed-name{flex:1;min-width:0;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dough .cv-condensed-actions{display:flex;gap:7px;flex:none}
+.dough .cv-condensed-actions .circlebtn{width:38px;height:38px}
+@media (prefers-reduced-motion:reduce){.dough .cv-condensed{transition:none}}
+.dough .followbtn{
+  flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;
+  padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--cream);font-size:13px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.dough .followbtn:active{transform:scale(.94)}
+.dough .followbtn .following-label{display:none}
+.dough .followbtn.is-on{background:var(--card);color:var(--ink-2);border:1.5px solid var(--stroke-2)}
+.dough .followbtn.is-on .follow-label,.dough .followbtn.is-on .ic{display:none}
+.dough .followbtn.is-on .following-label{display:inline}
+
+.dough .promo{
+  position:relative;width:100%;margin-top:18px;text-align:start;
+  background:var(--orange);border-radius:var(--r-big);
+  padding:22px;min-height:150px;overflow:hidden;
+  display:flex;align-items:center;color:var(--orange-ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .promo:active{transform:scale(.98)}
+.dough .promo-copy{position:relative;z-index:2;display:grid;gap:8px;max-width:56%;justify-items:start}
+.dough .promo-kicker{font-size:12.5px;font-weight:600;line-height:1.45;opacity:.85}
+.dough .promo-off{font-size:31px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.dough .promo-btn{display:inline-block;margin-top:2px;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--cream);font-size:12px;font-weight:700}
+.dough .promo-pizza{
+  position:absolute;inset-inline-end:-30px;top:50%;translate:0 -50%;
+  width:158px;height:158px;object-fit:cover;border-radius:50%;
+  box-shadow:0 18px 34px rgba(66,40,20,.35);
+  transition:transform .6s var(--ease);
+}
+.dough .promo:hover .promo-pizza{transform:rotate(9deg) scale(1.04)}
+.dough .promo-tomato{
+  position:absolute;inset-inline-end:118px;top:12px;
+  width:42px;height:42px;object-fit:cover;border-radius:50%;
+  box-shadow:0 10px 18px rgba(66,40,20,.3);
+  animation:dgh-tomato-float 4.5s ease-in-out infinite alternate;
+}
+@keyframes dgh-tomato-float{to{translate:0 -9px;rotate:14deg}}
+
+.dough .cat-row{display:flex;align-items:center;gap:10px;padding:20px 0 6px;position:sticky;top:0;z-index:5;background:var(--cream)}
+.dough .cat-row::after{content:"";position:absolute;inset-inline:0;top:100%;height:14px;background:linear-gradient(var(--cream),transparent);pointer-events:none}
+.dough .cats{display:flex;gap:8px;overflow-x:auto;flex:1;min-width:0;padding:2px 2px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent)}
+[dir="rtl"] .dough .cats{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 26px),transparent)}
+.dough .chip{
+  flex:none;display:flex;align-items:center;gap:7px;
+  padding:11px 16px;min-height:44px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line);
+  font-size:13px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.dough .chip .emoji{font-size:14px;line-height:1}
+.dough .chip .chip-img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.dough .chip:active{transform:scale(.94)}
+.dough .chip.is-on{background:var(--ink);border-color:var(--ink);color:var(--cream);font-weight:700}
+.dough .seeall{flex:none;font-size:12.5px;font-weight:700;color:var(--ink-2);padding:6px 4px;min-height:44px;text-decoration:underline;text-underline-offset:3px}
+
+.dough .section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 22px) 2px 4px}
+.dough .section-head h2{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+
+/* product grid — white cards, round photos */
+.dough .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:12px}
+.dough .g-card{
+  position:relative;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-card);padding:14px 13px 13px;text-align:start;
+  display:grid;justify-items:center;gap:2px;
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:dgh-card-in .5s var(--ease) backwards;
+}
+@keyframes dgh-card-in{from{opacity:0;transform:translateY(18px)}}
+.dough .g-card:active{transform:scale(.965)}
+.dough .g-photo{width:104px;height:104px;object-fit:cover;border-radius:50%;box-shadow:0 12px 22px -10px rgba(26,27,30,.35);transition:transform .5s var(--ease);background:var(--cream-2)}
+.dough .g-card:hover .g-photo{transform:rotate(6deg) scale(1.05)}
+.dough .g-fav{
+  position:absolute;top:8px;inset-inline-start:8px;width:34px;height:34px;border-radius:50%;
+  background:var(--cream);display:grid;place-items:center;color:var(--ink-3);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .g-fav:active{transform:scale(.82)}
+.dough .g-fav .ic{width:15px;height:15px}
+.dough .g-fav.is-on{color:var(--red)}
+.dough .g-fav.is-on .ic{fill:currentColor}
+.dough .g-special{
+  position:absolute;top:12px;inset-inline-end:-4px;
+  background:var(--sage);color:var(--sage-ink);
+  font-size:9.5px;font-weight:800;letter-spacing:.02em;
+  padding:4px 9px;border-radius:10px 0 0 10px;
+}
+[dir="rtl"] .dough .g-special{border-radius:0 10px 10px 0}
+.dough .g-soldout{
+  position:absolute;top:12px;inset-inline-end:-4px;
+  background:var(--red);color:#fff;
+  font-size:9.5px;font-weight:800;letter-spacing:.02em;
+  padding:4px 9px;border-radius:10px 0 0 10px;
+}
+[dir="rtl"] .dough .g-soldout{border-radius:0 10px 10px 0}
+/* Happy-hour offer tab — top-end column (fav owns top-start); drops below the
+   status tab when an item is both on offer and sold-out/special/popular. */
+.dough .g-hh{
+  position:absolute;top:12px;inset-inline-end:-4px;z-index:2;
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;
+  font-size:9.5px;font-weight:800;letter-spacing:.02em;
+  padding:4px 9px;border-radius:10px 0 0 10px;
+}
+[dir="rtl"] .dough .g-hh{border-radius:0 10px 10px 0}
+.dough .g-soldout ~ .g-hh,
+.dough .g-special ~ .g-hh,
+.dough .g-popular ~ .g-hh{top:40px}
+.dough .g-card.is-sold .g-photo{filter:grayscale(.7) opacity(.6)}
+.dough .g-name{font-size:14px;font-weight:700;color:var(--ink);margin-top:9px;text-align:center;line-height:1.25}
+.dough .g-meta{font-size:11px;color:var(--ink-3);font-weight:600;display:flex;gap:6px;align-items:center}
+.dough .g-meta .st{color:var(--orange-deep)}
+.dough .g-foot{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:7px}
+.dough .g-price{font-size:15px;font-weight:800;color:var(--ink)}
+/* was stacks ABOVE the live price (not inline beside it) */
+.dough .g-pricewrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.dough .g-was{margin-inline-end:0 !important;font-size:11px;line-height:1.2}
+.dough .g-add{
+  width:36px;height:36px;border-radius:50%;flex:none;
+  background:var(--ink);color:var(--cream);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .g-add:active{transform:scale(.84)}
+.dough .g-add .ic{width:17px;height:17px}
+
+/* empty states */
+.dough .empty,.dough .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.dough .empty-art{width:82px;height:82px;stroke:var(--ink-3);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.6}
+.dough .ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line-2);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);text-decoration:none;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .ghostbtn:active{transform:scale(.96)}
+
+/* ── item view (lavender hero + white sheet) ─────────── */
+.dough .i-hero{position:relative;height:46%;flex:none}
+.dough .i-hero .circlebtn{position:absolute;top:12px;z-index:3}
+.dough .i-hero .back{inset-inline-start:18px}
+.dough .i-hero .circlebtn:last-of-type{inset-inline-end:18px}
+.dough #iFav.is-on{color:var(--red)}
+.dough #iFav.is-on .ic{fill:currentColor}
+.dough .i-img{
+  position:absolute;left:50%;top:52%;translate:-50% -50%;
+  width:min(78%,300px);aspect-ratio:1;object-fit:cover;border-radius:50%;
+  box-shadow:0 34px 60px -22px rgba(26,27,30,.55);
+  animation:dgh-hero-in .8s var(--ease-pop) backwards;background:var(--lav-2);
+}
+@keyframes dgh-hero-in{from{translate:-50% -34%;scale:.7;opacity:0}}
+.dough .i-badge{
+  position:absolute;bottom:24%;inset-inline-start:20px;z-index:3;
+  background:var(--sage);color:var(--sage-ink);
+  font-size:11px;font-weight:800;padding:6px 12px;border-radius:var(--r-pill);
+}
+.dough .i-sheet{
+  position:absolute;inset-inline:0;bottom:0;height:58%;
+  background:var(--card);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:0 -18px 40px -24px rgba(26,27,30,.4);
+  display:flex;flex-direction:column;z-index:4;
+  transition:height .45s var(--ease);
+  touch-action:none;
+}
+.dough .i-sheet.is-tall{height:84%}
+.dough .i-notch{flex:none;padding:10px 0 4px;width:100%;display:grid;place-items:center;cursor:grab}
+.dough .i-notch i{width:44px;height:5px;border-radius:var(--r-pill);background:var(--line-2);transition:background var(--t-fast)}
+.dough .i-notch:active{cursor:grabbing}
+.dough .i-notch:active i{background:var(--ink-3)}
+.dough .i-scroll{flex:1;min-height:0;overflow-y:auto;padding:4px 22px 0}
+.dough .i-tail{height:14px}
+.dough .i-titlerow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.dough .i-titlerow h1{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1.2}
+.dough .i-rate{
+  flex:none;display:inline-flex;align-items:center;gap:4px;
+  font-size:12.5px;font-weight:800;color:var(--orange-deep);
+  background:rgba(242,153,94,.14);padding:6px 11px;border-radius:var(--r-pill);
+}
+.dough .i-meta{display:flex;flex-wrap:wrap;gap:7px;padding:11px 0 2px}
+.dough .tagchip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;color:var(--ink-2);
+  background:var(--cream);padding:6px 11px;border-radius:var(--r-pill);
+}
+.dough .tagchip.sage{background:rgba(169,192,162,.28);color:var(--sage-ink)}
+.dough .i-ing{padding:11px 0 4px;font-size:13.5px;line-height:1.65;color:var(--ink-2);max-width:60ch}
+.dough .i-block{padding-top:18px}
+.dough .i-bhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dough .i-block h3{font-size:14px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.dough .i-bhint{font-size:11px;font-weight:600;color:var(--ink-3)}
+
+/* signature size circles */
+.dough .sizes{display:flex;gap:16px;flex-wrap:wrap}
+.dough .size{
+  min-width:56px;height:56px;padding:0 10px;border-radius:50%;
+  border:1.5px solid var(--line-2);background:var(--card);
+  font-size:15px;font-weight:700;color:var(--ink-2);
+  display:grid;place-items:center;
+  transition:all .3s var(--ease-pop);
+}
+.dough .size:active{transform:scale(.9)}
+.dough .size.is-on{background:var(--ink);border-color:var(--ink);color:var(--cream);transform:scale(1.08)}
+
+/* extras checklist */
+.dough .extras{display:grid;gap:2px}
+.dough .extra{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:10px 4px;border-radius:12px;text-align:start;
+  transition:background var(--t-fast);
+}
+.dough .extra:active{background:var(--cream)}
+.dough .extra-box{
+  width:22px;height:22px;flex:none;border-radius:8px;
+  border:1.5px solid var(--line-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .extra.is-on .extra-box{background:var(--sage);border-color:var(--sage)}
+.dough .extra-box svg{width:12px;height:12px;stroke:var(--sage-ink);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.dough .extra.is-on .extra-box svg{opacity:1;transform:none}
+.dough .extra-name{flex:1;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.dough .extra.is-on .extra-name{color:var(--ink)}
+.dough .extra-price{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.dough .extra.is-on .extra-price{color:var(--sage-deep)}
+
+/* option groups (global modifiers) rendered as chip rows */
+.dough .optgroup{padding-top:18px}
+.dough .opt-chips{display:flex;flex-wrap:wrap;gap:8px}
+.dough .opt-chip{
+  padding:10px 15px;min-height:44px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .opt-chip:active{transform:scale(.93)}
+.dough .opt-chip.is-on{border-color:var(--ink);background:var(--ink);color:var(--cream)}
+
+/* signature qty row: − 1 + spread */
+.dough .i-qtyrow{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 8px 4px;
+}
+.dough .i-qtyrow output{font-size:34px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.dough .qty-circle{
+  width:48px;height:48px;border-radius:50%;
+  border:1.5px solid var(--line-2);color:var(--ink);
+  display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .qty-circle:active{transform:scale(.86);background:var(--cream)}
+.dough .qty-circle.sm{width:40px;height:40px}
+
+/* signature black price pill */
+.dough .i-cta{flex:none;display:flex;align-items:center;gap:12px;padding:10px 22px calc(18px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--card) 40%)}
+.dough .pricepill{
+  flex:1;width:auto;height:58px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--cream);
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  font-size:17px;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 16px 30px -14px rgba(26,27,30,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .pricepill:active{transform:scale(.97)}
+.dough .pricepill.pop{animation:dgh-pill-pop .5s var(--ease-pop)}
+@keyframes dgh-pill-pop{40%{transform:scale(1.05)}}
+
+/* direct "go to cart" button beside Add to Cart on the item footer — cart-jump
+   parity with orbit's .p-cart-jump / aurora's .au-cart-jump; a card/outline
+   pill so it reads as the secondary action next to the solid-ink CTA. Toggled
+   visible by script.js (syncBag) only once the cart holds something. */
+.dough .i-cart-jump{
+  flex:none;position:relative;width:58px;height:58px;border-radius:var(--r-pill);
+  background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);
+  display:grid;place-items:center;
+  box-shadow:0 16px 30px -14px rgba(26,27,30,.4);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .i-cart-jump:active{transform:scale(.94)}
+.dough .i-cart-jump[hidden]{display:none}
+.dough .i-cart-jump .ic{width:23px;height:23px}
+.dough .i-cart-jump-count{
+  position:absolute;top:-5px;inset-inline-end:-5px;
+  min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--orange);color:#fff;
+  font-size:11px;font-weight:800;line-height:20px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+}
+
+/* ── cart ────────────────────────────────────────────── */
+.dough .cart-list{display:grid;gap:4px}
+.dough .ct-row{
+  display:grid;grid-template-columns:58px 1fr auto;gap:13px;align-items:center;
+  padding:11px 2px;border-bottom:1px solid var(--line);
+  animation:dgh-card-in .4s var(--ease) backwards;
+}
+.dough .ct-row.removing{transition:all .3s var(--ease);opacity:0;transform:translateX(-40px)}
+.dough .ct-img{width:58px;height:58px;object-fit:cover;border-radius:50%;box-shadow:0 8px 16px -8px rgba(26,27,30,.35);background:var(--cream-2)}
+.dough .ct-mid{min-width:0}
+.dough .ct-mid b{display:block;font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.25}
+.dough .ct-mid small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.dough .ct-notebtn{font-size:11px;font-weight:700;color:var(--sage-deep);padding:4px 0;display:inline-flex;gap:5px;align-items:center}
+.dough .ct-note{margin-top:6px;padding:8px 11px;font-size:16px;border-radius:10px}
+/* Side column: remove tucked top-right, the horizontal stepper at the bottom —
+   the old trash/pill/stepper stack made every row taller with the middle empty.
+   The line price now lives in .ct-mid next to its strike/unit hints. */
+.dough .ct-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:7px;align-self:stretch}
+.dough .ct-price{
+  display:block;font-size:13px;font-weight:800;color:var(--ink);
+  margin-top:3px;font-variant-numeric:tabular-nums;
+}
+.dough .ct-step{display:flex;align-items:center;gap:9px}
+.dough .ct-step button{
+  position:relative;width:32px;height:32px;border-radius:50%;
+  border:1.2px solid var(--line-2);color:var(--ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .ct-step button:active{transform:scale(.82)}
+.dough .ct-step button .ic{width:12px;height:12px}
+.dough .ct-step output{font-size:13px;font-weight:800;min-width:16px;text-align:center;color:var(--ink);font-variant-numeric:tabular-nums}
+/* pre-discount strike + per-unit hint + tap-to-reopen + dedicated remove */
+.dough .ct-was{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.dough .ct-unit{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.dough .ct-img[data-open],.dough .ct-mid b[data-open]{cursor:pointer}
+.dough .ct-rm{color:var(--ink-3);width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.dough .ct-rm:active{color:var(--red)}
+.dough .ct-rm .ic{width:15px;height:15px}
+/* ── product reviews (item view) ─────────────────────── */
+.dough .p-reviews{display:grid;gap:10px}
+.dough .p-reviews .rv-card{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--card)}
+.dough .p-reviews .rv-card b{display:block;font-size:13px;font-weight:800;color:var(--ink)}
+.dough .p-reviews .rv-card p{margin:7px 0 0;color:var(--ink-2);font-size:13px;line-height:1.55}
+.dough .p-reviews .rv-empty{color:var(--ink-3);font-size:12.5px}
+.dough .review-stars{display:block;color:var(--orange-deep);letter-spacing:2px;font-size:12px;margin-top:4px}
+.dough .review-stars-dim{color:var(--line-2)}
+
+/* inline per-item quick-rate */
+.dough .i-quickrate{padding:0}
+.dough .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;font-weight:800;color:var(--ink)}
+.dough .rate-row>span:first-child{flex:1 1 auto;min-width:0}
+.dough .rate-stars{display:inline-flex;gap:1px;flex:none}
+.dough .rate-stars button{padding:6px 3px;font-size:23px;line-height:1;color:var(--line-2)}
+.dough .rate-stars button.is-on{color:var(--orange-deep)}
+.dough .rate-thanks{flex:1 0 100%;color:var(--ink-2);font-weight:700}
+
+.dough .cart-tools{display:grid;gap:18px;padding-top:20px}
+.dough .tool-block h3,.dough .i-block h3{margin-bottom:0}
+.dough .tool-block>h3{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:11px;letter-spacing:-.01em;text-transform:none}
+
+.dough .seg{display:flex;background:var(--cream);border:1px solid var(--line);border-radius:var(--r-pill);padding:4px;gap:3px}
+.dough .view[data-view="cart"] .seg,.dough .view[data-view="checkout"] .seg,.dough .sheet .seg{background:var(--cream)}
+.dough .seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  /* ink-3 on cream is only 2.5:1 — too faint for the unselected order types */
+  font-size:12px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.dough .seg button .ic{width:15px;height:15px}
+.dough .seg button.is-on{background:var(--ink);color:var(--cream)}
+.dough .seg.mini{padding:3px}
+.dough .seg.mini button{padding:7px 13px;flex:none}
+
+.dough .ot-fields{display:grid;gap:9px;padding-top:10px}
+.dough .ot-fields:empty{display:none}
+.dough .ot-hint{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.dough .ot-hint .ic{width:14px;height:14px;color:var(--sage-deep)}
+.dough .when-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.dough .when-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.dough .when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:16px;min-height:44px}
+
+.dough .coupon-field{display:flex;align-items:center;gap:9px;background:var(--card);border:1px dashed var(--line-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .dough .coupon-field{padding:5px 15px 5px 6px}
+.dough .coupon-field .ic{color:var(--orange-deep);flex:none}
+.dough .coupon-field input{background:none;border:0;padding:8px 0;font-size:16px}
+.dough .coupon-field.is-applied{border-color:var(--sage-deep);border-style:solid}
+.dough .minibtn{
+  flex:none;padding:12px 16px;min-height:44px;border-radius:var(--r-pill);
+  background:var(--cream);font-size:12.5px;font-weight:700;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .minibtn:active{transform:scale(.94)}
+.dough .minibtn.ink{background:var(--ink);color:var(--cream)}
+.dough .coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--sage-deep);font-weight:600}
+.dough .coupon-msg.err{color:var(--red)}
+
+.dough .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.dough .tip-row button{
+  flex:1;padding:13px 4px;min-height:46px;border-radius:14px;min-width:56px;
+  background:var(--card);border:1.5px solid var(--line);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .tip-row button:active{transform:scale(.93)}
+.dough .tip-row button.is-on{border-color:var(--ink);background:var(--ink);color:var(--cream)}
+
+.dough .loyalty-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  background:rgba(169,192,162,.22);border:1px solid rgba(169,192,162,.55);
+  border-radius:var(--r-card);padding:13px 15px;color:var(--sage-ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .loyalty-row:active{transform:scale(.98)}
+.dough .loyalty-row .ic{color:var(--sage-deep)}
+.dough .loyalty-row b{flex:1;font-size:14px;font-weight:800}
+.dough .loy-cta{font-size:12px;font-weight:800;background:var(--ink);color:var(--cream);padding:7px 14px;border-radius:var(--r-pill)}
+
+.dough .waiter-row{display:flex;gap:10px}
+.dough .waiter-row .ghostbtn{flex:1;justify-content:center}
+
+.dough .wa-order{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-card);
+  padding:13px 15px;font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;
+}
+.dough .wa-order .ic:first-child{color:var(--sage-deep)}
+.dough .wa-order span{flex:1}
+.dough .wa-order .arr{color:var(--ink-3)}
+[dir="rtl"] .dough .arr{transform:scaleX(-1)}
+
+/* totals breakdown + signature orange band */
+.dough .breakdown{background:var(--cream);border-radius:var(--r-card);padding:14px 16px;display:grid;gap:8px}
+.dough .tr{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:600}
+.dough .tr b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.dough .tr.disc b{color:var(--sage-deep)}
+
+.dough .band{
+  position:relative;background:var(--orange);border-radius:var(--r-big);
+  padding:18px 20px;overflow:hidden;color:var(--orange-ink);
+}
+.dough .band-inner{position:relative;z-index:2;display:grid;gap:10px;max-width:70%}
+.dough .band-row{display:flex;justify-content:space-between;gap:14px;font-size:13px;font-weight:600;opacity:.9}
+.dough .band-row b{font-weight:800;font-variant-numeric:tabular-nums}
+.dough .band-total{border-top:1px dashed rgba(66,40,20,.35);padding-top:10px;display:grid;gap:2px}
+.dough .band-inner.no-del .band-total{border-top:0;padding-top:0}
+.dough .band-total span{font-size:12px;font-weight:700;opacity:.8}
+.dough .band-total b{font-size:23px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dough .band-pizza{
+  position:absolute;inset-inline-end:-44px;top:50%;translate:0 -50%;
+  width:132px;height:132px;object-fit:cover;border-radius:50%;
+  box-shadow:0 14px 30px rgba(66,40,20,.35);
+}
+
+/* footer bars */
+.dough .foot-cta{
+  flex:none;padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--panel) 34%);position:relative;z-index:6;
+}
+.dough .view[data-view="cart"] .foot-cta{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+.dough .view[data-view="checkout"] .foot-cta{background:linear-gradient(transparent,var(--cream) 34%)}
+.dough .inkbar{
+  width:100%;height:56px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--cream);
+  font-size:15px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 16px 30px -14px rgba(26,27,30,.5);
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);
+}
+.dough .inkbar:active{transform:scale(.97)}
+.dough .inkbar:disabled{opacity:.4}
+[dir="rtl"] .dough .inkbar .ic,[dir="rtl"] .dough .promo .ic{transform:scaleX(-1)}
+.dough .inkbar .spinner{width:18px;height:18px;border:2.5px solid rgba(242,237,228,.35);border-top-color:var(--cream);border-radius:50%;animation:dgh-spin .7s linear infinite}
+@keyframes dgh-spin{to{transform:rotate(360deg)}}
+
+/* ── checkout ────────────────────────────────────────── */
+.dough .view[data-view="checkout"] .tool-block{padding-top:16px}
+.dough .co-summary{display:flex;flex-wrap:wrap;gap:8px}
+.dough .co-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:8px 13px;
+  font-size:12px;font-weight:700;color:var(--ink-2);
+}
+.dough .co-chip .ic{width:14px;height:14px;color:var(--sage-deep)}
+.dough .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.dough .co-addr{padding-top:9px}
+/* delivery address: saved-address chips + autocomplete + use-my-location */
+.dough .saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.dough .saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1px solid var(--line-2);border-radius:15px;background:var(--card);color:var(--ink);cursor:pointer}
+.dough .saved-addr .ic{flex:none;color:var(--ink-2)}
+.dough .saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.dough .saved-addr .sa-text b{font-size:13px;font-weight:700}
+.dough .saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dough .saved-addr.is-on{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.dough .saved-addr.is-on .ic{color:var(--orange-deep)}
+.dough .addr-field{position:relative}
+.dough .addr-field input{padding-inline-end:46px}
+.dough .uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--orange-deep);background:none;border:0;cursor:pointer}
+.dough .uselocbtn:active{transform:scale(.9)}
+.dough .uselocbtn.is-loading{opacity:.5;animation:dgh-dd-spin 1s linear infinite}
+.dough .addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--card);border:1px solid var(--line-2);border-radius:15px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(26,27,30,.35);max-height:230px;overflow-y:auto}
+.dough .addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer}
+.dough .addr-opt:last-child{border-bottom:0}
+.dough .addr-opt:active,.dough .addr-opt:hover{background:var(--cream)}
+.dough .geo-attrib{font-size:10px;color:var(--ink-3);margin-top:7px;text-align:center}
+.dough .pm-list{display:grid;gap:9px}
+.dough .pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:18px;
+  padding:13px 15px;transition:all var(--t-fast) var(--ease);text-align:start;width:100%;
+}
+.dough .pm.is-on{border-color:var(--ink)}
+.dough .pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--cream);display:grid;place-items:center;color:var(--ink-2)}
+.dough .pm.is-on .pm-ic{background:var(--ink);color:var(--cream)}
+.dough .pm b{flex:1;font-size:14px;font-weight:700;color:var(--ink)}
+.dough .pm small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.dough .pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--line-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.dough .pm.is-on .pm-radio{border-color:var(--ink)}
+.dough .pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.dough .pm-logos{display:flex;gap:4px}
+.dough .pm-logos span{font-size:8.5px;font-weight:800;letter-spacing:.02em;background:var(--cream);border-radius:4px;padding:3px 5px;color:var(--ink-2)}
+.dough .cardform{display:grid;gap:9px;padding-top:10px;animation:dgh-card-in .35s var(--ease)}
+.dough #coBreakdown{margin-top:18px}
+.dough #coBand{margin-top:12px}
+.dough .err-box{background:rgba(217,106,87,.12);border:1px solid rgba(217,106,87,.4);color:var(--red);border-radius:14px;padding:11px 14px;font-size:12.5px;font-weight:600}
+.dough .minorder{font-size:12.5px;color:var(--orange-deep);font-weight:700;padding:4px 2px}
+
+/* ── OTP view ────────────────────────────────────────── */
+.dough .view-otp{justify-content:flex-end;padding:0 18px calc(20px + env(safe-area-inset-bottom))}
+.dough .view-otp .circlebtn.back{position:absolute;top:12px;inset-inline-start:18px;z-index:3}
+.dough .otp-card{
+  position:relative;z-index:2;
+  background:var(--card);border-radius:var(--r-sheet);
+  padding:28px 24px 24px;color:var(--ink);
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+  animation:dgh-otp-rise .55s var(--ease) backwards;
+}
+@keyframes dgh-otp-rise{from{transform:translateY(60px);opacity:0}}
+.dough .otp-card h2{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.dough .otp-sub{font-size:13px;color:var(--ink-3);margin-top:7px;line-height:1.5}
+.dough .otp-phone{display:block;margin-top:14px;font-size:15px;font-weight:800;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.dough .otp-boxes{display:flex;gap:12px;padding-top:18px}
+.dough .otp-boxes input{
+  width:58px;height:62px;text-align:center;
+  font-size:24px;font-weight:800;border-radius:16px;
+  border:1.5px solid var(--line-2);background:var(--cream);
+  caret-color:var(--ink);
+}
+.dough .otp-boxes.otp-6{gap:8px}
+.dough .otp-boxes.otp-6 input{width:46px;height:56px;font-size:20px}
+.dough .otp-boxes input:focus{border-color:var(--ink);background:var(--card);transform:scale(1.04)}
+.dough .otp-boxes input.filled{border-color:var(--ink);background:var(--card)}
+.dough .otp-hint{font-size:11.5px;color:var(--ink-3);padding:12px 0 16px}
+.dough .otp-hint b{color:var(--ink-2)}
+.dough .otp-err{color:var(--red);font-size:12px;font-weight:600;padding:2px 0 10px}
+.dough .otp-done{display:grid;justify-items:center;text-align:center;gap:8px;padding:6px 0 2px}
+.dough .otp-done .inkbar{margin-top:14px}
+.dough .otp-code{
+  font-size:13px;font-weight:800;color:var(--sage-ink);
+  background:rgba(169,192,162,.3);border:1px dashed var(--sage-deep);
+  padding:7px 16px;border-radius:var(--r-pill);font-variant-numeric:tabular-nums;
+}
+.dough .otp-resend{margin-top:12px;font-size:12.5px;font-weight:700;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+.dough .tick{width:84px;height:84px;margin-bottom:6px}
+.dough .tick-ring{fill:rgba(169,192,162,.25);stroke:var(--sage-deep);stroke-width:2.5;stroke-dasharray:1;stroke-dashoffset:1;animation:dgh-draw .6s var(--ease) .1s forwards}
+.dough .tick-mark{fill:none;stroke:var(--sage-ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:dgh-draw .45s var(--ease) .55s forwards}
+@keyframes dgh-draw{to{stroke-dashoffset:0}}
+
+/* ── track view ──────────────────────────────────────── */
+.dough .map{position:relative;height:242px;background:var(--cream-2)}
+.dough .map-art{width:100%;height:100%}
+.dough .map-art .st{stroke:#fff;stroke-width:9;fill:none;stroke-linecap:round}
+.dough .map-art .st.thin{stroke-width:4;opacity:.75}
+.dough .map-art .route{stroke:var(--ink);stroke-width:2.5;fill:none;stroke-dasharray:2 8;stroke-linecap:round;animation:dgh-route-dash 1.6s linear infinite}
+@keyframes dgh-route-dash{to{stroke-dashoffset:-20}}
+.dough .node-store circle:first-child{fill:rgba(169,192,162,.4)}
+.dough .node-store circle:last-child{fill:var(--sage-deep)}
+.dough .node-pin path{fill:var(--orange);stroke:var(--orange-deep);stroke-width:1}
+.dough .node-pin circle{fill:#fff}
+.dough .node-pin{animation:dgh-pin-bob 2.4s ease-in-out infinite alternate}
+@keyframes dgh-pin-bob{to{transform:translateY(-5px)}}
+.dough .float-a,.dough .float-b{position:absolute;inset-inline-end:16px}
+.dough .float-a{top:64px}
+.dough .float-b{top:118px}
+
+.dough .courier-card{
+  position:relative;margin:-30px 20px 0;z-index:3;
+  background:var(--card);border-radius:var(--r-big);
+  padding:16px;box-shadow:0 24px 44px -22px rgba(26,27,30,.4);
+  display:grid;gap:14px;color:var(--ink);
+  animation:dgh-card-in .5s var(--ease) backwards;
+}
+.dough .cc-top{display:flex;align-items:center;gap:11px}
+.dough .cc-top img{width:46px;height:46px;border-radius:50%;object-fit:cover;background:var(--cream-2)}
+.dough .cc-top>div{flex:1;min-width:0}
+.dough .cc-top b{display:block;font-size:14.5px;font-weight:800}
+.dough .cc-top small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.dough .cc-chip{
+  flex:none;background:var(--ink);color:var(--cream);
+  font-size:11px;font-weight:800;padding:8px 13px;border-radius:var(--r-pill);
+  transition:transform .3s var(--ease-pop);
+}
+.dough .cc-chip.bump{animation:dgh-badge-bump .5s var(--ease-pop)}
+.dough .cc-addr{display:flex;gap:12px;align-items:center;background:var(--cream);border-radius:16px;padding:12px 14px}
+.dough .cc-route{display:grid;justify-items:center;gap:3px;padding-top:2px}
+.dough .cc-route .r-a{width:9px;height:9px;border-radius:50%;background:var(--sage-deep)}
+.dough .cc-route .r-line{width:2px;height:16px;background:repeating-linear-gradient(var(--ink-3) 0 3px,transparent 3px 6px)}
+.dough .cc-route .r-b{width:9px;height:9px;border-radius:50%;border:2.5px solid var(--orange-deep)}
+.dough .cc-addr>div{min-width:0}
+.dough .cc-addr b{display:block;font-size:13px;font-weight:700;line-height:1.35}
+.dough .cc-addr small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.dough .cc-eta{display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+.dough .cc-eta span{font-size:12.5px;font-weight:600;color:var(--ink-3)}
+.dough .cc-eta b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+
+.dough .timeline{list-style:none;display:grid;padding:22px 30px 0}
+.dough .tl{display:grid;grid-template-columns:24px 1fr;gap:13px;position:relative;padding-bottom:22px;color:var(--ink)}
+.dough .tl:last-child{padding-bottom:0}
+.dough .tl-node{
+  width:21px;height:21px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--line-2);background:var(--cream);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.dough .tl-node svg{width:10px;height:10px;stroke:var(--sage-ink);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.dough .tl-line{position:absolute;inset-inline-start:9.5px;top:21px;bottom:0;width:2.5px;background:var(--line-2)}
+.dough .tl-line::after{content:"";position:absolute;inset:0;background:var(--sage-deep);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.dough .tl.done .tl-node,.dough .tl.now .tl-node{border-color:var(--sage-deep);background:var(--sage)}
+.dough .tl.done .tl-node svg{opacity:1;transform:none}
+.dough .tl.done .tl-line::after{transform:none}
+.dough .tl.now .tl-node{box-shadow:0 0 0 0 rgba(126,155,118,.5);animation:dgh-pulse 2s infinite}
+.dough .tl.cancelled .tl-node{border-color:var(--red);background:rgba(217,106,87,.2)}
+@keyframes dgh-pulse{70%{box-shadow:0 0 0 8px transparent}}
+.dough .tl-copy b{font-size:13.5px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.dough .tl.done .tl-copy b,.dough .tl.now .tl-copy b{color:var(--ink)}
+.dough .tl-copy small{font-size:11px;color:var(--ink-3)}
+
+.dough .homecircle{
+  position:absolute;bottom:calc(22px + env(safe-area-inset-bottom));inset-inline-start:20px;
+  width:54px;height:54px;border-radius:50%;z-index:var(--z-pill);
+  background:var(--ink);color:var(--cream);
+  display:grid;place-items:center;text-decoration:none;
+  box-shadow:0 16px 30px -12px rgba(26,27,30,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .homecircle:active{transform:scale(.88)}
+
+/* ── track / account detail cards ────────────────────── */
+.dough .track-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:16px;color:var(--ink)}
+.dough .track-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.dough .track-top b{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.dough .tk-label{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.dough .tk-eta{text-align:end}
+.dough .tk-eta b{font-size:13.5px}
+.dough .order-lines{display:grid;gap:8px;padding-top:8px}
+.dough .order-line{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--ink-2);font-weight:600}
+.dough .order-line b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:end}
+.dough .order-line small{display:block;font-size:11px;color:var(--ink-3);font-weight:500;margin-top:2px}
+.dough .order-line.disc b{color:var(--sage-deep)}
+.dough .order-line.grand{border-top:1px dashed var(--line-2);padding-top:10px;margin-top:2px}
+.dough .order-line.grand span{color:var(--ink);font-weight:800;font-size:14px}
+.dough .order-line.grand b{font-size:16px;font-weight:800}
+.dough .mt{margin-top:14px}
+.dough .foot-center{display:grid;place-items:center;padding-top:18px}
+.dough .tk-eta .tk-label{margin-top:5px}
+.dough #cv-curbside-card{text-align:center}
+
+/* ── profile ─────────────────────────────────────────── */
+.dough .me-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:14px}
+.dough .me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover;background:var(--cream-2)}
+.dough .me-avatar{width:52px;height:52px;border-radius:50%;flex:none;background:var(--ink);color:var(--cream);display:grid;place-items:center;font-size:22px;font-weight:800}
+.dough .me-card>div{flex:1;min-width:0}
+.dough .me-card b{font-size:15.5px;font-weight:800;color:var(--ink);display:block}
+.dough .me-card small,.dough .me-card .tk-label{font-size:12px;color:var(--ink-3);font-weight:600}
+.dough .me-badge{font-size:10.5px;font-weight:800;background:rgba(169,192,162,.3);color:var(--sage-ink);padding:5px 11px;border-radius:var(--r-pill)}
+.dough .pts-card{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:17px 18px;border-radius:var(--r-card);
+  background:var(--sage);color:var(--sage-ink);
+}
+.dough .pts-card small{font-size:11.5px;font-weight:700;opacity:.8}
+.dough .pts-big{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dough .view[data-view="profile"] .tool-block,.dough .orders-block{padding-top:22px}
+.dough .pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px}
+.dough .pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.dough .line-row{
+  display:flex;align-items:center;gap:11px;margin-top:14px;width:100%;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:14px 15px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:700;text-align:start;
+}
+.dough .line-row .ic:first-child{color:var(--sage-deep)}
+.dough .line-row span{flex:1}
+.dough .line-row .arr{color:var(--ink-3)}
+.dough .orders-list{display:grid;gap:9px}
+.dough .order-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;
+  animation:dgh-card-in .4s var(--ease) backwards;color:var(--ink);text-decoration:none;
+}
+.dough .order-row>.ic{color:var(--orange-deep)}
+.dough .order-row>div{flex:1;min-width:0}
+.dough .order-row b{font-size:13.5px;font-weight:800;display:block}
+.dough .order-row small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.dough .order-status,.dough .row-status{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:var(--r-pill);background:rgba(169,192,162,.3);color:var(--sage-ink);white-space:nowrap}
+.dough .orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px}
+.dough .demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.7}
+
+/* ── floating menu pill ──────────────────────────────── */
+.dough .menupill{
+  position:absolute;left:50%;translate:-50% 0;bottom:calc(20px + env(safe-area-inset-bottom));
+  z-index:var(--z-pill);
+  background:rgba(26,27,30,.94);backdrop-filter:blur(14px);
+  border-radius:var(--r-pill);color:var(--on-dark);
+  box-shadow:0 18px 40px -12px rgba(26,27,30,.6);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.dough .menupill.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.dough .mp-toggle{display:none;align-items:center;gap:5px;padding:16px 26px;color:var(--on-dark)}
+.dough .mp-toggle i{width:5px;height:5px;border-radius:50%;background:var(--on-dark);opacity:.55}
+.dough .mp-toggle i:first-child{background:var(--orange);opacity:1}
+.dough .mp-toggle span{font-size:13.5px;font-weight:700;letter-spacing:.01em;margin-inline-start:5px}
+.dough .mp-nav{display:flex;align-items:center;gap:4px;padding:7px}
+.dough .menupill.is-open .mp-toggle{display:none}
+.dough .menupill.is-open .mp-nav{display:flex;animation:dgh-nav-in .3s var(--ease)}
+@keyframes dgh-nav-in{from{opacity:0;transform:scale(.9)}}
+.dough .mp-btn{
+  position:relative;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;color:rgba(232,223,206,.55);
+  transition:all var(--t-fast) var(--ease);
+}
+.dough .mp-btn:active{transform:scale(.86)}
+.dough .mp-btn.is-on{background:var(--on-dark);color:#1A1B1E}
+.dough .mp-badge{
+  position:absolute;top:1px;inset-inline-end:0;
+  min-width:18px;height:18px;border-radius:var(--r-pill);
+  background:var(--sage);color:var(--sage-ink);
+  font-size:10px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2px solid rgba(26,27,30,.94);
+}
+
+/* ── search overlay ──────────────────────────────────── */
+.dough .search-overlay{
+  position:absolute;inset:0;z-index:var(--z-search);
+  background:var(--cream);display:flex;flex-direction:column;
+  padding:14px 20px 0;
+  transform:translateY(100%);
+  transition:transform .32s var(--ease);
+}
+.dough .search-overlay.is-open{transform:none}
+.dough .so-top{display:flex;gap:10px;align-items:center;flex:none}
+.dough .so-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);
+  padding:0 18px;height:50px;color:var(--ink-3);
+}
+.dough .so-field input{background:none;border:0;padding:0;height:100%;font-size:16px}
+.dough .so-chips{display:flex;gap:8px;flex-wrap:wrap;padding:16px 0 4px;flex:none}
+.dough .so-results{flex:1;min-height:0;overflow-y:auto;padding:10px 0 30px;display:grid;gap:4px;align-content:start}
+.dough .so-row{
+  display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;
+  padding:9px 2px;border-bottom:1px solid var(--line);text-align:start;color:var(--ink);
+  animation:dgh-card-in .3s var(--ease) backwards;
+}
+.dough .so-row img{width:48px;height:48px;object-fit:cover;border-radius:50%;background:var(--cream-2)}
+.dough .so-row b{font-size:13.5px;font-weight:700;display:block}
+.dough .so-row small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.dough .so-row .g-add{width:36px;height:36px}
+.dough .so-none{padding:30px 4px;color:var(--ink-3);font-size:13.5px;text-align:center}
+
+/* ── sheets / scrim / toast ──────────────────────────── */
+.dough .scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(23,24,28,.55);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.dough .scrim.is-open{opacity:1}
+.dough .sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--card);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  padding:10px 22px calc(26px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:80%;overflow-y:auto;color:var(--ink);
+}
+.dough .sheet.is-open{transform:none}
+.dough .sheet-grab{width:44px;height:5px;border-radius:var(--r-pill);background:var(--line-2);margin:6px auto 16px}
+.dough .sheet h2{font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.dough .sheet h4{font-size:13px;font-weight:800;color:var(--ink-2);letter-spacing:-.01em;text-transform:none;margin:18px 0 10px}
+.dough .sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:14px}
+.dough .sheet .inkbar{margin-top:18px}
+.dough .sheet .seg{margin-bottom:6px}
+.dough .field-label{font-size:11.5px;font-weight:700;color:var(--ink-3);display:block;margin:12px 0 6px}
+.dough .sheet-form{display:grid}
+.dough .sheet-done{text-align:center;display:grid;gap:6px;padding:16px 0}
+.dough .sheet-done-emoji{font-size:38px}
+.dough .sheet-done b{font-size:16px;font-weight:800}
+
+.dough .tier-list{display:grid;gap:9px;padding-top:8px}
+.dough .tier{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:13px 15px;
+  transition:all var(--t-fast) var(--ease);color:var(--ink);
+}
+.dough .tier:disabled{opacity:.4}
+.dough .tier.is-on{border-color:var(--sage-deep);background:rgba(169,192,162,.14)}
+.dough .tier b{flex:1;font-size:14px;font-weight:800}
+.dough .tier b small{display:block;font-weight:600;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.dough .tier-val{font-size:14px;font-weight:800;color:var(--sage-deep)}
+
+.dough .chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.dough .chip-row button{
+  padding:10px 15px;min-height:44px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .chip-row button:active{transform:scale(.93)}
+.dough .chip-row button.is-on{border-color:var(--ink);background:var(--ink);color:var(--cream)}
+.dough .guest-step{display:flex;align-items:center;gap:18px;justify-content:center;padding:6px 0}
+.dough .guest-step output{font-size:26px;font-weight:300;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+.dough .res-done{
+  margin-top:14px;padding:12px 16px;border-radius:14px;text-align:center;
+  background:rgba(169,192,162,.22);border:1px dashed var(--sage-deep);
+  color:var(--sage-ink);font-size:13px;font-weight:700;
+}
+
+.dough .stars{display:flex;justify-content:center;gap:10px;padding:12px 0 6px}
+.dough .stars button{
+  font-size:34px;line-height:1;color:var(--line-2);
+  transition:color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.dough .stars button:active{transform:scale(.85)}
+.dough .stars button.is-on{color:var(--orange)}
+.dough .rv-form{display:grid;gap:0;padding-top:8px}
+.dough .rv-form textarea{resize:none;font-size:16px}
+
+.dough .toast{
+  position:absolute;top:calc(14px + env(safe-area-inset-top));left:50%;translate:-50% -18px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--cream);
+  font-size:13px;font-weight:600;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(26,27,30,.4);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.dough .toast.is-on{opacity:1;translate:-50% 0}
+.dough .toast .ic{width:16px;height:16px;color:var(--sage)}
+
+/* fly-to-bag ghost */
+.dough .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.dough .fly-img{
+  position:absolute;width:60px;height:60px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(26,27,30,.4);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* hidden attribute must win over component display rules */
+.dough [hidden]{display:none}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .dough :is(.g-price,.ct-price,.ck-price,.ck-qty,.ct-was,.ct-unit,.tr b,.band-row b,.band-total b,.otp-phone,.otp-code,.pts-big,.i-rate,#iTotal,#loyaltyPts,.cc-eta b,.tier-val,.g-meta,.order-row b,.order-line b,.me-card small){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .dough :is(.order-row b,.ct-price,.ck-price,.ck-qty,.ct-was,.ct-unit){text-align:right}
+
+/* ── checkout order summary ── */
+.dough .ck-items{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:14px;display:grid;gap:11px;margin-bottom:14px}
+.dough .ck-head{display:flex;align-items:center;justify-content:space-between}
+.dough .ck-head h3{margin:0;font-size:14px;font-weight:800;color:var(--ink)}
+.dough .ck-edit{background:none;border:0;padding:4px 0;font-size:12.5px;font-weight:800;color:var(--sage-deep);cursor:pointer}
+.dough .ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.dough .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:50%;background:var(--cream-2)}
+.dough .ck-mid{min-width:0}
+.dough .ck-mid b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dough .ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dough .ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.dough .ck-price{font-size:12.5px;font-weight:800;color:var(--ink);text-align:end;font-variant-numeric:tabular-nums}
+.dough .ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+
+/* ── filter button dot ───────────────────────────────── */
+.dough .flt-dot{position:absolute;top:9px;inset-inline-end:10px;width:8px;height:8px;border-radius:50%;background:var(--orange);outline:2.5px solid var(--cream)}
+.dough .filter-actions{display:flex;gap:10px;align-items:center;padding-top:18px}
+.dough .filter-actions .ghostbtn{flex:none}
+.dough .filter-actions .inkbar{flex:1;margin-top:0;padding-inline:20px}
+.dough .filter-actions .inkbar b{margin-inline-start:auto;font-weight:800;opacity:.85}
+
+/* ── admin promo banners ─────────────────────────────── */
+.dough .banners{display:flex;gap:12px;overflow-x:auto;padding:18px 2px 2px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.dough .banner{
+  scroll-snap-align:start;flex:0 0 86%;position:relative;overflow:hidden;text-decoration:none;
+  border-radius:var(--r-big);padding:20px;min-height:120px;
+  display:flex;align-items:center;background:var(--charcoal);color:var(--on-dark);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough .banner:active{transform:scale(.98)}
+.dough .banner.alt{background:var(--orange);color:var(--orange-ink)}
+.dough .banner-copy{position:relative;z-index:2;display:grid;gap:7px;max-width:62%;justify-items:start}
+.dough .banner-kicker{font-size:12px;font-weight:600;opacity:.82;line-height:1.35}
+.dough .banner-title{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.12}
+.dough .banner-btn{margin-top:2px;padding:8px 15px;border-radius:var(--r-pill);background:var(--on-dark);color:#1A1B1E;font-size:11.5px;font-weight:700}
+.dough .banner.alt .banner-btn{background:var(--ink);color:var(--cream)}
+.dough .banner-img{position:absolute;inset-inline-end:-16px;top:50%;translate:0 -50%;width:122px;height:122px;object-fit:cover;border-radius:50%;box-shadow:0 14px 28px rgba(0,0,0,.32)}
+
+/* ── secondary sub-category chips (two-tier nav) ─────── */
+.dough .subchips{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 0;min-width:0}
+.dough .subgroup{display:flex;gap:8px}
+.dough .subchip{
+  flex:none;display:inline-flex;align-items:center;gap:6px;
+  padding:10px 15px;min-height:44px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line);
+  font-size:12.5px;font-weight:600;color:var(--ink-2);white-space:nowrap;
+  transition:all var(--t-fast) var(--ease);
+}
+.dough .subchip:active{transform:scale(.94)}
+.dough .subchip.is-on{background:var(--ink);border-color:var(--ink);color:var(--cream);font-weight:700}
+.dough .subchip-img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+
+/* ── per-item image gallery (thumbnail strip) ────────── */
+.dough .i-gallery{
+  position:absolute;top:66px;left:50%;translate:-50% 0;z-index:3;
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:calc(100% - 44px);
+}
+.dough .i-thumb{
+  width:44px;height:44px;border-radius:14px;overflow:hidden;flex:none;
+  border:2px solid rgba(255,255,255,.55);background:var(--card);
+  box-shadow:0 6px 14px -6px rgba(26,27,30,.4);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.dough .i-thumb:active{transform:scale(.9)}
+.dough .i-thumb.is-on{border-color:var(--ink);transform:translateY(-2px)}
+.dough .i-thumb img{width:100%;height:100%;object-fit:cover}
+
+/* ── nearest-branch Leaflet map sheet ────────────────── */
+.dough .branchmap{height:300px;border-radius:18px;overflow:hidden;margin:6px 0;background:var(--cream-2)}
+.dough .geo-attrib{font-size:11px;color:var(--ink-3);margin:6px 2px}
+.dough .branch-list{display:grid;gap:9px;padding-top:6px;max-height:34vh;overflow-y:auto}
+.dough .branch-row{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:13px 15px;
+  color:var(--ink);transition:all var(--t-fast) var(--ease);
+}
+.dough .branch-row:active{transform:scale(.98)}
+.dough a.branch-row{text-decoration:none}
+.dough .branch-row.is-on{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.dough .branch-row .ic{width:20px;height:20px;flex:none;color:var(--sage-deep)}
+.dough .branch-row b{flex:1;font-size:14px;font-weight:800}
+.dough .branch-row b small{display:block;font-weight:600;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.dough .branch-dist{font-size:12px;font-weight:800;color:var(--sage-deep)}
+/* plain "Our locations" list in the profile — let the page scroll, not the box */
+.dough .branch-list.branch-all{max-height:none;overflow:visible}
+.dough .branch-open{flex:none;font-size:11px;font-weight:800;white-space:nowrap;color:var(--sage-deep)}
+.dough .branch-open.closed{color:var(--red)}
+
+/* hidden attribute must beat the component display rules above (append order) */
+.dough .subchips[hidden],.dough .subgroup[hidden],.dough .banners[hidden],
+.dough .i-gallery[hidden],.dough .flt-dot[hidden]{display:none!important}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .dough *,.dough *::before,.dough *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .dough .ob-title span,.dough .ob-sub,.dough .g-card,.dough .i-img,.dough .otp-card,.dough .courier-card,.dough .ct-row,.dough .so-row,.dough .order-row{opacity:1!important;transform:none!important}
+  .dough .err-box.shake{animation:none!important}
+}
+
+/* ── stories rail + full-screen viewer ───────────────── */
+/* the rail bleeds past .view-scroll's 20px gutter so bubbles scroll edge-to-edge */
+.dough .stories{display:flex;gap:14px;overflow-x:auto;margin:18px -20px 0;padding:2px 20px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.dough .stories::-webkit-scrollbar{display:none}
+.dough .st-bubble{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;width:68px;transition:transform var(--t-fast) var(--ease-pop)}
+.dough .st-bubble:active{transform:scale(.93)}
+/* no gradient token in dough — compose the ring from the two brand accents */
+.dough .st-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 55%,var(--sage-deep) 100%);display:grid;place-items:center}
+.dough .st-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--cream)}
+.dough .st-bubble small{font-size:11px;font-weight:600;color:var(--ink-2);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dough .story-viewer{position:absolute;inset:0;z-index:var(--z-fly);background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.dough .story-viewer.is-open{opacity:1}
+.dough .sv-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.dough .sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.dough .sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.dough .sv-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.dough .sv-close .ic{width:20px;height:20px}
+.dough .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.dough .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dough .sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.dough .sv-nav.prev{inset-inline-start:0}
+.dough .sv-nav.next{inset-inline-end:0}
+.dough .sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.dough .sv-caption{color:#fff;font-size:17px;font-weight:800;line-height:1.35;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.dough .sv-cta{display:inline-block;padding:12px 22px;border-radius:var(--r-pill);background:var(--orange);color:var(--orange-ink);font-size:13px;font-weight:800;text-decoration:none}
+.dough .sv-cta:active{transform:scale(.96)}
+
+/* hidden must beat the display rules above (append order) */
+.dough .stories[hidden],.dough .story-viewer[hidden],.dough .sv-cta[hidden]{display:none!important}
+
+/* ═══════════════════════════════════════════════════════════
+   THEME-RESCUE — dough phase U/W additions
+   1. new components introduced by the wiring fixes
+   2. touch-target hit expansion (ALL-F2)
+   3. RTL isolation for LTR data (F27)
+   4. dark palette — dough's own charcoal/orange/sage, not an inversion (F9)
+   5. real breakpoints: tablet + desktop + wide (F28)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 1. components ─────────────────────────────────────── */
+
+/* card description — every seeded item ships copy and the grid threw it all away */
+.dough .g-desc{
+  font-size:11.5px;line-height:1.45;color:var(--ink-3);font-weight:500;
+  text-align:center;margin-top:5px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;
+}
+/* is_popular was shipped in the payload but never drawn */
+.dough .g-popular{
+  position:absolute;top:12px;inset-inline-end:-4px;
+  background:var(--orange);color:var(--orange-ink);
+  font-size:9.5px;font-weight:800;letter-spacing:.02em;
+  padding:4px 9px;border-radius:10px 0 0 10px;
+}
+[dir="rtl"] .dough .g-popular{border-radius:0 10px 10px 0}
+/* the theme's own missing-photo art sits flush in the round frame */
+.dough img.is-ph{object-fit:cover;background:var(--cream-2)}
+
+/* a search result with no price was a dead end */
+.dough .so-price{font-size:13px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;margin-inline-start:auto}
+.dough .so-row{grid-template-columns:48px 1fr auto auto}
+.dough .so-empty{padding:38px 20px}
+
+/* variant pills for a non-size axis (Regular / Spicy) — two-letter circles
+   cannot express a flavour or preparation choice */
+.dough .sizes.is-labels{gap:9px}
+.dough .size.wide{
+  min-width:0;width:auto;height:auto;min-height:48px;border-radius:var(--r-pill);
+  padding:12px 18px;display:flex;align-items:center;gap:9px;font-size:14px;
+}
+.dough .size.wide.is-on{transform:none}
+.dough .size-delta{font-size:12px;font-weight:800;opacity:.72;font-variant-numeric:tabular-nums}
+
+/* item CTA now carries a verb, not just a glyph and a number */
+.dough .pricepill .pp-verb{font-size:15px;font-weight:800}
+.dough .pricepill #iTotal{margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.dough .pricepill{padding-inline:22px;justify-content:flex-start;gap:10px}
+
+/* the total travels with the CTA so a diner never has to scroll to learn the price */
+.dough .inkbar .bar-total{margin-inline-start:auto;font-weight:800;font-variant-numeric:tabular-nums}
+.dough .inkbar{padding-inline:22px}
+.dough .inkbar>span:first-child{white-space:nowrap}
+
+/* promo card headlines the dish it advertises */
+.dough .promo-price{font-size:14px;font-weight:800;opacity:.9;font-variant-numeric:tabular-nums}
+
+/* confirmation recap: an order number alone is not a receipt */
+.dough .otp-recap{width:100%;margin-top:14px;background:var(--cream);border-radius:16px}
+.dough .otp-code[hidden]{display:none}
+
+/* guest order history rows + reorder */
+.dough .order-row .row-btn{
+  display:inline-flex;align-items:center;gap:6px;flex:none;
+  min-height:40px;padding:9px 14px;border-radius:var(--r-pill);
+  background:var(--cream);color:var(--ink);font-size:12px;font-weight:800;
+}
+.dough .order-row .row-btn:active{transform:scale(.94)}
+.dough .row-status{text-decoration:none}
+.dough .lookup-field{margin-top:12px}
+
+/* auth sheet */
+.dough .auth-pane{padding-top:4px}
+.dough .auth-err{margin-top:12px}
+.dough .social-login__btn{min-height:46px}
+
+/* invisible validation was the bug: message scrolls into view, field is outlined */
+.dough .is-invalid{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(217,106,87,.16)}
+.dough .err-box.shake{animation:dgh-shake .42s var(--ease)}
+@keyframes dgh-shake{20%{transform:translateX(-6px)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}100%{transform:none}}
+
+/* profile: the store phone was a large unlabelled bold number under a grey address */
+.dough .store-card{display:grid;gap:10px;margin-top:14px}
+.dough .store-line{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--ink-2);text-decoration:none}
+.dough .store-line .ic{color:var(--sage-deep);flex:none}
+.dough .store-line b{color:var(--ink);font-weight:700}
+.dough .store-line small{display:block;font-size:11.5px;color:var(--ink-3);font-weight:600}
+
+/* track receipt: the subtotal opens the money block */
+.dough .order-line.sub{border-top:1px dashed var(--line);padding-top:10px;margin-top:4px}
+
+/* the native search cancel button was an unstyled blue ✕ on cream */
+.dough input[type="search"]::-webkit-search-cancel-button{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;border-radius:50%;background:var(--line-2);
+  -webkit-mask:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center/11px no-repeat;
+  mask:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E") center/11px no-repeat;
+  cursor:pointer;
+}
+
+/* ── 2. touch targets (ALL-F2) ─────────────────────────── */
+/* Keep the drawn size — dough's cards are small on purpose — but give every
+   frequently-tapped control a real ≥44px hit box via a transparent pseudo. */
+/* .g-fav omitted here: it has its own position:absolute (card overlay); a grouped position:relative would drop it into flow and overlap the card text. It keeps its ::after hit box below. */
+.dough .g-add,.dough .ct-step button,.dough .i-thumb,.dough .subchip{position:relative}
+.dough .g-fav::after,.dough .g-add::after,.dough .ct-step button::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+}
+.dough .ct-step button::after{inset:-6px}
+
+/* ── 3. RTL: isolate LTR data inside the RTL layout (F27) ─ */
+/* Latin dish names/descriptions on an Arabic menu rendered as ".Crispy fried…"
+   and "$0.50+". Only a hand-picked list of money selectors was isolated before. */
+.dough .g-name,.dough .g-desc,.dough .i-ing,.dough .extra-name,.dough .extra-price,
+.dough .ct-mid b,.dough .ct-mid small,.dough .so-row b,.dough .so-row small,
+.dough .size-name,.dough .i-titlerow h1,.dough .promo-off,.dough .promo-price,
+.dough .so-price,.dough .tagchip,.dough .order-line span,.dough .banner-title{
+  unicode-bidi:isolate;
+}
+
+/* ── 4. dark palette (F9) ──────────────────────────────── */
+/* dough's own night register: the charcoal it already uses for onboarding and the
+   OTP view promoted to the whole app, warm cream ink, the same orange and sage
+   accents pushed one step brighter so they survive on a dark ground. NOT an
+   inversion — the cream surfaces become warm graphite, not grey. */
+.dough[data-dough-theme="dark"]{
+  --charcoal:#0E0F12;
+  --charcoal-2:#15171B;
+  --cream:#191B20;          /* page surface */
+  --cream-2:#22252B;
+  --panel:#141519;          /* cart / checkout panel */
+  --card:#1F2228;
+  --lav:#262932;
+  --lav-2:#2F323C;
+  --ink:#F3EEE6;
+  --ink-2:#C6C0B4;
+  --ink-3:#9C9689;
+  --line:rgba(243,238,230,.10);
+  --line-2:rgba(243,238,230,.20);
+  --stroke-2:rgba(243,238,230,.20);
+  /* surfaces/ink above are dough's own night register (not an inversion), so they
+     stay literal — an owner's light-mode surface override must not leak onto a dark
+     ground. The BRAND (orange→primary) and SECONDARY brand (sage→accent) DO route
+     through the token so a store's customized brand survives into dark; with no
+     override each falls back to dough's brightened dark literal, so parity holds. */
+  --orange:var(--tc-primary, #E8894C);
+  --orange-deep:#F4A26B;
+  --orange-ink:#1A1004;
+  --sage:var(--tc-accent, #7C9974);
+  --sage-deep:#AFC6A8;
+  --sage-ink:#0C120A;
+  --red:#E88875;
+}
+/* ink/cream is a PAIR (solid-ink button + cream label) and inverts correctly with
+   the tokens above; these are the spots that need a nudge on a dark ground. */
+.dough[data-dough-theme="dark"] .g-photo{box-shadow:0 12px 22px -10px rgba(0,0,0,.7)}
+.dough[data-dough-theme="dark"] .i-img{box-shadow:0 34px 60px -22px rgba(0,0,0,.8)}
+.dough[data-dough-theme="dark"] .inkbar{box-shadow:0 16px 30px -14px rgba(0,0,0,.75)}
+.dough[data-dough-theme="dark"] .pricepill{box-shadow:0 16px 30px -14px rgba(0,0,0,.75)}
+.dough[data-dough-theme="dark"] .breakdown{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .otp-recap{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .seg{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .view[data-view="cart"] .seg,
+.dough[data-dough-theme="dark"] .view[data-view="checkout"] .seg,
+.dough[data-dough-theme="dark"] .sheet .seg{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .minibtn:not(.ink){background:var(--cream-2)}
+/* Translucent-sage chips carry near-black --sage-ink text, which is unreadable on
+   a 30%-alpha wash over a dark card. On dark they take the light sage as ink. */
+.dough[data-dough-theme="dark"] :is(.row-status,.order-status,.me-badge,.otp-code,.res-done,.loyalty-row,.tagchip.sage){color:var(--sage-deep)}
+.dough[data-dough-theme="dark"] .loyalty-row .loy-cta{color:var(--cream);background:var(--ink)}
+.dough[data-dough-theme="dark"] .pts-card{color:#0C120A}
+.dough[data-dough-theme="dark"] .order-row .row-btn{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .pm-ic{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .pm-logos span{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .tagchip{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .cc-addr{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .extra:active{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .qty-circle:active{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .tl-node{background:var(--cream-2)}
+.dough[data-dough-theme="dark"] .circlebtn,.dough[data-dough-theme="dark"] .fab{box-shadow:none}
+.dough[data-dough-theme="dark"] .circlebtn.lav{background:rgba(255,255,255,.10)}
+.dough[data-dough-theme="dark"] .bag-count{outline-color:var(--card)}
+.dough[data-dough-theme="dark"] .flt-dot{outline-color:var(--card)}
+.dough[data-dough-theme="dark"] .g-soldout{color:#1A1B1E}
+.dough[data-dough-theme="dark"] .social-login__btn{background:rgba(255,255,255,.06);color:#f2f2f2;border-color:rgba(255,255,255,.18)}
+.dough[data-dough-theme="dark"] .social-login__btn--apple{background:#fff;color:#000;border-color:#fff}
+/* the placeholder art is drawn light — dim it so it does not glare at night */
+.dough[data-dough-theme="dark"] img.is-ph{filter:brightness(.42) saturate(.7)}
+
+/* ── 5. responsive (F28) ───────────────────────────────────
+   dough had ZERO width media queries: a 1280px desktop got two ~600px-wide cards
+   with 400px placeholder discs and a centred "Menu" pill. The app-shell metaphor
+   is kept — it is a QR menu, phones are ~90% of traffic — but from tablet up the
+   shell becomes a centred, framed column and the grid gains real columns. */
+
+/* small phones: nothing may overflow horizontally at 320 */
+@media (max-width:359px){
+  .dough .view-scroll{padding-inline:14px}
+  .dough .grid{gap:9px}
+  .dough .g-photo{width:84px;height:84px}
+  .dough .hello-big{font-size:20px}
+  .dough .promo{padding:18px;min-height:132px}
+  .dough .promo-off{font-size:25px}
+  .dough .promo-pizza{width:126px;height:126px;inset-inline-end:-34px}
+  .dough .ob-title{font-size:38px}
+  .dough .otp-boxes.otp-6{gap:6px}
+  .dough .otp-boxes.otp-6 input{width:40px;height:50px;font-size:18px}
+  .dough .field-duo{grid-template-columns:1fr}
+}
+
+/* large phones / small tablets: a third column of dishes */
+@media (min-width:560px){
+  .dough .grid{grid-template-columns:repeat(3,1fr);gap:14px}
+  .dough .g-photo{width:118px;height:118px}
+  .dough .banner{flex-basis:56%}
+}
+
+/* tablet and up: the phone shell becomes a framed, centred app column */
+@media (min-width:768px){
+  html:has(.dough),body:has(.dough){background:#0B0C0F}
+  .dough{
+    position:fixed;inset:0;
+    display:grid;grid-template-columns:minmax(0,1fr);
+    place-content:stretch center;
+    padding:0;
+  }
+  .dough>.views,.dough .views{max-width:none}
+  .dough .view-scroll{padding-inline:max(20px,calc((100% - 720px) / 2))}
+  .dough .grid{grid-template-columns:repeat(3,1fr);gap:16px}
+  .dough .onboard{padding-inline:max(30px,calc((100% - 720px) / 2))}
+  .dough .search-overlay{padding-inline:max(20px,calc((100% - 720px) / 2))}
+  .dough .sheet{
+    inset-inline:auto;left:50%;translate:-50% 0;width:min(560px,100%);
+    border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  }
+  .dough .sheet.is-open{transform:none}
+  .dough .foot-cta{padding-inline:max(20px,calc((100% - 720px) / 2))}
+  .dough .foot-cta .inkbar{max-width:420px;margin-inline:auto}
+  .dough .i-hero{height:40%}
+  .dough .i-sheet{
+    inset-inline:auto;left:50%;translate:-50% 0;width:min(720px,100%);
+  }
+  .dough .i-scroll{padding-inline:max(22px,calc((100% - 640px) / 2))}
+  .dough .i-cta{padding-inline:max(22px,calc((100% - 640px) / 2))}
+  .dough .otp-card{max-width:520px;margin-inline:auto}
+  .dough .view-otp{padding-inline:max(18px,calc((100% - 720px) / 2))}
+}
+
+/* desktop: four columns, a real content measure, larger art */
+@media (min-width:1024px){
+  .dough .view-scroll{padding-inline:max(24px,calc((100% - 960px) / 2))}
+  .dough .onboard{padding-inline:max(30px,calc((100% - 960px) / 2))}
+  .dough .search-overlay{padding-inline:max(24px,calc((100% - 960px) / 2))}
+  .dough .foot-cta{padding-inline:max(24px,calc((100% - 960px) / 2))}
+  .dough .grid{grid-template-columns:repeat(4,1fr);gap:18px}
+  .dough .g-photo{width:132px;height:132px}
+  .dough .g-name{font-size:15px}
+  .dough .promo{min-height:180px;padding:28px}
+  .dough .promo-off{font-size:36px}
+  .dough .promo-pizza{width:190px;height:190px}
+  .dough .hello-big{font-size:27px}
+  .dough .banner{flex-basis:42%}
+  .dough .cat-row{padding-top:24px}
+  /* the item view stops being a bottom sheet and becomes a two-pane layout */
+  .dough .view[data-view="item"] .i-hero{
+    position:absolute;inset-block:0;inset-inline-start:0;width:44%;height:auto;
+  }
+  .dough .i-img{width:min(72%,340px)}
+  .dough .i-sheet{
+    /* the physical resets MUST come before the logical insets: `left:auto` declared
+       after `inset-inline-end` cascades over the RTL-resolved left, which parked the
+       sheet on top of the photo pane in Arabic (both at x=717..1280, 44% of the view
+       left empty). Physical first, logical last, and RTL mirrors correctly. */
+    left:auto;right:auto;translate:none;
+    inset-block:0;inset-inline-start:auto;inset-inline-end:0;
+    width:56%;height:100%;border-radius:0;
+  }
+  .dough .i-sheet.is-tall{height:100%}
+  .dough .i-notch{display:none}
+  .dough .i-scroll{padding:34px max(28px,6%) 0}
+  .dough .i-cta{padding:14px max(28px,6%) 26px}
+  .dough .i-gallery{top:auto;bottom:26px}
+  /* the cart gets the same two-pane treatment as the item view.
+     Stacked, a 1280x623 laptop opened the cart with the order-type, coupon, tip and
+     totals ALL below the fold — the tip chips hit-tested to FOOTER.foot-cta because the
+     cart footer (a 164px bar, 96px of it dead space kept clear for the floating pill)
+     ate 26% of the viewport. Receipt on the left, everything you decide on the right. */
+  .dough .view[data-view="cart"] .view-scroll{
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+    column-gap:30px;align-content:start;align-items:start;
+  }
+  .dough .view[data-view="cart"] .page-head,
+  .dough .view[data-view="cart"] .empty,
+  .dough .view[data-view="cart"] .tail-space{grid-column:1 / -1}
+  .dough .view[data-view="cart"] .cart-list{grid-column:1;grid-row:2}
+  .dough .view[data-view="cart"] .cart-tools{grid-column:2;grid-row:2;padding-top:0}
+  /* the collapsed "Menu" pill is a phone affordance; on a mouse, show the nav */
+  .dough .menupill .mp-toggle{display:none}
+  .dough .menupill .mp-nav{display:flex}
+}
+
+@media (min-width:1440px){
+  .dough .view-scroll{padding-inline:calc((100% - 1120px) / 2)}
+  .dough .foot-cta{padding-inline:calc((100% - 1120px) / 2)}
+  .dough .search-overlay{padding-inline:calc((100% - 1120px) / 2)}
+  .dough .grid{grid-template-columns:repeat(5,1fr)}
+}
+
+/* pointer-fine devices get hover affordances that touch devices must not stick on */
+@media (hover:hover){
+  .dough .g-card:hover{transform:translateY(-3px)}
+  .dough .chip:hover,.dough .subchip:hover{border-color:var(--line-2)}
+  .dough .order-row:hover,.dough .line-row:hover{border-color:var(--line-2)}
+}
+.dough .co-error{margin:12px 0 4px}
+
+/* Keyboard focus rings (a11y). The theme had no :focus-visible rules — every
+   button, link, icon button, category chip, menu card, banner and nav control
+   was invisible to keyboard users. One brand-orange ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.dough a:focus-visible,
+.dough button:focus-visible,
+.dough [tabindex]:focus-visible,
+.dough .chip:focus-visible,
+.dough .card:focus-visible,
+.dough .g-card:focus-visible,
+.dough .banner:focus-visible,
+.dough .fab:focus-visible { outline:2px solid var(--orange); outline-offset:2px; }
+/* inputs keep their own focus treatment; suppress the ring to avoid doubling. */
+.dough input:focus-visible,
+.dough textarea:focus-visible,
+.dough select:focus-visible { outline:none; }
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.dough .ck-head{gap:10px;padding:4px 0 2px}
+.dough .ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.dough .ck-items{gap:0}
+.dough .ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.dough .ck-row + .ck-row{border-top:1px solid var(--line)}
+.dough .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.dough .ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--cream-2);border-radius:9px;padding:3px 6px}
+.dough .ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.dough .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.dough .ct-rm{position:relative}
+.dough .ct-rm::after{content:"";position:absolute;inset:-6px -4px}
+.dough .ct-notebtn{min-height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, dough skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Cream bakery ticket. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--cream-2);border:1px dashed var(--doodle);color:var(--ink-2);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--ink-2)}
+
+/* ── notification-center panel — dough skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--card,#FFFFFF);--nb-surface-2:var(--cream-2,#E9E2D4);--nb-line:var(--cream-2,#E9E2D4);--nb-ink:var(--ink,#1A1B1E);--nb-muted:var(--ink-2,#5F5B54);--nb-accent:var(--orange-deep,#E07F3F)}
+
+/* topbar toggle icons (Lane B) — rides dough's NATIVE appearance system
+   (data-dough-theme on the root, #themeSeg, LS key "theme"): light shows the
+   moon (action = go dark), dark shows the sun */
+.dough .mb-th-sun{display:none}
+.dough[data-dough-theme="dark"] .mb-th-sun{display:block}
+.dough[data-dough-theme="dark"] .mb-th-moon{display:none}
+
+/* B9 · --doodle (light beige decorative stroke + the currency-notice dashed
+   border) had no dark value in the native palette — tone it down */
+.dough[data-dough-theme="dark"]{--doodle:#31343C}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.dough .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — dough skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#brandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#followBtn. Maps the shared
+   --mbh-* token contract onto dough's own scheme-aware tokens (card/ink/orange/
+   line/r-card/r-pill/r-sheet) so re-ink holds on the light/dark flip. Only the
+   hub paints an opaque surface (a modal legitimately does); the chip and the
+   checkout controls stay translucent / borderless so they never fight the
+   charcoal chrome. Logical props for RTL.
+   ═══════════════════════════════════════════════════════════ */
+.dough #mbHotelChip,
+.dough #mbHotelOrderCtrls,
+.dough #mbHotelBook,
+.dough #mbHotelHub{
+  --mbh-surface:var(--card);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--orange);
+  --mbh-on-accent:var(--orange-ink);
+  --mbh-border:var(--line-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill sitting with the follow button in the brand row ── */
+.dough #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--card);border:1px solid var(--line-2);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.dough #mbHotelChip:active{transform:scale(.95)}
+.dough #mbHotelChip .mb-hotel-roomchip__ic{color:var(--orange)}
+.dough #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: dough's own bottom sheet (card surface, r-sheet corners, grab + x) ── */
+.dough #mbHotelHubScrim{background:rgba(14,15,18,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.dough #mbHotelHub{
+  background:var(--card);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--line-2);box-shadow:none;
+}
+.dough #mbHotelHub .mb-hotel-hub__grab{background:var(--line-2)}
+.dough #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.dough #mbHotelHub .mb-hotel-hub__x{
+  background:var(--cream-2);color:var(--ink-2);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.dough #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.dough #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.dough #mbHotelHub .mb-hotel-card{border-color:var(--line)}
+.dough #mbHotelHub .mb-hotel-card summary,
+.dough #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.dough #mbHotelHub .mb-hotel-info-link{color:var(--orange)}
+/* service form controls → dough inputs / orange CTA */
+.dough #mbHotelHub .mb-hotel-field{
+  background:var(--card);border:1px solid var(--line-2);color:var(--ink);border-radius:12px;
+}
+.dough #mbHotelHub .mb-hotel-btn{
+  background:var(--orange);color:var(--orange-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → dough tender rows ── */
+.dough #mbHotelOrderCtrls{margin:0}
+.dough #mbHotelSched,
+.dough #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--line);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.dough #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.dough #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.dough #mbHotelSched input[type="radio"]{accent-color:var(--orange)}
+.dough #mbHotelSched .mb-hotel-field{
+  background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);border-radius:14px;
+}
+.dough #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.dough #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.dough #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.dough #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.dough #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.dough #mbHotelCharge input[type="checkbox"]{accent-color:var(--orange)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .dough, RTL-safe (logical props), scheme-flip via tokens.
+   Mirrors the item .i-rate pill (orange star) for a consistent look. */
+.dough .dough-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.dough .dough-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:var(--orange-deep);background:rgba(242,153,94,.14);padding-block:6px;padding-inline:11px;border-radius:var(--r-pill)}
+.dough .dough-rating small{color:var(--ink-3);font-weight:600}
+.dough .dough-review-list{display:flex;flex-direction:column;gap:8px}
+.dough .dough-review{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding-block:10px;padding-inline:13px}
+.dough .dough-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.dough .dough-review-star{color:var(--orange-deep);font-weight:800;white-space:nowrap}
+.dough .dough-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.dough .dough-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for dough. Surface,
+   ink, border and radius come from dough tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.dough .mb-paypending{
+  --pp-surface:var(--card,#ffffff);
+  --pp-ink:var(--ink,#1A1B1E);
+  --pp-muted:var(--ink-2,#5F5B54);
+  --pp-border:var(--line-2,rgba(26,27,30,.16));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,22px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.dough .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.dough .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.dough .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.dough .mb-paypending-txn:empty{display:none}
+.dough .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.dough .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.dough .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.dough .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.dough .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.wa-order.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}

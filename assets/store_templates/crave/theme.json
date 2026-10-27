@@ -1,0 +1,262 @@
+{
+  "version": 2,
+  "texts": {
+    "localized": true
+  },
+  "presets": [
+    {
+      "id": "signature",
+      "label": "Signature",
+      "thumb": "assets/store_templates/crave/presets/signature.png",
+      "values": {
+        "colors.primary": "#3fd463",
+        "colors.background": "#15171a",
+        "colors.surface": "#22262b",
+        "colors.text": "#f4f6f5",
+        "colors.accent": "#ffb02e",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "daylight",
+      "label": "Daylight",
+      "thumb": "assets/store_templates/crave/presets/daylight.png",
+      "values": {
+        "colors.primary": "#17b866",
+        "colors.background": "#f6f8f6",
+        "colors.surface": "#ffffff",
+        "colors.text": "#12201a",
+        "colors.accent": "#f08a00",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "midnight",
+      "label": "Midnight",
+      "thumb": "assets/store_templates/crave/presets/midnight.png",
+      "values": {
+        "colors.primary": "#7c5cff",
+        "colors.background": "#0a0a12",
+        "colors.surface": "#15151f",
+        "colors.text": "#ececf5",
+        "colors.accent": "#39d0e0",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "desert",
+      "label": "Desert",
+      "thumb": "assets/store_templates/crave/presets/desert.png",
+      "values": {
+        "colors.primary": "#e07a3c",
+        "colors.background": "#1c150f",
+        "colors.surface": "#2a2016",
+        "colors.text": "#f6ead9",
+        "colors.accent": "#e0b23c",
+        "layout.radius": "soft"
+      }
+    },
+    {
+      "id": "mono",
+      "label": "Mono",
+      "thumb": "assets/store_templates/crave/presets/mono.png",
+      "values": {
+        "colors.primary": "#e8e8ea",
+        "colors.background": "#0e0e0f",
+        "colors.surface": "#1a1a1c",
+        "colors.text": "#f5f5f6",
+        "colors.accent": "#9a9aa0",
+        "layout.radius": "none"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#3fd463"
+        },
+        "colors.background": {
+          "default": "#15171a"
+        },
+        "colors.surface": {
+          "default": "#22262b"
+        },
+        "colors.text": {
+          "default": "#f4f6f5"
+        },
+        "colors.accent": {
+          "default": "#ffb02e"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Hero title",
+          "default": "Fresh Food"
+        },
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.menu_title",
+          "type": "text",
+          "label": "Menu section title",
+          "default": "Menu"
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Featured"
+        },
+        {
+          "id": "texts.order_now",
+          "type": "text",
+          "label": "Order button",
+          "default": "Order now"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": "Add to cart"
+        },
+        {
+          "id": "texts.cart_button",
+          "type": "text",
+          "label": "View-cart button",
+          "default": "View cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.view_menu",
+          "type": "text",
+          "label": "View-menu button",
+          "default": "View menu"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery label",
+          "default": "Delivery"
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup label",
+          "default": "Pickup"
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.enabled": {
+          "default": true,
+          "label": "Show intro splash"
+        }
+      }
+    },
+    {
+      "include": "search",
+      "fields": {
+        "search.enabled": {
+          "default": true,
+          "label": "Show search bar"
+        },
+        "texts.search_placeholder": {
+          "default": "Search the menu",
+          "label": "Search box placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        },
+        {
+          "id": "brand.cover_splash",
+          "type": "toggle",
+          "label": "Cover behind splash",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "daily_specials",
+      "label": "Today's specials",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "catbar",
+      "label": "Category chips",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

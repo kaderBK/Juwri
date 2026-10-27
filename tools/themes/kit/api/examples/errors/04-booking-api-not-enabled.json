@@ -1,0 +1,32 @@
+{
+  "operationId": "getBookingStaff",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/booking/staff",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ]
+    }
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:32:10 GMT"
+    },
+    "body": {
+      "message": "The booking API is not included in this store's plan.",
+      "code": "booking_api_not_enabled",
+      "details": {
+        "feature": "booking_api"
+      }
+    }
+  }
+}

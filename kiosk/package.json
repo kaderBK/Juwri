@@ -1,0 +1,21 @@
+{
+  "name": "juwri-kiosk",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "description": "juwri self-service Kiosk — Capacitor 8 Android launcher-mode wrapper of the {slug}/kiosk web mode.",
+  "scripts": {
+    "sync": "cap sync",
+    "open:android": "cap open android",
+    "add:android": "cap add android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0",
+    "@capgo/capacitor-android-kiosk": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0"
+  }
+}

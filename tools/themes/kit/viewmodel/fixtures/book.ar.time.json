@@ -1,0 +1,1100 @@
+{
+ "store": {
+  "public_id": "st_sidra_salon",
+  "slug": "sidra-salon-demo",
+  "name": "صالون سدرة",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "صالون سدرة"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "صالون سدرة"
+  },
+  "tagline": "شعر وأظافر وسبا في حي الملقا",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/sidra-salon-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/sidra-salon-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "service",
+  "store_type": "services",
+  "status": {
+   "open": true,
+   "label": "مفتوح · يغلق 10 م",
+   "next_change_at": "2026-10-02T22:00:00+03:00",
+   "paused_reason": null,
+   "accepting_bookings": true
+  },
+  "contact": {
+   "phone": "+966 55 010 0105",
+   "whatsapp": "+966 55 010 0105",
+   "address": "طريق أنس بن مالك، حي الملقا، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/sidra-salon"
+   }
+  ],
+  "rating": {
+   "avg": 4.8,
+   "count": 320
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/sidra-salon-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/sidra-salon-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "مؤسسة صالون سدرة للتجميل",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-5505",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-5505",
+    "label": "الرقم الضريبي"
+   },
+   "address": "طريق أنس بن مالك، حي الملقا، الرياض 13521"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "الفرع الرئيسي",
+   "address": "طريق أنس بن مالك، حي الملقا، الرياض"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "appointment",
+    "label": "في الصالون",
+    "needs_address": false,
+    "needs_slot": true
+   },
+   {
+    "key": "at_home",
+    "label": "في المنزل",
+    "needs_address": true,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "appointment",
+  "schedule_ahead": true,
+  "next_free_slot": {
+   "label": "اليوم 4:30 م",
+   "at": "2026-10-02T16:30:00+03:00"
+  },
+  "staff": [
+   {
+    "id": "maha",
+    "name": "مها",
+    "role": "مصففة شعر أولى",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مها"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   },
+   {
+    "id": "lina",
+    "name": "لينا",
+    "role": "مصففة شعر",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لينا"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "evening-makeup",
+     "bridal-makeup-trial",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   },
+   {
+    "id": "sara",
+    "name": "سارة",
+    "role": "خبيرة صبغات",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سارة"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage"
+    ]
+   },
+   {
+    "id": "reem",
+    "name": "ريم",
+    "role": "فنية أظافر",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ريم"
+    },
+    "service_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure"
+    ]
+   },
+   {
+    "id": "dana",
+    "name": "دانة",
+    "role": "أخصائية تجميل",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "دانة"
+    },
+    "service_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure",
+     "classic-facial",
+     "hydrating-glow-facial",
+     "eyebrow-threading",
+     "relaxing-massage",
+     "hot-stone-massage",
+     "back-and-shoulders-massage",
+     "evening-makeup",
+     "bridal-makeup-trial",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   }
+  ]
+ },
+ "theme": {
+  "slug": "book",
+  "preset": "calm",
+  "settings": {
+   "colors.primary": "#2F6B5E",
+   "colors.background": "#F6F7F4",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#1C2420",
+   "colors.accent": "#C9A36A",
+   "layout.radius": "soft",
+   "layout.density": "cozy",
+   "fonts.pair": "jakarta",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#7FC8B5",
+   "colors_dark.background": "#0F1412",
+   "colors_dark.surface": "#18201D",
+   "colors_dark.text": "#ECF2EF",
+   "colors_dark.accent": "#D9B97E",
+   "layout.card": "list",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "cover",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "featured_title": "الأكثر طلباً",
+   "search_placeholder": "ابحث عن خدمة"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "hair",
+    "name": "الشعر",
+    "item_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut"
+    ],
+    "count": 5
+   },
+   {
+    "id": "colour",
+    "name": "الصبغات",
+    "item_ids": [
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage"
+    ],
+    "count": 3
+   },
+   {
+    "id": "nails",
+    "name": "الأظافر",
+    "item_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure"
+    ],
+    "count": 4
+   },
+   {
+    "id": "face",
+    "name": "العناية بالوجه",
+    "item_ids": [
+     "classic-facial",
+     "hydrating-glow-facial",
+     "eyebrow-threading"
+    ],
+    "count": 3
+   },
+   {
+    "id": "massage",
+    "name": "المساج",
+    "item_ids": [
+     "relaxing-massage",
+     "hot-stone-massage",
+     "back-and-shoulders-massage"
+    ],
+    "count": 3
+   },
+   {
+    "id": "makeup",
+    "name": "المكياج",
+    "item_ids": [
+     "evening-makeup",
+     "bridal-makeup-trial"
+    ],
+    "count": 2
+   },
+   {
+    "id": "packages",
+    "name": "الباقات",
+    "item_ids": [
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ],
+    "count": 3
+   }
+  ],
+  "items": {
+   "haircut-and-blow-dry": {
+    "id": "haircut-and-blow-dry",
+    "name": "قص وسشوار",
+    "url": "/sidra-salon-demo/item/haircut-and-blow-dry",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "قص وسشوار"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "استشارة وقص وسشوار نهائي.",
+    "from_price": {
+     "minor": 12000,
+     "currency": "SAR",
+     "formatted": "120.00 ر.س"
+    },
+    "duration_min": 45,
+    "meta_label": "45 دقيقة · من 120.00 ر.س"
+   },
+   "blow-dry": {
+    "id": "blow-dry",
+    "name": "سشوار",
+    "url": "/sidra-salon-demo/item/blow-dry",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سشوار"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "غسيل وسشوار وتصفيف.",
+    "from_price": {
+     "minor": 7000,
+     "currency": "SAR",
+     "formatted": "70.00 ر.س"
+    },
+    "duration_min": 30,
+    "meta_label": "30 دقيقة · من 70.00 ر.س"
+   },
+   "keratin-smoothing-treatment": {
+    "id": "keratin-smoothing-treatment",
+    "name": "علاج تنعيم بالكيراتين",
+    "url": "/sidra-salon-demo/item/keratin-smoothing-treatment",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "علاج تنعيم بالكيراتين"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "شعر لامع وخالٍ من التجعد حتى ثلاثة أشهر.",
+    "from_price": {
+     "minor": 45000,
+     "currency": "SAR",
+     "formatted": "450.00 ر.س"
+    },
+    "duration_min": 150,
+    "meta_label": "ساعتان و30 دقيقة · من 450.00 ر.س"
+   },
+   "event-hairstyling": {
+    "id": "event-hairstyling",
+    "name": "تسريحة مناسبات",
+    "url": "/sidra-salon-demo/item/event-hairstyling",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تسريحة مناسبات"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تسريحة مرفوعة أو تموجات لمناسبتك.",
+    "price": {
+     "minor": 20000,
+     "currency": "SAR",
+     "formatted": "200.00 ر.س"
+    },
+    "duration_min": 60,
+    "meta_label": "ساعة · 200.00 ر.س"
+   },
+   "kids-haircut": {
+    "id": "kids-haircut",
+    "name": "قص شعر للأطفال",
+    "url": "/sidra-salon-demo/item/kids-haircut",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "قص شعر للأطفال"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "للأطفال دون 12 سنة مع غسيل.",
+    "price": {
+     "minor": 6000,
+     "currency": "SAR",
+     "formatted": "60.00 ر.س"
+    },
+    "duration_min": 30,
+    "meta_label": "30 دقيقة · 60.00 ر.س"
+   },
+   "root-colour-touch-up": {
+    "id": "root-colour-touch-up",
+    "name": "صبغ الجذور",
+    "url": "/sidra-salon-demo/item/root-colour-touch-up",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "صبغ الجذور"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تغطية الجذور بدرجة مطابقة.",
+    "price": {
+     "minor": 22000,
+     "currency": "SAR",
+     "formatted": "220.00 ر.س"
+    },
+    "duration_min": 90,
+    "meta_label": "ساعة و30 دقيقة · 220.00 ر.س"
+   },
+   "full-hair-colour": {
+    "id": "full-hair-colour",
+    "name": "صبغة شعر كاملة",
+    "url": "/sidra-salon-demo/item/full-hair-colour",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "صبغة شعر كاملة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "صبغة كاملة بلمسة لمعان.",
+    "from_price": {
+     "minor": 38000,
+     "currency": "SAR",
+     "formatted": "380.00 ر.س"
+    },
+    "duration_min": 150,
+    "meta_label": "ساعتان و30 دقيقة · من 380.00 ر.س"
+   },
+   "balayage": {
+    "id": "balayage",
+    "name": "بالياج",
+    "url": "/sidra-salon-demo/item/balayage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بالياج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "هايلايت مرسوم يدوياً بإطلالة مشمسة.",
+    "from_price": {
+     "minor": 65000,
+     "currency": "SAR",
+     "formatted": "650.00 ر.س"
+    },
+    "duration_min": 210,
+    "meta_label": "3 ساعات و30 دقيقة · من 650.00 ر.س"
+   },
+   "classic-manicure": {
+    "id": "classic-manicure",
+    "name": "مانيكير كلاسيك",
+    "url": "/sidra-salon-demo/item/classic-manicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مانيكير كلاسيك"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تشكيل وعناية بالجلد وطلاء.",
+    "price": {
+     "minor": 7000,
+     "currency": "SAR",
+     "formatted": "70.00 ر.س"
+    },
+    "duration_min": 40,
+    "meta_label": "40 دقيقة · 70.00 ر.س"
+   },
+   "gel-manicure": {
+    "id": "gel-manicure",
+    "name": "مانيكير جل",
+    "url": "/sidra-salon-demo/item/gel-manicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مانيكير جل"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لون جل يدوم طويلاً بلمعان عالٍ.",
+    "price": {
+     "minor": 11000,
+     "currency": "SAR",
+     "formatted": "110.00 ر.س"
+    },
+    "duration_min": 55,
+    "meta_label": "55 دقيقة · 110.00 ر.س"
+   },
+   "classic-pedicure": {
+    "id": "classic-pedicure",
+    "name": "باديكير كلاسيك",
+    "url": "/sidra-salon-demo/item/classic-pedicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "باديكير كلاسيك"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "نقع وتقشير وتشكيل وطلاء.",
+    "price": {
+     "minor": 9000,
+     "currency": "SAR",
+     "formatted": "90.00 ر.س"
+    },
+    "duration_min": 50,
+    "meta_label": "50 دقيقة · 90.00 ر.س"
+   },
+   "gel-pedicure": {
+    "id": "gel-pedicure",
+    "name": "باديكير جل",
+    "url": "/sidra-salon-demo/item/gel-pedicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "باديكير جل"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "باديكير مع لون جل يدوم طويلاً.",
+    "price": {
+     "minor": 13000,
+     "currency": "SAR",
+     "formatted": "130.00 ر.س"
+    },
+    "duration_min": 65,
+    "meta_label": "ساعة و5 دقيقة · 130.00 ر.س"
+   },
+   "classic-facial": {
+    "id": "classic-facial",
+    "name": "تنظيف بشرة كلاسيكي",
+    "url": "/sidra-salon-demo/item/classic-facial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تنظيف بشرة كلاسيكي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تنظيف وتقشير واستخراج الشوائب وقناع.",
+    "price": {
+     "minor": 22000,
+     "currency": "SAR",
+     "formatted": "220.00 ر.س"
+    },
+    "duration_min": 60,
+    "meta_label": "ساعة · 220.00 ر.س"
+   },
+   "hydrating-glow-facial": {
+    "id": "hydrating-glow-facial",
+    "name": "جلسة نضارة وترطيب",
+    "url": "/sidra-salon-demo/item/hydrating-glow-facial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "جلسة نضارة وترطيب"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "ترطيب عميق للبشرة الباهتة والمرهقة.",
+    "price": {
+     "minor": 26000,
+     "currency": "SAR",
+     "formatted": "260.00 ر.س"
+    },
+    "duration_min": 60,
+    "meta_label": "ساعة · 260.00 ر.س"
+   },
+   "eyebrow-threading": {
+    "id": "eyebrow-threading",
+    "name": "تنظيف الحواجب بالخيط",
+    "url": "/sidra-salon-demo/item/eyebrow-threading",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تنظيف الحواجب بالخيط"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حواجب مرتبة ومحددة خلال دقائق.",
+    "price": {
+     "minor": 3000,
+     "currency": "SAR",
+     "formatted": "30.00 ر.س"
+    },
+    "duration_min": 15,
+    "meta_label": "15 دقيقة · 30.00 ر.س"
+   },
+   "relaxing-massage": {
+    "id": "relaxing-massage",
+    "name": "مساج استرخاء",
+    "url": "/sidra-salon-demo/item/relaxing-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مساج استرخاء"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مساج للجسم كاملاً بزيوت دافئة.",
+    "from_price": {
+     "minor": 25000,
+     "currency": "SAR",
+     "formatted": "250.00 ر.س"
+    },
+    "duration_min": 60,
+    "meta_label": "ساعة · من 250.00 ر.س"
+   },
+   "hot-stone-massage": {
+    "id": "hot-stone-massage",
+    "name": "مساج بالأحجار الساخنة",
+    "url": "/sidra-salon-demo/item/hot-stone-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مساج بالأحجار الساخنة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أحجار دافئة تخفف توتر العضلات العميق.",
+    "price": {
+     "minor": 28000,
+     "currency": "SAR",
+     "formatted": "280.00 ر.س"
+    },
+    "duration_min": 75,
+    "meta_label": "ساعة و15 دقيقة · 280.00 ر.س"
+   },
+   "back-and-shoulders-massage": {
+    "id": "back-and-shoulders-massage",
+    "name": "مساج الظهر والكتفين",
+    "url": "/sidra-salon-demo/item/back-and-shoulders-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مساج الظهر والكتفين"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "جلسة مركّزة لعضلات أرهقها الجلوس.",
+    "price": {
+     "minor": 14000,
+     "currency": "SAR",
+     "formatted": "140.00 ر.س"
+    },
+    "duration_min": 30,
+    "meta_label": "30 دقيقة · 140.00 ر.س"
+   },
+   "evening-makeup": {
+    "id": "evening-makeup",
+    "name": "مكياج سهرة",
+    "url": "/sidra-salon-demo/item/evening-makeup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مكياج سهرة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مكياج يدوم طويلاً للعشاء والمناسبات.",
+    "price": {
+     "minor": 28000,
+     "currency": "SAR",
+     "formatted": "280.00 ر.س"
+    },
+    "duration_min": 60,
+    "meta_label": "ساعة · 280.00 ر.س"
+   },
+   "bridal-makeup-trial": {
+    "id": "bridal-makeup-trial",
+    "name": "تجربة مكياج العروس",
+    "url": "/sidra-salon-demo/item/bridal-makeup-trial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تجربة مكياج العروس"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "جرّبي إطلالتك قبل يوم الزفاف.",
+    "price": {
+     "minor": 45000,
+     "currency": "SAR",
+     "formatted": "450.00 ر.س"
+    },
+    "duration_min": 90,
+    "meta_label": "ساعة و30 دقيقة · 450.00 ر.س"
+   },
+   "bride-to-be-package": {
+    "id": "bride-to-be-package",
+    "name": "باقة العروس",
+    "url": "/sidra-salon-demo/item/bride-to-be-package",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "باقة العروس"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "شعر ومكياج ومانيكير وتنظيف بشرة ليوم الاستعداد.",
+    "price": {
+     "minor": 120000,
+     "currency": "SAR",
+     "formatted": "1200.00 ر.س"
+    },
+    "duration_min": 240,
+    "meta_label": "4 ساعات · 1200.00 ر.س"
+   },
+   "glow-day-package": {
+    "id": "glow-day-package",
+    "name": "باقة اليوم المشرق",
+    "url": "/sidra-salon-demo/item/glow-day-package",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "باقة اليوم المشرق"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تنظيف بشرة ومانيكير جل وسشوار.",
+    "price": {
+     "minor": 65000,
+     "currency": "SAR",
+     "formatted": "650.00 ر.س"
+    },
+    "duration_min": 180,
+    "meta_label": "3 ساعات · 650.00 ر.س"
+   },
+   "mani-pedi-duo": {
+    "id": "mani-pedi-duo",
+    "name": "باقة مانيكير وباديكير",
+    "url": "/sidra-salon-demo/item/mani-pedi-duo",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "باقة مانيكير وباديكير"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مانيكير وباديكير كلاسيك معاً.",
+    "price": {
+     "minor": 19000,
+     "currency": "SAR",
+     "formatted": "190.00 ر.س"
+    },
+    "duration_min": 90,
+    "meta_label": "ساعة و30 دقيقة · 190.00 ر.س"
+   }
+  }
+ },
+ "features": {
+  "featured": [
+   "haircut-and-blow-dry",
+   "balayage",
+   "gel-manicure",
+   "relaxing-massage"
+  ]
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/sidra-salon-demo/cart",
+  "quote": "/sidra-salon-demo/quote",
+  "place": "/sidra-salon-demo/order",
+  "track": "/sidra-salon-demo/track",
+  "coupon": "/sidra-salon-demo/coupon",
+  "otp": "/sidra-salon-demo/otp",
+  "account": "/sidra-salon-demo/account",
+  "search": "/sidra-salon-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "checkout",
+  "checkout": {
+   "step_label": "الخطوة 2 من 3",
+   "summary_rows": [
+    {
+     "icon": "scissors",
+     "label": "قص وسشوار",
+     "sub": "متوسط · ترطيب عميق · ساعة و15 دقيقة"
+    }
+   ],
+   "staff": [
+    {
+     "id": "any",
+     "name": "أي موظفة",
+     "role": "الأقرب",
+     "photo": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "أي موظفة"
+     },
+     "service_ids": [
+      "haircut-and-blow-dry"
+     ]
+    },
+    {
+     "id": "maha",
+     "name": "مها",
+     "role": "مصففة شعر أولى",
+     "photo": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "مها"
+     },
+     "service_ids": [
+      "haircut-and-blow-dry",
+      "blow-dry",
+      "keratin-smoothing-treatment",
+      "event-hairstyling",
+      "kids-haircut",
+      "root-colour-touch-up",
+      "full-hair-colour",
+      "balayage",
+      "bride-to-be-package",
+      "glow-day-package",
+      "mani-pedi-duo"
+     ]
+    },
+    {
+     "id": "lina",
+     "name": "لينا",
+     "role": "مصففة شعر",
+     "photo": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "لينا"
+     },
+     "service_ids": [
+      "haircut-and-blow-dry",
+      "blow-dry",
+      "keratin-smoothing-treatment",
+      "event-hairstyling",
+      "kids-haircut",
+      "evening-makeup",
+      "bridal-makeup-trial",
+      "bride-to-be-package",
+      "glow-day-package",
+      "mani-pedi-duo"
+     ]
+    },
+    {
+     "id": "sara",
+     "name": "سارة",
+     "role": "خبيرة صبغات",
+     "photo": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "سارة"
+     },
+     "service_ids": [
+      "haircut-and-blow-dry",
+      "blow-dry",
+      "keratin-smoothing-treatment",
+      "event-hairstyling",
+      "kids-haircut",
+      "root-colour-touch-up",
+      "full-hair-colour",
+      "balayage"
+     ]
+    }
+   ],
+   "selected_staff": "maha",
+   "slots": {
+    "title": "أكتوبر 2026",
+    "days": [
+     {
+      "id": "d_fri",
+      "label": "جمعة",
+      "sub": "2",
+      "state": "available"
+     },
+     {
+      "id": "d_sat",
+      "label": "سبت",
+      "sub": "3",
+      "state": "closed"
+     },
+     {
+      "id": "d_sun",
+      "label": "أحد",
+      "sub": "4",
+      "state": "selected"
+     },
+     {
+      "id": "d_mon",
+      "label": "اثنين",
+      "sub": "5",
+      "state": "available"
+     },
+     {
+      "id": "d_tue",
+      "label": "ثلاثاء",
+      "sub": "6",
+      "state": "available"
+     }
+    ],
+    "groups": [
+     {
+      "label": "بعد الظهر",
+      "slots": [
+       {
+        "id": "t_1300",
+        "label": "1:00 م",
+        "state": "available"
+       },
+       {
+        "id": "t_1330",
+        "label": "1:30 م",
+        "state": "available"
+       },
+       {
+        "id": "t_1400",
+        "label": "2:00 م",
+        "state": "available"
+       },
+       {
+        "id": "t_1515",
+        "label": "3:15 م",
+        "state": "available"
+       },
+       {
+        "id": "t_1630",
+        "label": "4:30 م",
+        "state": "selected"
+       },
+       {
+        "id": "t_1700",
+        "label": "5:00 م",
+        "state": "available"
+       }
+      ]
+     },
+     {
+      "label": "المساء",
+      "slots": [
+       {
+        "id": "t_1815",
+        "label": "6:15 م",
+        "state": "available"
+       },
+       {
+        "id": "t_1900",
+        "label": "7:00 م",
+        "state": "available"
+       },
+       {
+        "id": "t_2030",
+        "label": "8:30 م",
+        "state": "available"
+       }
+      ]
+     }
+    ],
+    "note": "بقيت 3 مواعيد فقط مع مها يوم الأحد",
+    "timezone_note": "المواعيد بتوقيت الرياض (GMT+3)",
+    "selection_label": "الأحد 4 أكتوبر · 4:30–5:45 م · مع مها"
+   },
+   "payment_methods": [],
+   "quote": {
+    "lines": [
+     {
+      "id": "ln_1",
+      "item_id": "haircut-and-blow-dry",
+      "name": "قص وسشوار",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-1x1.svg",
+       "alt": "قص وسشوار"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 18000,
+       "currency": "SAR",
+       "formatted": "180.00 ر.س"
+      },
+      "choices_label": "متوسط · ترطيب عميق · ساعة و15 دقيقة"
+     }
+    ],
+    "rows": [
+     {
+      "key": "subtotal",
+      "label": "الإجمالي",
+      "amount": {
+       "minor": 18000,
+       "currency": "SAR",
+       "formatted": "180.00 ر.س"
+      },
+      "kind": "subtotal"
+     }
+    ],
+    "total": {
+     "minor": 18000,
+     "currency": "SAR",
+     "formatted": "180.00 ر.س"
+    },
+    "total_label": "الإجمالي"
+   },
+   "place_label": "متابعة · 180.00 ر.س"
+  }
+ }
+}

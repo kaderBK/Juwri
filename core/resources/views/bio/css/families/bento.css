@@ -1,0 +1,26 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* bento family — compact header then a 2-col tile grid. Menu / featured / video / capture span full width. */
+.fam-bento .bio-in{padding:44px 16px 0}
+.fam-bento .bio-storehead{margin-bottom:14px}
+.fam-bento .bio-avatar--sm{width:52px;height:52px;border-radius:16px;font-size:22px}
+.fam-bento .bio-storehead__bio{margin:0 0 12px}
+.fam-bento .bio-blocks{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:start}
+.fam-bento .bio-block{margin:0;min-width:0}
+.fam-bento .bio-block--menu,
+.fam-bento .bio-block--featured_dish,
+.fam-bento .bio-block--video,
+.fam-bento .bio-block--capture,
+.fam-bento .bio-block--map{grid-column:1/-1}
+
+/* every block root becomes a tile */
+.fam-bento .bio-link,
+.fam-bento .bio-card{position:relative;flex-direction:column;align-items:flex-start;gap:8px;
+  min-height:96px;padding:14px;border-radius:var(--radius,18px)}
+.fam-bento .bio-link__icon{width:auto;height:auto;background:none;color:var(--accent,inherit);font-size:24px;padding:0}
+.fam-bento .bio-link__icon svg{width:24px;height:24px}
+.fam-bento .bio-link__body{flex:0 1 auto}
+.fam-bento .bio-link__arrow{position:absolute;inset-block-start:13px;inset-inline-end:13px;margin:0}
+.fam-bento .bio-link__price{position:absolute;inset-block-start:12px;inset-inline-end:12px;margin:0}
+.fam-bento .bio-socials{grid-column:1/-1;justify-content:flex-start}

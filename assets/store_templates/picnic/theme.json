@@ -1,0 +1,158 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "picnic",
+      "label": "Picnic",
+      "thumb": "assets/store_templates/picnic/presets/picnic.png",
+      "values": {
+        "colors.primary": "#f4581c",
+        "colors.background": "#fdf6ee",
+        "colors.surface": "#ffffff",
+        "colors.text": "#17232e",
+        "colors.accent": "#ffc93d",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "meadow",
+      "label": "Meadow",
+      "thumb": "assets/store_templates/picnic/presets/meadow.png",
+      "values": {
+        "colors.primary": "#5a9e5a",
+        "colors.background": "#f2f6ee",
+        "colors.surface": "#ffffff",
+        "colors.text": "#16210f",
+        "colors.accent": "#f4581c",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "dusk",
+      "label": "Dusk",
+      "thumb": "assets/store_templates/picnic/presets/dusk.png",
+      "values": {
+        "colors.primary": "#ff6a3c",
+        "colors.background": "#141018",
+        "colors.surface": "#201924",
+        "colors.text": "#f6ece0",
+        "colors.accent": "#ffc93d",
+        "layout.radius": "soft"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#f4581c"
+        },
+        "colors.background": {
+          "default": "#fdf6ee"
+        },
+        "colors.surface": {
+          "default": "#ffffff"
+        },
+        "colors.text": {
+          "default": "#17232e"
+        },
+        "colors.accent": {
+          "default": "#ffc93d"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.onboarding_title",
+          "type": "text",
+          "label": "Onboarding title",
+          "default": ""
+        },
+        {
+          "id": "texts.home_title",
+          "type": "text",
+          "label": "Home headline",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash"
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category circles",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "bestsellers",
+      "label": "Best Sellers grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "mealplan",
+      "label": "Meal-plan week calendar",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "rewards",
+      "label": "Loyalty points – Get Now",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

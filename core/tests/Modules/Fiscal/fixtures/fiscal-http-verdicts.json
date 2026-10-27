@@ -1,0 +1,373 @@
+[
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 200,
+  "body": {
+   "reportingStatus": "REPORTED"
+  },
+  "expected": "accepted",
+  "note": "reported"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 202,
+  "body": {
+   "reportingStatus": "REPORTED",
+   "validationResults": {
+    "status": "WARNING"
+   }
+  },
+  "expected": "accepted",
+  "note": "reported with warnings"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 200,
+  "body": {
+   "reportingStatus": "NOT_REPORTED"
+  },
+  "expected": "rejected",
+  "note": "2xx but not reported"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 400,
+  "body": {
+   "reportingStatus": "NOT_REPORTED"
+  },
+  "expected": "rejected",
+  "note": "validation error"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 409,
+  "body": {
+   "errors": [
+    {
+     "message": "already reported"
+    }
+   ]
+  },
+  "expected": "accepted",
+  "note": "already reported (re-send)"
+ },
+ {
+  "authority": "zatca",
+  "op": "clear",
+  "status": 200,
+  "body": {
+   "clearanceStatus": "CLEARED",
+   "clearedInvoice": "PHgvPg=="
+  },
+  "expected": "accepted",
+  "note": "cleared"
+ },
+ {
+  "authority": "zatca",
+  "op": "clear",
+  "status": 200,
+  "body": {
+   "clearanceStatus": "NOT_CLEARED"
+  },
+  "expected": "rejected",
+  "note": "2xx but not cleared"
+ },
+ {
+  "authority": "zatca",
+  "op": "clear",
+  "status": 409,
+  "body": {
+   "errors": [
+    {
+     "message": "already cleared"
+    }
+   ]
+  },
+  "expected": "accepted",
+  "note": "already cleared (re-send)"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 401,
+  "body": {
+   "message": "unauthorized"
+  },
+  "expected": "retry",
+  "note": "auth"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 429,
+  "body": {},
+  "expected": "retry",
+  "note": "rate limit"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 500,
+  "body": {},
+  "expected": "retry",
+  "note": "server error"
+ },
+ {
+  "authority": "zatca",
+  "op": "clear",
+  "status": 503,
+  "body": {},
+  "expected": "retry",
+  "note": "unavailable"
+ },
+ {
+  "authority": "zatca",
+  "op": "report",
+  "status": 303,
+  "body": {},
+  "expected": "retry",
+  "note": "redirect (other)"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 202,
+  "body": {
+   "acceptedDocuments": [
+    {
+     "uuid": "u"
+    }
+   ],
+   "rejectedDocuments": []
+  },
+  "expected": "accepted",
+  "note": "accepted"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 202,
+  "body": {
+   "acceptedDocuments": [],
+   "rejectedDocuments": [
+    {
+     "uuid": "u"
+    }
+   ]
+  },
+  "expected": "rejected",
+  "note": "rejected in body"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 401,
+  "body": {},
+  "expected": "retry",
+  "note": "auth"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 403,
+  "body": {},
+  "expected": "retry",
+  "note": "forbidden"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 408,
+  "body": {},
+  "expected": "retry",
+  "note": "timeout"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 409,
+  "body": {},
+  "expected": "retry",
+  "note": "conflict"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 422,
+  "body": {},
+  "expected": "retry",
+  "note": "duplicate window"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 429,
+  "body": {},
+  "expected": "retry",
+  "note": "rate limit"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 500,
+  "body": {},
+  "expected": "retry",
+  "note": "server error"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 503,
+  "body": {},
+  "expected": "retry",
+  "note": "unavailable"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 400,
+  "body": {
+   "error": "bad"
+  },
+  "expected": "rejected",
+  "note": "plain 4xx"
+ },
+ {
+  "authority": "eta",
+  "op": "submit",
+  "status": 302,
+  "body": {},
+  "expected": "rejected",
+  "note": "redirect (other)"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 200,
+  "body": {
+   "EINV_STATUS": "SUBMITTED",
+   "EINV_QR": "q",
+   "EINV_INV_UUID": "u"
+  },
+  "expected": "accepted",
+  "note": "submitted"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 200,
+  "body": {
+   "EINV_STATUS": "NOT_SUBMITTED"
+  },
+  "expected": "rejected",
+  "note": "2xx not submitted"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 400,
+  "body": {
+   "EINV_STATUS": "NOT_SUBMITTED"
+  },
+  "expected": "rejected",
+  "note": "validation 4xx"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 400,
+  "body": {
+   "EINV_STATUS": "SUBMITTED"
+  },
+  "expected": "accepted",
+  "note": "4xx body says submitted"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 401,
+  "body": {},
+  "expected": "retry",
+  "note": "auth"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 403,
+  "body": {},
+  "expected": "retry",
+  "note": "forbidden"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 408,
+  "body": {},
+  "expected": "retry",
+  "note": "timeout"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 429,
+  "body": {},
+  "expected": "retry",
+  "note": "rate limit"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 500,
+  "body": {},
+  "expected": "retry",
+  "note": "server error"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 502,
+  "body": {},
+  "expected": "retry",
+  "note": "bad gateway"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 503,
+  "body": {},
+  "expected": "retry",
+  "note": "unavailable"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 409,
+  "body": {},
+  "expected": "retry",
+  "note": "duplicate UUID re-send"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 200,
+  "body": {
+   "EINV_STATUS": "ALREADY_SUBMITTED",
+   "EINV_QR": "q"
+  },
+  "expected": "accepted",
+  "note": "re-send of an invoice the ISTD holds"
+ },
+ {
+  "authority": "jofotara",
+  "op": "submit",
+  "status": 302,
+  "body": {},
+  "expected": "rejected",
+  "note": "redirect (other), empty body"
+ }
+]

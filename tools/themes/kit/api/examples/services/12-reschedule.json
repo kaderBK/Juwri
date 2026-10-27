@@ -1,0 +1,265 @@
+{
+  "operationId": "rescheduleBooking",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/bookings/mgt_fa27a0ac471f03dcaad42a6f2d39/reschedule",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fbb4-eef0-780d-ac40-4a0604df9333",
+      "X-Hold-Token": "hld_b47443944566e81378410eaccde1e5f0"
+    },
+    "body": {
+      "hold_id": "01a0fbb2-e380-76d2-94c4-26d208c7307c",
+      "notes": "Please keep the same stylist."
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:22:14 GMT"
+    },
+    "body": {
+      "booking": {
+        "public_id": "01a0fb55-94c8-73d0-ab48-248ce0421be0",
+        "number": "SB-4821",
+        "status": "confirmed",
+        "starts_at": "2026-10-05T15:15:00+03:00",
+        "ends_at": "2026-10-05T16:30:00+03:00",
+        "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+        "service_ids": [
+          "019ed72b-4e00-76d8-a0e0-611df411c074"
+        ],
+        "manage_token": "mgt_fa27a0ac471f03dcaad42a6f2d39",
+        "manage_url": "https://sidra-salon.example/booking/mgt_fa27a0ac471f03dcaad42a6f2d39",
+        "ics_url": "https://sidra-salon.example/booking/mgt_fa27a0ac471f03dcaad42a6f2d39/calendar.ics",
+        "cancel_deadline_at": "2026-10-04T15:15:00+03:00",
+        "reschedule_deadline_at": "2026-10-04T15:15:00+03:00"
+      },
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "name": "Haircut & blow-dry",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Haircut & blow-dry"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 14000,
+              "currency": "SAR",
+              "formatted": "SAR 140.00"
+            },
+            "choices_label": "Medium"
+          },
+          {
+            "id": "ln_2",
+            "name": "Deep conditioning",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Deep conditioning"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 4000,
+              "currency": "SAR",
+              "formatted": "SAR 40.00"
+            }
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Total",
+            "amount": {
+              "minor": 18000,
+              "currency": "SAR",
+              "formatted": "SAR 180.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "deposit",
+            "label": "Due now (deposit)",
+            "amount": {
+              "minor": 5000,
+              "currency": "SAR",
+              "formatted": "SAR 50.00"
+            },
+            "kind": "deposit",
+            "muted": true,
+            "informational": true
+          },
+          {
+            "key": "due_later",
+            "label": "Due at the salon",
+            "amount": {
+              "minor": 13000,
+              "currency": "SAR",
+              "formatted": "SAR 130.00"
+            },
+            "kind": "due_later",
+            "muted": true,
+            "informational": true
+          }
+        ],
+        "total": {
+          "minor": 18000,
+          "currency": "SAR",
+          "formatted": "SAR 180.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Prices include VAT 15% (SAR 23.48)."
+      },
+      "view": {
+        "number": "SB-4821",
+        "status": "confirmed",
+        "status_label": "Confirmed",
+        "eta_label": "Mon 5 Oct · 3:15 pm",
+        "heading": "You're booked, Noura",
+        "ticket": {
+          "title": "Monday",
+          "big": "5 Oct · 3:15 pm",
+          "sub": "75 min · ends 4:30 pm"
+        },
+        "steps": [
+          {
+            "label": "Booked",
+            "sub": "Fri 2 Oct, 9:38 am",
+            "state": "done"
+          },
+          {
+            "label": "Reminder",
+            "sub": "Sun 4 Oct, 3:15 pm (24 h before)",
+            "state": "current"
+          },
+          {
+            "label": "Check in",
+            "sub": "Show this screen or say SB-4821",
+            "state": "todo"
+          },
+          {
+            "label": "Done",
+            "sub": "Rate your visit",
+            "state": "todo"
+          }
+        ],
+        "location": {
+          "icon": "map-pin",
+          "label": "Sidra Salon, Al Malqa",
+          "sub": "Anas Ibn Malik Rd, Riyadh · Parking at the back"
+        },
+        "quote": {
+          "lines": [
+            {
+              "id": "ln_1",
+              "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+              "name": "Haircut & blow-dry",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Haircut & blow-dry"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 18000,
+                "currency": "SAR",
+                "formatted": "SAR 180.00"
+              },
+              "choices_label": "with Maha · Medium · Deep conditioning"
+            }
+          ],
+          "rows": [
+            {
+              "key": "subtotal",
+              "label": "Total",
+              "amount": {
+                "minor": 18000,
+                "currency": "SAR",
+                "formatted": "SAR 180.00"
+              },
+              "kind": "subtotal"
+            },
+            {
+              "key": "deposit",
+              "label": "Paid · deposit · Visa •• 4242",
+              "amount": {
+                "minor": 5000,
+                "currency": "SAR",
+                "formatted": "SAR 50.00"
+              },
+              "kind": "deposit",
+              "muted": true,
+              "informational": true
+            },
+            {
+              "key": "due_later",
+              "label": "Due at the salon",
+              "amount": {
+                "minor": 13000,
+                "currency": "SAR",
+                "formatted": "SAR 130.00"
+              },
+              "kind": "due_later",
+              "muted": true,
+              "informational": true
+            }
+          ],
+          "total": {
+            "minor": 18000,
+            "currency": "SAR",
+            "formatted": "SAR 180.00"
+          },
+          "total_label": "Total",
+          "notes": [
+            "Free to change or cancel until Sun 4 Oct, 3:15 pm."
+          ]
+        },
+        "paid_label": "Paid · deposit · Visa •• 4242",
+        "actions": [
+          {
+            "label": "Add to calendar",
+            "url": "/sidra-salon-demo/booking/SB-4821.ics",
+            "kind": "primary",
+            "icon": "calendar-plus"
+          },
+          {
+            "label": "Directions",
+            "url": "/sidra-salon-demo/directions",
+            "kind": "secondary",
+            "icon": "navigation"
+          },
+          {
+            "label": "Reschedule",
+            "url": "/sidra-salon-demo/booking/SB-4821/reschedule",
+            "kind": "secondary",
+            "icon": "calendar-clock"
+          },
+          {
+            "label": "Cancel booking",
+            "url": "/sidra-salon-demo/booking/SB-4821/cancel",
+            "kind": "danger",
+            "icon": "x"
+          }
+        ]
+      },
+      "policy_note": "Moved to Mon 5 Oct, 3:15 pm. Your SAR 50.00 deposit carries over.",
+      "payment": {
+        "mode": "hosted",
+        "status": "paid",
+        "next_action": null,
+        "amount_now": {
+          "minor": 5000,
+          "currency": "SAR",
+          "formatted": "SAR 50.00"
+        }
+      }
+    }
+  }
+}

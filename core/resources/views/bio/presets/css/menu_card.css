@@ -1,0 +1,5 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--menu_card{background-image:radial-gradient(rgba(43,55,31,.05) 1px,transparent 1.5px);background-size:14px 14px}
+.bio--menu_card .bio-avatar span{font-family:'Fraunces',serif}

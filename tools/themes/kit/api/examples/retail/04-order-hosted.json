@@ -1,0 +1,170 @@
+{
+  "operationId": "createOrder",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/orders",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_dune_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://dune-and-co.example",
+      "Idempotency-Key": "01a0fb5d-0320-7ab2-9da2-02ca9cd0fdbf"
+    },
+    "body": {
+      "order_type": "ship",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+          "variant_id": "019fa718-1080-763e-a69c-9f701d44ac3b",
+          "qty": 1
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+          "variant_id": "019ea63e-e400-7902-af49-16aadc649da7",
+          "qty": 1
+        }
+      ],
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA"
+      },
+      "shipping_method_id": "01a01863-f880-702d-b8e8-df65791001f2",
+      "quote_hash": "qh_af7bb448d796e2bf2be64c0fd407cd98",
+      "customer": {
+        "name": "Noura Al-Harbi",
+        "phone": "+966551234567",
+        "email": "noura@example.com",
+        "marketing_opt_in": false
+      },
+      "payment": {
+        "mode": "hosted",
+        "method_id": "card",
+        "return_url": "https://dune-and-co.example/checkout/return"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:46:12 GMT"
+    },
+    "body": {
+      "order": {
+        "public_id": "01a0fb5d-0320-7df2-a96e-e59f5606bb1a",
+        "number": "DC-10422",
+        "status": "pending_payment",
+        "track_token": "trk_09d7215cba93b208052ca360",
+        "track_url": "https://dune-and-co.example/track/trk_09d7215cba93b208052ca360"
+      },
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+            "name": "Relaxed linen shirt",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-4x5.svg",
+              "alt": "Relaxed linen shirt"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 13900,
+              "currency": "SAR",
+              "formatted": "SAR 139.00"
+            },
+            "brand": "Dune & Co.",
+            "compare_at": {
+              "minor": 19900,
+              "currency": "SAR",
+              "formatted": "SAR 199.00"
+            },
+            "choices_label": "Sand · M",
+            "unit_label": "Qty 1"
+          },
+          {
+            "id": "ln_2",
+            "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+            "name": "Wide-leg trousers",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-4x5.svg",
+              "alt": "Wide-leg trousers"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 22900,
+              "currency": "SAR",
+              "formatted": "SAR 229.00"
+            },
+            "brand": "Dune & Co.",
+            "choices_label": "Navy · M",
+            "unit_label": "Qty 1"
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Items (2)",
+            "amount": {
+              "minor": 36800,
+              "currency": "SAR",
+              "formatted": "SAR 368.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "shipping",
+            "label": "Shipping · Standard",
+            "amount": {
+              "minor": 0,
+              "currency": "SAR",
+              "formatted": "SAR 0.00"
+            },
+            "amount_label": "Free",
+            "kind": "delivery"
+          },
+          {
+            "key": "saving",
+            "label": "You save",
+            "amount": {
+              "minor": 6000,
+              "currency": "SAR",
+              "formatted": "SAR 60.00"
+            },
+            "kind": "discount",
+            "muted": true,
+            "informational": true
+          }
+        ],
+        "total": {
+          "minor": 36800,
+          "currency": "SAR",
+          "formatted": "SAR 368.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Includes VAT 15% (SAR 48.00). 14-day returns."
+      },
+      "payment": {
+        "mode": "hosted",
+        "status": "pending",
+        "next_action": {
+          "type": "redirect",
+          "url": "https://dune-and-co.example/pay/pay_9374138495c462ccf8ab",
+          "expires_at": "2026-10-02T10:01:12+03:00"
+        },
+        "amount_now": {
+          "minor": 36800,
+          "currency": "SAR",
+          "formatted": "SAR 368.00"
+        }
+      },
+      "replayed": false
+    }
+  }
+}

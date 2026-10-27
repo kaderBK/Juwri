@@ -1,0 +1,6 @@
+{
+  "id": "carparts-service-kits",
+  "request": "Service kits for a car parts shop: owner blocks describing maintenance kits (oil change, brakes, filters) and a rail of matching parts from the catalogue with prices.",
+  "verticals": ["carparts"],
+  "type": "service-kits"
+}

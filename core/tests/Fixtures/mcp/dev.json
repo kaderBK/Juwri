@@ -1,0 +1,233 @@
+{
+    "initialize": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "3219277d47f367cd894864d778901133266c3b4b27df328fe8c358b46d4e3e83",
+        "length": 169,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-dev-mcp\",\"version\":\""
+    },
+    "initialize_old": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "8e7ff7bbc2e46069d006b32504f8fa6cc0a19b16487e2467f58c5cbf62e177a0",
+        "length": 169,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-dev-mcp\",\"version\":\""
+    },
+    "initialize_unknown": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "3219277d47f367cd894864d778901133266c3b4b27df328fe8c358b46d4e3e83",
+        "length": 169,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-dev-mcp\",\"version\":\""
+    },
+    "ping": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "fcd8c77a7e0a0e2c93bf89cbf8b02c66255a80aca8114b348de69523a4f6d640",
+        "length": 36,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}"
+    },
+    "tools_list": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "0e98c8d991a7c5b2b492196afa59249558dd09c4af27f0985a41b0d5bbe02f17",
+        "length": 5302,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"learn_platform\",\"description\":\"Call this FIRST in any conversation about building on this platform. Returns "
+    },
+    "unknown_method": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cce6f1d9c45011667ea0af8b964b8389b7825f0ab29e5e78daa883af3375e1a1",
+        "length": 89,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\\/nope\"}}"
+    },
+    "unknown_tool": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "706201aeaca0b54baadfaa3116a8a294601bb2b48d739010eb70bc3716f4f9e9",
+        "length": 79,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown tool: nope\"}}"
+    },
+    "notification": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "39e0590e02bf4db8393d6cbb8845d0a276eed5fdc2f2aacb6c550aef2edfa152",
+        "length": 122,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{}},{\"jsonrpc\":\"2.0\",\"id\":8,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\"}}]"
+    },
+    "notifications_only_batch": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "scalar_batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cc5c2698b3663df631503fd9e0f1bd81c09b4383421dfacad55427964840e89b",
+        "length": 84,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}]"
+    },
+    "invalid_json": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "f96339765a17ec91f2352be0cf7ba8ca2350bf9b4b2d23ef160863314520f5c7",
+        "length": 82,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}"
+    },
+    "bad_protocol_header": {
+        "status": 400,
+        "type": "application/json",
+        "sha256": "93b8efaf44dd464afb46247f2a4fcf0d03d79f140ab7c890f28902f236e702f2",
+        "length": 155,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Unsupported MCP-Protocol-Version: 1999-01-01. Supported: 2024-11-05, 2025-03-26, 2025-06-18\"}}"
+    },
+    "foreign_origin": {
+        "status": 403,
+        "type": "application/json",
+        "sha256": "9619ea80721b75cf311e51ccf964ee969fad22b71fb969b78e27661d1c8adff3",
+        "length": 108,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Origin is not allowed for this MCP endpoint.\"}}"
+    },
+    "call:learn_platform": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "56259b64eb0d3f29dc69721d2eb7e4782e5357a2cc0a98363929599cc591639e",
+        "length": 4080,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"\\n# Platform overview for AI agents\\n\\nThis platform is a multi-tenant, multi-vertical comme"
+    },
+    "call:learn_platform#themes": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "d959913b29bbee93a9527ad3585729d2ed0777ed27e3d0c0a3eca552fb443bc9",
+        "length": 9182,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"\\n# Building Liquid themes\\n\\nThemes are Liquid (Shopify-compatible syntax, CLOSED whitelist"
+    },
+    "call:learn_platform#bad": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "418a46e0cb6969ab10c72190e21f0d3651b2df8d39e270188519d7c2cdeaf6c6",
+        "length": 142,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown topic: nope. Valid: overview, themes, apps, storefront-api, customer-api.\"}}"
+    },
+    "call:get_liquid_reference": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "bfe94b5e56b353b7b74154edaec43b78711678f6c0ef061dbbd0cbd48f01915b",
+        "length": 408,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Liquid reference (generated from the engine \\u2014 authoritative)\\nAnything not listed her"
+    },
+    "call:get_liquid_reference#bad": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "67c41576887a17b4ba94cd23ca1674380983daecd6c3edfb7e34f8754406dda5",
+        "length": 114,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown kind: nope. Valid: drops, filters, tags, all.\"}}"
+    },
+    "call:get_section_schema": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "51b5ea2e1368e30ba403e15ccf8bb734b604ffd44d728627aebdfcd496f4a9f2",
+        "length": 8034,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"\\n# Section schema & settings\\n\\nA section file may end with one `{% schema %} ... {% endsch"
+    },
+    "call:get_section_schema#color": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "e6b3bc6b68f9c48543167b13cbefaf638e6aca949e03d97f9481ef469ad74dca",
+        "length": 192,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"## color\\n\\nUI: colour picker. Validation: string matching `#` + 3\\u20138 hex digits\\n(`#fff"
+    },
+    "call:get_section_schema#bad": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "9cdcb528ae2eb3e4609d3e56919374f9b88727706f01fbb02cece091029c3caf",
+        "length": 248,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown setting_type: nope. Valid: text, textarea, color, checkbox, toggle, select, image, range, numb"
+    },
+    "call:search_docs": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "292f4c4732919466286ab64dde8a541c6938014f2553d47c9c4746888dd971a8",
+        "length": 1206,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Search results for \\\"webhook\\\"\\n\\nCall fetch_full_doc with a `doc` path below for the comp"
+    },
+    "call:search_docs#pillar": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "a1dcb920df72f5b842790542c286cef2412c3fab3f84d142bb4787f8f1a6539b",
+        "length": 2901,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Search results for \\\"menu\\\"\\n\\nCall fetch_full_doc with a `doc` path below for the complet"
+    },
+    "call:search_docs#empty": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "c02b6d534db9587177b52840962c288ce33fc5116e3f1104ad0b40ff0a5e3e13",
+        "length": 79,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"query is required.\"}}"
+    },
+    "call:fetch_full_doc": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "a5726d1beeb810d5df30d39b0002e8115c1110c679c4863d677e2609fdacc887",
+        "length": 1477,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"\\n# Webhooks\\n\\nReal-time events (e.g. `order.paid`) delivered to your HTTPS endpoint from a"
+    },
+    "call:fetch_full_doc#bad": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "7298d85d77b0a2c8d7922f8d9d9eabcc94c112ae3316d354334afad102a05706",
+        "length": 766,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown doc path: nope\\/nope. Valid dev paths: README, api\\/admin-api, api\\/auth-tokens, api\\/customer"
+    },
+    "call:validate_theme": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "70f6d2805a2b7541b0f5f73c4d5675f7f6fa8259a04852cdbb0da6f535b7eebb",
+        "length": 599,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n    \\\"passed\\\": true,\\n    \\\"errors\\\": [],\\n    \\\"warnings\\\": [\\n        {\\n            \\"
+    },
+    "call:validate_theme#bad": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "493f5ff37e40b633b30b5312525778ffca65d81e2d2971b5030f4ab85d80550d",
+        "length": 443,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\n    \\\"passed\\\": false,\\n    \\\"errors\\\": [\\n        {\\n            \\\"rule\\\": \\\"unknown-fil"
+    },
+    "call:validate_theme#none": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "78aab4aee7e74f8431c8d9cb4568a4269bcd3975eded84bd1652814af820c4ad",
+        "length": 126,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"files is required: {\\\"sections\\/hero.liquid\\\": \\\"<source>\\\", ...}\"}}"
+    },
+    "call:list_webhook_events": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "c43bd795496c5ac00303e9ff1e454c9003eecdded1965434836372d173f45364",
+        "length": 1139,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"# Webhook events (generated from the platform registry \\u2014 authoritative)\\n\\nSubscribe an"
+    },
+    "call:submit_feedback": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "15f3620218fbbbd0451ed95f72a4eb8003eec70dcc87e50088575bff871f9922",
+        "length": 165,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"Thanks \\u2014 recorded. Your report about `api\\/webhooks` has been logged for the docs team."
+    },
+    "call:submit_feedback#empty": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "b0db2832b3bfcf61e208d0f48e73afb66df6c9bfb1a06a387154d90767df3613",
+        "length": 117,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"message is required: describe what was wrong or missing.\"}}"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "status": 200,
+    "body": {
+        "default_store_id": "null",
+        "more": "empty",
+        "onboarding_path": "string",
+        "store": "null",
+        "stores": "empty",
+        "tabs": "empty",
+        "token_expires_at": "string",
+        "user": {
+            "dir": "string",
+            "email": "string",
+            "id": "int",
+            "locale": "string",
+            "name": "string",
+            "username": "string"
+        }
+    }
+}

@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--pastel_zen .bio-avatar{width:84px;height:84px;box-shadow:0 6px 22px rgba(125,155,106,.22)}
+.bio--pastel_zen .bio-name{letter-spacing:.06em}
+.bio--pastel_zen .bio-link:hover{box-shadow:0 8px 22px rgba(125,155,106,.2)}
+.bio--pastel_zen .bio-link:nth-of-type(2n) .bio-link__icon{background:#fbeef0}
+.bio--pastel_zen .bio-socials a{box-shadow:0 3px 10px rgba(61,68,58,.08);color:#7d9b6a}

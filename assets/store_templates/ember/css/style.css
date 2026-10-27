@@ -1,0 +1,2048 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   ember — glassmorphic dark burger app post_template
+   frosted glass panels over a blurred food backdrop, orange energy
+   Faithful port of rev/ember/demo.css → full-viewport (no phone frame)
+   accent driven by --theme-color-1 with an ember fallback
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── brand tokens, hardened ────────────────────────────────────────────────
+   `--theme-color-1` is built by the SHARED layout with
+   `sscanf($store->color,"#%02x%02x%02x")` and interpolated into CSS unvalidated.
+   A 3-digit shorthand (`#111`), an empty string or a named colour all produce a
+   MALFORMED token — e.g. `rgba(17,1,,1)`. A `var()` fallback only rescues a
+   MISSING variable, never an INVALID one, so that token used to propagate into
+   --flame/--amber/--grad and take 102 rules down with it: every `.grad` CTA lost
+   its fill, `.bg-tint` lost the dark scrim that makes this a night theme, and the
+   whole storefront rendered as a pale grey wash.
+
+   Registering the two source tokens as real `<color>` properties fixes it at the
+   root: an invalid substitution is "invalid at computed-value time", which for a
+   registered property resolves to the inherited/initial value — ember's own
+   ember-orange — instead of poisoning everything downstream. Everything derived
+   (--flame-hi, --grad, all the color-mix() calls) is therefore always valid.
+   Root cause is shared code; see EMBER-B1 in the findings. */
+@property --flame{syntax:"<color>";inherits:true;initial-value:#F97316}
+@property --amber{syntax:"<color>";inherits:true;initial-value:#F59E0B}
+
+.ember{
+  /* backdrop — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is ember's own
+     value, kept as the var() fallback so a store that customized nothing — or a
+     render with no token include — is byte-identical to today. ember.json's
+     background/surface defaults ARE these literals, so the emitted tokens
+     reproduce them exactly. */
+  --night:var(--tc-background, #0b0705);
+  --night-2:var(--tc-surface, #140d08);
+  /* the scrim that turns the blurred backdrop photo into a night surface.
+     Its own token so the accent glow can be layered over it without being able
+     to delete it (see .bg-tint), and so the light face can swap it wholesale. */
+  --scrim-layers:linear-gradient(180deg,rgba(11,7,5,.66),rgba(9,6,4,.82) 60%,rgba(8,5,3,.9));
+  /* glass material */
+  --glass:rgba(255,255,255,.06);
+  --glass-2:rgba(255,255,255,.10);
+  --glass-brd:rgba(255,255,255,.14);
+  --glass-brd-2:rgba(255,255,255,.22);
+  --blur:18px;
+  /* ink — the text role; ember.json's text default is this same #ffffff */
+  --ink:var(--tc-text, #ffffff);
+  --ink-2:rgba(255,255,255,.68);
+  /* .44 measured 4.32:1 on the night backdrop — under the 4.5 floor for the
+     captions and placeholders this token drives. */
+  --ink-3:rgba(255,255,255,.54);
+  /* brand — Customizer v2 is now the source of truth: --flame follows the
+     PRIMARY role, --amber the ACCENT role (ember.json defaults #F97316 / #F59E0B,
+     which are exactly these @property initial-values). The legacy per-store
+     `--theme-color-1` is kept as the NESTED fallback so the no-token render path
+     (broken schema / non-v2 template) is byte-for-byte the pre-v2 behaviour.
+     Because the token layer always emits --tc-primary/--tc-accent (role default
+     when the owner set nothing), a store's legacy `$store->color` is now
+     superseded by the role default — the same model crave already follows
+     (crave-demo renders its theme green, not its legacy colour). Both tokens are
+     validated 6-digit hex upstream, so they can never poison the registered
+     @property below; an invalid legacy value still resolves to the initial. */
+  --amber:var(--tc-accent, var(--theme-color-1,#F59E0B));
+  --flame:var(--tc-primary, var(--theme-color-1,#F97316));
+  /* hand-tuned deep char; derived --tc-primary-600 (#db6513) differs materially, keep literal */
+  --flame-deep:#EA580C;
+  --flame-hi:color-mix(in srgb,var(--flame) 62%,#ffffff);
+  /* The fill under WHITE BUTTON LABELS. The raw accent (#F97316) carries white at
+     only 2.8:1 — the CTA labels are 15.5px bold, which is not "large text", so
+     4.5:1 applies and the theme's loudest control failed it in BOTH faces.
+     Deepened toward ember's own dark char rather than to black, so the button
+     still reads as ember and still tracks the restaurant's colour. */
+  --flame-ink-safe:color-mix(in srgb,var(--flame) 52%,#7C2D12);
+  /* Decorative accent fill (chips, badges, icon tiles — no small white label on it). */
+  --grad:linear-gradient(135deg,color-mix(in srgb,var(--flame) 78%,#F59E0B),var(--flame) 58%,color-mix(in srgb,var(--flame) 72%,#000));
+  /* The same gradient deepened for surfaces that CARRY white text. */
+  --grad-ink-safe:linear-gradient(135deg,var(--flame-ink-safe),color-mix(in srgb,var(--flame-ink-safe) 88%,#000) 58%,color-mix(in srgb,var(--flame-ink-safe) 74%,#000));
+  --red:#E5484D;
+  /* radius — only --r-pill tracks the layout.radius scale: at the "round"
+     default --tr-pill is 999px, matching ember's pill exactly. --r-card stays
+     literal (ember's 20px ≠ the scale's 18px "round" card, so adopting --tr-card
+     would shrink every panel corner); --r-img and --r-sheet stay literal too
+     (control-radius at "pill" would circle images / reshape sheets). */
+  --r-card:20px;
+  --r-img:16px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-overlay:55; --z-toast:60; --z-fly:70; --z-story:75; --z-splash:80;
+  /* type — ember is single-font (--font-ui drives headings AND body), so it maps
+     to --tf-body; the pair "none" default emits no --tf-* var and these degrade
+     to ember's own stacks. Both --tf-* stacks end in the pair's Arabic face, so
+     RTL (--font-ar) can share --tf-body safely. ember exposes no separate heading
+     face, so --tf-heading is intentionally left unadopted. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Manrope",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+
+  font-family:var(--font-ui);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+}
+.ember *{margin:0;padding:0;box-sizing:border-box}
+[dir="rtl"] .ember,[dir="rtl"] .ember input,[dir="rtl"] .ember button,[dir="rtl"] .ember textarea,[dir="rtl"] .ember select{font-family:var(--font-ar)}
+.ember img{display:block;max-width:100%}
+.ember button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* link reset: several controls (.minipill, .fab) render as <a> on the account/track
+   views, where the UA underline would otherwise strike through the pill label */
+.ember a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.ember input,.ember textarea,.ember select{
+  font:inherit;color:var(--ink);
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--glass-brd);border-radius:15px;
+  padding:13px 15px;width:100%;outline:none;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.ember input::placeholder,.ember textarea::placeholder{color:var(--ink-3)}
+.ember input:focus,.ember textarea:focus,.ember select:focus{border-color:color-mix(in srgb,var(--flame) 60%,transparent);background:rgba(255,255,255,.10)}
+/* A3 · phone-OTP login boxes (scheme-safe via tokens; LTR digits in RTL) */
+.ember .otp-boxes{display:flex;gap:8px;padding-top:2px}
+.ember .otp-boxes input{flex:1 1 0;width:auto;min-width:0;padding:0;height:54px;text-align:center;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+[dir="rtl"] .ember .otp-boxes{direction:ltr}
+.ember select option{background:#1c130c;color:#fff}
+.ember ::-webkit-scrollbar{display:none}
+.ember [hidden]{display:none!important}
+
+/* icons */
+.ember .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ember .ic-xs{width:15px;height:15px}
+
+/* ── THE GLASS MATERIAL ───────────────────────────────── */
+.ember .gl{
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(1.15);
+  backdrop-filter:blur(var(--blur)) saturate(1.15);
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 32px -14px rgba(0,0,0,.55);
+}
+.ember .grad{
+  background:var(--grad);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 26px -8px color-mix(in srgb,var(--flame) 55%,transparent);
+  color:#fff;
+}
+
+/* ── full-viewport app shell (replaces demo stage/phone) ─ */
+.ember .app{
+  position:relative;
+  height:100dvh;
+  min-height:100dvh;
+  display:flex;flex-direction:column;
+  isolation:isolate;
+  background:var(--night);
+  overflow:clip;
+}
+.ember .views{position:relative;flex:1;min-height:0;z-index:1}
+
+.ember .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  /* opacity fade is front-loaded (≈45% of the slide) so the OUTGOING view clears
+     before the incoming one finishes sliding in — otherwise both are visible for
+     the full 340ms and the transparent-glass views ghost over each other. */
+  transition:transform var(--t-view) var(--ease),opacity calc(var(--t-view) * .45) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .ember .view{transform:translateX(-26%)}
+.ember .view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.ember .view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:0;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity calc(var(--t-view) * .45) var(--ease);
+}
+[dir="rtl"] .ember .view.is-under{transform:translateX(9%) scale(.985)}
+
+.ember .view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.ember .tail-space{height:122px}
+.ember .tail-space.tall{height:36px}
+
+.ember .page-head{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) 2px 16px}
+.ember .page-head h1{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.ember .page-head.sub{justify-content:flex-start;gap:14px}
+.ember .page-head.sub h1{flex:1}
+
+/* ── blurred food backdrop (behind everything) ────────── */
+.ember .bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ember .bg-photo{
+  position:absolute;inset:-7%;
+  background-position:center;background-size:cover;background-repeat:no-repeat;
+  filter:blur(26px) saturate(1.25) brightness(.52);
+  transform:scale(1.08);
+}
+.ember .bg-bokeh i{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--flame-hi) 50%,transparent),color-mix(in srgb,var(--flame) 12%,transparent) 55%,transparent 70%);
+  filter:blur(10px);opacity:.55;
+  animation:emb-bokeh-drift 14s ease-in-out infinite alternate;
+}
+.ember .bg-bokeh i:nth-child(1){width:120px;height:120px;top:6%;inset-inline-end:-6%}
+.ember .bg-bokeh i:nth-child(2){width:70px;height:70px;top:30%;inset-inline-start:-4%;animation-delay:-3s}
+.ember .bg-bokeh i:nth-child(3){width:46px;height:46px;top:52%;inset-inline-end:10%;animation-delay:-6s}
+.ember .bg-bokeh i:nth-child(4){width:90px;height:90px;bottom:12%;inset-inline-start:6%;animation-delay:-9s;opacity:.4}
+.ember .bg-bokeh i:nth-child(5){width:36px;height:36px;top:16%;inset-inline-start:26%;animation-delay:-11s;opacity:.35}
+@keyframes emb-bokeh-drift{to{transform:translateY(-26px) translateX(10px) scale(1.12)}}
+/* The dark scrim is declared ALONE first, then the accent glow is layered on top
+   in a second declaration. They used to share one `background:` shorthand, so a
+   single invalid accent token deleted the scrim too and left the blurred backdrop
+   photo undarkened — the theme stopped being dark at all. Split, the worst case is
+   a night backdrop without its glow, never a washed-out one. */
+.ember .bg-tint{
+  position:absolute;inset:0;
+  background:var(--scrim-layers);
+}
+.ember .bg-tint{
+  background:
+    radial-gradient(120% 55% at 85% -6%,color-mix(in srgb,var(--flame) 20%,transparent),transparent 55%),
+    radial-gradient(90% 45% at 8% 104%,color-mix(in srgb,var(--amber) 12%,transparent),transparent 60%),
+    var(--scrim-layers);
+}
+
+/* ── splash ───────────────────────────────────────────── */
+.ember .splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:
+    radial-gradient(90% 60% at 50% 110%,color-mix(in srgb,var(--flame) 28%,transparent),transparent 60%),
+    linear-gradient(180deg,rgba(11,7,5,.55),rgba(9,6,4,.78));
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  overflow:hidden;
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+.ember .splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.ember .splash-mark{
+  width:96px;height:96px;border-radius:30px;display:grid;place-items:center;
+  background:var(--grad);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 24px 50px -14px color-mix(in srgb,var(--flame) 60%,transparent);
+  animation:emb-mark-pop .8s var(--ease-pop) backwards;overflow:hidden;
+}
+.ember .splash-mark svg{width:52px;height:52px;fill:#fff;stroke:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
+.ember .splash-mark img{width:100%;height:100%;object-fit:cover}
+@keyframes emb-mark-pop{from{transform:scale(.4) rotate(-14deg);opacity:0}}
+.ember .splash-word{font-size:46px;font-weight:800;letter-spacing:-.03em;margin-top:14px;animation:emb-rise-in .7s var(--ease) .15s backwards}
+.ember .splash-tag{font-size:15px;font-weight:700;color:var(--ink-2);text-align:center;animation:emb-rise-in .7s var(--ease) .3s backwards}
+@keyframes emb-rise-in{from{opacity:0;transform:translateY(18px)}}
+.ember .hot{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ember .splash-skip{
+  position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:22px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  font-size:13px;font-weight:700;color:var(--ink);
+}
+
+/* ── ember particles (GPU-cheap, transform+opacity only) ── */
+.ember .embers{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.ember .embers i{
+  position:absolute;bottom:12%;left:var(--x,50%);
+  width:var(--s,5px);height:var(--s,5px);border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,#ffe3b8,var(--flame) 62%,transparent 75%);
+  box-shadow:0 0 8px 2px color-mix(in srgb,var(--flame) 50%,transparent);
+  opacity:0;will-change:transform,opacity;
+  animation:emb-ember-rise var(--d,3.6s) linear var(--dl,0s) infinite;
+}
+@keyframes emb-ember-rise{
+  0%{transform:translate(0,0) scale(.6);opacity:0}
+  10%{opacity:.95}
+  45%{opacity:.75}
+  70%{opacity:.5;transform:translate(calc(var(--dx,10px)*.7),-92px) scale(1)}
+  100%{transform:translate(var(--dx,10px),-150px) scale(.35);opacity:0}
+}
+
+/* ── home ─────────────────────────────────────────────── */
+.ember .home-top{display:flex;align-items:center;gap:11px;padding:calc(12px + env(safe-area-inset-top)) 2px 4px}
+.ember .home-spacer{flex:1}
+.ember .iconbtn{
+  position:relative;width:46px;height:46px;flex:none;border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .iconbtn:active{transform:scale(.9)}
+.ember .iconbtn.sm{width:38px;height:38px}
+.ember .avatar{position:relative;width:46px;height:46px;border-radius:50%;flex:none;border:1.5px solid var(--glass-brd-2);padding:0;overflow:visible;background:var(--glass-2);display:grid;place-items:center;cursor:pointer}
+.ember .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+/* crave-parity profile avatar (glyph / initial) + branch selector */
+.ember .avatar .ic{width:26px;height:26px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ember .avatar-initial{font-weight:800;font-size:17px;color:var(--ink);line-height:1}
+.ember .avatar.is-me{background:var(--flame);border-color:transparent}
+.ember .avatar.is-me .avatar-initial{color:#fff}
+.ember .loc{display:inline-flex;align-items:center;gap:5px;min-width:0;max-width:50%;padding:7px 12px;border-radius:999px;background:var(--glass-2);border:1px solid var(--glass-brd-2);color:var(--ink);font-size:13px;font-weight:700;cursor:pointer}
+.ember .loc .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;color:var(--flame);flex:none}
+.ember .loc b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-weight:700}
+.ember .loc .chev{width:13px;height:13px;color:var(--ink-3);flex:none}
+.ember .avatar .dot,.ember .iconbtn .dot{position:absolute;top:1px;inset-inline-end:1px;width:11px;height:11px;border-radius:50%;background:var(--red);outline:2.5px solid rgba(15,10,7,.9)}
+
+.ember .hello{padding:14px 2px 2px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.ember .hero-line{font-size:37px;font-weight:800;line-height:1.08;letter-spacing:-.025em;padding:2px 2px 4px}
+/* Open/Closed status + live viewers */
+.ember .statusrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 2px 2px}
+.ember .open-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:800;letter-spacing:.01em;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));border:1px solid var(--glass-brd);color:var(--ink)}
+.ember .open-chip i{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px color-mix(in srgb,#22c55e 26%,transparent)}
+.ember .open-chip.is-closed{color:var(--ink-2)}
+.ember .open-chip.is-closed i{background:#ef4444;box-shadow:0 0 0 3px color-mix(in srgb,#ef4444 26%,transparent)}
+.ember .viewers{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+.ember .viewers .ic{width:14px;height:14px}
+.ember .viewers b{color:var(--ink-2);font-weight:800}
+
+/* ── F2 · brand / follow row (crave/orbit parity, ember tokens) ─────────── */
+.ember .brand-row{display:flex;align-items:center;gap:12px;padding:10px 2px 2px}
+.ember .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;display:grid;place-items:center}
+.ember .brand-logo img{width:100%;height:100%;object-fit:cover}
+.ember .brand-info{flex:1;min-width:0}
+.ember .brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.ember .brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;font-weight:600}
+.ember .brand-followers--cta{color:var(--flame-hi)}
+.ember .brand-dot{opacity:.6}
+.ember .brand-viewers b{color:var(--ink-2);font-weight:800}
+/* remapped from the shared partial's literal green accent to ember's own brand token */
+/* verified = a filled flame seal + white check. */
+.ember .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.ember .verified-badge .vb-seal{width:17px;height:17px;display:block}
+.ember .verified-badge .vb-seal-fill{fill:var(--flame)}
+.ember .verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner), off the grab bar it borrows for close wiring. */
+.ember .sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:var(--glass-2);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.ember .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.ember .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── full-bleed cover with a flame-tinted bottom scrim (steakhouse dark) ── */
+/* bottom pad = clearance for the brand row's -22px hero overlap: the pull now
+   lands on the flame-scrim photo strip, not on the status chip / store name */
+.ember .ember-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px 26px;min-block-size:184px}
+.ember .ember-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--night-2)}
+.ember .ember-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.ember .ember-cover-scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,.06) 34%, transparent 52%),
+  linear-gradient(180deg, transparent 46%, color-mix(in srgb, var(--flame) 22%, var(--night)) 82%, var(--night) 100%);}
+.ember .ember-cover .home-top,.ember .ember-cover .hello,.ember .ember-cover .hero-line,.ember .ember-cover .statusrow,.ember .ember-cover .qc-cen-slot{position:relative;z-index:2}
+.ember .ember-cover .home-top{text-shadow:0 1px 4px rgba(0,0,0,.5)}
+/* greeting + hero headline sit OVER the cover photo — lift them above the media
+   (z-index above) and give light, shadowed text so they read on any cover */
+.ember .ember-cover .hello{color:rgba(255,255,255,.92);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.ember .ember-cover .hero-line{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+/* hero headline: two lines on phones (the text default carries a <br>); on wider
+   screens the break collapses so it reads as one line, with a gap replacing it */
+@media (min-width:620px){
+  .ember .hero-line br{display:none}
+  .ember .hero-line .hot{margin-inline-start:.35em}
+}
+.ember .brand-row--hero{margin-block-start:-22px;position:relative;z-index:3}
+.ember .brand-row--hero .brand-logo{border:3px solid var(--night);box-shadow:0 6px 18px rgba(0,0,0,.5)}
+/* on phones the branch selector drops to its own row under the icon bar, so a
+   long branch name never squeezes the language / profile / bell controls */
+@media (max-width:560px){
+  .ember .home-top{flex-wrap:wrap}
+  .ember .home-top .loc{order:9;flex-basis:100%;max-width:100%;margin-block-start:8px}
+}
+
+/* ── collapsing header ── */
+.ember .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--night);box-shadow:0 6px 18px rgba(0,0,0,.5);
+  border-block-end:1px solid var(--glass-brd);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.ember .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.ember .cv-condensed-logo{width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;background:var(--glass-2);display:grid;place-items:center}
+.ember .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.ember .cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ember .cv-condensed-actions{display:flex;gap:7px;flex:none}
+.ember .cv-condensed-actions .iconbtn{width:38px;height:38px}
+@media (prefers-reduced-motion:reduce){.ember .cv-condensed{transition:none}}
+.ember .followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--night);font-size:13px;font-weight:700;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.ember .followbtn:active{transform:scale(.94)}
+.ember .followbtn .ic{width:15px;height:15px}
+.ember .followbtn .following-label{display:none}
+.ember .followbtn.is-on{background:rgba(255,255,255,.08);color:var(--ink-2);border:1.5px solid var(--glass-brd)}
+.ember .followbtn.is-on .follow-label,.ember .followbtn.is-on .ic{display:none}
+.ember .followbtn.is-on .following-label{display:inline}
+@keyframes emberFollowPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.ember .followbtn--pop{animation:emberFollowPop .25s var(--ease-pop)}
+@media (prefers-reduced-motion:reduce){.ember .followbtn--pop{animation:none}}
+
+.ember .searchrow{display:flex;gap:10px;padding-top:16px}
+.ember .search{
+  flex:1;display:flex;align-items:center;gap:10px;
+  border-radius:var(--r-pill);padding:0 18px;height:52px;
+  color:var(--ink-3);font-size:14.5px;font-weight:600;text-align:start;
+  transition:border-color var(--t-fast);
+}
+.ember .search:focus-within{border-color:color-mix(in srgb,var(--flame) 55%,transparent)}
+.ember .search input{background:none;border:0;padding:0;height:100%;font-size:14.5px;backdrop-filter:none;-webkit-backdrop-filter:none}
+.ember .search input:focus{background:none;border:0}
+.ember .search.grow{flex:1}
+.ember .filterbtn{
+  position:relative;width:52px;height:52px;border-radius:var(--r-pill);flex:none;
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .filterbtn:active{transform:scale(.9)}
+.ember .filterbtn .dot{position:absolute;top:8px;inset-inline-end:8px;width:9px;height:9px;border-radius:50%;background:var(--flame);outline:2px solid rgba(15,10,7,.9)}
+
+/* category glass tiles */
+.ember .cats{display:flex;align-items:flex-start;gap:10px;overflow-x:auto;padding:18px 2px 4px}
+.ember .cat{
+  flex:none;width:76px;padding:11px 4px 9px;border-radius:18px;
+  display:grid;justify-items:center;gap:7px;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),border-color var(--t-fast),box-shadow var(--t-fast);
+}
+.ember .cat:active{transform:translateY(-3px) scale(.97)}
+/* The theme's own icon is the BASE layer; the owner's category image lays over it,
+   so a 404 falls back to the icon rather than to a colour emoji. */
+.ember .cat .emoji{position:relative;width:46px;height:46px;display:grid;place-items:center;line-height:1;border-radius:14px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.ember .cat .emoji .cat-ic{width:26px;height:26px;color:var(--ink-2)}
+.ember .cat.is-on .emoji .cat-ic{color:var(--flame-hi)}
+/* the owner's category photo now fills the pill (was a tiny 28px square over the
+   icon); a soft inner ring keeps it reading as a chip, brighter when selected */
+.ember .cat .emoji img{position:absolute;inset:0;width:46px;height:46px;border-radius:14px;object-fit:cover;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.ember .cat.is-on .emoji img{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--flame) 60%,transparent)}
+.ember .cat small{font-size:11px;font-weight:700;color:var(--ink-2);width:72px;text-align:center;line-height:1.25;overflow-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.ember .cat.is-on{
+  background:linear-gradient(165deg,color-mix(in srgb,var(--flame) 34%,transparent),color-mix(in srgb,var(--amber) 14%,transparent));
+  border-color:color-mix(in srgb,var(--flame) 50%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 26px -10px color-mix(in srgb,var(--flame) 55%,transparent);
+}
+.ember .cat.is-on small{color:var(--ink)}
+
+/* secondary sub-category chips (revealed per active parent) */
+.ember .subchips{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 2px}
+.ember .subgroup{display:flex;gap:8px}
+.ember .subchip{
+  flex:none;display:inline-flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:var(--r-pill);white-space:nowrap;
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),border-color var(--t-fast),color var(--t-fast);
+}
+.ember .subchip:active{transform:scale(.96)}
+.ember .subchip-img{width:20px;height:20px;border-radius:6px;object-fit:cover}
+.ember .subchip.is-on{
+  color:var(--ink);
+  background:linear-gradient(165deg,color-mix(in srgb,var(--flame) 32%,transparent),color-mix(in srgb,var(--amber) 12%,transparent));
+  border-color:color-mix(in srgb,var(--flame) 48%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 20px -12px color-mix(in srgb,var(--flame) 55%,transparent);
+}
+/* [hidden] guard: class-based display: must not out-rank the native attribute */
+.ember .subchips[hidden],.ember .subgroup[hidden]{display:none!important}
+
+/* story rail — only ever visible once the stories fetch returns items */
+.ember .stories{display:flex;gap:13px;overflow-x:auto;padding:16px 2px 0}
+/* [hidden] guard: the class-based display must not out-rank the native attribute */
+.ember .stories[hidden]{display:none!important}
+/* Admin promo banners (shared .mbs slider). The wrapper only carries the
+   sibling rhythm; the slider itself is re-skinned to ember's night glass —
+   the shared #0001 fill and 16px radius read as a pale rectangle on the dark
+   backdrop. --glass-brd + --r-card make it a native frosted panel; the
+   controls (nav arrows/dots) keep the shared dark-on-image styling, which
+   survives a scheme flip because they sit over the banner image, not the page. */
+.ember .em-banners{padding-top:16px}
+.ember .em-banners .mbs{background:var(--glass);border:1px solid var(--glass-brd);border-radius:var(--r-card);margin-block-end:0}
+.ember .story{flex:none;width:68px;display:grid;justify-items:center;gap:7px}
+.ember .story-ring{
+  width:60px;height:60px;border-radius:50%;padding:2.5px;
+  background:var(--grad);display:grid;place-items:center;
+  box-shadow:0 10px 22px -12px color-mix(in srgb,var(--flame) 70%,transparent);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .story:active .story-ring{transform:scale(.93)}
+.ember .story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--night)}
+.ember .story small{font-size:11px;font-weight:700;color:var(--ink-2);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* promo glass card */
+.ember .promo{
+  position:relative;width:100%;margin-top:18px;border-radius:24px;
+  padding:18px;min-height:148px;overflow:hidden;text-align:start;
+  display:flex;align-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.ember .promo:active{transform:translateY(-3px) scale(.99);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 20px 44px -16px rgba(0,0,0,.7)}
+.ember .promo-copy{position:relative;z-index:2;display:grid;gap:9px;justify-items:start;max-width:62%}
+.ember .promo-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+  padding:6px 11px;border-radius:var(--r-pill);color:var(--flame-hi);
+}
+.ember .promo-title{font-size:21px;font-weight:800;line-height:1.12;letter-spacing:-.015em}
+.ember .promo-row{display:flex;align-items:center;gap:10px}
+.ember .promo-off{
+  font-size:11px;font-weight:800;letter-spacing:.02em;color:#fff;
+  background:var(--grad);padding:6px 11px;border-radius:var(--r-pill);
+  box-shadow:0 0 0 0 color-mix(in srgb,var(--flame) 45%,transparent);
+  animation:emb-off-pulse 2.6s var(--ease) infinite;
+}
+@keyframes emb-off-pulse{45%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.ember .promo-cta{font-size:12.5px;font-weight:800;padding:9px 17px;border-radius:var(--r-pill)}
+.ember .promo-img{
+  position:absolute;inset-inline-end:-34px;top:50%;translate:0 -50%;
+  width:175px;height:175px;object-fit:cover;border-radius:50%;background:rgba(255,255,255,.05);
+  box-shadow:0 22px 44px rgba(0,0,0,.55);
+  transition:transform .6s var(--ease);
+}
+.ember .promo:hover .promo-img{transform:rotate(6deg) scale(1.05)}
+
+/* section heads */
+.ember .section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 24px) 2px 13px}
+.ember .section-head h2{font-size:18px;font-weight:800;letter-spacing:-.015em}
+.ember .viewall{font-size:13px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;min-height:32px;padding-inline:6px}
+
+/* popular rail — glass product cards */
+.ember .rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 8px}
+.ember .pcard{
+  flex:0 0 152px;width:152px;min-width:0;scroll-snap-align:start;
+  border-radius:var(--r-card);padding:9px;position:relative;text-align:start;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 32px -14px rgba(0,0,0,.55);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast),border-color var(--t-fast);
+  animation:emb-card-in .5s var(--ease) backwards;
+}
+@keyframes emb-card-in{from{opacity:0;transform:translateY(18px)}}
+.ember .pcard:active{transform:translateY(-4px) scale(.98);border-color:var(--glass-brd-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 20px 40px -14px rgba(0,0,0,.7)}
+.ember .pcard-imgwrap{display:block;position:relative;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.05;background:rgba(255,255,255,.05)}
+.ember .pcard-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.ember .pcard:hover .pcard-imgwrap img{transform:scale(1.07)}
+.ember .pcard b{display:block;font-size:13.5px;font-weight:800;margin:9px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ember .pcard-meta{display:block;font-size:11px;color:var(--ink-3);font-weight:600;padding:0 2px}
+.ember .pcard-foot{display:flex;align-items:center;gap:6px;padding:6px 2px 2px}
+.ember .pcard-price{font-size:15px;font-weight:800;color:var(--flame-hi);display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+/* Happy-hour "was" stacks ABOVE the live price (not inline beside it). */
+.ember .pcard-price s{color:var(--ink-3);font-weight:600;font-size:11px;margin-inline-start:0;line-height:1.2}
+/* Happy-hour / schedule badge — flame-tinted pill (was a hard-coded amber inline
+   block that ignored the theme and light mode). In the compact list row (mrow)
+   it stays a pill beside the price; on the grid card it is re-anchored as a
+   ribbon on the thumbnail bottom (below) so it never crowds the price. */
+.ember .hh-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:var(--r-pill);
+  background:var(--grad);color:#fff;font-size:10px;font-weight:800;line-height:1;letter-spacing:.02em;
+  white-space:nowrap;box-shadow:0 5px 12px -6px color-mix(in srgb,var(--flame) 70%,transparent)}
+/* grid card: full-width flame ribbon bonded to the thumbnail bottom (imgwrap
+   clips it to the rounded corners). */
+.ember .pcard-imgwrap .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;justify-content:center;
+  border-radius:0;box-shadow:none;padding:5px 8px;letter-spacing:.02em;
+  overflow:hidden;text-overflow:ellipsis;display:block;text-align:center}
+.ember .pcard-foot .card-add{margin-inline-start:auto}
+
+/* shared: heart circle + chips on card photos */
+.ember .card-fav{
+  position:absolute;top:7px;inset-inline-end:7px;width:30px;height:30px;border-radius:50%;
+  background:rgba(12,8,5,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.16);
+  display:grid;place-items:center;color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .card-fav:active{transform:scale(.8)}
+.ember .card-fav .ic{width:15px;height:15px}
+.ember .card-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.ember .chip-spicy{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:800;letter-spacing:.02em;
+  background:var(--red);color:#fff;padding:4px 9px;border-radius:var(--r-pill);
+  box-shadow:0 6px 14px -4px rgba(229,72,77,.6);
+}
+.ember .chip-daily{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:800;color:#fff;
+  background:var(--grad);padding:4px 9px;border-radius:var(--r-pill);
+}
+.ember .chip-soldout{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:800;color:#fff;
+  background:rgba(12,8,5,.72);border:1px solid var(--glass-brd);padding:4px 9px;border-radius:var(--r-pill);
+}
+.ember .pcard .chip-spicy,.ember .pcard .chip-daily,.ember .pcard .chip-soldout,
+.ember .mrow .chip-spicy,.ember .mrow .chip-daily,.ember .mrow .chip-soldout{position:absolute;top:9px;inset-inline-start:9px;z-index:2}
+.ember .card-add{
+  width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;cursor:pointer;
+  background:var(--grad);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px -6px color-mix(in srgb,var(--flame) 60%,transparent);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast) var(--ease);
+}
+.ember .card-add:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 22px -6px color-mix(in srgb,var(--flame) 75%,transparent)}
+.ember .card-add:active{transform:scale(.82)}
+.ember .card-add .ic{width:16px;height:16px;stroke-width:2.2}
+/* the +/heart pills carry a 32px box under the 44px tap floor — a transparent
+   ::after grows the hit area without disturbing the visual size */
+.ember .card-add,.ember .card-fav{position:relative}
+.ember .card-add::after,.ember .card-fav::after{content:"";position:absolute;inset:-6px}
+
+/* sold-out visual */
+.ember .is-soldout{opacity:.62}
+.ember .is-soldout .pcard-imgwrap img,.ember .is-soldout .mrow-imgwrap img{filter:grayscale(.7) brightness(.7)}
+.ember .is-soldout .card-add{display:none}
+
+/* vertical menu list — glass rows */
+.ember .mlist{display:grid;gap:11px;padding-top:6px}
+.ember .mrow{
+  display:grid;grid-template-columns:86px 1fr auto;gap:13px;align-items:center;
+  border-radius:var(--r-card);padding:9px;text-align:start;position:relative;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 32px -14px rgba(0,0,0,.5);
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+  animation:emb-card-in .45s var(--ease) backwards;
+}
+.ember .mrow:active{transform:translateY(-3px) scale(.99);border-color:var(--glass-brd-2)}
+.ember .mrow-imgwrap{display:block;position:relative;border-radius:var(--r-img);overflow:hidden;width:86px;height:86px;background:rgba(255,255,255,.05)}
+.ember .mrow-imgwrap img{width:100%;height:100%;object-fit:cover}
+.ember .mrow .chip-spicy,.ember .mrow .chip-daily,.ember .mrow .chip-soldout{top:6px;inset-inline-start:6px;font-size:9px;padding:3px 7px}
+.ember .mrow-body b{display:block;font-size:14.5px;font-weight:800;line-height:1.25}
+.ember .mrow-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);font-weight:600;padding-top:4px;flex-wrap:wrap}
+.ember .mrow-meta .star{color:var(--amber);font-weight:800}
+.ember .mrow-price{font-size:14.5px;font-weight:800;color:var(--flame-hi);padding-top:6px;display:block}
+.ember .mrow-side{display:grid;gap:8px;justify-items:center;padding-inline-end:4px}
+.ember .mrow-side .card-fav{position:static;background:rgba(255,255,255,.07)}
+
+/* empty state */
+.ember .empty{display:grid;place-items:center;gap:12px;text-align:center;padding:38px 26px;border-radius:var(--r-card);color:var(--ink-3);font-size:14px;margin-top:8px}
+/* empty-state art is now the theme's stroked SVG, not a colour emoji */
+.ember .empty-art{width:56px;height:56px;fill:none;stroke:var(--ink-3);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.75}
+
+/* ── item detail ──────────────────────────────────────── */
+.ember .view[data-view="product"] .view-scroll{padding:0}
+.ember .p-hero{position:relative;height:330px;flex:none}
+.ember .fab{
+  position:absolute;top:calc(14px + env(safe-area-inset-top));width:44px;height:44px;border-radius:50%;z-index:5;
+  display:grid;place-items:center;color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .fab:active{transform:scale(.88)}
+.ember .fab:not(.fav){inset-inline-start:18px}
+[dir="rtl"] .ember .fab:not(.fav):not(.inline) .ic,[dir="rtl"] .ember .fab.inline .ic{transform:scaleX(-1)}
+.ember .fab.fav{inset-inline-end:18px}
+.ember .fab.fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.ember .fab.inline{position:static;flex:none;color:var(--ink);top:auto}
+.ember .p-img{
+  position:absolute;left:50%;top:54%;translate:-50% -50%;
+  width:264px;height:264px;object-fit:cover;border-radius:50%;background:rgba(255,255,255,.05);
+  box-shadow:0 40px 70px -20px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.1),0 0 90px -20px color-mix(in srgb,var(--flame) 50%,transparent);
+  animation:emb-hero-float 3.6s ease-in-out infinite alternate;
+}
+@keyframes emb-hero-float{from{transform:translateY(4px)}to{transform:translateY(-10px)}}
+.ember #heroEmbers{z-index:1}
+.ember .p-hero .fab,.ember .p-img{z-index:2}
+
+/* product image gallery: circular thumbnails that swap the hero image */
+.ember .p-gallery{
+  position:absolute;left:0;right:0;bottom:14px;z-index:4;
+  display:flex;gap:9px;justify-content:center;
+  padding:0 18px;overflow-x:auto;
+}
+.ember .p-thumb{
+  flex:none;width:46px;height:46px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(255,255,255,.22);opacity:.62;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,.7);
+  transition:opacity var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-pop);
+}
+.ember .p-thumb:active{transform:scale(.92)}
+.ember .p-thumb img{width:100%;height:100%;object-fit:cover}
+.ember .p-thumb.is-on{opacity:1;border-color:color-mix(in srgb,var(--flame) 70%,transparent)}
+.ember .p-gallery[hidden]{display:none!important}
+
+.ember .p-sheet{
+  position:relative;z-index:3;min-height:420px;
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-bottom:0;
+  padding:20px 20px 0;
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05) 30%,rgba(20,13,8,.35));
+}
+.ember .p-toprow{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;min-height:20px;gap:10px}
+.ember .gridglyph{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:var(--ink-2);border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);transition:all var(--t-fast);flex:none}
+.ember .gridglyph.is-on{color:var(--flame-hi);border-color:color-mix(in srgb,var(--flame) 50%,transparent);background:color-mix(in srgb,var(--flame) 12%,transparent)}
+.ember .p-title{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.ember .p-meta-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0 2px;gap:10px}
+.ember .p-rate{font-size:14px;font-weight:800;color:var(--amber)}
+.ember .p-rate small{color:var(--ink-3);font-weight:600}
+.ember .p-price{font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.ember .p-desc{padding:10px 0 4px;font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.ember .p-tags{display:flex;flex-wrap:wrap;gap:7px;padding:8px 0 2px}
+.ember .tag{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:700;color:var(--ink-2);
+  background:rgba(255,255,255,.07);border:1px solid var(--glass-brd);
+  padding:6px 11px;border-radius:var(--r-pill);
+}
+.ember .p-nutri{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 0 2px;animation:emb-card-in .3s var(--ease)}
+.ember .nutri{
+  display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);
+}
+.ember .nutri b{font-size:13.5px;font-weight:800;color:var(--flame-hi)}
+.ember .nutri small{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+
+.ember .p-sec{font-size:16px;font-weight:800;letter-spacing:-.01em;padding:18px 0 4px}
+.ember .p-lbl{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase;padding:8px 0 9px;display:flex;align-items:center}
+.ember .sizes{display:flex;gap:9px;flex-wrap:wrap}
+.ember .szchip{
+  flex:1;min-width:82px;padding:12px 6px;border-radius:16px;
+  font-size:13px;font-weight:800;color:var(--ink-2);
+  background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.ember .szchip:active{transform:scale(.94)}
+.ember .szchip.is-on{
+  background:var(--grad);color:#fff;border-color:rgba(255,255,255,.25);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px -8px color-mix(in srgb,var(--flame) 60%,transparent);
+}
+.ember .szchip small{display:block;font-size:10px;font-weight:700;opacity:.75;padding-top:1px}
+
+/* signature paid-extra TOGGLES */
+.ember .togs{display:grid;gap:9px;padding-top:14px}
+.ember .tgl-row{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:13px 15px;border-radius:16px;text-align:start;
+  background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);
+  transition:border-color var(--t-fast),background var(--t-fast);
+}
+.ember .tgl-row.is-on{border-color:color-mix(in srgb,var(--flame) 40%,transparent);background:color-mix(in srgb,var(--flame) 8%,transparent)}
+/* extra/topping thumbnail — the owner's photo for the add-on (was title-only) */
+.ember .tgl-img{width:44px;height:44px;flex:none;border-radius:12px;object-fit:cover;box-shadow:inset 0 0 0 1px var(--glass-brd)}
+.ember .tgl-info{flex:1;display:flex;align-items:baseline;gap:8px;min-width:0}
+.ember .tgl-info b{font-size:14px;font-weight:700;color:var(--ink-2)}
+.ember .tgl-row.is-on .tgl-info b{color:var(--ink)}
+.ember .tgl-info small{font-size:12px;font-weight:800;color:var(--ink-3);white-space:nowrap}
+.ember .tgl-row.is-on .tgl-info small{color:var(--flame-hi)}
+.ember .tgl{
+  position:relative;width:46px;height:27px;border-radius:var(--r-pill);flex:none;
+  background:rgba(255,255,255,.12);border:1px solid var(--glass-brd);
+  transition:background .25s var(--ease),border-color .25s,box-shadow .25s;
+}
+.ember .tgl i{
+  position:absolute;top:2.5px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.4);
+  transition:translate .25s var(--ease-pop);
+}
+.ember .tgl-row.is-on .tgl{
+  background:var(--grad);border-color:rgba(255,255,255,.3);
+  box-shadow:0 0 16px -2px color-mix(in srgb,var(--flame) 65%,transparent);
+}
+.ember .tgl-row.is-on .tgl i{translate:19px 0}
+[dir="rtl"] .ember .tgl-row.is-on .tgl i{translate:-19px 0}
+.ember .opt-req{font-size:10px;font-weight:800;color:var(--flame-hi);letter-spacing:.03em;text-transform:uppercase;margin-inline-start:6px}
+
+/* bottom CTA bar */
+.ember .p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,rgba(9,6,4,.72) 40%);
+  position:relative;z-index:6;
+}
+.ember .qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  border-radius:var(--r-pill);padding:5px;
+}
+.ember .qty.sm{padding:3px}
+.ember .qty.sm .qty-btn{width:32px;height:32px}
+.ember .qty-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.ember .qty-btn:active{transform:scale(.82);background:rgba(255,255,255,.1);color:var(--ink)}
+.ember .qty output{min-width:28px;text-align:center;font-weight:800;font-size:15.5px;font-variant-numeric:tabular-nums}
+/* direct "go to cart" button beside Add to Cart on the product footer; a
+   glass icon button (not the solid CTA) so it reads as the secondary
+   action, with a flame-gradient count badge. Toggled visible by script.js
+   only once the cart holds something. */
+.ember .p-cart-jump{
+  flex:none;position:relative;width:52px;height:52px;border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .p-cart-jump:active{transform:scale(.9)}
+.ember .p-cart-jump[hidden]{display:none}
+.ember .p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:19px;height:19px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--grad);color:#fff;
+  font-size:10.5px;font-weight:800;line-height:19px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+  box-shadow:0 0 0 2px var(--night);
+}
+.ember .cta{
+  flex:1;height:56px;border-radius:var(--r-pill);
+  font-size:15.5px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast),opacity var(--t-fast);
+  position:relative;overflow:hidden;color:#fff;text-decoration:none;
+}
+.ember .cta:active{transform:scale(.97)}
+.ember .cta b{font-weight:800;opacity:.9;font-variant-numeric:tabular-nums}
+.ember .cta.wide{width:100%}
+.ember .cta:disabled{opacity:.45;box-shadow:none}
+.ember .cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  animation:emb-spin .7s linear infinite;
+}
+@keyframes emb-spin{to{rotate:360deg}}
+.ember .morph{animation:emb-price-pop .34s var(--ease-pop)}
+@keyframes emb-price-pop{40%{transform:scale(1.18);filter:blur(1.5px)}}
+
+/* ── offers ───────────────────────────────────────────── */
+.ember .loy-banner{
+  display:flex;align-items:center;gap:13px;width:100%;
+  border-radius:var(--r-card);padding:14px 15px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .loy-banner:active{transform:translateY(-3px) scale(.99)}
+.ember .loy-flame{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;
+  background:var(--grad);font-size:20px;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px -6px color-mix(in srgb,var(--flame) 55%,transparent);
+}
+.ember .loy-copy{flex:1;display:grid;gap:2px}
+.ember .loy-copy b{font-size:16.5px;font-weight:800}
+.ember .loy-copy small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .loy-go{font-size:12px;font-weight:800;padding:9px 15px;border-radius:var(--r-pill)}
+.ember .offer-list{display:grid;gap:11px;padding-top:14px}
+.ember .offer{
+  display:flex;align-items:center;gap:13px;
+  border-radius:var(--r-card);padding:14px 15px;position:relative;overflow:hidden;
+  animation:emb-card-in .45s var(--ease) backwards;
+}
+.ember .offer::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--grad)}
+.ember .offer-art{width:24px;height:24px;flex:none;color:var(--flame-hi);filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))}
+.ember .offer-body{flex:1;min-width:0}
+.ember .offer-body b{display:block;font-size:14px;font-weight:800;line-height:1.25}
+.ember .offer-body small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .offer-code{
+  display:inline-block;margin-top:7px;font-size:10.5px;font-weight:800;letter-spacing:.06em;
+  border:1px dashed color-mix(in srgb,var(--flame) 55%,transparent);color:var(--flame-hi);
+  padding:4px 9px;border-radius:8px;
+}
+.ember .offer-apply{
+  flex:none;font-size:12px;font-weight:800;padding:9px 15px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .offer-apply:active{transform:scale(.92)}
+.ember .offer-apply.is-applied{background:color-mix(in srgb,var(--flame) 14%,transparent);border:1px solid color-mix(in srgb,var(--flame) 50%,transparent);color:var(--flame-hi);box-shadow:none}
+
+/* ── orders ───────────────────────────────────────────── */
+.ember .orders-list{display:grid;gap:11px}
+.ember .order-row{
+  display:flex;align-items:center;gap:12px;width:100%;
+  border-radius:var(--r-card);padding:13px 14px;text-align:start;text-decoration:none;color:var(--ink);
+  animation:emb-card-in .4s var(--ease) backwards;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .order-row:active{transform:translateY(-2px) scale(.99)}
+.ember .order-ic{
+  width:42px;height:42px;border-radius:14px;flex:none;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--flame) 13%,transparent);color:var(--flame-hi);border:1px solid color-mix(in srgb,var(--flame) 30%,transparent);
+}
+.ember .order-row>div{flex:1;min-width:0}
+.ember .order-row b{font-size:13.5px;font-weight:800;display:block}
+.ember .order-row small{font-size:11px;color:var(--ink-3);font-weight:600}
+.ember .row-status,.ember .order-status{font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--flame) 13%,transparent);color:var(--flame-hi);border:1px solid color-mix(in srgb,var(--flame) 30%,transparent);white-space:nowrap}
+.ember .order-status.done,.ember .row-status.ok{background:rgba(255,255,255,.07);color:var(--ink-2);border-color:var(--glass-brd)}
+.ember .orders-empty{font-size:13px;color:var(--ink-3);text-align:center;padding:14px}
+
+/* ── cart ─────────────────────────────────────────────── */
+.ember .cart-list{display:grid;gap:10px}
+.ember .cart-item{
+  display:grid;grid-template-columns:74px 1fr auto;gap:12px;align-items:center;
+  border-radius:var(--r-card);padding:10px;overflow:hidden;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));
+  -webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+  border:1px solid var(--glass-brd);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  animation:emb-card-in .4s var(--ease) backwards;
+}
+.ember .cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.ember .cart-item img{width:74px;height:74px;object-fit:cover;border-radius:var(--r-img);background:rgba(255,255,255,.05)}
+.ember .ci-im{flex:none;padding:0;background:none;border:0}
+.ember .ci-name{display:block;padding:0;background:none;border:0;text-align:start;color:var(--ink);font-size:14px;font-weight:800;line-height:1.25}
+.ember .ci-was{font-size:11px;color:var(--ink-3);text-decoration:line-through}
+.ember .ci-unit{font-size:10.5px;color:var(--ink-3);font-weight:700}
+.ember .ci-opts{font-size:11px;color:var(--ink-3);margin-top:3px;line-height:1.45;font-weight:600}
+.ember .ci-note{font-size:11px;color:var(--flame-hi);margin-top:3px;font-weight:600;font-style:italic}
+.ember .ci-row{display:flex;align-items:center;gap:9px;margin-top:6px}
+.ember .ci-price{font-size:14px;font-weight:800;color:var(--flame-hi)}
+.ember .ci-notebtn{font-size:10.5px;font-weight:700;color:var(--ink-3);display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:4px 9px;min-height:32px;border-radius:var(--r-pill);border:1px dashed var(--glass-brd-2);transition:color var(--t-fast),border-color var(--t-fast)}
+.ember .ci-notebtn:active{color:var(--flame-hi);border-color:color-mix(in srgb,var(--flame) 50%,transparent)}
+/* horizontal stepper (crumb restructure): a vertical +/− column read as two
+   unrelated buttons and ate a whole column of the line's width */
+.ember .ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:5px;align-self:stretch}
+.ember .ci-qty{display:flex;align-items:center;border-radius:var(--r-pill);border:1px solid var(--glass-brd);background:rgba(255,255,255,.05);padding:3px}
+.ember .ci-qty .qty-btn{width:32px;height:32px}
+.ember .ci-qty output{font-size:12.5px;font-weight:800;padding:0 2px;min-width:22px;text-align:center}
+.ember .ci-remove{color:var(--ink-3);width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.ember .ci-remove:active{color:var(--red)}
+.ember .free-tag{font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--grad);border-radius:var(--r-pill);padding:3px 8px;margin-inline-start:6px}
+
+.ember .cart-tools{display:grid;gap:13px;padding-top:16px}
+.ember .panel{border-radius:var(--r-card);padding:15px}
+.ember .panel h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em}
+
+.ember .seg{display:flex;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);border-radius:var(--r-pill);padding:4px;gap:3px}
+.ember .seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:800;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);
+}
+.ember .seg button .ic{width:16px;height:16px}
+.ember .seg button.is-on{background:var(--grad);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 18px -8px color-mix(in srgb,var(--flame) 60%,transparent)}
+.ember .seg.mini{padding:3px;flex-wrap:wrap}
+.ember .seg.mini button{padding:7px 13px;flex:none}
+
+.ember .ot-fields{display:grid;gap:9px;padding-top:11px}
+.ember .ot-fields:empty{display:none}
+.ember .ot-hint{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px;font-weight:600}
+.ember .ot-hint .ic{width:14px;height:14px;color:var(--flame-hi)}
+
+.ember .schedule-row{display:flex;align-items:center;gap:10px;padding-top:13px;flex-wrap:wrap}
+.ember .sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.ember .when-time{width:auto;flex:1;min-width:150px;padding:9px 13px;border-radius:14px;font-size:13px}
+.ember .waiter-row{display:flex;gap:9px;padding-top:13px}
+.ember .waiter-row .minipill{flex:1;justify-content:center}
+
+.ember .coupon-field{display:flex;align-items:center;gap:9px;padding:0}
+.ember .coupon-field .ic{color:var(--flame-hi);flex:none}
+.ember .coupon-field input{background:none;border:0;padding:10px 0;font-size:13.5px;backdrop-filter:none;-webkit-backdrop-filter:none}
+.ember .coupon-field input:focus{background:none}
+.ember .coupon-field .minipill{flex:none}
+.ember .coupon-field.is-applied{opacity:.85}
+.ember .coupon-msg{font-size:12px;padding:9px 2px 0;color:var(--flame-hi);font-weight:700}
+.ember .coupon-msg.err{color:var(--red)}
+
+.ember .totals{display:grid;gap:9px}
+.ember .tr{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);font-weight:600}
+.ember .tr b{font-weight:700;font-variant-numeric:tabular-nums}
+.ember .tr.disc{color:var(--flame-hi)}
+.ember .tr.grand{border-top:1px dashed var(--glass-brd-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px}
+.ember .tr.grand b{font-weight:800;font-size:17px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ember .minorder{font-size:12px;color:var(--red);font-weight:700;padding:4px 2px 0}
+
+.ember .minipill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:11px 17px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:800;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .minipill:active{transform:scale(.95)}
+.ember .linkbtn{font-size:13px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding:6px 2px;min-height:32px}
+
+/* checkout order summary — one row per cart line, Edit → cart */
+.ember .ck-items{display:grid;gap:11px}
+.ember .ck-head{display:flex;align-items:center;justify-content:space-between}
+.ember .ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ember .ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ember .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.ember .ck-mid{min-width:0}
+.ember .ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ember .ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ember .ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ember .ck-price{font-size:12.5px;font-weight:800;color:var(--flame-hi);text-align:end}
+.ember .ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+
+.ember .wa-line{
+  display:flex;align-items:center;gap:11px;
+  border-radius:var(--r-card);padding:14px 15px;
+  color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:700;
+}
+.ember .wa-line .ic:first-child{color:#4ade80}
+.ember .wa-line span{flex:1}
+.ember .wa-line .arr{color:var(--ink-3)}
+[dir="rtl"] .ember .arr{transform:scaleX(-1)}
+
+/* ── checkout ─────────────────────────────────────────── */
+.ember .view[data-view="checkout"] .view-scroll{display:flex;flex-direction:column;gap:13px}
+.ember .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.ember .field-label{display:block;font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:.02em;padding:2px 2px 5px}
+.ember .cv-block{border-radius:var(--r-card);padding:15px;display:grid;gap:9px}
+.ember .cv-h3{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+.ember .pm-list{display:grid;gap:9px}
+.ember .pm{
+  display:flex;align-items:center;gap:12px;width:100%;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--glass-brd);border-radius:17px;
+  padding:12px 14px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.ember .pm.is-on{border-color:color-mix(in srgb,var(--flame) 60%,transparent);background:color-mix(in srgb,var(--flame) 9%,transparent);box-shadow:0 0 20px -6px color-mix(in srgb,var(--flame) 40%,transparent)}
+.ember .pm.is-off{opacity:.45;pointer-events:none}
+.ember .pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:var(--ink-2);border:1px solid var(--glass-brd)}
+.ember .pm.is-on .pm-ic{background:var(--grad);color:#fff;border-color:rgba(255,255,255,.25)}
+.ember .pm b{flex:1;font-size:14px;font-weight:800}
+.ember .pm b small{display:block;font-weight:600;font-size:11px;color:var(--ink-3);margin-top:2px}
+.ember .pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--glass-brd-2);display:grid;place-items:center;transition:all var(--t-fast);flex:none}
+.ember .pm.is-on .pm-radio{border-color:var(--flame)}
+.ember .pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--grad)}
+.ember .cardform{display:grid;gap:9px;padding-top:11px;animation:emb-card-in .35s var(--ease)}
+.ember .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.ember .tip-row button{
+  flex:1;min-width:56px;padding:11px 4px;border-radius:15px;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--glass-brd);
+  font-size:13.5px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.ember .tip-row button:active{transform:scale(.93)}
+.ember .tip-row button.is-on{border-color:color-mix(in srgb,var(--flame) 60%,transparent);color:var(--flame-hi);background:color-mix(in srgb,var(--flame) 10%,transparent)}
+.ember .terms{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--ink-2);font-weight:600;line-height:1.5;cursor:pointer}
+.ember .terms input{width:auto;flex:none;margin-top:2px}
+.ember .err-box{font-size:12.5px;color:var(--red);font-weight:700;background:color-mix(in srgb,var(--red) 12%,transparent);border:1px solid color-mix(in srgb,var(--red) 40%,transparent);border-radius:14px;padding:11px 14px}
+
+/* ── delivery address: saved chips + autocomplete + use-my-location ── */
+.ember .saved-addrs{display:grid;gap:8px}
+.ember .saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1.5px solid var(--glass-brd);border-radius:15px;background:rgba(255,255,255,.05);color:var(--ink)}
+.ember .saved-addr .ic{flex:none;color:var(--ink-2)}
+.ember .saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.ember .saved-addr .sa-text b{font-size:13px;font-weight:800}
+.ember .saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ember .saved-addr.is-on{border-color:color-mix(in srgb,var(--flame) 60%,transparent);background:color-mix(in srgb,var(--flame) 10%,transparent)}
+.ember .saved-addr.is-on .ic{color:var(--flame-hi)}
+.ember .addr-field{position:relative}
+.ember .addr-field input#coAddr,.ember .addr-field input#cartAddr{padding-inline-end:46px}
+/* product reviews */
+.ember .product-reviews:empty{display:none}
+.ember .product-reviews{margin-top:16px}
+.ember .review-card{padding:12px 14px;margin-bottom:9px;border-radius:var(--r-img)}
+.ember .review-card b{display:block;font-size:12.5px;font-weight:800}
+.ember .review-stars{display:inline-block;font-size:12px;color:var(--flame-hi);letter-spacing:2px;margin:2px 0}
+.ember .review-stars-dim{color:var(--ink-3);opacity:.45}
+.ember .review-card p{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin:2px 0 0}
+.ember .reviews-empty{font-size:12.5px;color:var(--ink-3)}
+/* inline product quick-rate stars */
+.ember .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:2px 0 12px;font-size:13px;font-weight:800}
+.ember .rate-row .rate-label{flex:1 1 auto;min-width:0}
+.ember .rate-stars{display:flex;gap:0;flex:none;color:var(--amber)}
+.ember .rate-stars button{padding:7px;background:none;border:0;cursor:pointer;line-height:0}
+.ember .rate-stars button .ic{width:22px;height:22px;fill:none;stroke:currentColor;opacity:.4;transition:opacity .15s,fill .15s}
+.ember .rate-stars button.is-on .ic{fill:currentColor;stroke:currentColor;opacity:1}
+.ember .uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--flame-hi);background:none;border:0;cursor:pointer}
+.ember .uselocbtn:active{transform:scale(.9)}
+.ember .uselocbtn.is-loading{opacity:.5;animation:emb-spin 1s linear infinite}
+.ember .addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:#180f09;border:1px solid var(--glass-brd);border-radius:15px;overflow:hidden;box-shadow:0 18px 40px -14px rgba(0,0,0,.7);max-height:230px;overflow-y:auto}
+.ember .addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--glass-brd);cursor:pointer}
+.ember .addr-opt:last-child{border-bottom:0}
+.ember .addr-opt:active,.ember .addr-opt:hover{background:rgba(255,255,255,.06)}
+.ember .geo-attrib{font-size:10px;color:var(--ink-3);margin-top:7px;text-align:center}
+
+/* ── confirmed ────────────────────────────────────────── */
+.ember .view-center{justify-content:center}
+.ember .confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:7px}
+.ember .embers.tall i{bottom:34%}
+.ember .confirm-ring{
+  width:118px;height:118px;border-radius:50%;display:grid;place-items:center;
+  margin-bottom:10px;position:relative;z-index:2;
+  animation:emb-mark-pop .7s var(--ease-pop) .1s backwards;
+}
+.ember .confirm-check{width:54px;height:54px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ember .confirm-check path{stroke-dasharray:1;stroke-dashoffset:1;animation:emb-draw .5s var(--ease) .6s forwards}
+@keyframes emb-draw{to{stroke-dashoffset:0}}
+.ember .confirm-title{font-size:27px;font-weight:800;letter-spacing:-.02em;position:relative;z-index:2}
+.ember .confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65;position:relative;z-index:2;font-weight:600}
+.ember .confirm-eta{color:var(--ink-2);font-weight:800}
+.ember .confirm-code{
+  font-size:13px;font-weight:800;color:var(--flame-hi);
+  padding:9px 18px;border-radius:var(--r-pill);margin-top:8px;
+  border:1px dashed color-mix(in srgb,var(--flame) 50%,transparent);
+  font-variant-numeric:tabular-nums;position:relative;z-index:2;
+}
+.ember .confirm-actions{display:grid;gap:12px;width:100%;padding-top:22px;justify-items:center;position:relative;z-index:2}
+.ember .confirm-actions .cta{max-width:280px}
+/* Match the Track Order CTA's footprint — the bare text link hugging its own
+   text next to a 280px primary read as an afterthought. */
+.ember .confirm-actions .ghostbtn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;max-width:280px;padding:14px 18px;border-radius:var(--r-pill);
+  background:var(--glass);border:1px solid var(--glass-brd);
+  transition:background var(--t-fast) var(--ease);
+}
+.ember .confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.ember .confirm-actions .ghostbtn:hover{background:var(--glass-2)}
+.ember .greview{
+  display:flex;align-items:center;gap:12px;position:relative;z-index:2;width:100%;max-width:320px;
+  border-radius:var(--r-card);padding:13px 15px;margin-top:16px;text-decoration:none;color:var(--ink);text-align:start;
+  background:linear-gradient(165deg,var(--glass-2),var(--glass));border:1px solid var(--glass-brd);
+}
+.ember .greview-star{font-size:22px}
+.ember .greview-copy{flex:1;display:grid}
+.ember .greview-copy b{font-size:13.5px;font-weight:800}
+.ember .greview-copy small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .ghostbtn{font-size:13px;font-weight:800;color:var(--ink-2);padding:8px 4px}
+
+/* ── track ────────────────────────────────────────────── */
+.ember .track-card{display:grid;gap:16px}
+.ember .track-top{display:flex;justify-content:space-between;align-items:center}
+.ember .tk-label{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.ember .track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.ember .tk-eta{text-align:end}
+.ember .tk-eta b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ember .courier{display:flex;align-items:center;gap:11px;border-radius:16px;padding:10px}
+.ember .courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.ember .courier>div{flex:1}
+.ember .courier b{font-size:14px;font-weight:800}
+.ember .timeline{list-style:none;display:grid;gap:0;padding:2px 4px}
+.ember .tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.ember .tl:last-child{padding-bottom:0}
+.ember .tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--glass-brd-2);background:rgba(20,13,8,.8);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.ember .tl-node svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.ember .tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:rgba(255,255,255,.14)}
+.ember .tl-line::after{content:"";position:absolute;inset:0;background:var(--grad);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.ember .tl.done .tl-node,.ember .tl.now .tl-node{border-color:var(--flame);background:var(--grad)}
+.ember .tl.done .tl-node svg{opacity:1;transform:none}
+.ember .tl.done .tl-line::after{transform:none}
+.ember .tl.now .tl-node{box-shadow:0 0 0 0 color-mix(in srgb,var(--flame) 50%,transparent);animation:emb-pulse 2s infinite}
+@keyframes emb-pulse{70%{box-shadow:0 0 0 8px transparent}}
+.ember .tl-copy b{font-size:14px;font-weight:800;display:block;color:var(--ink-3);transition:color .3s}
+.ember .tl.done .tl-copy b,.ember .tl.now .tl-copy b{color:var(--ink)}
+.ember .tl-copy small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .rate-card{margin-top:13px;display:grid;justify-items:center;gap:11px;text-align:center;font-size:13.5px;color:var(--ink-2);font-weight:700}
+
+/* ── dock: cart pill + glass nav ──────────────────────── */
+.ember .dock{
+  position:absolute;inset-inline:18px;bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);display:grid;gap:10px;
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.ember .dock.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.ember .cartpill{
+  display:flex;align-items:center;gap:10px;
+  border-radius:var(--r-pill);padding:9px 14px;
+  font-size:13px;font-weight:800;color:var(--ink);
+  animation:emb-pill-in .45s var(--ease-pop) backwards;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember .cartpill:active{transform:scale(.97)}
+@keyframes emb-pill-in{from{opacity:0;transform:translateY(20px) scale(.9)}}
+.ember .cp-badge{
+  min-width:26px;height:26px;border-radius:var(--r-pill);
+  display:grid;place-items:center;padding:0 7px;
+  font-size:12px;font-weight:800;color:#fff;
+}
+.ember .cartpill span{white-space:nowrap}
+.ember .cartpill b{margin-inline-start:auto;font-variant-numeric:tabular-nums;color:var(--flame-hi)}
+.ember .tabbar{
+  display:flex;justify-content:space-between;align-items:center;
+  border-radius:var(--r-pill);padding:8px;
+  background:linear-gradient(165deg,rgba(28,19,12,.62),rgba(18,12,8,.55));
+}
+.ember .tab{
+  display:flex;align-items:center;justify-content:center;
+  height:46px;min-width:46px;padding:0 12px;border-radius:var(--r-pill);
+  color:var(--ink-3);position:relative;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.ember .tab:active{transform:scale(.9)}
+.ember .tab .ic{width:22px;height:22px}
+.ember .tab .badge{position:absolute;top:4px;inset-inline-end:6px;min-width:16px;height:16px;padding:0 4px;border-radius:var(--r-pill);background:var(--grad);color:#fff;font-size:9.5px;font-weight:800;display:grid;place-items:center}
+.ember .tab-label{
+  font-size:12px;font-weight:800;letter-spacing:-.01em;
+  max-width:0;opacity:0;overflow:hidden;white-space:nowrap;
+  transition:max-width .35s var(--ease),opacity .3s var(--ease) .08s,margin .35s var(--ease);
+}
+.ember .tab.is-on{
+  color:#fff;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--flame) 36%,transparent),color-mix(in srgb,var(--amber) 16%,transparent));
+  border:1px solid color-mix(in srgb,var(--flame) 50%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 24px -10px color-mix(in srgb,var(--flame) 60%,transparent);
+}
+.ember .tab.is-on .ic{color:var(--flame-hi)}
+.ember .tab.is-on .tab-label{max-width:88px;opacity:1;margin-inline-start:8px}
+
+/* ── sheets / scrim / overlay ─────────────────────────── */
+.ember .scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(6,3,2,.55);
+  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.ember .scrim.is-open{opacity:1}
+.ember .sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:linear-gradient(180deg,rgba(38,25,16,.78),rgba(22,14,9,.86));
+  -webkit-backdrop-filter:blur(26px) saturate(1.2);backdrop-filter:blur(26px) saturate(1.2);
+  border:1px solid var(--glass-brd);border-bottom:0;
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 -20px 60px rgba(0,0,0,.5);
+  padding:10px 22px calc(26px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:86%;overflow-y:auto;
+}
+.ember .sheet.is-open{transform:none}
+/* Light mode: the sheet's hardcoded dark-brown gradient never flipped, so the now
+   dark ink sat on a dark sheet (profile / menu / branch / any sheet). Repaint the
+   surface as warm paper in light mode so the content stays legible. */
+.ember[data-appearance="light"] .sheet,
+.ember[data-appearance="system"].is-sys-light .sheet{
+  background:linear-gradient(180deg,#ffffff,var(--night-2));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 -18px 50px rgba(60,40,20,.16);
+}
+.ember .sheet-tall{max-height:92%}
+.ember .sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--glass-brd-2);margin:6px auto 16px;cursor:pointer}
+
+/* nearest-branch map picker */
+.ember .branchmap{width:100%;height:300px;border-radius:18px;overflow:hidden;border:1px solid var(--glass-brd);background:rgba(255,255,255,.05)}
+.ember .branchmap .leaflet-container{width:100%;height:100%;background:#1c130c}
+.ember .geo-attrib{font-size:10.5px;color:var(--ink-3);margin:7px 2px 0;text-align:end}
+.ember .branch-list{display:grid;gap:9px;margin-top:12px}
+.ember .branch-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  padding:13px 15px;border-radius:16px;color:var(--ink);
+}
+.ember .branch-row .ic{color:var(--flame);flex:none}
+.ember .branch-row b{font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.ember .branch-row b small{font-size:11.5px;font-weight:600;color:var(--ink-3)}
+.ember .branch-dist{font-size:12px;font-weight:700;color:var(--amber);flex:none}
+.ember .branch-row:active{transform:scale(.98)}
+.ember .sheet h2{font-size:19px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px}
+.ember .sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:14px;font-weight:600}
+.ember .sheet-form{display:grid;gap:4px}
+.ember .sheet-form input,.ember .sheet-form textarea{margin-bottom:6px}
+.ember .sheet-done{display:grid;justify-items:center;text-align:center;gap:8px;padding:14px 4px}
+.ember .sheet-done-emoji{font-size:40px}
+.ember .sheet-done b{font-size:17px;font-weight:800}
+.ember .sheet-done p{font-size:13px;color:var(--ink-2);font-weight:600}
+.ember .sheet-done .muted{color:var(--ink-3)}
+
+/* menu sheet */
+.ember .menu-rows{display:grid;gap:7px}
+.ember .mrow-link{
+  display:flex;align-items:center;gap:13px;width:100%;
+  padding:11px 10px;border-radius:16px;text-align:start;text-decoration:none;color:var(--ink);
+  transition:background var(--t-fast);
+}
+.ember .mrow-link:active{background:rgba(255,255,255,.06)}
+.ember .mr-ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:18px;flex:none}
+.ember .mr-ic.grad{color:#fff}
+.ember .mrow-link b{flex:1;font-size:14.5px;font-weight:800}
+.ember .mrow-link small{font-size:12px;font-weight:800;color:var(--flame-hi)}
+
+/* profile sheet */
+.ember .me-card{display:flex;align-items:center;gap:13px;border-radius:var(--r-card);padding:13px;margin-bottom:14px}
+.ember .me-card .me-avatar{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#fff;font-size:20px;font-weight:800;flex:none}
+.ember .me-card>div{flex:1;min-width:0}
+.ember .me-card b{font-size:15.5px;font-weight:800;display:block}
+.ember .me-card small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .me-card .minibtn{flex:none;font-size:12px;font-weight:800;padding:9px 14px;border-radius:var(--r-pill);background:rgba(255,255,255,.08);border:1px solid var(--glass-brd);color:var(--ink)}
+.ember .wallet-tag{font-size:12.5px;font-weight:800;padding:8px 13px;border-radius:var(--r-pill);font-variant-numeric:tabular-nums}
+.ember .pref{display:grid;gap:2px;padding-top:6px}
+.ember .pref-row{display:flex;align-items:center;justify-content:space-between;padding:11px 2px;width:100%;gap:10px;flex-wrap:wrap}
+.ember .pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.ember .demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:20px 0 2px;opacity:.75}
+.ember .biz-card{display:grid;gap:9px;padding:14px 2px 2px}
+.ember .biz-card span{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2);font-weight:600}
+.ember .biz-card a{color:var(--ink-2);text-decoration:none}
+.ember .minibtn{font-size:12px;font-weight:800;padding:9px 14px;border-radius:var(--r-pill);background:var(--grad);color:#fff;flex:none}
+
+/* loyalty */
+.ember .loyalty{border-radius:var(--r-card);padding:16px;display:grid;gap:8px;margin-bottom:14px}
+.ember .loyalty-head{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:800;color:var(--flame-hi)}
+.ember .loyalty-num{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.ember .loyalty-sub{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.ember .loyalty-bar{height:8px;border-radius:var(--r-pill);background:rgba(255,255,255,.08);overflow:hidden;margin-top:4px}
+.ember .loyalty-bar i{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--grad);transition:width .8s var(--ease)}
+.ember .stamp-dots{display:flex;flex-wrap:wrap;gap:7px;padding-top:4px}
+.ember .stamp-dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3);background:rgba(255,255,255,.06);border:1px solid var(--glass-brd)}
+.ember .stamp-dot.is-on{color:#fff;background:var(--grad);border-color:transparent}
+.ember .loyalty-ok{font-size:13px;font-weight:800;color:var(--flame-hi);text-align:center;padding:6px 0}
+.ember .orders-block{display:grid;gap:9px;padding-top:6px}
+.ember .orders-block h3{padding-bottom:2px}
+
+/* review sheet */
+.ember .rv-stars{display:flex;justify-content:center;gap:8px;padding:4px 0 14px}
+.ember .rv-stars button{width:40px;height:40px;color:rgba(255,255,255,.24);transition:color var(--t-fast),transform var(--t-fast) var(--ease-pop)}
+.ember .rv-stars button .ic{width:32px;height:32px}
+.ember .rv-stars button.is-on{color:var(--amber)}
+.ember .rv-stars button.is-on .ic{fill:var(--amber);stroke:var(--amber)}
+
+/* search overlay */
+.ember .overlay{
+  position:absolute;inset:0;z-index:var(--z-overlay);
+  background:linear-gradient(180deg,rgba(24,16,10,.72),rgba(12,8,5,.85));
+  -webkit-backdrop-filter:blur(22px) saturate(1.2);backdrop-filter:blur(22px) saturate(1.2);
+  display:flex;flex-direction:column;
+  padding:calc(24px + env(safe-area-inset-top)) 20px 0;
+  /* pointer-events gated on is-open: the overlay (z-overlay 55) sits above the
+     product sheet (z-sheet 50), and closeSearch() fades it out over 300ms before
+     setting [hidden]. Tapping a search result opens the product mid-fade, so
+     without this the invisible overlay swallowed taps on the item for 300ms. */
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
+.ember .overlay.is-open{opacity:1;pointer-events:auto}
+.ember .ov-top{display:flex;gap:10px;flex:none}
+.ember .diet-row{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 6px;flex:none}
+.ember .diet-row button{
+  flex:none;display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.06);border:1.5px solid var(--glass-brd);
+  font-size:12.5px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);white-space:nowrap;
+}
+.ember .diet-row button:active{transform:scale(.93)}
+.ember .diet-row button.is-on{border-color:color-mix(in srgb,var(--flame) 60%,transparent);color:var(--flame-hi);background:color-mix(in srgb,var(--flame) 12%,transparent)}
+.ember .ov-results{flex:1;min-height:0;overflow-y:auto;display:grid;gap:11px;align-content:start;padding:8px 0 24px}
+
+/* ── full-screen story viewer ─────────────────────────── */
+.ember .storyview{position:absolute;inset:0;z-index:var(--z-story);background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.ember .storyview.is-open{opacity:1}
+.ember .sv-progress{position:absolute;top:calc(12px + env(safe-area-inset-top));inset-inline:14px;z-index:3;display:flex;gap:5px}
+.ember .sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.26);overflow:hidden}
+.ember .sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.ember .sv-close{
+  position:absolute;top:calc(26px + env(safe-area-inset-top));inset-inline-end:18px;z-index:4;
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;
+}
+.ember .sv-close:active{transform:scale(.9)}
+.ember .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.ember .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ember .sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent}
+.ember .sv-nav.prev{inset-inline-start:0}
+.ember .sv-nav.next{inset-inline-end:0}
+.ember .sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:24px 22px calc(28px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(0,0,0,.74),transparent);
+}
+.ember .sv-caption{color:#fff;font-size:17px;font-weight:800;line-height:1.34;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.ember .sv-cta{height:50px;width:100%}
+
+/* ── toast & fly layer ────────────────────────────────── */
+.ember .toast{
+  position:absolute;bottom:112px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  color:var(--ink);font-size:13px;font-weight:700;
+  padding:11px 18px;border-radius:var(--r-pill);
+  background:linear-gradient(165deg,rgba(46,30,18,.85),rgba(28,18,11,.85));
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid var(--glass-brd);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.ember .toast.is-on{opacity:1;translate:-50% 0}
+.ember .toast .ic{width:16px;height:16px;color:var(--flame-hi)}
+.ember .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.ember .fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(0,0,0,.6),0 0 30px -6px color-mix(in srgb,var(--flame) 50%,transparent);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .ember :is(.pcard-price,.mrow-price,.ci-price,.p-price,.p-rate,.tr b,.cta b,.cartpill b,.confirm-code,.wallet-tag,.tk-eta b,.track-top b,.tgl-info small,.szchip small,.offer-code,.loy-copy b,.mrow-link small,.loyalty-num,.ci-was,.ci-unit,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+/* display:block members: isolation alone leaves them flush-left in RTL */
+[dir="rtl"] .ember :is(.mrow-price,.szchip small,.ck-price,.ck-qty){text-align:right}
+
+/* ── standalone pages (account / track) ──────────────── */
+.ember .app>.view-scroll{position:relative;z-index:1}
+.ember .view-scroll>.track-card~.track-card{margin-top:14px}
+.ember .tk-eta .tk-label{margin-top:5px;margin-bottom:0}
+.ember .order-line.grand{border-top:1px dashed var(--glass-brd-2);padding-top:10px;margin-top:2px}
+.ember .order-line.grand span{color:var(--ink);font-weight:700}
+.ember .order-line.grand b{font-size:16px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ember #cv-curbside-card{text-align:center;gap:0}
+.ember .imhere-msg{margin-top:10px;font-size:13px;font-weight:700;color:var(--flame-hi)}
+.ember .track-foot{display:grid;place-items:center;padding-top:18px}
+.ember .grid-empty .minipill{justify-self:center}
+.ember .order-lines{display:grid;gap:8px;padding-top:10px}
+.ember .order-line{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--ink-2);font-weight:600}
+.ember .order-line span{flex:1;min-width:0}
+.ember .order-line span small{display:block;font-size:11px;color:var(--ink-3);font-weight:500}
+.ember .order-line b{font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+.ember .order-line.disc b{color:var(--flame-hi)}
+.ember .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:40px 26px;color:var(--ink-3);font-size:14px}
+.ember .empty-art{width:64px;height:64px;fill:none;stroke:var(--ink-3);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.6}
+
+/* ── reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  /* delay must be killed too: card reveals fill `backwards`, so a stagger delay would
+     otherwise hold the opacity:0 from-state for up to 350ms before snapping in */
+  .ember *,.ember *::before,.ember *::after{animation-duration:.01ms!important;animation-delay:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .ember .embers{display:none}
+  .ember .p-img{animation:none}
+  .ember .view.is-active{opacity:1;transform:none}
+  .ember .pcard,.ember .mrow,.ember .offer,.ember .order-row,.ember .cart-item{opacity:1;transform:none}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+
+   The theme used to ship exactly one width query — `min-width:560px` capping the
+   app at 440px — so a 1280px desktop got a 440px phone column in 840px of dead
+   black, and the menu was a single column at EVERY width. These are real
+   breakpoints: the stage grows, the menu list becomes a 2- then 3-up grid, and
+   the floating chrome stops stretching with it.
+   ══════════════════════════════════════════════════════════════════════════ */
+.ember{--stage:100%}
+.ember .app{max-width:var(--stage);margin-inline:auto}
+
+@media (min-width:620px){
+  .ember{--stage:720px}
+  .ember .app{box-shadow:0 0 0 1px var(--glass-brd),0 44px 90px -30px rgba(0,0,0,.55)}
+  .ember .view-scroll{padding-inline:28px}
+  /* the menu finally earns a second column */
+  .ember .mlist{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  /* floating chrome must not stretch to the stage width */
+  .ember .dock,.ember .cartpill,.ember .cta-wrap,.ember .toast{max-width:460px;margin-inline:auto;inset-inline:0}
+  .ember .sheet{max-width:560px;margin-inline:auto;inset-inline:0}
+}
+
+@media (min-width:900px){
+  .ember{--stage:900px}
+  .ember .mlist{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ember .view-scroll{padding-inline:34px}
+  /* the product page reads as a two-column detail, not a full-viewport photo */
+  .ember .view[data-view="product"] .view-scroll{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);gap:30px;align-items:start;padding:26px 34px 0}
+  .ember .p-hero{height:auto;aspect-ratio:1;border-radius:var(--r-card);overflow:hidden;position:sticky;top:26px}
+  /* cart / checkout get a bounded reading column instead of a 900px form.
+     width:100% is required for the checkout: its .view-scroll is a flex column
+     (line ~988), and on a flex item `margin-inline:auto` alone collapses the card
+     to its content width (~98px) instead of filling — width:100% makes it fill to
+     the 660 cap and stay centred, matching the (non-flex) cart column. */
+  .ember .view[data-view="cart"] .view-scroll > *,
+  .ember .view[data-view="checkout"] .view-scroll > *{max-width:660px;width:100%;margin-inline:auto}
+}
+
+@media (min-width:1280px){
+  .ember{--stage:1080px}
+  .ember .view-scroll{padding-inline:40px}
+}
+
+/* 1280px and below: the phone-frame goes edge-to-edge — full width AND height, no
+   letterbox gutter. --stage:100% overrides the 720/900/1080 caps above (this block
+   is later in source, so it wins for the 620–1280 range where a min-width query also
+   matches); .app is already height:100dvh, so dropping the frame's ring/drop shadow
+   removes the last hint of a floating card. Above 1280 the centred 1080px stage stays. */
+/* Backdrop behind the centred stage. Above 1280 the frame is a centred 1080 card;
+   paint the page in the frame's OWN night so the gutter matches it — no white
+   letterbox — and drop the UA body margin (8px) the layout never resets. --night is
+   defined on .ember (and carries the --tc-background Customizer token), so it must be
+   painted on .ember, not on body (an ancestor that can't see the variable). ember.css
+   only loads on ember storefront pages, so touching body here stays scoped. */
+body{margin:0}
+.ember{background:var(--night);min-height:100dvh}
+
+@media (max-width:1280px){
+  /* 1280 and below the frame goes fully edge-to-edge: no width cap and no card ring. */
+  .ember{--stage:100%}
+  .ember .app{box-shadow:none}
+}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .ember .dock > .tabbar (bottom 14px + 62px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(70px + env(safe-area-inset-bottom, 0px)); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESCUE PASS — typography, hit targets, focus, new controls, light face
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── the theme's own typeface ──────────────────────────────────────────────
+   The SHARED layout ships `body{font-family:'Roboto',sans-serif!important}` (and a
+   Tajawal rule for Arabic) over every storefront, so ember downloaded Manrope and
+   then drew every body string in Roboto. An `!important` can only be beaten by a
+   more specific `!important`. Root cause is shared code — see EMBER-B2. */
+html body{font-family:var(--font-ui,"Manrope",system-ui,sans-serif)!important}
+html[dir="rtl"] body,[dir="rtl"] html body{font-family:var(--font-ar,"IBM Plex Sans Arabic",system-ui,sans-serif)!important}
+
+/* ── iOS zoom-on-focus (ALL-F1) ───────────────────────────────────────────
+   Safari iOS force-zooms any focused control under 16px and never zooms back —
+   the single most-felt defect in a phone-first QR menu. The drawn size is kept
+   with padding; only the computed font-size moves. */
+.ember input,.ember textarea,.ember select,
+.ember .search input,.ember .coupon-field input,.ember .lookup-field input,
+.ember .sched-input,.ember #noteText,.ember #orderNote{font-size:16px}
+.ember .search input{padding:0}
+
+/* ── touch targets (ALL-F2) ───────────────────────────────────────────────
+   44px hit areas via a transparent ::after, so nothing visibly grows. */
+/* .card-fav is position:absolute (overlay heart on card photo) — kept out of this
+   relative group so it isn't dropped into flow and overlapping card/price text;
+   it still gets a 44px ::after hit box below. */
+.ember [data-fav],.ember .qty button,.ember .minipill,
+.ember .ci-notebtn,.ember .coupon-clear,.ember #dietRow [data-diet]{position:relative}
+.ember .card-fav::after,.ember [data-fav]::after,.ember .qty button::after,
+.ember .ci-notebtn::after,.ember .coupon-clear::after{
+  content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:44px;height:44px;border-radius:50%;
+}
+.ember .minipill,.ember #dietRow [data-diet]{min-height:44px}
+.ember .qty button{width:44px;height:44px}
+
+/* ── keyboard focus ───────────────────────────────────────────────────────
+   The theme had ZERO :focus-visible rules — the whole storefront was invisible
+   to keyboard users. */
+.ember :focus-visible{
+  outline:2px solid var(--flame-hi);
+  outline-offset:2px;
+}
+.ember input:focus-visible,.ember textarea:focus-visible,.ember select:focus-visible{outline-offset:1px}
+
+/* ── order-lookup field (was reusing .coupon-field and stealing its state) ── */
+.ember .lookup-field{
+  display:flex;align-items:center;gap:10px;padding:0 6px 0 14px;
+  border:1px solid var(--glass-brd);border-radius:16px;
+  background:rgba(255,255,255,.06);border-style:solid;
+}
+.ember .lookup-field .ic{color:var(--ink-3);flex:none}
+.ember .lookup-field input{background:none;border:0;padding:11px 0;font-size:16px;backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* ── removable coupon chip ────────────────────────────────────────────────
+   An applied coupon locks the field and offers a real way off it; before this
+   the only escape was typing over the code. */
+.ember .coupon-clear{
+  width:32px;height:32px;flex:none;display:grid;place-items:center;
+  border-radius:50%;color:var(--ink-2);
+  background:rgba(255,255,255,.10);border:1px solid var(--glass-brd);
+}
+.ember .coupon-field.is-applied{
+  opacity:1;
+  border-color:color-mix(in srgb,var(--flame) 45%,transparent);
+  background:color-mix(in srgb,var(--flame) 10%,transparent);
+}
+.ember .coupon-field.is-applied input{font-weight:800;letter-spacing:.04em;color:var(--flame-hi)}
+
+/* ── empty-state escape ───────────────────────────────────────────────────── */
+.ember .empty #clearFilters{margin-top:12px}
+.ember .sheet-done-art{width:52px;height:52px;fill:none;stroke:var(--flame-hi);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ember .loy-flame{width:22px;height:22px;color:var(--flame-hi)}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LIGHT FACE
+
+   ember had no light mode at all (zero prefers-color-scheme rules) and no
+   appearance control, so a diner in daylight was stuck with the near-black glass.
+
+   This is a real daytime palette in ember's OWN family — warm paper instead of
+   night, white glass instead of smoked glass — NOT an inversion, and the
+   ember-orange accent is untouched because that IS the brand.
+
+   Dark remains the default for every store: flipping thousands of live
+   storefronts because a device asked would change the product the owner bought.
+   `prefers-color-scheme` therefore applies ONLY under the explicit "System"
+   choice (data-appearance="system").
+   ══════════════════════════════════════════════════════════════════════════ */
+.ember[data-appearance="light"],
+.ember[data-appearance="system"].is-sys-light{
+  --night:#F7F3EE;
+  --night-2:#EFE7DE;
+  /* opaque enough that the faint backdrop doesn't bleed through and flatten the
+     card against the paper — the dark face can be translucent, paper can't. */
+  --glass:rgba(255,255,255,.84);
+  --glass-2:rgba(255,255,255,.98);
+  --glass-brd:rgba(28,18,10,.12);
+  --glass-brd-2:rgba(28,18,10,.20);
+  --ink:#1B1410;
+  --ink-2:rgba(27,20,16,.72);
+  --ink-3:rgba(27,20,16,.64);
+  --scrim-layers:linear-gradient(180deg,rgba(247,243,238,.82),rgba(247,243,238,.90) 60%,rgba(247,243,238,.95));
+}
+/* Surfaces that are dark BY BRAND in both faces keep light ink on them. Without
+   this the paper face's near-black ink would land on the orange gradient and on
+   the photo-overlay controls. */
+.ember .grad,.ember .cta.grad,.ember .mr-ic.grad,.ember .card-fav,.ember .fab{color:#fff}
+.ember[data-appearance="light"] .gl,
+.ember[data-appearance="system"].is-sys-light .gl{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 12px 30px -16px rgba(60,40,20,.34);
+}
+/* Item-hero fab discs (back / favourite) use the .gl glass, which turns near-white
+   in light appearance (--glass .84 / --glass-2 .98). The global `.fab{color:#fff}`
+   above then paints a white icon on that white disc — invisible on the light hero
+   surround (esp. the desktop split view). Give glass fabs the dark ink icon in
+   light mode so they read on the white disc; the .fav red-on state still wins via
+   its own higher-specificity rule. */
+.ember[data-appearance="light"] .fab.gl,
+.ember[data-appearance="system"].is-sys-light .fab.gl{ color:var(--ink); }
+/* the active dock tab sits on a translucent flame tint — white text on a pale
+   tint fails on the paper face, so the label follows the ink token there */
+.ember[data-appearance="light"] .tab.is-on,
+.ember[data-appearance="system"].is-sys-light .tab.is-on{color:#7C2D12}
+/* On the pale light-face active-tab bg both the icon (--flame-hi) AND the label
+   (inherited #fff via a rule that out-specified the earlier lift) wash out. Pin
+   both to the dark flame ink at .ic/.tab-label specificity so they win. */
+.ember[data-appearance="light"] .tab.is-on .ic,
+.ember[data-appearance="light"] .tab.is-on .tab-label,
+.ember[data-appearance="system"].is-sys-light .tab.is-on .ic,
+.ember[data-appearance="system"].is-sys-light .tab.is-on .tab-label{color:#7C2D12}
+/* Light face: the blurred food backdrop and the flame/amber glow are dark-face
+   devices — over paper they read as a muddy orange wash and rob the cards of
+   contrast. Fade the photo to a faint clean tint and keep only a whisper of warmth
+   in the tint layer, so the page reads as clean paper. */
+.ember[data-appearance="light"] .bg-photo,
+.ember[data-appearance="system"].is-sys-light .bg-photo{filter:blur(32px) saturate(.65) brightness(1.4);opacity:.24}
+.ember[data-appearance="light"] .bg-tint,
+.ember[data-appearance="system"].is-sys-light .bg-tint{
+  background:
+    radial-gradient(120% 50% at 88% -8%,color-mix(in srgb,var(--flame) 6%,transparent),transparent 52%),
+    var(--scrim-layers);
+}
+.ember[data-appearance="light"] select option,
+.ember[data-appearance="system"].is-sys-light select option{background:#fff;color:#1B1410}
+/* Search takeover: the .overlay scrim is hardcoded near-black for the dark face,
+   with no light override, so in the paper face its children still flip to the
+   light tokens — dark ink-2 text and a dark glass-brd border — and the diet-row
+   pills (which float straight on the scrim, no .gl surface of their own) went
+   invisible: dark-on-dark. The empty-state copy had the same fate. Repaint the
+   scrim to frosted paper in the light face so the whole search modal reads on
+   the light tokens like the rest of the page; the white .gl search box then sits
+   on paper as a normal light card instead of a white box on near-black. */
+.ember[data-appearance="light"] .overlay,
+.ember[data-appearance="system"].is-sys-light .overlay{
+  background:linear-gradient(180deg,rgba(247,243,238,.88),rgba(239,231,222,.94));
+}
+
+/* Appearance control — a full-width 3-segment switcher stacked UNDER its label.
+   `.pref-row.stack` had no rule, so the control collapsed to min-content beside the
+   label and the three flex:1 buttons overlapped. Stack the row and let the segments
+   share the width evenly; each carries a mode icon (moon / sun / monitor). */
+.ember .pref-row.stack{flex-direction:column;align-items:stretch;gap:10px}
+.ember .appearance-row{display:flex;gap:6px;width:100%}
+.ember .appearance-row button{
+  flex:1;min-width:0;min-height:46px;border-radius:14px;font-size:13px;font-weight:700;
+  border:1px solid var(--glass-brd);background:rgba(255,255,255,.07);color:var(--ink-2);
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),border-color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.ember .appearance-row button .ic{width:17px;height:17px}
+.ember .appearance-row button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ember .appearance-row button:active{transform:scale(.96)}
+.ember .appearance-row button.is-on{
+  background:var(--grad);color:#fff;border-color:transparent;
+  box-shadow:0 8px 18px -8px color-mix(in srgb,var(--flame) 60%,transparent);
+}
+
+/* ── layout utilities (replace the inline style= attributes the CSP nonce
+      could not cover) ────────────────────────────────────────────────────── */
+.ember .spacer{flex:1}
+.ember .stack-xs{margin-top:6px}
+.ember .stack-sm{margin-top:12px}
+.ember .stack-below{margin-bottom:14px}
+.ember .stack-below-sm{margin-bottom:12px}
+.ember .block-label{display:block;margin-bottom:9px}
+/* the schedule picker was the last sub-16px control (13px -> iOS zoom) */
+.ember .when-time{font-size:16px}
+
+/* ── white-label surfaces get the deepened accent ─────────────────────────
+   The raw accent carries white at 2.8:1; these are the surfaces with a real
+   text label on them, so they use the ink-safe fill instead. Decorative .grad
+   chips and icon tiles keep the brighter gradient. */
+.ember .cta.grad,
+.ember .promo-cta.grad,
+.ember .seg button.is-on,
+.ember .minipill.grad,
+.ember .appearance-row button.is-on,
+.ember .free-tag,
+.ember .chip-daily,
+.ember .sv-cta.grad{background:var(--grad-ink-safe)}
+
+/* The floating nav pill hardcodes a smoked-glass fill, which stayed near-black on
+   the paper face. Its own token so both faces get a pill in their own material. */
+.ember{--pill-fill:linear-gradient(165deg,rgba(28,19,12,.62),rgba(18,12,8,.55))}
+.ember[data-appearance="light"],
+.ember[data-appearance="system"].is-sys-light{
+  --pill-fill:linear-gradient(165deg,rgba(255,255,255,.92),rgba(255,255,255,.82));
+}
+.ember .tabbar{background:var(--pill-fill)}
+.ember[data-appearance="light"] .tabbar,
+.ember[data-appearance="system"].is-sys-light .tabbar{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 34px -14px rgba(60,40,20,.4);
+  border:1px solid var(--glass-brd);
+}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ember .ck-head{gap:10px;padding:4px 0 2px}
+.ember .ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ember .ck-items{gap:0}
+.ember .ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ember .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ember .ck-row + .ck-row{border-top:1px solid var(--glass-brd)}
+.ember .ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--glass-2);border-radius:9px;padding:3px 6px}
+.ember .ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.ember .ck-items{background:var(--glass);border-radius:var(--r-card);padding:6px 14px 8px}
+.ember .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ember .ci-qty .qty-btn,.ember .ci-remove{position:relative}
+.ember .ci-qty .qty-btn::after{content:"";position:absolute;inset:-6px -4px}
+.ember .ci-remove::after{content:"";position:absolute;inset:-2px -6px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+.ember select{min-height:44px}
+.ember input[type=radio]{inline-size:20px;block-size:20px;accent-color:var(--flame)}
+/* Custom checkbox — the native control renders as a stark white OS square on the
+   dark checkout (unstyled). Draw a themed box (transparent + glass border) that
+   fills with --flame and shows a white check when on; works in dark and light. */
+.ember input[type=checkbox]{
+  -webkit-appearance:none;appearance:none;margin:0;flex:none;cursor:pointer;
+  inline-size:20px;block-size:20px;border-radius:6px;
+  border:1.5px solid var(--glass-brd);background:transparent;
+  display:inline-grid;place-content:center;
+  transition:background var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.ember input[type=checkbox]::before{
+  content:"";inline-size:11px;block-size:11px;transform:scale(0);
+  transition:transform var(--t-fast) var(--ease-pop);
+  box-shadow:inset 1em 1em #fff;
+  clip-path:polygon(14% 47%,0 62%,42% 100%,100% 22%,84% 8%,42% 70%);
+}
+.ember input[type=checkbox]:checked{background:var(--flame);border-color:var(--flame)}
+.ember input[type=checkbox]:checked::before{transform:scale(1)}
+.ember input[type=checkbox]:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+.ember .splash-skip.gl,.ember .viewall,.ember .linkbtn{min-height:44px}
+.ember .gridglyph{width:44px;height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, ember skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Night-glass chip, amber coins icon. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--glass);border:1px solid var(--glass-brd);color:var(--ink-2);-webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--amber)}
+
+/* ── notification-center panel — ember skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--night-2,#140d08);--nb-surface-2:var(--glass-2,rgba(255,255,255,.10));--nb-line:var(--glass-brd,rgba(255,255,255,.14));--nb-ink:var(--ink,#ffffff);--nb-muted:var(--ink-3,rgba(255,255,255,.54));--nb-accent:var(--amber,#F59E0B)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.ember .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — ember skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   100dvh-stage theme, default DARK (light/system via data-appearance + .is-sys-light);
+   the hub is still a bottom-sheet — here ember's GLASS sheet (blurred warm-dark
+   gradient, repainted to warm paper in the light face).
+   1) ember marks header.home-top with data-mb-hotel-chip-slot (its index), so the
+      shared partial mounts the room chip there natively, in the top chrome row that
+      holds the branch .loc pill;
+   2) this block maps the shared --mbh-* contract onto ember's own tokens and gives
+      each relocated surface ember's native look. Scoped under .ember (root .ember#ember,
+      a direct child of <main>, so the relocated hub lands inside it and .ember #mbHotelHub
+      beats the partial's bare #mbHotelHub on specificity). ember's --glass/--ink/--night-2
+      flip under [data-appearance=light]/.is-sys-light, so the layer re-inks through the
+      mapping; the glass sheet gets its own light repaint (as ember's own .sheet does).
+   ═══════════════════════════════════════════════════════════ */
+.ember #mbHotelChip,
+.ember #mbHotelOrderCtrls,
+.ember #mbHotelBook,
+.ember #mbHotelHub{
+  --mbh-surface:var(--night-2);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-2);
+  --mbh-accent:var(--flame);
+  --mbh-on-accent:#ffffff;
+  --mbh-border:var(--glass-brd);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: its own row under the brand row, on ember's card surface. (It used to be
+      a glass pill in the .home-top chrome, but that bar sits INSIDE .ember-cover, so the
+      chip landed over the cover art between the header buttons — the blade now mounts it
+      after #cvBrandRow via data-mb-hotel-chip-after.) ── */
+.ember #mbHotelChip{
+  margin:0;padding:9px 13px;gap:8px;
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);
+  border-radius:var(--r-card);font-size:13px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ember #mbHotelChip:active{transform:scale(.95)}
+.ember #mbHotelChip .mb-hotel-roomchip__ic{color:var(--flame)}
+.ember #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-2)}
+
+/* ── Hub: ember's own glass bottom-sheet (warm-dark gradient blur; light face repaint) ── */
+.ember #mbHotelHubScrim{background:rgba(6,3,2,.55);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);}
+.ember #mbHotelHub{
+  background:linear-gradient(180deg,rgba(38,25,16,.78),rgba(22,14,9,.86));
+  -webkit-backdrop-filter:blur(26px) saturate(1.2);backdrop-filter:blur(26px) saturate(1.2);
+  color:var(--ink);
+  border:1px solid var(--glass-brd);border-bottom:0;
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 -20px 60px rgba(0,0,0,.5);
+}
+.ember[data-appearance="light"] #mbHotelHub,
+.ember[data-appearance="system"].is-sys-light #mbHotelHub{
+  background:linear-gradient(180deg,#ffffff,var(--night-2));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 -18px 50px rgba(60,40,20,.16);
+}
+.ember #mbHotelHub .mb-hotel-hub__grab{background:var(--glass-brd-2)}
+.ember #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;font-weight:800;letter-spacing:-.02em}
+.ember #mbHotelHub .mb-hotel-hub__x{
+  background:var(--glass-2);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.ember #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.ember #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-2)}
+.ember #mbHotelHub .mb-hotel-card{border-color:var(--glass-brd)}
+.ember #mbHotelHub .mb-hotel-card summary,
+.ember #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.ember #mbHotelHub .mb-hotel-info-link{color:var(--flame)}
+/* light face: flame text over paper needs the darker flame ink (ember's own device) */
+.ember[data-appearance="light"] #mbHotelHub .mb-hotel-info-link,
+.ember[data-appearance="system"].is-sys-light #mbHotelHub .mb-hotel-info-link{color:#7C2D12}
+/* service form controls → ember glass inputs / flame-gradient CTA (ember's primary CTA) */
+.ember #mbHotelHub .mb-hotel-field{
+  background:var(--glass);border:1px solid var(--glass-brd);color:var(--ink);border-radius:15px;
+}
+.ember #mbHotelHub .mb-hotel-btn{
+  background:var(--grad);color:#fff;border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls relocated into the checkout → ember tender rows ── */
+.ember #mbHotelOrderCtrls{margin:0}
+.ember #mbHotelSched,
+.ember #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--glass-brd);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.ember #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.ember #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.ember #mbHotelSched input[type="radio"]{accent-color:var(--flame)}
+.ember #mbHotelSched .mb-hotel-field{
+  background:var(--glass);border:1px solid var(--glass-brd);color:var(--ink);border-radius:15px;
+}
+.ember #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.ember #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.ember #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.ember #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.ember #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.ember #mbHotelCharge input[type="checkbox"]{accent-color:var(--flame)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .ember, RTL-safe (logical props). Cards reuse the .gl glass
+   surface so bg/border/shadow track the theme; stars use the --amber accent. */
+.ember .em-reviews{margin-block:14px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.ember .em-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);padding-block:6px;padding-inline:13px;border-radius:var(--r-pill)}
+.ember .em-rating-star{color:var(--amber)}
+.ember .em-rating small{color:var(--ink-3);font-weight:600}
+.ember .em-review-list{display:flex;flex-direction:column;gap:8px}
+.ember .em-review{padding-block:11px;padding-inline:14px;border-radius:var(--r-card)}
+.ember .em-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.ember .em-review-star{color:var(--amber);font-weight:800;white-space:nowrap}
+.ember .em-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.ember .em-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for ember. Surface,
+   ink, border and radius come from ember tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.ember .mb-paypending{
+  --pp-surface:var(--night-2,#140d08);
+  --pp-ink:var(--ink,#ffffff);
+  --pp-muted:var(--ink-2,rgba(255,255,255,.68));
+  --pp-border:var(--glass-brd,rgba(255,255,255,.14));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,20px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.ember .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.ember .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.ember .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.ember .mb-paypending-txn:empty{display:none}
+.ember .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.ember .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.ember .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.ember .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.ember .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* ═══════════════ PERF-LITE ▸ reversible ▸ added 2026-08-27 ═══════════════
+   Idle GPU/CPU fix. ember paints many backdrop-filter glass panels; several
+   ALWAYS-ON decorative animations (drifting bokeh, rising embers, promo-badge
+   pulse, hero-image float) keep repainting pixels behind those panels, which
+   forces every glass panel to re-blur every single frame even when the user is
+   doing nothing — that combination is what pegs the GPU at idle. Pausing the
+   decorative motion lets the blurred backdrops become static (cached) so the
+   GPU rests. Loading spinners (emb-spin) and the live order-tracking node
+   (emb-pulse) are intentionally LEFT running — they are transient / meaningful.
+
+   REVERT (three ways, any one restores the original exactly):
+     • add attribute  data-mbfx="full"  to the <html> element
+       (e.g. in devtools console: document.documentElement.dataset.mbfx='full'), OR
+     • delete everything from this banner down to the END marker, OR
+     • flip the whole thing off by removing the html:not(...) guard.
+   Nothing else in the codebase references data-mbfx. */
+html:not([data-mbfx="full"]) .ember .bg-bokeh i,
+html:not([data-mbfx="full"]) .ember .embers i,
+html:not([data-mbfx="full"]) .ember .promo-off,
+html:not([data-mbfx="full"]) .ember .p-img{
+  animation: none !important;
+}
+/* ═══════════════ PERF-LITE END ═══════════════ */
+
+/* Share row is a <button> reusing .wa-line — reset the UA button box to match the anchor rows. */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* Account view sub-tab switcher (Orders / Offers / Profile merged into one tab). */
+.ember .acct-seg{margin-block:2px 14px}
+
+/* Bottom tabbar must stay inside the frame on narrow phones. The six icon tabs plus
+   the active tab's expanding label outgrew the inset dock around 410px and spilled
+   past the frame edge (reported: "the tabbar goes outside the frame ≤410"). Tighten
+   the dock inset + tab padding here; on the smallest phones drop the active label to
+   icon-only so all six always fit. */
+@media (max-width:410px){
+  .ember .dock{inset-inline:8px}
+  .ember .tabbar{padding:6px}
+  .ember .tab{min-width:42px;padding:0 8px}
+  /* icon-only on small phones — the active pill's highlight already marks it, and
+     the expanding label is what pushed the sixth tab past the frame edge. */
+  .ember .tab.is-on .tab-label{max-width:0;opacity:0;margin-inline-start:0}
+}
+
+/* ── Address map picker + clear-device-data (shared engines, ember-skinned) ──
+   The map lives in an ember-native .sheet.sheet-tall bottom sheet; controls
+   mirror the theme's glass rows (.gl) and gradient CTA (.cta.grad). ─────── */
+.ember .em-map-trigger{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  margin-top:4px;padding:12px 15px;border-radius:16px;
+  font-size:13.5px;font-weight:800;letter-spacing:-.01em;color:var(--ink);
+  cursor:pointer;transition:transform var(--t-fast) var(--ease);
+}
+.ember .em-map-trigger .ic{width:18px;height:18px;color:var(--flame-hi);flex:none}
+.ember .em-map-trigger:active{transform:scale(.98)}
+
+/* map sheet canvas — reuses .branchmap chrome, taller drop-a-pin viewport */
+.ember .em-map-canvas{position:relative;height:min(52vh,360px);margin-top:2px}
+.ember .em-map-preview{text-align:center;min-height:16px;margin:9px 2px 2px}
+.ember #emMapConfirm{margin-top:14px}
+
+/* centred pin the engine injects (.mb-map-pin) — ember flame teardrop */
+.ember .mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.ember .mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--flame);border:2px solid #fff}
+.ember .mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#fff}
+
+/* clear-saved-data — themed danger row in the guest settings panel */
+.ember .em-device-data{margin-top:6px;padding-top:14px;border-top:1px solid var(--glass-brd)}
+.ember .em-cleardata{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;cursor:pointer;
+  border-radius:var(--r-card);padding:13px 15px;
+  font-size:13.5px;font-weight:800;color:var(--ink);transition:transform var(--t-fast) var(--ease)}
+.ember .em-cleardata .ic:first-child{width:20px;height:20px;color:var(--red);flex:none}
+.ember .em-cleardata span{flex:1;min-width:0}
+.ember .em-cleardata .arr{color:var(--ink-3)}
+.ember .em-cleardata:active{transform:scale(.98)}
+.ember .em-device-data-hint{margin:8px 2px 0;font-size:11px;line-height:1.5;color:var(--ink-3);opacity:.85}

@@ -1,0 +1,50 @@
+{
+  "operationId": "createBooking",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/bookings",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fc6a-66d0-755e-8e36-2c09f5608966",
+      "X-Hold-Token": "hld_c3b1ed75dc7d594df19eee3a398c32fa"
+    },
+    "body": {
+      "hold_id": "01a0fc6d-8251-7613-b304-563005c4dbd9",
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ],
+      "option_ids": [
+        "019f9e03-278b-717b-b9e2-b16615441e71",
+        "019f9b12-2514-7941-a496-bb4c8e05f95a"
+      ],
+      "notes": "Allergic to some hair dyes",
+      "quote_hash": "qh_9b292e29eaaac45f91ab53aab85cee67",
+      "customer": {
+        "name": "Noura Al-Harbi",
+        "phone": "+966551234567",
+        "marketing_opt_in": false
+      },
+      "payment": {
+        "mode": "hosted",
+        "method_id": "deposit",
+        "return_url": "https://sidra-salon.example/booking/return"
+      }
+    }
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:01:30 GMT"
+    },
+    "body": {
+      "message": "Verify your phone number to book.",
+      "code": "phone_verification_required"
+    }
+  }
+}

@@ -1,0 +1,1009 @@
+{
+ "store": {
+  "public_id": "st_sidra_salon",
+  "slug": "sidra-salon-demo",
+  "name": "Sidra Salon",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "Sidra Salon"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "Sidra Salon"
+  },
+  "tagline": "Hair, nails and spa in Al Malqa",
+  "locale": "en",
+  "dir": "ltr",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/sidra-salon-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/sidra-salon-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "service",
+  "store_type": "services",
+  "status": {
+   "open": true,
+   "label": "Open · closes 10 pm",
+   "next_change_at": "2026-10-02T22:00:00+03:00",
+   "paused_reason": null,
+   "accepting_bookings": true
+  },
+  "contact": {
+   "phone": "+966 55 010 0105",
+   "whatsapp": "+966 55 010 0105",
+   "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/sidra-salon"
+   }
+  ],
+  "rating": {
+   "avg": 4.8,
+   "count": 320
+  },
+  "legal_links": [
+   {
+    "label": "Privacy",
+    "url": "/sidra-salon-demo/privacy"
+   },
+   {
+    "label": "Terms",
+    "url": "/sidra-salon-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "Sidra Beauty Salon Est.",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-5505",
+    "label": "Commercial registration (CR)"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-5505",
+    "label": "VAT number"
+   },
+   "address": "Anas Ibn Malik Road, Al Malqa, Riyadh 13521"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "Main branch",
+   "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "appointment",
+    "label": "In salon",
+    "needs_address": false,
+    "needs_slot": true
+   },
+   {
+    "key": "at_home",
+    "label": "At home",
+    "needs_address": true,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "appointment",
+  "schedule_ahead": true,
+  "next_free_slot": {
+   "label": "Today 4:30 pm",
+   "at": "2026-10-02T16:30:00+03:00"
+  },
+  "staff": [
+   {
+    "id": "maha",
+    "name": "Maha",
+    "role": "Senior stylist",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Maha"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   },
+   {
+    "id": "lina",
+    "name": "Lina",
+    "role": "Stylist",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lina"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "evening-makeup",
+     "bridal-makeup-trial",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   },
+   {
+    "id": "sara",
+    "name": "Sara",
+    "role": "Colourist",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sara"
+    },
+    "service_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut",
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage"
+    ]
+   },
+   {
+    "id": "reem",
+    "name": "Reem",
+    "role": "Nail technician",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Reem"
+    },
+    "service_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure"
+    ]
+   },
+   {
+    "id": "dana",
+    "name": "Dana",
+    "role": "Beauty therapist",
+    "photo": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dana"
+    },
+    "service_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure",
+     "classic-facial",
+     "hydrating-glow-facial",
+     "eyebrow-threading",
+     "relaxing-massage",
+     "hot-stone-massage",
+     "back-and-shoulders-massage",
+     "evening-makeup",
+     "bridal-makeup-trial",
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ]
+   }
+  ]
+ },
+ "theme": {
+  "slug": "book",
+  "preset": "calm",
+  "settings": {
+   "colors.primary": "#2F6B5E",
+   "colors.background": "#F6F7F4",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#1C2420",
+   "colors.accent": "#C9A36A",
+   "layout.radius": "soft",
+   "layout.density": "cozy",
+   "fonts.pair": "jakarta",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#7FC8B5",
+   "colors_dark.background": "#0F1412",
+   "colors_dark.surface": "#18201D",
+   "colors_dark.text": "#ECF2EF",
+   "colors_dark.accent": "#D9B97E",
+   "layout.card": "list",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "cover",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "featured_title": "Popular",
+   "search_placeholder": "Search services"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "hair",
+    "name": "Hair",
+    "item_ids": [
+     "haircut-and-blow-dry",
+     "blow-dry",
+     "keratin-smoothing-treatment",
+     "event-hairstyling",
+     "kids-haircut"
+    ],
+    "count": 5
+   },
+   {
+    "id": "colour",
+    "name": "Colour",
+    "item_ids": [
+     "root-colour-touch-up",
+     "full-hair-colour",
+     "balayage"
+    ],
+    "count": 3
+   },
+   {
+    "id": "nails",
+    "name": "Nails",
+    "item_ids": [
+     "classic-manicure",
+     "gel-manicure",
+     "classic-pedicure",
+     "gel-pedicure"
+    ],
+    "count": 4
+   },
+   {
+    "id": "face",
+    "name": "Face",
+    "item_ids": [
+     "classic-facial",
+     "hydrating-glow-facial",
+     "eyebrow-threading"
+    ],
+    "count": 3
+   },
+   {
+    "id": "massage",
+    "name": "Massage",
+    "item_ids": [
+     "relaxing-massage",
+     "hot-stone-massage",
+     "back-and-shoulders-massage"
+    ],
+    "count": 3
+   },
+   {
+    "id": "makeup",
+    "name": "Makeup",
+    "item_ids": [
+     "evening-makeup",
+     "bridal-makeup-trial"
+    ],
+    "count": 2
+   },
+   {
+    "id": "packages",
+    "name": "Packages",
+    "item_ids": [
+     "bride-to-be-package",
+     "glow-day-package",
+     "mani-pedi-duo"
+    ],
+    "count": 3
+   }
+  ],
+  "items": {
+   "haircut-and-blow-dry": {
+    "id": "haircut-and-blow-dry",
+    "name": "Haircut & blow-dry",
+    "url": "/sidra-salon-demo/item/haircut-and-blow-dry",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Haircut & blow-dry"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "A consultation, cut and finished blow-dry.",
+    "from_price": {
+     "minor": 12000,
+     "currency": "SAR",
+     "formatted": "SAR 120.00"
+    },
+    "duration_min": 45,
+    "meta_label": "45 min · from SAR 120.00"
+   },
+   "blow-dry": {
+    "id": "blow-dry",
+    "name": "Blow-dry",
+    "url": "/sidra-salon-demo/item/blow-dry",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Blow-dry"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Wash, blow-dry and style.",
+    "from_price": {
+     "minor": 7000,
+     "currency": "SAR",
+     "formatted": "SAR 70.00"
+    },
+    "duration_min": 30,
+    "meta_label": "30 min · from SAR 70.00"
+   },
+   "keratin-smoothing-treatment": {
+    "id": "keratin-smoothing-treatment",
+    "name": "Keratin smoothing treatment",
+    "url": "/sidra-salon-demo/item/keratin-smoothing-treatment",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Keratin smoothing treatment"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Frizz-free, glossy hair for up to three months.",
+    "from_price": {
+     "minor": 45000,
+     "currency": "SAR",
+     "formatted": "SAR 450.00"
+    },
+    "duration_min": 150,
+    "meta_label": "2 h 30 min · from SAR 450.00"
+   },
+   "event-hairstyling": {
+    "id": "event-hairstyling",
+    "name": "Event hairstyling",
+    "url": "/sidra-salon-demo/item/event-hairstyling",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Event hairstyling"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Updo, curls or waves for your occasion.",
+    "price": {
+     "minor": 20000,
+     "currency": "SAR",
+     "formatted": "SAR 200.00"
+    },
+    "duration_min": 60,
+    "meta_label": "1 h · SAR 200.00"
+   },
+   "kids-haircut": {
+    "id": "kids-haircut",
+    "name": "Kids haircut",
+    "url": "/sidra-salon-demo/item/kids-haircut",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Kids haircut"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "For children under 12, with a wash.",
+    "price": {
+     "minor": 6000,
+     "currency": "SAR",
+     "formatted": "SAR 60.00"
+    },
+    "duration_min": 30,
+    "meta_label": "30 min · SAR 60.00"
+   },
+   "root-colour-touch-up": {
+    "id": "root-colour-touch-up",
+    "name": "Root colour touch-up",
+    "url": "/sidra-salon-demo/item/root-colour-touch-up",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Root colour touch-up"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cover regrowth with a matched shade.",
+    "price": {
+     "minor": 22000,
+     "currency": "SAR",
+     "formatted": "SAR 220.00"
+    },
+    "duration_min": 90,
+    "meta_label": "1 h 30 min · SAR 220.00"
+   },
+   "full-hair-colour": {
+    "id": "full-hair-colour",
+    "name": "Full hair colour",
+    "url": "/sidra-salon-demo/item/full-hair-colour",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Full hair colour"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "All-over colour with gloss finish.",
+    "from_price": {
+     "minor": 38000,
+     "currency": "SAR",
+     "formatted": "SAR 380.00"
+    },
+    "duration_min": 150,
+    "meta_label": "2 h 30 min · from SAR 380.00"
+   },
+   "balayage": {
+    "id": "balayage",
+    "name": "Balayage",
+    "url": "/sidra-salon-demo/item/balayage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Balayage"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Hand-painted highlights for a sun-kissed look.",
+    "from_price": {
+     "minor": 65000,
+     "currency": "SAR",
+     "formatted": "SAR 650.00"
+    },
+    "duration_min": 210,
+    "meta_label": "3 h 30 min · from SAR 650.00"
+   },
+   "classic-manicure": {
+    "id": "classic-manicure",
+    "name": "Classic manicure",
+    "url": "/sidra-salon-demo/item/classic-manicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Classic manicure"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Shape, cuticle care and polish.",
+    "price": {
+     "minor": 7000,
+     "currency": "SAR",
+     "formatted": "SAR 70.00"
+    },
+    "duration_min": 40,
+    "meta_label": "40 min · SAR 70.00"
+   },
+   "gel-manicure": {
+    "id": "gel-manicure",
+    "name": "Gel manicure",
+    "url": "/sidra-salon-demo/item/gel-manicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Gel manicure"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Long-wear gel colour with a high shine.",
+    "price": {
+     "minor": 11000,
+     "currency": "SAR",
+     "formatted": "SAR 110.00"
+    },
+    "duration_min": 55,
+    "meta_label": "55 min · SAR 110.00"
+   },
+   "classic-pedicure": {
+    "id": "classic-pedicure",
+    "name": "Classic pedicure",
+    "url": "/sidra-salon-demo/item/classic-pedicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Classic pedicure"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Soak, scrub, shape and polish.",
+    "price": {
+     "minor": 9000,
+     "currency": "SAR",
+     "formatted": "SAR 90.00"
+    },
+    "duration_min": 50,
+    "meta_label": "50 min · SAR 90.00"
+   },
+   "gel-pedicure": {
+    "id": "gel-pedicure",
+    "name": "Gel pedicure",
+    "url": "/sidra-salon-demo/item/gel-pedicure",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Gel pedicure"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Pedicure with long-wear gel colour.",
+    "price": {
+     "minor": 13000,
+     "currency": "SAR",
+     "formatted": "SAR 130.00"
+    },
+    "duration_min": 65,
+    "meta_label": "1 h 5 min · SAR 130.00"
+   },
+   "classic-facial": {
+    "id": "classic-facial",
+    "name": "Classic facial",
+    "url": "/sidra-salon-demo/item/classic-facial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Classic facial"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cleanse, exfoliate, extract and mask.",
+    "price": {
+     "minor": 22000,
+     "currency": "SAR",
+     "formatted": "SAR 220.00"
+    },
+    "duration_min": 60,
+    "meta_label": "1 h · SAR 220.00"
+   },
+   "hydrating-glow-facial": {
+    "id": "hydrating-glow-facial",
+    "name": "Hydrating glow facial",
+    "url": "/sidra-salon-demo/item/hydrating-glow-facial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Hydrating glow facial"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Deep hydration for dull, tired skin.",
+    "price": {
+     "minor": 26000,
+     "currency": "SAR",
+     "formatted": "SAR 260.00"
+    },
+    "duration_min": 60,
+    "meta_label": "1 h · SAR 260.00"
+   },
+   "eyebrow-threading": {
+    "id": "eyebrow-threading",
+    "name": "Eyebrow threading",
+    "url": "/sidra-salon-demo/item/eyebrow-threading",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Eyebrow threading"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Clean, defined brows in minutes.",
+    "price": {
+     "minor": 3000,
+     "currency": "SAR",
+     "formatted": "SAR 30.00"
+    },
+    "duration_min": 15,
+    "meta_label": "15 min · SAR 30.00"
+   },
+   "relaxing-massage": {
+    "id": "relaxing-massage",
+    "name": "Relaxing massage",
+    "url": "/sidra-salon-demo/item/relaxing-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Relaxing massage"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Full-body massage with warm oils.",
+    "from_price": {
+     "minor": 25000,
+     "currency": "SAR",
+     "formatted": "SAR 250.00"
+    },
+    "duration_min": 60,
+    "meta_label": "1 h · from SAR 250.00"
+   },
+   "hot-stone-massage": {
+    "id": "hot-stone-massage",
+    "name": "Hot stone massage",
+    "url": "/sidra-salon-demo/item/hot-stone-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Hot stone massage"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Heated stones ease deep muscle tension.",
+    "price": {
+     "minor": 28000,
+     "currency": "SAR",
+     "formatted": "SAR 280.00"
+    },
+    "duration_min": 75,
+    "meta_label": "1 h 15 min · SAR 280.00"
+   },
+   "back-and-shoulders-massage": {
+    "id": "back-and-shoulders-massage",
+    "name": "Back & shoulders massage",
+    "url": "/sidra-salon-demo/item/back-and-shoulders-massage",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Back & shoulders massage"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "A focused session for desk-tired muscles.",
+    "price": {
+     "minor": 14000,
+     "currency": "SAR",
+     "formatted": "SAR 140.00"
+    },
+    "duration_min": 30,
+    "meta_label": "30 min · SAR 140.00"
+   },
+   "evening-makeup": {
+    "id": "evening-makeup",
+    "name": "Evening makeup",
+    "url": "/sidra-salon-demo/item/evening-makeup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Evening makeup"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Long-wear makeup for dinners and events.",
+    "price": {
+     "minor": 28000,
+     "currency": "SAR",
+     "formatted": "SAR 280.00"
+    },
+    "duration_min": 60,
+    "meta_label": "1 h · SAR 280.00"
+   },
+   "bridal-makeup-trial": {
+    "id": "bridal-makeup-trial",
+    "name": "Bridal makeup trial",
+    "url": "/sidra-salon-demo/item/bridal-makeup-trial",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Bridal makeup trial"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Test your look before the big day.",
+    "price": {
+     "minor": 45000,
+     "currency": "SAR",
+     "formatted": "SAR 450.00"
+    },
+    "duration_min": 90,
+    "meta_label": "1 h 30 min · SAR 450.00"
+   },
+   "bride-to-be-package": {
+    "id": "bride-to-be-package",
+    "name": "Bride-to-be package",
+    "url": "/sidra-salon-demo/item/bride-to-be-package",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Bride-to-be package"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Hair, makeup, manicure and facial for the day before.",
+    "price": {
+     "minor": 120000,
+     "currency": "SAR",
+     "formatted": "SAR 1200.00"
+    },
+    "duration_min": 240,
+    "meta_label": "4 h · SAR 1200.00"
+   },
+   "glow-day-package": {
+    "id": "glow-day-package",
+    "name": "Glow day package",
+    "url": "/sidra-salon-demo/item/glow-day-package",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Glow day package"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Facial, gel manicure and blow-dry.",
+    "price": {
+     "minor": 65000,
+     "currency": "SAR",
+     "formatted": "SAR 650.00"
+    },
+    "duration_min": 180,
+    "meta_label": "3 h · SAR 650.00"
+   },
+   "mani-pedi-duo": {
+    "id": "mani-pedi-duo",
+    "name": "Mani-pedi duo",
+    "url": "/sidra-salon-demo/item/mani-pedi-duo",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mani-pedi duo"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Classic manicure and pedicure together.",
+    "price": {
+     "minor": 19000,
+     "currency": "SAR",
+     "formatted": "SAR 190.00"
+    },
+    "duration_min": 90,
+    "meta_label": "1 h 30 min · SAR 190.00"
+   }
+  }
+ },
+ "features": {
+  "featured": [
+   "haircut-and-blow-dry",
+   "balayage",
+   "gel-manicure",
+   "relaxing-massage"
+  ]
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/sidra-salon-demo/cart",
+  "quote": "/sidra-salon-demo/quote",
+  "place": "/sidra-salon-demo/order",
+  "track": "/sidra-salon-demo/track",
+  "coupon": "/sidra-salon-demo/coupon",
+  "otp": "/sidra-salon-demo/otp",
+  "account": "/sidra-salon-demo/account",
+  "search": "/sidra-salon-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "SAR",
+   "exponent": 2,
+   "symbol_position_effective": "before"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "VAT"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "track",
+  "order": {
+   "number": "SB-4821",
+   "status": "confirmed",
+   "status_label": "Confirmed",
+   "eta_label": "Sun 4 Oct · 4:30 pm",
+   "heading": "You're booked, Noura",
+   "ticket": {
+    "title": "Sunday",
+    "big": "4 Oct · 4:30 pm",
+    "sub": "75 min · ends 5:45 pm"
+   },
+   "steps": [
+    {
+     "label": "Booked",
+     "sub": "Fri 2 Oct, 9:38 am",
+     "state": "done"
+    },
+    {
+     "label": "Reminder",
+     "sub": "Sat 3 Oct, 4:30 pm (24 h before)",
+     "state": "current"
+    },
+    {
+     "label": "Check in",
+     "sub": "Show this screen or say SB-4821",
+     "state": "todo"
+    },
+    {
+     "label": "Done",
+     "sub": "Rate your visit",
+     "state": "todo"
+    }
+   ],
+   "location": {
+    "icon": "map-pin",
+    "label": "Sidra Salon, Al Malqa",
+    "sub": "Anas Ibn Malik Rd, Riyadh · Parking at the back"
+   },
+   "quote": {
+    "lines": [
+     {
+      "id": "ln_1",
+      "item_id": "haircut-and-blow-dry",
+      "name": "Haircut & blow-dry",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-1x1.svg",
+       "alt": "Haircut & blow-dry"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 18000,
+       "currency": "SAR",
+       "formatted": "SAR 180.00"
+      },
+      "choices_label": "with Maha · Medium · Deep conditioning"
+     }
+    ],
+    "rows": [
+     {
+      "key": "subtotal",
+      "label": "Total",
+      "amount": {
+       "minor": 18000,
+       "currency": "SAR",
+       "formatted": "SAR 180.00"
+      },
+      "kind": "subtotal"
+     },
+     {
+      "key": "deposit",
+      "label": "Paid · deposit · Visa •• 4242",
+      "amount": {
+       "minor": 5000,
+       "currency": "SAR",
+       "formatted": "SAR 50.00"
+      },
+      "kind": "deposit",
+      "muted": true,
+      "informational": true
+     },
+     {
+      "key": "due_later",
+      "label": "Due at the salon",
+      "amount": {
+       "minor": 13000,
+       "currency": "SAR",
+       "formatted": "SAR 130.00"
+      },
+      "kind": "due_later",
+      "muted": true,
+      "informational": true
+     }
+    ],
+    "total": {
+     "minor": 18000,
+     "currency": "SAR",
+     "formatted": "SAR 180.00"
+    },
+    "total_label": "Total",
+    "notes": [
+     "Free to change or cancel until Sat 3 Oct, 4:30 pm."
+    ]
+   },
+   "paid_label": "Paid · deposit · Visa •• 4242",
+   "actions": [
+    {
+     "label": "Add to calendar",
+     "url": "/sidra-salon-demo/booking/SB-4821.ics",
+     "kind": "primary",
+     "icon": "calendar-plus"
+    },
+    {
+     "label": "Directions",
+     "url": "/sidra-salon-demo/directions",
+     "kind": "secondary",
+     "icon": "navigation"
+    },
+    {
+     "label": "Reschedule",
+     "url": "/sidra-salon-demo/booking/SB-4821/reschedule",
+     "kind": "secondary",
+     "icon": "calendar-clock"
+    },
+    {
+     "label": "Cancel booking",
+     "url": "/sidra-salon-demo/booking/SB-4821/cancel",
+     "kind": "danger",
+     "icon": "x"
+    }
+   ]
+  }
+ }
+}

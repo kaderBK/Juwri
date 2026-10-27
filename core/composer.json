@@ -1,0 +1,158 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "juwri: multi-tenant commerce platform (Laravel application).",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "AGPL-3.0-only",
+    "require": {
+        "php": "^8.4",
+        "ext-sodium": "*",
+        "anhskohbo/no-captcha": "^3.5",
+        "bacon/bacon-qr-code": "^2.0",
+        "brick/money": "^0.15.1",
+        "cviebrock/eloquent-sluggable": "^13.0",
+        "dedoc/scramble": "^0.13.47",
+        "enshrined/svg-sanitize": "^1.0",
+        "fgribreau/mailchecker": "^6.0",
+        "geoip2/geoip2": "^2.13",
+        "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^2.7",
+        "keepsuit/liquid": "^0.10.0",
+        "laravel/ai": "^1.0",
+        "laravel/framework": "^13.0",
+        "laravel/mcp": "^1.0",
+        "laravel/octane": "^2.21",
+        "laravel/passkeys": "^0.2.1",
+        "laravel/passport": "^13.0",
+        "laravel/pennant": "^1.26",
+        "laravel/pulse": "^1.0",
+        "laravel/reverb": "^1.12",
+        "laravel/scout": "^11.0",
+        "laravel/socialite": "^5.11",
+        "laravel/tinker": "^3.0",
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "mcamara/laravel-localization": "^2.0",
+        "minishlink/web-push": "^10.1",
+        "mollie/laravel-mollie": "^3.0 || ^4.0",
+        "pragmarx/google2fa": "^8.0 || ^9.0",
+        "pragmarx/google2fa-laravel": "^2.2 || ^3.0",
+        "pragmarx/google2fa-qrcode": "^3.0",
+        "razorpay/razorpay": "^2.9",
+        "sentry/sentry-laravel": "^4.27",
+        "socialiteproviders/apple": "^5.10",
+        "srmklive/paypal": "~3.0",
+        "stevebauman/purify": "^6.3",
+        "stripe/stripe-php": "^12.0",
+        "tecnickcom/tcpdf": "^6.8"
+    },
+    "require-dev": {
+        "brianium/paratest": "^7.8",
+        "driftingly/rector-laravel": "^2.0",
+        "fakerphp/faker": "^1.9.1",
+        "larastan/larastan": "^3.9",
+        "laravel/boost": "^2.0",
+        "laravel/pint": "^1.0",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^8.9",
+        "pestphp/pest": "^5",
+        "pestphp/pest-plugin-arch": "^5.0",
+        "pestphp/pest-plugin-browser": "^5.0",
+        "pestphp/pest-plugin-laravel": "^5.0",
+        "phpunit/phpunit": "^13.0",
+        "rector/rector": "^2.0",
+        "smalot/pdfparser": "^2.13",
+        "studio-design/gesso": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Juwri\\Core\\": "app/Core/",
+            "Juwri\\Modules\\": "app/Modules/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "Plugins\\": "plugins/"
+        },
+        "files": [
+            "app/Http/Helpers/Helper.php",
+            "app/Http/Helpers/SeoHelper.php",
+            "app/Http/Helpers/CurrencyDisplay.php",
+            "app/Core/Support/QueueHeartbeatHelper.php",
+            "app/Http/Helpers/GeoHelper.php",
+            "app/Modules/Messaging/Support/WhatsAppHelper.php",
+            "app/Http/Helpers/NavHelper.php",
+            "app/Modules/Storefront/Http/Helpers/StorefrontHelper.php",
+            "app/Modules/Storefront/Http/Helpers/FolioHelper.php",
+            "app/Modules/Verticals/Http/Helpers/VerticalHelper.php",
+            "app/Http/Helpers/StoreMoneyHelper.php",
+            "app/Http/Helpers/CspHelper.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "phpstan": "phpstan analyse --memory-limit=2G",
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan test --parallel"
+        ],
+        "test:filter": "@php artisan test --filter",
+        "mutate:money": "@php -d pcov.enabled=1 -d pcov.directory=app -d memory_limit=3G vendor/bin/pest --mutate --path=app/Core/Money/Money.php,app/Core/Money/Currencies.php,app/Core/Money/CurrencyTotals.php,app/Core/Money/AmountInput.php,app/Core/Money/Casts/MinorMoney.php,app/Core/Money/Concerns/HasMinorMoney.php,app/Core/Money/MinorMoneyModel.php,app/Core/Money/LegacyRound.php --configuration=phpunit.mutation.xml --testsuite=money",
+        "mutate:ordering": "@php -d pcov.enabled=1 -d pcov.directory=app -d memory_limit=3G vendor/bin/pest --mutate --path=app/Modules/Ordering/Services/Orders/OrderPricing.php,app/Modules/Ordering/Services/Tax/TaxSnapshot.php --configuration=phpunit.mutation.xml --testsuite=ordering",
+        "mutate:payments": "@php -d pcov.enabled=1 -d pcov.directory=app -d memory_limit=3G vendor/bin/pest --mutate --path=app/Modules/Payments/Support/GatewayMinorUnits.php,app/Modules/Payments/Services/Gateways/Settlement.php,app/Modules/Payments/Services/Refunds/RefundGuard.php,app/Modules/Payments/Services/Refunds/GatewayRefundService.php,app/Modules/Payments/Services/Webhooks/TransactionalOutbox.php --configuration=phpunit.mutation.xml --testsuite=payments",
+        "mutate:fiscal": "@php -d pcov.enabled=1 -d pcov.directory=app -d memory_limit=3G vendor/bin/pest --mutate --path=app/Modules/Fiscal/Services/FiscalReceipt.php,app/Modules/Fiscal/Services/FiscalProfile.php,app/Modules/Fiscal/Services/Tlv.php,app/Modules/Fiscal/Services/FiscalChain.php,app/Modules/Fiscal/Services/Zatca/UblBuilder.php,app/Modules/Fiscal/Services/Zatca/UblInvoice.php,app/Modules/Fiscal/Services/Jofotara/JofotaraBuilder.php,app/Modules/Fiscal/Services/Eta/ReceiptBuilder.php,app/Modules/Fiscal/Services/Profiles/SaProfile.php,app/Modules/Fiscal/Services/Profiles/AeProfile.php,app/Modules/Fiscal/Services/Profiles/EgProfile.php,app/Modules/Fiscal/Services/Profiles/JoProfile.php,app/Modules/Fiscal/Services/Profiles/OmProfile.php,app/Modules/Fiscal/Services/Profiles/BhProfile.php --configuration=phpunit.mutation.xml --testsuite=fiscal"
+    },
+    "extra": {
+        "aws/aws-sdk-php": [
+            "S3"
+        ],
+        "laravel": {
+            "dont-discover": [
+                "studio-design/gesso"
+            ]
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.4.1"
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        },
+        "audit": {
+            "abandoned": "fail"
+        },
+        "policy": {
+            "advisories": {
+                "block": true
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -1,0 +1,61 @@
+{
+  "group": "Splash",
+  "icon": "sparkles",
+  "fields": [
+    { "id": "splash.enabled", "type": "toggle", "label": "Show intro splash", "default": true },
+    {
+      "id": "splash.style",
+      "type": "select",
+      "label": "Splash style",
+      "options": ["theme", "shared"],
+      "option_labels": { "theme": "Theme's own design", "shared": "Simple logo splash" },
+      "default": "theme",
+      "visible_if": { "splash.enabled": true }
+    },
+    { "id": "splash.image", "type": "image", "label": "Splash image / logo", "default": "", "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    { "id": "splash.title", "type": "text", "label": "Splash title", "default": "", "visible_if": { "splash.enabled": true } },
+    { "id": "splash.subtitle", "type": "text", "label": "Splash subtitle", "default": "", "visible_if": { "splash.enabled": true } },
+    { "id": "splash.duration", "type": "number", "label": "Duration (ms)", "default": 2300, "min": 0, "max": 5000, "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    { "id": "splash.show_language_picker", "type": "toggle", "label": "Show language picker", "default": false, "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    { "id": "splash.background", "type": "color", "label": "Splash background", "default": "", "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    { "id": "splash.background_image", "type": "image", "label": "Background image", "default": "", "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    { "id": "splash.text_color", "type": "color", "label": "Splash text colour", "default": "", "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    {
+      "id": "splash.frequency",
+      "type": "select",
+      "label": "Show the splash",
+      "options": ["session", "always", "daily", "once"],
+      "option_labels": { "session": "Once per visit", "always": "Every page load", "daily": "Once per day", "once": "Only the first visit" },
+      "default": "session",
+      "visible_if": { "splash.enabled": true, "splash.style": "shared" }
+    },
+    { "id": "splash.cta_label", "type": "text", "label": "Button label (empty = none)", "default": "", "visible_if": { "splash.enabled": true, "splash.style": "shared" } },
+    {
+      "id": "splash.animation",
+      "type": "select",
+      "label": "Entrance animation",
+      "options": ["pop", "fade", "rise", "none"],
+      "option_labels": { "pop": "Logo pop", "fade": "Fade in", "rise": "Rise up", "none": "None" },
+      "default": "pop",
+      "visible_if": { "splash.enabled": true, "splash.style": "shared" }
+    },
+    {
+      "id": "splash.logo_size",
+      "type": "select",
+      "label": "Logo size",
+      "options": ["s", "m", "l"],
+      "option_labels": { "s": "Small", "m": "Medium", "l": "Large" },
+      "default": "m",
+      "visible_if": { "splash.enabled": true, "splash.style": "shared" }
+    },
+    {
+      "id": "splash.logo_shape",
+      "type": "select",
+      "label": "Logo shape",
+      "options": ["rounded", "round", "square"],
+      "option_labels": { "rounded": "Rounded", "round": "Circle", "square": "Square" },
+      "default": "rounded",
+      "visible_if": { "splash.enabled": true, "splash.style": "shared" }
+    }
+  ]
+}

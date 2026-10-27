@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'Мы используем файлы cookie',
+    'cookie.body' => 'Необходимые файлы cookie обеспечивают работу :brand. С вашего согласия мы также используем аналитические cookie, чтобы понимать, как используется сайт. Маркетинговые cookie без вашего согласия не устанавливаются. [Политика конфиденциальности](/privacy)',
+    'cookie.accept' => 'Принять аналитику',
+    'cookie.reject' => 'Только необходимые',
+    'cookie.settings' => 'Настройки cookie',
+    'cookie.settings.essential' => 'Необходимые (всегда включены)',
+    'cookie.settings.analytics' => 'Аналитика: помогает нам улучшать сайт',
+    'cookie.settings.marketing' => 'Маркетинг: оценивает наши кампании',
+    'cookie.save' => 'Сохранить выбор',
+    'signup.accept' => 'Я принимаю [Условия подписки](/terms), [Соглашение об обработке данных](/legal/dpa) и [Политику допустимого использования](/legal/aup).',
+    'signup.business' => 'Подтверждаю, что регистрируюсь как предприятие, а не как потребитель.',
+    'signup.privacy' => 'Мы используем ваши данные для ведения вашей учётной записи, как описано в нашей [Политике конфиденциальности](/privacy).',
+    'signup.marketing_optin' => 'Присылайте мне новости продукта и советы по электронной почте (отписаться можно в любой момент).',
+    'checkout.accept' => 'Оплачивая, вы принимаете [Условия подписки](/terms). Тарифы продлеваются автоматически; отменить можно в любое время в настройках.',
+    'checkout.vat' => 'Цены указаны без НДС, если он применяется.',
+    'pharmacy.gate' => 'Продажа лекарств доступна только в странах, где мы её включили. Загрузите документы о лицензии, чтобы опубликовать магазин. Рецептурные и подконтрольные препараты запрещены.',
+    'footer.legal' => 'Правовая информация',
+    'footer.terms' => 'Условия подписки',
+    'footer.privacy' => 'Политика конфиденциальности',
+    'footer.dpa' => 'Соглашение об обработке данных',
+    'footer.aup' => 'Политика допустимого использования',
+    'footer.sla' => 'Уровни обслуживания и поддержка',
+    'footer.subprocessors' => 'Субобработчики',
+    'footer.security' => 'Безопасность',
+    'footer.free_reseller' => 'Условия бесплатного уровня реселлера',
+    'footer.status' => 'Состояние системы',
+    'footer.trademarks' => 'Политика в отношении товарных знаков',
+    'footer.licensing' => 'Лицензирование открытого кода',
+    'footer.company' => 'JUWRI LTD · Рег. номер компании 14363043 · 128 City Road, London, EC1V 2NX, Великобритания',
+    'footer.copyright' => '© 2026 JUWRI LTD. juwri — открытое ПО под лицензией AGPL-3.0.',
+    'footer.powered' => 'Работает на juwri',
+    'footer.contact' => 'Контакты',
+    'footer.language' => 'Язык',
+    'legal.version' => 'Версия :version · Действует с :date',
+    'legal.updated' => 'Последнее обновление: :date · Краткое изложение простым языком — не юридическая консультация',
+    'legal.translation_note' => 'Этот перевод на арабский язык предоставлен для удобства. Юридически обязывающей является английская версия.',
+    'legal.changes' => 'О существенных изменениях этих документов мы уведомляем не менее чем за 30 дней.',
+    'legal.contact' => 'Вопросы: legal@juwri.com',
+    'mail.terms_changed.subject' => 'Мы обновляем Условия juwri :date',
+    'mail.renewal.subject' => 'Ваш тариф juwri продлевается :date',
+    'mail.payment_failed.subject' => 'Требуется действие: платёж за juwri не прошёл',
+    'mail.suspension_warning.subject' => 'Ваши сервисы juwri будут приостановлены через 7 дней',
+    'mail.breach_notice.subject' => 'Важное уведомление о безопасности вашей учётной записи juwri',
+    'mail.export_window.subject' => 'Ваши данные доступны для экспорта до :date',
+    'mail.reseller_winddown_reseller.subject' => 'Учётную запись реселлера нужно продлить: ваши магазины под угрозой',
+    'mail.reseller_winddown_store.subject' => 'Изменения платформы, на которой работает ваш магазин',
+    'signup.accept_required' => 'Чтобы продолжить, примите Условия подписки, Соглашение об обработке данных и Политику допустимого использования.',
+    'signup.business_required' => 'Подтвердите, что вы регистрируетесь как предприятие.',
+    'legal.reaccept.upcoming' => 'Мы обновляем следующие документы :date: :documents. Ознакомьтесь с новой версией и примите её.',
+    'legal.reaccept.updated' => 'Мы обновили следующие документы: :documents. Ознакомьтесь с новой версией и примите её.',
+    'legal.reaccept.accept' => 'Принимаю',
+    'legal.reaccept.done' => 'Спасибо. Ваше согласие сохранено.',
+    'legal.english_only' => 'Этот документ опубликован на английском языке.',
+];

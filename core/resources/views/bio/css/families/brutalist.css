@@ -1,0 +1,26 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* brutalist one-off — stencil headline, slab links with hard offset shadows, acid accent. */
+.fam-brutalist .bio-in{padding:26px 18px 0;text-align:start}
+.fam-brutalist .bio-avatar{display:none}
+.fam-brutalist .bio-name{font-weight:900;font-size:42px;line-height:.88;letter-spacing:-.03em;
+  text-transform:uppercase;margin:0 0 8px}
+.fam-brutalist .bio-tagline{font-family:var(--font-mono,monospace);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;margin:0 0 16px}
+.fam-brutalist .bio-status{border-radius:0;border:3px solid var(--ink,#141412);background:var(--accent,#d8ff00);
+  color:var(--ink,#141412);font-family:var(--font-mono,monospace)}
+.fam-brutalist .bio-link{background:var(--card,#e8e8e2);color:var(--ink,#141412);
+  border:3px solid var(--ink,#141412);border-radius:0;box-shadow:5px 5px 0 var(--ink,#141412);
+  padding:15px 16px;flex-direction:column;align-items:flex-start;gap:2px}
+.fam-brutalist .bio-link:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink,#141412)}
+.fam-brutalist .bio-link:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink,#141412)}
+.fam-brutalist .bio-link__icon,.fam-brutalist .bio-link__arrow{display:none}
+.fam-brutalist .bio-link__label{font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:-.01em}
+.fam-brutalist .bio-link__sub{font-family:var(--font-mono,monospace);font-size:10px;letter-spacing:.1em}
+.fam-brutalist .bio-ann{background:var(--ink,#141412);color:var(--accent,#d8ff00);border:3px solid var(--ink,#141412);
+  border-radius:0;font-family:var(--font-mono,monospace);letter-spacing:.14em;font-size:11px}
+.fam-brutalist .bio-feat,.fam-brutalist .bio-card{border:3px solid var(--ink,#141412);border-radius:0;
+  box-shadow:5px 5px 0 var(--ink,#141412)}
+.fam-brutalist .bio-socials a{border:3px solid var(--ink,#141412);border-radius:0;background:var(--card,#e8e8e2);
+  box-shadow:3px 3px 0 var(--ink,#141412)}

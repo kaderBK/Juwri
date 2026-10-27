@@ -1,0 +1,116 @@
+{
+  "operationId": "legacyPublicMenu",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/menu/42",
+    "headers": {
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=120",
+      "Date": "Fri, 02 Oct 2026 06:21:10 GMT",
+      "ETag": "W/\"saffron-menu-en-91be\"",
+      "Deprecation": "true",
+      "Sunset": "Sun, 03 Oct 2027 00:00:00 GMT",
+      "Link": "</developers>; rel=\"deprecation\", </api/v1/storefront/catalog>; rel=\"successor-version\""
+    },
+    "body": {
+      "restaurant": {
+        "id": 42,
+        "title": "Saffron House",
+        "slug": "saffron-house-demo",
+        "store_type": "restaurant"
+      },
+      "categories": [
+        {
+          "id": 11,
+          "name": "Mezze",
+          "items": [
+            {
+              "id": 101,
+              "name": "Hummus",
+              "description": "Chickpea and tahini dip, olive oil, paprika.",
+              "price": 18.0,
+              "image": "https://media.example/img/placeholder-1x1.svg",
+              "gallery": [],
+              "is_popular": true,
+              "is_vegan": true,
+              "is_halal": true,
+              "is_gluten_free": true,
+              "calories": 320,
+              "variants": [],
+              "variant_groups": [],
+              "extras": [
+                {
+                  "id": 7,
+                  "title": "Extra pita",
+                  "price": 2.0,
+                  "image": null
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "name": "Moutabal",
+              "description": "Smoked aubergine, tahini and lemon.",
+              "price": 20.0,
+              "image": "https://media.example/img/placeholder-1x1.svg",
+              "gallery": [],
+              "is_popular": false,
+              "is_vegan": true,
+              "is_halal": true,
+              "is_gluten_free": true,
+              "calories": 280,
+              "variants": [],
+              "variant_groups": [],
+              "extras": []
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "Grills",
+          "items": [
+            {
+              "id": 131,
+              "name": "Mixed grill platter",
+              "description": "Shish tawook, kofta and lamb tikka.",
+              "price": 68.0,
+              "image": "https://media.example/img/placeholder-1x1.svg",
+              "gallery": [],
+              "is_popular": false,
+              "is_vegan": false,
+              "is_halal": true,
+              "is_gluten_free": false,
+              "calories": 1150,
+              "variants": [],
+              "variant_groups": [
+                {
+                  "id": 31,
+                  "title": "Size",
+                  "options": [
+                    "For one",
+                    "For two"
+                  ],
+                  "required": true,
+                  "min_select": 1,
+                  "max_select": 1,
+                  "option_prices": [
+                    0.0,
+                    56.0
+                  ]
+                }
+              ],
+              "extras": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

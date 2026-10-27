@@ -1,0 +1,46 @@
+{
+    "label": "Cafe",
+    "categories": [
+        {
+            "name": "Hot Coffee",
+            "name_ar": "قهوة ساخنة",
+            "items": [
+                {"name": "Espresso", "name_ar": "إسبريسو", "description": "A rich, concentrated shot.", "description_ar": "جرعة غنية ومركزة.", "price": 2.50, "popular": true},
+                {"name": "Cappuccino", "name_ar": "كابتشينو", "description": "Espresso with steamed milk and foam.", "description_ar": "إسبريسو مع حليب مبخر ورغوة.", "price": 3.50, "popular": true},
+                {"name": "Cafe Latte", "name_ar": "كافيه لاتيه", "description": "Smooth espresso with plenty of milk.", "description_ar": "إسبريسو ناعم مع الكثير من الحليب.", "price": 3.75},
+                {"name": "Flat White", "name_ar": "فلات وايت", "description": "Velvety microfoam over a double shot.", "description_ar": "رغوة ناعمة فوق جرعة مزدوجة.", "price": 3.75},
+                {"name": "Americano", "name_ar": "أمريكانو", "description": "Espresso lengthened with hot water.", "description_ar": "إسبريسو مخفف بالماء الساخن.", "price": 3.00}
+            ]
+        },
+        {
+            "name": "Cold Drinks",
+            "name_ar": "مشروبات باردة",
+            "items": [
+                {"name": "Iced Latte", "name_ar": "لاتيه مثلج", "description": "Chilled espresso and milk over ice.", "description_ar": "إسبريسو وحليب مثلج.", "price": 4.00},
+                {"name": "Cold Brew", "name_ar": "كولد برو", "description": "Slow-steeped for a smooth finish.", "description_ar": "منقوع ببطء لمذاق ناعم.", "price": 4.25},
+                {"name": "Iced Matcha", "name_ar": "ماتشا مثلجة", "description": "Stone-ground green tea with milk.", "description_ar": "شاي أخضر مطحون مع الحليب.", "price": 4.50, "vegan": true},
+                {"name": "Lemonade", "name_ar": "ليموناضة", "description": "Fresh-squeezed and lightly sweet.", "description_ar": "طازجة وحلوة قليلاً.", "price": 3.50, "vegan": true}
+            ]
+        },
+        {
+            "name": "Pastries",
+            "name_ar": "معجنات",
+            "items": [
+                {"name": "Butter Croissant", "name_ar": "كرواسون بالزبدة", "description": "Flaky and golden.", "description_ar": "هش وذهبي.", "price": 2.75, "popular": true},
+                {"name": "Pain au Chocolat", "name_ar": "بان أو شوكولا", "description": "Buttery pastry with dark chocolate.", "description_ar": "معجنات بالزبدة والشوكولاتة الداكنة.", "price": 3.25},
+                {"name": "Blueberry Muffin", "name_ar": "مافن التوت", "description": "Moist muffin packed with berries.", "description_ar": "مافن طري محشو بالتوت.", "price": 3.00},
+                {"name": "Banana Bread", "name_ar": "خبز الموز", "description": "A thick, comforting slice.", "description_ar": "شريحة سميكة ولذيذة.", "price": 3.00, "vegan": true}
+            ]
+        },
+        {
+            "name": "Breakfast",
+            "name_ar": "فطور",
+            "items": [
+                {"name": "Avocado Toast", "name_ar": "توست الأفوكادو", "description": "Sourdough, smashed avocado, chili.", "description_ar": "خبز مخمر، أفوكادو مهروس، فلفل حار.", "price": 6.50, "vegan": true, "popular": true},
+                {"name": "Egg & Cheese Sandwich", "name_ar": "ساندويتش البيض والجبن", "description": "Warm, melty and quick.", "description_ar": "دافئ وذائب وسريع.", "price": 5.50},
+                {"name": "Greek Yogurt Bowl", "name_ar": "زبادي يوناني", "description": "Yogurt, granola and honey.", "description_ar": "زبادي وجرانولا وعسل.", "price": 5.00},
+                {"name": "Overnight Oats", "name_ar": "شوفان بارد", "description": "Oats soaked with fruit and seeds.", "description_ar": "شوفان منقوع مع الفواكه والبذور.", "price": 4.75, "vegan": true}
+            ]
+        }
+    ]
+}

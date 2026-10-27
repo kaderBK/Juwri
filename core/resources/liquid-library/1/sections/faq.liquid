@@ -1,0 +1,62 @@
+{%- comment -%}
+  FAQ (library v1): question / answer blocks as native <details><summary>
+  disclosures — keyboard and screen-reader accessible with no JS. Blocks
+  missing a question or an answer are skipped; with none left the section
+  renders nothing.
+{%- endcomment -%}
+{%- liquid
+  assign shown = 0
+  for block in section.blocks
+    if block.type == 'question'
+      assign q = block.settings.question | strip
+      if q != '' and block.settings.answer != ''
+        assign shown = shown | plus: 1
+      endif
+    endif
+  endfor
+  assign heading = section.settings.heading | strip
+-%}
+{%- if shown > 0 -%}
+<section class="mbs-faq" aria-labelledby="mbs-faq-{{ section.id | escape }}">
+  <h2 class="mbs-faq__title" id="mbs-faq-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- else -%}{{ 'Frequently asked questions' | t }}{%- endif -%}</h2>
+  <div class="mbs-faq__list">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'question' -%}
+        {%- assign q = block.settings.question | strip -%}
+        {%- if q != '' and block.settings.answer != '' -%}
+        <details class="mbs-faq__item"{% if forloop.first and section.settings.open_first %} open{% endif %}>
+          <summary class="mbs-faq__q"><span>{{ q | escape }}</span>{%- render 'icon', name: 'chevron', size: 18 -%}</summary>
+          <div class="mbs-faq__a">{{ block.settings.answer }}</div>
+        </details>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "group": "content",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Frequently asked questions)", "default": "" },
+    { "id": "open_first", "type": "checkbox", "label": "Open the first question", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "limit": 20,
+      "settings": [
+        { "id": "question", "type": "text", "label": "Question", "default": "" },
+        { "id": "answer", "type": "richtext", "label": "Answer", "default": "" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "FAQ", "blocks": [ { "type": "question" }, { "type": "question" }, { "type": "question" } ] }
+  ]
+}
+{% endschema %}

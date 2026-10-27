@@ -1,0 +1,151 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "zest",
+      "label": "Zest",
+      "thumb": "assets/store_templates/lime/presets/zest.png",
+      "values": {
+        "colors.primary": "#CDF34B",
+        "colors.background": "#ffffff",
+        "colors.surface": "#EEF0F2",
+        "colors.text": "#101010",
+        "colors.accent": "#2fb56b",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "mint",
+      "label": "Mint",
+      "thumb": "assets/store_templates/lime/presets/mint.png",
+      "values": {
+        "colors.primary": "#3ddc84",
+        "colors.background": "#f2fbf6",
+        "colors.surface": "#ffffff",
+        "colors.text": "#0f2018",
+        "colors.accent": "#101010",
+        "layout.radius": "soft"
+      }
+    },
+    {
+      "id": "nightlime",
+      "label": "Nightlime",
+      "thumb": "assets/store_templates/lime/presets/nightlime.png",
+      "values": {
+        "colors.primary": "#c7e94a",
+        "colors.background": "#111310",
+        "colors.surface": "#1c1f18",
+        "colors.text": "#f3f5ee",
+        "colors.accent": "#2fb56b",
+        "layout.radius": "round"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#CDF34B"
+        },
+        "colors.background": {
+          "default": "#ffffff"
+        },
+        "colors.surface": {
+          "default": "#EEF0F2"
+        },
+        "colors.text": {
+          "default": "#101010"
+        },
+        "colors.accent": {
+          "default": "#2fb56b"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Most popular"
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Snacks, fast and fresh",
+          "label": "Splash title"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category pills",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "New Menu rail + featured blob",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "All Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "restaurant-01",
+  "vertical": "restaurant",
+  "default_language": "en",
+  "brief": {
+    "text": "Family burger joint with smash burgers, loaded fries and milkshakes. Fast takeaway at lunch.",
+    "vibes": [
+      "bold",
+      "playful"
+    ],
+    "priority": "fast_ordering",
+    "colors": [
+      "#d62828"
+    ]
+  }
+}

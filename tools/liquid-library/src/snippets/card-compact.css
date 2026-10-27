@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* card-compact snippet (tiles, rails, offers); shared parts live in card-photo.css */
+.mbs-card-compact { position: relative; display: flex; flex-direction: column; gap: 6px; border-radius: var(--tr-control, 12px); }
+.mbs-card-compact[hidden] { display: none; }
+.mbs-card-compact__media { position: relative; aspect-ratio: 1; border-radius: inherit; background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); overflow: hidden; }
+.mbs-card-compact__media .mbs-badges { position: absolute; inset-block-start: 6px; inset-inline-start: 6px; }
+.mbs-card-compact .mbs-badges__b:nth-child(n+2) { display: none; }
+.mbs-card-compact .mbs-card-compact__out { padding: 4px; background: rgba(var(--tc-background-rgb, 255, 255, 255), .9); text-align: center; }
+.mbs-card-compact__media .mbs-card-compact__out { position: absolute; inset-inline: 0; inset-block-end: 0; }
+.mbs-card-compact__name { display: -webkit-box; margin: 0; overflow: hidden; font-size: .85rem; line-height: 1.3; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.mbs-card-compact__foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-block-start: auto; }

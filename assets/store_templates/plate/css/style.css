@@ -1,0 +1,1763 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   plate — editorial ordering-app post_template
+   Faithful port of rev/plate/demo.css, wired to the real app.
+   Design DNA: light cool-gray canvas, white cards, Playfair
+   serif headings, tiny gray Inter labels, gold stars, black
+   pill CTAs, circular plated imagery, right-side cart rail.
+   ═══════════════════════════════════════════════════════════ */
+
+.plate{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is plate's own value,
+     kept as the var() fallback so a store that customized nothing — or a render
+     with no token include — is byte-identical to today. */
+  --stage:var(--tc-background, #ECEDEF);   /* ambient page canvas (the background role) */
+  --paper:var(--tc-surface, #FFFFFF);      /* cards / sheets / rails (the surface role) */
+  --paper-2:#FAFAFB;                        /* hand-tuned off-white; derived surface-400 differs, keep */
+  --hair:#ECECEE;                           /* hairline strokes, hand-tuned, keep literal */
+  --hair-2:#E2E3E7;
+  /* ink */
+  --ink:var(--tc-text, #141414);           /* primary text (the text role) */
+  --mut:#646a73; /* P6-95: 5.2:1 on white, 4.8:1 on the paper tint (was #8A8F98, 3.4:1) */
+  --mut-2:#B4B8C0;
+  --stroke-2:#E2E3E7;
+  /* accents (brand ink drives the black CTAs; gold stays fixed) */
+  --gold:#E9B949;
+  --gold-soft:rgba(233,185,73,.14);
+  --wa:#3FBF6B;
+  --err:#D26060;
+  /* shadows (very soft, diffuse) */
+  --sh-card:0 14px 30px -22px rgba(24,28,35,.28);
+  --sh-float:0 22px 44px -20px rgba(24,28,35,.28);
+  /* radius — pill follows the layout.radius scale (round → 999px, an exact match).
+     card (20px) and btn (13px) are hand-tuned off the scale (round = 18px / 14px),
+     and sheet is a fixed corner; those three stay literal so the token can't reshape
+     plate's signature 20px cards or 13px pill buttons. */
+  --r-card:20px;
+  --r-btn:13px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:360ms;
+  /* z scale */
+  --z-rail:24; --z-search:38; --z-scrim:40; --z-story:46; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — follow the self-hosted pair (WI-T2); pair "none" (the default) emits no
+     --tf-*, so these degrade to plate's own Inter/Playfair stacks. The Arabic face
+     shares --tf-body because every pair's body stack ends in its Arabic face. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Inter",system-ui,sans-serif);
+  --font-display:'Saudi Riyal', var(--tf-heading, "Playfair Display",Georgia,serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+  /* brand ink — plate's signature is a near-black that drives the pill CTAs and every
+     active/selected state; that is the customizer PRIMARY role (theme.json colors.primary). */
+  --plate-ink:var(--tc-primary, #141414);
+  /* text that sits ON --plate-ink (the signature pill CTA). A token, not a literal
+     #fff, so dark mode can flip the pill to light-on-dark in one line. */
+  --cta-fg:#FFFFFF;
+}
+
+/* Arabic has no Playfair glyphs, so every display heading fell back to the system
+   serif while IBM Plex Sans Arabic sat loaded and unused. Keeping Playfair FIRST
+   means Latin (prices, item names, "$18.80") still renders in the display face and
+   only Arabic runs fall through to Plex — per-glyph fallback, one declaration. */
+[dir="rtl"] .plate{--font-display:'Saudi Riyal', var(--tf-heading, "Playfair Display","IBM Plex Sans Arabic",system-ui,serif)}
+
+/* the app fills the viewport; body behind it is locked */
+html:has(.plate), body:has(.plate){overflow:hidden;height:100%;background:var(--tc-background, #ECEDEF)}
+
+.plate,.plate *{margin:0;padding:0;box-sizing:border-box}
+.plate{
+  position:fixed;inset:0;z-index:1;
+  font-family:var(--font-ui);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:13px;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;
+  isolation:isolate;overflow:clip;
+}
+[dir="rtl"] .plate,[dir="rtl"] .plate :is(input,button,select,output){font-family:var(--font-ar)}
+.plate img{display:block;max-width:100%}
+.plate button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.plate input,.plate select,.plate textarea{
+  font:inherit;
+  /* iOS Safari force-zooms any focused field below 16px and never zooms back —
+     the single most-felt defect on a QR menu. 16px is a floor, not a style. */
+  font-size:16px;color:var(--ink);background:var(--paper-2);
+  border:1px solid var(--hair-2);border-radius:12px;
+  padding:12px 14px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.plate input::placeholder,.plate textarea::placeholder{color:var(--mut-2)}
+.plate input:focus,.plate select:focus,.plate textarea:focus{border-color:var(--ink);background:var(--paper)}
+.plate ::-webkit-scrollbar{display:none}
+
+/* icons */
+.plate .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.plate .ic-xs{width:14px;height:14px}
+.plate .star-fill{fill:var(--gold);stroke:none}
+
+/* shared type helpers */
+.plate .stars{display:inline-flex;align-items:center;gap:2.5px}
+.plate .cap{
+  font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--mut);font-family:var(--font-ui);
+}
+[dir="rtl"] .plate .cap{letter-spacing:.06em}
+.plate .gold{color:var(--gold)}
+
+/* ── app shell & view router ─────────────────────────── */
+.plate .views,.cv-views{position:relative;flex:1;min-height:0}
+
+.plate .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--paper);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .plate .view{transform:translateX(-26%)}
+.plate .view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.plate .view.is-under{
+  /* P6-95: the view under the active one is fully covered by it (opaque, full size), so once the push transition ends it is
+     hidden like any other inactive view: a dimmed but still "visible" copy failed axe colour-contrast (opacity .5). */
+  visibility:hidden;transform:translateX(-9%) scale(.985);opacity:.5;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+}
+[dir="rtl"] .plate .view.is-under{transform:translateX(9%) scale(.985)}
+.plate .view-center{justify-content:center}
+
+.plate .view-scroll{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:4px 22px 0;scroll-behavior:smooth;
+  transition:padding var(--t-view) var(--ease);
+}
+.plate .tail-space{height:36px}
+.plate .tail-space.tall{height:22px}
+
+/* rail pushes content so nothing hides beneath it */
+.plate.rail-open .view[data-view="home"] .view-scroll,
+.plate.rail-open .view[data-view="item"] .view-scroll{padding-inline-end:88px}
+.plate.rail-open .view[data-view="item"] .foot-cta{padding-inline-end:88px}
+
+/* sub-screen header */
+.plate .s-head{display:flex;align-items:center;gap:14px;padding:10px 0 16px}
+.plate .s-title{flex:1;font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.01em;text-align:center}
+.plate .ghost-spot{visibility:hidden}
+[dir="rtl"] .plate .s-head .rbtn[data-back] .ic{transform:scaleX(-1)}
+[dir="rtl"] .plate .arr{transform:scaleX(-1)}
+
+/* round icon buttons */
+.plate .rbtn{
+  position:relative;width:42px;height:42px;flex:none;border-radius:50%;
+  background:var(--paper);border:1px solid var(--hair);
+  box-shadow:0 8px 18px -10px rgba(24,28,35,.22);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.plate .rbtn:active{transform:scale(.88)}
+.plate .rbtn .count{
+  position:absolute;top:-3px;inset-inline-end:-3px;
+  min-width:17px;height:17px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);font-size:9.5px;font-weight:700;font-style:normal;
+  display:grid;place-items:center;padding:0 4px;outline:2px solid var(--paper);
+  transition:transform .25s var(--ease-pop);
+}
+.plate .rbtn .count.bump{animation:pl-bump .45s var(--ease-pop)}
+@keyframes pl-bump{40%{transform:scale(1.45)}}
+
+/* black pill CTA */
+.plate .btn-black{
+  height:50px;padding:0 22px;border-radius:var(--r-btn);
+  background:var(--plate-ink);color:var(--cta-fg);
+  font-size:12.5px;font-weight:600;letter-spacing:.04em;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 16px 30px -14px rgba(20,20,20,.45);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+  position:relative;overflow:hidden;flex:1;
+}
+.plate .btn-black:active{transform:scale(.97)}
+.plate .btn-black:disabled{opacity:.4;box-shadow:none}
+.plate .btn-black b{font-family:var(--font-display);font-weight:600;font-size:14px;opacity:.75}
+.plate .btn-black.wide{width:100%}
+.plate .btn-black.sm{height:40px;padding:0 18px;flex:none;font-size:11px}
+.plate .btn-black .spinner{
+  width:18px;height:18px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.25);border-top-color:currentColor;
+  animation:pl-spin .7s linear infinite;
+}
+@keyframes pl-spin{to{rotate:360deg}}
+
+/* hairline ghost button */
+.plate .btn-hair{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-btn);
+  background:var(--paper);border:1px solid var(--hair-2);
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.plate .btn-hair:active{transform:scale(.96)}
+.plate .btn-hair.wide{width:100%}
+.plate .btn-mini{
+  flex:none;padding:9px 16px;border-radius:10px;
+  background:var(--plate-ink);color:var(--cta-fg);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .btn-mini:active{transform:scale(.94)}
+
+/* ── splash ──────────────────────────────────────────── */
+.plate .splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--paper);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  transition:opacity .6s var(--ease),visibility 0s linear .6s;
+}
+.plate .splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.plate .sp-tag{animation:pl-fade-up .8s var(--ease) .1s backwards}
+.plate .sp-disc{
+  width:216px;height:216px;border-radius:50%;padding:12px;
+  background:radial-gradient(circle at 34% 28%,#2b2c30,#131417 72%);
+  box-shadow:0 40px 70px -30px rgba(24,28,35,.5);
+  animation:pl-fade-up .9s var(--ease) .2s backwards;
+}
+.plate .sp-disc img{width:100%;height:100%;object-fit:cover;border-radius:50%;animation:pl-plate-spin 46s linear infinite}
+.plate .sp-brand{font-family:var(--font-display);font-size:46px;font-weight:600;letter-spacing:-.02em;animation:pl-fade-up .9s var(--ease) .32s backwards;text-align:center;max-width:88%;line-height:1.1}
+.plate .sp-brand span{color:var(--gold)}
+.plate .sp-rule{width:34px;height:1px;background:var(--hair-2);animation:pl-fade-up .9s var(--ease) .4s backwards}
+.plate .sp-skip{position:absolute;top:16px;inset-inline-end:24px;padding:10px 14px;color:var(--mut)}
+@keyframes pl-fade-up{from{opacity:0;transform:translateY(22px)}}
+@keyframes pl-plate-spin{to{rotate:360deg}}
+
+/* ── menu (home) ─────────────────────────────────────── */
+.plate .m-top{display:flex;align-items:center;gap:11px;padding:10px 0 4px}
+.plate .m-top-space{flex:1}
+
+.plate .m-titlerow{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding:22px 2px 4px}
+.plate .m-title{font-family:var(--font-display);font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1}
+/* logical end already mirrors — no [dir="rtl"] override, or the stack
+   re-aligns to the inner edge and the two lines go ragged */
+.plate .m-sort{display:grid;justify-items:end;gap:3px;text-align:end;padding-bottom:4px}
+.plate .m-sort .cap{display:inline-flex;align-items:center;gap:3px}
+.plate .m-sort b{font-size:12.5px;font-weight:600;color:var(--ink)}
+
+.plate .loyalty-chip{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  padding:8px 14px;border-radius:var(--r-pill);
+  background:var(--gold-soft);border:1px solid rgba(233,185,73,.35);
+  font-size:11.5px;font-weight:600;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .loyalty-chip:active{transform:scale(.95)}
+.plate .loyalty-chip b{font-family:var(--font-display);font-size:13px}
+.plate .loyalty-link{margin-inline-start:6px;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--hair-2);padding-bottom:1px}
+
+/* ── brand / follow row (ported from crave cvBrandRow; green accent
+   remapped to --plate-ink, the customizer-driven brand token) ──── */
+.plate .brand-row{display:flex;align-items:center;gap:12px;margin-top:14px}
+.plate .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--paper-2);display:grid;place-items:center;border:1px solid var(--hair-2)}
+.plate .brand-logo img{width:100%;height:100%;object-fit:cover}
+.plate .brand-info{flex:1;min-width:0}
+.plate .brand-name{display:flex;align-items:center;gap:7px;font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:-.01em}
+.plate .brand-followers{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+.plate .brand-followers--cta{color:var(--plate-ink);font-weight:600}
+.plate .brand-dot{color:var(--mut)}
+.plate .brand-viewers b{color:var(--ink);font-weight:700}
+/* verified = an actual seal medallion (filled ink seal + white check). */
+.plate .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.plate .verified-badge .vb-seal{width:16px;height:16px;display:block}
+.plate .verified-badge .vb-seal-fill{fill:var(--plate-ink)}
+.plate .verified-badge .vb-seal-check{fill:var(--cta-fg,#fff)}
+/* Explicit sheet close button (top corner), restyled off the grab bar it borrows
+   for its close wiring. Generic so any sheet can carry one. */
+.plate .sheet .sheet-x{
+  position:absolute;inset-block-start:12px;inset-inline-end:14px;
+  width:34px;height:34px;margin:0;border-radius:50%;border:0;
+  background:color-mix(in srgb,var(--plate-ink) 8%,transparent);color:var(--plate-ink);
+  display:grid;place-items:center;cursor:pointer;z-index:2;
+}
+.plate .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.plate .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── editorial cover hero: full-bleed photo under a hairline frame; the Menu
+   title + chrome sit over it in white and the band fades to the paper. Light
+   theme. No cover / toggle off = the wrap is not emitted. ── */
+.plate .plate-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:196px}
+.plate .plate-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--paper-2)}
+.plate .plate-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.plate .plate-cover-scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(0,0,0,.44), rgba(0,0,0,.10) 45%),
+  linear-gradient(180deg, transparent 30%, var(--paper) 97%);}
+.plate .plate-cover-frame{position:absolute;inset:12px 12px 22px;border:1px solid rgba(255,255,255,.5);z-index:1;pointer-events:none}
+.plate .plate-cover .m-top,.plate .plate-cover .m-titlerow,.plate .plate-cover .open-chip,.plate .plate-cover .qc-cen-slot{position:relative;z-index:2}
+.plate .plate-cover .m-title{color:#fff}
+.plate .plate-cover .m-titletools .cap,.plate .plate-cover .m-titletools b{color:#fff}
+.plate .plate-cover .m-top .rbtn{color:#fff;background:rgba(20,20,20,.34);border-color:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.plate .plate-cover .open-chip{background:rgba(20,20,20,.42);border-color:rgba(255,255,255,.25);color:#fff}
+
+/* ── collapsing header ── */
+.plate .cv-menu-sentinel{display:block;block-size:1px;inline-size:1px;pointer-events:none}
+.plate .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--paper);box-shadow:0 6px 18px rgba(0,0,0,.10);
+  border-block-end:1px solid var(--hair-2);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.plate .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.plate .cv-condensed-logo{width:32px;height:32px;border-radius:10px;overflow:hidden;flex:none;background:var(--paper-2);display:grid;place-items:center}
+.plate .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.plate .cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plate .cv-condensed-actions{display:flex;gap:6px;flex:none}
+@media (prefers-reduced-motion:reduce){.plate .cv-condensed{transition:none}}
+.plate .followbtn{
+  display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:9px 16px;
+  border-radius:var(--r-pill);background:var(--plate-ink);color:var(--cta-fg);
+  font-size:12px;font-weight:600;flex:none;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.plate .followbtn:active{transform:scale(.94)}
+.plate .followbtn .following-label{display:none}
+.plate .followbtn.is-on{background:var(--paper);color:var(--ink);border:1px solid var(--hair-2)}
+.plate .followbtn.is-on .follow-label,.plate .followbtn.is-on .ic{display:none}
+.plate .followbtn.is-on .following-label{display:inline}
+
+/* open/closed status chip (R4) */
+.plate .open-chip{
+  display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+  padding:6px 13px;border-radius:var(--r-pill);
+  background:var(--paper-2);border:1px solid var(--hair-2);
+  font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+}
+[dir="rtl"] .plate .open-chip{letter-spacing:.03em}
+.plate .open-chip i{width:8px;height:8px;border-radius:50%;background:#2fbf6b;box-shadow:0 0 0 3px rgba(47,191,107,.16)}
+.plate .open-chip.is-closed{color:var(--mut)}
+.plate .open-chip.is-closed i{background:#d64b45;box-shadow:0 0 0 3px rgba(214,75,69,.14)}
+
+/* categories */
+.plate .cats{
+  display:flex;gap:22px;overflow-x:auto;padding:20px 2px 2px;
+  position:sticky;top:0;z-index:5;
+  background:linear-gradient(var(--paper) 82%,transparent);
+}
+.plate .cat{
+  flex:none;padding:8px 1px 11px;position:relative;
+  font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);
+  transition:color var(--t-fast);white-space:nowrap;
+}
+[dir="rtl"] .plate .cat{letter-spacing:.05em}
+.plate .cat::after{
+  content:"";position:absolute;inset-inline:0;bottom:0;height:2px;border-radius:2px;
+  background:var(--ink);transform:scaleX(0);transition:transform .3s var(--ease);
+}
+.plate .cat.is-on{color:var(--ink)}
+.plate .cat.is-on::after{transform:none}
+
+/* secondary (sub-category) chip row — pills below the parent chips */
+.plate .subcats{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 2px}
+.plate .subcat{
+  flex:none;padding:8px 15px;border-radius:var(--r-pill);
+  background:var(--paper);border:1px solid var(--hair-2);
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+  white-space:nowrap;transition:background var(--t-fast),color var(--t-fast),border-color var(--t-fast);
+}
+[dir="rtl"] .plate .subcat{letter-spacing:.03em}
+.plate .subcat.is-on{background:var(--plate-ink);border-color:var(--ink);color:var(--cta-fg)}
+
+/* stories rail — circular plated avatars, same horizontal-strip rhythm as .cats */
+.plate .stories{display:flex;gap:16px;overflow-x:auto;padding:16px 2px 2px;scrollbar-width:none}
+.plate .stories::-webkit-scrollbar{display:none}
+.plate .stories[hidden]{display:none}
+.plate .story{display:flex;flex-direction:column;align-items:center;gap:7px;flex:none;width:68px}
+.plate .story-ring{
+  width:60px;height:60px;border-radius:50%;padding:2px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--gold),var(--plate-ink));
+  box-shadow:0 10px 20px -14px rgba(24,28,35,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .story:active .story-ring{transform:scale(.93)}
+.plate .story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--paper);background:#131417}
+.plate .story small{
+  font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+  max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+[dir="rtl"] .plate .story small{letter-spacing:.03em}
+
+/* title-row tools (filter + sort) */
+.plate .m-titletools{display:flex;align-items:flex-end;gap:14px}
+.plate .m-filter{position:relative;display:inline-flex;align-items:center;gap:5px;padding-bottom:4px;color:var(--mut)}
+.plate .m-filter .cap{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.plate .m-filter .ic{width:14px;height:14px}
+.plate .m-filter-dot{position:absolute;top:-2px;inset-inline-end:-6px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+
+/* per-item gallery thumbnails (swap the disc image) */
+.plate .plate-gallery{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 22px 6px}
+.plate .pg-thumb{
+  width:48px;height:48px;border-radius:12px;overflow:hidden;flex:none;
+  border:1px solid var(--hair-2);opacity:.6;transition:opacity var(--t-fast),border-color var(--t-fast);
+}
+.plate .pg-thumb img{width:100%;height:100%;object-fit:cover}
+.plate .pg-thumb.is-on{opacity:1;border-color:var(--ink)}
+
+/* filter sheet actions */
+.plate .sheet-actions{display:flex;gap:10px;margin-top:18px}
+.plate .sheet-actions .btn-hair{flex:none}
+.plate .sheet-actions .btn-black{flex:1}
+.plate .branch-dist{margin-inline-start:auto;font-size:12px;opacity:.7}
+
+/* visibility guard: an element with the [hidden] attribute must stay hidden even
+   when a display rule (e.g. .subcats flex) would otherwise reveal it. */
+.plate [hidden]{display:none !important}
+
+/* promo / banner slot */
+.plate .promo{
+  display:flex;align-items:center;gap:14px;width:100%;margin-top:16px;
+  background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);padding:16px 16px;text-align:start;text-decoration:none;color:inherit;
+  transition:transform var(--t-fast) var(--ease-pop);position:relative;overflow:hidden;
+}
+.plate .promo::before{content:"";position:absolute;inset-inline-start:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--gold)}
+.plate .promo:active{transform:scale(.98)}
+.plate .promo-copy{flex:1;display:grid;gap:5px;padding-inline-start:8px}
+.plate .promo-title{font-family:var(--font-display);font-size:17.5px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.plate .promo-cta{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-top:2px}
+.plate .promo-img{flex:none;width:74px;height:74px;border-radius:50%;overflow:hidden;box-shadow:0 12px 22px -10px rgba(24,28,35,.4);background:#131417}
+.plate .promo-img img{width:100%;height:100%;object-fit:cover}
+
+/* admin banners (real menuBanners) reuse promo look, horizontal scroll */
+.plate .banners{margin-top:16px;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory}
+.plate .banners .promo{margin-top:0;min-width:88%;scroll-snap-align:start}
+
+/* grid of dish cards */
+.plate .m-grid{
+  display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:dense;
+  gap:var(--ts-gap-3, 14px);padding-top:18px;
+}
+.plate .card{
+  position:relative;background:var(--paper);
+  border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);
+  padding:18px 12px 12px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .55s var(--ease) var(--d,0s),transform .55s var(--ease) var(--d,0s);
+}
+.plate .card.in{opacity:1;transform:none}
+.plate .card.is-unavailable{opacity:.55}
+.plate .card .flag{
+  position:absolute;top:10px;inset-inline-start:10px;z-index:2;
+  font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 8px;border-radius:var(--r-pill);
+}
+[dir="rtl"] .plate .card .flag{letter-spacing:.04em}
+.plate .flag.pop{background:var(--gold-soft);color:#B4881F;border:1px solid rgba(233,185,73,.4)}
+.plate .flag.spec{background:var(--ink);color:var(--paper)}
+.plate .flag.sold{background:var(--err);color:#fff}
+.plate .card .fav{
+  position:absolute;top:8px;inset-inline-end:8px;z-index:2;
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--mut-2);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast);
+}
+.plate .card .fav:active{transform:scale(.8)}
+.plate .card .fav .ic{width:15px;height:15px}
+.plate .card .fav.is-on{color:var(--err)}
+.plate .card .fav.is-on .ic{fill:currentColor}
+.plate .card-ring{
+  width:104px;height:104px;border-radius:50%;overflow:hidden;flex:none;
+  box-shadow:0 16px 26px -12px rgba(24,28,35,.4);
+  background:radial-gradient(circle at 34% 28%,#2b2c30,#131417 72%);padding:6px;
+}
+.plate .card-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%;transition:transform .6s var(--ease)}
+.plate .card:hover .card-ring img{transform:scale(1.07) rotate(4deg)}
+.plate .card-name{
+  font-family:var(--font-display);font-size:14.5px;font-weight:700;letter-spacing:-.005em;
+  line-height:1.25;margin:11px 0 5px;display:block;
+}
+.plate .card-stars{display:flex;align-items:center;gap:2px;min-height:12px}
+.plate .card-stars svg{width:10px;height:10px}
+.plate .card-price{font-family:var(--font-display);font-size:14px;font-weight:600;margin-top:6px}
+.plate .card-from{font-size:8px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:6px}
+.plate .card-add{
+  margin-top:9px;padding:8px 14px;border-radius:10px;
+  border:1px solid var(--hair-2);
+  font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+[dir="rtl"] .plate .card-add{letter-spacing:.04em}
+.plate .card-add:active{transform:scale(.93);background:var(--ink);color:var(--paper)}
+.plate .card-chev{
+  margin-top:6px;color:var(--mut-2);width:26px;height:22px;display:grid;place-items:center;
+  transition:transform .3s var(--ease);position:relative;
+}
+/* pad the hit area out to the 32px floor without growing the card */
+.plate .card-chev::after{content:"";position:absolute;inset:-5px -3px}
+.plate .card-chev .ic{width:13px;height:13px}
+.plate .card.is-more .card-chev{transform:rotate(180deg)}
+.plate .card-more{
+  max-height:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s;opacity:0;
+}
+.plate .card.is-more .card-more{max-height:150px;opacity:1}
+.plate .card-more p{font-size:10.5px;line-height:1.6;color:var(--mut);padding:4px 4px 6px}
+.plate .card-more .cap{font-size:8.5px}
+
+/* featured (enlarged) card */
+.plate .card.card-xl{
+  grid-row:span 2;padding:0;align-items:stretch;text-align:start;overflow:hidden;
+  box-shadow:var(--sh-float);z-index:1;
+}
+.plate .card-xl .xl-img{position:relative;height:172px;overflow:hidden;background:#131417}
+.plate .card-xl .xl-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.plate .card-xl:hover .xl-img img{transform:scale(1.06)}
+.plate .card-xl .fav{background:rgba(255,255,255,.85);color:var(--mut)}
+.plate .card-xl .xl-body{display:flex;flex-direction:column;flex:1;padding:14px 14px 14px;gap:7px}
+.plate .card-xl .card-name{font-size:19px;margin:2px 0 0}
+.plate .card-xl .card-stars{min-height:12px}
+.plate .card-xl .xl-desc{font-size:10.5px;line-height:1.6;color:var(--mut)}
+.plate .card-xl .xl-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:6px}
+.plate .card-xl .card-price{font-size:19px;margin:0}
+.plate .card-xl .xl-add{
+  flex:none;height:38px;padding:0 14px;border-radius:11px;
+  background:var(--plate-ink);color:var(--cta-fg);
+  font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;align-items:center;
+  box-shadow:0 12px 22px -10px rgba(20,20,20,.5);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+[dir="rtl"] .plate .card-xl .xl-add{letter-spacing:.04em}
+.plate .card-xl .xl-add:active{transform:scale(.93)}
+
+.plate .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:40px 20px;color:var(--mut);font-size:12px}
+.plate .empty-art{width:64px;height:64px;stroke:var(--hair-2);fill:none;stroke-width:1.6}
+
+/* strips (reserve / whatsapp) */
+.plate .strip{
+  display:flex;align-items:center;gap:13px;width:100%;margin-top:14px;
+  background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);padding:13px 15px;text-align:start;text-decoration:none;color:inherit;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .strip:active{transform:scale(.98)}
+.plate .strip-ic{
+  width:40px;height:40px;flex:none;border-radius:50%;
+  background:var(--paper-2);border:1px solid var(--hair);
+  display:grid;place-items:center;color:var(--ink);
+}
+.plate .strip-ic.wa{color:var(--wa)}
+.plate .strip-copy{flex:1;display:grid;gap:2px}
+.plate .strip-copy b{font-family:var(--font-display);font-size:14.5px;font-weight:700}
+.plate .strip-copy small{font-size:10px;color:var(--mut);letter-spacing:.04em}
+.plate .strip .arr{color:var(--mut-2)}
+.plate .demo-foot{text-align:center;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut-2);padding:26px 0 2px}
+
+/* back-to-top */
+.plate .totop{
+  position:absolute;bottom:20px;inset-inline-end:20px;z-index:20;
+  transition:inset var(--t-view) var(--ease);
+  width:44px;height:44px;border-radius:50%;
+  background:var(--paper);border:1px solid var(--hair);
+  box-shadow:var(--sh-float);display:grid;place-items:center;color:var(--ink);
+  animation:pl-fade-up .4s var(--ease);
+}
+.plate.rail-open .totop{inset-inline-end:84px}
+.plate .totop:active{transform:scale(.88)}
+
+/* ── item detail ─────────────────────────────────────── */
+.plate .view[data-view="item"] .view-scroll{padding-inline:0}
+.plate .i-top{display:flex;align-items:center;gap:11px;padding:10px 22px 0}
+.plate #itemFav.is-on{color:var(--err)}
+.plate #itemFav.is-on .ic{fill:currentColor}
+
+.plate .plate-hero{position:relative;padding:16px 22px 30px;min-height:320px}
+.plate .plate-disc{
+  width:318px;height:318px;border-radius:50%;flex:none;
+  margin-inline-start:-92px;
+  background:radial-gradient(circle at 36% 28%,#2c2d31,#131417 72%);
+  padding:17px;
+  box-shadow:0 46px 80px -34px rgba(24,28,35,.55),0 18px 34px -20px rgba(24,28,35,.35);
+}
+.plate .plate-disc img{width:100%;height:100%;object-fit:cover;border-radius:50%;animation:pl-plate-spin 46s linear infinite}
+.plate .plate-chips{position:absolute;inset-inline-end:22px;bottom:16px;display:grid;gap:10px;z-index:2}
+.plate .pchip{
+  background:var(--paper);border:1px solid var(--hair);border-radius:14px;
+  box-shadow:var(--sh-float);
+  padding:10px 15px;display:grid;gap:2px;min-width:96px;
+  animation:pl-fade-up .6s var(--ease) backwards;
+}
+.plate .pchip:nth-child(2){animation-delay:.1s}
+.plate .pchip .cap{font-size:8.5px}
+.plate .pchip b{font-size:12.5px;font-weight:600;color:var(--ink)}
+
+.plate .i-body{padding:0 26px;display:grid;justify-items:center;gap:0}
+.plate .i-flag{
+  font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  background:var(--ink);color:var(--paper);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:12px;
+}
+[dir="rtl"] .plate .i-flag{letter-spacing:.06em}
+.plate .i-title{
+  font-family:var(--font-display);font-size:27px;font-weight:700;letter-spacing:-.01em;
+  line-height:1.2;text-align:center;max-width:19ch;
+}
+.plate .i-stars{display:inline-flex;align-items:center;gap:7px;padding:12px 6px 2px}
+.plate .i-stars .stars{display:flex;gap:3px}
+.plate .i-stars svg{width:15px;height:15px}
+.plate .i-stars .rv{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.plate .i-desc{
+  padding:12px 0 2px;font-size:12px;line-height:1.75;color:var(--mut);
+  text-align:center;max-width:34ch;
+}
+.plate .i-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;padding:16px 0 2px}
+.plate .tag{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:8.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);
+  border:1px solid var(--hair-2);border-radius:var(--r-pill);padding:6px 11px;
+}
+[dir="rtl"] .plate .tag{letter-spacing:.04em}
+.plate .tag .ic{width:11px;height:11px}
+.plate .tag.hot{color:#C46A3A;border-color:rgba(196,106,58,.35)}
+.plate .tag.kcal{color:#B4881F;border-color:rgba(233,185,73,.4)}
+
+.plate .i-vars{width:100%;display:grid;justify-items:center;gap:10px;padding-top:22px}
+.plate .i-vars:empty{display:none}
+.plate .i-vars .seg{width:auto;flex-wrap:wrap}
+.plate .i-vars .cap{display:block;text-align:center}
+.plate .i-extras{width:100%;padding-top:22px}
+.plate .i-extras:empty{display:none}
+.plate .i-extras .grp{padding-top:16px}
+.plate .i-extras .grp:first-child{padding-top:0}
+.plate .i-extras .cap{display:block;text-align:center;margin-bottom:6px}
+/* ── product reviews (item view) ─────────────────────── */
+.plate .p-reviews{margin-top:18px;display:grid;gap:10px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);padding:14px;text-align:start}
+.plate .p-reviews .rv-head{display:flex;align-items:center;justify-content:space-between}
+.plate .p-reviews .rv-count{font-size:10px;font-weight:700;color:var(--mut);background:var(--paper-2);border:1px solid var(--hair);padding:2px 9px;border-radius:var(--r-pill)}
+.plate .p-reviews .rv-card{padding:11px 13px;border:1px solid var(--hair);border-radius:13px;background:var(--paper-2)}
+.plate .p-reviews .rv-card b{display:block;font-size:12.5px;font-weight:700}
+.plate .p-reviews .rv-card p{margin:6px 0 0;color:var(--ink);opacity:.75;font-size:12.5px;line-height:1.55}
+.plate .p-reviews .rv-empty{color:var(--mut);font-size:12px;margin:0}
+.plate .review-stars{display:block;color:var(--gold);letter-spacing:2px;font-size:11.5px;margin-top:3px}
+.plate .review-stars-dim{color:var(--hair-2)}
+.plate .x-list{border-top:1px solid var(--hair);margin-top:8px}
+.plate .xrow{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:13px 4px;border-bottom:1px solid var(--hair);text-align:start;
+  transition:background var(--t-fast);
+}
+.plate .xrow:active{background:var(--paper-2)}
+.plate .x-ctl{
+  width:19px;height:19px;flex:none;border-radius:6px;
+  border:1.5px solid var(--hair-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.plate .x-ctl.radio{border-radius:50%}
+.plate .xrow.is-on .x-ctl{border-color:var(--ink);background:var(--ink)}
+.plate .x-ctl svg{width:10px;height:10px;stroke:var(--paper);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.plate .xrow.is-on .x-ctl svg{opacity:1;transform:none}
+.plate .x-name{flex:1;font-size:12.5px;font-weight:500;color:var(--mut)}
+.plate .xrow.is-on .x-name{color:var(--ink)}
+.plate .x-price{font-family:var(--font-display);font-size:12.5px;font-weight:600;color:var(--mut-2)}
+.plate .xrow.is-on .x-price{color:var(--ink)}
+
+/* segmented control */
+.plate .seg{
+  display:flex;gap:4px;background:var(--paper);
+  border:1px solid var(--hair-2);border-radius:14px;padding:4px;
+}
+.plate .seg button{
+  flex:1;padding:10px 16px;border-radius:10px;white-space:nowrap;
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all var(--t-fast) var(--ease);
+}
+[dir="rtl"] .plate .seg button{letter-spacing:.03em}
+.plate .seg button .ic{width:15px;height:15px}
+.plate .seg button.is-on{background:var(--plate-ink);color:var(--cta-fg)}
+.plate .seg.mini{padding:3px}
+.plate .seg.mini button{padding:8px 13px;flex:none}
+
+/* qty stepper */
+.plate .qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--paper);border:1px solid var(--hair-2);border-radius:var(--r-btn);
+  padding:4px;
+}
+.plate .qty-btn{
+  width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--mut);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.plate .qty-btn:active{transform:scale(.82);background:var(--paper-2);color:var(--ink)}
+.plate .qty output{min-width:28px;text-align:center;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.plate .qty.mini{padding:3px}
+.plate .qty.mini .qty-btn{width:32px;height:32px}
+.plate .qty.mini .qty-btn .ic{width:13px;height:13px}
+.plate .qty.mini output{min-width:22px;font-size:12.5px}
+
+/* footer CTA bar */
+.plate .foot-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 22px calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--paper) 34%);
+  position:relative;z-index:6;
+}
+
+/* item footer: direct jump to the cart, shown once anything is in it
+   (orbit #pCartJump / aurora #au-cart-jump parity) */
+.plate .p-cart-jump{
+  flex:none;position:relative;width:50px;height:50px;border-radius:var(--r-pill);
+  background:var(--paper);border:1px solid var(--hair-2);color:var(--ink);
+  display:grid;place-items:center;
+  box-shadow:0 16px 30px -14px rgba(20,20,20,.32);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .p-cart-jump:active{transform:scale(.94)}
+.plate .p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);
+  background:var(--plate-ink);color:var(--cta-fg);
+  font-size:9.5px;font-weight:700;line-height:18px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;outline:2px solid var(--paper);
+}
+
+/* ── vertical cart rail ──────────────────────────────── */
+.plate .rail{
+  position:absolute;top:64px;bottom:22px;inset-inline-end:10px;width:62px;
+  z-index:var(--z-rail);
+  background:var(--paper);border:1px solid var(--hair);border-radius:34px;
+  box-shadow:var(--sh-float);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding:10px 0 12px;
+  visibility:hidden;
+  transform:translateX(calc(100% + 26px));
+  transition:transform .5s var(--ease),visibility 0s linear .5s;
+}
+[dir="rtl"] .plate .rail{transform:translateX(calc(-100% - 26px))}
+.plate .rail.is-open{
+  visibility:visible;transform:none;
+  transition:transform .5s var(--ease);
+}
+.plate .rail-x{
+  width:34px;height:34px;flex:none;border-radius:50%;
+  border:1px solid var(--hair-2);display:grid;place-items:center;color:var(--mut);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .rail-x:active{transform:scale(.85)}
+.plate .rail-label{
+  flex:none;writing-mode:vertical-rl;font-size:9px;letter-spacing:.24em;color:var(--mut);
+  padding:2px 0;text-transform:uppercase;
+}
+/* vertical-rl stacks Arabic letter-by-letter and breaks the joining forms, so the
+   RTL rail label rendered as an unreadable column of shapes. Lay it flat. */
+[dir="rtl"] .plate .rail-label{
+  writing-mode:horizontal-tb;letter-spacing:0;font-size:8.5px;line-height:1.2;
+  text-align:center;max-width:54px;
+}
+.plate .rail-thumbs{
+  flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:11px;
+  padding:4px 0;width:100%;
+}
+.plate .rthumb{position:relative;flex:none;width:42px;height:42px;cursor:pointer;animation:pl-thumb-in .45s var(--ease-pop) backwards}
+@keyframes pl-thumb-in{from{opacity:0;transform:scale(.3)}}
+.plate .rthumb img{width:100%;height:100%;border-radius:50%;object-fit:cover;box-shadow:0 8px 14px -6px rgba(24,28,35,.4);background:#131417}
+.plate .rt-x{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--paper);border:1px solid var(--hair-2);
+  display:grid;place-items:center;color:var(--mut);
+  box-shadow:0 4px 8px -3px rgba(24,28,35,.3);
+}
+.plate .rt-x svg{width:7px;height:7px;stroke-width:2.4}
+/* the badge stays 16px on the thumb; only its hit area reaches the 32px floor */
+.plate .rt-x::after{content:"";position:absolute;inset:-8px}
+.plate .rt-q{
+  position:absolute;bottom:-3px;inset-inline-start:-3px;
+  min-width:16px;height:16px;border-radius:var(--r-pill);padding:0 3px;
+  background:var(--ink);color:var(--paper);font-size:8.5px;font-weight:700;font-style:normal;
+  display:grid;place-items:center;
+}
+.plate .rt-more{
+  flex:none;width:42px;height:42px;border-radius:50%;
+  border:1px dashed var(--hair-2);display:grid;place-items:center;
+  font-size:10px;font-weight:600;color:var(--mut);
+}
+.plate .rail-foot{flex:none;display:grid;justify-items:center;gap:5px;padding-top:6px;border-top:1px solid var(--hair);width:70%}
+.plate .rail-tl{font-size:7.5px;text-transform:uppercase}
+.plate .rail-total{font-family:var(--font-display);font-size:12px;font-weight:700;text-align:center;line-height:1.1;max-width:56px;overflow-wrap:break-word}
+.plate .rail-go{
+  width:40px;height:40px;border-radius:50%;margin-top:3px;
+  background:var(--plate-ink);color:var(--cta-fg);display:grid;place-items:center;
+  box-shadow:0 12px 22px -10px rgba(20,20,20,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .rail-go:active{transform:scale(.86)}
+.plate .rail-go .ic{width:17px;height:17px}
+
+/* ── cart screen ─────────────────────────────────────── */
+.plate .c-lines{display:grid;gap:10px}
+.plate .cline{
+  display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;
+  background:var(--paper);border:1px solid var(--hair);border-radius:18px;
+  box-shadow:var(--sh-card);padding:12px;
+  animation:pl-fade-up .45s var(--ease) var(--d,0s) backwards;
+}
+.plate .cline.removing{transition:all .3s var(--ease);opacity:0;transform:translateX(-36px) scale(.95)}
+[dir="rtl"] .plate .cline.removing{transform:translateX(36px) scale(.95)}
+.plate .cl-img{width:52px;height:52px;border-radius:50%;overflow:hidden;background:#131417;padding:3px}
+.plate .cl-img img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.plate .cl-mid{min-width:0;display:grid;gap:3px}
+.plate .cl-name{font-family:var(--font-display);font-size:14px;font-weight:700;line-height:1.25}
+.plate .cl-name .rwd{font-size:8px;font-weight:700;letter-spacing:.1em;color:#B4881F;text-transform:uppercase;margin-inline-start:5px;font-family:var(--font-ui)}
+.plate .cl-opts{font-size:10px;color:var(--mut);line-height:1.5}
+/* pre-discount strike + per-unit hint + tap-to-reopen */
+.plate .cl-was{font-size:10px;color:var(--mut-2)}
+.plate .cl-unit{font-size:10px;color:var(--mut)}
+.plate .cl-img[data-open],.plate .cl-name[data-open]{cursor:pointer}
+.plate .cl-note-t{
+  justify-self:start;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mut);border-bottom:1px dashed var(--hair-2);padding:2px 0;position:relative;
+}
+/* pad the hit area out to the 32px floor without detaching the dashed rule */
+.plate .cl-note-t::after{content:"";position:absolute;inset:-7px -6px}
+.plate .cl-note-in{margin-top:5px;padding:7px 11px;font-size:16px;border-radius:9px}
+/* Side column: remove tucked top-right, the horizontal stepper at the bottom —
+   the old price/qty/trash stack made every card taller with the left half empty.
+   The line price now lives in .cl-mid next to its strike/unit hints. */
+.plate .cl-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:7px;align-self:stretch}
+.plate .cl-price{font-family:var(--font-display);font-size:13.5px;font-weight:700}
+.plate .cl-rm{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--mut-2);
+  transition:color var(--t-fast);
+}
+.plate .cl-rm:active{color:var(--err)}
+.plate .cl-rm .ic{width:12px;height:12px}
+
+/* ── checkout order summary ── */
+.plate .ck-items{background:var(--paper);border:1px solid var(--hair);border-radius:18px;box-shadow:var(--sh-card);padding:14px;display:grid;gap:11px;margin-bottom:14px}
+.plate .ck-head{display:flex;align-items:center;justify-content:space-between}
+.plate .ck-head h3{margin:0;font-family:var(--font-display);font-size:14px;font-weight:700}
+.plate .ck-edit{background:none;border:0;padding:4px 0;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer}
+.plate .ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.plate .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:50%;background:#131417}
+.plate .ck-mid{min-width:0}
+.plate .ck-mid b{display:block;font-family:var(--font-display);font-size:12.5px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plate .ck-mid small{display:block;font-size:10px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plate .ck-qty{font-size:11px;font-weight:600;color:var(--mut)}
+.plate .ck-price{font-family:var(--font-display);font-size:12.5px;font-weight:700;text-align:end}
+.plate .ck-price del{display:block;font-size:10px;font-family:var(--font-ui);font-weight:500;color:var(--mut-2)}
+
+.plate .c-empty{display:grid;place-items:center;gap:14px;text-align:center;padding:52px 30px;color:var(--mut);font-size:13px}
+.plate .ce-art{width:72px;height:72px;stroke:var(--hair-2);fill:none;stroke-width:1.6}
+
+.plate .c-tools{display:grid;gap:18px;padding-top:18px}
+.plate .c-block{display:grid;gap:11px}
+.plate .c-block>.cap{padding:0 2px}
+
+.plate .coupon{
+  display:flex;align-items:center;gap:10px;
+  background:var(--paper);border:1px dashed var(--hair-2);border-radius:var(--r-btn);
+  padding:5px 6px 5px 14px;
+}
+[dir="rtl"] .plate .coupon{padding:5px 14px 5px 6px}
+.plate .coupon .ic{color:var(--gold);flex:none}
+.plate .coupon input{background:none;border:0;padding:7px 0;font-size:16px}
+.plate .coupon input:focus{background:none}
+.plate .coupon.is-applied{border-style:solid;border-color:var(--gold)}
+.plate .coupon-msg{font-size:11px;padding:6px 6px 0;color:#B4881F}
+.plate .coupon-msg.err{color:var(--err)}
+
+.plate .ot-fields{display:grid;gap:9px}
+.plate .ot-fields:empty{display:none}
+.plate .ot-hint{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:7px;padding:2px 3px}
+.plate .ot-hint .ic{width:13px;height:13px;color:var(--gold)}
+
+/* delivery address suite: saved-address chips + autocomplete + use-my-location */
+.plate .saved-addrs{display:flex;flex-wrap:wrap;gap:7px}
+.plate .saved-addr{
+  display:inline-flex;align-items:center;gap:8px;max-width:100%;
+  padding:8px 12px;border-radius:var(--r-btn);
+  background:var(--paper);border:1px solid var(--hair-2);color:var(--ink);
+  text-align:start;transition:border-color var(--t-fast),background var(--t-fast);
+}
+.plate .saved-addr .ic{width:15px;height:15px;color:var(--gold);flex:none}
+.plate .saved-addr.is-on{border-color:var(--ink);background:var(--paper-2)}
+.plate .saved-addr .sa-text{display:flex;flex-direction:column;min-width:0}
+.plate .saved-addr .sa-text b{font-size:12.5px;font-weight:600}
+.plate .saved-addr .sa-text small{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.plate .addr-field{position:relative}
+.plate .addr-field #addrInput{padding-inline-end:46px}
+.plate .useloc-btn{
+  position:absolute;top:50%;inset-inline-end:6px;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:var(--r-btn);
+  background:var(--paper-2);border:1px solid var(--hair-2);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.plate .useloc-btn:active{transform:translateY(-50%) scale(.9)}
+.plate .useloc-btn .ic{width:18px;height:18px}
+.plate .addr-suggest{
+  margin-top:6px;background:var(--paper);
+  border:1px solid var(--hair-2);border-radius:var(--r-btn);
+  overflow:hidden;box-shadow:var(--sh-float)
+}
+.plate .addr-opt{
+  display:block;width:100%;text-align:start;
+  padding:11px 13px;font-size:13px;color:var(--ink);
+  border-bottom:1px solid var(--hair)
+}
+.plate .addr-opt:last-child{border-bottom:0}
+.plate .addr-opt:active{background:var(--paper-2)}
+.plate .geo-attrib{font-size:10.5px;color:var(--mut);padding:2px 3px}
+
+.plate .when-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:2px}
+.plate .when-time{width:auto;flex:1;min-width:150px;padding:8px 13px;border-radius:11px;font-size:16px}
+
+.plate .totals{
+  border-top:1px solid var(--hair);padding-top:15px;display:grid;gap:10px;
+}
+.plate .tr{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;color:var(--mut)}
+.plate .tr b{font-family:var(--font-display);font-weight:600;font-size:12.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.plate .tr.disc,.plate .tr.disc b{color:#B4881F}
+.plate .tr.grand{border-top:1px solid var(--hair);padding-top:12px;margin-top:2px}
+.plate .tr.grand span{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.plate .tr.grand b{font-size:19px;font-weight:700}
+.plate .minorder{font-size:11px;color:var(--err);text-align:center;padding-top:6px}
+
+/* ── checkout ────────────────────────────────────────── */
+.plate .field-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:6px}
+.plate .pay-list{display:grid;gap:9px}
+.plate .pay{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1px solid var(--hair-2);border-radius:16px;
+  padding:13px 15px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.plate .pay.is-on{border-color:var(--ink);box-shadow:var(--sh-card)}
+.plate .pay-ic{width:38px;height:38px;flex:none;border-radius:12px;background:var(--paper-2);display:grid;place-items:center;color:var(--mut)}
+.plate .pay.is-on .pay-ic{background:var(--plate-ink);color:var(--cta-fg)}
+.plate .pay b{flex:1;font-family:var(--font-display);font-size:14px;font-weight:700}
+.plate .pay b small{display:block;font-family:var(--font-ui);font-weight:500;font-size:10px;color:var(--mut);margin-top:2px;letter-spacing:.04em}
+.plate .pay-radio{width:19px;height:19px;border-radius:50%;border:1.5px solid var(--hair-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.plate .pay.is-on .pay-radio{border-color:var(--ink)}
+.plate .pay.is-on .pay-radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--ink)}
+.plate .cardform{display:grid;gap:9px;animation:pl-fade-up .35s var(--ease)}
+.plate .duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+.plate .wallet-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;
+  background:var(--gold-soft);border:1px solid rgba(233,185,73,.35);border-radius:16px;
+  padding:13px 15px;
+}
+.plate .w-copy b{font-family:var(--font-display);font-size:14px;font-weight:700;display:block}
+.plate .w-copy small{font-size:10px;color:#B4881F;font-weight:600;letter-spacing:.06em}
+.plate .switch{position:relative;width:42px;height:24px;flex:none}
+.plate .switch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%}
+.plate .switch i{
+  position:absolute;inset:0;border-radius:var(--r-pill);
+  background:var(--paper);border:1px solid var(--hair-2);transition:all .25s var(--ease);
+}
+.plate .switch i::after{
+  content:"";position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;
+  background:var(--paper);border:1px solid var(--hair-2);box-shadow:0 3px 6px -2px rgba(24,28,35,.35);
+  transition:translate .25s var(--ease-pop);
+}
+.plate .switch input:checked+i{background:var(--ink);border-color:var(--ink)}
+.plate .switch input:checked+i::after{translate:18px 0}
+[dir="rtl"] .plate .switch input:checked+i::after{translate:-18px 0}
+
+.plate .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.plate .tip-row button{
+  flex:1;min-width:56px;padding:12px 4px;border-radius:var(--r-btn);
+  background:var(--paper);border:1px solid var(--hair-2);
+  font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--mut);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.plate .tip-row button:active{transform:scale(.93)}
+.plate .tip-row button.is-on{background:var(--plate-ink);border-color:var(--ink);color:var(--cta-fg)}
+
+.plate .view[data-view="checkout"] .c-block{padding-top:4px;margin-bottom:20px}
+.plate .terms{display:flex;align-items:flex-start;gap:9px;font-size:11.5px;color:var(--mut);line-height:1.5;cursor:pointer}
+.plate .terms input{width:auto;flex:none;margin-top:2px}
+.plate .linkbtn{font-size:11px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+.plate .err-box{font-size:12px;color:var(--err);background:rgba(210,96,96,.08);border:1px solid rgba(210,96,96,.25);border-radius:12px;padding:11px 14px}
+
+/* ── confirmed ───────────────────────────────────────── */
+.plate .conf-wrap{display:grid;place-items:center;text-align:center;padding:0 40px;gap:10px}
+.plate .conf-ring{width:116px;height:116px;overflow:visible;margin-bottom:8px}
+.plate .cr-track{fill:none;stroke:var(--hair);stroke-width:2}
+.plate .cr-prog{
+  fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;
+  stroke-dasharray:1;stroke-dashoffset:1;transform:rotate(-90deg);transform-origin:center;
+  animation:pl-draw 1s var(--ease) .15s forwards;
+}
+.plate .cr-check{
+  fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;
+  animation:pl-draw .55s var(--ease) .9s forwards;
+}
+@keyframes pl-draw{to{stroke-dashoffset:0}}
+.plate .conf-title{font-family:var(--font-display);font-size:28px;font-weight:700;letter-spacing:-.01em}
+.plate .conf-sub{font-size:12px;color:var(--mut);line-height:1.8}
+.plate .conf-sub #confEta{color:var(--ink);font-weight:600}
+.plate .conf-code{
+  font-size:10.5px;font-weight:600;letter-spacing:.18em;
+  border:1px dashed var(--hair-2);border-radius:var(--r-pill);
+  padding:9px 18px;margin-top:8px;font-variant-numeric:tabular-nums;
+}
+.plate .conf-actions{display:grid;gap:10px;width:100%;max-width:260px;padding-top:24px;justify-items:center}
+/* Match the Track Order CTA's footprint — the bare hairline pill hugging its own
+   text next to a full-width primary read as an afterthought. */
+.plate .conf-actions .btn-hair{width:100%}
+.plate .conf-actions .btn-hair .ic{width:17px;height:17px}
+.plate .conf-actions .btn-hair:hover{background:var(--paper-2)}
+
+/* ── track (in-app + standalone track.blade) ─────────── */
+.plate .trk-card,.plate .track-card{
+  background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);padding:18px;display:grid;gap:18px;
+}
+.plate .trk-top,.plate .track-top{display:flex;justify-content:space-between;align-items:flex-start}
+.plate .trk-top .cap,.plate .track-top .tk-label{display:block;margin-bottom:3px;font-size:8.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.plate .trk-top b,.plate .track-top b{font-family:var(--font-display);font-size:16.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.plate .trk-eta,.plate .tk-eta{text-align:end}
+.plate .trk-eta b,.plate .tk-eta b{color:#B4881F}
+.plate .order-status{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+
+.plate .tline,.plate .timeline{list-style:none;display:grid;padding:2px 4px;gap:0}
+.plate .tl{display:grid;grid-template-columns:24px 1fr;gap:13px;position:relative;padding-bottom:22px}
+.plate .tl:last-child{padding-bottom:0}
+.plate .tl-node{
+  width:21px;height:21px;border-radius:50%;z-index:2;
+  border:1.5px solid var(--hair-2);background:var(--paper);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.plate .tl-node svg{width:10px;height:10px;stroke:var(--paper);stroke-width:3;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.plate .tl-line{position:absolute;inset-inline-start:10px;top:21px;bottom:0;width:1.5px;background:var(--hair-2)}
+.plate .tl-line::after{content:"";position:absolute;inset:0;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.plate .tl.done .tl-node{border-color:var(--ink);background:var(--ink)}
+.plate .tl.done .tl-node svg{opacity:1;transform:none}
+.plate .tl.done .tl-line::after{transform:none}
+.plate .tl.now .tl-node{border-color:var(--gold);box-shadow:0 0 0 0 rgba(233,185,73,.5);animation:pl-pulse 2s infinite}
+.plate .tl.now .tl-node::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--gold)}
+.plate .tl.cancelled .tl-node{border-color:var(--err);background:var(--err)}
+@keyframes pl-pulse{70%{box-shadow:0 0 0 8px transparent}}
+.plate .tl-copy b{font-family:var(--font-display);font-size:13.5px;font-weight:700;display:block;color:var(--mut-2);transition:color .3s}
+.plate .tl.done .tl-copy b,.plate .tl.now .tl-copy b{color:var(--ink)}
+.plate .tl-copy small{font-size:10px;color:var(--mut);letter-spacing:.04em}
+
+.plate .rate-card{
+  margin-top:16px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);
+  box-shadow:var(--sh-card);padding:20px 18px;display:grid;justify-items:center;gap:12px;text-align:center;
+}
+.plate .rate-q{font-family:var(--font-display);font-size:16.5px;font-weight:700}
+.plate .rate-stars{display:flex;gap:8px}
+.plate .rate-stars button{
+  width:38px;height:38px;display:grid;place-items:center;color:var(--hair-2);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast);
+}
+.plate .rate-stars button svg{width:26px;height:26px;fill:currentColor;stroke:none}
+.plate .rate-stars button:active{transform:scale(.8)}
+.plate .rate-stars button.is-on{color:var(--gold)}
+.plate .g-cta{gap:10px}
+.plate .g-badge{
+  width:22px;height:22px;border-radius:50%;background:var(--cta-fg);color:var(--plate-ink);
+  font-family:var(--font-display);font-weight:700;font-size:13px;
+  display:grid;place-items:center;flex:none;
+}
+.plate .rate-thanks{color:#B4881F}
+
+/* ── search overlay ──────────────────────────────────── */
+.plate .search-panel{
+  position:absolute;inset:0;z-index:var(--z-search);
+  background:var(--paper);
+  display:flex;flex-direction:column;
+  padding:14px 22px 0;
+  opacity:0;transform:translateY(-12px);pointer-events:none;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.plate .search-panel.is-open{opacity:1;transform:none;pointer-events:auto}
+.plate .sp-top{display:flex;gap:10px;align-items:center;padding-bottom:8px}
+.plate .sp-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--paper-2);border:1px solid var(--hair-2);border-radius:var(--r-btn);
+  padding:0 15px;height:46px;color:var(--mut);
+}
+.plate .sp-field input{background:none;border:0;padding:0;height:100%;font-size:16px}
+.plate .sp-field input:focus{background:none}
+.plate .sp-results{flex:1;min-height:0;overflow-y:auto;padding:8px 0 20px;display:grid;gap:4px;align-content:start}
+.plate .srow{
+  display:flex;align-items:center;gap:13px;width:100%;
+  padding:10px 4px;border-bottom:1px solid var(--hair);text-align:start;
+  transition:background var(--t-fast);
+}
+.plate .srow:active{background:var(--paper-2)}
+.plate .srow img{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 8px 14px -8px rgba(24,28,35,.4);background:#131417}
+.plate .srow .sr-mid{flex:1;min-width:0}
+.plate .srow .sr-mid b{font-family:var(--font-display);font-size:14px;font-weight:700;display:block}
+.plate .srow .sr-mid small{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.plate .srow .sr-price{font-family:var(--font-display);font-size:13.5px;font-weight:700}
+.plate .sp-empty{text-align:center;padding:30px 0}
+
+/* ── story viewer overlay ────────────────────────────── */
+.plate .story-view{
+  position:absolute;inset:0;z-index:var(--z-story);
+  background:#0B0C0E;
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.plate .story-view.is-open{opacity:1}
+.plate .sv-progress{position:absolute;top:calc(12px + env(safe-area-inset-top));inset-inline:14px;z-index:3;display:flex;gap:5px}
+.plate .sv-seg{flex:1;height:2.5px;border-radius:3px;background:rgba(255,255,255,.26);overflow:hidden}
+.plate .sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.plate .sv-close{
+  position:absolute;top:calc(26px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;
+  display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate .sv-close:active{transform:scale(.9)}
+.plate .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.plate .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.plate .sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.plate .sv-nav.prev{inset-inline-start:0}
+.plate .sv-nav.next{inset-inline-end:0}
+.plate .sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:26px 22px calc(30px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(11,12,14,.82),transparent);
+}
+.plate .sv-caption{font-family:var(--font-display);color:#fff;font-size:18px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.plate .sv-cta{background:#fff;color:#141414;text-decoration:none}
+
+/* ── sheets / scrim / toast ──────────────────────────── */
+.plate .scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(24,26,30,.32);backdrop-filter:blur(2px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.plate .scrim.is-open{opacity:1}
+.plate .sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--paper);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:0 -24px 60px -30px rgba(24,28,35,.4);
+  padding:10px 24px calc(26px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .45s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.plate .sheet.is-open{transform:none}
+.plate .sheet-grab{width:40px;height:4px;border-radius:var(--r-pill);background:var(--hair-2);margin:8px auto 18px}
+.plate .sheet-title,.plate .sheet>h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.01em;margin-bottom:16px}
+.plate .sheet>h4{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:14px 0 8px}
+.plate .sheet-note{display:block;text-align:center;padding-top:18px;font-size:8.5px;color:var(--mut-2)}
+.plate .sheet-sub{font-size:12px;color:var(--mut);margin-bottom:10px}
+.plate .sheet-form{display:grid;gap:4px}
+.plate .sheet-form .field-label{margin-top:8px}
+.plate .sheet-done{display:grid;justify-items:center;gap:8px;text-align:center;padding:18px 6px}
+.plate .sheet-done-emoji{font-size:34px}
+.plate .sheet-done b{font-family:var(--font-display);font-size:18px}
+.plate .sheet-done p{font-size:12px;color:var(--mut)}
+.plate .sheet-done .muted{color:var(--mut-2);font-size:11px}
+
+.plate .nav-list{display:grid}
+.plate .nav-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 2px;border-bottom:1px solid var(--hair);text-align:start;width:100%;
+  transition:background var(--t-fast);
+}
+.plate .nav-row:last-child{border-bottom:0}
+.plate .nav-row:active{background:var(--paper-2)}
+.plate .nav-row .cap{color:var(--ink);font-size:10.5px}
+.plate .nav-row .arr{color:var(--mut-2)}
+.plate .nav-val{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--mut)}
+.plate .nav-val.gold{color:#B4881F}
+.plate .nav-row .dot-on{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+
+/* guest recent-orders list in the nav sheet (R5) */
+.plate .ro-list{display:grid;margin-top:8px;border-top:1px solid var(--hair);padding-top:2px}
+.plate .ro-list[hidden]{display:none}
+.plate .ro-head{padding:10px 2px 2px;color:var(--mut);font-size:10px;letter-spacing:.14em}
+[dir="rtl"] .plate .ro-head{letter-spacing:.04em}
+.plate .ro-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid var(--hair);text-align:start}
+.plate .ro-row:last-child{border-bottom:0}
+.plate .ro-row:active{background:var(--paper-2)}
+.plate .ro-mid{display:flex;flex-direction:column;gap:2px;min-width:0}
+.plate .ro-mid b{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--ink)}
+.plate .ro-mid small{font-size:11px;color:var(--mut)}
+.plate .ro-row .arr{color:var(--mut-2);flex:none}
+
+/* rewards sheet */
+.plate .pts-hero{display:flex;align-items:baseline;gap:8px;padding:2px 0 12px}
+.plate .pts-big{font-family:var(--font-display);font-size:52px;font-weight:700;line-height:1}
+.plate .pts-bar{height:5px;border-radius:var(--r-pill);background:var(--hair);overflow:hidden}
+.plate .pts-bar i{display:block;height:100%;width:0;border-radius:var(--r-pill);background:var(--gold);transition:width .8s var(--ease)}
+.plate .pts-next{padding:9px 2px 18px;display:block}
+.plate .reward-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border:1px solid var(--hair-2);border-radius:16px;padding:13px 15px;
+}
+.plate .r-copy b{font-family:var(--font-display);font-size:15px;font-weight:700;display:block}
+.plate .r-copy small{font-size:10px;color:var(--mut);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+
+/* reserve/settings sheet rows */
+.plate .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 2px;border-bottom:1px solid var(--hair)}
+.plate .set-row:last-of-type{border-bottom:0}
+.plate .chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.plate .chiprow button{
+  padding:9px 14px;border-radius:var(--r-pill);border:1px solid var(--hair-2);
+  font-size:10.5px;font-weight:600;color:var(--mut);transition:all var(--t-fast) var(--ease-pop);
+}
+.plate .chiprow button.is-on{background:var(--plate-ink);border-color:var(--ink);color:var(--cta-fg)}
+.plate .sheet-actions{display:flex;gap:10px;margin-top:18px}
+.plate .branch-list{display:grid;gap:2px}
+.plate .branch-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;text-decoration:none;color:inherit;
+  padding:14px 2px;border-bottom:1px solid var(--hair);
+}
+.plate .branch-row:last-child{border-bottom:0}
+.plate .branch-row b{font-family:var(--font-display);font-size:14px;font-weight:700;flex:1}
+.plate .branch-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--hair-2)}
+.plate .branch-row.is-on .branch-check{border-color:var(--ink);background:var(--ink)}
+.plate .auth-tabs{display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--hair-2);border-radius:14px;padding:4px;margin-bottom:14px}
+.plate .auth-tabs button{flex:1;padding:10px;border-radius:10px;font-size:11px;font-weight:600;color:var(--mut)}
+.plate .auth-tabs button.is-on{background:var(--plate-ink);color:var(--cta-fg)}
+.plate .auth-form{display:grid;gap:9px}
+.plate .otp-boxes{display:flex;gap:8px}
+.plate .otp-boxes input{text-align:center;font-size:20px;font-family:var(--font-display)}
+
+/* toast */
+.plate .toast{
+  position:absolute;bottom:96px;left:50%;translate:-50% 14px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--paper);font-size:12px;font-weight:500;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 18px 36px -14px rgba(20,20,20,.55);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.plate .toast.is-on{opacity:1;translate:-50% 0}
+.plate .toast .ic{width:15px;height:15px;color:var(--gold)}
+
+/* fly-to-rail ghost */
+.plate .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.plate .fly-img{
+  position:absolute;width:56px;height:56px;border-radius:50%;object-fit:cover;
+  box-shadow:0 12px 26px rgba(24,28,35,.4);background:#131417;
+  transition:all .7s cubic-bezier(.4,.1,.3,1);
+}
+
+/* ── account & track standalone pages ────────────────── */
+.plate a.rbtn{text-decoration:none}
+[dir="rtl"] .plate .rbtn.back .ic{transform:scaleX(-1)}
+.plate .me-card{display:flex;align-items:center;gap:13px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--sh-card);padding:14px 16px;margin-top:6px}
+.plate .me-card>div{flex:1;min-width:0}
+.plate .me-card b{font-family:var(--font-display);font-size:16px;font-weight:700;display:block}
+.plate .me-avatar{width:46px;height:46px;flex:none;border-radius:50%;background:var(--plate-ink);color:var(--cta-fg);display:grid;place-items:center;font-family:var(--font-display);font-size:20px;font-weight:700}
+.plate .tk-label{font-size:11px;color:var(--mut)}
+.plate .tk-label.amt{margin-top:5px;text-align:end}
+.plate .orders-block,.plate .pref,.plate .loyalty-block,.plate section.loyalty{display:grid;gap:10px;margin-top:20px}
+.plate .orders-list{display:grid;gap:10px}
+.plate .order-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;text-decoration:none;color:inherit;
+  background:var(--paper);border:1px solid var(--hair);border-radius:16px;box-shadow:var(--sh-card);padding:14px;
+}
+.plate .order-row>div{flex:1;min-width:0}
+.plate .order-row b{font-family:var(--font-display);font-size:14px;font-weight:700;display:block}
+.plate .order-row small{font-size:11px;color:var(--mut)}
+.plate .row-status{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.plate .order-lines{display:grid;gap:8px}
+.plate .order-line{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--mut)}
+.plate .order-line b{font-family:var(--font-display);color:var(--ink);font-weight:700;white-space:nowrap}
+.plate .order-line small{display:block;font-size:10px;color:var(--mut-2)}
+.plate .order-line.disc,.plate .order-line.disc b{color:#B4881F}
+.plate .card-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.plate .me-card .btn-black.sm{flex:none}
+.plate [data-view="track"] .view-scroll>.track-card{margin-top:14px}
+.plate [data-view="track"] .view-scroll>.s-head+.track-card{margin-top:0}
+.plate .track-card.curbside{text-align:center}
+.plate .curbside-msg{display:none;font-size:13px;font-weight:600;color:#B4881F}
+.plate .order-line.total{border-top:1px dashed var(--hair-2);padding-top:10px}
+.plate .order-line.total span{color:var(--ink);font-weight:700}
+.plate .order-line.total b{font-size:16px}
+.plate .trk-foot{display:grid;place-items:center;padding-top:18px}
+.plate .loyalty-head{display:flex;align-items:center;gap:9px}
+.plate .loyalty-head b{font-family:var(--font-display);font-size:15px}
+.plate .loyalty-num{font-family:var(--font-display);font-size:40px;font-weight:700}
+.plate .loyalty-sub{font-size:11px;color:var(--mut)}
+.plate .loyalty-bar{height:6px;border-radius:var(--r-pill);background:var(--hair);overflow:hidden}
+.plate .loyalty-bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .8s var(--ease)}
+.plate .stamp-dots{display:flex;flex-wrap:wrap;gap:8px}
+.plate .stamp-dot{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--hair-2);display:grid;place-items:center;color:var(--hair-2)}
+.plate .stamp-dot.on{border-color:var(--gold);color:var(--gold)}
+.plate .pref-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.plate .pref-row>span{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.plate .wa-line{
+  display:flex;align-items:center;gap:12px;margin-top:16px;text-decoration:none;color:inherit;
+  background:var(--paper);border:1px solid var(--hair);border-radius:16px;box-shadow:var(--sh-card);padding:14px 15px;
+}
+.plate .wa-line>.ic:first-child{color:var(--wa)}
+.plate .wa-line span{flex:1;font-weight:600;font-size:12.5px}
+.plate .biz-card{display:grid;gap:8px;margin-top:16px;color:var(--mut);font-size:11.5px}
+.plate .biz-card span{display:flex;align-items:center;gap:8px}
+.plate .biz-card a{color:var(--ink)}
+.plate .greview{display:flex;align-items:center;gap:12px;margin-top:14px;text-decoration:none;color:inherit;background:var(--gold-soft);border:1px solid rgba(233,185,73,.35);border-radius:16px;padding:13px 15px}
+.plate .greview-copy{flex:1}
+.plate .greview-copy b{font-family:var(--font-display);font-size:14px;display:block}
+.plate .greview-copy small{font-size:11px;color:#B4881F}
+.plate .greview-star{font-size:22px}
+.plate .nps{margin-top:18px;text-align:center;display:grid;gap:10px}
+.plate .nps>p{font-size:12px;color:var(--mut)}
+.plate .nps-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.plate .nps-row button{width:30px;height:30px;border-radius:8px;border:1px solid var(--hair-2);font-size:12px;font-weight:600;color:var(--mut)}
+.plate .nps-row button.is-on{background:var(--plate-ink);color:var(--cta-fg);border-color:var(--ink)}
+.plate .nps-thanks{color:#B4881F;font-size:12px}
+
+/* hidden must win */
+.plate [hidden]{display:none!important}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .plate :is(.ck-price,.ck-qty,.card-price,.cl-price,.cl-was,.cl-unit,.x-price,.rail-total,.tr b,.btn-black b,.pts-big,.conf-code,#trkCode,#trkEta,.sr-price,#walletBal,.nav-val,.order-line b,.me-card .tk-label,.tk-label.amt){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .plate :is(.order-line b,.cl-was,.cl-unit,.ck-price,.ck-qty){text-align:right}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .plate *,.plate *::before,.plate *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .plate .card{opacity:1;transform:none}
+  .plate .fly-img{display:none}
+  .plate .plate-disc img,.plate .sp-disc img{animation:none}
+}
+
+/* ── responsive ──────────────────────────────────────────────
+   The theme used to ship exactly ONE width breakpoint (820px), so a tablet at
+   768 got a full-bleed phone layout with 355px-wide dish cards, and a 1280
+   desktop got a 520px column stranded in 760px of dead grey. Three steps now:
+   clamp early, widen the frame, and add a third column when there is room. */
+
+/* tablets & small laptops: stop the phone layout stretching edge to edge */
+@media (min-width:600px){
+  /* left/translateX are physical: centering is -50% in both directions.
+     `right:auto;width:100%` matters — the base rule is inset:0, so left:50% alone
+     left right:0 in force and the frame silently became HALF the viewport
+     (384px at 768) instead of min(viewport, max-width). */
+  .plate{left:50%;right:auto;width:100%;max-width:560px;transform:translateX(-50%);border-inline:1px solid rgba(20,20,20,.06)}
+}
+
+/* real desktop: a wider editorial page with a genuine 3-up grid, not a phone
+   pretending. The rail, sheets and CTAs are all absolute inside .plate, so they
+   follow the frame without further work. */
+@media (min-width:1000px){
+  .plate{max-width:860px}
+  .plate .view-scroll{padding-inline:40px}
+  .plate .m-grid{grid-template-columns:repeat(3,1fr);gap:18px}
+  .plate .m-title{font-size:46px}
+  .plate .card-xl .xl-img{min-height:210px}
+  /* sheets are bottom-sheets on a phone; on a wide frame they read better as a
+     centered card that does not run the full 860px */
+  .plate .sheet{inset-inline:auto;left:50%;transform:translate(-50%,105%);width:min(520px,92%);border-radius:var(--r-sheet)}
+  .plate .sheet.is-open{transform:translate(-50%,0)}
+  .plate .toast{bottom:110px}
+}
+@media (min-width:1000px) and (prefers-reduced-motion:reduce){
+  .plate .sheet{transform:translate(-50%,0)}
+}
+
+/* ── dark mode ───────────────────────────────────────────────
+   plate shipped 0 dark rules in 59KB: a phone in dark mode got the full-white
+   storefront at 2am. Dark is a re-tint of the same palette — the surfaces move,
+   the design does not. The signature black CTA pill inverts to a light pill
+   (still carrying the owner's brand hue via color-mix) so the theme's
+   high-contrast CTA survives on a dark ground.
+   `[data-mode]` is the customer's explicit Settings → Appearance choice and
+   outranks the OS preference in both directions; "auto" leaves it to the OS. */
+@media (prefers-color-scheme:dark){
+  html:has(.plate:not([data-mode="light"])), body:has(.plate:not([data-mode="light"])){background:#0E0F12}
+}
+.plate[data-mode="dark"]{background:var(--paper)}
+html:has(.plate[data-mode="dark"]), body:has(.plate[data-mode="dark"]){background:#0E0F12}
+
+@media (prefers-color-scheme:dark){
+  .plate:not([data-mode="light"]){
+    --stage:#0E0F12;
+    --paper:#16181C;
+    --paper-2:#1D2025;
+    --hair:#242830;
+    --hair-2:#333842;
+    --stroke-2:#333842;
+    --ink:#F1F3F6;
+    --mut:#98A0AC;
+    --mut-2:#6B7280;
+    --gold:#EFC366;
+    --gold-soft:rgba(239,195,102,.16);
+    --err:#E8807F;
+    --sh-card:0 14px 30px -22px rgba(0,0,0,.8);
+    --sh-float:0 22px 44px -20px rgba(0,0,0,.85);
+    --cta-fg:#14161A;
+    --plate-ink:#E6E8EC;
+    --plate-ink:color-mix(in srgb,var(--tc-primary,#141414) 14%,#EDEFF3);
+  }
+}
+.plate[data-mode="dark"]{
+  --stage:#0E0F12;
+  --paper:#16181C;
+  --paper-2:#1D2025;
+  --hair:#242830;
+  --hair-2:#333842;
+  --stroke-2:#333842;
+  --ink:#F1F3F6;
+  --mut:#98A0AC;
+  --mut-2:#6B7280;
+  --gold:#EFC366;
+  --gold-soft:rgba(239,195,102,.16);
+  --err:#E8807F;
+  --sh-card:0 14px 30px -22px rgba(0,0,0,.8);
+  --sh-float:0 22px 44px -20px rgba(0,0,0,.85);
+  --cta-fg:#14161A;
+  --plate-ink:#E6E8EC;
+  --plate-ink:color-mix(in srgb,var(--tc-primary,#141414) 14%,#EDEFF3);
+}
+/* surfaces that were hardcoded light, and the amber-on-white accents that go
+   muddy once the ground is dark */
+@media (prefers-color-scheme:dark){
+  .plate:not([data-mode="light"]) :is(.coupon-msg,.rate-thanks,.tr.disc,.tr.disc b,.w-copy small,.nav-val.gold,.order-line.disc,.order-line.disc b,.cl-name .rwd,.flag.pop,.greview-copy small,.nps-thanks,.tk-eta b,.trk-eta b){color:var(--gold)}
+  .plate:not([data-mode="light"]) .err-box{background:rgba(232,128,127,.12);border-color:rgba(232,128,127,.3)}
+  .plate:not([data-mode="light"]) .scrim{background:rgba(0,0,0,.55)}
+  .plate:not([data-mode="light"]) .card-xl .fav{background:rgba(22,24,28,.8);color:var(--mut)}
+  .plate:not([data-mode="light"]) .cats{background:linear-gradient(var(--paper) 82%,transparent)}
+  .plate:not([data-mode="light"]) .leaflet-tile{filter:brightness(.78) contrast(1.05)}
+}
+.plate[data-mode="dark"] :is(.coupon-msg,.rate-thanks,.tr.disc,.tr.disc b,.w-copy small,.nav-val.gold,.order-line.disc,.order-line.disc b,.cl-name .rwd,.flag.pop,.greview-copy small,.nps-thanks,.tk-eta b,.trk-eta b){color:var(--gold)}
+.plate[data-mode="dark"] .err-box{background:rgba(232,128,127,.12);border-color:rgba(232,128,127,.3)}
+.plate[data-mode="dark"] .scrim{background:rgba(0,0,0,.55)}
+.plate[data-mode="dark"] .card-xl .fav{background:rgba(22,24,28,.8);color:var(--mut)}
+.plate[data-mode="dark"] .cats{background:linear-gradient(var(--paper) 82%,transparent)}
+.plate[data-mode="dark"] .leaflet-tile{filter:brightness(.78) contrast(1.05)}
+
+/* ── touch targets ───────────────────────────────────────────
+   The 44px floor. Every control below stays VISUALLY the size the design wants
+   and gains a transparent, centered 44×44 hit area — nothing moves, nothing is
+   a near-miss. Chip/pill controls take a real min-height instead, because they
+   sit in scrolling rows where an overlay would swallow the neighbour. */
+/* .card .fav (line ~379) and .sp-skip (line ~233) keep their OWN position:absolute
+   overlay — don't force them relative here or they drop into flow and overlap text. */
+.plate :is(.cl-rm,.rail-x,.sv-close,.qty-btn,.rate-stars button,.m-filter,.sheet-grab){position:relative}
+.plate :is(.card .fav,.cl-rm,.rail-x,.sv-close,.qty-btn,.rate-stars button,.sheet-grab)::after{
+  content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;
+  transform:translate(-50%,-50%);border-radius:50%;
+}
+.plate .card-chev::after{inset:auto;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.plate .rt-x::after{inset:-14px}
+.plate .cl-note-t::after{inset:-13px -8px}
+.plate .cat::before{content:"";position:absolute;inset:-8px -10px -4px}
+.plate .m-filter::after{content:"";position:absolute;inset:-12px -8px}
+.plate :is(.subcat,.seg button,.chiprow button,.tip-row button,.card-add,.xl-add,.btn-mini,.sp-skip,.auth-tabs button,.nps-row button){
+  min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+}
+.plate .rail-go{width:44px;height:44px}
+.plate .xl-add{height:auto}
+.plate .nps-row button{width:36px;min-height:36px}
+
+/* the featured card used to pin its image at 172px and let .xl-body stretch over
+   the 2-row span, leaving a tall empty white slab between the description and the
+   price. Let the image absorb the extra height instead. */
+.plate .card-xl{display:flex;flex-direction:column}
+.plate .card-xl .xl-img{height:auto;flex:1;min-height:172px}
+
+/* Keyboard focus rings (a11y). Only inputs styled :focus — every button,
+   link, icon button, category, menu card, order-type option and nav control
+   was invisible to keyboard users. Ring uses var(--ink) (the theme
+   foreground, which flips with light/dark) — plate is monochrome, so --ink
+   guarantees contrast on both surfaces. Outline follows each control's own
+   radius, so round icon buttons ring as circles. */
+.plate a:focus-visible,
+.plate button:focus-visible,
+.plate [tabindex]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* inputs already show an --ink border on focus; suppress the ring to avoid a
+   double indicator. */
+.plate input:focus-visible,
+.plate textarea:focus-visible,
+.plate select:focus-visible{outline:none}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.plate .ck-head{gap:10px;padding:4px 0 2px}
+.plate .ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.plate .ck-items{gap:0}
+.plate .ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.plate .ck-row + .ck-row{border-top:1px solid var(--hair)}
+/* Combo cart lines carry no thumbnail — drop the 40px image column so the
+   name gets the full track and qty/price stay right-aligned. */
+.plate .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.plate .ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--paper-2);border-radius:9px;padding:3px 6px}
+.plate .ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.plate .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+/* .cl-side stacks the stepper and the trash 7px apart, so two centred 44px hit
+   boxes overlapped by 5px — a thumb reaching for "−" could remove the line.
+   The trash keeps the full width and gives back the vertical it cannot own. */
+.plate .cl-side .cl-rm::after{height:39px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.plate .m-filter,.plate .m-sort,.plate .btn-hair,.plate .cat{min-height:44px}
+.plate .rbtn{width:44px;height:44px}
+.plate .i-stars{position:relative}
+.plate .i-stars::after{content:"";position:absolute;inset:-6px -2px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, plate skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Minimal paper chip, gold coins icon. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--paper);border:1px solid var(--hair-2);color:var(--mut);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--gold)}
+
+/* ── notification-center panel — plate skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--paper,#FFFFFF);--nb-surface-2:var(--paper-2,#FAFAFB);--nb-line:var(--hair,#ECECEE);--nb-ink:var(--ink,#141414);--nb-muted:var(--mut,#8A8F98);--nb-accent:var(--gold,#E9B949)}
+
+/* topbar toggle icons (Lane B) — light shows the moon (action = go dark), dark shows the sun */
+.plate .mb-th-sun{display:none}
+@media (prefers-color-scheme:dark){
+  .plate:not([data-mode="light"]) .mb-th-sun{display:block}
+  .plate:not([data-mode="light"]) .mb-th-moon{display:none}
+}
+.plate[data-mode="dark"] .mb-th-sun{display:block}
+.plate[data-mode="dark"] .mb-th-moon{display:none}
+
+/* Standardized floating dock + favourites sheet (plate's primary nav was a slide-out sheet) */
+.plate .pl-dock{
+  position:absolute;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:60;display:flex;gap:2px;width:calc(100% - 28px);max-width:440px;
+  padding:6px;border-radius:999px;
+  background:rgba(24,24,27,.93);-webkit-backdrop-filter:blur(16px) saturate(1.15);backdrop-filter:blur(16px) saturate(1.15);
+  border:1px solid rgba(255,255,255,.06);box-shadow:0 16px 40px -12px rgba(0,0,0,.5);
+  transition:transform .4s var(--ease,ease),opacity .3s var(--ease,ease);
+}
+.plate .pl-dock.is-hidden{transform:translate(-50%,150%);opacity:0;pointer-events:none}
+.plate .pl-dock-btn{flex:1 1 0;min-width:0;height:44px;display:grid;place-items:center;position:relative;
+  border:0;background:none;color:rgba(255,255,255,.62);cursor:pointer;padding:0;border-radius:999px;transition:color .2s ease,background .2s ease}
+.plate .pl-dock-btn .ic{width:22px;height:22px}
+.plate .pl-dock-btn.is-on{color:#fff;background:rgba(255,255,255,.14)}
+.plate .pl-dock-badge{position:absolute;top:3px;inset-inline-end:7px;min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--accent,#c2410c);color:#fff;font-size:10px;font-weight:800;line-height:16px;text-align:center;font-style:normal}
+.plate .pl-fav-row{display:flex;align-items:center;gap:12px;padding:11px 2px;border-block-end:1px solid var(--line,rgba(20,20,20,.1));color:inherit;text-decoration:none;width:100%;text-align:start;background:none;border-inline:0;border-block-start:0;font:inherit;cursor:pointer}
+.plate .pl-fav-img{width:54px;height:54px;border-radius:12px;object-fit:cover;flex:none;background:rgba(127,127,127,.14)}
+.plate .pl-fav-body{display:flex;flex-direction:column;gap:3px;min-width:0}
+.plate .pl-fav-name{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plate .pl-fav-price{font-size:13px;opacity:.7}
+.plate .pl-fav-empty{text-align:center;padding:40px 16px;opacity:.7}
+.plate .pl-fav-empty p{font-size:16px;font-weight:700;margin:0 0 6px}
+
+/* store subtitle in the brand band (2-line clamp, muted) — parity with the splash tagline + crave/aurora themes */
+.plate .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--mut);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — plate skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#plateBrandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#plateFollowBtn. Maps the shared
+   --mbh-* token contract onto plate's own scheme-aware tokens (paper/ink/plate-ink/
+   hair/r-card/r-pill/r-sheet) so re-ink holds on the light/dark flip. plate's
+   signature is the near-black CTA (--plate-ink on --cta-fg), so the accent is that
+   ink, not a colour. Only the hub paints an opaque surface (a modal legitimately
+   does); the chip + checkout controls stay translucent / borderless so they never
+   fight plate's editorial white-card chrome. Logical props for RTL.
+   ═══════════════════════════════════════════════════════════ */
+.plate #mbHotelChip,
+.plate #mbHotelOrderCtrls,
+.plate #mbHotelBook,
+.plate #mbHotelHub{
+  --mbh-surface:var(--paper);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--mut);
+  --mbh-accent:var(--plate-ink);
+  --mbh-on-accent:var(--cta-fg);
+  --mbh-border:var(--hair-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill sitting with the follow button in the brand row ── */
+.plate #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--paper);border:1px solid var(--hair-2);color:var(--ink);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.plate #mbHotelChip:active{transform:scale(.95)}
+.plate #mbHotelChip .mb-hotel-roomchip__ic{color:var(--plate-ink)}
+.plate #mbHotelChip .mb-hotel-roomchip__guest{color:var(--mut)}
+
+/* ── Hub: plate's own bottom sheet (paper surface, r-sheet corners, grab + x) ── */
+.plate #mbHotelHubScrim{background:rgba(20,20,20,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.plate #mbHotelHub{
+  background:var(--paper);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--hair-2);box-shadow:none;
+}
+.plate #mbHotelHub .mb-hotel-hub__grab{background:var(--hair-2)}
+.plate #mbHotelHub .mb-hotel-hub__title{font-family:var(--font-display);font-size:19px;letter-spacing:-.01em}
+.plate #mbHotelHub .mb-hotel-hub__x{
+  background:var(--paper-2);color:var(--mut);border:1px solid var(--hair);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.plate #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.plate #mbHotelHub .mb-hotel-hub__greet{color:var(--mut)}
+.plate #mbHotelHub .mb-hotel-card{border-color:var(--hair)}
+.plate #mbHotelHub .mb-hotel-card summary,
+.plate #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.plate #mbHotelHub .mb-hotel-info-link{color:var(--plate-ink)}
+/* service form controls → plate inputs / near-black pill CTA */
+.plate #mbHotelHub .mb-hotel-field{
+  background:var(--paper);border:1px solid var(--hair-2);color:var(--ink);border-radius:var(--r-btn);
+}
+.plate #mbHotelHub .mb-hotel-btn{
+  background:var(--plate-ink);color:var(--cta-fg);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → plate tender rows ── */
+.plate #mbHotelOrderCtrls{margin:0}
+.plate #mbHotelSched,
+.plate #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--hair);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.plate #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.plate #mbHotelSched .mb-hotel-modes label{color:var(--mut);font-weight:600}
+.plate #mbHotelSched input[type="radio"]{accent-color:var(--plate-ink)}
+.plate #mbHotelSched .mb-hotel-field{
+  background:var(--paper);border:1.5px solid var(--hair-2);color:var(--ink);border-radius:var(--r-btn);
+}
+.plate #mbHotelSched .mb-hotel-note{color:var(--mut)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.plate #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.plate #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.plate #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.plate #mbHotelCharge .mb-hotel-greet__welcome{color:var(--mut)}
+.plate #mbHotelCharge input[type="checkbox"]{accent-color:var(--plate-ink)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .plate, RTL-safe (logical props). Uses the theme --paper card
+   surface, --hair hairline, --mut muted text and plate's fixed --gold star. */
+.plate .plate-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.plate .plate-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink);background:var(--gold-soft);border:1px solid rgba(233,185,73,.35);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.plate .plate-rating-star{color:var(--gold)}
+.plate .plate-rating small{color:var(--mut);font-weight:600}
+.plate .plate-review-list{display:flex;flex-direction:column;gap:8px}
+.plate .plate-review{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.plate .plate-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.plate .plate-review-star{color:var(--gold);font-weight:700;white-space:nowrap}
+.plate .plate-review p{margin-block:5px 0;color:var(--mut);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.plate .plate-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for plate. Surface,
+   ink, border and radius come from plate tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.plate .mb-paypending{
+  --pp-surface:var(--paper,#FFFFFF);
+  --pp-ink:var(--ink,#141414);
+  --pp-muted:color-mix(in srgb,var(--ink,#141414) 60%,var(--paper,#FFFFFF));
+  --pp-border:var(--stroke-2,#E2E3E7);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,20px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.plate .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.plate .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.plate .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.plate .mb-paypending-txn:empty{display:none}
+.plate .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.plate .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.plate .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.plate .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.plate .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.nav-row.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}

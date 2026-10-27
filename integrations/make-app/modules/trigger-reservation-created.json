@@ -1,0 +1,33 @@
+{
+  "name": "watchReservationCreated",
+  "label": "Watch New Reservations",
+  "description": "Triggers when a new reservation is created.",
+  "type": "instant_trigger",
+  "webhook": "juwriWebhook",
+  "event": "reservation.created",
+  "interface": [
+    { "name": "id", "type": "text", "label": "Delivery ID" },
+    { "name": "event", "type": "text", "label": "Event" },
+    { "name": "created_at", "type": "date", "label": "Delivered at" },
+    {
+      "name": "data",
+      "type": "collection",
+      "label": "Reservation",
+      "spec": [
+        { "name": "reservation_id", "type": "number", "label": "Reservation ID" },
+        { "name": "status", "type": "text", "label": "Status" },
+        { "name": "source", "type": "text", "label": "Source" }
+      ]
+    }
+  ],
+  "samples": {
+    "id": "msg_h2K9xW3qLp8RtY5vN0aBcDe7",
+    "event": "reservation.created",
+    "created_at": "2026-07-08T14:03:11+00:00",
+    "data": {
+      "reservation_id": 512,
+      "status": "pending",
+      "source": "desk"
+    }
+  }
+}

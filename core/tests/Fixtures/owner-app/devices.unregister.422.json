@@ -1,0 +1,12 @@
+{
+    "status": 422,
+    "body": {
+        "code": "string",
+        "errors": {
+            "token": {
+                "list_of": "string"
+            }
+        },
+        "message": "string"
+    }
+}

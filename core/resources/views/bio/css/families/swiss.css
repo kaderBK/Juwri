@@ -1,0 +1,24 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* swiss one-off — one big display size, full-bleed hairline link rows, mono meta. */
+.fam-swiss .bio-in{padding:56px 0 0;text-align:start}
+.fam-swiss .bio-profile{text-align:start;padding:0 22px}
+.fam-swiss .bio-avatar{display:none}
+.fam-swiss .bio-name{font-family:var(--font-display,var(--font-body,sans-serif));font-weight:900;
+  font-size:52px;line-height:.9;letter-spacing:-.045em;margin:0 0 10px}
+.fam-swiss .bio-tagline{font-size:13px;max-width:34ch;margin:0 0 8px}
+.fam-swiss .bio-status{margin:12px 22px 0;border-radius:0;background:transparent;color:var(--ink,#111)}
+.fam-swiss .bio-blocks{margin-top:24px}
+.fam-swiss .bio-block{margin:0}
+.fam-swiss .bio-link{background:transparent;border:0;border-radius:0;box-shadow:none;padding:19px 22px;gap:14px;
+  border-bottom:1px solid color-mix(in srgb,var(--ink,#111) 14%,transparent)}
+.fam-swiss .bio-block:first-child .bio-link{border-top:1px solid color-mix(in srgb,var(--ink,#111) 14%,transparent)}
+.fam-swiss .bio-link:hover{transform:none;background:color-mix(in srgb,var(--ink,#111) 5%,transparent)}
+.fam-swiss .bio-link__icon{display:none}
+.fam-swiss .bio-link__label{font-weight:800;font-size:16.5px;letter-spacing:-.015em}
+.fam-swiss .bio-link__sub{font-family:var(--font-mono,monospace);font-size:10px;letter-spacing:.04em}
+.fam-swiss .bio-link__arrow{color:var(--accent,#d94f00)}
+.fam-swiss .bio-card,.fam-swiss .bio-feat,.fam-swiss .bio-ann,.fam-swiss .bio-block--apps{margin:12px 22px;border-radius:0}
+.fam-swiss .bio-socials{justify-content:flex-start;padding:0 22px;margin-top:26px}
+.fam-swiss .bio-socials a{border-radius:0;border:1px solid var(--ink,#111);background:transparent}

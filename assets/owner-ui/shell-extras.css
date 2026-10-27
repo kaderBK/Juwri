@@ -1,0 +1,803 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * shell-extras.css — our own owner-shell additions (toast choreography, sticky
+ * save bar, responsive table cards, notification bell motion, store settings,
+ * template launcher, upsell rows…). Formerly assets/templates/old-theme/css/
+ * old-theme-skin.css (own code written on top of the retired NexLink chrome; moved
+ * out of the legacy folder in WI-16h). Loaded by <x-ui.shell.legacy-styles>.
+ * Rules for the retired NexLink chrome (.app-menubar-tabs, .app-header …)
+ * match nothing any more and can be pruned.
+ *
+ * CACHE: head busts this with ?v=filemtime.
+ */
+
+:root {
+  --bs-body-font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+body { font-family: var(--bs-body-font-family); }
+/* Alpine cloak — dashboard pages don't load the public base.css that defines it. */
+[x-cloak] { display: none !important; }
+
+/* Icon-rail flaticon glyphs sized like the demo SVGs (matches reseller skin). */
+.app-menubar-tabs .app-navbar-tabs .menu-link i.fi { font-size: 1.2rem; line-height: 1; }
+
+/* P0-3: labelled rail tabs — a small caption under each glyph so the 5 sections
+   are readable without a hover tooltip (tooltips don't exist on touch). Widen the
+   rail to fit the caption; keep it centred and theme/RTL-agnostic. */
+/* Keep the icon rail a fixed 80px column (matches the menu panel's left:80
+   offset). `auto` let the rail balloon to ~320px in expanded mode and cover the
+   menu panel. */
+.app-menubar-tabs .app-navbar-tabs { width: 80px; flex: 0 0 80px; }
+.app-menubar-tabs .app-navbar-tabs .menu-link.rail-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; padding: .5rem .25rem; text-align: center;
+}
+/* Centre the tabs in the rail. Simplebar wraps the list in a content div that
+   carries 16px of inline padding, leaving 48px inside the 80px rail — the tab
+   is wider than that, so it overflowed to one side and sat ~7px off-centre.
+   Drop that padding here and let the list own the full rail width. */
+.app-menubar-tabs .app-navbar-tabs .simplebar-content { padding-inline: 0 !important; }
+.app-menubar-tabs .app-navbar-tabs > .nav,
+.app-menubar-tabs .app-navbar-tabs .simplebar-content > .nav { width: 100%; }
+.app-menubar-tabs .app-navbar-tabs .nav-item { width: 100%; display: flex; justify-content: center; }
+.app-menubar-tabs .app-navbar-tabs .menu-link.rail-tab { width: 68px; min-width: 0; }
+/* Rail affordances: which tab is open was only a faint grey box, hover gave no
+   feedback at all, and keyboard focus was invisible. */
+.app-menubar-tabs .app-navbar-tabs .menu-link {
+  position: relative; border-radius: .75rem; margin-inline: auto;
+  color: var(--bs-secondary-color);
+  transition: background-color .15s ease, color .15s ease;
+}
+.app-menubar-tabs .app-navbar-tabs .menu-link:hover {
+  background: rgba(var(--bs-primary-rgb), .08); color: var(--bs-heading-color);
+}
+.app-menubar-tabs .app-navbar-tabs .menu-link:focus-visible {
+  outline: 2px solid var(--theme-color, var(--bs-primary)); outline-offset: 2px;
+}
+.app-menubar-tabs .app-navbar-tabs .menu-link.active,
+.app-menubar-tabs .app-navbar-tabs .menu-link.active i,
+.app-menubar-tabs .app-navbar-tabs .menu-link.active .rail-label {
+  color: var(--theme-color, var(--bs-primary));
+}
+.app-menubar-tabs .app-navbar-tabs .menu-link.active {
+  background: rgba(var(--bs-primary-rgb), .12); font-weight: 600;
+}
+/* Accent bar on the rail edge — reads in both LTR and RTL. */
+.app-menubar-tabs .app-navbar-tabs .menu-link.active::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: 50%;
+  transform: translateY(-50%); width: 3px; height: 58%;
+  border-start-end-radius: 3px; border-end-end-radius: 3px;
+  background: var(--theme-color, var(--bs-primary));
+}
+
+/* Two lines rather than one ellipsised line — long tab titles were cut to an
+   unreadable stub ("القائمة والمحت…"). */
+.app-menubar-tabs .app-navbar-tabs .rail-label {
+  font-size: 10px; line-height: 1.15; letter-spacing: .01em; font-weight: 500;
+  max-width: 72px; overflow: hidden; white-space: normal;
+  /* Wrap between words only — breaking anywhere split "Marketplace" into
+     "Marketplac / e", which reads worse than the ellipsis it replaced. */
+  overflow-wrap: normal; word-break: normal; hyphens: none;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.side-menubar .menu-link i.fi { font-size: 1rem; width: 1.15rem; flex: 0 0 auto; text-align: center; }
+.app-page-head { padding-block: 1rem .25rem; }
+
+/* Brand logo cap. */
+/* Fit the logo to the 80px rail on whichever axis binds first — the old 34px
+   height cap left square marks tiny and squeezed wordmarks to an unreadable strip. */
+.app-navbar-brand { display: flex; align-items: center; justify-content: center; padding: 10px; }
+.app-navbar-brand .navbar-brand-logo {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; max-height: 60px; overflow: hidden;
+}
+.app-navbar-brand img {
+  max-height: 100%; max-width: 100%; width: auto; height: auto;
+  object-fit: contain; object-position: center;
+  image-rendering: -webkit-optimize-contrast;
+}
+/* The gradient tile itself lives in assets/brand/brand-tile.css (.brand-tile),
+   shared with the public site; the rail only supplies the panel-aware inner
+   surface and makes the logo fill the frame. */
+.app-navbar-brand .navbar-brand-logo { --brand-tile-inner: var(--bs-body-bg); }
+.app-navbar-brand .navbar-brand-logo > img { width: 100%; height: 100%; }
+
+.navbar-brand-logo .brand-logo-dark { display: none; }
+[data-bs-theme="dark"] .navbar-brand-logo .brand-logo-light { display: none; }
+[data-bs-theme="dark"] .navbar-brand-logo .brand-logo-dark { display: block; }
+.app-brand-tag {
+  display: block; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--bs-secondary-color); margin-top: 2px;
+}
+
+/* Sidebar: the admin-nexlink skin natively shows the full labelled menu (with
+   content space reserved) at >=1480px, and collapses to an icon rail + `.open`
+   flyout below that. At >=1480px the hamburger collapses/expands via our OWN root
+   class `dash-nav-mini` (turbo-compat.js) — NOT the vendor's data-app-sidebar,
+   which the base skin JS also toggles and would fight. Default (no class) = the
+   vendor's native full menu; `.dash-nav-mini` = the icon rail. No override in the
+   1200–1480 band (the wrapper doesn't reserve the sidebar's space there, so an
+   inline panel would overlap content — the `.open` flyout is used instead). */
+@media (min-width: 1480px) {
+  html.dash-nav-mini { --app-menubar-tabs: 80px; }
+  html.dash-nav-mini .app-menubar-tabs .app-tab-content { left: -160px; }
+}
+/* Below 1480px the menu is a hamburger-opened flyout. In the 1200–1480 band the
+   skin pins the sidebar var to 80px, so the panel's width (calc(var - 80)) is 0
+   and nothing shows when opened — give the OPEN flyout a real width + overlay. */
+@media (max-width: 1479.98px) {
+  /* Fully hide the CLOSED flyout. The skin parks it at left:-160/-200 (width 240),
+     so ~40–80px poked onto screen once the rail slid off (<1200px) — a stray
+     sliver. Push it right off. */
+  .app-menubar-tabs:not(.open) .app-tab-content { left: -320px !important; }
+  .app-menubar-tabs.open .app-tab-content { left: 80px !important; width: 260px; overflow: visible; z-index: 1046; }
+}
+
+/* Header toggler: transparent, theme-aware. */
+.app-toggler {
+  background: transparent; color: var(--bs-heading-color);
+  border: 1px solid var(--bs-border-color);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.app-toggler:hover { background: rgba(var(--bs-primary-rgb), .08); }
+
+.app-header-inner { gap: .5rem; }
+#topbar-context { margin-inline-start: auto; }
+.topbar-context-label { max-width: 160px; }
+
+/* Mobile owner chrome: keep the current store plus the two essential account
+   controls in one touch-friendly row. Search and theme controls remain available
+   on wider layouts; language switching stays directly accessible on mobile. */
+@media (max-width: 575.98px) {
+  .app-header-inner {
+    min-width: 0;
+    padding-inline: 8px;
+    gap: 4px;
+  }
+  .app-toggler {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+  }
+  .app-header-search,
+  .topbar-theme,
+  .topbar-divider {
+    display: none;
+  }
+  #topbar-context {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-inline-start: 0;
+  }
+  #topbar-context > button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: .5rem;
+  }
+  #topbar-context > button > span {
+    min-width: 0;
+    max-width: none;
+  }
+  .app-header-end {
+    flex: 0 0 auto;
+    min-width: 0;
+    margin-inline-start: 0;
+  }
+  .topbar-language > button,
+  .topbar-notifications > button,
+  .topbar-account > a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+}
+
+/* ===== Narrow-phone (≤400px) dashboard hardening — 350px usability ===== */
+
+/* Guard: no single wide child may scroll the whole dashboard sideways. `clip`
+   (not `hidden`) never becomes a scroll container, so it can't break sticky
+   headers or the vertical scroll; wrapped tables (.table-responsive) keep their
+   own internal horizontal scroll. */
+.app-wrapper { overflow-x: clip; }
+.app-wrapper > .container-fluid { min-width: 0; max-width: 100%; }
+
+@media (max-width: 575.98px) {
+  /* The topbar help button was missed by the earlier 44px sizing pass. */
+  .topbar-help > button { min-width: 44px; min-height: 44px; }
+
+  /* KPI stat cards (x-ui.stat): the delta badge is flex-shrink-0 and its
+     "+12% vs last week" text can't sit beside the value in a col-6 cell, so let
+     it wrap below rather than crushing the value column to nothing. */
+  .card-lift > .card-body > .d-flex.align-items-start.justify-content-between { flex-wrap: wrap; }
+  .card-lift > .card-body > .d-flex.align-items-start .badge { white-space: nowrap; }
+}
+
+/* At ≤400px the account cluster + store switcher + toggler no longer fit at
+   44px each — the fixed topbar rendered ~361px wide at a 350px viewport and
+   scrolled the whole page sideways. Tighten to 40px touch targets + 2px gaps. */
+@media (max-width: 400px) {
+  .app-header-inner { padding-inline: 6px; gap: 2px; }
+  .app-header-end { gap: 2px; }
+  .app-toggler { flex: 0 0 40px; width: 40px; height: 40px; }
+  .topbar-help > button,
+  .topbar-language > button,
+  .topbar-notifications > button,
+  .topbar-account > a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 0;
+  }
+  #topbar-context > button { padding-inline: .35rem; }
+}
+
+/* Sidebar footer (store/branch switcher + account) pinned below a SCROLLING menu.
+   The expanded panel is a fixed full-height column: brand header (auto) +
+   content-inner (fills) → menu (scrolls) + footer (pinned, never clipped). */
+.app-menubar-tabs .app-tab-content { display: flex; flex-direction: column; }
+.app-tab-content .app-content-inner { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.app-content-inner .tab-content { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.app-content-inner .tab-content > .tab-pane.active { height: 100%; }
+.app-content-inner .tab-content .app-navbar { height: 100%; overflow-y: auto; }
+.app-sidebar-footer { flex: 0 0 auto; margin-top: auto; background: var(--bs-body-bg); }
+.app-sidebar-footer .avatar-initials { flex: 0 0 auto; }
+.min-w-0 { min-width: 0 !important; }
+
+/* Close (X) for the mobile overlay drawer — lives in .app-side-brands. The
+   docked sidebar (≥1200px) is always visible, so the button only shows once the
+   sidebar becomes a hamburger-toggled overlay (≤1199.98px). */
+.app-menubar-close { display: none; }
+@media (max-width: 1199.98px) {
+    .app-menubar-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        margin-inline-start: auto;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--bs-secondary-color, #6c757d);
+        font-size: 1.15rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .app-menubar-close:hover,
+    .app-menubar-close:focus-visible {
+        background: var(--bs-tertiary-bg, rgba(0, 0, 0, .06));
+        color: var(--bs-body-color);
+    }
+}
+
+/* ===== Responsive table → cards engine =====
+   mbTableCards (layout script) tags any .table-responsive data table whose last
+   column holds row actions with `.table-cards` and copies each <th> into its
+   cells' data-th. At ≤575px each row becomes a labelled card with a full-width
+   action footer, so action-heavy tables stop needing sideways scrolling on
+   phones. Opt a table out with `.no-cards`; a page can hand-tune with its own
+   rules (see the hotel rooms page's bespoke `.rooms-table`, excluded here). */
+@media (max-width: 575.98px) {
+    table.table-cards thead { display: none; }
+    table.table-cards,
+    table.table-cards tbody,
+    table.table-cards tr,
+    table.table-cards td { display: block; width: 100%; }
+    table.table-cards tr {
+        border: 1px solid var(--bs-border-color);
+        border-radius: .6rem;
+        padding: .5rem .75rem;
+        margin-bottom: .5rem;
+        background: var(--bs-card-bg, var(--bs-body-bg));
+    }
+    table.table-cards td {
+        border: 0 !important;
+        padding: .2rem 0;
+        display: flex;
+        gap: .75rem;
+        align-items: baseline;
+        justify-content: space-between;
+        text-align: end;
+        min-width: 0;
+    }
+    table.table-cards td::before {
+        content: attr(data-th);
+        color: var(--bs-secondary-color);
+        font-weight: 500;
+        text-align: start;
+        flex: 0 0 auto;
+    }
+    table.table-cards td[data-th=""]::before { content: none; }
+    /* Last cell (the row actions) → full-width footer, no label, left-aligned. */
+    table.table-cards td:last-child {
+        display: block;
+        text-align: start;
+        padding-top: .5rem;
+        margin-top: .35rem;
+        border-top: 1px solid var(--bs-border-color-translucent, rgba(0, 0, 0, .08)) !important;
+    }
+    table.table-cards td:last-child::before { content: none; }
+    table.table-cards td:last-child > * {
+        justify-content: flex-start !important;
+        flex-wrap: wrap;
+    }
+}
+
+/* Toast container (fed by Alpine $store.toast). */
+.dash-toast-wrap {
+  position: fixed; inset-block-end: 1rem; inset-inline-end: 1rem;
+  display: flex; flex-direction: column; gap: .5rem; z-index: 1090;
+}
+.dash-toast {
+  background: var(--bs-body-bg); color: var(--bs-body-color);
+  border: 1px solid var(--bs-border-color); border-inline-start: 3px solid var(--bs-primary);
+  border-radius: var(--bs-border-radius); box-shadow: 0 8px 24px rgba(16,24,40,.12);
+  padding: .625rem .875rem; min-width: 220px; max-width: 360px; font-size: .875rem;
+}
+.dash-toast.type-success { border-inline-start-color: var(--bs-success); }
+.dash-toast.type-danger  { border-inline-start-color: var(--bs-danger); }
+.dash-toast.type-warning { border-inline-start-color: var(--bs-warning); }
+
+/* N2: unified toast choreography — slide in from the edge, slide/fade out on
+   dismiss. The wrap sits at inset-inline-end, so LTR slides from the right;
+   under RTL the wrap is on the left, so the sign flips (memory:
+   rtl-flex-carousel-translatex). Transform/opacity only; reduced-motion below
+   collapses both to an instant show/hide. */
+@keyframes dashToastIn  { from { opacity: 0; transform: translateX(1.5rem); }  to { opacity: 1; transform: translateX(0); } }
+@keyframes dashToastOut { from { opacity: 1; transform: translateX(0); }       to { opacity: 0; transform: translateX(1.5rem); } }
+@keyframes dashToastInRtl  { from { opacity: 0; transform: translateX(-1.5rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes dashToastOutRtl { from { opacity: 1; transform: translateX(0); }        to { opacity: 0; transform: translateX(-1.5rem); } }
+.dash-toast { animation: dashToastIn .22s ease both; }
+.dash-toast.is-leaving { animation: dashToastOut .2s ease forwards; }
+[dir="rtl"] .dash-toast { animation-name: dashToastInRtl; }
+[dir="rtl"] .dash-toast.is-leaving { animation-name: dashToastOutRtl; }
+/* Pause the entry motion while the pointer rests on the stack (the dismiss
+   timer is suspended in JS in lockstep). */
+.dash-toast-wrap:hover .dash-toast { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+    .dash-toast,
+    .dash-toast.is-leaving { animation: none !important; }
+}
+
+/* Native <dialog> restyled as a Bootstrap card (ui/dialog keeps showModal()). */
+.dash-dialog {
+  border: 0; padding: 0; background: transparent;
+  max-width: min(560px, calc(100vw - 2rem)); width: 100%;
+  border-radius: var(--bs-border-radius-lg); overflow: visible;
+}
+.dash-dialog--sm { max-width: min(400px, calc(100vw - 2rem)); }
+.dash-dialog--lg { max-width: min(760px, calc(100vw - 2rem)); }
+.dash-dialog--xl { max-width: min(1040px, calc(100vw - 2rem)); }
+.dash-dialog::backdrop { background: rgba(16,24,40,.5); backdrop-filter: blur(2px); }
+/* The panel caps its height; the BODY takes the overflow, not the panel. Letting
+   the panel scroll pushed the footer (Save / Use selected) below the viewport on
+   any dialog with a long body, so the action that commits the change was
+   unreachable and the dialog looked inert. min-height:0 lets the flex child
+   shrink; .card is already a flex column. */
+/* iOS 18 Safari collapses a flex-column dialog panel to height:0 when the dialog
+   is the SECOND modal in the top layer (e.g. the media picker opened over the
+   Add/Edit-item dialog): it fails to resolve the dialog's fit-content height, so
+   the panel — and its children — render 0px tall and only the backdrop shows.
+   Giving the panel an explicit intrinsic height (capped by max-height, body still
+   scrolls) sidesteps the broken auto-height resolution. Harmless for single/desktop
+   dialogs (max-content == the natural content height there). */
+.dash-dialog__panel { box-shadow: 0 24px 48px rgba(16,24,40,.24); height: max-content; max-height: calc(100vh - 3rem); overflow: hidden; }
+/* Some dialogs wrap header/body/footer in a <form>; it has to pass the flex
+   sizing through, or the body cannot shrink and the footer leaves the screen. */
+.dash-dialog__panel > form { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.dash-dialog__panel > .card-body,
+.dash-dialog__panel > form > .card-body { overflow-y: auto; min-height: 0; }
+
+/* Same rule for the hand-rolled menu item dialog (its own .menu-dialog styles
+   live in pages/dashboard.css, which the dashboard layout never loads). Without
+   this the whole dialog scrolls and Save sits ~1200px below the viewport. */
+.menu-dialog[open] { display: flex; flex-direction: column; height: max-content; max-height: calc(100vh - 3rem); overflow: hidden; }
+.menu-dialog__body { overflow-y: auto; min-height: 0; }
+.menu-dialog__actions {
+  /* bottom offset cancels the body's own padding so the bar sits flush and no
+     scrolled field shows underneath it. */
+  position: sticky; bottom: -1rem; z-index: 1;
+  margin-inline: -1rem; margin-bottom: -1rem; padding: .75rem 1rem;
+  background: var(--bs-body-bg, #fff); border-top: 1px solid var(--bs-border-color, #e5e7eb);
+}
+
+/* Alpine dropdown (ui/menu) — position under trigger. */
+.menu-wrap { position: relative; }
+
+/* Skip link. */
+.skip-link { position: absolute; inset-block-start: -60px; inset-inline-start: 0; z-index: 1100; }
+
+/* Sticky save bar for long settings/edit forms — keeps the primary action reachable. */
+.sticky-savebar {
+    position: sticky;
+    bottom: 12px;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .5rem;
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: var(--bs-body-bg, #fff);
+    border: 1px solid var(--bs-border-color, rgba(16, 15, 26, .1));
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(16, 15, 26, .10);
+}
+@media (max-width: 640px) {
+    .sticky-savebar { flex-direction: column; }
+    .sticky-savebar > * { width: 100%; }
+}
+
+/* WI-A1 (upsell-visibility): a sidebar row for a feature the owner does not have.
+   Dimmed rather than hidden — hidden is not discoverable, and the whole point is
+   that they can see what they are missing — keeping the feature's own icon so the
+   row still reads as the thing it is, with the lock as a small chip beside it. */
+.side-menubar .menu-link-locked { opacity: .62; }
+.side-menubar .menu-link-locked:hover,
+.side-menubar .menu-link-locked:focus-visible { opacity: 1; }
+.side-menubar .menu-lock {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: .25rem;
+    flex-shrink: 0;
+    padding: .1rem .4rem;
+    border-radius: 999px;
+    font-size: .68rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    color: var(--bs-secondary-color, #6c757d);
+    background: var(--bs-tertiary-bg, rgba(16, 15, 26, .06));
+}
+.side-menubar .menu-lock i.fi { font-size: .72rem; }
+/* The price is the reason to click, so it stays. The sidebar is a fixed width
+   whatever the viewport, so hiding it on narrow screens hid it from most
+   laptops and left a bare padlock — the exact thing this row replaces. It
+   truncates instead, and only the label may take the space it needs. */
+.side-menubar .menu-lock-sell {
+    max-width: 4.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.side-menubar .menu-link-locked .menu-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* WI-A3 (upsell-visibility): preview mode — the owner's own read-only dashboard,
+   shown blurred to someone who has not bought it yet. The blur is a tease, never
+   a security boundary: what is safe to send is decided server-side, and the
+   controller withholds every row-level value before it reaches the page. */
+.spotlight-preview__stage {
+    filter: blur(6px);
+    -webkit-filter: blur(6px);
+    pointer-events: none;
+    user-select: none;
+    /* Blur bleeds past the element edge; clip it so it cannot smear the layout. */
+    overflow: hidden;
+}
+/* Stage and veil share one grid cell, so the wrapper grows to whichever is
+   taller. An absolutely positioned veil is sized by the BLURRED content behind
+   it, and a short dashboard then let the unlock card overflow outside it. */
+.spotlight-preview {
+    display: grid;
+}
+.spotlight-preview__stage,
+.spotlight-preview__veil {
+    grid-area: 1 / 1;
+    min-width: 0;
+}
+.spotlight-preview__veil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    /* Above the blur, and legible over whatever it happens to sit on. */
+    background: color-mix(in srgb, var(--bs-body-bg, #fff) 55%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+    .spotlight-preview__veil { backdrop-filter: saturate(1.1); }
+}
+
+/* WI-B2 (upsell-visibility): a feature the owner gained in the last fortnight.
+   A dot rather than a "NEW" word — the sidebar is dense, the row already names
+   the feature, and the point is only to draw the eye once. */
+.side-menubar .menu-new {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.side-menubar .menu-new__dot {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background: var(--bs-primary, #8b3dff);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bs-primary, #8b3dff) 22%, transparent);
+}
+/* A toast that announces a feature needs a way into it. */
+.dash-toast__action {
+    display: inline-block;
+    margin-inline-start: .5rem;
+    font-weight: 600;
+    text-decoration: underline;
+    color: inherit;
+}
+
+/* ── Store settings (stores/{id}/edit) ─────────────────────────────
+   Compact profile hero + professional template picker. The old markup let
+   each template card render its full-height preview.png (~600px tall);
+   these rules cap previews and pack cards into a responsive grid. */
+.edit-hero {
+    overflow: hidden;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: var(--bs-border-radius-lg, .75rem);
+    background: var(--bs-body-bg, #fff);
+}
+.edit-hero__cover {
+    height: 170px;
+    background: var(--bs-secondary-bg, #f3f4f6);
+}
+.edit-hero__cover img,
+.edit-hero__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.edit-hero__body {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 0 1.25rem 1.1rem;
+}
+.edit-hero__logo {
+    overflow: hidden;
+    flex: 0 0 auto;
+    width: 84px;
+    height: 84px;
+    margin-top: -42px;
+    border: 4px solid var(--bs-body-bg, #fff);
+    border-radius: var(--bs-border-radius-lg, .75rem);
+    background: var(--bs-secondary-bg, #f3f4f6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+}
+.edit-hero__body p {
+    margin: 0 0 .15rem;
+    color: var(--bs-primary, var(--theme-color, #8b3dff));
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.edit-hero__body h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+.edit-hero__body span {
+    color: var(--bs-secondary-color, #6b7280);
+    font-size: .85rem;
+}
+
+.tpl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: .875rem;
+}
+.tpl-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: var(--bs-border-radius-lg, .75rem);
+    background: var(--bs-body-bg, #fff);
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+.tpl-card:hover {
+    border-color: color-mix(in srgb, var(--bs-primary, #8b3dff) 55%, var(--bs-border-color, #e5e7eb));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+    transform: translateY(-2px);
+}
+.tpl-card.is-selected {
+    border-color: var(--bs-primary, var(--theme-color, #8b3dff));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bs-primary, #8b3dff) 20%, transparent);
+}
+.tpl-card:focus-within {
+    outline: 2px solid var(--bs-primary, #8b3dff);
+    outline-offset: 2px;
+}
+.tpl-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top center;
+    background: var(--bs-secondary-bg, #f3f4f6);
+}
+.tpl-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+    padding: .55rem .7rem .65rem;
+}
+.tpl-card__meta strong {
+    overflow: hidden;
+    font-size: .85rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.tpl-card__meta small {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--bs-secondary-color, #6b7280);
+    font-size: .72rem;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.tpl-card__check {
+    position: absolute;
+    top: .5rem;
+    inset-inline-end: .5rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bs-primary, var(--theme-color, #8b3dff));
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+}
+.tpl-card.is-selected .tpl-card__check {
+    display: inline-flex;
+}
+
+/* Phase 2: preset-thumbnail strip revealed on template-card hover. */
+.tpl-card__presets {
+    position: absolute;
+    right: .5rem;
+    bottom: 5.1rem;
+    left: .5rem;
+    display: flex;
+    gap: .35rem;
+    justify-content: center;
+    padding: .35rem;
+    border-radius: .5rem;
+    background: color-mix(in srgb, var(--bs-body-bg, #fff) 82%, transparent);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity .15s ease, transform .15s ease;
+    transform: translateY(4px);
+    pointer-events: none;
+}
+.tpl-card:hover .tpl-card__presets,
+.tpl-card:focus-within .tpl-card__presets {
+    opacity: 1;
+    transform: translateY(0);
+}
+.tpl-card__presets img {
+    width: auto;
+    height: 40px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: .35rem;
+    background: var(--bs-secondary-bg, #f3f4f6);
+}
+
+/* Phase 3: Design-tab template launcher (picker itself lives in the customizer). */
+.tpl-launcher {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: var(--bs-border-radius-lg, .75rem);
+    background: var(--bs-body-bg, #fff);
+}
+.tpl-launcher__thumb {
+    flex: 0 0 auto;
+    width: 132px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: .5rem;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    background: var(--bs-secondary-bg, #f3f4f6);
+}
+.tpl-launcher__body { min-width: 0; }
+.tpl-launcher__presets { display: flex; gap: .35rem; }
+.tpl-launcher__presets img {
+    height: 34px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid var(--bs-border-color, #e5e7eb);
+    border-radius: .35rem;
+    background: var(--bs-secondary-bg, #f3f4f6);
+}
+
+/* ── Notification bell motion (N1) ───────────────────────────────────────
+   Fires only on a genuine count RISE — Alpine (notifBell.pop) toggles
+   .notif-badge--pop on the badge and .notif-bell--shake on the bell icon —
+   and on dropdown open, where the five counter rows stagger in. The badge
+   sits under Bootstrap .translate-middle, so every keyframe carries the
+   translate(-50%,-50%) offset: we scale IN PLACE and never move it
+   (position must stay — the button clips overflow). Transform/opacity only;
+   fully disabled under prefers-reduced-motion (§0.9). */
+@keyframes notifBadgePop {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    35%  { transform: translate(-50%, -50%) scale(1.5); }
+    70%  { transform: translate(-50%, -50%) scale(.86); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+/* RTL keeps the translate-middle X sign flipped (translate(50%,-50%)); reuse
+   that sign here so the pop scales in place instead of jumping to the LTR
+   anchor for the duration of the animation. */
+@keyframes notifBadgePopRtl {
+    0%   { transform: translate(50%, -50%) scale(1); }
+    35%  { transform: translate(50%, -50%) scale(1.5); }
+    70%  { transform: translate(50%, -50%) scale(.86); }
+    100% { transform: translate(50%, -50%) scale(1); }
+}
+@keyframes notifBellShake {
+    0%, 100% { transform: rotate(0); }
+    15%  { transform: rotate(-13deg); }
+    30%  { transform: rotate(11deg); }
+    45%  { transform: rotate(-8deg); }
+    60%  { transform: rotate(5deg); }
+    75%  { transform: rotate(-2deg); }
+}
+@keyframes notifRowIn {
+    from { opacity: 0; transform: translateY(-7px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+/* Horizontal placement of the notification badge. Anchored at the bell's top
+   inline-end corner. Moved off the element's inline `style` so it can be
+   MIRRORED under RTL — a hardcoded physical `left: calc(100% - 8px)` put the
+   badge over the adjacent language switcher in Arabic. Mirror with `right`
+   (not a flipped `left`): admin-nexlink's RTL sheet forces
+   `.translate-middle { transform: translate(50%,-50%) !important }`, so the
+   badge is already shifted the other way — anchoring from `right` rides that
+   correctly and lands it on the inline-start corner, clear of the switcher. */
+.notif-badge {
+    left: calc(100% - 8px);
+}
+[dir="rtl"] .notif-badge {
+    left: auto;
+    right: calc(100% - 8px);
+}
+.notif-badge--pop {
+    animation: notifBadgePop 340ms cubic-bezier(.34, 1.56, .64, 1);
+}
+[dir="rtl"] .notif-badge--pop {
+    animation-name: notifBadgePopRtl;
+}
+.topbar-notifications .notif-bell--shake {
+    display: inline-block;
+    transform-origin: 50% 15%;
+    animation: notifBellShake 520ms ease;
+}
+.topbar-notifications .dropdown-menu.show > .notif-row {
+    animation: notifRowIn 240ms ease both;
+}
+.topbar-notifications .dropdown-menu.show > .notif-row:nth-of-type(1) { animation-delay: 0ms; }
+.topbar-notifications .dropdown-menu.show > .notif-row:nth-of-type(2) { animation-delay: 40ms; }
+.topbar-notifications .dropdown-menu.show > .notif-row:nth-of-type(3) { animation-delay: 80ms; }
+.topbar-notifications .dropdown-menu.show > .notif-row:nth-of-type(4) { animation-delay: 120ms; }
+.topbar-notifications .dropdown-menu.show > .notif-row:nth-of-type(5) { animation-delay: 160ms; }
+@media (prefers-reduced-motion: reduce) {
+    .notif-badge--pop,
+    .topbar-notifications .notif-bell--shake,
+    .topbar-notifications .dropdown-menu.show > .notif-row {
+        animation: none !important;
+    }
+}

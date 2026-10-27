@@ -1,0 +1,39 @@
+{
+  "operationId": "verifyCustomerOtp",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/customer/otp/verify",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fc97-b368-7d98-8c3a-9eda2f40c2fc"
+    },
+    "body": {
+      "phone": "+966551234567",
+      "code": "482913",
+      "device": "sidra-web"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:02:30 GMT"
+    },
+    "body": {
+      "token": "ctk_demo_05aef6e5e3713791c7a07a572047fc1ea67aa29d",
+      "token_type": "Bearer",
+      "expires_at": null,
+      "customer": {
+        "public_id": "01a0fca9-aa2e-721a-8130-cc5374114763",
+        "name": null,
+        "phone": "+966551234567",
+        "phone_verified_at": "2026-10-02T10:02:30+03:00"
+      }
+    }
+  }
+}

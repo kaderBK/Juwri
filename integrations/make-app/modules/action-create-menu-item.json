@@ -1,0 +1,49 @@
+{
+  "name": "createMenuItem",
+  "label": "Create Menu Item",
+  "description": "Creates a new menu item on a restaurant.",
+  "type": "action",
+  "connection": "juwri",
+  "parameters": [
+    { "name": "restaurant_id", "type": "integer", "label": "Restaurant ID", "required": true },
+    { "name": "name", "type": "text", "label": "Name", "required": true },
+    { "name": "price", "type": "number", "label": "Price", "required": true },
+    { "name": "category_id", "type": "integer", "label": "Category ID" },
+    { "name": "description", "type": "text", "label": "Description" },
+    { "name": "type", "type": "select", "label": "Type", "options": ["veg", "nonveg"] },
+    { "name": "active", "type": "boolean", "label": "Active" },
+    { "name": "is_sold_out", "type": "boolean", "label": "Sold out" },
+    { "name": "calories", "type": "integer", "label": "Calories" }
+  ],
+  "communication": {
+    "url": "{{baseUrl}}/api/v1/stores/{{parameters.restaurant_id}}/menu/items",
+    "method": "POST",
+    "body": {
+      "name": "{{parameters.name}}",
+      "price": "{{parameters.price}}",
+      "category_id": "{{parameters.category_id}}",
+      "description": "{{parameters.description}}",
+      "type": "{{parameters.type}}",
+      "active": "{{parameters.active}}",
+      "is_sold_out": "{{parameters.is_sold_out}}",
+      "calories": "{{parameters.calories}}"
+    },
+    "response": { "output": "{{body}}" }
+  },
+  "interface": [
+    { "name": "id", "type": "number", "label": "Item ID" },
+    { "name": "category_id", "type": "number", "label": "Category ID" },
+    { "name": "name", "type": "text", "label": "Name" },
+    { "name": "price", "type": "number", "label": "Price" },
+    { "name": "active", "type": "boolean", "label": "Active" },
+    { "name": "is_sold_out", "type": "boolean", "label": "Sold out" }
+  ],
+  "samples": {
+    "id": 991,
+    "category_id": 12,
+    "name": "Margherita Pizza",
+    "price": 12.5,
+    "active": true,
+    "is_sold_out": false
+  }
+}

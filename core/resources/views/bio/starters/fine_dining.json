@@ -1,0 +1,12 @@
+{
+  "key": "fine_dining",
+  "name": "Fine dining",
+  "sections": {"hours": true, "socials": true, "capture": false, "map": true, "whatsapp": false, "reviews": true},
+  "blocks": [
+    {"type": "reservation", "label": "Reserve a table", "priority": 100, "requires": "reservations", "config": {}},
+    {"type": "menu", "label": "View the menu", "priority": 90, "config": {"prefill": "menu"}},
+    {"type": "featured_dish", "label": "Tasting highlight", "priority": 70, "requires": "menu_items", "config": {"title": "Tasting highlight"}},
+    {"type": "link", "label": "Gift a dinner", "priority": 50, "requires": "gift_cards", "config": {"prefill": "giftcard"}},
+    {"type": "reviews", "label": "Reviews", "priority": 40, "requires": "reviews", "config": {"source": "live"}}
+  ]
+}

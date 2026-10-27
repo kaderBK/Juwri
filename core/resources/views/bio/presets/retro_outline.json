@@ -1,0 +1,33 @@
+{
+  "slug": "retro_outline",
+  "starter": "minimal",
+  "name": "Retro Outline",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 600, 700, 800]},
+    {"family": "Archivo", "weights": [800, 900]}
+  ],
+  "tokens": {
+    "--bg": "#fdf3e3",
+    "--ink": "#191713",
+    "--muted": "#5c554c",
+    "--card": "#fdf3e3",
+    "--btn-bg": "#fdf3e3",
+    "--btn-fg": "#191713",
+    "--btn-border": "#191713",
+    "--btn-border-width": "2.5px",
+    "--accent": "#191713",
+    "--accent-ink": "#ffd23e",
+    "--avatar-bg": "#ffd23e",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "10px",
+    "--shadow": "4px 4px 0 #191713",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Archivo',sans-serif"
+  }
+}

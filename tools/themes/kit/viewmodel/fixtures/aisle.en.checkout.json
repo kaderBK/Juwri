@@ -1,0 +1,2704 @@
+{
+ "store": {
+  "public_id": "st_dune_and_co",
+  "slug": "dune-and-co-demo",
+  "name": "Dune & Co.",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "Dune & Co."
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "Dune & Co."
+  },
+  "tagline": "Linen, wool and warm neutrals",
+  "locale": "en",
+  "dir": "ltr",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/dune-and-co-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/dune-and-co-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "retail",
+  "status": {
+   "open": true,
+   "label": "Open · closes 10 pm",
+   "next_change_at": "2026-10-02T22:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0104",
+   "whatsapp": "+966 55 010 0104",
+   "address": "Al Nakheel Mall, Riyadh"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/dune-and-co"
+   }
+  ],
+  "rating": {
+   "avg": 4.7,
+   "count": 438
+  },
+  "legal_links": [
+   {
+    "label": "Privacy",
+    "url": "/dune-and-co-demo/privacy"
+   },
+   {
+    "label": "Terms",
+    "url": "/dune-and-co-demo/terms"
+   },
+   {
+    "label": "Returns",
+    "url": "/dune-and-co-demo/returns"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "Dune & Co. Fashion Trading Co.",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-4404",
+    "label": "Commercial registration (CR)"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-4404",
+    "label": "VAT number"
+   },
+   "address": "Al Nakheel Mall, Riyadh 12384"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "Main branch",
+   "address": "Al Nakheel Mall, Riyadh"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "ship",
+    "label": "Shipping",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "pickup_slot",
+    "label": "Pickup slot",
+    "needs_address": false,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "ship",
+  "schedule_ahead": true,
+  "free_delivery_threshold": {
+   "minor": 20000,
+   "currency": "SAR",
+   "formatted": "SAR 200.00"
+  },
+  "refunds": {
+   "returns": true
+  }
+ },
+ "theme": {
+  "slug": "aisle",
+  "preset": "clean",
+  "settings": {
+   "colors.primary": "#111111",
+   "colors.background": "#FFFFFF",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#111111",
+   "colors.accent": "#C8281B",
+   "layout.radius": "soft",
+   "layout.density": "cozy",
+   "fonts.pair": "inter",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#F5F5F5",
+   "colors_dark.background": "#0C0C0D",
+   "colors_dark.surface": "#161618",
+   "colors_dark.text": "#F5F5F5",
+   "colors_dark.accent": "#FF6B5E",
+   "layout.card": "grid",
+   "layout.image_ratio": "4:5",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "drawer",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "announcement",
+   "order_type",
+   "hero",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "announcement": "Free shipping over SAR 200 · 14-day returns",
+   "hero_title": "The new edit",
+   "hero_cta": "Shop now",
+   "featured_title": "New in",
+   "search_placeholder": "Search products"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "women",
+    "name": "Women",
+    "item_ids": [
+     "relaxed-linen-shirt",
+     "wide-leg-trousers",
+     "linen-maxi-dress",
+     "pleated-midi-skirt",
+     "cotton-poplin-blouse",
+     "tailored-linen-blazer",
+     "satin-slip-dress",
+     "straight-leg-jeans",
+     "linen-shorts",
+     "organic-cotton-tee",
+     "shirt-dress"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Women"
+    }
+   },
+   {
+    "id": "men",
+    "name": "Men",
+    "item_ids": [
+     "linen-camp-collar-shirt",
+     "oxford-shirt",
+     "slim-chinos",
+     "cotton-polo",
+     "linen-drawstring-trousers",
+     "crew-neck-tee",
+     "denim-jacket",
+     "cotton-blend-thobe"
+    ],
+    "count": 8,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Men"
+    }
+   },
+   {
+    "id": "abayas",
+    "name": "Abayas",
+    "item_ids": [
+     "classic-open-abaya",
+     "crepe-closed-abaya",
+     "embroidered-cuff-abaya",
+     "linen-blend-abaya",
+     "butterfly-abaya",
+     "kimono-abaya"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Abayas"
+    }
+   },
+   {
+    "id": "knitwear",
+    "name": "Knitwear",
+    "item_ids": [
+     "merino-crew-sweater",
+     "wool-blend-cardigan",
+     "ribbed-knit-polo",
+     "chunky-knit-vest",
+     "merino-turtleneck"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Knitwear"
+    }
+   },
+   {
+    "id": "shoes",
+    "name": "Shoes",
+    "item_ids": [
+     "leather-loafers",
+     "suede-ankle-boots",
+     "canvas-sneakers",
+     "leather-sandals",
+     "ballet-flats",
+     "chelsea-boots"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Shoes"
+    }
+   },
+   {
+    "id": "bags",
+    "name": "Bags",
+    "item_ids": [
+     "leather-tote",
+     "canvas-shopper",
+     "crossbody-bag",
+     "mini-bucket-bag",
+     "weekend-duffle"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Bags"
+    }
+   },
+   {
+    "id": "accessories",
+    "name": "Accessories",
+    "item_ids": [
+     "wool-and-cashmere-scarf",
+     "leather-belt",
+     "straw-hat",
+     "silk-scarf",
+     "acetate-sunglasses",
+     "leather-card-holder"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Accessories"
+    }
+   }
+  ],
+  "items": {
+   "relaxed-linen-shirt": {
+    "id": "relaxed-linen-shirt",
+    "name": "Relaxed linen shirt",
+    "url": "/dune-and-co-demo/p/relaxed-linen-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Relaxed linen shirt"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "sale",
+      "label": "Sale −30%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Breathable linen with a soft collar and dropped shoulder.",
+    "compare_at": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "SAR 199.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 13900,
+     "currency": "SAR",
+     "formatted": "SAR 139.00"
+    }
+   },
+   "wide-leg-trousers": {
+    "id": "wide-leg-trousers",
+    "name": "Wide-leg trousers",
+    "url": "/dune-and-co-demo/p/wide-leg-trousers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Wide-leg trousers"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "High-waisted with a fluid drape.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "SAR 229.00"
+    }
+   },
+   "linen-maxi-dress": {
+    "id": "linen-maxi-dress",
+    "name": "Linen maxi dress",
+    "url": "/dune-and-co-demo/p/linen-maxi-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Linen maxi dress"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Tiered skirt, square neckline, side pockets.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Terracotta",
+      "hex": "#B5654A"
+     },
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Sage",
+      "hex": "#9CAF88"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "SAR 289.00"
+    }
+   },
+   "pleated-midi-skirt": {
+    "id": "pleated-midi-skirt",
+    "name": "Pleated midi skirt",
+    "url": "/dune-and-co-demo/p/pleated-midi-skirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Pleated midi skirt"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Fine pleats that move with you.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Stone",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "SAR 189.00"
+    }
+   },
+   "cotton-poplin-blouse": {
+    "id": "cotton-poplin-blouse",
+    "name": "Cotton poplin blouse",
+    "url": "/dune-and-co-demo/p/cotton-poplin-blouse",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Cotton poplin blouse"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −21%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Crisp, tucked or untucked, with covered buttons.",
+    "compare_at": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "SAR 189.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Sky blue",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "Blush",
+      "hex": "#E6C9C3"
+     }
+    ],
+    "price": {
+     "minor": 14900,
+     "currency": "SAR",
+     "formatted": "SAR 149.00"
+    }
+   },
+   "tailored-linen-blazer": {
+    "id": "tailored-linen-blazer",
+    "name": "Tailored linen blazer",
+    "url": "/dune-and-co-demo/p/tailored-linen-blazer",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Tailored linen blazer"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Single-breasted, half-lined, two patch pockets.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "SAR 349.00"
+    }
+   },
+   "satin-slip-dress": {
+    "id": "satin-slip-dress",
+    "name": "Satin slip dress",
+    "url": "/dune-and-co-demo/p/satin-slip-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Satin slip dress"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Bias-cut, adjustable straps, ankle length.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Burgundy",
+      "hex": "#6D2432"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Blush",
+      "hex": "#E6C9C3"
+     }
+    ],
+    "price": {
+     "minor": 25900,
+     "currency": "SAR",
+     "formatted": "SAR 259.00"
+    }
+   },
+   "straight-leg-jeans": {
+    "id": "straight-leg-jeans",
+    "name": "Straight-leg jeans",
+    "url": "/dune-and-co-demo/p/straight-leg-jeans",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Straight-leg jeans"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Mid-rise, five pockets, a little stretch.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Denim blue",
+      "hex": "#5B7FA3"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 21900,
+     "currency": "SAR",
+     "formatted": "SAR 219.00"
+    }
+   },
+   "linen-shorts": {
+    "id": "linen-shorts",
+    "name": "Linen shorts",
+    "url": "/dune-and-co-demo/p/linen-shorts",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Linen shorts"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −24%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Elastic back waist, relaxed leg.",
+    "compare_at": {
+     "minor": 16900,
+     "currency": "SAR",
+     "formatted": "SAR 169.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 12900,
+     "currency": "SAR",
+     "formatted": "SAR 129.00"
+    }
+   },
+   "organic-cotton-tee": {
+    "id": "organic-cotton-tee",
+    "name": "Organic cotton tee",
+    "url": "/dune-and-co-demo/p/organic-cotton-tee",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Organic cotton tee"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "A soft everyday crew neck.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Stone",
+      "hex": "#BDB8AD"
+     },
+     {
+      "label": "Cream",
+      "hex": "#F2E8D5"
+     }
+    ],
+    "price": {
+     "minor": 6900,
+     "currency": "SAR",
+     "formatted": "SAR 69.00"
+    }
+   },
+   "shirt-dress": {
+    "id": "shirt-dress",
+    "name": "Shirt dress",
+    "url": "/dune-and-co-demo/p/shirt-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Shirt dress"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Belted, button-through, midi length.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sky blue",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 26900,
+     "currency": "SAR",
+     "formatted": "SAR 269.00"
+    }
+   },
+   "linen-camp-collar-shirt": {
+    "id": "linen-camp-collar-shirt",
+    "name": "Linen camp-collar shirt",
+    "url": "/dune-and-co-demo/p/linen-camp-collar-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Linen camp-collar shirt"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Short sleeves and a relaxed boxy cut.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Sky blue",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     }
+    ],
+    "price": {
+     "minor": 15900,
+     "currency": "SAR",
+     "formatted": "SAR 159.00"
+    }
+   },
+   "oxford-shirt": {
+    "id": "oxford-shirt",
+    "name": "Oxford shirt",
+    "url": "/dune-and-co-demo/p/oxford-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Oxford shirt"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Brushed cotton with a button-down collar.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Sky blue",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 17900,
+     "currency": "SAR",
+     "formatted": "SAR 179.00"
+    }
+   },
+   "slim-chinos": {
+    "id": "slim-chinos",
+    "name": "Slim chinos",
+    "url": "/dune-and-co-demo/p/slim-chinos",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Slim chinos"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −20%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Stretch cotton with a clean tapered leg.",
+    "compare_at": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "SAR 249.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "SAR 199.00"
+    }
+   },
+   "cotton-polo": {
+    "id": "cotton-polo",
+    "name": "Cotton polo",
+    "url": "/dune-and-co-demo/p/cotton-polo",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Cotton polo"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Piqué cotton with a two-button placket.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Forest green",
+      "hex": "#2F4F3E"
+     }
+    ],
+    "price": {
+     "minor": 11900,
+     "currency": "SAR",
+     "formatted": "SAR 119.00"
+    }
+   },
+   "linen-drawstring-trousers": {
+    "id": "linen-drawstring-trousers",
+    "name": "Linen drawstring trousers",
+    "url": "/dune-and-co-demo/p/linen-drawstring-trousers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Linen drawstring trousers"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Easy summer trousers with an elastic waist.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 16900,
+     "currency": "SAR",
+     "formatted": "SAR 169.00"
+    }
+   },
+   "crew-neck-tee": {
+    "id": "crew-neck-tee",
+    "name": "Crew-neck tee",
+    "url": "/dune-and-co-demo/p/crew-neck-tee",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Crew-neck tee"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Heavyweight cotton, made to last.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Charcoal",
+      "hex": "#3A3A3C"
+     },
+     {
+      "label": "Stone",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 7900,
+     "currency": "SAR",
+     "formatted": "SAR 79.00"
+    }
+   },
+   "denim-jacket": {
+    "id": "denim-jacket",
+    "name": "Denim jacket",
+    "url": "/dune-and-co-demo/p/denim-jacket",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Denim jacket"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −18%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Washed denim with chest pockets.",
+    "compare_at": {
+     "minor": 39900,
+     "currency": "SAR",
+     "formatted": "SAR 399.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Denim blue",
+      "hex": "#5B7FA3"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 32900,
+     "currency": "SAR",
+     "formatted": "SAR 329.00"
+    }
+   },
+   "cotton-blend-thobe": {
+    "id": "cotton-blend-thobe",
+    "name": "Cotton-blend thobe",
+    "url": "/dune-and-co-demo/p/cotton-blend-thobe",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Cotton-blend thobe"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Easy-care, collar and cuff finished by hand.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Cream",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "Stone",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "SAR 289.00"
+    }
+   },
+   "classic-open-abaya": {
+    "id": "classic-open-abaya",
+    "name": "Classic open abaya",
+    "url": "/dune-and-co-demo/p/classic-open-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Classic open abaya"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Open front with a hidden snap closure.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 39900,
+     "currency": "SAR",
+     "formatted": "SAR 399.00"
+    }
+   },
+   "crepe-closed-abaya": {
+    "id": "crepe-closed-abaya",
+    "name": "Crepe closed abaya",
+    "url": "/dune-and-co-demo/p/crepe-closed-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Crepe closed abaya"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Closed front, wide sleeves, matte finish.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Charcoal",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 45900,
+     "currency": "SAR",
+     "formatted": "SAR 459.00"
+    }
+   },
+   "embroidered-cuff-abaya": {
+    "id": "embroidered-cuff-abaya",
+    "name": "Embroidered-cuff abaya",
+    "url": "/dune-and-co-demo/p/embroidered-cuff-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Embroidered-cuff abaya"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Tone-on-tone embroidery at the cuffs.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Burgundy",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 54900,
+     "currency": "SAR",
+     "formatted": "SAR 549.00"
+    }
+   },
+   "linen-blend-abaya": {
+    "id": "linen-blend-abaya",
+    "name": "Linen-blend abaya",
+    "url": "/dune-and-co-demo/p/linen-blend-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Linen-blend abaya"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Light enough for summer, structured enough for work.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 42900,
+     "currency": "SAR",
+     "formatted": "SAR 429.00"
+    }
+   },
+   "butterfly-abaya": {
+    "id": "butterfly-abaya",
+    "name": "Butterfly abaya",
+    "url": "/dune-and-co-demo/p/butterfly-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Butterfly abaya"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −14%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Wide cut with a flowing cape effect.",
+    "compare_at": {
+     "minor": 56900,
+     "currency": "SAR",
+     "formatted": "SAR 569.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     }
+    ],
+    "price": {
+     "minor": 48900,
+     "currency": "SAR",
+     "formatted": "SAR 489.00"
+    }
+   },
+   "kimono-abaya": {
+    "id": "kimono-abaya",
+    "name": "Kimono abaya",
+    "url": "/dune-and-co-demo/p/kimono-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Kimono abaya"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Open kimono sleeves and a tie belt.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Forest green",
+      "hex": "#2F4F3E"
+     },
+     {
+      "label": "Stone",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 51900,
+     "currency": "SAR",
+     "formatted": "SAR 519.00"
+    }
+   },
+   "merino-crew-sweater": {
+    "id": "merino-crew-sweater",
+    "name": "Merino crew sweater",
+    "url": "/dune-and-co-demo/p/merino-crew-sweater",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Merino crew sweater"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Fine-gauge merino, warm without bulk.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Charcoal",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "SAR 249.00"
+    }
+   },
+   "wool-blend-cardigan": {
+    "id": "wool-blend-cardigan",
+    "name": "Wool-blend cardigan",
+    "url": "/dune-and-co-demo/p/wool-blend-cardigan",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Wool-blend cardigan"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −17%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Button front with ribbed trims.",
+    "compare_at": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "SAR 349.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Cream",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "SAR 289.00"
+    }
+   },
+   "ribbed-knit-polo": {
+    "id": "ribbed-knit-polo",
+    "name": "Ribbed knit polo",
+    "url": "/dune-and-co-demo/p/ribbed-knit-polo",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Ribbed knit polo"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Soft rib knit with a polo collar.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "SAR 199.00"
+    }
+   },
+   "chunky-knit-vest": {
+    "id": "chunky-knit-vest",
+    "name": "Chunky knit vest",
+    "url": "/dune-and-co-demo/p/chunky-knit-vest",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Chunky knit vest"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "Sold out"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": true,
+    "short": "Layer over a shirt or a tee.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Cream",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "Charcoal",
+      "hex": "#3A3A3C"
+     },
+     {
+      "label": "Terracotta",
+      "hex": "#B5654A"
+     }
+    ],
+    "price": {
+     "minor": 21900,
+     "currency": "SAR",
+     "formatted": "SAR 219.00"
+    }
+   },
+   "merino-turtleneck": {
+    "id": "merino-turtleneck",
+    "name": "Merino turtleneck",
+    "url": "/dune-and-co-demo/p/merino-turtleneck",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Merino turtleneck"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Close-fitting and very soft.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Burgundy",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "SAR 229.00"
+    }
+   },
+   "leather-loafers": {
+    "id": "leather-loafers",
+    "name": "Leather loafers",
+    "url": "/dune-and-co-demo/p/leather-loafers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Leather loafers"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Hand-stitched with a cushioned insole.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 35900,
+     "currency": "SAR",
+     "formatted": "SAR 359.00"
+    }
+   },
+   "suede-ankle-boots": {
+    "id": "suede-ankle-boots",
+    "name": "Suede ankle boots",
+    "url": "/dune-and-co-demo/p/suede-ankle-boots",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Suede ankle boots"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Stacked heel, side zip, soft suede.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 44900,
+     "currency": "SAR",
+     "formatted": "SAR 449.00"
+    }
+   },
+   "canvas-sneakers": {
+    "id": "canvas-sneakers",
+    "name": "Canvas sneakers",
+    "url": "/dune-and-co-demo/p/canvas-sneakers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Canvas sneakers"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "sale",
+      "label": "Sale −15%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Low-top with a vulcanised sole.",
+    "compare_at": {
+     "minor": 26900,
+     "currency": "SAR",
+     "formatted": "SAR 269.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "White",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "SAR 229.00"
+    }
+   },
+   "leather-sandals": {
+    "id": "leather-sandals",
+    "name": "Leather sandals",
+    "url": "/dune-and-co-demo/p/leather-sandals",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Leather sandals"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Two straps and a moulded footbed.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "SAR 199.00"
+    }
+   },
+   "ballet-flats": {
+    "id": "ballet-flats",
+    "name": "Ballet flats",
+    "url": "/dune-and-co-demo/p/ballet-flats",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Ballet flats"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Rounded toe, elastic trim, leather lining.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Blush",
+      "hex": "#E6C9C3"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     }
+    ],
+    "price": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "SAR 189.00"
+    }
+   },
+   "chelsea-boots": {
+    "id": "chelsea-boots",
+    "name": "Chelsea boots",
+    "url": "/dune-and-co-demo/p/chelsea-boots",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Chelsea boots"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Leather with elastic gussets.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 42900,
+     "currency": "SAR",
+     "formatted": "SAR 429.00"
+    }
+   },
+   "leather-tote": {
+    "id": "leather-tote",
+    "name": "Leather tote",
+    "url": "/dune-and-co-demo/p/leather-tote",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Leather tote"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Room for a laptop, with an inner zip pocket.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 49900,
+     "currency": "SAR",
+     "formatted": "SAR 499.00"
+    }
+   },
+   "canvas-shopper": {
+    "id": "canvas-shopper",
+    "name": "Canvas shopper",
+    "url": "/dune-and-co-demo/p/canvas-shopper",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Canvas shopper"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Sturdy, washable and foldable.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 15900,
+     "currency": "SAR",
+     "formatted": "SAR 159.00"
+    }
+   },
+   "crossbody-bag": {
+    "id": "crossbody-bag",
+    "name": "Crossbody bag",
+    "url": "/dune-and-co-demo/p/crossbody-bag",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Crossbody bag"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Compact with an adjustable strap.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Burgundy",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 32900,
+     "currency": "SAR",
+     "formatted": "SAR 329.00"
+    }
+   },
+   "mini-bucket-bag": {
+    "id": "mini-bucket-bag",
+    "name": "Mini bucket bag",
+    "url": "/dune-and-co-demo/p/mini-bucket-bag",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Mini bucket bag"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −14%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Drawstring top and a detachable strap.",
+    "compare_at": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "SAR 349.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Blush",
+      "hex": "#E6C9C3"
+     },
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 29900,
+     "currency": "SAR",
+     "formatted": "SAR 299.00"
+    }
+   },
+   "weekend-duffle": {
+    "id": "weekend-duffle",
+    "name": "Weekend duffle",
+    "url": "/dune-and-co-demo/p/weekend-duffle",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Weekend duffle"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Cotton canvas with leather handles.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Olive",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 56900,
+     "currency": "SAR",
+     "formatted": "SAR 569.00"
+    }
+   },
+   "wool-and-cashmere-scarf": {
+    "id": "wool-and-cashmere-scarf",
+    "name": "Wool and cashmere scarf",
+    "url": "/dune-and-co-demo/p/wool-and-cashmere-scarf",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Wool and cashmere scarf"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Wide, warm and very soft.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Cream",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "Charcoal",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 17900,
+     "currency": "SAR",
+     "formatted": "SAR 179.00"
+    }
+   },
+   "leather-belt": {
+    "id": "leather-belt",
+    "name": "Leather belt",
+    "url": "/dune-and-co-demo/p/leather-belt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Leather belt"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Matte buckle, full-grain leather.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 12900,
+     "currency": "SAR",
+     "formatted": "SAR 129.00"
+    }
+   },
+   "straw-hat": {
+    "id": "straw-hat",
+    "name": "Straw hat",
+    "url": "/dune-and-co-demo/p/straw-hat",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Straw hat"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Wide brim to keep the sun off.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Sand",
+      "hex": "#D8C3A5"
+     }
+    ],
+    "price": {
+     "minor": 11900,
+     "currency": "SAR",
+     "formatted": "SAR 119.00"
+    }
+   },
+   "silk-scarf": {
+    "id": "silk-scarf",
+    "name": "Silk scarf",
+    "url": "/dune-and-co-demo/p/silk-scarf",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Silk scarf"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Hand-rolled edges and a printed border.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Ivory",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "Terracotta",
+      "hex": "#B5654A"
+     },
+     {
+      "label": "Navy",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 14900,
+     "currency": "SAR",
+     "formatted": "SAR 149.00"
+    }
+   },
+   "acetate-sunglasses": {
+    "id": "acetate-sunglasses",
+    "name": "Acetate sunglasses",
+    "url": "/dune-and-co-demo/p/acetate-sunglasses",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Acetate sunglasses"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −20%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Round frame with UV400 lenses.",
+    "compare_at": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "SAR 249.00"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Tan",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "SAR 199.00"
+    }
+   },
+   "leather-card-holder": {
+    "id": "leather-card-holder",
+    "name": "Leather card holder",
+    "url": "/dune-and-co-demo/p/leather-card-holder",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "Leather card holder"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Four slots and a centre pocket.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "Black",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "Camel",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "Burgundy",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "SAR 89.00"
+    }
+   }
+  },
+  "total": 47,
+  "next_page_url": null,
+  "facets": [
+   {
+    "id": "size",
+    "label": "Size",
+    "kind": "size",
+    "options": [
+     {
+      "value": "XS",
+      "label": "XS",
+      "count": 16,
+      "available": true
+     },
+     {
+      "value": "S",
+      "label": "S",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "M",
+      "label": "M",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "L",
+      "label": "L",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "XL",
+      "label": "XL",
+      "count": 22,
+      "available": true
+     },
+     {
+      "value": "30",
+      "label": "30",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "32",
+      "label": "32",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "34",
+      "label": "34",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "36",
+      "label": "36",
+      "count": 5,
+      "available": true
+     },
+     {
+      "value": "38",
+      "label": "38",
+      "count": 5,
+      "available": true
+     },
+     {
+      "value": "56",
+      "label": "56",
+      "count": 7,
+      "available": true
+     },
+     {
+      "value": "58",
+      "label": "58",
+      "count": 7,
+      "available": true
+     },
+     {
+      "value": "60",
+      "label": "60",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "62",
+      "label": "62",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "52",
+      "label": "52",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "54",
+      "label": "54",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "40",
+      "label": "40",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "41",
+      "label": "41",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "42",
+      "label": "42",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "43",
+      "label": "43",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "44",
+      "label": "44",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "45",
+      "label": "45",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "37",
+      "label": "37",
+      "count": 4,
+      "available": true
+     },
+     {
+      "value": "39",
+      "label": "39",
+      "count": 4,
+      "available": true
+     },
+     {
+      "value": "OS",
+      "label": "OS",
+      "count": 10,
+      "available": true
+     }
+    ]
+   },
+   {
+    "id": "colour",
+    "label": "Colour",
+    "kind": "swatch",
+    "options": [
+     {
+      "value": "black",
+      "label": "Black",
+      "swatch": "#1C1C1C",
+      "count": 29
+     },
+     {
+      "value": "blush",
+      "label": "Blush",
+      "swatch": "#E6C9C3",
+      "count": 4
+     },
+     {
+      "value": "burgundy",
+      "label": "Burgundy",
+      "swatch": "#6D2432",
+      "count": 5
+     },
+     {
+      "value": "camel",
+      "label": "Camel",
+      "swatch": "#B58B5A",
+      "count": 8
+     },
+     {
+      "value": "charcoal",
+      "label": "Charcoal",
+      "swatch": "#3A3A3C",
+      "count": 5
+     },
+     {
+      "value": "cream",
+      "label": "Cream",
+      "swatch": "#F2E8D5",
+      "count": 5
+     },
+     {
+      "value": "denim",
+      "label": "Denim blue",
+      "swatch": "#5B7FA3",
+      "count": 2
+     },
+     {
+      "value": "forest",
+      "label": "Forest green",
+      "swatch": "#2F4F3E",
+      "count": 2
+     },
+     {
+      "value": "ivory",
+      "label": "Ivory",
+      "swatch": "#F4EFE6",
+      "count": 6
+     },
+     {
+      "value": "navy",
+      "label": "Navy",
+      "swatch": "#1F2A44",
+      "count": 9
+     },
+     {
+      "value": "olive",
+      "label": "Olive",
+      "swatch": "#6B705C",
+      "count": 9
+     },
+     {
+      "value": "sage",
+      "label": "Sage",
+      "swatch": "#9CAF88",
+      "count": 1
+     },
+     {
+      "value": "sand",
+      "label": "Sand",
+      "swatch": "#D8C3A5",
+      "count": 10
+     },
+     {
+      "value": "sky",
+      "label": "Sky blue",
+      "swatch": "#A9C7DD",
+      "count": 4
+     },
+     {
+      "value": "stone",
+      "label": "Stone",
+      "swatch": "#BDB8AD",
+      "count": 5
+     },
+     {
+      "value": "tan",
+      "label": "Tan",
+      "swatch": "#C19A6B",
+      "count": 8
+     },
+     {
+      "value": "terracotta",
+      "label": "Terracotta",
+      "swatch": "#B5654A",
+      "count": 3
+     },
+     {
+      "value": "white",
+      "label": "White",
+      "swatch": "#FFFFFF",
+      "count": 9
+     }
+    ]
+   },
+   {
+    "id": "brand",
+    "label": "Brand",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "Dune & Co.",
+      "label": "Dune & Co.",
+      "count": 47
+     }
+    ]
+   },
+   {
+    "id": "on_sale",
+    "label": "On sale",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "On sale",
+      "count": 10
+     }
+    ]
+   },
+   {
+    "id": "in_stock",
+    "label": "In stock",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "In stock only"
+     }
+    ]
+   }
+  ]
+ },
+ "features": {
+  "announcement": {
+   "text": "Free shipping over SAR 200 · 14-day returns",
+   "icon": "truck"
+  },
+  "featured": [
+   "relaxed-linen-shirt",
+   "wide-leg-trousers",
+   "straight-leg-jeans",
+   "organic-cotton-tee",
+   "linen-camp-collar-shirt",
+   "crew-neck-tee",
+   "cotton-blend-thobe",
+   "classic-open-abaya"
+  ],
+  "wishlist": true,
+  "bnpl": {
+   "providers": [
+    "tabby",
+    "tamara"
+   ],
+   "instalments": 4
+  }
+ },
+ "customer": {
+  "name": "Noura",
+  "has_passkey": true,
+  "wishlist": [
+   "relaxed-linen-shirt",
+   "wide-leg-trousers"
+  ]
+ },
+ "endpoints": {
+  "cart": "/dune-and-co-demo/cart",
+  "quote": "/dune-and-co-demo/quote",
+  "place": "/dune-and-co-demo/order",
+  "track": "/dune-and-co-demo/track",
+  "coupon": "/dune-and-co-demo/coupon",
+  "otp": "/dune-and-co-demo/otp",
+  "account": "/dune-and-co-demo/account",
+  "search": "/dune-and-co-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "SAR",
+   "exponent": 2,
+   "symbol_position_effective": "before"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "VAT"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "checkout",
+  "checkout": {
+   "address": {
+    "icon": "map-pin",
+    "label": "Noura Al-Harbi",
+    "sub": "Al Olaya, King Fahd Rd, Bldg 12, Riyadh 12611 · +966 55 123 4567"
+   },
+   "delivery_methods": [
+    {
+     "id": "standard",
+     "label": "Standard",
+     "sub": "2–4 days · by Tue 6 Oct",
+     "amount": {
+      "minor": 0,
+      "currency": "SAR",
+      "formatted": "SAR 0.00"
+     },
+     "amount_label": "Free",
+     "selected": true,
+     "icon": "truck"
+    },
+    {
+     "id": "express",
+     "label": "Express",
+     "sub": "Tomorrow by 9 pm",
+     "amount": {
+      "minor": 2500,
+      "currency": "SAR",
+      "formatted": "SAR 25.00"
+     },
+     "amount_label": "SAR 25.00",
+     "icon": "zap"
+    },
+    {
+     "id": "pickup",
+     "label": "Pick up in store",
+     "sub": "Olaya Mall · ready tomorrow",
+     "amount": {
+      "minor": 0,
+      "currency": "SAR",
+      "formatted": "SAR 0.00"
+     },
+     "amount_label": "Free",
+     "icon": "store"
+    }
+   ],
+   "payment_methods": [
+    {
+     "id": "card",
+     "label": "Card",
+     "sub": "Visa, Mastercard, mada",
+     "selected": true,
+     "icon": "credit-card"
+    },
+    {
+     "id": "apple_pay",
+     "label": "Apple Pay",
+     "icon": "apple"
+    },
+    {
+     "id": "bnpl",
+     "label": "Pay in 4 · Tabby or Tamara",
+     "sub": "4 × SAR 92.00, no interest",
+     "kind": "bnpl",
+     "icon": "calendar-clock"
+    },
+    {
+     "id": "cod",
+     "label": "Cash on delivery",
+     "sub": "+ SAR 10.00 fee",
+     "amount": {
+      "minor": 1000,
+      "currency": "SAR",
+      "formatted": "SAR 10.00"
+     },
+     "amount_label": "+ SAR 10.00",
+     "icon": "banknote"
+    }
+   ],
+   "quote": {
+    "lines": [
+     {
+      "id": "ln_1",
+      "item_id": "relaxed-linen-shirt",
+      "name": "Relaxed linen shirt",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-4x5.svg",
+       "alt": "Relaxed linen shirt"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 13900,
+       "currency": "SAR",
+       "formatted": "SAR 139.00"
+      },
+      "brand": "Dune & Co.",
+      "compare_at": {
+       "minor": 19900,
+       "currency": "SAR",
+       "formatted": "SAR 199.00"
+      },
+      "choices_label": "Sand · M",
+      "unit_label": "Qty 1"
+     },
+     {
+      "id": "ln_2",
+      "item_id": "wide-leg-trousers",
+      "name": "Wide-leg trousers",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-4x5.svg",
+       "alt": "Wide-leg trousers"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 22900,
+       "currency": "SAR",
+       "formatted": "SAR 229.00"
+      },
+      "brand": "Dune & Co.",
+      "choices_label": "Navy · M",
+      "unit_label": "Qty 1"
+     }
+    ],
+    "rows": [
+     {
+      "key": "subtotal",
+      "label": "Items (2)",
+      "amount": {
+       "minor": 36800,
+       "currency": "SAR",
+       "formatted": "SAR 368.00"
+      },
+      "kind": "subtotal"
+     },
+     {
+      "key": "shipping",
+      "label": "Shipping · Standard",
+      "amount": {
+       "minor": 0,
+       "currency": "SAR",
+       "formatted": "SAR 0.00"
+      },
+      "amount_label": "Free",
+      "kind": "delivery"
+     },
+     {
+      "key": "saving",
+      "label": "You save",
+      "amount": {
+       "minor": 6000,
+       "currency": "SAR",
+       "formatted": "SAR 60.00"
+      },
+      "kind": "discount",
+      "muted": true,
+      "informational": true
+     }
+    ],
+    "total": {
+     "minor": 36800,
+     "currency": "SAR",
+     "formatted": "SAR 368.00"
+    },
+    "total_label": "Total",
+    "tax_note": "Includes VAT 15% (SAR 48.00). 14-day returns."
+   },
+   "place_label": "Pay SAR 368.00"
+  }
+ }
+}

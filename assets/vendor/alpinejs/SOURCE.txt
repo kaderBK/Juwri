@@ -1,0 +1,5 @@
+Alpine.js 3.14.9 (cdn build, minified). Source: https://github.com/alpinejs/alpine
+File: https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js (sha256 3ed1eed252488921df65e363d6715deb04d7f92aaedb9e52199fdf73cb1e0ad3, same bytes on unpkg).
+Was 3.13.10: its x-show hide cascade called `.then(([i]) => i())` on a hide promise that a second hide in the same frame had
+already consumed -> "TypeError: u is not a function" (the flaky e2e b-signup pageerror). Fixed upstream in 3.14.0
+(alpinejs/alpine#4204, `i?.()`). Guarded by tests/Feature/VendoredAlpineTest.php.

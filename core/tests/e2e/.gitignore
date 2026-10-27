@@ -1,0 +1,4 @@
+# T8 e2e — puppeteer screenshots are build artifacts, not source.
+__screenshots__/
+*.png
+__e2e_all__/

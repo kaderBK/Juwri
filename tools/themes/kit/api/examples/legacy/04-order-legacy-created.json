@@ -1,0 +1,54 @@
+{
+  "operationId": "createOrder",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/orders",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://saffron-house.example"
+    },
+    "body": {
+      "items": [
+        {
+          "item_id": 101,
+          "quantity": 2
+        },
+        {
+          "item_id": 102,
+          "quantity": 1
+        }
+      ],
+      "type": "delivery",
+      "customer_name": "Noura Al-Harbi",
+      "phone": "+966551234567",
+      "client_uuid": "01a0fb36-4a10-7c3e-9b52-0d6e4f1a2b37"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:01:40 GMT",
+      "Deprecation": "true",
+      "Sunset": "Sun, 03 Oct 2027 00:00:00 GMT",
+      "Link": "</developers>; rel=\"deprecation\", </api/v1/storefront/orders>; rel=\"successor-version\""
+    },
+    "body": {
+      "ok": true,
+      "order_id": 5821,
+      "total": 64.4,
+      "discount": 0.0,
+      "coupon_applied": false,
+      "wallet_applied": 0.0,
+      "scheduled_at": null,
+      "track_token": "trk_5b1e0c9d7a2f4e8c1d3b6a90",
+      "continue_url": "https://saffron-house.example/api/v1/track/trk_5b1e0c9d7a2f4e8c1d3b6a90",
+      "track_url": "https://saffron-house.example/order/track/trk_5b1e0c9d7a2f4e8c1d3b6a90",
+      "eta_range": "20-30"
+    }
+  }
+}

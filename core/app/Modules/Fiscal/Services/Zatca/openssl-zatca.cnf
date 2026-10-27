@@ -1,0 +1,13 @@
+# P4-01: the OpenSSL config ZatcaCrypto passes to openssl_csr_new / openssl_pkey_new, so CSR generation never depends
+# on the host's system openssl.cnf (macOS / static PHP builds ship one without a [v3_req] section → the onboarding
+# failed with "Error loading request_extensions_section section v3_req").
+[ req ]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[ req_distinguished_name ]
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment

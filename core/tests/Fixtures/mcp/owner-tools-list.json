@@ -1,0 +1,849 @@
+[
+    {
+        "name": "list_restaurants",
+        "description": "List the restaurants (or other vertical stores) you own. Each row includes store_type (restaurant, cafe, retail, cosmetic, clothing, carparts, grocery, laundry, services, pharmacy) and a vertical summary (label + capabilities: variant_goods, fitment, age_gate, expiry, service) so an agent can tell what kind of store it is before calling get_menu or a vertical tool.",
+        "inputSchema": {
+            "type": "object",
+            "properties": [],
+            "required": []
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "get_menu",
+        "description": "Get a restaurant's categories and items.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                }
+            },
+            "required": []
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "list_orders",
+        "description": "List a restaurant's orders, newest first. Filter with status, a created-at date range (date_from / date_to, YYYY-MM-DD, inclusive), and search (matches customer name or phone, case-insensitive). limit caps results (default 30, max 100). Returns a summary row per order; call get_order for full line items.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "date_from": {
+                    "type": "string"
+                },
+                "date_to": {
+                    "type": "string"
+                },
+                "search": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "get_order",
+        "description": "Full detail for one order by id: status, type, table, customer name + phone, paid flag, total, timestamps, and every line item (name, quantity, unit price, note). Use list_orders to find the id first. Errors -32004 if the order is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "order_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "get_analytics",
+        "description": "Order count and revenue for a restaurant over N days.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "days": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "update_order_status",
+        "description": "Advance an order's status.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "store_id",
+                "order_id",
+                "status"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "add_menu_item",
+        "description": "Create a catalog item. For a non-food store (retail/pharmacy/etc) you may also set goods fields: brand_id, weight, pricing_unit, sku, track_inventory, stock_qty, and pharmacy OTC fields age_restricted, batch_no, expiry_date (YYYY-MM-DD). These are ignored for a restaurant.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "brand_id": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                },
+                "pricing_unit": {
+                    "type": "string"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "track_inventory": {
+                    "type": "boolean"
+                },
+                "stock_qty": {
+                    "type": "integer"
+                },
+                "age_restricted": {
+                    "type": "boolean"
+                },
+                "batch_no": {
+                    "type": "string"
+                },
+                "expiry_date": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "store_id",
+                "name",
+                "price"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "update_menu_item",
+        "description": "Update a catalog item. Sets name/price/description, and for a non-food store the goods fields brand_id, weight, pricing_unit, sku, track_inventory, stock_qty, age_restricted, batch_no, expiry_date (YYYY-MM-DD) — ignored for a restaurant. Only the fields you pass change.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "brand_id": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                },
+                "pricing_unit": {
+                    "type": "string"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "track_inventory": {
+                    "type": "boolean"
+                },
+                "stock_qty": {
+                    "type": "integer"
+                },
+                "age_restricted": {
+                    "type": "boolean"
+                },
+                "batch_no": {
+                    "type": "string"
+                },
+                "expiry_date": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "list_categories",
+        "description": "List a restaurant's menu categories (id, name, position, and items_count). Use this to discover category ids before add_menu_item, update_category, or delete_category.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "add_category",
+        "description": "Create a menu category. Returns {id, name}. Only name is required; optional position (sort order) and active. Create the category first, then pass its id as category_id to add_menu_item.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "integer"
+                },
+                "active": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "store_id",
+                "name"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "update_category",
+        "description": "Rename or reorder a menu category. Pass category_id plus any of name/position/active. Returns {id, name}. Errors -32004 if the category is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "integer"
+                },
+                "active": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "store_id",
+                "category_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "delete_category",
+        "description": "Delete a menu category. REFUSES with error -32006 when the category still has items — move or delete those items first (an empty category deletes cleanly). Returns {deleted:true, id}.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "category_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": true,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "delete_menu_item",
+        "description": "Permanently delete a menu item by id. Returns {deleted:true, id}. To temporarily hide an item that is out of stock, use set_item_availability instead — deletion is irreversible. Errors -32004 if the item is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": true,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "set_item_availability",
+        "description": "Mark a menu item in or out of stock (the \"86\" toggle) without deleting it. Pass available:true to make it orderable again, available:false to mark it sold out. Returns {id, available, is_sold_out}. Prefer this over delete_menu_item for temporary stock-outs.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "available": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id",
+                "available"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "list_customers",
+        "description": "List a restaurant's customers (CRM), most-recent order first. Optional search matches name, phone, or email (case-insensitive); limit caps results (default 30, max 100). Each row: id, name, phone, email, orders_count, total_spent, last_order_at. Call get_customer for one customer's full record.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "search": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "get_customer",
+        "description": "Full CRM record for one customer by id: name, phone, email, orders_count, total_spent, last_order_at, tags, created_at. Errors -32004 if the customer is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "customer_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "customer_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "sales_report",
+        "description": "Sales summary for a date range: order counts (total/paid, by status, by type), revenue (gross/paid/avg order value), and the top 10 items by quantity. Pass from and to as YYYY-MM-DD (inclusive); default is the last 30 days. This is the authoritative revenue source — do not sum orders yourself.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "get_restaurant_settings",
+        "description": "Read-only snapshot of a restaurant's profile + ordering settings: name, address, phone, business_hours (free-text), currency, store_type, a vertical summary (label + capabilities), and ordering flags (online_ordering_enabled, delivery_charge). Use this to inspect config before update_business_hours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "update_business_hours",
+        "description": "Set the restaurant's business-hours text (free-form, e.g. \"Mon–Sat 9am–11pm, Sun closed\"), shown on the public page. Pass business_hours (max 255 chars). Returns {id, business_hours}. This is the whole hours field — send the complete text, it replaces the previous value.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "business_hours": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "store_id",
+                "business_hours"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "list_coupons",
+        "description": "List your discount coupons (id, code, type, value, usage limit, used count, min_order_amount, expiry). Coupons are account-level (apply across your restaurants' food orders). limit caps results (default 50, max 100).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                }
+            },
+            "required": []
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "create_coupon",
+        "description": "Create a food-order discount coupon. coupon_type is \"percentage\" (value = percent off, e.g. 15) or \"fixed\" (value = amount off in your currency). Optional: limit (max total redemptions, default 9999), expiry_at (YYYY-MM-DD), min_order_amount. Codes are uppercased and must be unique among your coupons (error -32602 on clash). Returns the created coupon.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "coupon_type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "expiry_at": {
+                    "type": "string"
+                },
+                "min_order_amount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "code",
+                "coupon_type",
+                "value"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "update_coupon",
+        "description": "Edit one of your coupons by id. Pass any of code, coupon_type, value, limit, expiry_at, min_order_amount. Returns the updated coupon. Errors -32004 if not found/not yours, -32602 on a code clash.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "coupon_id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "coupon_type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "expiry_at": {
+                    "type": "string"
+                },
+                "min_order_amount": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "coupon_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "delete_coupon",
+        "description": "Delete one of your coupons by id. Returns {deleted:true, id}. Errors -32004 if not found or not yours. Irreversible.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "coupon_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "coupon_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": true,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "list_brands",
+        "description": "List a store's brands (retail, cosmetic, clothing, car-parts, pharmacy — Multi-Vertical Stores feature). Returns id, name, slug, active, position, items_count. Use this to discover brand ids before filtering or assigning items to a brand.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "list_variants",
+        "description": "List one item's variants (size/color/etc. matrix) for a variant-tracked goods store. Pass item_id. Each row: id, sku, barcode, options (the axis combination, e.g. \"Size: M, Color: Red\"), stock_qty (null = not stock-tracked), price. Errors -32004 if the item is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "list_shipments",
+        "description": "List fulfillment/shipment status for a restaurant's physical-goods orders, newest first. Filter with order_id and/or status (pending, shipped, delivered). limit caps results (default 30, max 100). Each row: order_id, status, carrier, tracking_number, shipped_at, delivered_at.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "order_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "limit": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "list_fitments",
+        "description": "List vehicle Year/Make/Model fitment rows for a car-parts item. Pass item_id. Each row: id, year, make, model, submodel, engine, label (e.g. \"2016 Honda Civic EX (2.0L)\"), notes. Errors -32004 if the item is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "list_expiring_items",
+        "description": "Batch/expiry compliance read for a pharmacy (OTC-only) or other expiry-tracked store. Pass days to set the look-ahead window for \"expiring soon\" (default 30, max 365). Returns {expired: [...], expiring_soon: [...]}, each row {id, name, batch_no, expiry_date, age_restricted}. Never returns prescription, pharmacist, controlled-substance, or patient data — only batch_no/expiry_date on the item.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "days": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": true
+        }
+    },
+    {
+        "name": "add_variant",
+        "description": "Add a variant (a size/color/option combination) to a goods item. Pass item_id and options — the axis map, e.g. {\"Size\":\"M\",\"Color\":\"Red\"} — plus price. Optional sku, barcode, stock_qty (omit or null = not stock-tracked). Returns the created variant. Errors -32004 if the item is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "item_id": {
+                    "type": "integer"
+                },
+                "options": {
+                    "type": "object"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "barcode": {
+                    "type": "string"
+                },
+                "stock_qty": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "item_id",
+                "options",
+                "price"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": false
+        }
+    },
+    {
+        "name": "update_variant",
+        "description": "Update a goods variant by variant_id — price, sku, barcode, stock_qty, active. Only the fields you pass change. Errors -32004 if the variant is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "variant_id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "sku": {
+                    "type": "string"
+                },
+                "barcode": {
+                    "type": "string"
+                },
+                "stock_qty": {
+                    "type": "integer"
+                },
+                "active": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "store_id",
+                "variant_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": false,
+            "idempotentHint": true
+        }
+    },
+    {
+        "name": "delete_variant",
+        "description": "Delete a goods variant by variant_id. Errors -32004 if the variant is not found or not yours.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "store_id": {
+                    "type": "integer"
+                },
+                "variant_id": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "store_id",
+                "variant_id"
+            ]
+        },
+        "annotations": {
+            "readOnlyHint": false,
+            "destructiveHint": true,
+            "idempotentHint": false
+        }
+    }
+]

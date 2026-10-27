@@ -1,0 +1,257 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * tc-cards — visual card picker for customizer select fields that carry
+ * option_previews (rev/customizer-cards SPEC 1). Shared by the theme
+ * customizer partial (tc-card-select.blade.php) and /admin/menu-templates.
+ * Every selector is prefixed .tcc- (StoriesCardAssetsTest sweeps this).
+ * Grid follows the .tc-splash-presets idiom (96px min tiles); palette from
+ * the approved mockups: stage #1f2430, accent #6d28d9, gold #d4af37.
+ * Logical properties only (RTL-safe).
+ */
+
+.tcc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 8px;
+}
+
+.tcc-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+    margin: 0;
+    border: 1px solid rgba(127, 127, 127, .22);
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    text-align: start;
+    transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.tcc-card:hover {
+    border-color: rgba(212, 175, 55, .55);
+    transform: translateY(-1px);
+}
+
+/* Native radio: visually hidden but focusable — the group is one tab stop
+   with arrow-key movement for free. Never display:none (kills focus). */
+.tcc-card__radio {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Keyboard focus ring rides the card, driven by the hidden radio. */
+.tcc-card:has(.tcc-card__radio:focus-visible) {
+    outline: 2px solid var(--theme-color-1, #6d28d9);
+    outline-offset: 2px;
+    border-color: rgba(212, 175, 55, .55);
+}
+
+/* Selected tile: gold ring + subtle glow (SPEC 2). */
+.tcc-card:has(.tcc-card__radio:checked) {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 1px #d4af37 inset, 0 0 12px rgba(212, 175, 55, .3);
+}
+
+/* Thumb wrapper: dark stage behind the SVG while it loads, and the anchor
+   for the A4 overlay animations (shimmer/glow pseudo-elements). */
+.tcc-thumbwrap {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #1f2430;
+}
+
+.tcc-thumb {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.tcc-label {
+    font-size: .68rem;
+    line-height: 1.2;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tcc-sub {
+    font-size: .56rem;
+    line-height: 1.2;
+    opacity: .7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ A4 ---
+   Per-concept hover micro-animations. The tile art is a flat SVG in an img,
+   so motion rides the whole thumb or the two overlay pseudo-elements below
+   (sheen band + glow wash). Transform/opacity ONLY — no layout thrash. The
+   entire animation block sits behind prefers-reduced-motion. Triggers:
+   card :hover plus keyboard focus via :has(.tcc-card__radio:focus-visible)
+   (the label itself never receives focus — the hidden radio does).
+   transform-origins are physical on purpose: the raster art does not flip
+   in RTL, so the anchor must follow the art, not the writing direction. */
+
+.tcc-thumbwrap::before,
+.tcc-thumbwrap::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* Sheen band (seal shimmer, medallion glint). */
+.tcc-thumbwrap::before {
+    inset-block: 0;
+    inset-inline-start: -60%;
+    width: 45%;
+    transform: skewX(-18deg);
+    background: linear-gradient(90deg, rgba(232, 201, 106, 0) 0%, rgba(232, 201, 106, .38) 50%, rgba(232, 201, 106, 0) 100%);
+}
+
+/* Gold glow wash (toolbar glow). */
+.tcc-thumbwrap::after {
+    inset: 0;
+    background: radial-gradient(60% 55% at 50% 80%, rgba(212, 175, 55, .45), rgba(212, 175, 55, 0) 70%);
+}
+
+/* Capsule repurposes the glow layer as an oversized conic wedge that spins —
+   a border-run of gold into violet. inset -45% keeps the square covering the
+   wrapper at every rotation angle (overflow is clipped by .tcc-thumbwrap). */
+.tcc-anim--capsule .tcc-thumbwrap::after {
+    inset: -45%;
+    background: conic-gradient(from 0deg,
+        rgba(212, 175, 55, 0) 0deg, rgba(212, 175, 55, .4) 20deg,
+        rgba(139, 92, 246, .35) 42deg, rgba(139, 92, 246, 0) 72deg,
+        rgba(0, 0, 0, 0) 360deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .tcc-anim--orb:hover .tcc-thumb,
+    .tcc-anim--orb:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        animation: tcc-pulse 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--ribbon:hover .tcc-thumb,
+    .tcc-anim--ribbon:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        transform-origin: 62% 0;
+        animation: tcc-sway 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--seal:hover .tcc-thumbwrap::before,
+    .tcc-anim--seal:has(.tcc-card__radio:focus-visible) .tcc-thumbwrap::before,
+    .tcc-anim--medallion:hover .tcc-thumbwrap::before,
+    .tcc-anim--medallion:has(.tcc-card__radio:focus-visible) .tcc-thumbwrap::before {
+        animation: tcc-sheen 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--medallion:hover .tcc-thumb,
+    .tcc-anim--medallion:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        transform-origin: 50% 30%;
+        animation: tcc-tilt 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--filmstrip:hover .tcc-thumb,
+    .tcc-anim--filmstrip:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        animation: tcc-slide 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--sheet:hover .tcc-thumb,
+    .tcc-anim--sheet:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        animation: tcc-peek 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--capsule:hover .tcc-thumbwrap::after,
+    .tcc-anim--capsule:has(.tcc-card__radio:focus-visible) .tcc-thumbwrap::after {
+        animation: tcc-orbit 2s linear infinite;
+    }
+
+    .tcc-anim--tassel:hover .tcc-thumb,
+    .tcc-anim--tassel:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        transform-origin: 100% 25%;
+        animation: tcc-swing 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--dogear:hover .tcc-thumb,
+    .tcc-anim--dogear:has(.tcc-card__radio:focus-visible) .tcc-thumb {
+        transform-origin: 100% 0;
+        animation: tcc-curl 2s ease-in-out infinite;
+    }
+
+    .tcc-anim--toolbar:hover .tcc-thumbwrap::after,
+    .tcc-anim--toolbar:has(.tcc-card__radio:focus-visible) .tcc-thumbwrap::after {
+        animation: tcc-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes tcc-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @keyframes tcc-sway {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(-2deg); }
+    }
+
+    @keyframes tcc-sheen {
+        0% { transform: translateX(0) skewX(-18deg); opacity: 0; }
+        12% { opacity: 1; }
+        45%, 100% { transform: translateX(340%) skewX(-18deg); opacity: 0; }
+    }
+
+    @keyframes tcc-tilt {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(1.6deg); }
+    }
+
+    @keyframes tcc-slide {
+        0%, 100% { transform: translateX(0) scale(1.05); }
+        50% { transform: translateX(-3%) scale(1.05); }
+    }
+
+    @keyframes tcc-peek {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4%); }
+    }
+
+    @keyframes tcc-orbit {
+        0% { transform: rotate(0deg); opacity: 1; }
+        100% { transform: rotate(360deg); opacity: 1; }
+    }
+
+    @keyframes tcc-swing {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(-1.8deg); }
+    }
+
+    @keyframes tcc-curl {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.045); }
+    }
+
+    @keyframes tcc-glow {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+    }
+}

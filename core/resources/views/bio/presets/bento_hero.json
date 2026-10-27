@@ -1,0 +1,30 @@
+{
+  "slug": "bento_hero",
+  "starter": "social_grid",
+  "name": "Bento Hero",
+  "family": "bento",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "Manrope", "weights": [400, 600, 700, 800]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#191713",
+    "--ink": "#efe9df",
+    "--muted": "#b5ac9c",
+    "--card": "#221f1a",
+    "--btn-bg": "#221f1a",
+    "--btn-fg": "#efe9df",
+    "--btn-border": "#322e26",
+    "--accent": "#9db26a",
+    "--accent-ink": "#191713",
+    "--icon-fg": "#9db26a",
+    "--radius": "18px",
+    "--shadow": "none",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Fraunces',Georgia,serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "operationId": "createBooking",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/bookings",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_kiosk_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fcd0-3e31-7b5f-8ead-a6ee5792dc0b",
+      "X-Hold-Token": "hld_805db68acd617562527cc0edca9c84c2"
+    },
+    "body": {
+      "hold_id": "01a0fc2c-c257-740c-bd7f-d97da89f79a2",
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ],
+      "option_ids": [
+        "019f9e03-278b-717b-b9e2-b16615441e71",
+        "019f9b12-2514-7941-a496-bb4c8e05f95a"
+      ],
+      "quote_hash": "qh_b405000c6b88455eff51762bd863c0ae",
+      "customer": {
+        "name": "Reem",
+        "phone": "+966500000123"
+      },
+      "payment": {
+        "mode": "pay_later",
+        "method_id": "venue"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:02:10 GMT"
+    },
+    "body": {
+      "booking": {
+        "public_id": "01a0fcd0-8dc8-74bb-8071-b9bc7570dca5",
+        "number": "SB-4823",
+        "status": "confirmed",
+        "starts_at": "2026-10-02T11:30:00+03:00",
+        "ends_at": "2026-10-02T12:45:00+03:00",
+        "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+        "service_ids": [
+          "019ed72b-4e00-76d8-a0e0-611df411c074"
+        ],
+        "manage_token": "mgt_247f275a55d86c9cb8b068310bb8",
+        "manage_url": "https://sidra-salon.example/booking/mgt_247f275a55d86c9cb8b068310bb8",
+        "ics_url": "https://sidra-salon.example/booking/mgt_247f275a55d86c9cb8b068310bb8/calendar.ics",
+        "cancel_deadline_at": "2026-10-01T11:30:00+03:00",
+        "reschedule_deadline_at": "2026-10-01T11:30:00+03:00"
+      },
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "name": "Haircut & blow-dry",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Haircut & blow-dry"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 14000,
+              "currency": "SAR",
+              "formatted": "SAR 140.00"
+            },
+            "choices_label": "Medium"
+          },
+          {
+            "id": "ln_2",
+            "name": "Deep conditioning",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Deep conditioning"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 4000,
+              "currency": "SAR",
+              "formatted": "SAR 40.00"
+            }
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Total",
+            "amount": {
+              "minor": 18000,
+              "currency": "SAR",
+              "formatted": "SAR 180.00"
+            },
+            "kind": "subtotal"
+          }
+        ],
+        "total": {
+          "minor": 18000,
+          "currency": "SAR",
+          "formatted": "SAR 180.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Prices include VAT 15% (SAR 23.48)."
+      },
+      "payment": {
+        "mode": "pay_later",
+        "status": "pay_later",
+        "next_action": null
+      },
+      "replayed": false
+    }
+  }
+}

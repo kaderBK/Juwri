@@ -1,0 +1,27 @@
+{
+  "operationId": "getKiosk",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/kiosk",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_kiosk_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:21:00 GMT"
+    },
+    "body": {
+      "message": "Kiosk mode is not part of this store's plan.",
+      "code": "kiosk_not_enabled",
+      "details": {
+        "feature": "kiosk"
+      }
+    }
+  }
+}

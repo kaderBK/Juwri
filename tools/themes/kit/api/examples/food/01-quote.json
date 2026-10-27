@@ -1,0 +1,182 @@
+{
+  "operationId": "quoteCart",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/quote",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "order_type": "delivery",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019fd1cb-7600-7197-8e48-219b57ed96e0",
+          "option_ids": [
+            "019fb26b-c852-7904-aca4-bd1a1d1fba06",
+            "019f0fe5-9871-76bd-a3e6-b6b2f53cc65c",
+            "019f7aa6-e9e6-77d0-ba6e-792614d13c83"
+          ],
+          "qty": 1
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019eff4b-8580-729b-bbcf-1d93b83ec998",
+          "option_ids": [
+            "019f55ef-91b2-7314-b6db-52d33df40582"
+          ],
+          "qty": 1
+        }
+      ],
+      "coupon": "WELCOME10",
+      "tip": {
+        "choice_id": "tip_5",
+        "minor": 500
+      },
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "line2": "Apt 4",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA",
+        "notes": "Gate code at the door"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 18:40:38 GMT"
+    },
+    "body": {
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019fd1cb-7600-7197-8e48-219b57ed96e0",
+            "name": "Mixed grill platter",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Mixed grill platter"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 8000,
+              "currency": "SAR",
+              "formatted": "SAR 80.00"
+            },
+            "choices_label": "For one · Garlic sauce · Hummus"
+          },
+          {
+            "id": "ln_2",
+            "item_id": "019eff4b-8580-729b-bbcf-1d93b83ec998",
+            "name": "Chicken shish tawook",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Chicken shish tawook"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 4200,
+              "currency": "SAR",
+              "formatted": "SAR 42.00"
+            },
+            "choices_label": "White rice"
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Subtotal · 2 items",
+            "amount": {
+              "minor": 12200,
+              "currency": "SAR",
+              "formatted": "SAR 122.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "delivery",
+            "label": "Delivery",
+            "amount": {
+              "minor": 900,
+              "currency": "SAR",
+              "formatted": "SAR 9.00"
+            },
+            "kind": "delivery"
+          },
+          {
+            "key": "vat",
+            "label": "VAT 15%",
+            "amount": {
+              "minor": 1647,
+              "currency": "SAR",
+              "formatted": "SAR 16.47"
+            },
+            "kind": "tax"
+          },
+          {
+            "key": "tip",
+            "label": "Tip",
+            "amount": {
+              "minor": 500,
+              "currency": "SAR",
+              "formatted": "SAR 5.00"
+            },
+            "kind": "tip"
+          },
+          {
+            "key": "discount",
+            "label": "Discount · WELCOME10",
+            "amount": {
+              "minor": -1220,
+              "currency": "SAR",
+              "formatted": "−SAR 12.20"
+            },
+            "kind": "discount"
+          }
+        ],
+        "total": {
+          "minor": 14027,
+          "currency": "SAR",
+          "formatted": "SAR 140.27"
+        },
+        "total_label": "Total to pay",
+        "coupon": {
+          "code": "WELCOME10",
+          "applied": true,
+          "message": "10% off your food"
+        }
+      },
+      "quote_hash": "qh_988fda6c5b9e09ff3e1c9e440a23424c",
+      "expires_at": "2026-10-02T21:45:38+03:00",
+      "weighed": null,
+      "payment_methods": [
+        {
+          "id": "card",
+          "label": "Card or Apple Pay",
+          "sub": "Pay now, securely",
+          "selected": true,
+          "icon": "credit-card"
+        },
+        {
+          "id": "cod",
+          "label": "Cash on delivery",
+          "sub": "Pay the driver",
+          "icon": "banknote"
+        }
+      ],
+      "warnings": [],
+      "requires": [],
+      "payment_modes": [
+        "pay_later",
+        "hosted"
+      ]
+    }
+  }
+}

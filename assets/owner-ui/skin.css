@@ -1,0 +1,292 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner UI skin — re-points the existing owner dashboard (Bootstrap 5.3 +
+ * NexLink + old-theme-skin) at the owner UI tokens, so every owner page takes the
+ * redesign's look at once without its Blade being touched.
+ *
+ * Active only under <html class="ui-skin"> (config owner_ui.skin /
+ * OWNER_UI_SKIN), so the previous look is one env flip away. Loaded after
+ * styles.css, skin.css and old-theme-skin.css. Mostly Bootstrap variables; a few
+ * explicit rules where NexLink hard-codes values. Colours come only from
+ * --ui-* tokens (OwnerUiKitTest checks this file too).
+ *
+ * The in-app and phone shell rules (S2 + bottom tab bar) live at the end.
+ */
+
+/* ── Bootstrap theme variables ────────────────────────────────────────── */
+:root.ui-skin,
+:root.ui-skin[data-bs-theme="dark"] {
+  --bs-body-bg: var(--ui-surface);
+  --bs-body-color: var(--ui-ink-2);
+  --bs-emphasis-color: var(--ui-ink);
+  --bs-heading-color: var(--ui-ink);
+  --bs-secondary-color: var(--ui-ink-3);
+  --bs-secondary-bg: var(--ui-inset);
+  --bs-tertiary-bg: var(--ui-inset);
+  --bs-border-color: var(--ui-line);
+  --bs-border-radius: var(--ui-r-input);
+  --bs-border-radius-sm: 8px;
+  --bs-border-radius-lg: var(--ui-r-card);
+  --bs-border-radius-xl: var(--ui-r-panel);
+  --bs-border-radius-xxl: var(--ui-r-hero);
+  --bs-link-color: var(--ui-accent-text);
+  --bs-link-hover-color: var(--ui-accent-text);
+  --bs-focus-ring-color: var(--ui-accent-ring);
+  --app-header-bg: var(--ui-surface);
+  --app-sidebar-bg: var(--ui-surface);
+}
+
+/* Warm page ground; chrome, cards and inputs stay on the white surface. */
+.ui-skin body,
+.ui-skin .app-wrapper {
+  background: var(--ui-bg);
+}
+
+/* The head script paints <html> inline before CSS loads (no-flash guard);
+   match the page ground so short pages do not end in a white strip. */
+html.ui-skin {
+  background: var(--ui-bg) !important;
+}
+
+/* ── Page header ──────────────────────────────────────────────────────── */
+.ui-skin .app-page-head h4 {
+  font-family: var(--ui-font-display);
+  font-size: clamp(24px, 1.4vw + 16px, 30px);
+  font-weight: 700;
+  letter-spacing: var(--ui-track-display);
+  line-height: 1.15;
+  color: var(--ui-ink);
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+.ui-skin .card {
+  --bs-card-bg: var(--ui-surface);
+  --bs-card-border-color: var(--ui-line);
+  --bs-card-border-radius: var(--ui-r-card);
+  --bs-card-inner-border-radius: calc(var(--ui-r-card) - 1px);
+  --bs-card-box-shadow: none;
+  --bs-card-cap-bg: transparent;
+  box-shadow: none;
+}
+
+.ui-skin .card-header { border-block-end-color: var(--ui-hair); }
+.ui-skin .card-footer { border-block-start-color: var(--ui-hair); background: transparent; }
+.ui-skin .card-title { color: var(--ui-ink); font-weight: 700; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.ui-skin .btn {
+  --bs-btn-border-radius: var(--ui-r-input);
+  --bs-btn-font-weight: 600;
+  --bs-btn-padding-y: 0.625rem;
+  --bs-btn-padding-x: 1rem;
+  transition: transform var(--ui-motion-fast) var(--ui-ease-standard), opacity var(--ui-motion-fast) var(--ui-ease-standard);
+}
+
+.ui-skin .btn:active:not(:disabled):not(.disabled) { transform: scale(0.97); }
+
+.ui-skin .btn-sm {
+  --bs-btn-border-radius: 10px;
+  --bs-btn-padding-y: 0.375rem;
+  --bs-btn-padding-x: 0.75rem;
+}
+
+.ui-skin .btn-lg { --bs-btn-border-radius: var(--ui-r-button); }
+
+/* NexLink round icon buttons: 40px → the 44px touch target (small ones stay 32px). */
+.ui-skin .btn-icon:not(.btn-sm) {
+  block-size: var(--ui-target);
+  inline-size: var(--ui-target);
+  min-inline-size: var(--ui-target);
+}
+
+.ui-skin .btn-primary {
+  --bs-btn-color: var(--ui-on-accent);
+  --bs-btn-hover-color: var(--ui-on-accent);
+  --bs-btn-active-color: var(--ui-on-accent);
+  --bs-btn-disabled-color: var(--ui-on-accent);
+}
+
+.ui-skin .btn-dark {
+  --bs-btn-bg: var(--ui-selected-bg);
+  --bs-btn-border-color: var(--ui-selected-bg);
+  --bs-btn-color: var(--ui-selected-fg);
+  --bs-btn-hover-bg: var(--ui-selected-bg);
+  --bs-btn-hover-border-color: var(--ui-selected-bg);
+  --bs-btn-hover-color: var(--ui-selected-fg);
+  --bs-btn-active-bg: var(--ui-selected-bg);
+  --bs-btn-active-color: var(--ui-selected-fg);
+}
+
+.ui-skin .btn-light,
+.ui-skin .btn-outline-secondary,
+.ui-skin .btn-outline-light {
+  --bs-btn-bg: var(--ui-surface);
+  --bs-btn-color: var(--ui-ink);
+  --bs-btn-border-color: var(--ui-control-line);
+  --bs-btn-hover-bg: var(--ui-inset);
+  --bs-btn-hover-color: var(--ui-ink);
+  --bs-btn-hover-border-color: var(--ui-control-line);
+  --bs-btn-active-bg: var(--ui-inset);
+  --bs-btn-active-color: var(--ui-ink);
+  --bs-btn-active-border-color: var(--ui-control-line);
+}
+
+.ui-skin .btn-outline-primary {
+  --bs-btn-color: var(--ui-accent-text);
+  --bs-btn-border-color: var(--ui-control-line);
+  --bs-btn-hover-bg: var(--ui-accent-soft);
+  --bs-btn-hover-color: var(--ui-accent-text);
+  --bs-btn-hover-border-color: var(--ui-accent);
+  --bs-btn-active-bg: var(--ui-accent-soft);
+  --bs-btn-active-color: var(--ui-accent-text);
+}
+
+/* ── Forms ────────────────────────────────────────────────────────────── */
+.ui-skin .form-control,
+.ui-skin .form-select {
+  min-height: var(--ui-target);
+  border-color: var(--ui-control-line);
+  border-radius: var(--ui-r-input);
+  color: var(--ui-ink);
+}
+
+.ui-skin textarea.form-control { min-height: 88px; }
+
+.ui-skin .form-control-sm,
+.ui-skin .form-select-sm {
+  min-height: 36px;
+  border-radius: 10px;
+}
+
+.ui-skin .form-control::placeholder { color: var(--ui-ink-3); }
+
+.ui-skin .form-control:focus,
+.ui-skin .form-select:focus {
+  border-color: var(--ui-accent);
+  box-shadow: 0 0 0 4px var(--ui-accent-ring);
+}
+
+.ui-skin .form-control:disabled,
+.ui-skin .form-select:disabled { background-color: var(--ui-inset); }
+
+.ui-skin .form-label { font-size: var(--ui-fs-label); font-weight: 600; color: var(--ui-ink); }
+.ui-skin .form-text { color: var(--ui-ink-2); }
+
+.ui-skin .input-group-text {
+  background: var(--ui-inset);
+  border-color: var(--ui-control-line);
+  color: var(--ui-ink-2);
+}
+
+.ui-skin .form-check-input { border-color: var(--ui-control-line); }
+
+.ui-skin .form-check-input:checked {
+  background-color: var(--ui-accent);
+  border-color: var(--ui-accent);
+}
+
+.ui-skin .form-switch .form-check-input:checked {
+  background-color: var(--ui-track-on);
+  border-color: var(--ui-track-on);
+}
+
+.ui-skin .form-check-input:focus { box-shadow: 0 0 0 4px var(--ui-accent-ring); }
+
+/* ── Tables ───────────────────────────────────────────────────────────── */
+.ui-skin .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--ui-ink);
+  --bs-table-border-color: var(--ui-hair);
+  --bs-table-hover-bg: var(--ui-inset);
+  --bs-table-striped-bg: var(--ui-inset);
+}
+
+.ui-skin .table > thead > tr > th,
+.ui-skin .table > thead > tr > td {
+  background: var(--ui-table-head);
+  border-block-end-color: var(--ui-line);
+  color: var(--ui-ink-2);
+  font-size: var(--ui-fs-overline);
+  font-weight: 700;
+  letter-spacing: var(--ui-track-caps);
+  text-transform: uppercase;
+}
+
+/* ── Badges, alerts, menus, dialogs, tabs ─────────────────────────────── */
+.ui-skin .badge { border-radius: var(--ui-r-tag); font-weight: 700; }
+.ui-skin .alert { border-radius: var(--ui-r-button); }
+
+.ui-skin .dropdown-menu {
+  --bs-dropdown-border-radius: var(--ui-r-button);
+  --bs-dropdown-border-color: var(--ui-line);
+  --bs-dropdown-box-shadow: var(--ui-shadow-raised);
+  --bs-dropdown-link-active-bg: var(--ui-accent-soft);
+  --bs-dropdown-link-active-color: var(--ui-accent-text);
+}
+
+.ui-skin .modal {
+  --bs-modal-border-radius: var(--ui-r-panel);
+  --bs-modal-border-color: transparent;
+  --bs-modal-inner-border-radius: calc(var(--ui-r-panel) - 1px);
+}
+
+.ui-skin .dash-dialog__panel { border-radius: var(--ui-r-panel); }
+
+.ui-skin .nav-pills {
+  --bs-nav-pills-border-radius: 10px;
+  --bs-nav-pills-link-active-bg: var(--ui-selected-bg);
+  --bs-nav-pills-link-active-color: var(--ui-selected-fg);
+}
+
+.ui-skin .nav-tabs {
+  --bs-nav-tabs-border-color: var(--ui-line);
+  --bs-nav-tabs-link-active-color: var(--ui-ink);
+  --bs-nav-tabs-link-active-border-color: var(--ui-line) var(--ui-line) var(--ui-surface);
+}
+
+.ui-skin .page-link { border-color: var(--ui-line); color: var(--ui-ink); }
+
+.ui-skin .page-item.active .page-link {
+  background: var(--ui-selected-bg);
+  border-color: var(--ui-selected-bg);
+  color: var(--ui-selected-fg);
+}
+
+/* ── Sidebar: icon rail + menu panel (desktop) ────────────────────────── */
+.ui-skin .app-menubar,
+.ui-skin #appMenubar { border-color: var(--ui-line); }
+
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link { color: var(--ui-ink-3); border-radius: var(--ui-r-button); }
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link:hover { background: var(--ui-inset); color: var(--ui-ink); }
+
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link.active,
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link.active i,
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link.active .rail-label { color: var(--ui-accent-text); }
+
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link.active { background: var(--ui-accent-soft); }
+.ui-skin .app-menubar-tabs .app-navbar-tabs .menu-link.active::before { background: var(--ui-accent); }
+.ui-skin .app-menubar-tabs .rail-label { font-size: var(--ui-fs-micro); font-weight: 600; }
+
+.ui-skin .side-menubar .menu-heading {
+  color: var(--ui-ink-3);
+  font-size: var(--ui-fs-overline);
+  font-weight: 700;
+  letter-spacing: var(--ui-track-caps);
+  text-transform: uppercase;
+}
+
+.ui-skin .side-menubar .menu-item > .menu-link {
+  border-radius: var(--ui-r-input);
+  color: var(--ui-ink-2);
+  font-weight: 500;
+}
+
+.ui-skin .side-menubar .menu-item > .menu-link:hover { background: var(--ui-inset); color: var(--ui-ink); }
+.ui-skin .side-menubar .menu-item > .menu-link.active { background: var(--ui-accent-soft); color: var(--ui-accent-text); font-weight: 600; }
+.ui-skin .side-menubar .menu-item > .menu-link.active i { color: var(--ui-accent-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-skin .btn:active:not(:disabled):not(.disabled) { transform: none; }
+}

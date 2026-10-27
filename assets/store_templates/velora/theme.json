@@ -1,0 +1,150 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "garden",
+      "label": "Garden",
+      "values": {
+        "colors.primary": "#b5d336",
+        "colors.background": "#f7f7f5",
+        "colors.surface": "#ffffff",
+        "colors.text": "#141414",
+        "colors.accent": "#e05a4e",
+        "layout.radius": "round"
+      },
+      "thumb": "assets/store_templates/velora/presets/garden.png"
+    },
+    {
+      "id": "citrus",
+      "label": "Citrus",
+      "values": {
+        "colors.primary": "#ff9f1c",
+        "colors.background": "#fffaf2",
+        "colors.surface": "#ffffff",
+        "colors.text": "#2a1a08",
+        "colors.accent": "#2ec4b6",
+        "layout.radius": "pill"
+      },
+      "thumb": "assets/store_templates/velora/presets/citrus.png"
+    },
+    {
+      "id": "berry",
+      "label": "Berry",
+      "values": {
+        "colors.primary": "#d6336c",
+        "colors.background": "#fff5f8",
+        "colors.surface": "#ffffff",
+        "colors.text": "#2a0a16",
+        "colors.accent": "#7048e8",
+        "layout.radius": "round"
+      },
+      "thumb": "assets/store_templates/velora/presets/berry.png"
+    },
+    {
+      "id": "noir",
+      "label": "Noir",
+      "values": {
+        "colors.primary": "#c7e94a",
+        "colors.background": "#131512",
+        "colors.surface": "#1e211b",
+        "colors.text": "#f3f5ee",
+        "colors.accent": "#e05a4e",
+        "layout.radius": "soft"
+      },
+      "thumb": "assets/store_templates/velora/presets/noir.png"
+    },
+    {
+      "id": "slate",
+      "label": "Slate",
+      "values": {
+        "colors.primary": "#4c6ef5",
+        "colors.background": "#f4f6fb",
+        "colors.surface": "#ffffff",
+        "colors.text": "#141a2a",
+        "colors.accent": "#f59f00",
+        "layout.radius": "none"
+      },
+      "thumb": "assets/store_templates/velora/presets/slate.png"
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#b5d336"
+        },
+        "colors.background": {
+          "default": "#f7f7f5"
+        },
+        "colors.surface": {
+          "default": "#ffffff"
+        },
+        "colors.text": {
+          "default": "#141414"
+        },
+        "colors.accent": {
+          "default": "#e05a4e"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Fresh food, zero fuss",
+          "label": "Splash tagline"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    }
+  ]
+}

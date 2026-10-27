@@ -1,0 +1,378 @@
+{
+  "$schema_note": "Juwri theme tokens v1. Customizer roles (primary, background, surface, text, accent) map 1:1 to colors.* in theme.json; the other colour keys are theme tokens (--x-*) derived in theme.css. Checked by tools/contrast.py (contract §8).",
+  "theme": "table",
+  "vertical_set": "food",
+  "default_preset": "classic",
+  "scheme_default": "auto",
+  "customizer_roles": [
+    "primary",
+    "background",
+    "surface",
+    "text",
+    "accent"
+  ],
+  "presets": {
+    "classic": {
+      "label": {
+        "en": "Classic",
+        "ar": "كلاسيكي"
+      },
+      "source": "plate + crave",
+      "default_scheme": "light",
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#B4331A",
+        "background": "#FAF6F0",
+        "surface": "#FFFFFF",
+        "surface_2": "#F3EDE4",
+        "text": "#1F1A17",
+        "muted": "#6B6058",
+        "border": "#E7DED3",
+        "border_strong": "#8C8178",
+        "accent": "#E8A33D"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#F07A52",
+        "background": "#141210",
+        "surface": "#1E1B18",
+        "surface_2": "#2A2622",
+        "text": "#F6F1EA",
+        "muted": "#B3A89D",
+        "border": "#36302A",
+        "border_strong": "#7E746A",
+        "accent": "#F2B65A"
+      },
+      "layout_overrides": {}
+    },
+    "app": {
+      "label": {
+        "en": "App",
+        "ar": "تطبيق"
+      },
+      "source": "crave",
+      "default_scheme": "dark",
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#137A3E",
+        "background": "#F4F6F5",
+        "surface": "#FFFFFF",
+        "surface_2": "#E9EEEB",
+        "text": "#121614",
+        "muted": "#5A6460",
+        "border": "#DCE3DF",
+        "border_strong": "#7D8783",
+        "accent": "#FFB02E"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#3FD463",
+        "background": "#15171A",
+        "surface": "#22262B",
+        "surface_2": "#2C3137",
+        "text": "#F4F6F5",
+        "muted": "#A6AEB5",
+        "border": "#343A41",
+        "border_strong": "#737C85",
+        "accent": "#FFB02E"
+      },
+      "layout_overrides": {
+        "layout.radius": "pill",
+        "layout.header": "compact"
+      }
+    },
+    "delivery": {
+      "label": {
+        "en": "Delivery",
+        "ar": "توصيل"
+      },
+      "source": "feast",
+      "default_scheme": "light",
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#C8361F",
+        "background": "#FFFFFF",
+        "surface": "#FFFFFF",
+        "surface_2": "#F5F5F4",
+        "text": "#18181B",
+        "muted": "#5F5F66",
+        "border": "#E6E6E8",
+        "border_strong": "#85858C",
+        "accent": "#FFC233"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#FF6A4D",
+        "background": "#111113",
+        "surface": "#1C1C1F",
+        "surface_2": "#26262A",
+        "text": "#F7F7F8",
+        "muted": "#A9A9B0",
+        "border": "#2F2F34",
+        "border_strong": "#74747C",
+        "accent": "#FFC233"
+      },
+      "layout_overrides": {
+        "layout.card": "grid"
+      }
+    },
+    "pizzeria": {
+      "label": {
+        "en": "Pizzeria",
+        "ar": "بيتزا"
+      },
+      "source": "dough + pizzaflow",
+      "default_scheme": "dark",
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#B83D0B",
+        "background": "#FBF4E8",
+        "surface": "#FFFDF8",
+        "surface_2": "#F2E8D6",
+        "text": "#2A1E14",
+        "muted": "#6E5E4E",
+        "border": "#E8DCC6",
+        "border_strong": "#8F7F6C",
+        "accent": "#2F7D32"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#FF8A3D",
+        "background": "#1A1714",
+        "surface": "#24201C",
+        "surface_2": "#2F2A25",
+        "text": "#F6EBDD",
+        "muted": "#BBA993",
+        "border": "#3A332C",
+        "border_strong": "#85786A",
+        "accent": "#6BBF59"
+      },
+      "layout_overrides": {
+        "layout.image_ratio": "1:1"
+      }
+    },
+    "lounge": {
+      "label": {
+        "en": "Lounge",
+        "ar": "لاونج"
+      },
+      "source": "soiree",
+      "default_scheme": "dark",
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#6D2E8C",
+        "background": "#F7F5F9",
+        "surface": "#FFFFFF",
+        "surface_2": "#EEEAF2",
+        "text": "#1B1722",
+        "muted": "#625B6C",
+        "border": "#E2DCE8",
+        "border_strong": "#857D8F",
+        "accent": "#B8862B"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#C79BE0",
+        "background": "#14121A",
+        "surface": "#1E1B26",
+        "surface_2": "#282432",
+        "text": "#F3F0F7",
+        "muted": "#ADA5B9",
+        "border": "#332E3E",
+        "border_strong": "#7A7287",
+        "accent": "#D9B26A"
+      },
+      "layout_overrides": {
+        "layout.density": "comfortable",
+        "layout.card": "compact"
+      }
+    }
+  },
+  "color_usage": {
+    "primary": "CTA fill (add, cart bar, place order), active category chip, focus ring, links",
+    "accent": "badges (popular, new), rating stars, offer chips — never body text",
+    "surface_2": "input fill, skeletons, segmented control track, quantity stepper track",
+    "muted": "descriptions, meta (calories, prep time), placeholder — passes 4.5:1, replaces 55% mix for body-size text",
+    "border": "card hairline, dividers (decorative, no contrast requirement)",
+    "border_strong": "input + toggle outlines (3:1 non-text)",
+    "danger/success/warning": "status text + icons; fills use 12% tint of the same colour with the text colour on top"
+  },
+  "typography": {
+    "font_pair": "fraunces-jakarta",
+    "heading": "Fraunces (Latin) → IBM Plex Sans Arabic (Arabic)",
+    "body": "Plus Jakarta Sans (Latin) → IBM Plex Sans Arabic",
+    "weights": {
+      "body": 400,
+      "strong": 600,
+      "heading": 700
+    },
+    "scale_px": {
+      "xs": 12,
+      "sm": 14,
+      "base": 16,
+      "lg": 18,
+      "xl": 20,
+      "2xl": 24,
+      "3xl": 30,
+      "4xl": 38,
+      "5xl": 48
+    },
+    "roles": {
+      "store_name": {
+        "phone": "3xl/heading/700",
+        "desktop": "5xl/heading/700"
+      },
+      "category_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "item_name": {
+        "phone": "lg/body/600",
+        "desktop": "lg/body/600"
+      },
+      "item_desc": {
+        "phone": "sm/body/400 muted, 2-line clamp",
+        "desktop": "sm/body/400 muted, 2-line clamp"
+      },
+      "price": {
+        "phone": "base/body/600 tabular-nums",
+        "desktop": "base/body/600 tabular-nums"
+      },
+      "sheet_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "total": {
+        "phone": "xl/body/700 tabular-nums",
+        "desktop": "xl/body/700 tabular-nums"
+      },
+      "label": {
+        "phone": "sm/body/600",
+        "desktop": "sm/body/600"
+      },
+      "meta": {
+        "phone": "xs/body/400 muted (min 12px, never smaller)",
+        "desktop": "xs/body/400 muted"
+      }
+    },
+    "line_height": {
+      "latin": {
+        "tight": 1.15,
+        "base": 1.5
+      },
+      "arabic": {
+        "tight": 1.4,
+        "base": 1.7
+      }
+    },
+    "rules": [
+      "no letter-spacing on Arabic",
+      "no uppercase transforms",
+      "Fraunces only for headings ≥ 20px; Arabic headings use Plex Arabic 700",
+      "min body 16px on inputs (iOS zoom)"
+    ]
+  },
+  "radius": {
+    "customizer": "layout.radius",
+    "default": "round",
+    "values_px": {
+      "card": 18,
+      "control": 14,
+      "chip": 999,
+      "sheet_top": 24,
+      "image": 14
+    }
+  },
+  "spacing": {
+    "customizer": "layout.density",
+    "default": "cozy",
+    "grid_px": 4,
+    "scale_px": {
+      "1": 4,
+      "2": 8,
+      "3": 12,
+      "4": 16,
+      "5": 20,
+      "6": 24,
+      "8": 32,
+      "10": 40,
+      "12": 48,
+      "16": 64
+    },
+    "gutter": {
+      "phone": 16,
+      "desktop": 32
+    },
+    "max_content_px": 1200,
+    "section_gap": {
+      "phone": 32,
+      "desktop": 56
+    }
+  },
+  "sizes": {
+    "target_primary": 44,
+    "target_chip": 32,
+    "header_phone": 56,
+    "category_bar": 52,
+    "cart_bar": 64,
+    "item_thumb_list": 96,
+    "item_thumb_desktop": 120,
+    "icon": 20,
+    "icon_small": 16,
+    "scroll_padding_note": "scroll-padding-top = header + category_bar; scroll-padding-bottom = cart_bar + 16 (WCAG 2.4.11)"
+  },
+  "elevation": {
+    "card": "0 1px 2px rgb(0 0 0 / .06)",
+    "raised": "0 6px 20px rgb(0 0 0 / .10)",
+    "sheet": "0 -8px 32px rgb(0 0 0 / .18)",
+    "dark_note": "dark scheme uses surface steps (surface → surface_2) instead of shadows"
+  },
+  "motion": {
+    "fast_ms": 120,
+    "base_ms": 200,
+    "slow_ms": 320,
+    "ease": "cubic-bezier(.2,.8,.2,1)",
+    "ease_exit": "cubic-bezier(.4,0,1,1)",
+    "patterns": {
+      "sheet_open": "translateY(100%)→0, slow, ease",
+      "add_to_cart": "button label → check, fast; cart bar count bump scale 1→1.08→1, base",
+      "chip_active": "background colour, fast",
+      "skeleton": "opacity pulse 1.2s"
+    },
+    "reduced_motion": "all transforms off; opacity fades ≤ fast only"
+  },
+  "breakpoints_px": {
+    "phone": 0,
+    "tablet": 768,
+    "desktop": 1080,
+    "wide": 1440
+  },
+  "layout": {
+    "card_default": "list",
+    "image_ratio_default": "1:1",
+    "category_nav_default": "chips",
+    "header_default": "cover",
+    "desktop_cart_default": "panel",
+    "desktop": "3 columns: category sidebar 240 | catalog fluid | cart panel 360"
+  }
+}

@@ -1,0 +1,20 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* branch-picker - a strip around the branch switcher widget */
+.mbs-branch-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px) var(--ts-gap-3, 16px);
+  max-inline-size: 960px;
+  margin-inline: auto;
+  padding: var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-branch-picker > .mbs-icon { flex: none; color: var(--tc-primary-700, #1f8a3b); }
+.mbs-branch-picker__text { flex: 1 1 200px; }
+.mbs-branch-picker__title { margin: 0; font-size: 1.05rem; }
+.mbs-branch-picker__sub { margin: 2px 0 0; color: var(--tc-text-muted, #6b7280); font-size: .9rem; }

@@ -1,0 +1,9 @@
+{
+  "key": "minimal",
+  "name": "Minimal",
+  "sections": {"hours": true, "socials": true, "capture": false, "map": false, "whatsapp": true, "reviews": false},
+  "blocks": [
+    {"type": "menu", "label": "Menu", "priority": 100, "config": {"prefill": "menu"}},
+    {"type": "reservation", "label": "Book", "priority": 60, "requires": "reservations", "config": {}}
+  ]
+}

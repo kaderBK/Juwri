@@ -1,0 +1,33 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* store-status */
+.mbs-store-status {
+  display: grid;
+  gap: var(--ts-gap-2, 10px);
+  inline-size: min(1200px, calc(100% - 2 * var(--ts-gap-3, 16px)));
+  margin: var(--ts-gap-2, 10px) auto;
+  padding: var(--ts-gap-2, 10px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-surface, #f4f4f5);
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  font-size: .9rem;
+}
+.mbs-store-status__now { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ts-gap-2, 10px); margin: 0; }
+.mbs-store-status__now > .mbs-icon { color: var(--tc-text-muted, #6b7280); }
+.mbs-store-status__today { color: var(--tc-text-muted, #6b7280); }
+.mbs-store-status__branches { display: flex; flex-wrap: wrap; gap: var(--ts-gap-1, 6px); margin: 0; padding: 0; list-style: none; }
+.mbs-store-status__branch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px var(--ts-gap-2, 10px);
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-background, #fff);
+}
+.mbs-store-status__dot { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--tc-danger, #b42318); }
+.mbs-store-status__branch.is-open .mbs-store-status__dot { background: var(--tc-success, #16a34a); }
+.mbs-store-status__branch-name { font-weight: 600; }
+.mbs-store-status__branch-state { color: var(--tc-text-muted, #6b7280); font-size: .8rem; }

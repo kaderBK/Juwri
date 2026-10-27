@@ -1,0 +1,144 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — base (emitted first, so the other runtime files can refine it): the
+   shared buttons, fields, option rows and status lines the commerce runtime
+   renders into every surface. Selectors use the runtime's own .mb-* namespace. */
+.mb-sheet,
+.mb-cart,
+.mb-prod,
+.mb-account,
+.mb-confirm,
+.mb-dialog {
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  color: var(--tc-text, #111);
+}
+.mb-place,
+.mb-sheet-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  inline-size: 100%;
+  min-block-size: 48px;
+  box-sizing: border-box;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 0;
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-place:hover,
+.mb-sheet-add:hover { background: var(--tc-primary-700, var(--tc-primary, #2fb150)); }
+.mb-place:disabled,
+.mb-sheet-add:disabled { opacity: .5; cursor: not-allowed; }
+.mb-ghost,
+.mb-coupon button,
+.mb-acct-tabs button,
+.mb-ot-seg button,
+.mb-tip-opts button,
+.mb-slot,
+.mb-slot-day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-block-size: 44px;
+  box-sizing: border-box;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .16);
+  border-radius: var(--tr-control, 12px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-acct-tabs button,
+.mb-ot-seg button,
+.mb-tip-opts button,
+.mb-slot,
+.mb-slot-day { border-radius: var(--tr-pill, 999px); }
+.mb-ghost:hover,
+.mb-coupon button:hover,
+.mb-slot:hover,
+.mb-slot-day:hover { background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+.mb-acct-tabs .is-on,
+.mb-ot-seg .is-on,
+.mb-tip-opts .is-on,
+.mb-slot.is-on,
+.mb-slot-day.is-on {
+  border-color: var(--tc-primary, #3fd463);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .14);
+  font-weight: 700;
+}
+.mb-field {
+  inline-size: 100%;
+  min-block-size: 44px;
+  box-sizing: border-box;
+  padding-block: 10px;
+  padding-inline: var(--ts-gap-2, 10px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .2);
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-surface, var(--tc-background, #fff));
+  color: inherit;
+  font: inherit;
+}
+.mb-field::placeholder { color: var(--tc-text-muted, #6b7280); }
+.mb-field[readonly] { background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+.mb-place:focus-visible,
+.mb-ghost:focus-visible,
+.mb-opt:has(:focus-visible),
+.mb-sheet :focus-visible,
+.mb-cart :focus-visible,
+.mb-prod :focus-visible,
+.mb-dialog :focus-visible,
+.mb-account :focus-visible,
+.mb-confirm :focus-visible,
+.mb-fit-field :focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+
+/* option groups (variants, modifiers, extras, variant matrix) */
+.mb-opt-group {
+  display: grid;
+  gap: 6px;
+  min-inline-size: 0;
+  margin: 0 0 var(--ts-gap-3, 16px);
+  padding: 0;
+  border: 0;
+}
+.mb-opt-title { margin: 0 0 4px; padding: 0; font-weight: 700; font-size: .95rem; }
+.mb-req { color: var(--tc-danger, #b42318); }
+.mb-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px);
+  min-block-size: 48px;
+  box-sizing: border-box;
+  padding-inline: 12px;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .12);
+  border-radius: var(--tr-control, 12px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .03);
+  cursor: pointer;
+}
+.mb-opt:has(:checked) { border-color: var(--tc-primary, #3fd463); background: rgba(var(--tc-primary-rgb, 63, 212, 99), .1); }
+.mb-opt input { flex: none; inline-size: 20px; block-size: 20px; margin: 0; accent-color: var(--tc-primary, #3fd463); }
+.mb-opt input:focus-visible { outline: 0; }
+.mb-opt span { flex: 1; }
+.mb-opt em { font-style: normal; font-size: .9rem; color: var(--tc-text-muted, #6b7280); }
+.mb-opt.is-disabled { opacity: .45; cursor: not-allowed; text-decoration: line-through; }
+.mb-dim { display: flex; flex-wrap: wrap; gap: 8px; }
+.mb-dim-opt { min-block-size: 44px; padding-inline: var(--ts-gap-3, 16px); border-radius: var(--tr-pill, 999px); }
+.mb-dim-opt input { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; }
+
+/* status lines */
+.mb-item-meta { margin: 0 0 8px; font-size: .85rem; color: var(--tc-text-muted, #6b7280); }
+.mb-stock { margin: 0 0 8px; font-size: .85rem; font-weight: 700; color: var(--tc-success-700, var(--tc-success, #067647)); }
+.mb-stock[data-mb-stock-state="low"] { color: var(--tc-warning-700, #b54708); }
+.mb-stock[data-mb-stock-state="out"],
+.mb-err { color: var(--tc-danger, #b42318); }
+.mb-err { margin: 0; font-size: .9rem; }

@@ -1,0 +1,74 @@
+{
+    "_comment": "P3-04 report/enforce switch. 'enforce' = a failing gate fails the test/job; 'report' = the failure is printed and written to the report file but the job stays green. Env overrides for a one-off run: THEME_CONFORMANCE_KIT, THEME_CONFORMANCE_PREMIUM (report|enforce). Owner Q7 (2026-10-05): budgets block for the 5 kit themes, report-only for premium. P3-05 (first kit theme in Blade, `table`) flipped kit_mode to enforce; P3-07 ported `brew` and took it off the list; P3-08 ported `aisle` and P3-09 `basket`, and did the same. A kit theme listed in report_until_ported has no Blade views yet (only the design prototypes, whose preview script is not theme code): it stays report-only until its own work item ports it and removes it from that list. rtl.<theme>.limit is the share of pixels that may differ from the prototype; rtl.<theme>.exempt names the screens that cannot match it and why.",
+    "kit_mode": "enforce",
+    "premium_mode": "report",
+    "kit_themes": [
+        "table",
+        "brew",
+        "aisle",
+        "basket",
+        "book"
+    ],
+    "report_until_ported": [],
+    "premium_themes": [
+        "carely"
+    ],
+    "rtl": {
+        "table": {
+            "limit": 0.005,
+            "exempt": {
+                "track": "the prototype draws a decorative map placeholder above the timeline; the product has no map data, so the Blade page has none",
+                "states": "the prototype board also shows the hosted-payment states (API-2/API-10), which are not product features yet",
+                "kiosk": "the prototype kiosk screen is a short showcase with the design's sample content; the product's kiosk lists every category of the store (P3-06). Structure, order and tokens are checked by the static, axe, keyboard and CSP gates on the same page",
+                "kiosk-states": "the same board for the kiosk screens: 20 px off the prototype's height from the product's wording (P3-06)"
+            }
+        },
+        "brew": {
+            "limit": 0.025,
+            "exempt": {
+                "states": "the prototype board also shows the two hosted-payment states (API-2/API-10), which are not product features yet",
+                "kiosk": "the prototype kiosk screen is a short showcase with the design's sample content; the product's kiosk lists every category of the store (P3-06). Structure, order and tokens are checked by the static, axe, keyboard and CSP gates on the same page",
+                "kiosk-states": "the same board for the kiosk screens: 20 px off the prototype's height from the product's wording (P3-06)"
+            }
+        },
+        "aisle": {
+            "limit": 0.025,
+            "exempt": {
+                "bag": "the prototype draws the bag as a standalone screen; the product's bag is a dialog (drawer on desktop) over the store page",
+                "filters": "the prototype draws the filter sheet as a standalone screen; the product's filters are a sidebar on desktop and a sheet over the store page on a phone",
+                "home": "the prototype shows a short showcase of the catalogue; the product lists the server-filtered catalogue (every product of the fixture, toolbar, count, load more)",
+                "item": "the product page also carries the wishlist, size guide, back-in-stock and delivery rows of the retail backend, which the prototype does not draw",
+                "kiosk": "the prototype kiosk screen is a short showcase; the product's kiosk lists every category of the store",
+                "track": "the product's tracking page adds the return-request button and its window note (retail backend) and uses the order's real wording; it differs from the prototype by about 30 px in height, so the pixel diff cannot align",
+                "states": "the product's states board uses the real store's wording and the hosted-payment states of the retail checkout; it is 20-50 px off the prototype's height, so the pixel diff cannot align",
+                "kiosk-states": "the same board for the kiosk screens: 20 px off the prototype's height from the product's wording",
+                "wishlist": "the parity tree has no Blade render of the wishlist (it needs a saved list); the prototype's static page drawn with the product's theme.css, which adds the Blade-only blocks, is 8-56 px off the prototype's own CSS"
+            }
+        },
+        "book": {
+            "limit": 0.005,
+            "exempt": {
+                "checkout": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "home": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "item": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "reschedule": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "states": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "time": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "track": "the prototype draws its showcase content (fixed sample copy, ratings, imagery) with the design's own line breaks; the Blade page renders the store's data and the product's wording, so the page height differs. The structure, order and tokens are checked by the static, axe and keyboard gates on the same page",
+                "kiosk-states": "the same board for the kiosk screens: 20 px off the prototype's height from the product's wording (P3-06)"
+            }
+        },
+        "basket": {
+            "limit": 0.025,
+            "exempt": {
+                "cart": "the prototype draws the basket as a standalone screen; the product's basket is a dialog (drawer on desktop) over the store page and its rows are the server quote's own (fees, weighed-estimate note), 2-19 px off the prototype's height, so the pixel diff cannot align",
+                "home": "the prototype shows a short showcase of the catalogue; the product lists the whole store catalogue (every product of the fixture with its pack size and price per kg, search and sort)",
+                "item": "the same page with the product sheet opened: the sheet is drawn over the real catalogue, which is longer than the prototype's showcase",
+                "kiosk": "the prototype kiosk screen is a short showcase; the product's kiosk lists every category of the store",
+                "kiosk-states": "the same board for the kiosk screens: 20 px off the prototype's height from the product's wording",
+                "states": "the product's states board uses the real store's wording and the hosted-payment states of the grocery checkout; it is 27-51 px off the prototype's height, so the pixel diff cannot align",
+                "track": "the product's tracking page uses the order's real wording and the picker's progress line and changes-to-review block; it differs from the prototype by 5-27 px in height, so the pixel diff cannot align"
+            }
+        }
+    }
+}

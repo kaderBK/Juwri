@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'نستخدم ملفات تعريف الارتباط',
+    'cookie.body' => 'ملفات تعريف الارتباط الأساسية ضرورية لعمل :brand. وبموافقتك، نستخدم أيضاً ملفات تحليلية لفهم كيفية استخدام الموقع. لا نضع أي ملفات تسويقية دون موافقتك. [سياسة الخصوصية](/privacy)',
+    'cookie.accept' => 'قبول التحليلات',
+    'cookie.reject' => 'الأساسية فقط',
+    'cookie.settings' => 'إعدادات ملفات تعريف الارتباط',
+    'cookie.settings.essential' => 'الأساسية (مفعّلة دائماً)',
+    'cookie.settings.analytics' => 'التحليلات: تساعدنا على تحسين الموقع',
+    'cookie.settings.marketing' => 'التسويق: لقياس حملاتنا',
+    'cookie.save' => 'حفظ الاختيارات',
+    'signup.accept' => 'أوافق على [شروط الاشتراك](/terms) و[ملحق معالجة البيانات](/legal/dpa) و[سياسة الاستخدام المقبول](/legal/aup).',
+    'signup.business' => 'أؤكد أنني أسجّل لصالح نشاط تجاري، لا بصفتي مستهلكاً.',
+    'signup.privacy' => 'نستخدم بياناتك لإدارة حسابك كما هو موضح في [سياسة الخصوصية](/privacy).',
+    'signup.marketing_optin' => 'أرسلوا لي أخبار المنتج والنصائح عبر البريد الإلكتروني (يمكنك إلغاء الاشتراك في أي وقت).',
+    'checkout.accept' => 'بالدفع، فإنك تقبل [شروط الاشتراك](/terms). تتجدد الباقات تلقائياً؛ يمكنك الإلغاء في أي وقت من الإعدادات.',
+    'checkout.vat' => 'الأسعار لا تشمل ضريبة القيمة المضافة حيثما تنطبق.',
+    'pharmacy.gate' => 'بيع الأدوية متاح فقط في الدول التي فعّلناها. ارفع مستندات الترخيص للنشر. لا يُسمح بالأدوية التي تُصرف بوصفة طبية ولا الأدوية الخاضعة للرقابة.',
+    'footer.legal' => 'قانوني',
+    'footer.terms' => 'شروط الاشتراك',
+    'footer.privacy' => 'سياسة الخصوصية',
+    'footer.dpa' => 'ملحق معالجة البيانات',
+    'footer.aup' => 'سياسة الاستخدام المقبول',
+    'footer.sla' => 'مستويات الخدمة والدعم',
+    'footer.subprocessors' => 'المعالجون الفرعيون',
+    'footer.security' => 'الأمان',
+    'footer.free_reseller' => 'شروط فئة الموزّع المجانية',
+    'footer.status' => 'حالة النظام',
+    'footer.trademarks' => 'سياسة العلامات التجارية',
+    'footer.licensing' => 'ترخيص المصدر المفتوح',
+    'footer.company' => 'JUWRI LTD · رقم الشركة 14363043 · 128 City Road, London, EC1V 2NX, المملكة المتحدة',
+    'footer.copyright' => '© 2026 JUWRI LTD. ‏juwri مفتوح المصدر بموجب رخصة AGPL-3.0.',
+    'footer.powered' => 'مدعوم من juwri',
+    'footer.contact' => 'تواصل معنا',
+    'footer.language' => 'اللغة',
+    'legal.version' => 'الإصدار :version · ساري من :date',
+    'legal.updated' => 'آخر تحديث :date · ملخص بلغة مبسطة — وليس استشارة قانونية',
+    'legal.translation_note' => 'هذه الترجمة العربية مقدمة للتسهيل. النسخة الإنجليزية هي النسخة الملزمة.',
+    'legal.changes' => 'نرسل إشعاراً قبل 30 يوماً على الأقل من أي تغييرات جوهرية على هذه المستندات.',
+    'legal.contact' => 'للاستفسارات: legal@juwri.com',
+    'mail.terms_changed.subject' => 'سنحدّث شروط juwri في :date',
+    'mail.renewal.subject' => 'تتجدد باقة juwri الخاصة بك في :date',
+    'mail.payment_failed.subject' => 'مطلوب إجراء: فشل الدفع لـ juwri',
+    'mail.suspension_warning.subject' => 'ستتوقف خدمات juwri الخاصة بك مؤقتاً خلال 7 أيام',
+    'mail.breach_notice.subject' => 'إشعار أمني مهم بخصوص حسابك في juwri',
+    'mail.export_window.subject' => 'بياناتك متاحة للتصدير حتى :date',
+    'mail.reseller_winddown_reseller.subject' => 'حساب الموزّع الخاص بك يحتاج إلى تجديد: متاجرك معرّضة للخطر',
+    'mail.reseller_winddown_store.subject' => 'تغييرات على المنصة التي تشغّل متجرك',
+    'signup.accept_required' => 'يرجى الموافقة على شروط الاشتراك وملحق معالجة البيانات وسياسة الاستخدام المقبول للمتابعة.',
+    'signup.business_required' => 'يرجى تأكيد أنك تسجّل لصالح نشاط تجاري.',
+    'legal.reaccept.upcoming' => 'سنحدّث :documents في :date. يرجى مراجعة الإصدار الجديد والموافقة عليه.',
+    'legal.reaccept.updated' => 'حدّثنا :documents. يرجى مراجعة الإصدار الجديد والموافقة عليه.',
+    'legal.reaccept.accept' => 'أوافق',
+    'legal.reaccept.done' => 'شكراً لك. تم تسجيل موافقتك.',
+    'legal.english_only' => 'هذا المستند منشور باللغة الإنجليزية.',
+];

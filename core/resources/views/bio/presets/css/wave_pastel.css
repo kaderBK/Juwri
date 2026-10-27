@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--wave_pastel .bio-avatar{box-shadow:0 6px 16px rgba(29,58,71,.12)}
+.bio--wave_pastel .bio-link:hover{background:#d8eef7}
+.bio--wave_pastel .bio-link__icon{background:none;color:#3ba7cf}
+.bio--wave_pastel .bio-link__label{font-weight:700}

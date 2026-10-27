@@ -1,0 +1,18 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* custom-block - hosts an owner-authored Builder.js block (the block carries its
+   own scoped styles under .mb-doc); this only frames it */
+.mbs-custom-block {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  margin-inline: auto;
+  padding-block: var(--ts-gap-2, 10px);
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-custom-block--contained { max-inline-size: 1100px; padding-inline: var(--ts-gap-3, 16px); }
+.mbs-custom-block:empty { display: none; }
+.mbs-custom-block__body { overflow-wrap: anywhere; }
+.mbs-custom-block__body img { max-inline-size: 100%; block-size: auto; }

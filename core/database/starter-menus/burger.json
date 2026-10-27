@@ -1,0 +1,44 @@
+{
+    "label": "Burger Joint",
+    "categories": [
+        {
+            "name": "Burgers",
+            "name_ar": "برجر",
+            "items": [
+                {"name": "Classic Cheeseburger", "name_ar": "تشيز برجر كلاسيكي", "description": "Beef patty, cheese, lettuce, tomato.", "description_ar": "قطعة لحم وجبن وخس وطماطم.", "price": 8.50, "popular": true},
+                {"name": "Double Bacon", "name_ar": "دبل بيكون", "description": "Two patties with smoky bacon.", "description_ar": "قطعتان مع بيكون مدخن.", "price": 11.00, "popular": true},
+                {"name": "BBQ Crunch", "name_ar": "باربكيو كرانش", "description": "Onion rings and tangy BBQ sauce.", "description_ar": "حلقات بصل وصلصة باربكيو.", "price": 10.50},
+                {"name": "Spicy Jalapeno", "name_ar": "برجر هالبينو حار", "description": "Pepper jack and jalapenos.", "description_ar": "جبنة حارة وهالبينو.", "price": 10.00},
+                {"name": "Beyond Veggie", "name_ar": "برجر نباتي", "description": "Plant-based patty, all the fixings.", "description_ar": "قطعة نباتية مع كل الإضافات.", "price": 10.00, "vegan": true}
+            ]
+        },
+        {
+            "name": "Sides",
+            "name_ar": "أطباق جانبية",
+            "items": [
+                {"name": "Fries", "name_ar": "بطاطس مقلية", "description": "Crispy golden fries.", "description_ar": "بطاطس ذهبية مقرمشة.", "price": 3.50, "vegan": true, "popular": true},
+                {"name": "Onion Rings", "name_ar": "حلقات البصل", "description": "Battered and fried.", "description_ar": "مغطاة ومقلية.", "price": 4.00, "vegan": true},
+                {"name": "Loaded Fries", "name_ar": "بطاطس محملة", "description": "Cheese, bacon and green onion.", "description_ar": "جبن وبيكون وبصل أخضر.", "price": 6.00},
+                {"name": "Coleslaw", "name_ar": "سلطة كول سلو", "description": "Crunchy and creamy.", "description_ar": "مقرمشة وكريمية.", "price": 3.00}
+            ]
+        },
+        {
+            "name": "Salads",
+            "name_ar": "سلطات",
+            "items": [
+                {"name": "Garden Salad", "name_ar": "سلطة الحديقة", "description": "Mixed greens and vinaigrette.", "description_ar": "خضار مشكلة وصلصة الخل.", "price": 6.00, "vegan": true},
+                {"name": "Caesar Salad", "name_ar": "سلطة سيزر", "description": "Romaine, parmesan, croutons.", "description_ar": "خس روماني وبارميزان وخبز محمص.", "price": 7.00},
+                {"name": "Cobb Salad", "name_ar": "سلطة كوب", "description": "Egg, chicken, avocado and blue cheese.", "description_ar": "بيض ودجاج وأفوكادو وجبنة زرقاء.", "price": 9.00}
+            ]
+        },
+        {
+            "name": "Shakes",
+            "name_ar": "ميلك شيك",
+            "items": [
+                {"name": "Vanilla Shake", "name_ar": "شيك الفانيلا", "description": "Thick and classic.", "description_ar": "كثيف وكلاسيكي.", "price": 5.00},
+                {"name": "Chocolate Shake", "name_ar": "شيك الشوكولاتة", "description": "Rich cocoa flavor.", "description_ar": "نكهة كاكاو غنية.", "price": 5.00, "popular": true},
+                {"name": "Strawberry Shake", "name_ar": "شيك الفراولة", "description": "Made with real strawberries.", "description_ar": "مصنوع من فراولة حقيقية.", "price": 5.25}
+            ]
+        }
+    ]
+}

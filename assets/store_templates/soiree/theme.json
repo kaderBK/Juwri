@@ -1,0 +1,145 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "soiree",
+      "label": "Soiree",
+      "thumb": "assets/store_templates/soiree/presets/soiree.png",
+      "values": {
+        "colors.primary": "#48485B",
+        "colors.background": "#302E3B",
+        "colors.surface": "#44404D",
+        "colors.text": "#FFFFFF",
+        "colors.accent": "#797993",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "champagne",
+      "label": "Champagne",
+      "thumb": "assets/store_templates/soiree/presets/champagne.png",
+      "values": {
+        "colors.primary": "#c9a227",
+        "colors.background": "#26232e",
+        "colors.surface": "#39343f",
+        "colors.text": "#f5f2ea",
+        "colors.accent": "#d4af37",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "rose",
+      "label": "Rose",
+      "thumb": "assets/store_templates/soiree/presets/rose.png",
+      "values": {
+        "colors.primary": "#c25a72",
+        "colors.background": "#2b2530",
+        "colors.surface": "#3c3540",
+        "colors.text": "#f7eef1",
+        "colors.accent": "#9a7ab0",
+        "layout.radius": "round"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#48485B"
+        },
+        "colors.background": {
+          "default": "#302E3B"
+        },
+        "colors.surface": {
+          "default": "#44404D"
+        },
+        "colors.text": {
+          "default": "#FFFFFF"
+        },
+        "colors.accent": {
+          "default": "#797993"
+        },
+        "layout.radius": {
+          "default": "pill"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "drinks after dark",
+          "label": "Splash tagline"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category pills",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "Tonight hero carousel + daily special",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "The menu list",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

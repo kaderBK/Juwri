@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'ہم کوکیز استعمال کرتے ہیں',
+    'cookie.body' => 'ضروری کوکیز :brand کو چلاتی رہتی ہیں۔ آپ کی رضامندی سے ہم تجزیاتی کوکیز بھی استعمال کرتے ہیں تاکہ سمجھ سکیں کہ سائٹ کیسے استعمال ہوتی ہے۔ آپ کی رضامندی کے بغیر کوئی مارکیٹنگ کوکی نہیں لگائی جاتی۔ [رازداری کی پالیسی](/privacy)',
+    'cookie.accept' => 'تجزیات قبول کریں',
+    'cookie.reject' => 'صرف ضروری',
+    'cookie.settings' => 'کوکی کی ترتیبات',
+    'cookie.settings.essential' => 'ضروری (ہمیشہ فعال)',
+    'cookie.settings.analytics' => 'تجزیات: سائٹ بہتر بنانے میں مدد دیتی ہیں',
+    'cookie.settings.marketing' => 'مارکیٹنگ: ہماری مہمات کی پیمائش کرتی ہیں',
+    'cookie.save' => 'انتخاب محفوظ کریں',
+    'signup.accept' => 'میں [سبسکرپشن کی شرائط](/terms)، [ڈیٹا پروسیسنگ ضمیمہ](/legal/dpa) اور [قابلِ قبول استعمال کی پالیسی](/legal/aup) سے متفق ہوں۔',
+    'signup.business' => 'میں تصدیق کرتا/کرتی ہوں کہ میں صارف کے طور پر نہیں بلکہ ایک کاروبار کے لیے سائن اپ کر رہا/رہی ہوں۔',
+    'signup.privacy' => 'ہم آپ کی تفصیلات آپ کا اکاؤنٹ چلانے کے لیے استعمال کرتے ہیں، جیسا کہ ہماری [رازداری کی پالیسی](/privacy) میں بیان کیا گیا ہے۔',
+    'signup.marketing_optin' => 'مجھے ای میل کے ذریعے پروڈکٹ کی خبریں اور تجاویز بھیجیں (آپ کسی بھی وقت ان سبسکرائب کر سکتے ہیں)۔',
+    'checkout.accept' => 'ادائیگی کر کے آپ [سبسکرپشن کی شرائط](/terms) قبول کرتے ہیں۔ پلان خود بخود تجدید ہوتے ہیں؛ آپ ترتیبات میں کسی بھی وقت منسوخ کر سکتے ہیں۔',
+    'checkout.vat' => 'قیمتوں میں جہاں لاگو ہو VAT شامل نہیں ہے۔',
+    'pharmacy.gate' => 'ادویات کی فروخت صرف ان ممالک میں دستیاب ہے جہاں ہم نے اسے فعال کیا ہے۔ شائع کرنے کے لیے اپنے لائسنس کے دستاویزات اپ لوڈ کریں۔ نسخے والی اور کنٹرول شدہ ادویات کی اجازت نہیں ہے۔',
+    'footer.legal' => 'قانونی',
+    'footer.terms' => 'سبسکرپشن کی شرائط',
+    'footer.privacy' => 'رازداری کی پالیسی',
+    'footer.dpa' => 'ڈیٹا پروسیسنگ ضمیمہ',
+    'footer.aup' => 'قابلِ قبول استعمال کی پالیسی',
+    'footer.sla' => 'سروس کی سطحیں اور معاونت',
+    'footer.subprocessors' => 'ذیلی پروسیسرز',
+    'footer.security' => 'سیکیورٹی',
+    'footer.free_reseller' => 'مفت ری سیلر درجے کی شرائط',
+    'footer.status' => 'سسٹم کی حالت',
+    'footer.trademarks' => 'ٹریڈ مارک پالیسی',
+    'footer.licensing' => 'اوپن سورس لائسنسنگ',
+    'footer.company' => 'JUWRI LTD · کمپنی نمبر 14363043 · 128 City Road, London, EC1V 2NX، برطانیہ',
+    'footer.copyright' => '© 2026 JUWRI LTD. juwri، AGPL-3.0 کے تحت اوپن سورس ہے۔',
+    'footer.powered' => 'juwri کے ذریعے فراہم کردہ',
+    'footer.contact' => 'رابطہ',
+    'footer.language' => 'زبان',
+    'legal.version' => 'ورژن :version · :date سے نافذ',
+    'legal.updated' => 'آخری تازہ کاری :date · آسان زبان میں خلاصہ — قانونی مشورہ نہیں',
+    'legal.translation_note' => 'یہ عربی ترجمہ سہولت کے لیے فراہم کیا گیا ہے۔ پابند ورژن انگریزی والا ہے۔',
+    'legal.changes' => 'ان دستاویزات میں اہم تبدیلیوں کی اطلاع ہم کم از کم 30 دن پہلے دیتے ہیں۔',
+    'legal.contact' => 'سوالات: legal@juwri.com',
+    'mail.terms_changed.subject' => 'ہم :date کو juwri کی شرائط اپ ڈیٹ کر رہے ہیں',
+    'mail.renewal.subject' => 'آپ کا juwri پلان :date کو تجدید ہو گا',
+    'mail.payment_failed.subject' => 'کارروائی درکار: juwri کی ادائیگی ناکام ہو گئی',
+    'mail.suspension_warning.subject' => 'آپ کی juwri سروسز 7 دن میں رک جائیں گی',
+    'mail.breach_notice.subject' => 'آپ کے juwri اکاؤنٹ کے بارے میں اہم سیکیورٹی نوٹس',
+    'mail.export_window.subject' => 'آپ کا ڈیٹا :date تک برآمد کے لیے دستیاب ہے',
+    'mail.reseller_winddown_reseller.subject' => 'آپ کے ری سیلر اکاؤنٹ کی تجدید درکار ہے: آپ کے اسٹورز خطرے میں ہیں',
+    'mail.reseller_winddown_store.subject' => 'آپ کا اسٹور چلانے والے پلیٹ فارم میں تبدیلیاں',
+    'signup.accept_required' => 'جاری رکھنے کے لیے براہ کرم سبسکرپشن کی شرائط، ڈیٹا پروسیسنگ ضمیمہ اور قابلِ قبول استعمال کی پالیسی قبول کریں۔',
+    'signup.business_required' => 'براہ کرم تصدیق کریں کہ آپ ایک کاروبار کے لیے سائن اپ کر رہے ہیں۔',
+    'legal.reaccept.upcoming' => 'ہم :date کو یہ دستاویزات اپ ڈیٹ کر رہے ہیں: :documents۔ براہ کرم نیا ورژن دیکھیں اور اسے قبول کریں۔',
+    'legal.reaccept.updated' => 'ہم نے یہ دستاویزات اپ ڈیٹ کی ہیں: :documents۔ براہ کرم نیا ورژن دیکھیں اور اسے قبول کریں۔',
+    'legal.reaccept.accept' => 'میں قبول کرتا/کرتی ہوں',
+    'legal.reaccept.done' => 'شکریہ۔ آپ کی منظوری محفوظ کر لی گئی ہے۔',
+    'legal.english_only' => 'یہ دستاویز انگریزی میں شائع کی گئی ہے۔',
+];

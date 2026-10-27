@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--majlis_gold{background-image:radial-gradient(340px 260px at 50% 0%,rgba(212,175,55,.18),transparent 70%)}
+.bio--majlis_gold .bio-name{font-family:'Amiri',serif;color:#f7f0dd}
+.bio--majlis_gold .bio-avatar{border:1.5px solid #d4af37;box-shadow:0 0 0 5px rgba(212,175,55,.14),0 0 30px rgba(212,175,55,.2)}
+.bio--majlis_gold .bio-link:hover{border-color:#d4af37;background:rgba(212,175,55,.11);transform:translateY(-2px)}
+.bio--majlis_gold .bio-status{color:#8fe3b0;border-color:rgba(143,227,176,.3);background:rgba(143,227,176,.08)}
+.bio--majlis_gold .bio-status i{background:#8fe3b0}

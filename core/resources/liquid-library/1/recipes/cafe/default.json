@@ -1,0 +1,188 @@
+{
+    "name": "Café",
+    "description": "Cosy and quick: a short split hero, stories, image category tiles, today's specials and a compact menu, with loyalty up front.",
+    "vertical": "cafe",
+    "priority": "browse",
+    "tokens": {
+        "colors.primary": "#6f4e37",
+        "colors.background": "#f7f1ea",
+        "colors.surface": "#fffaf5",
+        "colors.text": "#2b1d14",
+        "colors.accent": "#4f6b3f",
+        "layout.radius": "round",
+        "layout.density": "cozy"
+    },
+    "font_pair": "instrument",
+    "translations": {
+        "ar": {
+            "name": "مقهى",
+            "description": "دافئ وسريع: غلاف قصير مقسوم، قصص، بلاطات تصنيفات بالصور، أطباق اليوم ومنيو مدمج، مع بطاقة الولاء في المقدمة."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "split",
+                    "sticky": true
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "split",
+                    "height": "s",
+                    "align": "start",
+                    "image_source": "cover"
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "menu"
+                        }
+                    },
+                    "cta-cart": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog",
+                    "cta-cart"
+                ]
+            },
+            "status": {
+                "type": "store-status",
+                "settings": []
+            },
+            "stories": {
+                "type": "stories-rail",
+                "settings": {
+                    "ring": "solid",
+                    "size": "s"
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "image-tiles",
+                    "sticky": false
+                }
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "specials",
+                    "card": "photo-card",
+                    "limit": 8
+                }
+            },
+            "menu": {
+                "type": "menu-grid",
+                "settings": {
+                    "card": "compact",
+                    "columns_mobile": 2,
+                    "columns_desktop": 4
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "loyalty": {
+                "type": "loyalty-card",
+                "settings": []
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "hours": {
+                "type": "hours",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "pill",
+                    "above_tabbar": true
+                }
+            },
+            "tabbar": {
+                "type": "bottom-tabbar",
+                "settings": {
+                    "style": "pill",
+                    "show_labels": true
+                },
+                "blocks": {
+                    "tab-home": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "home"
+                        }
+                    },
+                    "tab-catalog": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "menu"
+                        }
+                    },
+                    "tab-cart": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    },
+                    "tab-profile": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "profile"
+                        }
+                    }
+                },
+                "block_order": [
+                    "tab-home",
+                    "tab-catalog",
+                    "tab-cart",
+                    "tab-profile"
+                ]
+            }
+        },
+        "order": [
+            "header",
+            "hero",
+            "status",
+            "stories",
+            "catnav",
+            "featured",
+            "menu",
+            "offers",
+            "loyalty",
+            "reviews",
+            "hours",
+            "location",
+            "footer",
+            "cart-bar",
+            "tabbar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

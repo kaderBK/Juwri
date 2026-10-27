@@ -1,0 +1,141 @@
+{
+  "operationId": "quoteCart",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/quote",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_bloom_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "order_type": "takeaway",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019f4809-5900-7ffe-af8b-0c857a8d77d6",
+          "qty": 1,
+          "option_ids": [
+            "019f08ad-e78b-715c-8459-590a2475c663",
+            "019f8276-075b-7777-a704-8d732a99b184",
+            "019f922c-c3f6-7d80-9a10-77bed77fcfc3",
+            "019fd82a-f556-7f48-ab43-fe4b3f138eb2"
+          ],
+          "note": "Noura"
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ee02e-6f00-7a68-86ae-170d6823078c",
+          "qty": 1,
+          "option_ids": [
+            "019fe2de-bd56-791a-8f00-c8c894198a6e"
+          ]
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:44:12 GMT"
+    },
+    "body": {
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019f4809-5900-7ffe-af8b-0c857a8d77d6",
+            "name": "Iced matcha latte",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Iced matcha latte"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 2500,
+              "currency": "SAR",
+              "formatted": "SAR 25.00"
+            },
+            "choices_label": "Regular · Whole · Light · Extra matcha shot · “Noura”"
+          },
+          {
+            "id": "ln_2",
+            "item_id": "019ee02e-6f00-7a68-86ae-170d6823078c",
+            "name": "Butter croissant",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Butter croissant"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 900,
+              "currency": "SAR",
+              "formatted": "SAR 9.00"
+            },
+            "choices_label": "Warmed"
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Subtotal · 2 items",
+            "amount": {
+              "minor": 3400,
+              "currency": "SAR",
+              "formatted": "SAR 34.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "vat",
+            "label": "VAT 15%",
+            "amount": {
+              "minor": 510,
+              "currency": "SAR",
+              "formatted": "SAR 5.10"
+            },
+            "kind": "tax"
+          }
+        ],
+        "total": {
+          "minor": 3910,
+          "currency": "SAR",
+          "formatted": "SAR 39.10"
+        },
+        "total_label": "Total to pay"
+      },
+      "quote_hash": "qh_2ef4b3915d06063cfa4a2bb6240a46ef",
+      "expires_at": "2026-10-02T09:49:12+03:00",
+      "payment_methods": [
+        {
+          "id": "apple_pay",
+          "label": "Apple Pay",
+          "sub": "Fastest",
+          "selected": true,
+          "icon": "apple"
+        },
+        {
+          "id": "card",
+          "label": "Card",
+          "sub": "Visa, Mastercard, mada",
+          "icon": "credit-card"
+        },
+        {
+          "id": "counter",
+          "label": "Pay at the counter",
+          "sub": "Cash or card on pickup",
+          "icon": "store"
+        }
+      ],
+      "warnings": [],
+      "requires": [],
+      "payment_modes": [
+        "pay_later",
+        "hosted"
+      ]
+    }
+  }
+}

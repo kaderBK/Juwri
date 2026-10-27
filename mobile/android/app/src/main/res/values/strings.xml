@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">juwri</string>
+    <string name="push_channel_id">owner_alerts</string>
+    <string name="push_channel_name">Orders and alerts</string>
+
+    <string name="retry">Try again</string>
+    <string name="error_title">Something went wrong</string>
+    <string name="offline_title">You\'re offline</string>
+    <string name="offline_body">Check your internet connection and try again.</string>
+    <string name="update_title">Update required</string>
+    <string name="update_body">This version of the app is no longer supported. Please install the latest version.</string>
+    <string name="update_action">Update</string>
+    <string name="update_available">A new version of the app is available.</string>
+    <string name="app_disabled_title">App unavailable</string>
+    <string name="app_disabled_body">The mobile app is not available right now.</string>
+    <string name="unlock_title">Unlock juwri</string>
+    <string name="unlock_body">Confirm it\'s you to open your dashboard.</string>
+    <string name="unlock_action">Unlock</string>
+
+    <string name="login_title">Sign in</string>
+    <string name="login_subtitle">Manage your business from your phone.</string>
+    <string name="login_username">Email or username</string>
+    <string name="login_password">Password</string>
+    <string name="login_otp">Authentication code</string>
+    <string name="login_submit">Sign in</string>
+    <string name="login_busy">Signing in…</string>
+    <string name="login_missing">Enter your email or username and your password.</string>
+    <string name="login_two_factor">Enter the 6-digit code from your authenticator app, or a recovery code.</string>
+    <string name="login_forgot">Forgot password?</string>
+    <string name="login_register">Create an account</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_more">More</string>
+    <string name="switch_store">Switch store</string>
+    <string name="switch_store_current">Store: %1$s</string>
+
+    <string name="push_prompt_title">Get order alerts</string>
+    <string name="push_prompt_body">Turn on notifications to hear about new orders, reservations and status changes, even when the app is closed.</string>
+    <string name="push_prompt_allow">Turn on</string>
+    <string name="push_prompt_later">Not now</string>
+
+    <string name="download_started">Downloading…</string>
+    <string name="download_saved">Saved to Downloads</string>
+    <string name="download_failed">Download failed</string>
+    <string name="download_open">Open</string>
+    <string name="cancel">Cancel</string>
+    <string name="logout">Log out</string>
+    <string name="logout_confirm">Log out of juwri on this phone?</string>
+</resources>

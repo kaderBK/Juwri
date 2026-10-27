@@ -1,0 +1,235 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "glow",
+      "label": "Glow",
+      "thumb": "assets/store_templates/glow/presets/glow.png",
+      "values": {
+        "colors.primary": "#22c37a",
+        "colors.background": "#0b0f0d",
+        "colors.surface": "#1c2420",
+        "colors.text": "#f2f6f3",
+        "colors.accent": "#e8b34a",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "thumb": "assets/store_templates/glow/presets/aurora.png",
+      "values": {
+        "colors.primary": "#39d0e0",
+        "colors.background": "#08111a",
+        "colors.surface": "#122029",
+        "colors.text": "#e8f4f7",
+        "colors.accent": "#22c37a",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "dawn",
+      "label": "Dawn",
+      "thumb": "assets/store_templates/glow/presets/dawn.png",
+      "values": {
+        "colors.primary": "#2fb56b",
+        "colors.background": "#f2f7f4",
+        "colors.surface": "#ffffff",
+        "colors.text": "#0f2018",
+        "colors.accent": "#e8b34a",
+        "layout.radius": "round"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#22c37a"
+        },
+        "colors.background": {
+          "default": "#0b0f0d"
+        },
+        "colors.surface": {
+          "default": "#1c2420"
+        },
+        "colors.text": {
+          "default": "#f2f6f3"
+        },
+        "colors.accent": {
+          "default": "#e8b34a"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.greeting",
+          "type": "text",
+          "label": "Home greeting",
+          "default": "Keep glowing"
+        },
+        {
+          "id": "texts.greeting_sub",
+          "type": "text",
+          "label": "Greeting subtext",
+          "default": "Fresh drinks, made your way."
+        },
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Hero title",
+          "default": "Start fresh with"
+        },
+        {
+          "id": "texts.menu_title",
+          "type": "text",
+          "label": "Menu section title",
+          "default": "Explore"
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Seasonal"
+        },
+        {
+          "id": "texts.order_now",
+          "type": "text",
+          "label": "Order button",
+          "default": "Order now"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": "Add to Cart"
+        },
+        {
+          "id": "texts.cart_button",
+          "type": "text",
+          "label": "View-cart button",
+          "default": "Cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.view_menu",
+          "type": "text",
+          "label": "View-menu button",
+          "default": "Browse menu"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery label",
+          "default": "Delivery"
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup label",
+          "default": "Pickup"
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        },
+        {
+          "id": "brand.cover_splash",
+          "type": "toggle",
+          "label": "Cover behind splash",
+          "default": true
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.subtitle": {
+          "default": "Join today to earn your way to free treats",
+          "label": "Splash subtext"
+        }
+      }
+    },
+    {
+      "include": "search",
+      "fields": {
+        "texts.search_placeholder": {
+          "default": "Search the menu",
+          "label": "Search box placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category rings",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "Seasonal picks",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Explore grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

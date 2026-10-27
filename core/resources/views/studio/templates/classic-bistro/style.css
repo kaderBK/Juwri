@@ -1,0 +1,81 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Classic Bistro — serif, cream, 2-col. Print-first; screen preview shows the sheet.
+   All colors via CSS vars set inline from manifest/user overrides. Logical
+   properties only (RTL). No external requests: system font stacks. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --serif: 'Playfair Display', Georgia, 'Times New Roman', 'Amiri', 'Geeza Pro', serif;
+}
+
+html, body { background: #777; }
+
+.sheet {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    width: var(--page-w);
+    min-height: var(--page-h);
+    margin-inline: auto;
+    padding: 14mm 12mm;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, .35);
+}
+
+/* ---- header ---- */
+.menu-header { text-align: center; border-block-end: 3px double var(--accent); padding-block-end: 6mm; margin-block-end: 7mm; }
+.menu-header .rule { width: 34mm; height: 1px; background: var(--accent); margin: 3mm auto; }
+.restaurant-name { font-size: 26pt; letter-spacing: .06em; color: var(--accent); font-weight: 700; }
+.tagline { font-size: 10.5pt; font-style: italic; opacity: .8; margin-block-start: 2mm; }
+
+/* ---- category grid ---- */
+.menu-body { column-count: 2; column-gap: 10mm; }
+.category { break-inside: avoid; margin-block-end: 7mm; }
+.category-name {
+    font-size: 13.5pt; font-weight: 700; color: var(--accent);
+    letter-spacing: .12em; text-transform: uppercase;
+    border-block-end: 1px solid var(--accent);
+    padding-block-end: 1.5mm; margin-block-end: 3mm;
+}
+
+/* ---- items ---- */
+.item { break-inside: avoid; margin-block-end: 3.2mm; }
+.item-line { display: flex; align-items: baseline; gap: 2mm; }
+.item-name { font-size: 10.5pt; font-weight: 600; }
+.item-dots { flex: 1; border-block-end: 1px dotted color-mix(in srgb, var(--text) 45%, transparent); min-width: 4mm; }
+.item-price { font-size: 10.5pt; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.item-desc { font-size: 8.5pt; font-style: italic; opacity: .78; margin-block-start: .8mm; line-height: 1.35; }
+.item-tags { margin-block-start: .8mm; }
+.tag {
+    display: inline-block; font-size: 6.5pt; font-style: normal;
+    letter-spacing: .08em; text-transform: uppercase;
+    border: 1px solid var(--accent); color: var(--accent);
+    border-radius: 2mm; padding: .3mm 1.6mm; margin-inline-end: 1.2mm;
+}
+.item-variants, .item-extras { font-size: 8.5pt; opacity: .85; margin-block-start: .8mm; }
+.item-extras { font-style: italic; }
+
+/* ---- footer ---- */
+.menu-footer {
+    text-align: center; font-size: 8.5pt; font-style: italic; opacity: .75;
+    border-block-start: 1px solid var(--accent);
+    padding-block-start: 3mm; margin-block-start: 6mm;
+}
+
+/* ---- aspects ---- */
+.aspect-a4     { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+
+/* ---- print ---- */
+@media print {
+    html, body { background: none; }
+    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; }
+    .category, .item { break-inside: avoid; }
+}
+@page { margin: 0; }
+.aspect-a4.sheet     { page: a4page; }
+.aspect-letter.sheet { page: letterpage; }
+@page a4page     { size: A4; }
+@page letterpage { size: letter; }

@@ -1,0 +1,27 @@
+{
+  "slug": "pastel_zen",
+  "starter": "cafe",
+  "name": "Pastel Zen",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Zen Maru Gothic", "weights": [500, 700]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#f1f4ec",
+    "--ink": "#3d443a",
+    "--muted": "#8b9284",
+    "--card": "#ffffff",
+    "--btn-border": "transparent",
+    "--accent": "#7d9b6a",
+    "--accent-ink": "#ffffff",
+    "--icon-bg": "#eef3e7",
+    "--icon-fg": "#7d9b6a",
+    "--radius": "18px",
+    "--shadow": "0 3px 14px rgba(61,68,58,.06)",
+    "--font-body": "'Zen Maru Gothic','Manrope',sans-serif",
+    "--font-display": "'Zen Maru Gothic',sans-serif"
+  }
+}

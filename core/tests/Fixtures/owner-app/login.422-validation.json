@@ -1,0 +1,21 @@
+{
+    "status": 422,
+    "body": {
+        "code": "string",
+        "errors": {
+            "device_id": {
+                "list_of": "string"
+            },
+            "password": {
+                "list_of": "string"
+            },
+            "platform": {
+                "list_of": "string"
+            },
+            "username": {
+                "list_of": "string"
+            }
+        },
+        "message": "string"
+    }
+}

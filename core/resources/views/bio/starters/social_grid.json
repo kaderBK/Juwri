@@ -1,0 +1,11 @@
+{
+  "key": "social_grid",
+  "name": "Social & content",
+  "sections": {"hours": false, "socials": true, "capture": true, "map": false, "whatsapp": false, "reviews": false},
+  "blocks": [
+    {"type": "video", "label": "Watch", "priority": 90, "requires": "media", "config": {}},
+    {"type": "menu", "label": "Menu", "priority": 80, "config": {"prefill": "menu"}},
+    {"type": "featured_dish", "label": "Featured item", "priority": 60, "requires": "menu_items", "config": {"title": "Featured item"}},
+    {"type": "capture", "label": "Join the list", "priority": 40, "config": {}}
+  ]
+}

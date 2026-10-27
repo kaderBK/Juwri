@@ -1,0 +1,41 @@
+{
+  "name": "createCustomer",
+  "label": "Create Customer",
+  "description": "Creates a customer record on a restaurant.",
+  "type": "action",
+  "connection": "juwri",
+  "help": "Depends on a platform endpoint not yet shipped (NEEDS-F0 B4-a). Will error until POST /stores/{id}/customers exists.",
+  "parameters": [
+    { "name": "restaurant_id", "type": "integer", "label": "Restaurant ID", "required": true },
+    { "name": "name", "type": "text", "label": "Name", "required": true },
+    { "name": "email", "type": "email", "label": "Email" },
+    { "name": "phone", "type": "text", "label": "Phone" },
+    { "name": "marketing_consent", "type": "boolean", "label": "Marketing consent" },
+    { "name": "notes", "type": "text", "label": "Notes" }
+  ],
+  "communication": {
+    "url": "{{baseUrl}}/api/v1/stores/{{parameters.restaurant_id}}/customers",
+    "method": "POST",
+    "body": {
+      "name": "{{parameters.name}}",
+      "email": "{{parameters.email}}",
+      "phone": "{{parameters.phone}}",
+      "marketing_consent": "{{parameters.marketing_consent}}",
+      "notes": "{{parameters.notes}}"
+    },
+    "response": { "output": "{{body}}" }
+  },
+  "interface": [
+    { "name": "id", "type": "number", "label": "Customer ID" },
+    { "name": "name", "type": "text", "label": "Name" },
+    { "name": "email", "type": "text", "label": "Email" },
+    { "name": "phone", "type": "text", "label": "Phone" }
+  ],
+  "samples": {
+    "id": 8841,
+    "name": "Jordan Rivera",
+    "email": "jr@example.com",
+    "phone": "+15551234567",
+    "created_at": "2026-07-08T14:03:11+00:00"
+  }
+}

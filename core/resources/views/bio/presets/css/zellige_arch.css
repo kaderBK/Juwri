@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--zellige_arch .bio-name{font-family:'Fraunces',serif;color:#7c3b24}
+.bio--zellige_arch .bio-avatar{border-radius:44px 44px 10px 10px;border:2px solid #b45b3e;background:#fdf9f0;box-shadow:0 0 0 6px #f0e6d2}
+.bio--zellige_arch .bio-link:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(58,42,32,.16)}
+.bio--zellige_arch .bio-link__icon{border-radius:18px 18px 6px 6px;border:1px solid #e0c9a2}
+.bio--zellige_arch .bio-socials a{border-radius:14px 14px 5px 5px;border:1.5px solid #b45b3e;color:#b45b3e;background:#fdf9f0}

@@ -1,0 +1,90 @@
+{
+  "name": "juwri: Daily sales digest → email",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Daily sales digest\n\n1. Connect your **juwri API** credential and set the **Restaurant ID** on the *List today's orders* node.\n2. Connect **Gmail** (or swap for any email node) and set the recipient.\n3. Runs every morning at 08:00 and emails the day's order count + total.",
+        "height": 240,
+        "width": 340
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [300, 100]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 8 * * *" }]
+        }
+      },
+      "id": "schedule-1",
+      "name": "Every morning 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [680, 320]
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "operation": "list",
+        "storeId": "={{ 1 }}",
+        "limit": 100,
+        "filters": {
+          "since": "={{ $today.toISODate() }}"
+        }
+      },
+      "id": "list-1",
+      "name": "List today's orders",
+      "type": "n8n-nodes-juwri.juwri",
+      "typeVersion": 1,
+      "position": [900, 320],
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "agg-1",
+      "name": "Summarize",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "sendTo": "owner@example.com",
+        "subject": "=Daily sales — {{ $today.toISODate() }}",
+        "message": "=Orders today: {{ $items('List today\\'s orders').length }}. See the platform dashboard for the breakdown."
+      },
+      "id": "gmail-1",
+      "name": "Email the digest",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1340, 320],
+      "credentials": {
+        "gmailOAuth2": { "id": "4", "name": "Gmail account" }
+      }
+    }
+  ],
+  "connections": {
+    "Every morning 08:00": {
+      "main": [[{ "node": "List today's orders", "type": "main", "index": 0 }]]
+    },
+    "List today's orders": {
+      "main": [[{ "node": "Summarize", "type": "main", "index": 0 }]]
+    },
+    "Summarize": {
+      "main": [[{ "node": "Email the digest", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-daily-sales-digest" },
+  "tags": [{ "name": "juwri" }]
+}

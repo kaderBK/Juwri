@@ -1,0 +1,110 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner dashboard mobile shell (rev/mobile-app plan: step 2, server item S2).
+ *
+ *  - Phones (< 768px): a bottom tab bar (.ui-tabbar, partials/mobile-tabbar)
+ *    with the same five destinations the native app uses (OwnerApp::tabsFor).
+ *  - Inside the Hotwire Native app (html[data-owner-app="1"]): the native nav
+ *    bar and tab bar own navigation, so the web top bar, sidebar, tab bar and
+ *    web-only links are hidden and the content takes the full screen.
+ *
+ * Independent of the skin flag. Tokens only; logical properties.
+ */
+
+/* ── Phone tab bar ────────────────────────────────────────────────────── */
+.ui-tabbar { display: none; }
+
+@media (max-width: 767.98px) {
+  .ui-tabbar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 1030;
+    display: flex;
+    padding-block: 6px calc(6px + env(safe-area-inset-bottom));
+    padding-inline: 6px;
+    background: var(--ui-surface);
+    border-block-start: 1px solid var(--ui-line);
+  }
+
+  .ui-tabbar__item {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-block-size: 52px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ui-ink-3);
+    font-family: var(--ui-font);
+    font-size: var(--ui-fs-micro);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ui-tabbar__item:hover { color: var(--ui-ink); text-decoration: none; }
+  .ui-tabbar__item[aria-current="page"] { color: var(--ui-accent-text); }
+  .ui-tabbar__item svg { inline-size: 24px; block-size: 24px; }
+
+  .ui-tabbar__item:focus-visible {
+    outline: 2px solid var(--ui-accent);
+    outline-offset: -2px;
+    border-radius: var(--ui-r-input);
+  }
+
+  body.ui-has-tabbar .app-wrapper {
+    padding-block-end: calc(88px + env(safe-area-inset-bottom));
+  }
+
+  /* Floating page widgets sit above the tab bar, not under it. */
+  body.ui-has-tabbar .ui-toaster,
+  body.ui-has-tabbar .dash-toast-wrap {
+    inset-block-end: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  /* The cookie notice (partials/quick-addons) is pinned to the bottom edge on
+     phones and would cover the tab bar until accepted. */
+  body.ui-has-tabbar .cookieConsentContainer {
+    inset-block-end: calc(64px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── Inside the native app (S2) ───────────────────────────────────────── */
+html[data-owner-app="1"] .app-header,
+html[data-owner-app="1"] #appMenubar,
+html[data-owner-app="1"] .ui-tabbar,
+html[data-owner-app="1"] .skip-link,
+html[data-owner-app="1"] [data-web-only] {
+  display: none !important;
+}
+
+html[data-owner-app="1"] .app-wrapper {
+  margin: 0 !important;
+  min-block-size: 100vh;
+  padding-block: var(--ui-space-3) calc(var(--ui-space-6) + env(safe-area-inset-bottom));
+}
+
+html[data-owner-app="1"] body.ui-has-tabbar .app-wrapper {
+  padding-block-end: calc(var(--ui-space-6) + env(safe-area-inset-bottom));
+}
+
+/* Shared owner toast (owner/partials/toast, `.dash-toast*`): its layout and
+   motion live in old-theme-skin.css, which read Bootstrap colour variables that
+   only the retired NexLink sheet defined (WI-10i). Kit colours here. */
+.dash-toast {
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  border: 1px solid var(--ui-line);
+  border-inline-start: 3px solid var(--ui-accent);
+  border-radius: var(--ui-r-input);
+}
+.dash-toast.type-success { border-inline-start-color: var(--ui-success); }
+.dash-toast.type-danger  { border-inline-start-color: var(--ui-danger); }
+.dash-toast.type-warning { border-inline-start-color: var(--ui-warning); }

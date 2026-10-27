@@ -1,0 +1,90 @@
+{
+  "operationId": "getDeliverySlots",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/delivery/slots",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_bloom_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "order_type": "pickup",
+      "from": "2026-10-02",
+      "days": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:45:00 GMT"
+    },
+    "body": {
+      "timezone": "Asia/Riyadh",
+      "days": [
+        {
+          "date": "2026-10-02",
+          "display": {
+            "id": "d_fri",
+            "label": "Today",
+            "sub": "Fri 2 Oct",
+            "state": "selected"
+          },
+          "slots": [
+            {
+              "id": "pslot_634b49394a",
+              "starts_at": "2026-10-02T10:00:00+03:00",
+              "ends_at": "2026-10-02T10:15:00+03:00",
+              "state": "full",
+              "capacity_remaining": 0,
+              "display": {
+                "id": "pslot_634b49394a",
+                "label": "10:00 – 10:15",
+                "state": "full"
+              }
+            },
+            {
+              "id": "pslot_33ebfb2110",
+              "starts_at": "2026-10-02T10:15:00+03:00",
+              "ends_at": "2026-10-02T10:30:00+03:00",
+              "state": "few",
+              "capacity_remaining": 2,
+              "display": {
+                "id": "pslot_33ebfb2110",
+                "label": "10:15 – 10:30",
+                "state": "available"
+              }
+            },
+            {
+              "id": "pslot_cfeabbd562",
+              "starts_at": "2026-10-02T10:30:00+03:00",
+              "ends_at": "2026-10-02T10:45:00+03:00",
+              "state": "available",
+              "capacity_remaining": 6,
+              "display": {
+                "id": "pslot_cfeabbd562",
+                "label": "10:30 – 10:45",
+                "state": "available"
+              }
+            },
+            {
+              "id": "pslot_44f14b2eed",
+              "starts_at": "2026-10-02T10:45:00+03:00",
+              "ends_at": "2026-10-02T11:00:00+03:00",
+              "state": "available",
+              "capacity_remaining": 8,
+              "display": {
+                "id": "pslot_44f14b2eed",
+                "label": "10:45 – 11:00",
+                "state": "available"
+              }
+            }
+          ]
+        }
+      ],
+      "express": null
+    }
+  }
+}

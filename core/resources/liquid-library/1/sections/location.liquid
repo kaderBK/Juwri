@@ -1,0 +1,57 @@
+{%- comment -%}
+  Location (library v1): address, a directions link to the store's own map
+  URL (`social.maps_url` — never an embedded map; the click-to-load map is a
+  platform widget), phone, and the branch list. Renders nothing for a store
+  with no address, phone or branches.
+{%- endcomment -%}
+{%- liquid
+  assign address = social.address | default: restaurant.address | strip
+  assign phone = social.phone | default: restaurant.phone | strip
+  assign branch_count = branches | size
+  assign show_branches = false
+  if section.settings.show_branches and branch_count > 1
+    assign show_branches = true
+  endif
+-%}
+{%- if address != '' or phone != '' or show_branches -%}
+<section class="mbs-location" aria-labelledby="mbs-location-{{ section.id | escape }}">
+  <h2 class="mbs-location__title" id="mbs-location-{{ section.id | escape }}">{%- if section.settings.heading != '' -%}{{ section.settings.heading | escape }}{%- else -%}{{ 'Location' | t }}{%- endif -%}</h2>
+  <address class="mbs-location__card">
+    {%- if address != '' -%}
+    <p class="mbs-location__line">{%- render 'icon', name: 'pin', size: 18 -%}<span>{{ address | escape }}</span></p>
+    {%- endif -%}
+    {%- if phone != '' and section.settings.show_phone -%}
+    <p class="mbs-location__line">{%- render 'icon', name: 'phone', size: 18 -%}<a href="tel:{{ phone | remove: ' ' | escape }}"><bdi>{{ phone | escape }}</bdi></a></p>
+    {%- endif -%}
+    {%- if social.maps_url -%}
+    <a class="mbs-location__cta" href="{{ social.maps_url | escape }}" rel="noopener" target="_blank">{%- render 'icon', name: 'map', size: 18 -%}<span>{{ 'Directions' | t }}</span></a>
+    {%- endif -%}
+  </address>
+  {%- if show_branches -%}
+  <h3 class="mbs-location__sub">{{ 'Our branches' | t }}</h3>
+  <ul class="mbs-location__branches" role="list">
+    {%- for branch in branches -%}
+      <li class="mbs-location__branch">
+        <span class="mbs-location__branch-name">{{ branch.name | escape }}</span>
+        <span class="mbs-location__branch-state{% if branch.is_open %} is-open{% endif %}">{% if branch.is_open %}{{ 'Open now' | t }}{% else %}{{ 'Closed now' | t }}{% endif %}</span>
+      </li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Location",
+  "group": "info",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Location)", "default": "" },
+    { "id": "show_phone", "type": "checkbox", "label": "Show phone", "default": true },
+    { "id": "show_branches", "type": "checkbox", "label": "List branches (multi-branch stores)", "default": true }
+  ],
+  "presets": [{ "name": "Location" }]
+}
+{% endschema %}

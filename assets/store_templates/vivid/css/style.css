@@ -1,0 +1,3873 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* =========================================================================
+   VIVID — Vibrant Interactive Menu Template
+   Design system: warm, bright, tactile surfaces with playful micro-motion.
+   Mobile-first, fully responsive, RTL-aware, light/dark toggle.
+   Accent driven by --theme-color-1 from layout (warm coral fallback).
+   ========================================================================= */
+
+/* ----------------------------------------------------------------------- */
+/*  BRAND ACCENT — hardened against a malformed --theme-color-*             */
+/* ----------------------------------------------------------------------- */
+/*  The shared layout builds --theme-color-1 with sscanf($c,"#%02x%02x%02x"),
+    which cannot read 3-digit shorthand, a named colour or an rgb() string:
+    "#111" yields the MALFORMED "rgba(17,1,,1)". A var() fallback does NOT
+    rescue that — the token IS defined, it is merely garbage — so every rule
+    downstream of it (113 declarations in this file) fell over: the active
+    category pill and the sticky cart bar became white-on-cream INVISIBLE,
+    .vd-cta lost its fill entirely, and every price/kicker/dot rendered black
+    instead of coral. Registering --vd-accent with @property makes an invalid
+    substitution fall back to vivid's own coral instead of poisoning the page:
+    a value that does not parse as <color> is invalid-at-computed-value-time
+    and resolves to initial-value at :root. A VALID brand colour still drives
+    the whole theme, because the entire ramp is now derived from --vd-accent
+    with color-mix() rather than from separate --theme-color-0_* tokens that
+    are malformed in exactly the same way. Root cause is shared code (B10). */
+@property --vd-accent {
+    syntax:"<color>";
+    inherits:true;
+    initial-value:#ff6b4a;
+}
+
+/* ----------------------------------------------------------------------- */
+/*  ROOT — Design tokens                                                    */
+/* ----------------------------------------------------------------------- */
+:root {
+    /* Brand accent — vivid's design accent (the coral that drives the whole
+       ramp) IS the Customizer v2 PRIMARY role. The token layer
+       (theme-tokens.blade.php) sets --tc-primary only when the owner picks a
+       brand colour; the inner var(--theme-color-1, …) keeps the legacy layout
+       token (and this file's @property hardening) working when it does not, so
+       an un-customized render is byte-identical to today. */
+    --vd-accent:       var(--tc-primary, var(--theme-color-1, #ff6b4a));
+    --vd-accent-08:    color-mix(in srgb, var(--vd-accent) 8%,  transparent);
+    --vd-accent-12:    color-mix(in srgb, var(--vd-accent) 12%, transparent);
+    --vd-accent-16:    color-mix(in srgb, var(--vd-accent) 16%, transparent);
+    --vd-accent-20:    color-mix(in srgb, var(--vd-accent) 20%, transparent);
+    --vd-accent-30:    color-mix(in srgb, var(--vd-accent) 30%, transparent);
+    --vd-accent-40:    color-mix(in srgb, var(--vd-accent) 40%, transparent);
+    --vd-accent-45:    color-mix(in srgb, var(--vd-accent) 45%, transparent);
+    --vd-accent-50:    color-mix(in srgb, var(--vd-accent) 50%, transparent);
+    --vd-accent-55:    color-mix(in srgb, var(--vd-accent) 55%, transparent);
+    --vd-accent-42:    color-mix(in srgb, var(--vd-accent) 42%, transparent);
+    --vd-accent-00:    color-mix(in srgb, var(--vd-accent) 0%,  transparent);
+    /* Accent used as TEXT on a light surface. The raw coral measures 2.59:1 on
+       vivid's cream — below the 4.5:1 floor — so prices, kickers, ghost buttons
+       and every accent-tinted label were technically illegible copy. Pulled 35%
+       toward the ink colour it sits next to: 4.9:1, same hue, still obviously
+       the brand. Dark mode needs the opposite (the raw accent already measures
+       6.9:1 on #0e0d0b) so it maps straight through, below. */
+    --vd-accent-ink:   color-mix(in srgb, var(--vd-accent) 65%, #1a1916);
+
+    /* Light-mode surfaces — the base page/surface tokens flow from the
+       Customizer v2 role layer; the literal after each comma is vivid's own
+       value kept as the var() fallback. The -2/-3 shades, card-bg, bar-bg and
+       input surfaces are hand-tuned derivations (and translucent overlays in
+       dark mode) and stay literal so a role override can't flatten them. */
+    --vd-bg:           var(--tc-background, #faf8f5);
+    --vd-bg-2:         #f3efe9;
+    --vd-surface:      var(--tc-surface, #ffffff);
+    --vd-surface-2:    #f8f5f1;
+    --vd-surface-3:    #f0ece6;
+    --vd-card-bg:      #ffffff;
+    --vd-bar-bg:       rgba(255,255,255,.82);
+    --vd-scrim:        rgba(30,25,20,.48);
+    --vd-input-bg:     #f4f0ea;
+    --vd-input-border:#e5dfd5;
+
+    /* Text — base ink flows from the role layer; the -2/muted/faint tiers are
+       hand-tuned shades and stay literal (crave keeps its ink-2/ink-3 the same
+       way). */
+    --vd-text:         var(--tc-text, #1a1916);
+    --vd-text-2:       #4a443c;
+    --vd-muted:        #6b6457;
+    --vd-faint:        #b5ad9f;
+
+    /* Feedback */
+    --vd-veg:          #2dd470;
+    --vd-nonveg:       #f5556e;
+    --vd-star:         #fbbf24;
+    --vd-info:         #6366f1;
+    --vd-success:      #22c55e;
+    --vd-warning:      #f59e0b;
+
+    /* Shape & motion — ISS-B-302: the customizer's layout.radius tokens
+       (--tr-control small controls, --tr-card panels, --tr-pill capsules) drive
+       these, each falling back to vivid's original metric so the default look is
+       byte-identical until an owner changes Corner style. */
+    --vd-r-sm:    var(--tr-control, 12px);
+    --vd-r-md:    var(--tr-card, 16px);
+    --vd-r-lg:    var(--tr-card, 22px);
+    --vd-r-xl:    var(--tr-card, 30px);
+    --vd-r-pill:  var(--tr-pill, 999px);
+    --vd-shadow-sm:0 2px 8px -2px rgba(0,0,0,.08);
+    --vd-shadow:    0 12px 36px -10px rgba(0,0,0,.16);
+    --vd-shadow-lg:0 24px 60px -14px rgba(0,0,0,.24);
+    --vd-shadow-xl:0 32px 80px -18px rgba(0,0,0,.28);
+    --vd-shadow-accent:0 10px 28px -8px var(--vd-accent-42);
+    --vd-ease:      cubic-bezier(.22,1,.36,1);
+    --vd-spring:    cubic-bezier(.34,1.56,.64,1);
+    --vd-fast:      .18s;
+    --vd-med:       .32s;
+    --vd-slow:      .56s;
+
+    /* Typography — body maps to the Customizer font pair's body face,
+       heading/display to its heading face (WI-T2); each keeps vivid's own
+       stack (via the legacy --menu-font for body) as the var() fallback so a
+       pair of "none" degrades to today's fonts. */
+    --vd-font:      var(--tf-body, 'Saudi Riyal', var(--menu-font,'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif));
+    --vd-display:   'Saudi Riyal', var(--tf-heading, 'Fraunces',var(--vd-font));
+}
+
+/* ----------------------------------------------------------------------- */
+/*  DARK MODE — the shared engine (_shared/js/mb-theme.js) sets
+    data-theme="dark|light" on the .vd root; auto (OS preference) lives in
+    the media block at the end of this file. KEEP the two in sync.          */
+/* ----------------------------------------------------------------------- */
+.vd[data-theme="dark"],
+html[data-mb-theme="dark"] .vd {
+    /* On a near-black surface the light-mode darkening would bury the accent, so
+       ink lifts it instead: the default orange read 6.9:1 raw, but a deep brand
+       colour (#d81e5b) only 3.9:1 — a quarter of white brings any accent past
+       4.5:1 on #0e0d0b (P3-13 axe). */
+    --vd-accent-ink:   color-mix(in oklab, var(--vd-accent) 75%, #fff);
+
+    --vd-bg:           #0e0d0b;
+    --vd-bg-2:         #16140f;
+    --vd-surface:      #1c1a15;
+    --vd-surface-2:    #211e18;
+    --vd-surface-3:    #26221c;
+    --vd-card-bg:      rgba(255,255,255,.045);
+    --vd-bar-bg:       rgba(14,13,11,.82);
+    --vd-scrim:        rgba(0,0,0,.62);
+    --vd-input-bg:     rgba(255,255,255,.06);
+    --vd-input-border:rgba(255,255,255,.1);
+
+    --vd-text:         #f6f3ee;
+    --vd-text-2:       #c8c2b6;
+    --vd-muted:        #92897c;
+    --vd-faint:        #5a544b;
+
+    --vd-shadow-sm:0 2px 8px -2px rgba(0,0,0,.3);
+    --vd-shadow:    0 12px 36px -10px rgba(0,0,0,.5);
+    --vd-shadow-lg:0 24px 60px -14px rgba(0,0,0,.6);
+    --vd-shadow-xl:0 32px 80px -18px rgba(0,0,0,.7);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  RESET & BASE                                                            */
+/* ----------------------------------------------------------------------- */
+.vd *, .vd *::before, .vd *::after { box-sizing: border-box; }
+
+.vd {
+    position:relative;
+    min-height:100vh;
+    margin:0;
+    font-family:var(--vd-font);
+    color:var(--vd-text);
+    background:var(--vd-bg);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:clip;
+    transition:background var(--vd-med) var(--vd-ease), color var(--vd-med) var(--vd-ease);
+}
+
+.vd h1, .vd h2, .vd h3, .vd h4, .vd h5 {
+    font-family:var(--vd-display);
+    font-weight:600;
+    letter-spacing:-.015em;
+    margin:0;
+    line-height:1.15;
+}
+
+.vd a { color: inherit; text-decoration: none; }
+.vd img { max-width: 100%; display: block; }
+/* :where() so the reset carries the specificity of `.vd` alone (0,1,0) instead
+   of `.vd button` (0,1,1). As a type-plus-class selector it BEAT every single
+   component rule in this file — `.vd-cta` is (0,1,0) — so the primary call to
+   action on a <button> ("Add to order", "Place Order", "Send Request", login,
+   register) was painted `background:none; color:inherit`: no fill, no white
+   ink, an invisible pill on the page. Only its box-shadow survived, which is
+   why it looked like a brand-colour bug rather than a specificity one. Every
+   .vd-* rule is declared after this line, so each now wins on order. */
+.vd :where(button) { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+.vd ul { margin: 0; padding: 0; list-style: none; }
+.vd input, .vd textarea, .vd select { font-family: inherit; font-size: inherit; }
+.vd ::selection { background: var(--vd-accent-30); color: var(--vd-text); }
+
+.vd-container {
+    width:100%;
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 18px;
+}
+
+/* ----------------------------------------------------------------------- */
+/*  AMBIENT MESH BACKGROUND                                                 */
+/* ----------------------------------------------------------------------- */
+.vd-mesh {
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    overflow:hidden;
+    background:var(--vd-bg);
+}
+
+.vd-blob {
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.38;
+    animation:vd-blob 22s ease-in-out infinite;
+}
+
+.vd-blob-1 {
+    width:60vw;
+    height:60vw;
+    top:-12%;
+    inset-inline-start:-14%;
+    background:radial-gradient(circle, var(--vd-accent-45), transparent 72%);
+}
+
+.vd-blob-2 {
+    width:45vw;
+    height:45vw;
+    bottom:-10%;
+    inset-inline-end:-10%;
+    background:radial-gradient(circle, rgba(99,102,241,.22), transparent 70%);
+    animation-delay:-11s;
+}
+
+.vd-blob-3 {
+    width:35vw;
+    height:35vw;
+    top:42%;
+    inset-inline-start:55%;
+    background:radial-gradient(circle, rgba(251,191,36,.18), transparent 68%);
+    animation-delay:-6s;
+}
+
+.vd[data-theme="dark"] .vd-blob { opacity: .18; }
+
+@keyframes vd-blob {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(8%, 6%) scale(1.08); }
+    66%      { transform: translate(-6%, 4%) scale(.95); }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  SOCIAL PROOF BANNER                                                     */
+/* ----------------------------------------------------------------------- */
+.vd-social-proof {
+    text-align:center;
+    padding:8px 16px;
+    font-size:12px;
+    font-weight:600;
+    background:var(--vd-accent-12);
+    color:var(--vd-accent-ink);
+    border-bottom:1px solid var(--vd-accent-20);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.vd-pulse {
+    width:8px;
+    height:8px;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-accent);
+    box-shadow:0 0 0 0 var(--vd-accent-50);
+    animation:vd-pulse 1.6s ease-out infinite;
+}
+
+@keyframes vd-pulse {
+    0%   { transform: scale(.95); box-shadow: 0 0 0 0 var(--vd-accent-50); }
+    70%  { transform: scale(1); box-shadow: 0 0 0 8px var(--vd-accent-00); }
+    100% { transform: scale(.95); box-shadow: 0 0 0 0 var(--vd-accent-00); }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  TOP BAR                                                                 */
+/* ----------------------------------------------------------------------- */
+.vd-topbar {
+    position:sticky;
+    top:0;
+    z-index:200;
+    background:var(--vd-bar-bg);
+    backdrop-filter:blur(18px) saturate(1.5);
+    -webkit-backdrop-filter:blur(18px) saturate(1.5);
+    border-bottom:1px solid rgba(0,0,0,.05);
+    transition:box-shadow var(--vd-med) var(--vd-ease), background var(--vd-med) var(--vd-ease);
+}
+
+.vd[data-theme="dark"] .vd-topbar { border-bottom-color: rgba(255,255,255,.06); }
+
+.vd-topbar.is-stuck {
+    box-shadow:var(--vd-shadow-sm);
+    background:var(--vd-surface);
+}
+
+.vd[data-theme="dark"] .vd-topbar.is-stuck { background: rgba(28,26,21,.92); }
+
+.vd-topbar > .vd-container {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:12px 18px;
+}
+
+.vd-brandmini {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex:1;
+    min-width:0;
+    color:inherit;
+    transition:transform var(--vd-fast) var(--vd-spring);
+}
+
+.vd-brandmini:hover { transform: scale(1.02); }
+
+.vd-brandmini img {
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    object-fit:cover;
+    flex-shrink:0;
+    box-shadow:var(--vd-shadow-sm);
+}
+
+.vd-brandmini span {
+    font-family:var(--vd-display);
+    font-weight:700;
+    font-size:16px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.vd-topbar-actions {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+}
+
+.vd-iconbtn {
+    position:relative;
+    width:40px;
+    height:40px;
+    border-radius:var(--vd-r-pill);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    color:var(--vd-text-2);
+    background:transparent;
+    transition: transform var(--vd-fast) var(--vd-spring),
+                background var(--vd-fast) var(--vd-ease),
+                color var(--vd-fast) var(--vd-ease);
+}
+
+.vd-iconbtn:hover {
+    background:var(--vd-accent-08);
+    color:var(--vd-accent-ink);
+    transform:scale(1.08);
+}
+
+.vd-iconbtn:active { transform: scale(.92); }
+
+.vd-iconbtn.pulse { animation: vd-bump .45s var(--vd-spring); }
+
+.vd-badge-count {
+    position:absolute;
+    top:2px;
+    inset-inline-end:2px;
+    min-width:18px;
+    height:18px;
+    padding:0 5px;
+    background:var(--vd-accent);
+    color:#fff;
+    border-radius:var(--vd-r-pill);
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:scale(0);
+    transition:transform var(--vd-fast) var(--vd-spring);
+    border:2px solid var(--vd-surface);
+    pointer-events:none;
+}
+
+.vd-badge-count.show { transform: scale(1); }
+
+.vd-badge-count.bump { animation: vd-bump .4s var(--vd-spring); }
+
+@keyframes vd-bump {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.45); }
+    100% { transform: scale(1); }
+}
+
+/* Dropdowns */
+.vd-dropdown { position: relative; }
+
+.vd-dropdown-menu {
+    position:absolute;
+    top:calc(100% + 8px);
+    inset-inline-end:0;
+    min-width:170px;
+    background:var(--vd-surface);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-md);
+    padding:8px;
+    box-shadow:var(--vd-shadow);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-6px) scale(.96);
+    transform-origin:top right;
+    transition: opacity var(--vd-fast) var(--vd-ease),
+                transform var(--vd-fast) var(--vd-spring),
+                visibility var(--vd-fast);
+    z-index:210;
+}
+
+[dir="rtl"] .vd-dropdown-menu { transform-origin: top left; }
+
+.vd-dropdown.open .vd-dropdown-menu {
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0) scale(1);
+}
+
+.vd-dropdown-menu button,
+.vd-dropdown-menu a.vd-dropdown-link {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    text-align:start;
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--vd-text-2);
+    transition:background var(--vd-fast), color var(--vd-fast);
+}
+
+.vd-dropdown-menu button:hover,
+.vd-dropdown-menu a.vd-dropdown-link:hover {
+    background:var(--vd-accent-08);
+    color:var(--vd-accent-ink);
+}
+
+.vd-account-name {
+    padding:8px 12px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--vd-muted);
+    border-bottom:1px solid var(--vd-input-border);
+    margin-bottom:4px;
+}
+
+/* Branch select */
+.vd-branch-select {
+    background:var(--vd-input-bg);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-pill);
+    padding:8px 14px;
+    padding-inline-end:34px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--vd-text-2);
+    cursor:pointer;
+    outline:none;
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8275' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    background-size:12px;
+    transition:border-color var(--vd-fast), box-shadow var(--vd-fast);
+}
+
+[dir="rtl"] .vd-branch-select {
+    background-position:left 12px center;
+}
+
+.vd-branch-select:focus {
+    border-color:var(--vd-accent-ink);
+    box-shadow:0 0 0 3px var(--vd-accent-12);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  HERO                                                                    */
+/* ----------------------------------------------------------------------- */
+.vd-hero {
+    position:relative;
+    padding:0 0 8px;
+}
+
+.vd-hero-cover {
+    position:absolute;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    min-height:320px;
+    max-height:460px;
+}
+
+.vd-hero-cover img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(1.08);
+    will-change:transform;
+}
+
+.vd-hero-scrim {
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(250,248,245,.25) 0%, var(--vd-bg) 92%);
+}
+
+.vd[data-theme="dark"] .vd-hero-scrim {
+    background:linear-gradient(180deg, rgba(14,13,11,.15) 0%, var(--vd-bg) 92%);
+}
+
+.vd-hero > .vd-container { position: relative; z-index: 1; }
+
+.vd-hero-inner {
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:28px 0 8px;
+}
+
+.vd-hero-logo {
+    width:84px;
+    height:84px;
+    border-radius:22px;
+    object-fit:cover;
+    margin-bottom:16px;
+    box-shadow:var(--vd-shadow), 0 0 0 4px var(--vd-surface);
+    animation:vd-float 5s ease-in-out infinite;
+}
+
+@keyframes vd-float {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-7px); }
+}
+
+.vd-eyebrow {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1.8px;
+    color:var(--vd-accent-ink);
+    padding:5px 14px;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-accent-12);
+    margin-bottom:14px;
+    animation:vd-reveal-up .6s var(--vd-ease) both;
+}
+
+.vd-dot {
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--vd-accent);
+}
+
+.vd-hero-title {
+    font-size:clamp(32px, 7vw, 52px);
+    font-weight:700;
+    color:var(--vd-text);
+    margin-bottom:10px;
+    animation:vd-reveal-up .7s var(--vd-ease) .1s both;
+    max-width:800px;
+}
+
+.vd-hero-tag {
+    position:relative;
+    z-index:1;
+    font-size:15px;
+    color:var(--vd-text-2);
+    max-width:520px;
+    margin:0 auto 18px;
+    line-height:1.6;
+    animation:vd-reveal-up .7s var(--vd-ease) .2s both;
+}
+
+.vd-hero-meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-bottom:22px;
+    animation:vd-reveal-up .7s var(--vd-ease) .3s both;
+}
+
+.vd-chip-meta {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 13px;
+    font-size:12px;
+    font-weight:600;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface-2);
+    color:var(--vd-text-2);
+    /* long addresses must wrap inside the pill, not escape the hero */
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    border:1px solid var(--vd-input-border);
+    transition:transform var(--vd-fast) var(--vd-spring), background var(--vd-fast);
+}
+
+.vd-chip-meta:hover { transform: translateY(-2px); }
+
+.vd-chip-meta i { color: var(--vd-accent-ink); font-size: 11px; flex-shrink: 0; }
+
+/* R4 · open-now / closed status chip — the dot colour signals live state. */
+.vd-open-chip i { color: #22c55e; font-size: 8px; }
+.vd-open-chip.closed i { color: #ef4444; }
+
+/* ----------------------------------------------------------------------- */
+/*  SEARCH & FILTERS                                                        */
+/* ----------------------------------------------------------------------- */
+.vd-search-wrap {
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    max-width:480px;
+    width:100%;
+    margin:0 auto;
+    animation:vd-reveal-up .7s var(--vd-ease) .4s both;
+}
+
+.vd-search {
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--vd-surface);
+    border:1.5px solid var(--vd-input-border);
+    border-radius:var(--vd-r-pill);
+    padding:12px 16px;
+    box-shadow:var(--vd-shadow-sm);
+    transition: border-color var(--vd-fast) var(--vd-ease),
+                box-shadow var(--vd-fast) var(--vd-ease),
+                transform var(--vd-fast) var(--vd-ease);
+}
+
+.vd-search:focus-within {
+    border-color:var(--vd-accent-ink);
+    box-shadow:0 0 0 4px var(--vd-accent-12);
+    transform:translateY(-1px);
+}
+
+.vd-search i { color: var(--vd-muted); font-size: 14px; }
+
+.vd-search input {
+    flex:1;
+    border:0;
+    background:none;
+    outline:none;
+    color:inherit;
+    font-size:15px;
+    min-width:0;
+}
+
+.vd-search input::placeholder { color: var(--vd-faint); }
+
+.vd-search-clear {
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    color:var(--vd-muted);
+    transition:background var(--vd-fast), color var(--vd-fast);
+}
+
+.vd-search-clear.show { display: flex; }
+
+.vd-search-clear:hover {
+    background:var(--vd-accent-12);
+    color:var(--vd-accent-ink);
+}
+
+.vd-filters-toggle {
+    width:46px;
+    height:46px;
+    flex-shrink:0;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface);
+    border:1.5px solid var(--vd-input-border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    color:var(--vd-text-2);
+    box-shadow:var(--vd-shadow-sm);
+    transition: border-color var(--vd-fast), color var(--vd-fast),
+                transform var(--vd-fast) var(--vd-spring),
+                box-shadow var(--vd-fast);
+}
+
+.vd-filters-toggle:hover {
+    transform:scale(1.06);
+    box-shadow:var(--vd-shadow);
+}
+
+.vd-filters-toggle.active {
+    border-color:var(--vd-accent-ink);
+    color:var(--vd-accent-ink);
+    background:var(--vd-accent-08);
+}
+
+/* Filters panel */
+.vd-filters-panel {
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition: max-height var(--vd-med) var(--vd-ease),
+                opacity var(--vd-med) var(--vd-ease),
+                margin var(--vd-med) var(--vd-ease);
+}
+
+.vd-filters-panel.open {
+    max-height:500px;
+    opacity:1;
+    margin-top:16px;
+}
+
+.vd-filters-section {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:14px 16px;
+    background:var(--vd-surface);
+    border-radius:var(--vd-r-md);
+    border:1px solid var(--vd-input-border);
+    margin-bottom:10px;
+}
+
+.vd-filters-section h4 {
+    font-size:12px;
+    font-weight:700;
+    color:var(--vd-text-2);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.vd-filter-chips {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.vd-filter-chip {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:600;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface-2);
+    border:1px solid var(--vd-input-border);
+    color:var(--vd-text-2);
+    transition:all var(--vd-fast) var(--vd-ease);
+}
+
+.vd-filter-chip:hover {
+    border-color:var(--vd-accent-40);
+    background:var(--vd-accent-08);
+    transform:translateY(-1px);
+}
+
+.vd-filter-chip.active {
+    background:var(--vd-accent);
+    color:#fff;
+    border-color:var(--vd-accent-ink);
+    box-shadow:var(--vd-shadow-accent);
+}
+
+.vd-filters-foot {
+    display:flex;
+    justify-content:flex-end;
+    padding-top:2px;
+}
+
+.vd-filter-clear-btn {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--vd-accent-ink);
+    padding:8px 12px;
+    border-radius:var(--vd-r-sm);
+    transition:background var(--vd-fast);
+}
+
+.vd-filter-clear-btn:hover { background: var(--vd-accent-08); }
+
+/* ----------------------------------------------------------------------- */
+/*  CATEGORY NAV                                                            */
+/* ----------------------------------------------------------------------- */
+.vd-catnav {
+    position:sticky;
+    top:63px;
+    z-index:150;
+    background:var(--vd-bar-bg);
+    backdrop-filter:blur(14px) saturate(1.3);
+    -webkit-backdrop-filter:blur(14px) saturate(1.3);
+    border-bottom:1px solid rgba(0,0,0,.04);
+    padding:12px 0;
+    transition:background var(--vd-med) var(--vd-ease);
+}
+
+.vd[data-theme="dark"] .vd-catnav { border-bottom-color: rgba(255,255,255,.04); }
+
+.vd-catnav-inner {
+    position:relative;
+    display:flex;
+    gap:8px;
+    /* Centre the pills in the bar when they fit; `safe` falls back to start-
+       alignment once they overflow, so the leading pill never gets clipped out
+       of reach (plain `center` + overflow hides the first items). */
+    justify-content:safe center;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    padding:4px 18px;
+}
+
+.vd-catnav-inner::-webkit-scrollbar { display: none; }
+
+.vd-cat-pill {
+    position:relative;
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 18px;
+    font-size:14px;
+    font-weight:700;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface-2);
+    color:var(--vd-text-2);
+    border:1px solid transparent;
+    transition: color var(--vd-fast) var(--vd-ease),
+                background var(--vd-fast) var(--vd-ease),
+                transform var(--vd-fast) var(--vd-spring);
+}
+
+.vd-cat-pill:hover {
+    color:var(--vd-text);
+    transform:translateY(-1px);
+}
+
+.vd-cat-pill.active {
+    color:#fff;
+    background:var(--vd-accent);
+    box-shadow:var(--vd-shadow-accent);
+}
+
+.vd-cat-pill-ico { font-size: 13px; }
+
+/* The moving accent underline read as a stray red line under the pills, and it is
+   redundant now the active pill is fully filled with the accent — removed. */
+.vd-cat-indicator {
+    display:none;
+}
+
+/* ----------------------------------------------------------------------- */
+/*  TWO-TIER SUB-CATEGORY NAV                                               */
+/* ----------------------------------------------------------------------- */
+/* CSS-guard: native [hidden] loses the cascade to display: rules, so the
+   inactive groups / whole row would not collapse without this. */
+.vd-subnav[hidden],
+.vd-subgroup[hidden] { display: none !important; }
+
+.vd-subnav {
+    margin-top:8px;
+    border-top:1px dashed var(--vd-input-border);
+    padding-top:8px;
+}
+
+.vd-subnav-inner {
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    padding:2px 18px;
+}
+
+.vd-subnav-inner::-webkit-scrollbar { display: none; }
+
+.vd-subgroup {
+    display:flex;
+    gap:7px;
+}
+
+.vd-sub-pill {
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    padding:6px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    border-radius:var(--vd-r-pill);
+    background:transparent;
+    color:var(--vd-muted);
+    border:1px solid var(--vd-input-border);
+    transition: color var(--vd-fast) var(--vd-ease),
+                background var(--vd-fast) var(--vd-ease),
+                border-color var(--vd-fast) var(--vd-ease);
+}
+
+.vd-sub-pill:hover { color: var(--vd-text); border-color: var(--vd-accent-40); }
+
+.vd-sub-pill.active {
+    color:var(--vd-accent-ink);
+    background:var(--vd-accent-12);
+    border-color:var(--vd-accent-40);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  SECTION HEADERS                                                         */
+/* ----------------------------------------------------------------------- */
+.vd-section { padding: var(--ts-gap-4, 24px) 0 6px; scroll-margin-top: 124px; }
+
+.vd-section-head {
+    margin-bottom:18px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.vd-kicker {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1.8px;
+    color:var(--vd-accent-ink);
+}
+
+.vd-section-head h2 {
+    font-size:clamp(24px, 5vw, 32px);
+    font-weight:700;
+    color:var(--vd-text);
+}
+
+.vd-specials-section { padding-top: 28px; }
+
+/* ----------------------------------------------------------------------- */
+/*  CHEF'S SPECIALS RAIL                                                    */
+/* ----------------------------------------------------------------------- */
+.vd-rail {
+    display:flex;
+    gap:14px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    padding:4px 18px 14px;
+    margin:0 -18px;
+}
+
+.vd-rail::-webkit-scrollbar { display: none; }
+
+.vd-spotlight {
+    position:relative;
+    flex-shrink:0;
+    width:240px;
+    border-radius:var(--vd-r-lg);
+    overflow:hidden;
+    background:var(--vd-card-bg);
+    border:1px solid var(--vd-input-border);
+    box-shadow:var(--vd-shadow-sm);
+    cursor:pointer;
+    transition: transform var(--vd-med) var(--vd-spring),
+                box-shadow var(--vd-med) var(--vd-ease);
+}
+
+.vd-spotlight:hover {
+    transform:translateY(-5px);
+    box-shadow:var(--vd-shadow);
+}
+
+.vd-spotlight .vd-badge-soldout {
+    position:absolute;
+    top:10px;
+    inset-inline-start:10px;
+    z-index:2;
+}
+
+.vd-spotlight-img {
+    position:relative;
+    width:100%;
+    aspect-ratio:5/3;
+    overflow:hidden;
+    background:var(--vd-surface-2);
+}
+
+.vd-spotlight-img img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform var(--vd-slow) var(--vd-ease);
+}
+
+.vd-spotlight:hover .vd-spotlight-img img { transform: scale(1.08); }
+
+.vd-spotlight-body { padding: 14px 16px 16px; }
+
+.vd-spotlight-body h4 {
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:10px;
+    color:var(--vd-text);
+}
+
+.vd-spotlight-foot {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.vd-price {
+    font-family:var(--vd-display);
+    font-size:17px;
+    font-weight:700;
+    color:var(--vd-text);
+}
+
+.vd-arrow-btn {
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--vd-accent-12);
+    color:var(--vd-accent-ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    transition: transform var(--vd-fast) var(--vd-spring),
+                background var(--vd-fast);
+}
+
+.vd-spotlight:hover .vd-arrow-btn {
+    background:var(--vd-accent);
+    color:#fff;
+    transform:translateX(3px);
+}
+
+[dir="rtl"] .vd-spotlight:hover .vd-arrow-btn { transform: translateX(-3px); }
+
+/* the arrow glyph is a hardcoded arrow-right icon — mirror it in RTL */
+[dir="rtl"] .vd-arrow-btn i { transform: scaleX(-1); }
+
+/* ----------------------------------------------------------------------- */
+/*  MENU GRID                                                               */
+/* ----------------------------------------------------------------------- */
+.vd-grid {
+    display:grid;
+    gap:16px;
+    grid-template-columns:1fr;
+}
+
+@media (min-width: 560px)  { .vd-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 920px)  { .vd-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+
+/* ----------------------------------------------------------------------- */
+/*  DISH CARD                                                               */
+/* ----------------------------------------------------------------------- */
+.vd-card {
+    position:relative;
+    background:var(--vd-card-bg);
+    border-radius:var(--vd-r-lg);
+    overflow:hidden;
+    border:1px solid var(--vd-input-border);
+    box-shadow:var(--vd-shadow-sm);
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    transform:translateY(28px) scale(.97);
+    animation:vd-card-reveal var(--vd-slow) var(--vd-spring) var(--vd-card-delay, 0s) forwards;
+    transition: transform var(--vd-med) var(--vd-spring),
+                box-shadow var(--vd-med) var(--vd-ease),
+                border-color var(--vd-med) var(--vd-ease);
+    will-change:transform;
+}
+
+@keyframes vd-card-reveal {
+    from { opacity: 0; transform: translateY(28px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.vd-card:hover {
+    transform:translateY(-5px) scale(1.015);
+    box-shadow:var(--vd-shadow);
+    border-color:var(--vd-accent-20);
+}
+
+.vd-card-media {
+    position:relative;
+    aspect-ratio:16/10;
+    overflow:hidden;
+    background:var(--vd-surface-2);
+}
+
+.vd-card-media img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform var(--vd-slow) var(--vd-ease);
+}
+
+.vd-card:hover .vd-card-media img { transform: scale(1.08); }
+
+/* image missing or 404 — fall back to the same glyph the detail sheet uses */
+.vd-card-media.vd-noimg,
+.vd-spotlight-img.vd-noimg {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--vd-faint);
+    font-size:34px;
+}
+
+/* No-photo placeholder: the kit's dine-in line icon, drawn as a mask in the
+   text colour and sized by font-size (34px on cards, 48px in the detail sheet). */
+.vd-card-media.vd-noimg::before,
+.vd-spotlight-img.vd-noimg::before,
+.vd-detail-img.vd-noimg::before {
+    content:'';
+    width:1em;
+    height:1em;
+    background:currentColor;
+    -webkit-mask:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10'/%3E%3Cpath d='M17 21V3c-2 1.5-3 4-3 7v3h3'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10'/%3E%3Cpath d='M17 21V3c-2 1.5-3 4-3 7v3h3'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.vd-card-badges {
+    position:absolute;
+    top:10px;
+    inset-inline-start:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    z-index:2;
+    max-width:calc(100% - 56px);
+}
+
+.vd-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:4px 8px;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    border-radius:var(--vd-r-pill);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    color:#fff;
+    line-height:1;
+    border:1px solid rgba(255,255,255,.2);
+}
+
+.vd-badge-veg     { background: rgba(45,212,112,.9); }
+.vd-badge-nonveg  { background: rgba(245,85,110,.9); }
+.vd-badge-soldout { background: rgba(239,68,68,.92); }
+.vd-badge-vegan   { background: rgba(34,197,94,.9); }
+.vd-badge-halal   { background: rgba(99,102,241,.9); }
+.vd-badge-gf      { background: rgba(168,152,134,.9); }
+.vd-badge-popular { background: rgba(251,146,60,.9); }
+.vd-badge-spicy   { background: rgba(220,38,38,.9); font-size: 10px; }
+.vd-badge-custom  { background: rgba(120,120,120,.78); text-transform: lowercase; }
+
+.vd-fav {
+    position:absolute;
+    top:10px;
+    inset-inline-end:10px;
+    z-index:2;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    color:var(--vd-faint);
+    box-shadow:var(--vd-shadow-sm);
+    transition:all var(--vd-fast) var(--vd-spring);
+}
+
+.vd[data-theme="dark"] .vd-fav { background: rgba(0,0,0,.55); }
+
+.vd-fav:hover { transform: scale(1.15); color: var(--vd-nonveg); }
+
+.vd-fav.is-active {
+    color:var(--vd-nonveg);
+    animation:vd-heart-pop .4s var(--vd-spring);
+}
+
+@keyframes vd-heart-pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+.vd-card-body {
+    padding:15px 16px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    flex:1;
+}
+
+.vd-card-top {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.vd-card-title {
+    font-size:16px;
+    font-weight:700;
+    font-family:var(--vd-display);
+    color:var(--vd-text);
+    line-height:1.25;
+}
+
+.vd-card-rating {
+    display:flex;
+    align-items:center;
+    gap:4px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--vd-text-2);
+    white-space:nowrap;
+    flex-shrink:0;
+    background:var(--vd-surface-2);
+    padding:3px 8px;
+    border-radius:var(--vd-r-pill);
+}
+
+.vd-card-rating i { color: var(--vd-star); font-size: 10px; }
+
+.vd-card-desc {
+    font-size:13px;
+    color:var(--vd-text-2);
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    margin:0;
+}
+
+.vd-card-nutrition {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    font-size:11px;
+    font-weight:600;
+    color:var(--vd-muted);
+}
+
+.vd-card-nutrition i { color: var(--vd-accent-ink); }
+
+.vd-card-lowstock {
+    font-size:11px;
+    color:var(--vd-warning);
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.vd-card-allergies {
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+}
+
+.vd-card-allergies img {
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    object-fit:cover;
+    background:var(--vd-surface-2);
+}
+
+.vd-card-foot {
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding-top:8px;
+}
+
+.vd-card-price {
+    font-size:18px;
+    font-weight:800;
+    font-family:var(--vd-display);
+    color:var(--vd-text);
+}
+
+.vd-card-price small {
+    font-size:10px;
+    font-weight:500;
+    color:var(--vd-muted);
+    display:block;
+    line-height:1;
+    margin-top:2px;
+}
+
+.vd-card-actions { display: flex; align-items: center; gap: 6px; }
+
+.vd-btn-add {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:700;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-accent);
+    color:#fff;
+    box-shadow:var(--vd-shadow-accent);
+    transition: transform var(--vd-fast) var(--vd-spring),
+                box-shadow var(--vd-fast),
+                background var(--vd-fast);
+}
+
+.vd-btn-add:hover { transform: scale(1.06); box-shadow: 0 12px 32px -8px var(--vd-accent-55); }
+.vd-btn-add:active { transform: scale(.94); }
+
+.vd-btn-add.is-ghost {
+    background:var(--vd-surface-2);
+    color:var(--vd-text-2);
+    box-shadow:none;
+    border:1px solid var(--vd-input-border);
+}
+
+.vd-btn-add.is-ghost:hover { background: var(--vd-surface-3); border-color: var(--vd-accent-40); }
+
+.vd-btn-add.is-disabled {
+    background:var(--vd-surface-2);
+    color:var(--vd-faint);
+    box-shadow:none;
+    cursor:not-allowed;
+    opacity:.7;
+}
+
+/* ----------------------------------------------------------------------- */
+/*  WAITER / BILL ROW                                                       */
+/* ----------------------------------------------------------------------- */
+.vd-waiter-row {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:18px 0 10px;
+}
+
+.vd-waiter-btn {
+    flex:1;
+    min-width:140px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px 18px;
+    font-size:14px;
+    font-weight:700;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface);
+    border:1px solid var(--vd-input-border);
+    color:var(--vd-text);
+    box-shadow:var(--vd-shadow-sm);
+    transition: transform var(--vd-fast) var(--vd-spring),
+                box-shadow var(--vd-fast),
+                background var(--vd-fast);
+}
+
+.vd-waiter-btn:hover {
+    transform:translateY(-2px);
+    box-shadow:var(--vd-shadow);
+    background:var(--vd-surface-2);
+}
+
+.vd-waiter-bill { color: var(--vd-accent-ink); }
+
+/* ----------------------------------------------------------------------- */
+/*  SCRIMS & BOTTOM SHEETS                                                  */
+/* ----------------------------------------------------------------------- */
+.vd-scrim {
+    position:fixed;
+    inset:0;
+    z-index:400;
+    background:var(--vd-scrim);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity var(--vd-med) var(--vd-ease), visibility var(--vd-med);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+}
+
+.vd-scrim.open { opacity: 1; visibility: visible; }
+
+.vd-sheet {
+    position:fixed;
+    z-index:450;
+    bottom:0;
+    inset-inline:0;
+    max-height:92vh;
+    background:var(--vd-surface);
+    border-radius:var(--vd-r-xl) var(--vd-r-xl) 0 0;
+    transform:translateY(105%);
+    /* A closed sheet only clears the fold by ~5% of its height, so its large
+       box-shadow still cast a line over the bottom navbar. `visibility:hidden`
+       drops the closed sheet (and its shadow) from paint entirely; the delayed
+       visibility transition keeps it visible through the slide-down close. */
+    visibility:hidden;
+    transition: transform var(--vd-slow) var(--vd-spring),
+                visibility 0s linear var(--vd-slow);
+    box-shadow:var(--vd-shadow-xl);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.vd-sheet.open {
+    transform:translateY(0);
+    visibility:visible;
+    transition:transform var(--vd-slow) var(--vd-spring), visibility 0s;
+}
+
+.vd-sheet-handle {
+    width:44px;
+    height:5px;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-input-border);
+    margin:10px auto 4px;
+    flex-shrink:0;
+}
+
+.vd-sheet-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 20px 14px;
+    flex-shrink:0;
+}
+
+.vd-sheet-head h3 { font-size: 20px; font-weight: 700; }
+
+.vd-close {
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+    color:var(--vd-muted);
+    background:var(--vd-surface-2);
+    transition:all var(--vd-fast) var(--vd-spring);
+    flex-shrink:0;
+}
+
+.vd-close:hover {
+    background:var(--vd-accent-12);
+    color:var(--vd-accent-ink);
+    transform:rotate(90deg);
+}
+
+.vd-sheet-body {
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:0 20px 18px;
+    flex:1;
+}
+
+.vd-sheet-foot {
+    padding:14px 20px;
+    border-top:1px solid var(--vd-input-border);
+    background:var(--vd-surface-2);
+    flex-shrink:0;
+}
+
+@media (min-width: 720px) {
+    .vd-sheet {
+        max-width:540px;
+        inset-inline-start:50%;
+        transform:translate(-50%, 105%);
+        border-radius:var(--vd-r-xl);
+        bottom:24px;
+        max-height:calc(100vh - 48px);
+    }
+    .vd-sheet.open { transform: translate(-50%, 0); }
+    [dir="rtl"] .vd-sheet { transform: translate(50%, 105%); }
+    [dir="rtl"] .vd-sheet.open { transform: translate(50%, 0); }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  ITEM DETAIL SHEET                                                       */
+/* ----------------------------------------------------------------------- */
+.vd-detail-hero { position: relative; margin: -8px -20px 16px; }
+
+.vd-detail-img {
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    overflow:hidden;
+    background:var(--vd-surface-2);
+}
+
+.vd-detail-img img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.vd-detail-img.vd-noimg {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--vd-faint);
+    font-size:48px;
+}
+
+
+.vd-detail-badges {
+    position:absolute;
+    bottom:12px;
+    inset-inline-start:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    z-index:2;
+}
+
+.vd-detail-info { margin-bottom: 18px; }
+
+.vd-detail-title {
+    font-size:25px;
+    font-weight:700;
+    font-family:var(--vd-display);
+    margin-bottom:8px;
+    color:var(--vd-text);
+}
+
+.vd-detail-desc {
+    font-size:14px;
+    color:var(--vd-text-2);
+    line-height:1.65;
+    margin:0 0 12px;
+}
+
+.vd-detail-rating {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--vd-text-2);
+    margin-bottom:12px;
+    background:var(--vd-surface-2);
+    padding:5px 11px;
+    border-radius:var(--vd-r-pill);
+}
+
+.vd-detail-rating i { color: var(--vd-star); }
+
+.vd-detail-price {
+    font-size:26px;
+    font-weight:800;
+    font-family:var(--vd-display);
+    color:var(--vd-text);
+    margin-bottom:10px;
+}
+
+.vd-detail-price small {
+    font-size:12px;
+    font-weight:500;
+    color:var(--vd-muted);
+    margin-inline-start:4px;
+}
+
+.vd-detail-soldout {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:700;
+    color:#fff;
+    background:var(--vd-nonveg);
+    padding:8px 14px;
+    border-radius:var(--vd-r-pill);
+    margin-bottom:12px;
+}
+
+.vd-detail-lowstock {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--vd-warning);
+    background:rgba(245,158,11,.12);
+    padding:7px 12px;
+    border-radius:var(--vd-r-pill);
+    margin-bottom:12px;
+}
+
+.vd-detail-nutrition {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    font-size:12px;
+    font-weight:600;
+    color:var(--vd-muted);
+    margin-bottom:14px;
+}
+
+.vd-detail-nutrition i { color: var(--vd-accent-ink); }
+
+.vd-detail-allergies {
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+
+.vd-detail-allergen {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:5px 10px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--vd-text-2);
+    background:var(--vd-surface-2);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-pill);
+}
+
+.vd-detail-allergen img {
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.vd-detail-section { margin-bottom: 22px; }
+
+.vd-detail-section h4 {
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:10px;
+    color:var(--vd-text);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.vd-options-list { display: flex; flex-direction: column; gap: 8px; }
+
+.vd-option {
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:var(--vd-r-md);
+    background:var(--vd-surface-2);
+    border:1.5px solid transparent;
+    cursor:pointer;
+    transition: border-color var(--vd-fast) var(--vd-ease),
+                background var(--vd-fast);
+}
+
+.vd-option:hover { background: var(--vd-accent-08); }
+
+.vd-option.selected {
+    border-color:var(--vd-accent-ink);
+    background:var(--vd-accent-12);
+}
+
+.vd-option input {
+    position:absolute;
+    opacity:0;
+    width:0;
+    height:0;
+}
+
+.vd-option-thumb {
+    width:34px;
+    height:34px;
+    flex:none;
+    border-radius:var(--vd-r-sm);
+    object-fit:cover;
+}
+
+.vd-option-info {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex:1;
+    min-width:0;
+}
+
+.vd-option-label {
+    font-size:14px;
+    font-weight:600;
+    color:var(--vd-text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.vd-option-price {
+    font-size:13px;
+    font-weight:700;
+    color:var(--vd-text-2);
+    flex-shrink:0;
+}
+
+.vd-option-check {
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    border:2px solid var(--vd-input-border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    color:transparent;
+    flex-shrink:0;
+    transition:all var(--vd-fast) var(--vd-ease);
+}
+
+.vd-option-toggle .vd-option-check { border-radius: 5px; }
+
+.vd-option.selected .vd-option-check {
+    background:var(--vd-accent);
+    border-color:var(--vd-accent-ink);
+    color:#fff;
+}
+
+.vd-detail-qty {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    background:var(--vd-surface-2);
+    border-radius:var(--vd-r-pill);
+    padding:6px 10px;
+}
+
+.vd-qty-btn {
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:var(--vd-surface);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:700;
+    color:var(--vd-accent-ink);
+    border:1px solid var(--vd-input-border);
+    transition: transform var(--vd-fast) var(--vd-spring),
+                background var(--vd-fast), border-color var(--vd-fast);
+}
+
+.vd-qty-btn:hover {
+    transform:scale(1.12);
+    border-color:var(--vd-accent-40);
+}
+
+.vd-qty-btn:active { transform: scale(.88); }
+
+.vd-detail-qty span {
+    font-size:17px;
+    font-weight:800;
+    min-width:24px;
+    text-align:center;
+}
+
+.vd-qty-btn.sm {
+    width:26px;
+    height:26px;
+    font-size:11px;
+}
+
+/* Item sheet footer layout */
+#vd-item-foot {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+}
+
+#vd-item-foot .vd-cta { flex: 1; }
+
+/* orbit #pCartJump / aurora #au-cart-jump parity: direct jump to the cart from
+   the item-detail sheet, beside Add-to-Cart, shown once the cart has items. */
+.vd-cart-jump {
+    position:relative;
+    flex:none;
+    width:52px;
+    height:52px;
+    border-radius:var(--vd-r-pill);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    color:var(--vd-text);
+    background:var(--vd-surface-2);
+    border:1px solid var(--vd-input-border);
+    transition:transform var(--vd-fast) var(--vd-spring), background var(--vd-fast);
+}
+
+.vd-cart-jump:hover { transform: scale(1.06); }
+.vd-cart-jump:active { transform: scale(.94); }
+.vd-cart-jump[hidden] { display: none; }
+
+/* ----------------------------------------------------------------------- */
+/*  CART LIST                                                               */
+/* ----------------------------------------------------------------------- */
+.vd-cart-line {
+    display:flex;
+    gap:12px;
+    padding:14px 0;
+    border-bottom:1px solid var(--vd-input-border);
+    align-items:center;
+}
+
+/* combo / "Meal deals" cart lines reuse .vd-cart-line but carry no thumbnail
+   (single .vd-cart-line-info child). Pad the leading thumbnail slot so the
+   info block aligns with imaged rows instead of hugging the row edge.
+   padding-inline-start is logical → RTL-safe. */
+.vd-cart-line.vd-cart-line--combo {
+    align-items:flex-start;
+    padding-inline-start: calc(58px + 12px); /* .vd-cart-line-img width + row gap */
+}
+
+.vd-cart-line-img {
+    width:58px;
+    height:58px;
+    border-radius:var(--vd-r-sm);
+    object-fit:cover;
+    flex-shrink:0;
+    background:var(--vd-surface-2);
+}
+
+.vd-cart-line-info {
+    flex:1;
+    min-width:0;
+}
+
+.vd-cart-line-info h4 {
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:3px;
+    color:var(--vd-text);
+}
+
+.vd-cart-variant {
+    font-size:12px;
+    color:var(--vd-muted);
+    margin-bottom:2px;
+}
+
+.vd-cart-extras {
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px;
+    margin-bottom:4px;
+}
+
+.vd-cart-extras span {
+    font-size:11px;
+    color:var(--vd-text-2);
+    background:var(--vd-surface-2);
+    padding:2px 7px;
+    border-radius:var(--vd-r-pill);
+}
+
+.vd-cart-line-price {
+    font-size:13px;
+    color:var(--vd-muted);
+}
+
+.vd-cart-line-price strong {
+    color:var(--vd-text);
+    font-weight:700;
+}
+
+/* happy-hour strike-through on a cart line */
+.vd-cart-was {
+    font-size:12px;
+    color:var(--vd-muted);
+    text-decoration:line-through;
+}
+
+/* cart line reopen affordances: the image + name are buttons that reopen the item sheet */
+.vd-cart-line-open {
+    background:none;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    flex-shrink:0;
+    line-height:0;
+}
+
+.vd-cart-line-name {
+    background:none;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    font:inherit;
+    color:inherit;
+    text-align:start;
+}
+
+.vd-cart-line-actions {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+}
+
+.vd-cart-qty {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--vd-surface-2);
+    border-radius:var(--vd-r-pill);
+    padding:4px 8px;
+}
+
+/* 32px floor keeps these tappable on mobile; icon stays small */
+.vd-cart-qty .vd-qty-btn { width: 32px; height: 32px; font-size: 10px; }
+
+.vd-cart-qty span {
+    font-size:14px;
+    font-weight:700;
+    min-width:18px;
+    text-align:center;
+}
+
+.vd-cart-rm {
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    color:var(--vd-nonveg);
+    background:rgba(245,85,110,.08);
+    transition: transform var(--vd-fast) var(--vd-spring),
+                background var(--vd-fast);
+}
+
+.vd-cart-rm:hover {
+    transform:scale(1.1);
+    background:rgba(245,85,110,.16);
+}
+
+.vd-cart-empty {
+    text-align:center;
+    padding:40px 20px;
+}
+
+.vd-cart-empty h3 {
+    font-size:18px;
+    margin-bottom:6px;
+    color:var(--vd-text);
+}
+
+.vd-cart-empty p { color: var(--vd-muted); font-size: 14px; margin: 0; }
+
+/* ----------------------------------------------------------------------- */
+/*  CART TOTALS & CHECKOUT FORM                                             */
+/* ----------------------------------------------------------------------- */
+.vd-totals { margin: 14px 0 18px; }
+
+.vd-total-row {
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    font-size:14px;
+    color:var(--vd-text-2);
+}
+
+.vd-total-discount { color: var(--vd-success); }
+
+.vd-total-grand {
+    font-weight:800;
+    font-size:17px;
+    color:var(--vd-text);
+    border-top:1px solid var(--vd-input-border);
+    padding-top:10px;
+    margin-top:6px;
+    font-family:var(--vd-display);
+}
+
+.vd-total-warn {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--vd-warning);
+    font-size:12px;
+    font-weight:700;
+    background:rgba(245,158,11,.1);
+    padding:8px 12px;
+    border-radius:var(--vd-r-sm);
+    margin-top:4px;
+}
+
+.vd-field { margin-bottom: 16px; }
+
+.vd-field label {
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:var(--vd-text-2);
+    margin-bottom:6px;
+}
+
+.vd-field input[type="text"],
+.vd-field input[type="tel"],
+.vd-field input[type="email"],
+.vd-field input[type="number"],
+.vd-field input[type="password"],
+.vd-field input[type="datetime-local"],
+.vd-sheet-body input[type="text"],
+.vd-sheet-body input[type="tel"],
+.vd-sheet-body input[type="email"],
+.vd-sheet-body input[type="number"],
+.vd-sheet-body input[type="password"],
+.vd-sheet-body input[type="datetime-local"],
+.vd-sheet-body textarea,
+.vd-sheet-body select,
+.vd-field textarea,
+.vd-field select {
+    width:100%;
+    background:var(--vd-input-bg);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-md);
+    padding:12px 14px;
+    color:inherit;
+    font-size:14px;
+    outline:none;
+    transition:border-color var(--vd-fast), box-shadow var(--vd-fast);
+}
+
+.vd-field input:focus,
+.vd-field textarea:focus,
+.vd-field select:focus,
+.vd-sheet-body input:focus,
+.vd-sheet-body textarea:focus,
+.vd-sheet-body select:focus {
+    border-color:var(--vd-accent-ink);
+    box-shadow:0 0 0 3px var(--vd-accent-12);
+}
+
+.vd-sheet-body textarea,
+.vd-field textarea { resize: vertical; min-height: 60px; }
+
+.vd-field select {
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8275' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    background-size:12px;
+    padding-inline-end:36px;
+}
+
+[dir="rtl"] .vd-field select { background-position: left 12px center; }
+
+.vd-seg {
+    display:flex;
+    gap:4px;
+    background:var(--vd-input-bg);
+    border-radius:var(--vd-r-md);
+    padding:4px;
+}
+
+.vd-seg button {
+    flex:1;
+    padding:10px;
+    font-size:13px;
+    font-weight:700;
+    border-radius:10px;
+    color:var(--vd-text-2);
+    transition:all var(--vd-fast) var(--vd-ease);
+}
+
+.vd-seg button.active {
+    background:var(--vd-surface);
+    color:var(--vd-accent-ink);
+    box-shadow:var(--vd-shadow-sm);
+}
+
+.vd[data-theme="dark"] .vd-seg button.active { background: var(--vd-surface-2); }
+
+.vd-coupon-row { display: flex; gap: 8px; }
+
+.vd-coupon-row input { flex: 1; margin-bottom: 0; }
+
+.vd-coupon-btn {
+    padding:12px 18px;
+    border-radius:var(--vd-r-md);
+    background:var(--vd-accent);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    flex-shrink:0;
+    transition:transform var(--vd-fast) var(--vd-spring), background var(--vd-fast);
+}
+
+.vd-coupon-btn:hover { transform: scale(1.04); }
+.vd-coupon-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+.vd-coupon-msg {
+    margin-top:8px;
+    font-size:13px;
+    font-weight:700;
+    padding:9px 12px;
+    border-radius:var(--vd-r-sm);
+    display:none;
+}
+
+.vd-coupon-msg.vd-coupon-ok {
+    display:block;
+    background:rgba(34,197,94,.12);
+    color:var(--vd-success);
+}
+
+.vd-coupon-msg.vd-coupon-err {
+    display:block;
+    background:rgba(239,68,68,.12);
+    color:var(--vd-nonveg);
+}
+
+.vd-form-error {
+    background:rgba(239,68,68,.1);
+    color:var(--vd-nonveg);
+    padding:12px 14px;
+    border-radius:var(--vd-r-md);
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:14px;
+    display:none;
+}
+/* showError() used to reveal this box with `style.display = ''`, which simply
+   removes the inline rule and lets `display:none` above win again — so every
+   server-side checkout rejection was reported to the customer by showing them
+   nothing at all. A reveal CLASS cannot lose that argument. */
+.vd-form-error.is-on { display: block; }
+
+.vd-rate-error {
+    color:var(--vd-nonveg);
+    font-size:12.5px;
+    font-weight:700;
+    margin:0 0 8px;
+}
+
+.vd-auth-required,
+.vd-auth-optional {
+    text-align:center;
+    padding:20px;
+    border-radius:var(--vd-r-md);
+    background:var(--vd-surface-2);
+    margin-bottom:16px;
+    border:1px dashed var(--vd-input-border);
+}
+
+.vd-auth-required i {
+    font-size:26px;
+    color:var(--vd-accent-ink);
+    margin-bottom:10px;
+    display:block;
+}
+
+.vd-auth-required h4 {
+    font-size:16px;
+    margin-bottom:6px;
+    color:var(--vd-text);
+}
+
+.vd-auth-required p {
+    font-size:13px;
+    color:var(--vd-muted);
+    margin-bottom:14px;
+}
+
+.vd-auth-optional {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    text-align:start;
+    gap:12px;
+}
+
+.vd-auth-optional h4 { font-size: 14px; color: var(--vd-text); }
+.vd-auth-optional p { font-size: 12px; color: var(--vd-muted); margin: 0; }
+
+.vd-btn-secondary {
+    padding:9px 16px;
+    border-radius:var(--vd-r-sm);
+    background:var(--vd-surface);
+    border:1px solid var(--vd-input-border);
+    font-weight:700;
+    font-size:13px;
+    color:var(--vd-text-2);
+    transition:all var(--vd-fast);
+    flex-shrink:0;
+}
+
+.vd-btn-secondary:hover {
+    border-color:var(--vd-accent-40);
+    color:var(--vd-accent-ink);
+}
+
+.vd-tip-options {
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+}
+
+.vd-tip-btn {
+    padding:9px 15px;
+    border-radius:var(--vd-r-pill);
+    border:1.5px solid var(--vd-input-border);
+    background:var(--vd-surface);
+    font-weight:700;
+    font-size:13px;
+    color:var(--vd-text-2);
+    transition:all var(--vd-fast);
+}
+
+.vd-tip-btn.active {
+    border-color:var(--vd-accent-ink);
+    background:var(--vd-accent-12);
+    color:var(--vd-accent-ink);
+}
+
+.vd-consent-label {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    cursor:pointer;
+    font-size:13px;
+    color:var(--vd-muted);
+    font-weight:500;
+}
+
+.vd-consent-label input {
+    width:18px;
+    height:18px;
+    flex-shrink:0;
+    margin-top:1px;
+    accent-color:var(--vd-accent-ink);
+}
+
+.vd-privacy-link {
+    color:var(--vd-accent-ink);
+    font-weight:700;
+    margin-inline-start:3px;
+}
+
+.vd-success {
+    text-align:center;
+    padding:40px 20px;
+    display:none;
+}
+
+.vd-success.show {
+    display:block;
+    animation:vd-reveal-up .5s var(--vd-spring);
+}
+
+.vd-success-ico {
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    background:var(--vd-success);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    color:#fff;
+    margin:0 auto 16px;
+    animation:vd-success-pop .6s var(--vd-spring);
+}
+
+@keyframes vd-success-pop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.vd-success h3 {
+    font-size:22px;
+    margin-bottom:8px;
+    color:var(--vd-text);
+}
+
+.vd-success p { color: var(--vd-muted); font-size: 15px; margin: 0; }
+
+/* ----------------------------------------------------------------------- */
+/*  CTA BUTTON                                                              */
+/* ----------------------------------------------------------------------- */
+.vd-cta {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:16px 24px;
+    font-size:15px;
+    font-weight:800;
+    color:#fff;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-accent);
+    box-shadow:var(--vd-shadow-accent);
+    transition: transform var(--vd-fast) var(--vd-spring),
+                box-shadow var(--vd-fast),
+                background var(--vd-fast);
+}
+
+.vd-cta:hover { transform: scale(1.02); box-shadow: 0 14px 34px -10px var(--vd-accent-55); }
+.vd-cta:active { transform: scale(.98); }
+.vd-cta:disabled { opacity: .55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.vd-cta-price {
+    margin-inline-start:auto;
+    font-size:14px;
+    padding:4px 12px;
+    background:rgba(255,255,255,.22);
+    border-radius:var(--vd-r-pill);
+    font-weight:700;
+}
+
+/* ----------------------------------------------------------------------- */
+/*  CART BAR                                                                */
+/* ----------------------------------------------------------------------- */
+.vd-cartbar {
+    position:fixed;
+    bottom:14px;
+    inset-inline:14px;
+    z-index:300;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 18px;
+    border-radius:var(--vd-r-lg);
+    background:var(--vd-accent);
+    color:#fff;
+    box-shadow:var(--vd-shadow-lg);
+    transform:translateY(140%);
+    transition:transform var(--vd-slow) var(--vd-spring);
+    cursor:pointer;
+    max-width:560px;
+    margin-inline:auto;
+}
+
+.vd-cartbar.show { transform: translateY(0); }
+
+.vd-cartbar:hover { transform: translateY(0) scale(1.01); }
+
+.vd-cartbar-ico { font-size: 22px; }
+
+.vd-cartbar-text { flex: 1; }
+
+.vd-cartbar-count {
+    font-weight:800;
+    font-size:14px;
+    display:block;
+}
+
+.vd-cartbar-text small {
+    font-size:11px;
+    opacity:.85;
+}
+
+.vd-cartbar-total {
+    font-weight:800;
+    font-size:17px;
+    font-family:var(--vd-display);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  FOOTER                                                                  */
+/* ----------------------------------------------------------------------- */
+.vd-footer {
+    padding:44px 0 96px;
+    text-align:center;
+    border-top:1px solid var(--vd-input-border);
+    margin-top:20px;
+}
+
+.vd-footer-brand {
+    font-family:var(--vd-display);
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:8px;
+    color:var(--vd-text);
+}
+
+.vd-footer-addr {
+    color:var(--vd-muted);
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.vd-footer-powered {
+    opacity:.6;
+    font-size:12px;
+    color:var(--vd-muted);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  EMPTY / NO RESULTS                                                      */
+/* ----------------------------------------------------------------------- */
+.vd-empty {
+    text-align:center;
+    padding:48px 20px;
+    display:none;
+}
+
+.vd-empty.show { display: block; animation: vd-reveal-up .5s var(--vd-spring); }
+
+.vd-empty h3 {
+    font-size:20px;
+    margin-bottom:6px;
+    color:var(--vd-text);
+}
+
+.vd-empty p { color: var(--vd-muted); font-size: 14px; margin: 0; }
+
+.vd-empty-ico {
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background:var(--vd-accent-12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    color:var(--vd-accent-ink);
+    margin:0 auto 16px;
+    animation:vd-success-pop .5s var(--vd-spring);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  SHIMMER LOADING                                                         */
+/* ----------------------------------------------------------------------- */
+.vd-shimmer {
+    position:relative;
+    overflow:hidden;
+    background:var(--vd-surface-2);
+}
+
+.vd-shimmer::after {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.38), transparent);
+    animation:vd-shimmer 1.6s infinite;
+}
+
+.vd[data-theme="dark"] .vd-shimmer::after {
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+}
+
+@keyframes vd-shimmer {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  SCROLL REVEAL                                                           */
+/* ----------------------------------------------------------------------- */
+.vd-reveal {
+    opacity:0;
+    transform:translateY(24px) scale(.97);
+    transition: opacity var(--vd-slow) var(--vd-ease),
+                transform var(--vd-slow) var(--vd-spring);
+}
+
+.vd-reveal.vd-reveal--in {
+    opacity:1;
+    transform:translateY(0) scale(1);
+}
+
+/* ----------------------------------------------------------------------- */
+/*  ANIMATIONS                                                              */
+/* ----------------------------------------------------------------------- */
+@keyframes vd-reveal-up {
+    from { opacity: 0; transform: translateY(24px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  RTL OVERRIDES                                                           */
+/* ----------------------------------------------------------------------- */
+[dir="rtl"] .vd-catnav-inner,
+[dir="rtl"] .vd-rail { direction: rtl; }
+
+[dir="rtl"] .vd-cartbar,
+[dir="rtl"] .vd-detail-qty,
+[dir="rtl"] .vd-cart-qty { direction: rtl; }
+
+[dir="rtl"] .vd-cartbar-text,
+[dir="rtl"] .vd-cartbar-total { text-align: right; }
+
+[dir="rtl"] .vd-cart-line-price { direction: rtl; }
+[dir="rtl"] .vd-cart-was { text-align: right; }
+
+[dir="rtl"] .vd-option-info { direction: rtl; }
+
+/* ----------------------------------------------------------------------- */
+/*  REDUCED MOTION                                                          */
+/* ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .vd *, .vd *::before, .vd *::after {
+        animation-duration:.01ms !important;
+        /* the hero reveals use `... both` with delays up to .4s; without this the
+           fill holds their opacity:0 from-state for the whole delay */
+        animation-delay:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+    }
+    .vd-card,
+    .vd-reveal { opacity: 1; transform: none; }
+    .vd-blob { animation: none; }
+    .vd-hero-logo { animation: none; }
+    .vd-pulse { animation: none; }
+}
+
+/* ----------------------------------------------------------------------- */
+/*  SMALL SCREEN TWEAKS                                                     */
+/* ----------------------------------------------------------------------- */
+@media (max-width: 480px) {
+    .vd-topbar > .vd-container { padding: 10px 14px; }
+    .vd-brandmini span { display: none; }
+    .vd-iconbtn { width: 38px; height: 38px; }
+    .vd-branch-select { display: none; }
+    .vd-hero-inner { padding-top: 20px; }
+    .vd-hero-logo { width: 72px; height: 72px; }
+    .vd-catnav { top: 58px; }
+    .vd-sheet { border-radius: 22px 22px 0 0; }
+}
+
+@media (max-width: 360px) {
+    .vd-card-body { padding: 12px 14px 14px; }
+    .vd-btn-add { padding: 8px 12px; }
+}
+
+/* ============================ PARITY: account / track pages ================= */
+.vd-account { max-inline-size: 660px; margin-inline: auto; padding: 22px 16px 60px; position: relative; z-index: 1; }
+.vd-account-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.vd-account-back {
+    display:inline-flex; align-items: center; justify-content: center;
+    inline-size:42px; block-size: 42px; border-radius: var(--vd-r-pill);
+    background:var(--vd-surface); color: var(--vd-text);
+    box-shadow:var(--vd-shadow-sm); text-decoration: none; transition: transform .2s var(--vd-ease);
+}
+.vd-account-back:hover { transform: translateX(-2px); color: var(--vd-accent-ink); }
+.vd-account-title { font-family: var(--vd-display); font-size: 26px; font-weight: 600; color: var(--vd-text); }
+.vd-me-card {
+    display:flex; align-items: center; gap: 14px;
+    background:var(--vd-card-bg); border-radius: var(--vd-r-lg);
+    padding:16px 18px; box-shadow: var(--vd-shadow-sm);
+}
+.vd-me-avatar {
+    inline-size:48px; block-size: 48px; border-radius: var(--vd-r-pill);
+    display:inline-flex; align-items: center; justify-content: center;
+    background:var(--vd-accent); color: #fff; font-family: var(--vd-display); font-weight: 700; font-size: 20px;
+}
+.vd-me-info { flex: 1; display: flex; flex-direction: column; }
+.vd-me-info b { color: var(--vd-text); font-weight: 700; }
+.vd-me-info small { color: var(--vd-muted); font-size: 13px; }
+.vd-credit-banner {
+    display:flex; justify-content: space-between; align-items: center;
+    margin-top:14px; padding: 12px 18px; border-radius: var(--vd-r-md);
+    background:var(--vd-accent-08); color: var(--vd-accent-ink); font-weight: 700;
+}
+.vd-orders { margin-top: 26px; }
+.vd-orders-h3 { font-family: var(--vd-display); font-size: 19px; font-weight: 600; color: var(--vd-text); margin-bottom: 14px; }
+.vd-reorder-msg { color: var(--vd-nonveg); font-size: 13px; margin-bottom: 12px; }
+.vd-order-card {
+    background:var(--vd-card-bg); border-radius: var(--vd-r-lg);
+    padding:16px 18px; margin-bottom: 14px; box-shadow: var(--vd-shadow-sm);
+}
+.vd-order-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.vd-order-date { color: var(--vd-muted); font-size: 12px; }
+.vd-order-id { font-family: var(--vd-display); font-size: 17px; font-weight: 700; color: var(--vd-text); display: block; }
+.vd-order-status {
+    display:inline-block; padding: 3px 12px; border-radius: var(--vd-r-pill);
+    background:var(--vd-accent-12); color: var(--vd-accent-ink); font-size: 12px; font-weight: 600;
+}
+.vd-order-total { color: var(--vd-text); font-weight: 700; font-size: 14px; margin-top: 5px; }
+.vd-order-lines {
+    margin-top:14px; padding-top: 12px; border-top: 1px solid var(--vd-surface-3);
+    display:flex; flex-direction: column; gap: 8px;
+}
+.vd-order-line { color: var(--vd-text-2); font-size: 13.5px; }
+.vd-order-line small { color: var(--vd-muted); display: block; font-size: 12px; }
+.vd-order-total-line {
+    border-top:1px dashed var(--vd-surface-3); padding-top: 10px; margin-top: 2px;
+    font-family:var(--vd-display); font-size: 16px; font-weight: 700; color: var(--vd-text);
+}
+.vd-order-actions { display: flex; gap: 10px; margin-top: 14px; }
+.vd-ghostbtn {
+    padding:9px 16px; border-radius: var(--vd-r-pill);
+    background:var(--vd-surface-2); border: 1px solid var(--vd-surface-3);
+    color:var(--vd-accent-ink); font-weight: 600; font-size: 13px;
+    cursor:pointer; text-decoration: none; transition: background .2s var(--vd-ease);
+}
+.vd-ghostbtn:hover { background: var(--vd-accent-08); }
+.vd-orders-empty {
+    text-align:center; padding: 40px 0; color: var(--vd-muted);
+    display:flex; flex-direction: column; align-items: center; gap: 12px;
+}
+
+/* track timeline */
+.vd-timeline { list-style: none; margin: 18px 0 0; padding: 0; }
+.vd-tl { display: grid; grid-template-columns: 30px 1fr; grid-template-rows: auto 1fr; column-gap: 14px; }
+.vd-tl-node {
+    grid-row:1; grid-column: 1; inline-size: 30px; block-size: 30px;
+    display:flex; align-items: center; justify-content: center; border-radius: var(--vd-r-pill);
+    background:var(--vd-surface-3); color: transparent; z-index: 1;
+}
+.vd-tl-node svg { inline-size: 16px; block-size: 16px; }
+.vd-tl-line { grid-row: 2; grid-column: 1; inline-size: 2px; block-size: 100%; background: var(--vd-surface-3); justify-self: center; }
+.vd-tl-copy { grid-column: 2; grid-row: 1 / span 2; padding-bottom: 22px; }
+.vd-tl-copy b { font-family: var(--vd-display); font-size: 15px; font-weight: 600; color: var(--vd-muted); display: block; }
+.vd-tl-copy small { color: var(--vd-faint); font-size: 12.5px; }
+.vd-tl.done .vd-tl-node, .vd-tl.now .vd-tl-node { background: var(--vd-accent); color: #fff; }
+.vd-tl.now .vd-tl-node { box-shadow: 0 0 0 4px var(--vd-accent-16); }
+.vd-tl.done .vd-tl-copy b, .vd-tl.now .vd-tl-copy b { color: var(--vd-text); }
+.vd-tl.done .vd-tl-line { background: var(--vd-accent); }
+.vd-tl.cancelled .vd-tl-node { background: var(--vd-nonveg); color: #fff; }
+.vd-track-alert {
+    margin-top:12px; padding: 10px 14px; border-radius: var(--vd-r-md);
+    background:rgba(245,85,110,.1); color: var(--vd-nonveg); font-size: 13px;
+}
+
+/* ============================ PARITY: NPS survey (P2) ====================== */
+.vd-nps {
+    background:var(--vd-card-bg);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-lg);
+    padding:22px 20px;
+    text-align:center;
+    box-shadow:var(--vd-shadow-sm);
+}
+.vd-nps-q { font-family: var(--vd-display); font-size: 17px; font-weight: 600; color: var(--vd-text); margin-bottom: 16px; }
+.vd-nps-row { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; }
+.vd-nps-row button {
+    inline-size:38px; block-size: 38px; border-radius: var(--vd-r-pill);
+    background:var(--vd-surface-2); border: 1px solid var(--vd-input-border);
+    color:var(--vd-text-2); font-weight: 600; font-size: 14px;
+    cursor:pointer; transition: all var(--vd-fast) var(--vd-ease);
+}
+.vd-nps-row button:hover { border-color: var(--vd-accent-ink); color: var(--vd-accent-ink); }
+.vd-nps-row button.is-on { background: var(--vd-accent); border-color: var(--vd-accent-ink); color: #fff; }
+.vd-nps-scale {
+    display:flex; justify-content: space-between;
+    max-inline-size:460px; margin: 10px auto 0;
+    font-size:11.5px; color: var(--vd-muted);
+}
+.vd-nps-thanks { color: var(--vd-success); font-weight: 600; font-size: 14px; margin-top: 14px; }
+
+/* ============================ PARITY: guest order lookup (P2) ============== */
+.vd-lookup {
+    background:var(--vd-card-bg);
+    border:1px solid var(--vd-input-border);
+    border-radius:var(--vd-r-lg);
+    padding:20px;
+    box-shadow:var(--vd-shadow-sm);
+}
+.vd-lookup-q { font-family: var(--vd-display); font-size: 16px; font-weight: 600; color: var(--vd-text); margin-bottom: 14px; }
+.vd-lookup-q i { color: var(--vd-accent-ink); margin-inline-end: 6px; }
+.vd-lookup-row { display: flex; gap: 8px; }
+.vd-lookup-row input {
+    flex:1; padding: 11px 14px; border-radius: var(--vd-r-md);
+    background:var(--vd-input-bg); border: 1px solid var(--vd-input-border);
+    color:var(--vd-text); font: inherit; font-size: 14px;
+}
+.vd-lookup-row input:focus { outline: none; border-color: var(--vd-accent-ink); }
+.vd-lookup-btn {
+    padding:11px 20px; border-radius: var(--vd-r-md);
+    background:var(--vd-accent); color: #fff; font-weight: 600; font-size: 14px;
+    cursor:pointer; border: 0; white-space: nowrap;
+}
+.vd-lookup-btn:hover { filter: brightness(1.05); }
+.vd-lookup-results { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.vd-lookup-loading { text-align: center; color: var(--vd-muted); padding: 8px; }
+.vd-lookup-empty { color: var(--vd-muted); font-size: 13.5px; text-align: center; padding: 8px; }
+.vd-lookup-item {
+    display:block; text-decoration: none; color: inherit;
+    padding:12px 14px; border-radius: var(--vd-r-md);
+    background:var(--vd-surface-2); border: 1px solid var(--vd-input-border);
+    transition:border-color var(--vd-fast) var(--vd-ease);
+}
+a.vd-lookup-item:hover { border-color: var(--vd-accent-ink); }
+.vd-lookup-order { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.vd-lookup-order b { color: var(--vd-text); font-size: 14px; display: block; }
+.vd-lookup-order small { color: var(--vd-muted); font-size: 12px; }
+.vd-lookup-status {
+    padding:3px 10px; border-radius: var(--vd-r-pill);
+    background:var(--vd-accent-12); color: var(--vd-accent-ink);
+    font-size:11.5px; font-weight: 600; white-space: nowrap; text-transform: capitalize;
+}
+
+/* ============================ PARITY: auth sheet tabs (P2) ================= */
+.vd-auth-tabs {
+    display:flex;
+    gap:6px;
+    margin-bottom:18px;
+    border-bottom:1px solid var(--vd-input-border);
+}
+.vd-auth-tabs button {
+    flex:1;
+    padding:10px 6px;
+    background:transparent;
+    border:0;
+    border-bottom:2px solid transparent;
+    color:var(--vd-muted);
+    font-family:var(--vd-display);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:color var(--vd-fast) var(--vd-ease), border-color var(--vd-fast) var(--vd-ease);
+}
+.vd-auth-tabs button.is-on {
+    color:var(--vd-accent-ink);
+    border-bottom-color:var(--vd-accent-ink);
+}
+.vd-auth-error {
+    background:rgba(245, 85, 110, .1);
+    border:1px solid rgba(245, 85, 110, .3);
+    color:var(--vd-nonveg);
+    border-radius:var(--vd-r-md);
+    padding:10px 13px;
+    font-size:13px;
+    margin-bottom:14px;
+}
+
+/* ═══════════════════════ INLINE QUICK-RATE ROW ═══════════════════════ */
+.vd-rate-row {
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.vd-rate-label {
+    color:var(--vd-muted);
+    font-weight:700;
+    font-size:13px;
+}
+.vd-rate-stars {
+    display:inline-flex;
+    gap:6px;
+}
+.vd-rate-star {
+    background:none;
+    border:none;
+    padding:2px;
+    margin:-2px;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+    color:var(--vd-input-border);
+    transition:color .15s ease, transform .15s ease;
+}
+.vd-rate-star:hover { transform: scale(1.12); }
+.vd-rate-star:hover,
+.vd-rate-star.on { color: var(--vd-star, var(--vd-accent-ink)); }
+.vd-rate-thanks {
+    color:var(--vd-star, var(--vd-accent-ink));
+    font-weight:700;
+    font-size:13px;
+    margin:0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* feature toast */
+.vd-feat-toast {
+    position:fixed; inset-block-end: 88px; inset-inline: 0; margin-inline: auto;
+    width:max-content; max-width: 82vw; z-index: 3000;
+    background:var(--vd-text); color: var(--vd-bg);
+    padding:10px 18px; border-radius: var(--vd-r-pill, 999px);
+    font-size:13.5px; font-weight: 700; box-shadow: var(--vd-shadow-lg);
+    opacity:0; transform: translateY(10px); pointer-events: none;
+    transition:opacity .25s var(--vd-ease), transform .25s var(--vd-ease);
+}
+.vd-feat-toast.show { opacity: 1; transform: translateY(0); }
+
+/* F2 · brand / follow row */
+.vd-brand-row {
+    display:flex; align-items: center; gap: 12px;
+    margin:0 0 14px; padding: 12px 14px;
+    background:var(--vd-card-bg); border: 1px solid var(--vd-faint);
+    border-radius:var(--vd-r-lg);
+}
+.vd-brand-logo { flex: none; width: 58px; height: 58px; border-radius: 50%; overflow: hidden; background: var(--vd-surface-2); display: grid; place-items: center; }
+.vd-brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+.vd-brand-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.vd-brand-name { font-weight: 800; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* verified = an actual seal medallion (filled brand seal + white check), inline
+   after the store name (title/aria-label carry the accessible name). */
+.vd-verified-badge { display: inline-flex; align-items: center; vertical-align: middle; flex: none; line-height: 0; }
+.vd-verified-badge .vb-seal { width: 17px; height: 17px; display: block; }
+.vd-verified-badge .vb-seal-fill { fill: var(--vd-accent); }
+.vd-verified-badge .vb-seal-check { fill: #fff; }
+.vd-brand-followers { font-size: 12px; color: var(--vd-muted); }
+.vd-followbtn {
+    flex:none; display: inline-flex; align-items: center; gap: 6px;
+    font:inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    padding:9px 16px; border-radius: var(--vd-r-pill, 999px);
+    background:var(--vd-accent); color: #fff; border: 1px solid var(--vd-accent);
+    transition:background var(--vd-fast), color var(--vd-fast);
+}
+.vd-followbtn .vd-following-label { display: none; }
+.vd-followbtn.is-on { background: transparent; color: var(--vd-text); border-color: var(--vd-faint); }
+.vd-followbtn.is-on .vd-follow-ic, .vd-followbtn.is-on .vd-follow-label { display: none; }
+.vd-followbtn.is-on .vd-following-label { display: inline; }
+
+/* B1/B2 · shared follower-count partial classes (proof line under the name) */
+.vd-brand-row .brand-followers { display: block; font-size: 12px; color: var(--vd-muted); margin-top: 2px; }
+.vd-brand-row .brand-followers--cta { color: var(--vd-accent-ink, var(--vd-accent)); font-weight: 600; }
+.vd-brand-row .brand-dot { color: var(--vd-muted); }
+.vd-brand-row .brand-viewers b { color: var(--vd-text); font-weight: 700; }
+
+
+/* B5 · scale-pop beat on a successful follow */
+@keyframes vdFollowPop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.vd-followbtn--pop { animation: vdFollowPop .25s cubic-bezier(.34,1.45,.5,1); }
+@media (prefers-reduced-motion: reduce) { .vd-followbtn--pop { animation: none; } }
+
+/* B7 · story ring on the brand logo when stories are live */
+.vd-brand-logo--live { padding: 3px; background: linear-gradient(135deg, var(--vd-accent), var(--vd-star, #f2a93b)); cursor: pointer; }
+.vd-brand-logo--live img { border: 2px solid var(--vd-bg); }
+
+/* B6 · Following sheet rows */
+.vd-follow-sheet-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--vd-surface-2); font-size: 15px; color: var(--vd-text); }
+.vd-follow-sheet-row input[type="checkbox"] { width: 44px; height: 26px; appearance: none; -webkit-appearance: none; background: var(--vd-surface-2); border: 1px solid var(--vd-faint); border-radius: 999px; position: relative; cursor: pointer; transition: background .2s; flex: none; }
+.vd-follow-sheet-row input[type="checkbox"]::after { content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start .2s; }
+.vd-follow-sheet-row input[type="checkbox"]:checked { background: var(--vd-accent); }
+.vd-follow-sheet-row input[type="checkbox"]:checked::after { inset-inline-start: 20px; }
+.vd-followsheet-unfollow { width: 100%; margin-top: 16px; background: color-mix(in srgb, #ef4444 14%, transparent); color: #ef4444; border: 0; padding: 13px; border-radius: var(--vd-r-pill, 999px); font-weight: 700; font-size: 14px; cursor: pointer; }
+.vd-followsheet-cancel { width: 100%; margin-top: 10px; background: none; border: 1px solid var(--vd-faint); color: var(--vd-muted); padding: 13px; border-radius: var(--vd-r-pill, 999px); font-weight: 600; font-size: 14px; cursor: pointer; }
+
+/* B8 · About sheet */
+.vd-about-rating { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: var(--vd-text); margin-bottom: 14px; }
+.vd-about-rating i { color: var(--vd-star, #f2a93b); }
+.vd-about-rating small { color: var(--vd-muted); font-weight: 400; }
+.vd-about-list { display: flex; flex-direction: column; }
+.vd-about-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--vd-surface-2); color: var(--vd-text); font-size: 14px; text-decoration: none; }
+.vd-about-row i { width: 20px; text-align: center; color: var(--vd-accent); flex: none; }
+.vd-about-row span { min-width: 0; word-break: break-word; }
+.vd-about-reviews { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+.vd-about-review-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; }
+.vd-about-star { color: var(--vd-star, #f2a93b); font-weight: 700; white-space: nowrap; }
+.vd-about-review p { color: var(--vd-muted); font-size: 13px; margin-top: 4px; line-height: 1.5; }
+
+/* F3 · stories rail + viewer */
+/* these are toggled with the `hidden` attribute from script.js; the `display`
+   declarations below beat the UA `[hidden] { display:none }` rule, so restore it
+   explicitly — otherwise the closed viewer stays a full-viewport click trap */
+.vd-stories-rail[hidden],
+.vd-story-viewer[hidden],
+.vd-sv-cta[hidden] { display: none; }
+.vd-stories-rail { display: flex; gap: 14px; overflow-x: auto; padding: 4px 2px 12px; margin: 0 0 6px; scrollbar-width: none; }
+.vd-stories-rail::-webkit-scrollbar { display: none; }
+.vd-story-bubble { flex: none; background: none; border: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 66px; }
+.vd-sb-ring { width: 60px; height: 60px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--vd-accent), var(--vd-star, #f2a93b)); display: grid; place-items: center; }
+.vd-sb-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--vd-bg); }
+.vd-story-bubble small { font-size: 11px; color: var(--vd-muted); max-width: 66px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vd-story-viewer { position: fixed; inset: 0; z-index: 4000; background: #000; display: flex; flex-direction: column; opacity: 0; transition: opacity .3s var(--vd-ease); }
+.vd-story-viewer.is-open { opacity: 1; }
+.vd-sv-progress { display: flex; gap: 5px; padding: 12px 12px 4px; }
+.vd-sv-seg { flex: 1; height: 3px; border-radius: 3px; background: rgba(255,255,255,.3); overflow: hidden; }
+.vd-sv-seg i { display: block; height: 100%; width: 0; background: #fff; }
+.vd-sv-close { position: absolute; inset-block-start: 14px; inset-inline-end: 14px; z-index: 3; background: rgba(0,0,0,.4); color: #fff; border: 0; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+/* 38px story-close → 44px tap floor. */
+.vd-sv-close::after { content: ""; position: absolute; inset: -3px; }
+.vd-sv-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.vd-sv-media { max-width: 100%; max-height: 100%; object-fit: contain; }
+.vd-sv-nav { position: absolute; inset-block: 0; width: 40%; background: none; border: 0; cursor: pointer; }
+.vd-sv-nav.prev { inset-inline-start: 0; } .vd-sv-nav.next { inset-inline-end: 0; }
+.vd-sv-foot { position: absolute; inset-block-end: 0; inset-inline: 0; padding: 24px 20px 30px; background: linear-gradient(transparent, rgba(0,0,0,.7)); text-align: center; }
+.vd-sv-caption { color: #fff; font-size: 15px; font-weight: 600; margin: 0 0 12px; }
+.vd-sv-cta { display: inline-flex; }
+
+/* F4 · branch map */
+.vd-branchmap { width: 100%; height: 260px; border-radius: var(--vd-r-md); overflow: hidden; margin-bottom: 8px; }
+.vd-geo-attrib { font-size: 10.5px; color: var(--vd-muted); margin: 4px 0 12px; }
+.vd-branch-geolist { display: flex; flex-direction: column; gap: 8px; }
+.vd-branch-georow { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; cursor: pointer; font: inherit; padding: 12px 14px; border-radius: var(--vd-r-md); background: var(--vd-card-bg); border: 1px solid var(--vd-faint); color: var(--vd-text); }
+.vd-branch-georow i { color: var(--vd-accent-ink); }
+.vd-bg-name { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vd-bg-name small { color: var(--vd-muted); font-size: 12px; }
+.vd-branch-dist { font-size: 12px; font-weight: 700; color: var(--vd-accent-ink); }
+
+/* F5 · address autocomplete */
+.vd-addr-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.vd-useloc-btn { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: var(--vd-r-pill, 999px); background: var(--vd-accent-08); color: var(--vd-accent-ink); border: 1px solid var(--vd-accent-20); }
+.vd-useloc-btn.is-loading { opacity: .6; pointer-events: none; }
+.vd-addr-suggest { display: flex; flex-direction: column; margin-top: 6px; border: 1px solid var(--vd-faint); border-radius: var(--vd-r-md); overflow: hidden; background: var(--vd-surface); }
+.vd-addr-opt { text-align: start; font: inherit; font-size: 13px; padding: 10px 12px; background: none; border: 0; border-bottom: 1px solid var(--vd-faint); cursor: pointer; color: var(--vd-text); }
+.vd-addr-opt:last-child { border-bottom: 0; }
+.vd-addr-opt:hover { background: var(--vd-accent-08); }
+
+/* saved addresses (logged-in) — tappable chips above the delivery field */
+.vd-saved-addrs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.vd-saved-addr { display: inline-flex; align-items: center; gap: 8px; text-align: start; font: inherit; cursor: pointer; padding: 8px 12px; border-radius: var(--vd-r-md); background: var(--vd-surface); border: 1px solid var(--vd-faint); color: var(--vd-text); max-inline-size: 100%; }
+.vd-saved-addr i { color: var(--vd-accent); font-size: 13px; }
+.vd-saved-addr .vd-sa-text { display: flex; flex-direction: column; min-inline-size: 0; }
+.vd-saved-addr .vd-sa-text b { font-size: 12.5px; font-weight: 600; }
+.vd-saved-addr .vd-sa-text small { font-size: 11px; color: var(--vd-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-inline-size: 200px; }
+.vd-saved-addr.is-on { background: var(--vd-accent-08); border-color: var(--vd-accent-20); }
+
+/* F6 · rich reviews */
+.vd-reviews-block { margin-top: 6px; }
+.vd-rv-secthead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.vd-rv-secthead h4 { margin: 0; }
+.vd-rv-head { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.vd-rv-avg { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.vd-rv-avg b { font-size: 30px; font-weight: 900; line-height: 1; }
+.vd-rv-avg small { font-size: 11.5px; color: var(--vd-muted); }
+.vd-rv-dist { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 4px; }
+.vd-rv-bar { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+.vd-rv-bar em { width: 10px; color: var(--vd-muted); font-style: normal; }
+.vd-rv-bar i { flex: 1; height: 6px; border-radius: 6px; background: var(--vd-faint); overflow: hidden; }
+.vd-rv-bar i s { display: block; height: 100%; background: var(--vd-star, var(--vd-accent)); }
+.vd-rv-bar b { width: 18px; text-align: end; color: var(--vd-muted); }
+.vd-stars-mini { color: var(--vd-star, #f2a93b); letter-spacing: 1px; }
+.vd-s-dim { color: var(--vd-faint); }
+.vd-rv-filters { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.vd-rv-filters button { font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; padding: 6px 12px; border-radius: var(--vd-r-pill, 999px); background: var(--vd-surface-2); border: 1px solid var(--vd-faint); color: var(--vd-text); }
+.vd-rv-filters button.is-on { background: var(--vd-accent); color: #fff; border-color: var(--vd-accent-ink); }
+.vd-rv-list { display: flex; flex-direction: column; gap: 12px; }
+.vd-rv-item { padding: 12px 0; border-bottom: 1px solid var(--vd-faint); }
+.vd-rv-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.vd-rv-item-top b { font-size: 13.5px; }
+.vd-rv-verified { font-size: 11px; font-weight: 700; color: var(--vd-success, #22c55e); }
+.vd-rv-item p { margin: 6px 0 0; font-size: 13px; color: var(--vd-text-2, var(--vd-muted)); }
+.vd-rv-photos { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.vd-rv-photos img { width: 60px; height: 60px; object-fit: cover; border-radius: var(--vd-r-sm); }
+.vd-rv-empty { color: var(--vd-muted); font-size: 13px; text-align: center; padding: 14px 0; }
+.vd-review-itemname { color: var(--vd-muted); font-size: 13px; margin: 0 0 12px; }
+.vd-rv-stars { display: flex; gap: 6px; margin-bottom: 14px; }
+.vd-rv-stars button { font-size: 30px; line-height: 1; background: none; border: 0; cursor: pointer; color: var(--vd-faint); padding: 0; }
+.vd-rv-stars button.on { color: var(--vd-star, #f2a93b); }
+
+/* F1 · meal-plan CTA */
+.vd-mealplan-cta { display: flex; align-items: center; gap: 12px; width: 100%; text-align: start; cursor: pointer; font: inherit; margin: 12px 0; padding: 13px 15px; border-radius: var(--vd-r-md); background: var(--vd-accent-08); border: 1px solid var(--vd-accent-20); color: var(--vd-text); }
+.vd-mp-ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--vd-accent-16); color: var(--vd-accent-ink); }
+.vd-mp-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vd-mp-copy b { font-size: 14px; }
+.vd-mp-copy small { font-size: 11.5px; color: var(--vd-muted); }
+.vd-mp-arr { color: var(--vd-muted); }
+
+/* F7 · OTP boxes */
+.vd-otp-boxes { display: flex; gap: 8px; justify-content: center; margin: 6px 0 14px; }
+.vd-otp-boxes input { width: 44px; height: 52px; text-align: center; font-size: 22px; font-weight: 800; border-radius: var(--vd-r-md); border: 1.5px solid var(--vd-input-border); background: var(--vd-input-bg); color: var(--vd-text); }
+.vd-otp-boxes input:focus { border-color: var(--vd-accent-ink); outline: none; }
+
+/* RTL: numbers stay LTR */
+[dir="rtl"] .vd-branch-dist, [dir="rtl"] #vd-otp-gate-phone { direction: ltr; unicode-bidi: embed; }
+
+/* ── agent-chat FAB clearance (transient) ──────────────────────────────────
+   Same shape as aurora: .vd-cartbar only slides in when the cart is non-empty
+   (JS toggles .show), so the lift is conditional rather than static.
+   Bar: 62px tall, measured clearance 84px (its effective bottom inset lands
+   around 21px rather than the bare 14px the rule reads as), so 76 leaves an 8px
+   gap. Measured — the CSS arithmetic said 62 and that still overlapped by 6px. */
+:root:has(.vd-cartbar.show) { --agent-fab-offset: calc(76px + env(safe-area-inset-bottom, 0px)); }
+
+/* ----------------------------------------------------------------------- */
+/*  SPLASH — bespoke vivid intro overlay                                    */
+/*  Pure-CSS auto-fade (CSP-safe); JS skip button + node cleanup on top.    */
+/* ----------------------------------------------------------------------- */
+.vd-splash {
+    position:fixed;
+    inset:0;
+    z-index:4000;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    text-align:center;
+    background:
+        radial-gradient(120% 90% at 50% 0%, var(--vd-accent-12), transparent 60%),
+        var(--vd-bg);
+    animation:vdSplashFade .6s var(--vd-ease) 1.7s forwards;
+}
+.vd-splash.vd-splash-out { animation: vdSplashOut .55s var(--vd-ease) forwards; }
+
+@keyframes vdSplashFade { to { opacity: 0; visibility: hidden; } }
+@keyframes vdSplashOut  { to { opacity: 0; visibility: hidden; } }
+
+.vd-splash-inner {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    animation:vdSplashRise .7s var(--vd-spring) both;
+}
+@keyframes vdSplashRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+.vd-splash-logo {
+    width:66px;
+    height:66px;
+    border-radius:var(--vd-r-lg);
+    object-fit:cover;
+    box-shadow:var(--vd-shadow);
+}
+
+.vd-splash-hero {
+    position:relative;
+    width:190px;
+    height:190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:4px 0;
+}
+
+.vd-splash-ring {
+    position:absolute;
+    inset:18px;
+    border-radius:50%;
+    border:2px dashed var(--vd-accent-40);
+    animation:vdSplashSpin 8s linear infinite;
+}
+@keyframes vdSplashSpin { to { transform: rotate(360deg); } }
+
+.vd-splash-pop {
+    position:absolute;
+    border-radius:50%;
+    object-fit:cover;
+    box-shadow:var(--vd-shadow);
+    animation:vdSplashPop .6s var(--vd-spring) both;
+}
+.vd-splash-pop-0 { width: 108px; height: 108px; z-index: 2; animation-delay: .15s; }
+.vd-splash-pop-1 { width: 64px;  height: 64px;  inset-block-start: 4px; inset-inline-end: 2px; animation-delay: .32s; }
+.vd-splash-pop-2 { width: 56px;  height: 56px;  inset-block-end: 6px; inset-inline-start: 6px; animation-delay: .46s; }
+@keyframes vdSplashPop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+
+.vd-splash-title {
+    font-family:var(--vd-display);
+    font-size:clamp(26px, 7vw, 40px);
+    font-weight:700;
+    color:var(--vd-text);
+    line-height:1.1;
+}
+
+.vd-splash-tag {
+    font-size:14px;
+    color:var(--vd-muted);
+    letter-spacing:.3px;
+}
+
+.vd-splash-skip {
+    position:absolute;
+    inset-block-end:calc(28px + env(safe-area-inset-bottom, 0px));
+    inset-inline-end:24px;
+    padding:8px 18px;
+    font-size:13px;
+    font-weight:600;
+    border-radius:var(--vd-r-pill);
+    color:var(--vd-text-2);
+    background:var(--vd-surface-2);
+    border:1px solid var(--vd-input-border);
+}
+.vd-splash-skip:hover { color: var(--vd-text); }
+
+@media (prefers-reduced-motion: reduce) {
+    .vd-splash-ring { animation: none; }
+    .vd-splash-inner, .vd-splash-pop { animation-duration: .01ms; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOYALTY CARD
+   The blade used to style this block inline against --vd-brand / --vd-card /
+   --vd-border, three tokens that DO NOT EXIST in vivid — so it fell back to a
+   set of hardcoded dark-theme values borrowed from another theme: a 4%-white
+   card and a 10%-white border, both invisible on vivid's cream light surface,
+   and an amber that ignored the restaurant's own accent entirely. Same markup,
+   vivid's real tokens, and it now works in both modes.
+   ═══════════════════════════════════════════════════════════════════ */
+.vd-loyalty-card {
+    border-radius:var(--vd-r-lg);
+    padding:20px 18px;
+    text-align:center;
+    background:var(--vd-card-bg);
+    border:1px solid var(--vd-input-border);
+    box-shadow:var(--vd-shadow-sm);
+}
+.vd-loyalty-star { color: var(--vd-accent-ink); }
+.vd-loyalty-num {
+    font-family:var(--vd-display);
+    font-size:34px;
+    font-weight:900;
+    line-height:1.05;
+    color:var(--vd-accent-ink);
+}
+.vd-stamp-dot {
+    inline-size:30px;
+    block-size:30px;
+    border-radius:50%;
+    border:2px solid var(--vd-input-border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    color:var(--vd-faint);
+    transition:background var(--vd-fast) var(--vd-ease), color var(--vd-fast) var(--vd-ease), border-color var(--vd-fast) var(--vd-ease);
+}
+.vd-stamp-dot.is-on {
+    background:var(--vd-accent);
+    border-color:var(--vd-accent-ink);
+    color:#fff;
+}
+.vd-loyalty-track {
+    block-size:8px;
+    border-radius:var(--vd-r-pill);
+    background:var(--vd-surface-3);
+    overflow:hidden;
+    margin-block-end:8px;
+}
+.vd-loyalty-bar {
+    display:block;
+    block-size:100%;
+    inline-size:0;
+    background:var(--vd-accent);
+    border-radius:var(--vd-r-pill);
+    transition:inline-size .6s var(--vd-ease);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE INPUT + TOUCH-TARGET FLOOR
+   Two defects the whole theme pack shares, both felt hardest on the phone
+   this product is designed for:
+
+   1. iOS Safari force-zooms any focused input whose font-size is under 16px
+      and never zooms back out — 32 fields here were at 14–15px. The visual
+      size is preserved with padding; only the computed font-size moves.
+   2. 86 controls rendered below the 44×44 touch floor, including all four
+      header icon buttons at 40×40 and every filter chip at 33px tall.
+   ═══════════════════════════════════════════════════════════════════ */
+.vd input[type="text"],
+.vd input[type="tel"],
+.vd input[type="email"],
+.vd input[type="password"],
+.vd input[type="number"],
+.vd input[type="search"],
+.vd input[type="date"],
+.vd input[type="time"],
+.vd input[type="datetime-local"],
+.vd select,
+.vd textarea {
+    font-size:16px;
+}
+
+.vd .vd-iconbtn {
+    inline-size:44px;
+    block-size:44px;
+}
+
+/* The chips in the wrapping filter panel simply grow: a pseudo-element overlay
+   would spill past the 8px row gap and steal taps from the row above. */
+.vd .vd-filter-chip,
+.vd .vd-sub-pill {
+    min-block-size:44px;
+    display:inline-flex;
+    align-items:center;
+}
+/* The category rail is a single scrolling row with no vertical neighbour, so
+   the pill keeps its 36px look and gains an invisible 44px tap box. */
+.vd .vd-cat-pill {
+    position:relative;
+}
+.vd .vd-cat-pill::after {
+    content:"";
+    position:absolute;
+    inset-inline:0;
+    inset-block-start:50%;
+    block-size:44px;
+    transform:translateY(-50%);
+}
+
+/* Close buttons, qty steppers and the favourite heart are the other habitual
+   sub-44 offenders. */
+.vd .vd-close,
+.vd .vd-qty-btn,
+.vd .vd-card-fav,
+.vd .vd-cart-rm {
+    min-inline-size:44px;
+    min-block-size:44px;
+}
+.vd .vd-qty-btn.sm {
+    min-inline-size:36px;
+    min-block-size:36px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RTL — directional glyphs the mirroring pass missed
+   The back chevron on the account and track headers is a raw <svg> path
+   pointing left, so an Arabic customer saw "back" aiming the wrong way; its
+   hover nudge travelled the wrong way too.
+   ═══════════════════════════════════════════════════════════════════ */
+[dir="rtl"] .vd-account-back svg { transform: scaleX(-1); }
+[dir="rtl"] .vd-account-back:hover { transform: translateX(2px); }
+
+/* The two controls a customer actually aims at on every card were the smallest
+   on the page: the favourite heart at 33×33 and the add button at 74×33, both
+   ×15 on a full menu. The visual size is kept; an invisible pseudo-element
+   grows the hit box to the 44px floor. Neither has a close neighbour in its
+   own row, so the overlay cannot steal a tap from anything else. */
+/* NOTE: .vd-fav is intentionally excluded here — it is a card overlay with its
+   own `position: absolute` (see .vd-fav rule above). This higher-specificity
+   `.vd .vd-fav` rule would override that to `relative`, dropping the favourite
+   heart into normal flow so it overlaps the card text. It keeps its ::after
+   44px hit box below (which works fine over an absolute-positioned parent). */
+.vd .vd-btn-add,
+.vd .vd-followbtn,
+.vd .vd-filter-clear-btn,
+.vd .vd-ghostbtn,
+.vd .vd-tip-btn {
+    position:relative;
+}
+.vd .vd-fav::after,
+.vd .vd-btn-add::after,
+.vd .vd-followbtn::after,
+.vd .vd-filter-clear-btn::after,
+.vd .vd-ghostbtn::after,
+.vd .vd-tip-btn::after {
+    content:"";
+    position:absolute;
+    inset-inline-start:50%;
+    inset-block-start:50%;
+    min-inline-size:44px;
+    min-block-size:44px;
+    inline-size:100%;
+    block-size:100%;
+    transform:translate(-50%, -50%);
+}
+[dir="rtl"] .vd .vd-fav::after,
+[dir="rtl"] .vd .vd-btn-add::after,
+[dir="rtl"] .vd .vd-followbtn::after,
+[dir="rtl"] .vd .vd-filter-clear-btn::after,
+[dir="rtl"] .vd .vd-ghostbtn::after,
+[dir="rtl"] .vd .vd-tip-btn::after {
+    transform:translate(50%, -50%);
+}
+
+/* Keyboard focus rings (a11y). Only inputs styled :focus — every button,
+   link, icon button, category pill, menu card, carousel arrow/dot and nav
+   control was invisible to keyboard users. One accent ring for all; the
+   outline follows each control's own radius, so round icon buttons ring as
+   circles. */
+.vd a:focus-visible,
+.vd button:focus-visible,
+.vd [tabindex]:focus-visible,
+.vd .vd-card:focus-visible,
+.vd .vd-cat-pill:focus-visible,
+.vd .vd-iconbtn:focus-visible,
+.vd .vd-arrow-btn:focus-visible { outline: 2px solid var(--vd-accent); outline-offset: 2px; }
+/* inputs already show a focus treatment; suppress the ring to avoid doubling. */
+.vd input:focus-visible,
+.vd textarea:focus-visible,
+.vd select:focus-visible { outline: none; }
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   32px controls on the line a thumb uses most. The pills sit 8px apart, so the
+   inline growth is capped at half that (no overlap between + and −); the block
+   axis is free and takes the control past 44px. */
+.vd-cart-qty .vd-qty-btn, .vd-cart-rm { position: relative; }
+.vd-cart-qty .vd-qty-btn::after { content: ""; position: absolute; inset: -6px -4px; }
+.vd-cart-rm::after { content: ""; position: absolute; inset: -6px; }
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.vd-seg button{min-block-size:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.vd-dropdown-menu button,.vd-auth-tabs button{min-block-size:44px}
+.vd-nps-row button,.vd-rv-stars button{position:relative}
+.vd-nps-row button::after,.vd-rv-stars button::after{content:"";position:absolute;inset:-7px -1px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   these themes had a static ring + snap recolour; add change-driven
+   pop/flash + animate the connector recolour. Neutralised by the
+   global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.vd-tl-line{transition:background .5s ease}
+.vd-tl.done .vd-tl-node{animation:mbStepPop .5s ease}
+.vd-tl.now .vd-tl-copy{animation:mbStepFlash .8s ease}
+.vd-tl:last-child.done .vd-tl-node{animation:mbDone .7s ease}
+
+/* ── MC-34 currency-estimate notice, vivid skin ─────────────────────────
+   vivid ships its own disclaimer, inserted right after its topbar (inline
+   styles removed from the JS). In-flow centered pill below the topbar —
+   the layout the owner approved: never covers chrome, scrolls with the
+   page. */
+#vd-currency-disclaimer{
+  margin:10px auto 0;width:max-content;max-width:min(92vw,560px);
+  border-radius:999px;padding:8px 16px;
+  text-align:center;font-size:11.5px;letter-spacing:.01em;line-height:1.45;
+  background:var(--vd-accent-12);border:1px solid var(--vd-accent-20);color:var(--vd-accent);font-weight:600;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+
+/* ── notification-center panel — vivid skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--vd-surface,#ffffff);--nb-surface-2:var(--vd-surface-2,#f8f5f1);--nb-line:var(--vd-surface-3,#f0ece6);--nb-ink:var(--vd-text,#1a1916);--nb-muted:var(--vd-muted,#8a8275);--nb-accent:var(--vd-accent,#ff6b4a)}
+
+
+/* ═══ DARK MODE, auto (Lane B togglify) — system dark unless the diner
+   forced light via the toggle (shared engine mb-theme.js sets data-theme
+   on .vd). KEEP IN SYNC with the explicit .vd[data-theme="dark"] rules
+   above (same declarations). ═══ */
+@media (prefers-color-scheme: dark) {
+.vd:not([data-theme="light"]) {
+    /* On a near-black surface the light-mode darkening would bury the accent, so
+       ink lifts it instead: the default orange read 6.9:1 raw, but a deep brand
+       colour (#d81e5b) only 3.9:1 — a quarter of white brings any accent past
+       4.5:1 on #0e0d0b (P3-13 axe). */
+    --vd-accent-ink:   color-mix(in oklab, var(--vd-accent) 75%, #fff);
+
+    --vd-bg:           #0e0d0b;
+    --vd-bg-2:         #16140f;
+    --vd-surface:      #1c1a15;
+    --vd-surface-2:    #211e18;
+    --vd-surface-3:    #26221c;
+    --vd-card-bg:      rgba(255,255,255,.045);
+    --vd-bar-bg:       rgba(14,13,11,.82);
+    --vd-scrim:        rgba(0,0,0,.62);
+    --vd-input-bg:     rgba(255,255,255,.06);
+    --vd-input-border:rgba(255,255,255,.1);
+
+    --vd-text:         #f6f3ee;
+    --vd-text-2:       #c8c2b6;
+    --vd-muted:        #92897c;
+    --vd-faint:        #5a544b;
+
+    --vd-shadow-sm:0 2px 8px -2px rgba(0,0,0,.3);
+    --vd-shadow:    0 12px 36px -10px rgba(0,0,0,.5);
+    --vd-shadow-lg:0 24px 60px -14px rgba(0,0,0,.6);
+    --vd-shadow-xl:0 32px 80px -18px rgba(0,0,0,.7);
+}
+.vd:not([data-theme="light"]) .vd-blob { opacity: .18; }
+.vd:not([data-theme="light"]) .vd-topbar { border-bottom-color: rgba(255,255,255,.06); }
+.vd:not([data-theme="light"]) .vd-topbar.is-stuck { background: rgba(28,26,21,.92); }
+.vd:not([data-theme="light"]) .vd-hero-scrim {
+    background:linear-gradient(180deg, rgba(14,13,11,.15) 0%, var(--vd-bg) 92%);
+}
+.vd:not([data-theme="light"]) .vd-catnav { border-bottom-color: rgba(255,255,255,.04); }
+.vd:not([data-theme="light"]) .vd-fav { background: rgba(0,0,0,.55); }
+.vd:not([data-theme="light"]) .vd-seg button.active { background: var(--vd-surface-2); }
+.vd:not([data-theme="light"]) .vd-shimmer::after {
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VIVID 2.0 · redesign layer (2026-08)
+   Bottom-of-set customer UI ratings. Audit: every card wore 4-7 stacked badges
+   over its photo (veg + vegan + halal + GF + popular + peppers + customizable),
+   a macro row (P/C/F) and an emoji allergen row — data soup that buried the
+   food; cards ran one-per-screen on phones; the palette washed out to pale
+   beige with none of the "vivid" energy the name promises. Same DOM, CSS only:
+   the detail sheet keeps every fact; the card keeps the three that sell
+   (photo, price, one diet dot). Source order beats the base rules above.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+    --vd-grad: linear-gradient(120deg, var(--vd-accent) 0%,
+        color-mix(in srgb, var(--vd-accent) 55%, #ffb03a) 100%);
+    --vd-r-lg:20px;
+}
+
+/* ── Cards: 2-up on phones, photo-first ───────────────────────────────── */
+.vd-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 920px) { .vd-grid { gap: 20px; } }
+
+/* Badge diet: photo keeps ONE diet dot + sold-out + popular. Vegan/halal/GF/
+   spice/customizable stay on the card's data-attrs (filters) and in the
+   detail sheet — they no longer curtain the photograph. */
+.vd-card-badges .vd-badge { display: none; }
+.vd-card-badges .vd-badge-veg,
+.vd-card-badges .vd-badge-nonveg,
+.vd-card-badges .vd-badge-soldout,
+.vd-card-badges .vd-badge-popular { display: inline-flex; }
+/* veg/non-veg collapse to a legible dot chip */
+.vd-card-badges .vd-badge-veg,
+.vd-card-badges .vd-badge-nonveg { font-size: 0; padding: 6px; gap: 0; }
+.vd-card-badges .vd-badge-veg i,
+.vd-card-badges .vd-badge-nonveg i { font-size: 7px !important; }
+
+/* macro row → kcal only, quiet */
+.vd-card-nutrition span:not(:first-child) { display: none; }
+.vd-card-nutrition { opacity: .75; }
+/* allergen thumbnails: smaller, quiet */
+.vd-card-allergies img { width: 16px; height: 16px; opacity: .8; }
+
+.vd-card-body { padding: 11px 12px 12px; gap: 5px; }
+.vd-card-title { font-size: 14.5px; line-height: 1.25; }
+.vd-card-desc {
+    font-size:12px;
+    display:-webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow:hidden;
+}
+.vd-card-media { aspect-ratio: 4/3; }
+@media (min-width: 920px) {
+    .vd-card-body { padding: 14px 16px 15px; }
+    .vd-card-title { font-size: 16px; }
+    .vd-card-media { aspect-ratio: 16/10; }
+}
+.vd-card-foot { flex-wrap: wrap; gap: 6px; }
+.vd-card-price { font-size: 15px; font-weight: 800; }
+
+/* ── Energy: gradient accents where the eye lands ─────────────────────── */
+.vd-btn-add { background: var(--vd-grad); }
+.vd-btn-add.is-ghost, .vd-btn-add.is-disabled { background: var(--vd-surface-2); }
+.vd-cat-pill.active { background: var(--vd-grad); border-color: transparent; }
+.vd-card:hover { border-color: var(--vd-accent-40); }
+.vd-eyebrow { background: var(--vd-grad); -webkit-background-clip: text;
+    background-clip: text; color: transparent; font-weight: 800; }
+.vd-eyebrow .vd-dot { background: var(--vd-accent); }
+
+/* warm the ground slightly so white cards pop */
+body.vivid, .vivid { background:
+    radial-gradient(1200px 400px at 50% -100px,
+        color-mix(in srgb, var(--vd-accent) 7%, transparent), transparent 70%),
+    var(--vd-bg); }
+
+/* ── Section headers: gradient kicker + tight rhythm ──────────────────── */
+.vd-menu-kicker, .vd-section-kicker { letter-spacing: .14em; }
+/* the 2-up mobile override above out-orders the base 920px rule — restate it */
+@media (min-width: 920px) { .vd-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── VIVID 2.1 · round 2 — detail sheet + checkout polish (2026-08) ────── */
+/* selected option rows join the gradient identity */
+.vd-option.selected { border-color: transparent; background:
+    linear-gradient(var(--vd-surface), var(--vd-surface)) padding-box,
+    var(--vd-grad) border-box; border: 2px solid transparent; }
+.vd-option .vd-option-check { color: var(--vd-accent); }
+/* sticky footer CTA carries the gradient (matches the card add buttons) */
+#vd-item-foot .vd-btn-primary, .vd-sheet .vd-btn-primary,
+button.vd-checkout-btn, .vd-cart-cta { background: var(--vd-grad); }
+/* detail badges: cap the soup here too — keep diet + popular, drop the rest */
+.vd-detail-badges .vd-badge-vegan, .vd-detail-badges .vd-badge-custom { display: none; }
+
+/* ═══ VIVID 2.2 · home-page pass (2026-08) ─ compact hero, capped promo ═══ */
+.mbs { margin-block-end: 10px; }
+.mbs__img { aspect-ratio: 16 / 7; max-block-size: 220px; }
+@media (max-width: 640px) { .mbs__img { aspect-ratio: 16 / 7; } }
+.vd-hero { padding-block: 26px 18px; }
+.vd-hero-cover img { max-block-size: 300px; }
+.vd-hero-logo { width: 64px; height: 64px; }
+.vd-hero-title { font-size: clamp(26px, 6vw, 40px); }
+.vd-hero-tag { font-size: 14px; max-inline-size: 560px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vd-hero-meta { gap: 6px; }
+.vd-chip-meta { padding: 5px 11px; font-size: 12px; }
+/* brand/follow row hugs the hero */
+.vd-brand-row { margin-block-start: 10px; }
+/* specials: rail-tight */
+.vd-specials-grid .vd-special-card, [class*="special-card"] { min-width: 0; }
+/* injected offers/order-type/combo strips park at body level — align them to the
+   same canvas as .vd-container instead of running full-bleed on desktop */
+#mbOffersStrip, #mbOrderType, #mb-combo-rail {
+    max-inline-size:1120px; margin-inline: auto; padding-inline: 18px;
+}
+/* story bubbles: the caption is the store name repeated six times, truncated */
+.vd-story-bubble small { display: none; }
+.vd-story-bubble { gap: 0; }
+
+/* ═══ VIVID 3.0 · bottom dock (soiree-parity) ═══ */
+:root { --vd-dock-h: 62px; }
+.vd-dock {
+    position:fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+    z-index:60; display: flex; gap: 2px;
+    width:calc(100vw - 16px); max-width: 460px;
+    padding:6px; border-radius: 999px;
+    /* Palette-following bar fill: white glass in light, near-black glass in dark.
+       Was pinned white, so the inactive icons/labels (--vd-text-2, which flips
+       light in dark) turned into light-on-white and vanished in dark mode. */
+    background:var(--vd-bar-bg);
+    backdrop-filter:blur(18px) saturate(1.15);
+    -webkit-backdrop-filter:blur(18px) saturate(1.15);
+    border:1px solid var(--vd-input-border);
+    box-shadow:0 14px 44px -14px rgba(30,25,20,.35);
+}
+.vd-dock-btn {
+    display:flex; flex-direction: column; align-items: center; gap: 2px;
+    min-width:0; flex: 1 1 0; padding: 7px 4px 6px; border: 0; border-radius: 999px;
+    background:none; color: var(--vd-text-2, #6b6257); cursor: pointer;
+    font-size:10.5px; font-weight: 700;
+}
+.vd-dock-btn span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Favorites sheet rows */
+.vd-fav-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 4px; border: 0; background: none; cursor: pointer; text-align: start; border-bottom: 1px solid var(--vd-input-border, rgba(127,127,127,.16)); color: inherit; font: inherit; }
+.vd-fav-row-img { width: 54px; height: 54px; border-radius: 12px; object-fit: cover; flex: none; background: rgba(127,127,127,.14); }
+.vd-fav-row-body { display: flex; flex-direction: column; gap: 3px; flex: 1 1 auto; min-width: 0; }
+.vd-fav-row-name { font-weight: 700; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vd-fav-row-price { font-size: 13px; opacity: .7; }
+.vd-fav-row-arr { opacity: .4; flex: none; }
+.vd-dock-btn svg { width: 20px; height: 20px; }
+.vd-dock-btn.is-on { background: var(--vd-grad); color: #fff; }
+/* The dock is a following SIBLING of .vd (both under <main>), NOT a descendant, so
+   the .vd-scoped dark blocks never reach it — it kept the :root light --vd-bar-bg
+   and its inactive ink (--vd-text-2) went dark-on-white, vanishing in dark. The
+   storefront toggle sets data-theme on .vd (mb-theme.js), so reach the dock via the
+   sibling combinator; also cover the system pref and a site-global html marker. */
+.vd[data-theme="dark"] ~ .vd-dock,
+html[data-mb-theme="dark"] .vd-dock { background: rgba(14,13,11,.82); border-color: rgba(255,255,255,.1); }
+.vd[data-theme="dark"] ~ .vd-dock .vd-dock-btn:not(.is-on),
+html[data-mb-theme="dark"] .vd-dock .vd-dock-btn:not(.is-on) { color: #c8c2b6; }
+@media (prefers-color-scheme: dark) {
+    .vd:not([data-theme="light"]) ~ .vd-dock { background: rgba(14,13,11,.82); border-color: rgba(255,255,255,.1); }
+    .vd:not([data-theme="light"]) ~ .vd-dock .vd-dock-btn:not(.is-on) { color: #c8c2b6; }
+}
+.vd-dock-badge {
+    position:absolute; top: 2px; inset-inline-end: 8px;
+    min-width:16px; height: 16px; padding: 0 4px; border-radius: 99px;
+    background:var(--vd-accent); color: #fff; font-style: normal;
+    font-size:10px; font-weight: 800; line-height: 16px; text-align: center;
+    border:2px solid #fff;
+}
+.vd-menu-section:last-of-type, #vd-menu-root { padding-bottom: calc(var(--vd-dock-h) + 28px); }
+:root { --agent-fab-offset: calc(var(--vd-dock-h) + 20px + env(safe-area-inset-bottom, 0px)); }
+
+/* ═══ VIVID 4.0 · design-review grind ═══ */
+/* the slide-up cart bar (z 300) parked exactly over the dock — stack it above */
+.vd-cartbar { bottom: calc(var(--vd-dock-h) + 22px) !important; }
+/* …but raising `bottom` to 84px broke the HIDDEN state: the base translateY(140%)
+   (~87px, sized for the old bottom:14px) no longer clears the viewport, so an EMPTY
+   cart (no .show) parked the bar back on top of the dock (z 300 > 60) and swallowed
+   every dock tap. Push the hidden bar fully below the fold from its raised anchor. */
+.vd-cartbar:not(.show) { transform: translateY(calc(100% + var(--vd-dock-h) + 30px)) !important; }
+/* branch selector: grey billboard → inline pill (matches velvet treatment) */
+.mbc-branch-switcher {
+    background:none !important; border: 1px solid var(--vd-input-border) !important;
+    border-radius:999px !important; padding: 4px 6px 4px 14px !important;
+    margin-block:10px !important; box-shadow: none !important;
+    display:inline-flex !important; align-items: center; gap: 8px; width: auto !important;
+}
+.mbc-branch-switcher select {
+    background:transparent !important; border: 0 !important;
+    font-size:13px !important; padding: 6px 26px 6px 4px !important; min-height: 34px;
+}
+/* desktop: same slider fix as velvet — fixed-height crop, full track */
+@media (min-width: 641px) {
+    .mbs__img { width: 100%; height: 232px; aspect-ratio: auto; object-fit: cover; }
+}
+.vd-cartbar.show { transform: translateY(0) !important; }
+
+/* ═══ VIVID 4.1 · PAGE CANVAS ═══
+   Same pair as velvet: UA body margin never reset, and the earlier canvas rule
+   targeted `body.vivid` — but the layout renders `<body class="ltr">`, so it
+   never matched and the document stayed unpainted (white frame + white
+   overscroll). Paint the document itself. */
+html, body { margin: 0; background: var(--vd-bg, #faf8f5); }
+body {
+    background-image: radial-gradient(1200px 400px at 50% -100px,
+        color-mix(in srgb, var(--vd-accent) 7%, transparent), transparent 70%);
+    background-repeat:no-repeat;
+}
+
+/* ═══ VIVID 4.2 · vertical rhythm + text contrast ═══ */
+/* measured gaps between top-level home sections were hero->slider 0px and
+   stories->offers 6px — the promo slider butted straight into the hero and the
+   rails ran together */
+:root { --vd-rhythm: 18px; }
+.mbs { margin-block: var(--vd-rhythm) var(--vd-rhythm); }
+#mbOffersStrip { margin-block: var(--vd-rhythm) 0; }
+#mbOrderType { margin-block: var(--vd-rhythm) var(--vd-rhythm); }
+.vd-brand-row { margin-block-start: var(--vd-rhythm); }
+@media (min-width: 768px) { :root { --vd-rhythm: 24px; } }
+
+/* WCAG pass — every failure was a light tint of the accent, or a muted grey
+   that fell under 4.5:1 on the warm paper ground */
+.vd-badge-popular { color: #fff; background: color-mix(in srgb, var(--vd-accent) 78%, #000); }
+.vd-footer-addr, .vd-footer-powered, .vd-powered-link,
+.vd-card-nutrition { color: color-mix(in srgb, var(--vd-text, #2b2620) 78%, #fff); }
+.vd-card-nutrition { opacity: 1; }
+/* the "from" suffix beside a customizable item's price measured 3.8:1 */
+.vd-card-price small, .vd-detail-price small { color: color-mix(in srgb, var(--vd-text, #2b2620) 72%, #fff); }
+
+/* ═══ VIVID 4.3 · dark-face page canvas ═══
+   vivid scopes its dark tokens to the theme root (.vd[data-theme="dark"] /
+   html[data-mb-theme="dark"] .vd), so --vd-bg resolved at :root — which is what
+   html and body read — never flipped. In dark mode the app was #0e0d0b while
+   the document canvas stayed #faf8f5: a white frame around a black page, and a
+   white overscroll area at the end of it. Mirror the dark ground onto the
+   document itself. */
+html:has(.vd[data-theme="dark"]),
+html:has(.vd[data-theme="dark"]) body,
+html[data-mb-theme="dark"],
+html[data-mb-theme="dark"] body { background-color: #0e0d0b; }
+html:has(.vd[data-theme="dark"]) { color-scheme: dark; }
+html:has(.vd[data-theme="dark"]) body { background-image: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — vivid skin  (lane C · copy-adapt of the crave L0 reference)
+   ───────────────────────────────────────────────────────────
+   Vivid is a bespoke-sheet family: its native sheet (.vd-sheet) is a bottom sheet
+   on mobile that becomes a floating centered card (bottom gap, all corners rounded)
+   at >=720px — so the shared #mbHotelHub is tuned to that same shape here. Chip mounts
+   natively in .vd-brand-row (data-mb-hotel-chip-slot) beside the follow button. Scoped
+   under .vd so vivid's tokens resolve once the layer is relocated into the theme root;
+   both schemes re-ink automatically because every --mbh-* maps onto a vivid token that
+   flips with data-theme="dark".
+   ═══════════════════════════════════════════════════════════ */
+
+/* Token contract → vivid's real tokens */
+.vd #mbHotelChip,
+.vd #mbHotelOrderCtrls,
+.vd #mbHotelBook,
+.vd #mbHotelHub{
+  --mbh-surface:var(--vd-surface);
+  --mbh-ink:var(--vd-text);
+  --mbh-muted:var(--vd-muted);
+  --mbh-accent:var(--vd-accent);
+  --mbh-on-accent:#fff;
+  --mbh-border:var(--vd-input-border);
+  --mbh-radius:var(--vd-r-lg);
+  --mbh-font:var(--vd-font);
+}
+
+/* ── Room chip: a ghost pill sitting with the follow button in .vd-brand-row ── */
+.vd #mbHotelChip{
+  margin:0;padding:8px 14px;gap:7px;flex:none;
+  background:var(--vd-surface-2);border:1px solid var(--vd-faint);color:var(--vd-text-2);
+  border-radius:var(--vd-r-pill);font-size:13px;font-weight:700;
+  transition:background var(--vd-fast),border-color var(--vd-fast);
+}
+.vd #mbHotelChip:hover{background:var(--vd-surface-3);border-color:var(--vd-muted);}
+.vd #mbHotelChip:active{transform:scale(.96)}
+.vd #mbHotelChip .mb-hotel-roomchip__ic{color:var(--vd-accent)}
+.vd #mbHotelChip .mb-hotel-roomchip__room{color:var(--vd-text)}
+.vd #mbHotelChip .mb-hotel-roomchip__guest{color:var(--vd-muted)}
+
+/* ── Hub: vivid's bottom sheet (mobile) → floating centered card (>=720px) ── */
+.vd #mbHotelHubScrim{background:var(--vd-scrim);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.vd #mbHotelHub{
+  background:var(--vd-surface);color:var(--vd-text);
+  border:0;border-top:1px solid var(--vd-input-border);
+  border-start-start-radius:var(--vd-r-xl);border-start-end-radius:var(--vd-r-xl);
+  box-shadow:var(--vd-shadow-xl);
+  transition:transform var(--vd-slow) var(--vd-spring);
+}
+@media (min-width:720px){
+  .vd #mbHotelHub{
+    max-inline-size:540px;inset-block-end:24px;
+    border:1px solid var(--vd-input-border);border-radius:var(--vd-r-xl);
+    max-block-size:calc(100dvh - 48px);
+  }
+}
+.vd #mbHotelHub .mb-hotel-hub__grab{background:var(--vd-faint);inline-size:44px;block-size:5px;}
+.vd #mbHotelHub .mb-hotel-hub__head{padding:12px 20px 10px;}
+.vd #mbHotelHub .mb-hotel-hub__title{font-family:var(--vd-display);font-size:20px;font-weight:700;}
+.vd #mbHotelHub .mb-hotel-hub__x{
+  background:var(--vd-surface-2);border:1px solid var(--vd-input-border);color:var(--vd-text);
+  inline-size:36px;block-size:36px;border-radius:50%;font-size:1.15rem;opacity:1;
+}
+.vd #mbHotelHub .mb-hotel-hub__x:hover{background:var(--vd-surface-3);}
+.vd #mbHotelHub .mb-hotel-hub__greet{color:var(--vd-muted)}
+.vd #mbHotelHub .mb-hotel-card{border-color:var(--vd-input-border)}
+.vd #mbHotelHub .mb-hotel-card summary,
+.vd #mbHotelHub .mb-hotel-card__t{color:var(--vd-text)}
+.vd #mbHotelHub .mb-hotel-info-link{color:var(--vd-accent-ink)}
+/* service form controls → vivid inputs / accent CTA */
+.vd #mbHotelHub .mb-hotel-field{
+  background:var(--vd-surface-2);border:1px solid var(--vd-input-border);color:var(--vd-text);border-radius:var(--vd-r-md);
+}
+.vd #mbHotelHub .mb-hotel-btn{
+  background:var(--vd-accent);color:#fff;border-radius:var(--vd-r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → vivid control rows ── */
+.vd #mbHotelOrderCtrls{margin:0}
+.vd #mbHotelSched,
+.vd #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--vd-input-border);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--vd-text);
+}
+.vd #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--vd-text);margin-bottom:11px;
+}
+.vd #mbHotelSched .mb-hotel-modes label{color:var(--vd-text-2);font-weight:600}
+.vd #mbHotelSched input[type="radio"]{accent-color:var(--vd-accent)}
+.vd #mbHotelSched .mb-hotel-field{
+  background:var(--vd-surface-2);border:1px solid var(--vd-input-border);color:var(--vd-text);border-radius:var(--vd-r-md);
+}
+.vd #mbHotelSched .mb-hotel-note{color:var(--vd-muted)}
+.vd #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.vd #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.vd #mbHotelCharge .mb-hotel-greet__room{color:var(--vd-text);font-weight:700}
+.vd #mbHotelCharge .mb-hotel-greet__welcome{color:var(--vd-muted)}
+.vd #mbHotelCharge input[type="checkbox"]{accent-color:var(--vd-accent)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for vivid. Surface,
+   ink, border and radius come from vivid tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.vd .mb-paypending{
+  --pp-surface:var(--vd-surface,#ffffff);
+  --pp-ink:var(--vd-text,#1a1916);
+  --pp-muted:var(--vd-muted,#8a8275);
+  --pp-border:var(--vd-input-border,#e5dfd5);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--vd-r-md,16px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.vd .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.vd .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.vd .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.vd .mb-paypending-txn:empty{display:none}
+.vd .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.vd .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.vd .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.vd .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.vd .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* ═══════════════ PERF-LITE ▸ reversible ▸ added 2026-08-27 ═══════════════
+   Idle GPU/CPU fix. The worst offender is .vd-blob — a filter:blur(80px)
+   element animated FOREVER (vd-blob 22s infinite), so an 80px gaussian blur is
+   re-rendered every frame behind the glass panels even at idle. Pausing it (plus
+   the accent pulse and the hero-logo float) lets the blurred layers go static so
+   the GPU stops working when nothing is happening. Also pauses .vd-shimmer::after
+   — measured live, 32 skeleton shimmers stay running forever after content has
+   loaded (orphaned placeholders), a steady idle-CPU drain; a static skeleton is
+   fine. The splash ring (.vd-splash-ring) is LEFT running (transient, on the
+   splash screen only).
+
+   REVERT (any one restores the original exactly):
+     • add attribute  data-mbfx="full"  to <html>
+       (devtools: document.documentElement.dataset.mbfx='full'), OR
+     • delete from this banner down to the END marker, OR
+     • remove the html:not(...) guard.
+   Nothing else references data-mbfx. */
+html:not([data-mbfx="full"]) .vd-blob,
+html:not([data-mbfx="full"]) .vd-pulse,
+html:not([data-mbfx="full"]) .vd-hero-logo,
+html:not([data-mbfx="full"]) .vd-shimmer::after{
+  animation:none !important;
+}
+/* ═══════════════ PERF-LITE END ═══════════════ */

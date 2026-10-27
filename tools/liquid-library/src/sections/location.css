@@ -1,0 +1,53 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* location */
+.mbs-location {
+  max-inline-size: 960px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-location__title { margin: 0 0 var(--ts-gap-3, 16px); font-family: var(--tf-heading, var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif)); font-size: 1.3rem; }
+.mbs-location__card {
+  display: grid;
+  gap: var(--ts-gap-2, 10px);
+  padding: var(--ts-gap-3, 16px);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-surface, #f4f4f5);
+  font-style: normal;
+}
+.mbs-location__line { display: flex; align-items: flex-start; gap: var(--ts-gap-2, 10px); margin: 0; }
+.mbs-location__line .mbs-icon { flex: none; margin-block-start: 2px; color: var(--tc-text-muted, #6b7280); }
+.mbs-location__line a { color: inherit; min-block-size: 24px; }
+.mbs-location__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  gap: 6px;
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font-weight: 700;
+  text-decoration: none;
+}
+.mbs-location__cta:focus-visible,
+.mbs-location__line a:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+.mbs-location__sub { margin: var(--ts-gap-4, 24px) 0 var(--ts-gap-2, 10px); font-size: 1rem; }
+.mbs-location__branches { display: grid; gap: var(--ts-gap-1, 6px); margin: 0; padding: 0; list-style: none; }
+.mbs-location__branch {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ts-gap-2, 10px);
+  padding: var(--ts-gap-2, 10px) var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .1);
+  border-radius: var(--tr-control, 12px);
+}
+.mbs-location__branch-name { font-weight: 600; }
+.mbs-location__branch-state { color: var(--tc-danger, #b42318); font-size: .85rem; }
+.mbs-location__branch-state.is-open { color: var(--tc-success, #16a34a); }

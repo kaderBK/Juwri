@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--stats_promo .bio-profile{background:linear-gradient(150deg,#ff5f3c,#ff9a3c);margin:-54px -22px 16px;padding:52px 22px 26px;color:#fff}
+.bio--stats_promo .bio-name,.bio--stats_promo .bio-tagline{color:#fff}
+.bio--stats_promo .bio-avatar{background:#fff;box-shadow:0 6px 16px rgba(160,50,10,.3)}
+.bio--stats_promo .bio-link{gap:11px}
+.bio--stats_promo .bio-link:hover{background:#ececf0}
+.bio--stats_promo .bio-link__icon{background:none;color:#ff5f3c}

@@ -1,0 +1,10 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* featured-rail — horizontal scroll-snap rail */
+.mbs-featured-rail { max-inline-size: 1200px; margin-inline: auto; padding-block: var(--ts-gap-3, 16px); color: var(--tc-text, #111); }
+.mbs-featured-rail__title { margin: 0 var(--ts-gap-3, 16px) 12px; font-family: var(--tf-heading); font-size: 1.2rem; }
+.mbs-featured-rail__track { display: flex; gap: 12px; margin: 0; padding: 2px var(--ts-gap-3, 16px) 8px; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--ts-gap-3, 16px); scrollbar-width: none; }
+.mbs-featured-rail__slot { display: flex; flex: 0 0 min(72%, 260px); scroll-snap-align: start; }
+.mbs-featured-rail__track--compact .mbs-featured-rail__slot { flex-basis: 150px; }
+.mbs-featured-rail__slot > * { flex: 1; }

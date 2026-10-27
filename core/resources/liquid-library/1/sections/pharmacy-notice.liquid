@@ -1,0 +1,55 @@
+{%- comment -%}
+  Pharmacy notice (library v1, B1c) — the persistent OTC disclaimer the Blade
+  carely theme shows, plus an age-check note when the catalogue has
+  age-restricted items. Renders only for stores with the `age_gate`
+  capability (pharmacy). The owner's own disclaimer
+  (PharmacyComplianceService, dashboard) is not exposed to Liquid, so the
+  text is a section setting; blank = the platform's default OTC wording
+  (same sentence as PharmacyComplianceService::disclaimerText()). The
+  blocking entry interstitial and the per-item age confirm are enforced by
+  the commerce runtime v2, not by this section.
+{%- endcomment -%}
+{%- if features.age_gate -%}
+{%- liquid
+  assign text = section.settings.disclaimer | strip
+  if text == ''
+    assign text = 'This store sells over-the-counter (OTC) products only. This information is not medical advice — read the label and consult a healthcare professional before use.' | t
+  endif
+  assign restricted = 0
+  for item in menu.items
+    if item.age_restricted
+      assign restricted = restricted | plus: 1
+    endif
+  endfor
+-%}
+<section class="mbs-pharmacy-notice mbs-pharmacy-notice--{{ section.settings.tone | escape }}" aria-label="{{ 'Health notice' | t }}">
+  <div class="mbs-pharmacy-notice__row" role="note">
+    <svg class="mbs-pharmacy-notice__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 5 6v5c0 4.5 3 8.2 7 10 4-1.8 7-5.5 7-10V6l-7-3Z"/><path d="M12 9v5M9.5 11.5h5"/></svg>
+    <p class="mbs-pharmacy-notice__text">{{ text | escape }}</p>
+  </div>
+  {%- if section.settings.show_age_note and restricted > 0 -%}
+  <div class="mbs-pharmacy-notice__row mbs-pharmacy-notice__row--age" role="note">
+    <span class="mbs-pharmacy-notice__badge" aria-hidden="true">{{ '18+' | t }}</span>
+    <p class="mbs-pharmacy-notice__text">{{ 'Some products are age-restricted. You will be asked to confirm your age before adding them to your cart.' | t }}</p>
+  </div>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pharmacy notice",
+  "group": "compliance",
+  "verticals": ["pharmacy"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "disclaimer", "type": "textarea", "label": "Disclaimer (blank = standard OTC wording)", "default": "" },
+    { "id": "tone", "type": "select", "label": "Style", "options": [
+      { "value": "info", "label": "Highlighted" },
+      { "value": "subtle", "label": "Subtle" }
+    ], "default": "info" },
+    { "id": "show_age_note", "type": "checkbox", "label": "Explain the age check when some products are age-restricted", "default": true }
+  ],
+  "presets": [{ "name": "Pharmacy notice" }]
+}
+{% endschema %}

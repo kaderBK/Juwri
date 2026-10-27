@@ -1,0 +1,51 @@
+[
+ {
+  "id": 1,
+  "provider_name": "Head Code",
+  "slug": "head_code",
+  "code": "<script></script>",
+  "status": true
+ },
+ {
+  "id": 2,
+  "provider_name": "Top",
+  "slug": "top",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": true
+ },
+ {
+  "id": 3,
+  "provider_name": "Bottom",
+  "slug": "bottom",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": true
+ },
+ {
+  "id": 4,
+  "provider_name": "Home Page 1",
+  "slug": "home_page_1",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": true
+ },
+ {
+  "id": 5,
+  "provider_name": "Home Page 2",
+  "slug": "home_page_2",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": true
+ },
+ {
+  "id": 12,
+  "provider_name": "Dashboard Top",
+  "slug": "dashboard_top",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": false
+ },
+ {
+  "id": 13,
+  "provider_name": "Dashboard Bottom",
+  "slug": "dashboard_bottom",
+  "code": "<img src=\"https://via.placeholder.com/720x90\" width=\"100%\" height=\"100%\">",
+  "status": true
+ }
+]

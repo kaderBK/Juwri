@@ -1,0 +1,13 @@
+[
+ {
+  "id": 1,
+  "name": "spotlight_locked_cta",
+  "description": "Locked page hero CTA wording: lead with the free trial, or with the outcome.",
+  "variants": "[\"trial_first\",\"outcome_first\"]",
+  "status": "active",
+  "started_at": "@now",
+  "ended_at": null,
+  "created_at": "@now",
+  "updated_at": "@now"
+ }
+]

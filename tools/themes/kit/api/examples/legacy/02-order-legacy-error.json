@@ -1,0 +1,46 @@
+{
+  "operationId": "createOrder",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/orders",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://saffron-house.example"
+    },
+    "body": {
+      "items": [
+        {
+          "item_id": 101,
+          "quantity": 2
+        },
+        {
+          "item_id": 131,
+          "quantity": 1,
+          "variation": 312
+        }
+      ],
+      "type": "curbside",
+      "customer_name": "Noura Al-Harbi",
+      "phone": "+966551234567",
+      "client_uuid": "01a0fb32-c6a0-70fb-be7e-196dfe707422"
+    }
+  },
+  "response": {
+    "status": 422,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:01:20 GMT",
+      "Deprecation": "true",
+      "Sunset": "Sun, 03 Oct 2027 00:00:00 GMT",
+      "Link": "</developers>; rel=\"deprecation\", </api/v1/storefront/catalog>; rel=\"successor-version\""
+    },
+    "body": {
+      "message": "The selected order type is not available for this store.",
+      "code": "invalid_order_type"
+    }
+  }
+}

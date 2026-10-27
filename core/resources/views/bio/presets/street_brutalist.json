@@ -1,0 +1,25 @@
+{
+  "slug": "street_brutalist",
+  "starter": "delivery_late_night",
+  "name": "Street Brutalist",
+  "family": "brutalist",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Archivo", "weights": [500, 600, 900]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#d9d9d2",
+    "--ink": "#141412",
+    "--muted": "#3c3c36",
+    "--card": "#e8e8e2",
+    "--accent": "#d8ff00",
+    "--accent-ink": "#141412",
+    "--radius": "0px",
+    "--shadow": "5px 5px 0 #141412",
+    "--font-body": "'Archivo',sans-serif",
+    "--font-display": "'Archivo',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

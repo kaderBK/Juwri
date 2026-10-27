@@ -1,0 +1,14 @@
+{
+    "id": "whatsapp-twilio",
+    "name": "WhatsApp via Twilio",
+    "description": "Send real WhatsApp messages (order confirmations, status updates, OTP, campaigns) through the Twilio WhatsApp API. Supports platform keys or per-restaurant BYOK.",
+    "image": "",
+    "version": "1.0",
+    "min_app_version": "1.0",
+    "url": "",
+    "author": "juwri",
+    "author_url": "",
+    "settings_route": "admin.whatsapp.settings",
+    "whatsapp_provider": "twilio",
+    "whatsapp_driver": "Juwri\\Modules\\Messaging\\Services\\WhatsApp\\Drivers\\TwilioProvider"
+}

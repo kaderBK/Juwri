@@ -1,0 +1,9 @@
+// Build-time configuration (AGENT-KICKOFF rule 4). Dev/staging by default — NEVER production.
+// Override locally in Config/Local.xcconfig (gitignored) or per CI build.
+MB_BASE_URL = https:/$()/menutempl.test
+MB_APP_VERSION = 1.0.0
+MB_BUILD_NUMBER = 1
+PRODUCT_BUNDLE_IDENTIFIER = com.juwri.owner
+
+#include? "Local.xcconfig"
+MB_APP_LINK_HOST = menutempl.test

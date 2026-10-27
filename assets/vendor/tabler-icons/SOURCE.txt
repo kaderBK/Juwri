@@ -1,0 +1,13 @@
+Tabler Icons 3.48.0 (MIT) — npm @tabler/icons@3.48.0
+https://registry.npmjs.org/@tabler/icons/-/icons-3.48.0.tgz
+integrity sha512-lQk06gVHNVBnJp0UOgtth54mcZBJM7rdYKsAxKOProj1bbSAx+/xiuOWfHlyvgdL3M+Y+I0HINrjHa3ygp8eXQ==
+https://tabler.io/icons  https://github.com/tabler/tabler-icons
+Files copied unmodified from package/icons/{outline,filled}/; only the icons the <x-ui.icon> map names,
+plus lock-open (WI-05b) and the builder editor toolbar icons device-desktop, device-tablet, device-mobile,
+arrow-back-up, arrow-forward-up, layout, external-link (WI-05d).
+Rendered through <x-ui.icon name="..."> (core/resources/views/components/ui/icon.blade.php).
+Phase 3 (P3-05): the 34 outline icons the kit themes use through kit/icons-map.json (tools/themes/kit/icons-map.json) were added,
+copied unmodified from the same package version (accessible, alert-circle, alert-triangle, barcode, basket, bell-ringing, bike,
+brand-apple, building-store, calendar-time, calendar-x, cash, chevron-left, chevron-right, chevron-up, coffee, credit-card,
+hourglass, info-circle, map-pin, map-pin-off, message-circle, navigation, package, repeat, ruler, scale, scissors, search-off,
+stopwatch, ticket, tools-kitchen-2, truck-delivery, wifi-off).

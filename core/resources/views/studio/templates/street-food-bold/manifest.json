@@ -1,0 +1,32 @@
+{
+    "name": "Street Food Bold",
+    "aspects": [
+        "a4",
+        "letter",
+        "square",
+        "story"
+    ],
+    "colors": {
+        "accent": "#e2453d",
+        "bg": "#fff7e6",
+        "text": "#1f1b16"
+    },
+    "fonts": [
+        {
+            "family": "chunky-stack",
+            "stack": "'Arial Black', 'Avenir Heavy', Impact, 'Geeza Pro', sans-serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 24,
+        "columns": 2,
+        "desc_max_chars": 70
+    },
+    "art_brief": "bold graphic shapes, halftone dot bursts and energetic diagonal accents, poster style",
+    "rtl": true,
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ]
+}

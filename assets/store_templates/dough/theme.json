@@ -1,0 +1,157 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "napoli",
+      "label": "Napoli",
+      "thumb": "assets/store_templates/dough/presets/napoli.png",
+      "values": {
+        "colors.primary": "#F2995E",
+        "colors.background": "#F2EDE4",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#1A1B1E",
+        "colors.accent": "#A9C0A2",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "basil",
+      "label": "Basil",
+      "thumb": "assets/store_templates/dough/presets/basil.png",
+      "values": {
+        "colors.primary": "#5a9e5a",
+        "colors.background": "#f1f5ee",
+        "colors.surface": "#ffffff",
+        "colors.text": "#16210f",
+        "colors.accent": "#e0954c",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "charwood",
+      "label": "Charwood",
+      "thumb": "assets/store_templates/dough/presets/charwood.png",
+      "values": {
+        "colors.primary": "#f0904a",
+        "colors.background": "#16130f",
+        "colors.surface": "#221c15",
+        "colors.text": "#f6ece0",
+        "colors.accent": "#a9c0a2",
+        "layout.radius": "soft"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#F2995E"
+        },
+        "colors.background": {
+          "default": "#F2EDE4"
+        },
+        "colors.surface": {
+          "default": "#FFFFFF"
+        },
+        "colors.text": {
+          "default": "#1A1B1E"
+        },
+        "colors.accent": {
+          "default": "#A9C0A2"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.promo_kicker",
+          "type": "text",
+          "label": "Home promo kicker",
+          "default": "Freshly baked, wood-fired daily"
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Daily special badge text",
+          "default": "Daily special"
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Hand-stretched dough, wood-fired daily.",
+          "label": "Onboarding subtitle"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category pills",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "Daily special badges",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

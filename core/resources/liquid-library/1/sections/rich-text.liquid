@@ -1,0 +1,55 @@
+{%- comment -%}
+  Rich text (library v1): an optional heading, sanitized rich text and an
+  optional button. The button only accepts web links, site paths or
+  #anchor links. With no heading and no text the section renders nothing.
+{%- endcomment -%}
+{%- liquid
+  assign heading = section.settings.heading | strip
+  assign url = section.settings.cta_url | strip
+  assign label = section.settings.cta_label | strip
+  assign url_head = url | slice: 0, 8 | downcase
+  assign url_head7 = url | slice: 0, 7 | downcase
+  assign url_first = url | slice: 0, 1
+  assign url_second = url | slice: 1, 1
+  assign url_len = url | size
+  assign ok = false
+  if label != ''
+    if url_head == 'https://' or url_head7 == 'http://'
+      assign ok = true
+    elsif url_first == '/' and url_second != '/'
+      assign ok = true
+    elsif url_first == '#' and url_len > 1
+      assign ok = true
+    endif
+  endif
+-%}
+{%- if heading != '' or section.settings.text != '' -%}
+<section class="mbs-rich-text mbs-rich-text--{{ section.settings.align | escape }} mbs-rich-text--{{ section.settings.width | escape }}"{% if heading != '' %} aria-labelledby="mbs-rich-text-{{ section.id | escape }}"{% endif %}>
+  {%- if heading != '' -%}<h2 class="mbs-rich-text__title" id="mbs-rich-text-{{ section.id | escape }}">{{ heading | escape }}</h2>{%- endif -%}
+  {%- if section.settings.text != '' -%}<div class="mbs-rich-text__body">{{ section.settings.text }}</div>{%- endif -%}
+  {%- if ok -%}<a class="mbs-rich-text__cta" href="{{ url | escape }}">{{ label | escape }}</a>{%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Rich text",
+  "group": "content",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading", "default": "" },
+    { "id": "text", "type": "richtext", "label": "Text", "default": "" },
+    { "id": "cta_label", "type": "text", "label": "Button label", "default": "" },
+    { "id": "cta_url", "type": "url", "label": "Button link", "default": "" },
+    { "id": "align", "type": "select", "label": "Alignment", "options": [
+      { "value": "start", "label": "Start" },
+      { "value": "center", "label": "Center" }
+    ], "default": "center" },
+    { "id": "width", "type": "select", "label": "Width", "options": [
+      { "value": "narrow", "label": "Narrow" },
+      { "value": "wide", "label": "Wide" }
+    ], "default": "narrow" }
+  ],
+  "presets": [{ "name": "Rich text" }]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+{
+  "operationId": "releaseHold",
+  "request": {
+    "method": "DELETE",
+    "path": "/api/v1/storefront/holds/01a0fb94-5f00-7b54-bd80-b7164c57c7e1",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Origin": "https://fresh-mart.example",
+      "X-Hold-Token": "hld_e482949322d38822b1a833bd8c30ce33"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:50:40 GMT"
+    },
+    "body": {
+      "hold_id": "01a0fb94-5f00-7b54-bd80-b7164c57c7e1",
+      "released": true,
+      "cancelled": {
+        "kind": "order",
+        "public_id": "01a0fb96-d000-72ee-be77-ffbe4167248a",
+        "number": "FM-50318",
+        "status": "cancelled",
+        "track_token": "trk_f4570b652cb4506a0fc2ac64"
+      },
+      "payment": {
+        "mode": "hosted",
+        "status": "failed",
+        "next_action": null
+      }
+    }
+  }
+}

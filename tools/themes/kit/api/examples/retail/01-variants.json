@@ -1,0 +1,141 @@
+{
+  "operationId": "getItemVariants",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/items/019fb72f-f000-7353-8c3b-9f7d5e1620c6/variants",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_dune_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=30",
+      "Date": "Fri, 02 Oct 2026 06:44:50 GMT"
+    },
+    "body": {
+      "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+      "variants": [
+        {
+          "id": "019e8a90-b580-7d21-8841-c8ec7cc5c1e6",
+          "sku": "RLS-SAN-XS",
+          "options": {
+            "019f23cc-0b00-7a1e-9c2d-3e4f5a6b7c61": "019f23cd-4a14-7b7b-a7c0-91d71e6a5348",
+            "019f8488-0b00-7b2f-8d3e-4f5a6b7c8d72": "019f8489-f7d7-7f7e-b550-2536c06e64ad"
+          },
+          "price": {
+            "minor": 13900,
+            "currency": "SAR",
+            "formatted": "SAR 139.00"
+          },
+          "compare_at": {
+            "minor": 19900,
+            "currency": "SAR",
+            "formatted": "SAR 199.00"
+          },
+          "stock": {
+            "state": "out",
+            "qty": null,
+            "label": "Sold out"
+          },
+          "notify_available": true
+        },
+        {
+          "id": "019f41d0-5480-70e0-a226-a4286dfc5326",
+          "sku": "RLS-SAN-S",
+          "options": {
+            "019f23cc-0b00-7a1e-9c2d-3e4f5a6b7c61": "019f23cd-4a14-7b7b-a7c0-91d71e6a5348",
+            "019f8488-0b00-7b2f-8d3e-4f5a6b7c8d72": "019f69da-06e5-723e-97d2-94bc820f0725"
+          },
+          "price": {
+            "minor": 13900,
+            "currency": "SAR",
+            "formatted": "SAR 139.00"
+          },
+          "compare_at": {
+            "minor": 19900,
+            "currency": "SAR",
+            "formatted": "SAR 199.00"
+          },
+          "stock": {
+            "state": "in_stock",
+            "qty": null,
+            "label": "In stock"
+          }
+        },
+        {
+          "id": "019fa718-1080-763e-a69c-9f701d44ac3b",
+          "sku": "RLS-SAN-M",
+          "options": {
+            "019f23cc-0b00-7a1e-9c2d-3e4f5a6b7c61": "019f23cd-4a14-7b7b-a7c0-91d71e6a5348",
+            "019f8488-0b00-7b2f-8d3e-4f5a6b7c8d72": "019f6628-fcc8-7266-b5e7-8ac988ca5a9d"
+          },
+          "price": {
+            "minor": 13900,
+            "currency": "SAR",
+            "formatted": "SAR 139.00"
+          },
+          "compare_at": {
+            "minor": 19900,
+            "currency": "SAR",
+            "formatted": "SAR 199.00"
+          },
+          "stock": {
+            "state": "low",
+            "qty": 2,
+            "label": "Only 2 left in M"
+          }
+        },
+        {
+          "id": "019ef234-b100-7756-84f0-2bc45f0c4e7e",
+          "sku": "RLS-SAN-L",
+          "options": {
+            "019f23cc-0b00-7a1e-9c2d-3e4f5a6b7c61": "019f23cd-4a14-7b7b-a7c0-91d71e6a5348",
+            "019f8488-0b00-7b2f-8d3e-4f5a6b7c8d72": "019f08c5-dabe-7e68-9fcb-a31ab7644014"
+          },
+          "price": {
+            "minor": 13900,
+            "currency": "SAR",
+            "formatted": "SAR 139.00"
+          },
+          "compare_at": {
+            "minor": 19900,
+            "currency": "SAR",
+            "formatted": "SAR 199.00"
+          },
+          "stock": {
+            "state": "in_stock",
+            "qty": null,
+            "label": "In stock"
+          }
+        },
+        {
+          "id": "019fe81c-5a00-771a-ae9b-4d2ee36f1b7b",
+          "sku": "RLS-OLI-M",
+          "options": {
+            "019f23cc-0b00-7a1e-9c2d-3e4f5a6b7c61": "019f35a9-6ec7-7869-b7ed-711dfec8feda",
+            "019f8488-0b00-7b2f-8d3e-4f5a6b7c8d72": "019f6628-fcc8-7266-b5e7-8ac988ca5a9d"
+          },
+          "price": {
+            "minor": 13900,
+            "currency": "SAR",
+            "formatted": "SAR 139.00"
+          },
+          "compare_at": {
+            "minor": 19900,
+            "currency": "SAR",
+            "formatted": "SAR 199.00"
+          },
+          "stock": {
+            "state": "untracked",
+            "qty": null,
+            "label": "Made to order"
+          }
+        }
+      ]
+    }
+  }
+}

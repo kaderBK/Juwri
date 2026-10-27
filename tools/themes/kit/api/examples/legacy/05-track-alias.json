@@ -1,0 +1,55 @@
+{
+  "operationId": "legacyTrack",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/track/trk_5b1e0c9d7a2f4e8c1d3b6a90",
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Date": "Fri, 02 Oct 2026 06:20:00 GMT",
+      "Deprecation": "true",
+      "Sunset": "Sun, 03 Oct 2027 00:00:00 GMT",
+      "Link": "</developers>; rel=\"deprecation\", </api/v1/storefront/orders/trk_5b1e0c9d7a2f4e8c1d3b6a90>; rel=\"successor-version\""
+    },
+    "body": {
+      "id": 5821,
+      "status": "ready",
+      "type": "delivery",
+      "type_label": "Delivery",
+      "store_type": "restaurant",
+      "delivery_status": "out_for_delivery",
+      "is_paid": false,
+      "total": 64.4,
+      "placed_at": "2026-10-02T06:01:40.000000Z",
+      "shipment": null,
+      "timeline": {
+        "preparing_at": "2026-10-02T06:04:10.000000Z",
+        "ready_at": "2026-10-02T06:15:30.000000Z",
+        "out_for_delivery_at": "2026-10-02T06:17:05.000000Z"
+      },
+      "items": [
+        {
+          "name": "Hummus",
+          "quantity": 2
+        },
+        {
+          "name": "Moutabal",
+          "quantity": 1
+        }
+      ],
+      "driver": {
+        "name": "Faisal",
+        "phone": "+966500000001",
+        "lat": 24.6941,
+        "lng": 46.6853,
+        "location_updated_at": "2026-10-02T06:19:48.000000Z"
+      },
+      "courier": null
+    }
+  }
+}

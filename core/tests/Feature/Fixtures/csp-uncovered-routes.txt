@@ -1,0 +1,83 @@
+# P6-122/P6-122b: GET web routes that may stay WITHOUT a CSP route middleware, each with the reason.
+# AppSurfacesCspTest fails on any uncovered route not listed here AND on any listed route that is covered now.
+.well-known/apple-app-site-association  # JSON/text discovery document, not HTML
+.well-known/assetlinks.json  # JSON/text discovery document, not HTML
+.well-known/mcp.json  # JSON/text discovery document, not HTML
+.well-known/oauth-authorization-server  # JSON/text discovery document, not HTML
+.well-known/oauth-protected-resource  # JSON/text discovery document, not HTML
+.well-known/oauth-protected-resource/mcp  # JSON/text discovery document, not HTML
+.well-known/pgp-key.txt  # JSON/text discovery document, not HTML
+.well-known/security.txt  # JSON/text discovery document, not HTML
+.well-known/ucp  # JSON/text discovery document, not HTML
+_preflight/php  # one-shot JSON probe for juwri:preflight (token header), no HTML
+agent/{storeId}/llms.txt  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+agent/{storeId}/manifest  # JSON agent manifest
+board/{slug}/state  # JSON endpoint
+broadcasting/auth  # JSON endpoint
+clear-cache  # plain-text / JSON maintenance endpoint
+cronjob  # plain-text / JSON maintenance endpoint
+customer/meal-plan  # JSON endpoint
+dashboard-sw.js  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+dashboard/manifest.webmanifest  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+dashboard/pwa-icon-{size}.png  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+developers/themes/starter.zip  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+driver-app/manifest.webmanifest  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+driver/manifest.webmanifest  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+driver/sw.js  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+favicon.ico  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+fusion/help/{slug}.md  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+geo/autocomplete  # JSON endpoint
+geo/reverse  # JSON endpoint
+healthz  # plain-text / JSON maintenance endpoint
+healthz/voice-bridge  # plain-text / JSON maintenance endpoint
+juwritestindexnowkey00000000000.txt  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+llms.txt  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+marketplace/lang/{code}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+mcp/catalog  # 405 stub (POST-only MCP endpoints)
+mcp/customer  # 405 stub (POST-only MCP endpoints)
+mcp/dev  # 405 stub (POST-only MCP endpoints)
+mcp/storefront  # 405 stub (POST-only MCP endpoints)
+mk  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+oauth/authorize  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+oauth/device  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+oauth/device/authorize  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+pci/probe/{page}  # renders a payment-page view: AddPaymentPageCsp (global) sends that page's strict payment policy
+pos/orders/approvals  # JSON endpoint
+r/{store}/branches/geo  # JSON endpoint
+r/{store}/item/{menu}/reviews  # JSON endpoint
+r/{store}/stories  # JSON endpoint
+recede_historical_location  # empty HTML stub for the native app (no script, no content)
+refresh_historical_location  # empty HTML stub for the native app (no script, no content)
+reseller-lang/{code}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+restaurant/{storeId}/google-wallet/gift-card/{giftCardId}/jwt  # JSON endpoint
+restaurant/{storeId}/google-wallet/loyalty-jwt  # JSON endpoint
+restaurant/{storeId}/loyalty/balance  # JSON endpoint
+restaurant/{storeId}/my-orders  # JSON endpoint
+restaurant/{storeId}/notifications  # JSON endpoint
+restaurant/{storeId}/wallet/balance  # JSON endpoint
+resume_historical_location  # empty HTML stub for the native app (no script, no content)
+rsl/billing/{subscription}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+rsl/pay/{payment}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+rsl/pay/{payment}/return  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+rsl/paypal/{payment}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+rsl/paypal/{payment}/return  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
+signage/{token}/state  # JSON endpoint
+sitemap-blog.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap-directory.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap-fusion.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap-marketing.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap-restaurants.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap-restaurants-{page}.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+sitemap.xml  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+studio/design/download  # binary file (PDF/PNG)
+studio/design/preview  # binary file (PDF/PNG)
+studio/export  # JSON endpoint
+studio/pricing  # JSON endpoint
+studio/template/preview  # sets its own strict CSP in the response (default-src none; iframe document)
+studio/template/thumb/{slug}  # binary file (PDF/PNG)
+studio/templates  # JSON endpoint
+{slug}/hotel/rooms/availability  # JSON endpoint
+{slug}/kiosk-pass  # JSON endpoint
+{slug}/kiosk/loyalty/me  # JSON endpoint
+{slug}/manifest.json  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+robots.txt  # plain-text crawler rules (P6-248), not HTML

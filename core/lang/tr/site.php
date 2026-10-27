@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'Çerez kullanıyoruz',
+    'cookie.body' => 'Zorunlu çerezler, :brand hizmetinin çalışmasını sağlar. Onayınızla, sitenin nasıl kullanıldığını anlamak için analiz çerezleri de kullanırız. Onayınız olmadan pazarlama çerezi yerleştirilmez. [Gizlilik Politikası](/privacy)',
+    'cookie.accept' => 'Analizi kabul et',
+    'cookie.reject' => 'Yalnızca zorunlu',
+    'cookie.settings' => 'Çerez ayarları',
+    'cookie.settings.essential' => 'Zorunlu (her zaman açık)',
+    'cookie.settings.analytics' => 'Analiz: siteyi geliştirmemize yardımcı olur',
+    'cookie.settings.marketing' => 'Pazarlama: kampanyalarımızı ölçer',
+    'cookie.save' => 'Seçimleri kaydet',
+    'signup.accept' => '[Abonelik Koşulları](/terms), [Veri İşleme Eki](/legal/dpa) ve [Kabul Edilebilir Kullanım Politikası](/legal/aup) metinlerini kabul ediyorum.',
+    'signup.business' => 'Tüketici olarak değil, bir işletme adına kaydolduğumu onaylıyorum.',
+    'signup.privacy' => 'Bilgilerinizi, [Gizlilik Politikamızda](/privacy) açıklandığı şekilde hesabınızı yürütmek için kullanırız.',
+    'signup.marketing_optin' => 'Ürün haberlerini ve ipuçlarını bana e-postayla gönderin (istediğiniz zaman abonelikten çıkabilirsiniz).',
+    'checkout.accept' => 'Ödeme yaparak [Abonelik Koşulları](/terms)\'nı kabul etmiş olursunuz. Paketler otomatik olarak yenilenir; istediğiniz zaman Ayarlar\'dan iptal edebilirsiniz.',
+    'checkout.vat' => 'Fiyatlara, uygulanabildiği durumlarda KDV dahil değildir.',
+    'pharmacy.gate' => 'İlaç satışı yalnızca etkinleştirdiğimiz ülkelerde mümkündür. Yayınlamak için ruhsat belgelerinizi yükleyin. Reçeteli ve kontrollü ilaçlara izin verilmez.',
+    'footer.legal' => 'Yasal',
+    'footer.terms' => 'Abonelik Koşulları',
+    'footer.privacy' => 'Gizlilik Politikası',
+    'footer.dpa' => 'Veri İşleme Eki',
+    'footer.aup' => 'Kabul Edilebilir Kullanım Politikası',
+    'footer.sla' => 'Hizmet Seviyeleri ve Destek',
+    'footer.subprocessors' => 'Alt işleyenler',
+    'footer.security' => 'Güvenlik',
+    'footer.free_reseller' => 'Ücretsiz bayi kademesi şartları',
+    'footer.status' => 'Sistem durumu',
+    'footer.trademarks' => 'Marka politikası',
+    'footer.licensing' => 'Açık kaynak lisansları',
+    'footer.company' => 'JUWRI LTD · Şirket no. 14363043 · 128 City Road, London, EC1V 2NX, Birleşik Krallık',
+    'footer.copyright' => '© 2026 JUWRI LTD. juwri, AGPL-3.0 lisansıyla açık kaynaktır.',
+    'footer.powered' => 'juwri altyapısıyla',
+    'footer.contact' => 'İletişim',
+    'footer.language' => 'Dil',
+    'legal.version' => 'Sürüm :version · Yürürlük tarihi :date',
+    'legal.updated' => 'Son güncelleme: :date · Sade dille özet — hukuki tavsiye değildir',
+    'legal.translation_note' => 'Bu Arapça çeviri kolaylık için sunulmuştur. Bağlayıcı olan İngilizce sürümdür.',
+    'legal.changes' => 'Bu belgelerdeki önemli değişiklikleri en az 30 gün önceden bildiririz.',
+    'legal.contact' => 'Sorular: legal@juwri.com',
+    'mail.terms_changed.subject' => 'juwri Koşullarını :date tarihinde güncelliyoruz',
+    'mail.renewal.subject' => 'juwri paketiniz :date tarihinde yenileniyor',
+    'mail.payment_failed.subject' => 'İşlem gerekli: juwri ödemesi başarısız oldu',
+    'mail.suspension_warning.subject' => 'juwri hizmetleriniz 7 gün içinde duraklatılacak',
+    'mail.breach_notice.subject' => 'juwri hesabınızla ilgili önemli güvenlik bildirimi',
+    'mail.export_window.subject' => 'Verilerinizi :date tarihine kadar dışa aktarabilirsiniz',
+    'mail.reseller_winddown_reseller.subject' => 'Bayi hesabınızın yenilenmesi gerekiyor: mağazalarınız risk altında',
+    'mail.reseller_winddown_store.subject' => 'Mağazanızı çalıştıran platformdaki değişiklikler',
+    'signup.accept_required' => 'Devam etmek için Abonelik Koşulları\'nı, Veri İşleme Eki\'ni ve Kabul Edilebilir Kullanım Politikası\'nı kabul edin.',
+    'signup.business_required' => 'Lütfen bir işletme adına kaydolduğunuzu onaylayın.',
+    'legal.reaccept.upcoming' => ':date tarihinde şu belgeleri güncelliyoruz: :documents. Lütfen yeni sürümü inceleyip kabul edin.',
+    'legal.reaccept.updated' => 'Şu belgeleri güncelledik: :documents. Lütfen yeni sürümü inceleyip kabul edin.',
+    'legal.reaccept.accept' => 'Kabul ediyorum',
+    'legal.reaccept.done' => 'Teşekkürler. Onayınız kaydedildi.',
+    'legal.english_only' => 'Bu belge İngilizce olarak yayımlanmıştır.',
+];

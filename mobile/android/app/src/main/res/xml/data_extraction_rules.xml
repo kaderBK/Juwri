@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The encrypted app token and its Keystore key must never be backed up or transferred. -->
+<data-extraction-rules>
+    <cloud-backup><exclude domain="root" path="." /><exclude domain="file" path="." /><exclude domain="sharedpref" path="." /><exclude domain="database" path="." /></cloud-backup>
+    <device-transfer><exclude domain="root" path="." /><exclude domain="file" path="." /><exclude domain="sharedpref" path="." /><exclude domain="database" path="." /></device-transfer>
+</data-extraction-rules>

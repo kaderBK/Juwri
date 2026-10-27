@@ -1,0 +1,13 @@
+{
+    "merchant_id": "store-3425",
+    "service_id": "waitlist",
+    "localized_service_name": {
+        "value": "Waitlist"
+    },
+    "waitlist_rules": {
+        "min_party_size": 1,
+        "max_party_size": 8,
+        "supports_additional_request": false
+    },
+    "prepayment_type": "NOT_SUPPORTED"
+}

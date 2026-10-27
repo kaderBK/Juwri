@@ -1,0 +1,56 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Inline SVG icons in storefront themes, plugin screens and JS-built HTML.
+ * Markup: <i class="ico ico-NAME [ico-spin|ico-lg|ico-2x|ico-3x]" aria-hidden="true"><svg …></svg></i>
+ * The <svg> comes from <x-ui.icon> (owner-ui kit icons, Tabler Icons MIT fallback,
+ * assets/vendor/tabler-icons/). The icon follows the surrounding font-size and colour,
+ * so existing theme rules that size or colour the <i> keep working.
+ */
+i.ico {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  font-style: normal;
+  vertical-align: -0.125em;
+  flex: none;
+}
+i.ico > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+i.ico-lg { font-size: 1.333em; vertical-align: -0.2em; }
+i.ico-2x { font-size: 2em; }
+i.ico-3x { font-size: 3em; }
+i.ico-spin > svg { animation: ico-spin 1s linear infinite; }
+@keyframes ico-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  i.ico-spin > svg { animation-duration: 3s; }
+}
+
+/* Visually hidden text (skip link in store_templates/layout, screen-reader labels).
+ * Was provided by the old icon-font bundle (icons.css), removed in WI-05e. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

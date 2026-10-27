@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* rating-stars snippet: CSS-drawn stars, filled from the inline start */
+.mbs-rating-stars { display: inline-flex; align-items: center; gap: 4px; font-size: .75rem; color: var(--tc-text-muted, #6b7280); }
+.mbs-rating-stars__bar { position: relative; display: inline-block; line-height: 1; color: rgba(var(--tc-text-rgb, 17, 17, 17), .18); }
+.mbs-rating-stars__bar::before, .mbs-rating-stars__fill::before { content: "\2605\2605\2605\2605\2605"; }
+.mbs-rating-stars__fill { position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: var(--mbs-r, 0%); overflow: hidden; white-space: nowrap; color: var(--tc-accent, #f59e0b); }
+.mbs-rating-stars__num { color: var(--tc-text, #111); }

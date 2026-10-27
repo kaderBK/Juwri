@@ -1,0 +1,73 @@
+{%- comment -%}
+  Stories rail (library v1): the store's visible stories (`stories`) as a
+  scrolling row of round thumbnails with a ring and caption. A story with a
+  safe link (https, http, /path, #anchor) opens it; others are shown as pictures. Hidden when there are none.
+  Ring: gradient (primary → accent), solid (primary) or none. Size S/M/L.
+{%- endcomment -%}
+{%- assign story_count = stories | size -%}
+{%- if story_count > 0 -%}
+{%- assign heading = section.settings.heading | strip -%}
+<section class="mbs-stories-rail mbs-stories-rail--{{ section.settings.size | escape }} mbs-stories-rail--ring-{{ section.settings.ring | escape }}" aria-labelledby="mbs-stories-{{ section.id | escape }}">
+  <h2 class="mbs-stories-rail__title{% if heading == '' %} mbs-stories-rail__sr{% endif %}" id="mbs-stories-{{ section.id | escape }}">{% if heading != '' %}{{ heading | escape }}{% else %}{{ 'Stories' | t }}{% endif %}</h2>
+  <ul class="mbs-stories-rail__track" role="list">
+    {%- for story in stories -%}
+      {%- liquid
+        assign caption = story.caption | strip
+        assign alt = caption
+        if alt == ''
+          assign alt = 'Story' | t
+        endif
+        assign eager = false
+        if section.settings.eager_first and forloop.first
+          assign eager = true
+        endif
+        assign link = story.cta_url | strip
+        assign l7 = link | slice: 0, 7 | downcase
+        assign l8 = link | slice: 0, 8 | downcase
+        assign c1 = link | slice: 0, 1
+        assign c2 = link | slice: 1, 1
+        if l8 == 'https://' or l7 == 'http://'
+        elsif c1 == '/' and c2 != '/'
+        elsif c1 == '#' and link.size > 1
+        else
+          assign link = ''
+        endif
+      -%}
+      <li class="mbs-stories-rail__item">
+        {%- if link != '' -%}<a class="mbs-stories-rail__story" href="{{ link | escape }}">{%- else -%}<div class="mbs-stories-rail__story">{%- endif -%}
+          <span class="mbs-stories-rail__ring">
+            {%- if story.image_url -%}
+              {%- render 'media', src: story.image_url, alt: alt, width: 160, height: 160, class: 'mbs-stories-rail__img', priority: eager, sizes: '80px' -%}
+            {%- endif -%}
+          </span>
+          {%- if caption != '' -%}<span class="mbs-stories-rail__cap">{{ caption | escape }}</span>{%- endif -%}
+        {%- if link != '' -%}</a>{%- else -%}</div>{%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Stories rail",
+  "group": "engage",
+  "verticals": ["food", "goods"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = hidden)", "default": "" },
+    { "id": "ring", "type": "select", "label": "Ring", "options": [
+      { "value": "gradient", "label": "Gradient" },
+      { "value": "solid", "label": "Solid" },
+      { "value": "none", "label": "None" }
+    ], "default": "gradient" },
+    { "id": "size", "type": "select", "label": "Size", "options": [
+      { "value": "s", "label": "Small" },
+      { "value": "m", "label": "Medium" },
+      { "value": "l", "label": "Large" }
+    ], "default": "m" },
+    { "id": "eager_first", "type": "checkbox", "label": "Load the first image immediately (section near the top)", "default": false }
+  ],
+  "presets": [{ "name": "Stories rail" }]
+}
+{% endschema %}

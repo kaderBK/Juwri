@@ -1,0 +1,78 @@
+# gitleaks configuration for the juwri repository (CI job: .github/workflows/ci.yml → secret-scan).
+#
+# The default gitleaks rule set is used unchanged. The allowlist below covers ONLY
+# values verified by hand to be fakes or non-secrets (juwri Phase 0 WI-14). Every
+# entry says why. Do not allowlist a finding without checking it first; a real
+# credential must be removed and rotated, never allowlisted.
+
+title = "juwri gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Verified test fakes, published test vectors and third-party bundles (WI-14)"
+paths = [
+  # Lock files: package metadata and integrity hashes, no credentials.
+  '''(^|/)composer\.lock$''',
+  '''(^|/)package-lock\.json$''',
+  '''(^|/)yarn\.lock$''',
+  # Minified third-party bundles (high-entropy strings, no credentials).
+  '''\.min\.(js|css)$''',
+  # Translation catalogues: keys/values mention "token", "secret", "password" as words.
+  '''^core/lang/[a-z]{2}/lang\.php$''',
+  # Test-only environment: throwaway APP_KEY and IndexNow key used by the suite and CI.
+  '''^core/phpunit\.xml$''',
+  '''^\.github/workflows/''',
+  # Test fixtures (fake values only; the Google Wallet service-account key is generated at test time).
+  '''^core/tests/Fixtures/''',
+  # Tests asserting that secrets are masked/encrypted/redacted: obviously fake values
+  # (sk_live_SECRETVALUE, sk_live_51TestSecretValueABCD1234, PEM bodies of "AAAA", ...).
+  '''^core/tests/Feature/SecretsAtRestTest\.php$''',
+  '''^core/tests/Feature/StoreBackupTest\.php$''',
+  '''^core/tests/Feature/MobilePushDevicesTest\.php$''',
+  '''^core/tests/Unit/PushCredentialsTest\.php$''',
+  '''^core/tests/Feature/FiscalVerificationTest\.php$''',
+  '''^core/tests/Feature/ResellerStoreGatewaysTest\.php$''',
+  '''^core/tests/Feature/ResellerParityC4Test\.php$''',
+  # noon's own published webhook-signature test vector (the test verifies against it).
+  '''^core/tests/Feature/NoonWebhookSignatureTest\.php$''',
+  # Hard-coded per-test HMAC / OAuth client secrets and demo table keys (random literals).
+  '''^core/tests/Feature/(AppEmbedSessionTest|FeaturePlatformFix5BanTest|FeaturePlatformFix6ScopesTest|FeaturePlatformFix6LicenseTest|FeaturePlatformP5aTest|OAuthAppAuthorizationTest|AppBillingTest|FeaturePlatformFix5DeleteCascadeTest|FeaturePlatformPolishTest|PlatformMetricsTest|NoonGatewayTest|FatoraGatewayTest|CustomDomainTest|OwnerAppApiTest|StoreCloneTest|AdminFullBackupRegistryTest)\.php$''',
+  # Demo seeders: fixed demo stay / customer tokens for local showcase stores.
+  '''^core/database/seeders/(HotelDemoSeeder|ThemePackDemoSeeder|E2eDispatchDemoSeeder)\.php$''',
+  '''^core/tests/e2e/journeys/platform-v2/b-hotel-folio\.js$''',
+  # Locked-template test fixtures: field keys such as "feature_1_icon", not secrets.
+  '''^core/tests/Support/LockedTemplateFixtures\.php$''',
+  # RB C2 (2026-10-27): reviewed by hand on the mirror export, every hit is a fake, a placeholder or a hash (rule, then why).
+  # Installed dependencies (a scan of a working copy after composer/npm install).
+  '''(^|/)(vendor|node_modules)/''',
+  # generic-api-key: sha256 checksums of migration files.
+  '''^core/database/migration-checksums(\.baseline)?\.json$''',
+  # generic-api-key: example hold/track/idempotency tokens in the storefront API example payloads.
+  '''^tools/themes/kit/api/examples/''',
+  # curl-auth-header: documentation snippets with YOUR_TOKEN style placeholders.
+  '''^RESELLER-ONBOARDING\.md$''',
+  '''^core/resources/docs/dev/api/''',
+  '''^core/resources/docs/internal/production-readiness-handbook\.html$''',
+  '''^core/resources/views/developers(-apps)?\.blade\.php$''',
+  # Test files whose constants are fake credentials (sk_test_/sk_live_SECRET-style literals, "AAAA" PEM bodies, fixed passwords).
+  '''^core/tests/Feature/Legal/LegalAcceptanceTest\.php$''',
+  # generic-api-key: fixed fake registration password ('Secret-pass-123' as password_confirmation) in the email-change undo squatter test (checked by hand 10-27).
+  '''^core/tests/Modules/Auth/EmailChangeUndoTest\.php$''',
+  '''^core/tests/Modules/(Agents/PhoneAgentCredentialValidationTest|Fiscal/ZatcaSdkValidateTest|Integrations/(NoonWebhookSignatureTest|OAuthAppAuthorizationTest)|LegacyCompat/Import/Legacy(DomainImport|Importer|ScopeImport)Test|Messaging/MobilePushDevicesTest|Payments/SoftPosOwnerScreenTest|Platform/(AdminFullBackupRegistryTest|SecretsAtRestTest|StoreBackupTest|ViewComposersContractTest)|Storefront/CustomDomainTest)\.php$''',
+  '''^core/tests/Support/FakeOdoo\.php$''',
+  '''^core/tests/Unit/HostedServices/RequestSignatureTest\.php$''',
+  # This file.
+  '''^\.gitleaks\.toml$''',
+]
+# Identifiers that the generic-api-key rule can mistake for values (session keys,
+# cache keys, route names, env lookups, i18n keys). Matched against the finding only.
+regexTarget = "match"
+regexes = [
+  '''login\.2fa\.[a-z_]+''',
+  '''fx\.usd_rates\.v[0-9]+''',
+  '''api\.v[0-9]+\.[a-z_.]+''',
+  '''process\.env\.[A-Z0-9_]+''',
+  '''i18n\.networkError''',
+]

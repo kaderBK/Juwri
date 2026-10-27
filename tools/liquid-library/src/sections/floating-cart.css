@@ -1,0 +1,55 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* floating-cart — .is-autohide hides the bar while the runtime keeps the count probe hidden (empty cart) */
+.mbs-floating-cart {
+  --mbs-fc-bottom: calc(var(--ts-gap-3, 16px) + env(safe-area-inset-bottom, 0px));
+  position: fixed;
+  inset-inline: var(--ts-gap-3, 16px);
+  inset-block-end: var(--mbs-fc-bottom);
+  z-index: 45;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-floating-cart.is-raised { --mbs-fc-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+.mbs-floating-cart.is-autohide:has(> .mbs-floating-cart__probe[hidden]) { display: none; }
+.mbs-floating-cart__probe { display: none; }
+.mbs-floating-cart__btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px);
+  inline-size: 100%;
+  max-inline-size: 560px;
+  min-block-size: 52px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 0;
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font: inherit;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(var(--tc-text-rgb, 17, 17, 17), .22);
+  cursor: pointer;
+}
+.mbs-floating-cart__btn:focus-visible { outline: 3px solid var(--tc-accent, #f59e0b); outline-offset: 2px; }
+.mbs-floating-cart__icon { position: relative; display: inline-flex; }
+.mbs-floating-cart__count {
+  position: absolute;
+  inset-block-start: -8px;
+  inset-inline-end: -10px;
+  min-inline-size: 18px;
+  block-size: 18px;
+  padding-inline: 4px;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-on-primary, #fff);
+  color: var(--tc-primary-700, #1f8a3b);
+  font-size: .68rem;
+  line-height: 18px;
+  text-align: center;
+}
+.mbs-floating-cart__label { flex: 1; text-align: start; }
+.mbs-floating-cart__total { font-variant-numeric: tabular-nums; }
+.mbs-floating-cart--pill .mbs-floating-cart__btn { inline-size: auto; border-radius: var(--tr-pill, 999px); padding-inline: var(--ts-gap-4, 24px); }

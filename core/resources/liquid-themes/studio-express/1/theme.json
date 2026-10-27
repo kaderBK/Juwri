@@ -1,0 +1,24 @@
+{
+    "name": "Studio Express",
+    "slug": "studio-express",
+    "version": "1",
+    "author": "juwri",
+    "description": "A speed-first ordering storefront for quick-service kitchens: no hero, sticky search and category tabs, a dense one-column menu and a cart bar that is always one tap away.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "fast_food",
+    "vertical": "food",
+    "recipe": "restaurant/quick-order",
+    "tokens": {
+        "colors.primary": "#c1121f",
+        "colors.background": "#ffffff",
+        "colors.surface": "#f5f5f4",
+        "colors.text": "#141414",
+        "colors.accent": "#9a3412",
+        "layout.radius": "pill",
+        "layout.density": "compact",
+        "fonts.pair": "inter"
+    }
+}

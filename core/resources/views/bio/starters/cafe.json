@@ -1,0 +1,11 @@
+{
+  "key": "cafe",
+  "name": "Cafe",
+  "sections": {"hours": true, "socials": true, "capture": true, "map": true, "whatsapp": false, "reviews": true},
+  "blocks": [
+    {"type": "menu", "label": "Menu", "priority": 100, "config": {"prefill": "menu"}},
+    {"type": "featured_dish", "label": "Today's bake", "priority": 80, "requires": "menu_items", "config": {"title": "Today's bake"}},
+    {"type": "capture", "label": "Get our newsletter", "priority": 50, "config": {}},
+    {"type": "reviews", "label": "What guests say", "priority": 40, "requires": "reviews", "config": {"source": "live"}}
+  ]
+}

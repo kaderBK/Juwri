@@ -1,0 +1,28 @@
+{
+  "operationId": "getDeliverySlots",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/delivery/slots",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "order_type": "delivery"
+    }
+  },
+  "response": {
+    "status": 429,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:45:31 GMT",
+      "Retry-After": "17"
+    },
+    "body": {
+      "message": "Too many requests. Retry after 17 seconds.",
+      "code": "rate_limited"
+    }
+  }
+}

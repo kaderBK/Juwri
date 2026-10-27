@@ -1,0 +1,3722 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "fresh-mart-demo",
+            "name": "Fresh Mart",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Fresh Mart"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Fresh Mart"
+            },
+            "tagline": "Groceries delivered in 25 minutes",
+            "locale": "en",
+            "dir": "ltr",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/fresh-mart-demo?lang=en"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "retail",
+            "store_type": "grocery",
+            "status": {
+                "open": true,
+                "label": "Open · closes 11:59 PM",
+                "next_change_at": "2026-10-04T23:59:00+03:00",
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966550100103",
+                "whatsapp": "966550100103",
+                "address": "Al Olaya, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=Al%20Olaya%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": false,
+            "hours": [
+                {
+                    "days": [
+                        "Mo"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Tu"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "We"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Th"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Fr"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Sa"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Su"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                }
+            ]
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Fresh Mart — Main",
+                "address": "Al Olaya, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "delivery",
+                    "label": "Delivery",
+                    "needs_address": true,
+                    "needs_slot": false
+                },
+                {
+                    "key": "pickup_slot",
+                    "label": "Pickup",
+                    "needs_address": false,
+                    "needs_slot": true
+                }
+            ],
+            "selected_order_type": "delivery",
+            "table": null,
+            "room": null,
+            "schedule_ahead": true,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": false,
+                "order_types": [],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "basket",
+            "settings": {
+                "colors.primary": "#0B7A3B",
+                "colors.background": "#F6F7F4",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#161A14",
+                "colors.accent": "#FFC83D",
+                "layout.radius": "soft",
+                "layout.density": "compact",
+                "fonts.pair": "instrument",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#45C97A",
+                "colors_dark.background": "#0E1210",
+                "colors_dark.surface": "#171C19",
+                "colors_dark.text": "#F1F5F2",
+                "colors_dark.accent": "#FFC83D",
+                "layout.card": "grid",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "compact",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": false,
+                "menu.show_allergens": true,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "free_delivery",
+                "search",
+                "category_nav",
+                "offers",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "hero_title": "Deals this week",
+                "featured_title": "Deals this week"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "Fruits & vegetables",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}",
+                        "{id:10}",
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}",
+                        "{id:14}",
+                        "{id:15}",
+                        "{id:16}",
+                        "{id:17}",
+                        "{id:18}"
+                    ],
+                    "count": 15
+                },
+                {
+                    "id": "{id:19}",
+                    "name": "Dairy & eggs",
+                    "item_ids": [
+                        "{id:20}",
+                        "{id:21}",
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}",
+                        "{id:26}",
+                        "{id:27}",
+                        "{id:28}",
+                        "{id:29}",
+                        "{id:30}",
+                        "{id:31}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:32}",
+                    "name": "Bakery",
+                    "item_ids": [
+                        "{id:33}",
+                        "{id:34}",
+                        "{id:35}",
+                        "{id:36}",
+                        "{id:37}",
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}",
+                        "{id:41}",
+                        "{id:42}"
+                    ],
+                    "count": 10
+                },
+                {
+                    "id": "{id:43}",
+                    "name": "Meat & fish",
+                    "item_ids": [
+                        "{id:44}",
+                        "{id:45}",
+                        "{id:46}",
+                        "{id:47}",
+                        "{id:48}",
+                        "{id:49}",
+                        "{id:50}",
+                        "{id:51}",
+                        "{id:52}",
+                        "{id:53}",
+                        "{id:54}",
+                        "{id:55}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:56}",
+                    "name": "Drinks",
+                    "item_ids": [
+                        "{id:57}",
+                        "{id:58}",
+                        "{id:59}",
+                        "{id:60}",
+                        "{id:61}",
+                        "{id:62}",
+                        "{id:63}",
+                        "{id:64}",
+                        "{id:65}",
+                        "{id:66}",
+                        "{id:67}",
+                        "{id:68}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:69}",
+                    "name": "Snacks",
+                    "item_ids": [
+                        "{id:70}",
+                        "{id:71}",
+                        "{id:72}",
+                        "{id:73}",
+                        "{id:74}",
+                        "{id:75}",
+                        "{id:76}",
+                        "{id:77}",
+                        "{id:78}",
+                        "{id:79}",
+                        "{id:80}"
+                    ],
+                    "count": 11
+                },
+                {
+                    "id": "{id:81}",
+                    "name": "Pantry",
+                    "item_ids": [
+                        "{id:82}",
+                        "{id:83}",
+                        "{id:84}",
+                        "{id:85}",
+                        "{id:86}",
+                        "{id:87}",
+                        "{id:88}",
+                        "{id:89}",
+                        "{id:90}",
+                        "{id:91}",
+                        "{id:92}",
+                        "{id:93}",
+                        "{id:94}",
+                        "{id:95}",
+                        "{id:96}",
+                        "{id:97}"
+                    ],
+                    "count": 16
+                },
+                {
+                    "id": "{id:98}",
+                    "name": "Household",
+                    "item_ids": [
+                        "{id:99}",
+                        "{id:100}",
+                        "{id:101}",
+                        "{id:102}",
+                        "{id:103}",
+                        "{id:104}",
+                        "{id:105}",
+                        "{id:106}",
+                        "{id:107}",
+                        "{id:108}",
+                        "{id:109}"
+                    ],
+                    "count": 11
+                },
+                {
+                    "id": "{id:110}",
+                    "name": "Baby",
+                    "item_ids": [
+                        "{id:111}",
+                        "{id:112}",
+                        "{id:113}",
+                        "{id:114}",
+                        "{id:115}",
+                        "{id:116}",
+                        "{id:117}",
+                        "{id:118}"
+                    ],
+                    "count": 8
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "Bananas",
+                    "url": "/fresh-mart-demo#item-{id:4}",
+                    "short": "Sweet and ripe, sold loose by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Bananas"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00001",
+                    "unit": {
+                        "label": "⁨⃁⁩ 6.50 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "Tomatoes on the vine",
+                    "url": "/fresh-mart-demo#item-{id:5}",
+                    "short": "Juicy vine tomatoes with a deep flavour.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tomatoes on the vine"
+                    },
+                    "price": {
+                        "minor": 1180,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.80"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00002",
+                    "unit": {
+                        "label": "⁨⃁⁩ 11.80 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "Avocado Hass, ready to eat",
+                    "url": "/fresh-mart-demo#item-{id:6}",
+                    "short": "Creamy flesh, ripe today.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Avocado Hass, ready to eat"
+                    },
+                    "price": {
+                        "minor": 995,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.95"
+                    },
+                    "compare_at": {
+                        "minor": 1250,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00003",
+                    "pack_label": "2 pc",
+                    "unit": {
+                        "label": "2 pc · ⁨⃁⁩ 4.98 / pc"
+                    }
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "Strawberries",
+                    "url": "/fresh-mart-demo#item-{id:7}",
+                    "short": "Sweet red berries, hand-picked.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Strawberries"
+                    },
+                    "price": {
+                        "minor": 1495,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.95"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00004",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · ⁨⃁⁩ 59.80 / kg"
+                    }
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "Raspberries",
+                    "url": "/fresh-mart-demo#item-{id:8}",
+                    "short": "Tart and juicy, great with yoghurt.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Raspberries"
+                    },
+                    "price": {
+                        "minor": 1250,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00005",
+                    "pack_label": "125 g",
+                    "unit": {
+                        "label": "125 g · ⁨⃁⁩ 100.00 / kg"
+                    }
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "Cucumbers",
+                    "url": "/fresh-mart-demo#item-{id:9}",
+                    "short": "Crisp and cool, sold by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cucumbers"
+                    },
+                    "price": {
+                        "minor": 490,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 4.90"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00006",
+                    "unit": {
+                        "label": "⁨⃁⁩ 4.90 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:10}": {
+                    "id": "{id:10}",
+                    "name": "Red apples",
+                    "url": "/fresh-mart-demo#item-{id:10}",
+                    "short": "Crunchy and sweet, sold by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Red apples"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00007",
+                    "unit": {
+                        "label": "⁨⃁⁩ 9.50 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "Oranges",
+                    "url": "/fresh-mart-demo#item-{id:11}",
+                    "short": "Juicy navel oranges, sold by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Oranges"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.00"
+                    },
+                    "compare_at": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00008",
+                    "unit": {
+                        "label": "⁨⃁⁩ 7.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "Mango",
+                    "url": "/fresh-mart-demo#item-{id:12}",
+                    "short": "Sweet, fragrant, sold by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Mango"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00009",
+                    "unit": {
+                        "label": "⁨⃁⁩ 18.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "Khalas dates",
+                    "url": "/fresh-mart-demo#item-{id:13}",
+                    "short": "Soft, caramel-like dates from Al Ahsa.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Khalas dates"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 24.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00010",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 48.00 / kg"
+                    }
+                },
+                "{id:14}": {
+                    "id": "{id:14}",
+                    "name": "Lemons",
+                    "url": "/fresh-mart-demo#item-{id:14}",
+                    "short": "Thin-skinned and very juicy.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Lemons"
+                    },
+                    "price": {
+                        "minor": 550,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00011",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 11.00 / kg"
+                    }
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "Potatoes",
+                    "url": "/fresh-mart-demo#item-{id:15}",
+                    "short": "All-round potatoes for frying or baking.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Potatoes"
+                    },
+                    "price": {
+                        "minor": 790,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.90"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00012",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · ⁨⃁⁩ 3.95 / kg"
+                    }
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "Onions",
+                    "url": "/fresh-mart-demo#item-{id:16}",
+                    "short": "Yellow cooking onions.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Onions"
+                    },
+                    "price": {
+                        "minor": 590,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.90"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00013",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · ⁨⃁⁩ 2.95 / kg"
+                    }
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "Baby spinach",
+                    "url": "/fresh-mart-demo#item-{id:17}",
+                    "short": "Washed and ready to eat.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Baby spinach"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00014",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 32.50 / kg"
+                    }
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "Fresh mint",
+                    "url": "/fresh-mart-demo#item-{id:18}",
+                    "short": "One generous bunch.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Fresh mint"
+                    },
+                    "price": {
+                        "minor": 200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 2.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00015",
+                    "pack_label": "1 pc",
+                    "unit": {
+                        "label": "1 pc · ⁨⃁⁩ 2.00 / pc"
+                    }
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "Full-fat milk",
+                    "url": "/fresh-mart-demo#item-{id:20}",
+                    "short": "Fresh, pasteurised and homogenised.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Full-fat milk"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00016",
+                    "pack_label": "2 L"
+                },
+                "{id:21}": {
+                    "id": "{id:21}",
+                    "name": "Low-fat milk",
+                    "url": "/fresh-mart-demo#item-{id:21}",
+                    "short": "Light milk with 1% fat.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Low-fat milk"
+                    },
+                    "price": {
+                        "minor": 850,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 8.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00017",
+                    "pack_label": "1 L"
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "Laban",
+                    "url": "/fresh-mart-demo#item-{id:22}",
+                    "short": "Cultured buttermilk, cold and tangy.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Laban"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00018",
+                    "pack_label": "1 L"
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "Greek yoghurt",
+                    "url": "/fresh-mart-demo#item-{id:23}",
+                    "short": "Thick, creamy and high in protein.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Greek yoghurt"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00019",
+                    "pack_label": "450 g",
+                    "unit": {
+                        "label": "450 g · ⁨⃁⁩ 26.67 / kg"
+                    }
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "Plain yoghurt",
+                    "url": "/fresh-mart-demo#item-{id:24}",
+                    "short": "Mild everyday yoghurt.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Plain yoghurt"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00020",
+                    "pack_label": "1 kg",
+                    "unit": {
+                        "label": "1 kg · ⁨⃁⁩ 11.00 / kg"
+                    }
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "Labneh",
+                    "url": "/fresh-mart-demo#item-{id:25}",
+                    "short": "Strained yoghurt, spreadable.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Labneh"
+                    },
+                    "price": {
+                        "minor": 1450,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00021",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 29.00 / kg"
+                    }
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "Halloumi",
+                    "url": "/fresh-mart-demo#item-{id:26}",
+                    "short": "Squeaky cheese made for grilling.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Halloumi"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00022",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · ⁨⃁⁩ 64.00 / kg"
+                    }
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "Cheddar slices",
+                    "url": "/fresh-mart-demo#item-{id:27}",
+                    "short": "Ten slices, individually wrapped.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cheddar slices"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "compare_at": {
+                        "minor": 1450,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00023",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 60.00 / kg"
+                    }
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "Cream cheese",
+                    "url": "/fresh-mart-demo#item-{id:28}",
+                    "short": "Smooth and spreadable.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cream cheese"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00024",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 47.50 / kg"
+                    }
+                },
+                "{id:29}": {
+                    "id": "{id:29}",
+                    "name": "Salted butter",
+                    "url": "/fresh-mart-demo#item-{id:29}",
+                    "short": "Churned from fresh cream.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Salted butter"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 13.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00025",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 65.00 / kg"
+                    }
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "Eggs",
+                    "url": "/fresh-mart-demo#item-{id:30}",
+                    "short": "Large white eggs, tray of 30.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Eggs"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 29.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00026",
+                    "pack_label": "30 pc",
+                    "unit": {
+                        "label": "30 pc · ⁨⃁⁩ 0.97 / pc"
+                    }
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "Whipping cream",
+                    "url": "/fresh-mart-demo#item-{id:31}",
+                    "short": "35% fat, for desserts and sauces.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Whipping cream"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 8.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00027",
+                    "pack_label": "250 ml",
+                    "unit": {
+                        "label": "250 ml · ⁨⃁⁩ 32.00 / l"
+                    }
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "Sourdough loaf",
+                    "url": "/fresh-mart-demo#item-{id:33}",
+                    "short": "Slow-fermented, crisp crust.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Sourdough loaf"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00028",
+                    "pack_label": "800 g",
+                    "unit": {
+                        "label": "800 g · ⁨⃁⁩ 17.50 / kg"
+                    }
+                },
+                "{id:34}": {
+                    "id": "{id:34}",
+                    "name": "Arabic flatbread",
+                    "url": "/fresh-mart-demo#item-{id:34}",
+                    "short": "Soft white pita, pack of 7.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Arabic flatbread"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 3.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00029",
+                    "pack_label": "7 pc",
+                    "unit": {
+                        "label": "7 pc · ⁨⃁⁩ 0.50 / pc"
+                    }
+                },
+                "{id:35}": {
+                    "id": "{id:35}",
+                    "name": "Wholemeal toast",
+                    "url": "/fresh-mart-demo#item-{id:35}",
+                    "short": "Sliced, 600 g loaf.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Wholemeal toast"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00030",
+                    "pack_label": "600 g",
+                    "unit": {
+                        "label": "600 g · ⁨⃁⁩ 8.33 / kg"
+                    }
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "Butter croissants",
+                    "url": "/fresh-mart-demo#item-{id:36}",
+                    "short": "Four flaky croissants.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Butter croissants"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00031",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · ⁨⃁⁩ 3.00 / pc"
+                    }
+                },
+                "{id:37}": {
+                    "id": "{id:37}",
+                    "name": "Wholemeal pita",
+                    "url": "/fresh-mart-demo#item-{id:37}",
+                    "short": "Six high-fibre pockets.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Wholemeal pita"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 4.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00032",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 0.75 / pc"
+                    }
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "Burger buns",
+                    "url": "/fresh-mart-demo#item-{id:38}",
+                    "short": "Soft sesame buns, pack of 6.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Burger buns"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00033",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 1.17 / pc"
+                    }
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "Tortilla wraps",
+                    "url": "/fresh-mart-demo#item-{id:39}",
+                    "short": "Eight 25 cm wraps.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tortilla wraps"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00034",
+                    "pack_label": "8 pc",
+                    "unit": {
+                        "label": "8 pc · ⁨⃁⁩ 1.13 / pc"
+                    }
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "Zaatar manakish",
+                    "url": "/fresh-mart-demo#item-{id:40}",
+                    "short": "Four baked flatbreads with zaatar.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Zaatar manakish"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00035",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · ⁨⃁⁩ 3.50 / pc"
+                    }
+                },
+                "{id:41}": {
+                    "id": "{id:41}",
+                    "name": "Cinnamon rolls",
+                    "url": "/fresh-mart-demo#item-{id:41}",
+                    "short": "Four rolls with sweet glaze.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cinnamon rolls"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00036",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · ⁨⃁⁩ 3.75 / pc"
+                    }
+                },
+                "{id:42}": {
+                    "id": "{id:42}",
+                    "name": "Date bars",
+                    "url": "/fresh-mart-demo#item-{id:42}",
+                    "short": "Soft oat bars with Sukkari dates.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Date bars"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00037",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 1.83 / pc"
+                    }
+                },
+                "{id:44}": {
+                    "id": "{id:44}",
+                    "name": "Chicken breast fillet",
+                    "url": "/fresh-mart-demo#item-{id:44}",
+                    "short": "Skinless and boneless, cut to order.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Chicken breast fillet"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 28.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00038",
+                    "unit": {
+                        "label": "⁨⃁⁩ 28.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:45}": {
+                    "id": "{id:45}",
+                    "name": "Whole chicken",
+                    "url": "/fresh-mart-demo#item-{id:45}",
+                    "short": "Fresh whole chicken, about 1.2 kg.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Whole chicken"
+                    },
+                    "price": {
+                        "minor": 2500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 25.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00039",
+                    "pack_label": "1.2 kg",
+                    "unit": {
+                        "label": "1.2 kg · ⁨⃁⁩ 20.83 / kg"
+                    }
+                },
+                "{id:46}": {
+                    "id": "{id:46}",
+                    "name": "Minced beef",
+                    "url": "/fresh-mart-demo#item-{id:46}",
+                    "short": "Lean, ground daily.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Minced beef"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 29.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00040",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 58.00 / kg"
+                    }
+                },
+                "{id:47}": {
+                    "id": "{id:47}",
+                    "name": "Lamb shoulder",
+                    "url": "/fresh-mart-demo#item-{id:47}",
+                    "short": "Bone-in, great for slow roasting.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Lamb shoulder"
+                    },
+                    "price": {
+                        "minor": 6900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 69.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00041",
+                    "unit": {
+                        "label": "⁨⃁⁩ 69.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:48}": {
+                    "id": "{id:48}",
+                    "name": "Lamb chops",
+                    "url": "/fresh-mart-demo#item-{id:48}",
+                    "short": "Cut from the rack, sold by weight.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Lamb chops"
+                    },
+                    "price": {
+                        "minor": 8900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 89.00"
+                    },
+                    "compare_at": {
+                        "minor": 9900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 99.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00042",
+                    "unit": {
+                        "label": "⁨⃁⁩ 89.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:49}": {
+                    "id": "{id:49}",
+                    "name": "Beef ribeye",
+                    "url": "/fresh-mart-demo#item-{id:49}",
+                    "short": "Well marbled, steak cut.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Beef ribeye"
+                    },
+                    "price": {
+                        "minor": 9900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 99.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00043",
+                    "unit": {
+                        "label": "⁨⃁⁩ 99.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:50}": {
+                    "id": "{id:50}",
+                    "name": "Chicken drumsticks",
+                    "url": "/fresh-mart-demo#item-{id:50}",
+                    "short": "Skin on, tray of about 900 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Chicken drumsticks"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00044",
+                    "pack_label": "900 g",
+                    "unit": {
+                        "label": "900 g · ⁨⃁⁩ 21.11 / kg"
+                    }
+                },
+                "{id:51}": {
+                    "id": "{id:51}",
+                    "name": "Hammour fillet",
+                    "url": "/fresh-mart-demo#item-{id:51}",
+                    "short": "Local hammour, skinless.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Hammour fillet"
+                    },
+                    "price": {
+                        "minor": 6200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 62.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00045",
+                    "unit": {
+                        "label": "⁨⃁⁩ 62.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:52}": {
+                    "id": "{id:52}",
+                    "name": "Peeled shrimp",
+                    "url": "/fresh-mart-demo#item-{id:52}",
+                    "short": "Cleaned, ready to cook.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Peeled shrimp"
+                    },
+                    "price": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 39.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00046",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 78.00 / kg"
+                    }
+                },
+                "{id:53}": {
+                    "id": "{id:53}",
+                    "name": "Salmon fillet",
+                    "url": "/fresh-mart-demo#item-{id:53}",
+                    "short": "Norwegian salmon, skin on.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Salmon fillet"
+                    },
+                    "price": {
+                        "minor": 8500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 85.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00047",
+                    "unit": {
+                        "label": "⁨⃁⁩ 85.00 / kg",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:54}": {
+                    "id": "{id:54}",
+                    "name": "Beef kofta",
+                    "url": "/fresh-mart-demo#item-{id:54}",
+                    "short": "Spiced mince, ready for the grill.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Beef kofta"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 22.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00048",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 55.00 / kg"
+                    }
+                },
+                "{id:55}": {
+                    "id": "{id:55}",
+                    "name": "Marinated chicken shawarma",
+                    "url": "/fresh-mart-demo#item-{id:55}",
+                    "short": "Garlic and lemon marinade.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Marinated chicken shawarma"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 21.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00049",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 42.00 / kg"
+                    }
+                },
+                "{id:57}": {
+                    "id": "{id:57}",
+                    "name": "Mineral water",
+                    "url": "/fresh-mart-demo#item-{id:57}",
+                    "short": "12 bottles of 500 ml.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Mineral water"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Oasis",
+                    "sku": "FM-00050",
+                    "pack_label": "12 pc",
+                    "unit": {
+                        "label": "12 pc · ⁨⃁⁩ 0.75 / pc"
+                    }
+                },
+                "{id:58}": {
+                    "id": "{id:58}",
+                    "name": "Sparkling water",
+                    "url": "/fresh-mart-demo#item-{id:58}",
+                    "short": "Natural mineral, 1 L.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Sparkling water"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 4.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Oasis",
+                    "sku": "FM-00051",
+                    "pack_label": "1 L"
+                },
+                "{id:59}": {
+                    "id": "{id:59}",
+                    "name": "Orange juice",
+                    "url": "/fresh-mart-demo#item-{id:59}",
+                    "short": "100% juice, not from concentrate.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Orange juice"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00052",
+                    "pack_label": "1 L"
+                },
+                "{id:60}": {
+                    "id": "{id:60}",
+                    "name": "Apple juice",
+                    "url": "/fresh-mart-demo#item-{id:60}",
+                    "short": "No added sugar.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Apple juice"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00053",
+                    "pack_label": "1 L"
+                },
+                "{id:61}": {
+                    "id": "{id:61}",
+                    "name": "Cola cans",
+                    "url": "/fresh-mart-demo#item-{id:61}",
+                    "short": "Six 330 ml cans.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cola cans"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00054",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 1.83 / pc"
+                    }
+                },
+                "{id:62}": {
+                    "id": "{id:62}",
+                    "name": "Peach iced tea",
+                    "url": "/fresh-mart-demo#item-{id:62}",
+                    "short": "Ready to drink, 1.5 L.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Peach iced tea"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00055",
+                    "pack_label": "1.5 L"
+                },
+                "{id:63}": {
+                    "id": "{id:63}",
+                    "name": "Arabic coffee with cardamom",
+                    "url": "/fresh-mart-demo#item-{id:63}",
+                    "short": "Light roast, ground with cardamom.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Arabic coffee with cardamom"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 21.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00056",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · ⁨⃁⁩ 84.00 / kg"
+                    }
+                },
+                "{id:64}": {
+                    "id": "{id:64}",
+                    "name": "Black tea bags",
+                    "url": "/fresh-mart-demo#item-{id:64}",
+                    "short": "100 bags, strong and bright.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Black tea bags"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 13.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00057",
+                    "pack_label": "100 pc",
+                    "unit": {
+                        "label": "100 pc · ⁨⃁⁩ 0.13 / pc"
+                    }
+                },
+                "{id:65}": {
+                    "id": "{id:65}",
+                    "name": "Karak tea mix",
+                    "url": "/fresh-mart-demo#item-{id:65}",
+                    "short": "20 sachets with milk and cardamom.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Karak tea mix"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00058",
+                    "pack_label": "20 pc",
+                    "unit": {
+                        "label": "20 pc · ⁨⃁⁩ 0.90 / pc"
+                    }
+                },
+                "{id:66}": {
+                    "id": "{id:66}",
+                    "name": "Instant coffee",
+                    "url": "/fresh-mart-demo#item-{id:66}",
+                    "short": "Freeze-dried, rich and smooth.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Instant coffee"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 29.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00059",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 145.00 / kg"
+                    }
+                },
+                "{id:67}": {
+                    "id": "{id:67}",
+                    "name": "Ayran",
+                    "url": "/fresh-mart-demo#item-{id:67}",
+                    "short": "Six 250 ml cups of salted yoghurt drink.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Ayran"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00060",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 2.00 / pc"
+                    }
+                },
+                "{id:68}": {
+                    "id": "{id:68}",
+                    "name": "Pomegranate juice",
+                    "url": "/fresh-mart-demo#item-{id:68}",
+                    "short": "Cold-pressed, 750 ml.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Pomegranate juice"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sold_out",
+                            "label": "Sold out"
+                        }
+                    ],
+                    "sold_out": true,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00061",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · ⁨⃁⁩ 21.33 / l"
+                    }
+                },
+                "{id:70}": {
+                    "id": "{id:70}",
+                    "name": "Potato chips",
+                    "url": "/fresh-mart-demo#item-{id:70}",
+                    "short": "Lightly salted, 150 g bag.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Potato chips"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00062",
+                    "pack_label": "150 g",
+                    "unit": {
+                        "label": "150 g · ⁨⃁⁩ 43.33 / kg"
+                    }
+                },
+                "{id:71}": {
+                    "id": "{id:71}",
+                    "name": "Dark chocolate 70%",
+                    "url": "/fresh-mart-demo#item-{id:71}",
+                    "short": "Smooth bar with deep cocoa.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Dark chocolate 70%"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00063",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · ⁨⃁⁩ 120.00 / kg"
+                    }
+                },
+                "{id:72}": {
+                    "id": "{id:72}",
+                    "name": "Milk chocolate",
+                    "url": "/fresh-mart-demo#item-{id:72}",
+                    "short": "Creamy bar for sharing.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Milk chocolate"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00064",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · ⁨⃁⁩ 90.00 / kg"
+                    }
+                },
+                "{id:73}": {
+                    "id": "{id:73}",
+                    "name": "Date biscuits",
+                    "url": "/fresh-mart-demo#item-{id:73}",
+                    "short": "Soft biscuits filled with date paste.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Date biscuits"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 10.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00065",
+                    "pack_label": "300 g",
+                    "unit": {
+                        "label": "300 g · ⁨⃁⁩ 33.33 / kg"
+                    }
+                },
+                "{id:74}": {
+                    "id": "{id:74}",
+                    "name": "Mixed nuts",
+                    "url": "/fresh-mart-demo#item-{id:74}",
+                    "short": "Roasted, lightly salted.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Mixed nuts"
+                    },
+                    "price": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 39.00"
+                    },
+                    "compare_at": {
+                        "minor": 4500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 45.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00066",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 78.00 / kg"
+                    }
+                },
+                "{id:75}": {
+                    "id": "{id:75}",
+                    "name": "Pistachios",
+                    "url": "/fresh-mart-demo#item-{id:75}",
+                    "short": "Roasted in the shell.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Pistachios"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 34.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00067",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · ⁨⃁⁩ 136.00 / kg"
+                    }
+                },
+                "{id:76}": {
+                    "id": "{id:76}",
+                    "name": "Salted popcorn",
+                    "url": "/fresh-mart-demo#item-{id:76}",
+                    "short": "Ready to eat, 100 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Salted popcorn"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00068",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · ⁨⃁⁩ 50.00 / kg"
+                    }
+                },
+                "{id:77}": {
+                    "id": "{id:77}",
+                    "name": "Granola bars",
+                    "url": "/fresh-mart-demo#item-{id:77}",
+                    "short": "Six oat bars with honey.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Granola bars"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00069",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 2.67 / pc"
+                    }
+                },
+                "{id:78}": {
+                    "id": "{id:78}",
+                    "name": "Dried apricots",
+                    "url": "/fresh-mart-demo#item-{id:78}",
+                    "short": "Soft, unsulphured.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Dried apricots"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00070",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · ⁨⃁⁩ 56.00 / kg"
+                    }
+                },
+                "{id:79}": {
+                    "id": "{id:79}",
+                    "name": "Fruit gummies",
+                    "url": "/fresh-mart-demo#item-{id:79}",
+                    "short": "Fruit-flavoured gummies, 140 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Fruit gummies"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00071",
+                    "pack_label": "140 g",
+                    "unit": {
+                        "label": "140 g · ⁨⃁⁩ 50.00 / kg"
+                    }
+                },
+                "{id:80}": {
+                    "id": "{id:80}",
+                    "name": "Rice cakes",
+                    "url": "/fresh-mart-demo#item-{id:80}",
+                    "short": "Light and crunchy, 12 cakes.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Rice cakes"
+                    },
+                    "price": {
+                        "minor": 850,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 8.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00072",
+                    "pack_label": "12 pc",
+                    "unit": {
+                        "label": "12 pc · ⁨⃁⁩ 0.71 / pc"
+                    }
+                },
+                "{id:82}": {
+                    "id": "{id:82}",
+                    "name": "Basmati rice",
+                    "url": "/fresh-mart-demo#item-{id:82}",
+                    "short": "Aged long-grain rice.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Basmati rice"
+                    },
+                    "price": {
+                        "minor": 4200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 42.00"
+                    },
+                    "compare_at": {
+                        "minor": 4900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 49.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00073",
+                    "pack_label": "5 kg",
+                    "unit": {
+                        "label": "5 kg · ⁨⃁⁩ 8.40 / kg"
+                    }
+                },
+                "{id:83}": {
+                    "id": "{id:83}",
+                    "name": "Spaghetti",
+                    "url": "/fresh-mart-demo#item-{id:83}",
+                    "short": "Durum wheat pasta.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Spaghetti"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 4.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00074",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 9.00 / kg"
+                    }
+                },
+                "{id:84}": {
+                    "id": "{id:84}",
+                    "name": "Extra virgin olive oil",
+                    "url": "/fresh-mart-demo#item-{id:84}",
+                    "short": "Cold-pressed, first harvest.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Extra virgin olive oil"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 38.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00075",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · ⁨⃁⁩ 50.67 / l"
+                    }
+                },
+                "{id:85}": {
+                    "id": "{id:85}",
+                    "name": "Sunflower oil",
+                    "url": "/fresh-mart-demo#item-{id:85}",
+                    "short": "Light oil for frying.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Sunflower oil"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00076",
+                    "pack_label": "1.5 L"
+                },
+                "{id:86}": {
+                    "id": "{id:86}",
+                    "name": "White sugar",
+                    "url": "/fresh-mart-demo#item-{id:86}",
+                    "short": "Fine granulated sugar.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "White sugar"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00077",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · ⁨⃁⁩ 4.50 / kg"
+                    }
+                },
+                "{id:87}": {
+                    "id": "{id:87}",
+                    "name": "Plain flour",
+                    "url": "/fresh-mart-demo#item-{id:87}",
+                    "short": "All-purpose, 2 kg.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Plain flour"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00078",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · ⁨⃁⁩ 3.75 / kg"
+                    }
+                },
+                "{id:88}": {
+                    "id": "{id:88}",
+                    "name": "Tomato paste",
+                    "url": "/fresh-mart-demo#item-{id:88}",
+                    "short": "Double concentrate.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tomato paste"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00079",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 12.50 / kg"
+                    }
+                },
+                "{id:89}": {
+                    "id": "{id:89}",
+                    "name": "Chickpeas",
+                    "url": "/fresh-mart-demo#item-{id:89}",
+                    "short": "Cooked and ready, 400 g tin.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Chickpeas"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 3.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00080",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 8.75 / kg"
+                    }
+                },
+                "{id:90}": {
+                    "id": "{id:90}",
+                    "name": "Fava beans",
+                    "url": "/fresh-mart-demo#item-{id:90}",
+                    "short": "Seasoned, 400 g tin.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Fava beans"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 3.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00081",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 8.75 / kg"
+                    }
+                },
+                "{id:91}": {
+                    "id": "{id:91}",
+                    "name": "Tahini",
+                    "url": "/fresh-mart-demo#item-{id:91}",
+                    "short": "Stone-ground sesame paste.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tahini"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 17.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00082",
+                    "pack_label": "450 g",
+                    "unit": {
+                        "label": "450 g · ⁨⃁⁩ 37.78 / kg"
+                    }
+                },
+                "{id:92}": {
+                    "id": "{id:92}",
+                    "name": "Sidr honey",
+                    "url": "/fresh-mart-demo#item-{id:92}",
+                    "short": "Raw honey from Saudi highlands.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Sidr honey"
+                    },
+                    "price": {
+                        "minor": 4500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 45.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00083",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · ⁨⃁⁩ 90.00 / kg"
+                    }
+                },
+                "{id:93}": {
+                    "id": "{id:93}",
+                    "name": "Zaatar mix",
+                    "url": "/fresh-mart-demo#item-{id:93}",
+                    "short": "Thyme, sesame and sumac.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Zaatar mix"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00084",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 45.00 / kg"
+                    }
+                },
+                "{id:94}": {
+                    "id": "{id:94}",
+                    "name": "Kabsa spice mix",
+                    "url": "/fresh-mart-demo#item-{id:94}",
+                    "short": "Blend for chicken and lamb rice.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Kabsa spice mix"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 8.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00085",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · ⁨⃁⁩ 80.00 / kg"
+                    }
+                },
+                "{id:95}": {
+                    "id": "{id:95}",
+                    "name": "Red lentils",
+                    "url": "/fresh-mart-demo#item-{id:95}",
+                    "short": "Split red lentils, cook in 15 minutes.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Red lentils"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00086",
+                    "pack_label": "1 kg",
+                    "unit": {
+                        "label": "1 kg · ⁨⃁⁩ 9.00 / kg"
+                    }
+                },
+                "{id:96}": {
+                    "id": "{id:96}",
+                    "name": "Tuna chunks",
+                    "url": "/fresh-mart-demo#item-{id:96}",
+                    "short": "In olive oil, 160 g tin.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tuna chunks"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 7.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00087",
+                    "pack_label": "160 g",
+                    "unit": {
+                        "label": "160 g · ⁨⃁⁩ 46.88 / kg"
+                    }
+                },
+                "{id:97}": {
+                    "id": "{id:97}",
+                    "name": "Tahini halva",
+                    "url": "/fresh-mart-demo#item-{id:97}",
+                    "short": "Plain tahini halva block.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tahini halva"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00088",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 37.50 / kg"
+                    }
+                },
+                "{id:99}": {
+                    "id": "{id:99}",
+                    "name": "Dishwashing liquid",
+                    "url": "/fresh-mart-demo#item-{id:99}",
+                    "short": "Cuts grease, lemon scent.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Dishwashing liquid"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00089",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · ⁨⃁⁩ 14.67 / l"
+                    }
+                },
+                "{id:100}": {
+                    "id": "{id:100}",
+                    "name": "Laundry detergent",
+                    "url": "/fresh-mart-demo#item-{id:100}",
+                    "short": "Concentrated liquid, 3 L.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Laundry detergent"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 38.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00090",
+                    "pack_label": "3 L"
+                },
+                "{id:101}": {
+                    "id": "{id:101}",
+                    "name": "Fabric softener",
+                    "url": "/fresh-mart-demo#item-{id:101}",
+                    "short": "Long-lasting oud scent.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Fabric softener"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00091",
+                    "pack_label": "2 L"
+                },
+                "{id:102}": {
+                    "id": "{id:102}",
+                    "name": "Paper towels",
+                    "url": "/fresh-mart-demo#item-{id:102}",
+                    "short": "Six absorbent rolls.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Paper towels"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 22.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00092",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 3.67 / pc"
+                    }
+                },
+                "{id:103}": {
+                    "id": "{id:103}",
+                    "name": "Toilet tissue",
+                    "url": "/fresh-mart-demo#item-{id:103}",
+                    "short": "24 soft 2-ply rolls.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Toilet tissue"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 34.00"
+                    },
+                    "compare_at": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 39.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "On sale"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00093",
+                    "pack_label": "24 pc",
+                    "unit": {
+                        "label": "24 pc · ⁨⃁⁩ 1.42 / pc"
+                    }
+                },
+                "{id:104}": {
+                    "id": "{id:104}",
+                    "name": "Facial tissues",
+                    "url": "/fresh-mart-demo#item-{id:104}",
+                    "short": "Five boxes of 150 sheets.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Facial tissues"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 17.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00094",
+                    "pack_label": "5 pc",
+                    "unit": {
+                        "label": "5 pc · ⁨⃁⁩ 3.40 / pc"
+                    }
+                },
+                "{id:105}": {
+                    "id": "{id:105}",
+                    "name": "Bin bags",
+                    "url": "/fresh-mart-demo#item-{id:105}",
+                    "short": "30 large bags with drawstring.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Bin bags"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00095",
+                    "pack_label": "30 pc",
+                    "unit": {
+                        "label": "30 pc · ⁨⃁⁩ 0.30 / pc"
+                    }
+                },
+                "{id:106}": {
+                    "id": "{id:106}",
+                    "name": "Surface cleaner",
+                    "url": "/fresh-mart-demo#item-{id:106}",
+                    "short": "Multi-surface spray, 1 L.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Surface cleaner"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00096",
+                    "pack_label": "1 L"
+                },
+                "{id:107}": {
+                    "id": "{id:107}",
+                    "name": "Kitchen sponges",
+                    "url": "/fresh-mart-demo#item-{id:107}",
+                    "short": "Six scourer sponges.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Kitchen sponges"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 8.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00097",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · ⁨⃁⁩ 1.33 / pc"
+                    }
+                },
+                "{id:108}": {
+                    "id": "{id:108}",
+                    "name": "Aluminium foil",
+                    "url": "/fresh-mart-demo#item-{id:108}",
+                    "short": "30 m roll, 30 cm wide.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Aluminium foil"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00098",
+                    "pack_label": "30 m"
+                },
+                "{id:109}": {
+                    "id": "{id:109}",
+                    "name": "Hand soap",
+                    "url": "/fresh-mart-demo#item-{id:109}",
+                    "short": "Gentle, 500 ml pump.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Hand soap"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 10.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00099",
+                    "pack_label": "500 ml",
+                    "unit": {
+                        "label": "500 ml · ⁨⃁⁩ 20.00 / l"
+                    }
+                },
+                "{id:111}": {
+                    "id": "{id:111}",
+                    "name": "Nappies size 4",
+                    "url": "/fresh-mart-demo#item-{id:111}",
+                    "short": "Dry-lock, 44 nappies, 9–14 kg.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Nappies size 4"
+                    },
+                    "price": {
+                        "minor": 7900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 79.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00100",
+                    "pack_label": "44 pc",
+                    "unit": {
+                        "label": "44 pc · ⁨⃁⁩ 1.80 / pc"
+                    }
+                },
+                "{id:112}": {
+                    "id": "{id:112}",
+                    "name": "Baby wipes",
+                    "url": "/fresh-mart-demo#item-{id:112}",
+                    "short": "Fragrance-free, 80 wipes.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Baby wipes"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00101",
+                    "pack_label": "80 pc",
+                    "unit": {
+                        "label": "80 pc · ⁨⃁⁩ 0.18 / pc"
+                    }
+                },
+                "{id:113}": {
+                    "id": "{id:113}",
+                    "name": "Infant formula stage 1",
+                    "url": "/fresh-mart-demo#item-{id:113}",
+                    "short": "From birth to 6 months, 400 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Infant formula stage 1"
+                    },
+                    "price": {
+                        "minor": 5400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 54.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00102",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · ⁨⃁⁩ 135.00 / kg"
+                    }
+                },
+                "{id:114}": {
+                    "id": "{id:114}",
+                    "name": "Baby cereal",
+                    "url": "/fresh-mart-demo#item-{id:114}",
+                    "short": "Rice cereal with banana, 200 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Baby cereal"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 17.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00103",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · ⁨⃁⁩ 85.00 / kg"
+                    }
+                },
+                "{id:115}": {
+                    "id": "{id:115}",
+                    "name": "Baby shampoo",
+                    "url": "/fresh-mart-demo#item-{id:115}",
+                    "short": "Tear-free, 200 ml.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Baby shampoo"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00104",
+                    "pack_label": "200 ml",
+                    "unit": {
+                        "label": "200 ml · ⁨⃁⁩ 90.00 / l"
+                    }
+                },
+                "{id:116}": {
+                    "id": "{id:116}",
+                    "name": "Apple purée pouch",
+                    "url": "/fresh-mart-demo#item-{id:116}",
+                    "short": "From 6 months, 120 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Apple purée pouch"
+                    },
+                    "price": {
+                        "minor": 550,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 5.50"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00105",
+                    "pack_label": "120 g",
+                    "unit": {
+                        "label": "120 g · ⁨⃁⁩ 45.83 / kg"
+                    }
+                },
+                "{id:117}": {
+                    "id": "{id:117}",
+                    "name": "Baby lotion",
+                    "url": "/fresh-mart-demo#item-{id:117}",
+                    "short": "Moisturising, 200 ml.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Baby lotion"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 21.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00106",
+                    "pack_label": "200 ml",
+                    "unit": {
+                        "label": "200 ml · ⁨⃁⁩ 105.00 / l"
+                    }
+                },
+                "{id:118}": {
+                    "id": "{id:118}",
+                    "name": "Nappy rash cream",
+                    "url": "/fresh-mart-demo#item-{id:118}",
+                    "short": "Zinc oxide barrier cream, 100 g.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Nappy rash cream"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00107",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · ⁨⃁⁩ 190.00 / kg"
+                    }
+                }
+            },
+            "total": 107
+        },
+        "features": {
+            "featured": [
+                "{id:4}",
+                "{id:5}",
+                "{id:13}",
+                "{id:20}",
+                "{id:25}",
+                "{id:30}",
+                "{id:33}",
+                "{id:40}"
+            ],
+            "wishlist": true
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/fresh-mart-demo",
+            "cart": "/fresh-mart-demo#cart",
+            "quote": "/fresh-mart-demo/retail/quote",
+            "track": "/fresh-mart-demo#track",
+            "place": "/fresh-mart-demo/retail/order",
+            "coupon": "/{store}/coupon",
+            "slots": "/fresh-mart-demo/grocery/slots",
+            "order_lookup": "/{store}/order-lookup",
+            "wishlist": "/fresh-mart-demo/wishlist",
+            "stock_alerts": "/fresh-mart-demo/stock-alerts",
+            "hold": "/fresh-mart-demo/grocery/hold"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "before"
+            },
+            "tax": {
+                "mode": "exclusive",
+                "rate": 15,
+                "label": "VAT"
+            }
+        },
+        "i18n": {
+            "add_more": "Add more",
+            "nothing_in_your_order_yet": "Nothing in your order yet",
+            "total_to_pay": "Total to pay",
+            "store_closed": "Store closed",
+            "ordering_is_paused": "Ordering is paused",
+            "waiting_for_connection": "Waiting for connection",
+            "youre_offline": "You're offline",
+            "prices_changed_while_you_were_offline": "Prices changed while you were offline.",
+            "please_confirm_your_order_again": "Please confirm your order again",
+            "couldnt_update_total_retry": "Couldn't update total — Retry",
+            "sold_out": "Sold out",
+            "free": "Free",
+            "added_to_your_order": "Added to your order",
+            "removed_from_your_order": "Removed from your order",
+            "sending_your_order": "Sending your order",
+            "needs_your_confirmation": "Needs your confirmation",
+            "order_placed": "Order placed",
+            "order_expired": "Order expired",
+            "could_not_place_the_order": "Could not place the order",
+            "connect_to_place_this_order": "Connect to place this order",
+            "offline_prices_may_change": "Offline: prices may change",
+            "some_items_are_no_longer_available": "Some items are no longer available",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "Waiting orders were removed because offline ordering was switched off.",
+            "still_there_starting_over_in_n_seconds": "Still there? Starting over in :n seconds",
+            "incorrect_pin": "Incorrect PIN",
+            "too_many_attempts_wait_a_moment": "Too many attempts. Wait a moment.",
+            "device_setup_pin": "Device setup PIN",
+            "enter_the_staff_pin": "Enter the staff PIN",
+            "count_of_total_digits_entered": ":count of :total digits entered",
+            "starting_over_in_seconds_s": "Starting over in :seconds s",
+            "continue": "Continue",
+            "exit_kiosk": "Exit kiosk",
+            "connection_lost_pay_at_the_counter_to_order_now": "Connection lost — pay at the counter to order now",
+            "ordering_is_paused_until_the_connection_returns": "Ordering is paused until the connection returns"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "Bananas",
+                    "brand": "Fresh Mart",
+                    "description": "Sweet and ripe, sold loose by weight.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:1}",
+                            "alt": "Bananas"
+                        }
+                    ],
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.50"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "option_groups": [],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "sku": "FM-00001",
+                    "add_label": "Add · ⁨⃁⁩ 6.50"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "Bananas",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 650,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 6.50"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "Bananas"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "Subtotal",
+                            "amount": {
+                                "minor": 650,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 6.50"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "delivery",
+                            "label": "Delivery",
+                            "amount": {
+                                "minor": 900,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 9.00"
+                            },
+                            "kind": "delivery"
+                        },
+                        {
+                            "key": "free_delivery_remaining",
+                            "label": "Add ⁨⃁⁩ 83.50 more for free delivery",
+                            "amount": {
+                                "minor": 8350,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 83.50"
+                            },
+                            "kind": "delivery",
+                            "muted": true,
+                            "informational": true
+                        },
+                        {
+                            "key": "tax",
+                            "label": "VAT 15%",
+                            "amount": {
+                                "minor": 98,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 0.98"
+                            },
+                            "kind": "tax"
+                        }
+                    ],
+                    "total": {
+                        "minor": 1648,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.48"
+                    },
+                    "total_label": "Total",
+                    "cta_label": "Go to checkout · ⁨⃁⁩ 16.48"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "delivery_methods": [
+                        {
+                            "id": "asap",
+                            "label": "As soon as possible",
+                            "selected": true
+                        },
+                        {
+                            "id": "schedule",
+                            "label": "Schedule"
+                        }
+                    ],
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "Cash on delivery",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "Mobile (for order updates)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        },
+                        {
+                            "id": "country",
+                            "label": "Country code",
+                            "type": "hidden",
+                            "dir": "ltr",
+                            "required": true
+                        },
+                        {
+                            "id": "address",
+                            "label": "Delivery address",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "city",
+                            "label": "City",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "notes",
+                            "label": "Note for the driver",
+                            "type": "text",
+                            "help": "Gate code, floor, where to leave the bags"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "Bananas",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 6.50"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "Bananas"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "Subtotal",
+                                "amount": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 6.50"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "delivery",
+                                "label": "Delivery",
+                                "amount": {
+                                    "minor": 900,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 9.00"
+                                },
+                                "kind": "delivery"
+                            },
+                            {
+                                "key": "free_delivery_remaining",
+                                "label": "Add ⁨⃁⁩ 83.50 more for free delivery",
+                                "amount": {
+                                    "minor": 8350,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 83.50"
+                                },
+                                "kind": "delivery",
+                                "muted": true,
+                                "informational": true
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 98,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 0.98"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 1648,
+                            "currency": "SAR",
+                            "formatted": "⁨⃁⁩ 16.48"
+                        },
+                        "total_label": "Total to pay"
+                    },
+                    "place_label": "Place order · ⁨⃁⁩ 16.48"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/fresh-mart-demo",
+                "cart": "/fresh-mart-demo#cart",
+                "quote": "/fresh-mart-demo/retail/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/fresh-mart-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/fresh-mart-demo/grocery/slots",
+                "order_lookup": "/{store}/order-lookup",
+                "replacement": "/order/track/{track_token}/replacement",
+                "wishlist": "/fresh-mart-demo/wishlist",
+                "stock_alerts": "/fresh-mart-demo/stock-alerts",
+                "hold": "/fresh-mart-demo/grocery/hold"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "Order placed",
+                    "heading": "Order no. {order_no}",
+                    "steps": [
+                        {
+                            "label": "Order placed",
+                            "sub": "12:00 PM",
+                            "state": "current"
+                        },
+                        {
+                            "label": "Picking",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "On the way",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "Delivered",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "Bananas",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 6.50"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "Bananas"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "Subtotal",
+                                "amount": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 6.50"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "delivery",
+                                "label": "Delivery",
+                                "amount": {
+                                    "minor": 900,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 9.00"
+                                },
+                                "kind": "delivery"
+                            },
+                            {
+                                "key": "free_delivery_remaining",
+                                "label": "Add ⁨⃁⁩ 83.50 more for free delivery",
+                                "amount": {
+                                    "minor": 8350,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 83.50"
+                                },
+                                "kind": "delivery",
+                                "muted": true,
+                                "informational": true
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 98,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 0.98"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 1648,
+                            "currency": "SAR",
+                            "formatted": "⁨⃁⁩ 16.48"
+                        },
+                        "total_label": "Total · Cash on delivery"
+                    },
+                    "paid_label": "Cash on delivery",
+                    "actions": [
+                        {
+                            "label": "Call store",
+                            "url": "tel:966550100103",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "WhatsApp",
+                            "url": "https://wa.me/966550100103",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ]
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "pickup_slot",
+                        "label": "Pickup",
+                        "needs_address": false,
+                        "needs_slot": true
+                    }
+                ],
+                "selected_order_type": "pickup_slot",
+                "table": null,
+                "room": null,
+                "schedule_ahead": true,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "pickup_slot"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": false,
+                    "order_types": [],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/fresh-mart-demo",
+                "cart": "/fresh-mart-demo#cart",
+                "quote": "/fresh-mart-demo/retail/quote",
+                "track": "/fresh-mart-demo#track",
+                "place": "/fresh-mart-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/fresh-mart-demo/grocery/slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/fresh-mart-demo/kiosk/reset",
+                "kiosk_start": "/fresh-mart-demo/kiosk",
+                "kiosk_exit": "/fresh-mart-demo/kiosk/exit",
+                "kiosk_setup": "/fresh-mart-demo/kiosk/setup",
+                "wishlist": "/fresh-mart-demo/wishlist",
+                "stock_alerts": "/fresh-mart-demo/stock-alerts",
+                "hold": "/fresh-mart-demo/grocery/hold"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "fresh-mart-demo",
+                "name": "Fresh Mart",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Fresh Mart"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Fresh Mart"
+                },
+                "tagline": "Groceries delivered in 25 minutes",
+                "locale": "en",
+                "dir": "ltr",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/fresh-mart-demo?lang=en"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "retail",
+                "store_type": "grocery",
+                "status": {
+                    "open": false,
+                    "label": "Ordering is paused",
+                    "next_change_at": "2026-10-04T23:59:00+03:00",
+                    "paused_reason": "Ordering is paused"
+                },
+                "contact": {
+                    "phone": "966550100103",
+                    "whatsapp": "966550100103",
+                    "address": "Al Olaya, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=Al%20Olaya%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": false,
+                "hours": [
+                    {
+                        "days": [
+                            "Mo"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Tu"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "We"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Th"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Fr"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Sa"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Su"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    }
+                ]
+            }
+        }
+    }
+}

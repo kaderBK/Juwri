@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Brand",
+    "settings": [
+      { "id": "brand_color", "type": "color", "label": "Brand colour", "default": "#3fd463" }
+    ]
+  }
+]

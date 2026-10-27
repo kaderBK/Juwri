@@ -1,0 +1,69 @@
+{%- comment -%}
+  Announcement bar (library v1). Source "store" shows the store's own
+  announcement (the owner's on/off switch — nothing renders when it is off);
+  "custom" shows this section's text. Links are limited to https:// and
+  same-site paths/anchors. Dismissal is CSS-only (no JavaScript in themes)
+  and lasts for the page view.
+{%- endcomment -%}
+{%- liquid
+  assign custom = section.settings.text | strip
+  assign message = ''
+  if section.settings.source == 'custom'
+    assign message = custom
+  elsif announcement
+    assign message = announcement.text | strip
+  endif
+
+  assign link = section.settings.link | strip
+  assign link_head = link | slice: 0, 8 | downcase
+  assign link_first = link | slice: 0, 1
+  assign link_second = link | slice: 1, 1
+  assign safe_link = false
+  if link_head == 'https://'
+    assign safe_link = true
+  elsif link_first == '/' and link_second != '/'
+    assign safe_link = true
+  elsif link_first == '#' and link.size > 1
+    assign safe_link = true
+  endif
+-%}
+{%- if message != '' -%}
+<aside class="mbs-announcement-bar mbs-announcement-bar--{{ section.settings.tone | escape }}" aria-label="{{ 'Announcement' | t }}">
+  {%- if section.settings.dismissible -%}
+  <input class="mbs-announcement-bar__toggle" type="checkbox" id="mbs-ab-{{ section.id | escape }}" aria-label="{{ 'Close' | t }}">
+  {%- endif -%}
+  <div class="mbs-announcement-bar__inner">
+    <p class="mbs-announcement-bar__text">
+      {%- if safe_link -%}<a class="mbs-announcement-bar__link" href="{{ link | escape }}">{{ message | escape }}</a>{%- else -%}{{ message | escape }}{%- endif -%}
+    </p>
+    {%- if section.settings.dismissible -%}
+    <label class="mbs-announcement-bar__close" for="mbs-ab-{{ section.id | escape }}" aria-hidden="true">{% render 'icon', name: 'close', size: 16 %}</label>
+    {%- endif -%}
+  </div>
+</aside>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "group": "chrome",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "source", "type": "select", "label": "Message", "options": [
+      { "value": "store", "label": "Store announcement" },
+      { "value": "custom", "label": "Custom text" }
+    ], "default": "store" },
+    { "id": "text", "type": "text", "label": "Custom text", "default": "" },
+    { "id": "link", "type": "text", "label": "Link (https:// or /path)", "default": "" },
+    { "id": "tone", "type": "select", "label": "Colour", "options": [
+      { "value": "primary", "label": "Primary" },
+      { "value": "accent", "label": "Accent" },
+      { "value": "surface", "label": "Surface" },
+      { "value": "inverse", "label": "Dark" }
+    ], "default": "primary" },
+    { "id": "dismissible", "type": "checkbox", "label": "Let visitors close it", "default": true }
+  ],
+  "presets": [{ "name": "Announcement bar" }]
+}
+{% endschema %}

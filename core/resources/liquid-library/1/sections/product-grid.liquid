@@ -1,0 +1,162 @@
+{%- comment -%}
+  Product grid (library v1, B1c) — the goods catalogue (retail, cosmetics,
+  clothing, pharmacy, car parts). Cards come from the `card-product` snippet
+  (variant options hint, stock badge, wishlist, add to cart). Search
+  (data-mb-search), filter chips (data-mb-filter), sort (data-mb-sort) and
+  the "no matches" line (data-mb-empty) are driven by the commerce runtime;
+  sorting reorders cards inside each [data-mb-cat] group.
+  Any store can use it (it just lists the catalogue); an empty store gets a
+  friendly empty state.
+{%- endcomment -%}
+{%- liquid
+  assign want = section.settings.category | append: ''
+  assign group = section.settings.group_by_category
+  assign cap = section.settings.limit | default: 24
+  assign total = 0
+  assign has_special = false
+  for category in menu.categories
+    assign cid = category.id | append: ''
+    if want == '' or want == cid
+      assign n = category.items | size
+      assign total = total | plus: n
+      for item in category.items
+        if item.is_daily_special
+          assign has_special = true
+        endif
+      endfor
+    endif
+  endfor
+
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = vocab.items
+  endif
+  assign h = section.settings.heading_level | default: 'h2'
+  assign h_group = 'h3'
+  assign h_card = 'h3'
+  if h == 'h3'
+    assign h_group = 'h4'
+    assign h_card = 'h4'
+  endif
+  if group
+    if h == 'h3'
+      assign h_card = 'h5'
+    else
+      assign h_card = 'h4'
+    endif
+  endif
+  assign show_expiry = false
+  if section.settings.show_expiry and features.expiry
+    assign show_expiry = true
+  endif
+-%}
+<section class="mbs-product-grid mbs-product-grid--{{ section.settings.image_ratio | escape }}" aria-labelledby="mbs-pg-{{ section.id | escape }}" style="--mbs-cols-m: {{ section.settings.columns_mobile | escape }}; --mbs-cols-d: {{ section.settings.columns_desktop | escape }}" data-mb-catalog>
+  <div class="mbs-product-grid__head">
+    <{{ h }} class="mbs-product-grid__title" id="mbs-pg-{{ section.id | escape }}">{{ heading | escape }}</{{ h }}>
+  </div>
+  {%- if total > 0 -%}
+    {%- if section.settings.show_search or section.settings.show_filters or section.settings.show_sort -%}
+    <div class="mbs-product-grid__tools">
+      {%- if section.settings.show_search -%}
+      <label class="mbs-product-grid__search">
+        {%- render 'icon', name: 'search', size: 18 -%}
+        <span class="mbs-product-grid__sr">{{ 'Search' | t }}</span>
+        <input type="search" class="mbs-product-grid__input" data-mb-search autocomplete="off" enterkeyhint="search" placeholder="{{ 'Search' | t }} {{ vocab.items | escape }}">
+      </label>
+      {%- endif -%}
+      {%- if section.settings.show_filters -%}
+      <div class="mbs-product-grid__chips" role="group" aria-label="{{ 'Filter' | t }}">
+        <button type="button" class="mbs-product-grid__chip is-on" data-mb-filter="all">{{ 'All' | t }}</button>
+        {%- if has_special -%}<button type="button" class="mbs-product-grid__chip" data-mb-filter="special">{{ 'Featured' | t }}</button>{%- endif -%}
+        {%- if section.settings.show_wishlist -%}<button type="button" class="mbs-product-grid__chip" data-mb-filter="fav">{{ 'Wishlist' | t }}</button>{%- endif -%}
+      </div>
+      {%- endif -%}
+      {%- if section.settings.show_sort -%}
+      <label class="mbs-product-grid__sort">
+        <span class="mbs-product-grid__sort-label">{{ 'Sort by' | t }}</span>
+        <select class="mbs-product-grid__select" data-mb-sort>
+          <option value="featured">{{ 'Featured' | t }}</option>
+          <option value="price_asc">{{ 'Price: low to high' | t }}</option>
+          <option value="price_desc">{{ 'Price: high to low' | t }}</option>
+          <option value="rating">{{ 'Top rated' | t }}</option>
+        </select>
+      </label>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {%- if group -%}
+      {%- for category in menu.categories -%}
+        {%- assign cid = category.id | append: '' -%}
+        {%- assign n = category.items | size -%}
+        {%- if n > 0 and want == '' or n > 0 and want == cid -%}
+        <div class="mbs-product-grid__group" data-mb-cat>
+          <{{ h_group }} class="mbs-product-grid__group-title">{{ category.name | escape }}</{{ h_group }}>
+          <div class="mbs-product-grid__grid">
+            {%- for item in category.items limit: cap -%}
+              {%- render 'card-product', item: item, heading_tag: h_card, show_desc: section.settings.show_description, show_variants: section.settings.show_variants, show_sku: section.settings.show_sku, show_wishlist: section.settings.show_wishlist, show_expiry: show_expiry, flags: flags, vocab: vocab -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      <div class="mbs-product-grid__group" data-mb-cat>
+        <div class="mbs-product-grid__grid">
+          {%- assign shown = 0 -%}
+          {%- for category in menu.categories -%}
+            {%- assign cid = category.id | append: '' -%}
+            {%- if want == '' or want == cid -%}
+              {%- for item in category.items -%}
+                {%- if shown < cap -%}
+                  {%- assign shown = shown | plus: 1 -%}
+                  {%- render 'card-product', item: item, heading_tag: h_card, show_desc: section.settings.show_description, show_variants: section.settings.show_variants, show_sku: section.settings.show_sku, show_wishlist: section.settings.show_wishlist, show_expiry: show_expiry, flags: flags, vocab: vocab -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    <p class="mbs-product-grid__empty" data-mb-empty hidden>{{ 'No matches found' | t }}</p>
+  {%- else -%}
+    <p class="mbs-product-grid__empty">{{ 'Nothing here yet' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "group": "catalogue",
+  "verticals": ["goods"],
+  "max_per_page": 2,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = your item word, e.g. Products)", "default": "" },
+    { "id": "heading_level", "type": "select", "label": "Heading level", "options": [
+      { "value": "h2", "label": "H2 (main section)" },
+      { "value": "h3", "label": "H3 (sub-section)" }
+    ], "default": "h2" },
+    { "id": "category", "type": "category", "label": "Only this category (blank = all)", "default": "" },
+    { "id": "group_by_category", "type": "checkbox", "label": "Group by category", "default": true },
+    { "id": "limit", "type": "range", "label": "Items per group", "min": 4, "max": 48, "step": 4, "default": 24 },
+    { "id": "image_ratio", "type": "select", "label": "Image shape", "options": [
+      { "value": "square", "label": "Square" },
+      { "value": "portrait", "label": "Portrait" }
+    ], "default": "square" },
+    { "id": "columns_mobile", "type": "select", "label": "Columns on phones", "options": [
+      { "value": "1", "label": "1" },
+      { "value": "2", "label": "2" }
+    ], "default": "2" },
+    { "id": "columns_desktop", "type": "range", "label": "Columns on desktop", "min": 2, "max": 5, "step": 1, "default": 4 },
+    { "id": "show_search", "type": "checkbox", "label": "Show search", "default": true },
+    { "id": "show_filters", "type": "checkbox", "label": "Show filter chips", "default": true },
+    { "id": "show_sort", "type": "checkbox", "label": "Show sort", "default": true },
+    { "id": "show_description", "type": "checkbox", "label": "Show descriptions", "default": false },
+    { "id": "show_variants", "type": "checkbox", "label": "Show options (sizes, colours…)", "default": true },
+    { "id": "show_sku", "type": "checkbox", "label": "Show SKU / part number", "default": false },
+    { "id": "show_expiry", "type": "checkbox", "label": "Show best-before dates (stores that track expiry)", "default": true },
+    { "id": "show_wishlist", "type": "checkbox", "label": "Show save / wishlist", "default": true }
+  ],
+  "presets": [{ "name": "Product grid" }]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{%- comment -%}
+  Footer (library v1): store name, social links (only the ones the store
+  set), today's hours, address and phone, a copyright line and the
+  "Powered by <platform brand>" line. The brand + link come from `platform`
+  (reseller white-label aware); the line can only be hidden when the store's
+  plan allows removing branding (`platform.hide_branding`) — then the
+  `hide_powered_by` setting decides (on by default, as in the Blade themes).
+  Everything collapses cleanly for a brand-new store.
+{%- endcomment -%}
+{%- liquid
+  assign address = social.address | default: restaurant.address | strip
+  assign phone = social.phone | default: restaurant.phone | strip
+  assign has_social = false
+  if social.instagram_url or social.facebook_url or social.whatsapp_url or social.google_review_url
+    assign has_social = true
+  endif
+-%}
+<footer class="mbs-footer mbs-footer--{{ section.settings.tone | escape }}">
+  <div class="mbs-footer__inner">
+    <div class="mbs-footer__brand">
+      <p class="mbs-footer__name">{{ restaurant.title | escape }}</p>
+      {%- if section.settings.show_hours and hours.today -%}
+      <p class="mbs-footer__line">{%- render 'icon', name: 'clock', size: 16 -%}<span>{{ 'Today' | t }} <bdi>{{ hours.today | escape }}</bdi></span></p>
+      {%- endif -%}
+      {%- if section.settings.show_contact and address != '' -%}
+      <p class="mbs-footer__line">{%- render 'icon', name: 'pin', size: 16 -%}<span>{{ address | escape }}</span></p>
+      {%- endif -%}
+      {%- if section.settings.show_contact and phone != '' -%}
+      <p class="mbs-footer__line">{%- render 'icon', name: 'phone', size: 16 -%}<a href="tel:{{ phone | remove: ' ' | escape }}"><bdi>{{ phone | escape }}</bdi></a></p>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.show_social and has_social -%}
+    <nav class="mbs-footer__social" aria-label="{{ 'Follow Us' | t }}">
+      <ul class="mbs-footer__social-list" role="list">
+        {%- if social.instagram_url -%}<li><a class="mbs-footer__icon" href="{{ social.instagram_url | escape }}" rel="noopener" target="_blank" aria-label="{{ 'Instagram' | t }}">{%- render 'icon', name: 'instagram', size: 20 -%}</a></li>{%- endif -%}
+        {%- if social.facebook_url -%}<li><a class="mbs-footer__icon" href="{{ social.facebook_url | escape }}" rel="noopener" target="_blank" aria-label="{{ 'Facebook' | t }}">{%- render 'icon', name: 'facebook', size: 20 -%}</a></li>{%- endif -%}
+        {%- if social.whatsapp_url -%}<li><a class="mbs-footer__icon" href="{{ social.whatsapp_url | escape }}" rel="noopener" target="_blank" aria-label="{{ 'WhatsApp' | t }}">{%- render 'icon', name: 'whatsapp', size: 20 -%}</a></li>{%- endif -%}
+        {%- if social.google_review_url -%}<li><a class="mbs-footer__icon" href="{{ social.google_review_url | escape }}" rel="noopener" target="_blank" aria-label="{{ 'Google reviews' | t }}">{%- render 'icon', name: 'review', size: 20 -%}</a></li>{%- endif -%}
+      </ul>
+    </nav>
+    {%- endif -%}
+  </div>
+  <div class="mbs-footer__base">
+    <p class="mbs-footer__copy">© <bdi>{{ 'now' | date: '%Y' }}</bdi> {{ restaurant.title | escape }}</p>
+    {%- assign hide_powered = false -%}
+    {%- if platform.hide_branding and section.settings.hide_powered_by -%}{%- assign hide_powered = true -%}{%- endif -%}
+    {%- unless hide_powered or platform.brand_name == '' -%}
+    <p class="mbs-footer__powered">{{ 'Powered by' | t }} <a class="mbs-footer__powered-link" href="{{ platform.brand_url | escape }}"><bdi>{{ platform.brand_name | escape }}</bdi></a></p>
+    {%- endunless -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "group": "chrome",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "tone", "type": "select", "label": "Colour", "options": [
+      { "value": "surface", "label": "Surface" },
+      { "value": "inverse", "label": "Dark" },
+      { "value": "primary", "label": "Primary" }
+    ], "default": "surface" },
+    { "id": "show_hours", "type": "checkbox", "label": "Show today's hours", "default": true },
+    { "id": "show_contact", "type": "checkbox", "label": "Show address and phone", "default": true },
+    { "id": "show_social", "type": "checkbox", "label": "Show social links", "default": true },
+    { "id": "hide_powered_by", "type": "checkbox", "label": "Hide \"Powered by\" (only when your plan allows removing branding)", "default": true }
+  ],
+  "presets": [{ "name": "Footer" }]
+}
+{% endschema %}

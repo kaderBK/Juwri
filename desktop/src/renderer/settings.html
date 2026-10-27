@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+    <title>Desktop settings</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="wrap">
+    <div id="bridgeBanner" hidden></div>
+
+    <div class="tabs" role="tablist">
+        <button role="tab" id="tab-pairing" aria-selected="true" data-panel="pairing" data-i18n="settings.tab.pairing"></button>
+        <button role="tab" id="tab-printers" aria-selected="false" data-panel="printers" data-i18n="settings.tab.printers"></button>
+        <button role="tab" id="tab-shell" aria-selected="false" data-panel="shell" data-i18n="settings.tab.shell"></button>
+    </div>
+
+    <!-- ── pairing ─────────────────────────────────────────────────────── -->
+    <section data-tabpanel="pairing">
+        <div class="panel">
+            <h2 data-i18n="bridge.title"></h2>
+            <p>
+                <span class="status"><span class="dot" id="bridgeDot"></span><span id="bridgeState"></span></span>
+                <span class="muted small"> · <span data-i18n="bridge.address"></span>
+                <span class="mono" id="bridgeUrl"></span></span>
+            </p>
+            <p class="small muted">
+                <span data-i18n="bridge.jobs"></span>: <span id="statPrinted">0</span> ·
+                <span data-i18n="bridge.replayed"></span>: <span id="statReplayed">0</span> ·
+                <span data-i18n="bridge.failed"></span>: <span id="statFailed">0</span>
+            </p>
+        </div>
+
+        <div class="panel">
+            <h2 data-i18n="pairing.title"></h2>
+            <p class="help" data-i18n="pairing.help"></p>
+            <p><span class="status"><span class="dot" id="pairDot"></span><span id="pairState"></span></span></p>
+            <div class="field">
+                <label for="token" data-i18n="pairing.token"></label>
+                <input type="password" id="token" spellcheck="false" autocomplete="off">
+                <p class="small muted" id="tokenStorage"></p>
+            </div>
+            <button class="btn primary" id="saveToken" data-i18n="pairing.save"></button>
+            <button class="btn danger" id="clearToken" data-i18n="pairing.clear"></button>
+        </div>
+
+        <div class="panel">
+            <h2 data-i18n="pairing.origins"></h2>
+            <p class="help" data-i18n="pairing.originsHelp"></p>
+            <div class="field">
+                <textarea id="origins" spellcheck="false"></textarea>
+            </div>
+            <p class="small muted mono" id="activeOrigins"></p>
+            <button class="btn" id="saveOrigins" data-i18n="printers.save"></button>
+        </div>
+    </section>
+
+    <!-- ── printers ────────────────────────────────────────────────────── -->
+    <section data-tabpanel="printers" hidden>
+        <div class="panel">
+            <h2 data-i18n="printers.title"></h2>
+            <table>
+                <thead>
+                <tr>
+                    <th data-i18n="printers.label"></th>
+                    <th data-i18n="printers.target"></th>
+                    <th data-i18n="printers.width"></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="printerRows"></tbody>
+            </table>
+            <p class="muted" id="noPrinters" data-i18n="printers.none"></p>
+        </div>
+
+        <div class="panel" id="suggestedPanel" hidden>
+            <h2 data-i18n="printers.suggested"></h2>
+            <ul id="suggested" class="mono small"></ul>
+        </div>
+
+        <div class="panel">
+            <h2 data-i18n="printers.add"></h2>
+            <div class="row">
+                <div class="field">
+                    <label for="pLabel" data-i18n="printers.label"></label>
+                    <input type="text" id="pLabel">
+                </div>
+                <div class="field">
+                    <label for="pTarget" data-i18n="printers.target"></label>
+                    <input type="text" id="pTarget" class="mono" spellcheck="false" placeholder="tcp://192.168.1.50:9100">
+                </div>
+                <div class="field">
+                    <label for="pWidth" data-i18n="printers.width"></label>
+                    <select id="pWidth">
+                        <option value="80">80 mm</option>
+                        <option value="57">57 mm</option>
+                    </select>
+                </div>
+                <button class="btn primary" id="addPrinter" data-i18n="printers.save"></button>
+            </div>
+            <p class="small muted" data-i18n="printers.targetHelp"></p>
+        </div>
+    </section>
+
+    <!-- ── application ─────────────────────────────────────────────────── -->
+    <section data-tabpanel="shell" hidden>
+        <div class="panel">
+            <h2 data-i18n="shell.title"></h2>
+            <div class="field">
+                <label for="serverUrl" data-i18n="shell.serverUrl"></label>
+                <div class="row">
+                    <div class="field"><input type="text" id="serverUrl" spellcheck="false"></div>
+                    <button class="btn" id="saveServerUrl" data-i18n="shell.change"></button>
+                </div>
+            </div>
+
+            <div class="switch">
+                <input type="checkbox" id="kiosk">
+                <label for="kiosk" data-i18n="shell.kiosk"></label>
+            </div>
+            <div class="switch">
+                <input type="checkbox" id="autoLaunch">
+                <label for="autoLaunch" data-i18n="shell.autoLaunch"></label>
+            </div>
+
+            <div class="field">
+                <label for="locale" data-i18n="shell.locale"></label>
+                <select id="locale"></select>
+            </div>
+
+            <button class="btn" id="reloadStore" data-i18n="shell.reload"></button>
+            <p class="small muted"><span data-i18n="shell.version"></span> <span id="version" class="mono"></span></p>
+        </div>
+    </section>
+</div>
+<div class="toast" id="toast"></div>
+<script src="settings.js"></script>
+</body>
+</html>

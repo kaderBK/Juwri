@@ -1,0 +1,26 @@
+{
+  "name": "juwri → Google Calendar: new reservation",
+  "description": "When a new reservation is created in juwri, create a Google Calendar event.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "juwri:watchReservationCreated",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "google-calendar:createEvent",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "summary": "Reservation #{{1.data.reservation_id}} ({{1.data.status}})",
+        "source": "{{1.data.source}}"
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    }
+  ],
+  "metadata": { "instant": true }
+}

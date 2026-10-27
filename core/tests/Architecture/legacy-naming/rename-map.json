@@ -1,0 +1,1100 @@
+{
+ "Post": {
+  "kind": "file,php_class",
+  "new": "Store",
+  "note": "**Store** (legacy-model uses only; HTTP verb/Route::post stays)"
+ },
+ "PostController": {
+  "kind": "file,php_class",
+  "new": "StoreController",
+  "note": "**StoreController**"
+ },
+ "PostOption": {
+  "kind": "file,php_class",
+  "new": "StoreOption",
+  "note": "**StoreOption**"
+ },
+ "PostView": {
+  "kind": "file,php_class",
+  "new": "StoreView",
+  "note": "**StoreView**"
+ },
+ "QuickMenu": {
+  "kind": "js_global",
+  "new": "AppMenu",
+  "note": "**AppMenu**"
+ },
+ "RestaurantOrder": {
+  "kind": "file,php_class",
+  "new": "StoreOrder",
+  "note": "**StoreOrder**"
+ },
+ "RestaurantTable": {
+  "kind": "file,php_class",
+  "new": "StoreTable",
+  "note": "**StoreTable**"
+ },
+ "WHATSAPP_ORDER_TAGLINE": {
+  "kind": "lang_key",
+  "new": "customer_can_send_order_from",
+  "note": "copied copy"
+ },
+ "a_new_fast_and_efficient_way_to_order_your_daily_needs_with_an_ideal_contactless_experience_to_turn_their_ideas_into_reality_and_increase_sales_with_its_amazing_features": {
+  "kind": "lang_key",
+  "new": "guests_order_what_they_need",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "accept_terms_of_service_and_click_on_the_submit_button": {
+  "kind": "lang_key",
+  "new": "accept_google_s_terms_submit",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "add_new_restaurant": {
+  "kind": "lang_key",
+  "new": "add_new_store",
+  "note": "**add_new_store**"
+ },
+ "add_restaurant": {
+  "kind": "lang_key",
+  "new": "add_store",
+  "note": "**add_store**"
+ },
+ "all_data_within_this_section_will_be_deleted_are_you_sure": {
+  "kind": "lang_key",
+  "new": "everything_this_section_will_be",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "all_restaurants": {
+  "kind": "lang_key",
+  "new": "all_stores",
+  "note": "**all_stores**"
+ },
+ "allow_non_verified_users_to_post_content": {
+  "kind": "lang_key",
+  "new": "allow_non_verified_users_to_publish_content",
+  "note": "hand-set"
+ },
+ "allow_online_payment_for_restaurants": {
+  "kind": "lang_key",
+  "new": "allow_online_payment_for_stores",
+  "note": "**allow_online_payment_for_stores**"
+ },
+ "allow_restaurants_to_accept_orders": {
+  "kind": "lang_key",
+  "new": "allow_stores_to_accept_orders",
+  "note": "**allow_stores_to_accept_orders**"
+ },
+ "allow_restaurants_to_create_table_specific_qr_codes": {
+  "kind": "lang_key",
+  "new": "allow_businesses_create_table_specific",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "allow_text_editor_for_restaurant_description": {
+  "kind": "lang_key",
+  "new": "allow_text_editor_store_description",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "already_logged_in_as_user_name": {
+  "kind": "lang_key",
+  "new": "are_already_signed_as",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "blog-post": {
+  "kind": "css_class",
+  "new": "blog-article",
+  "note": "hand-set"
+ },
+ "by_clicking_on_register_button_you_are_agree_to_our_terms": {
+  "kind": "lang_key",
+  "new": "creating_account_means_accept_our",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "by_clicking_on_register_button_you_are_agree_to_our_terms_condition": {
+  "kind": "lang_key",
+  "new": "creating_account_means_accept_our_2",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "clear_all_caches_and_error_logs": {
+  "kind": "lang_key",
+  "new": "empty_every_cache_error_log",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "configure_and_generate_proper_invoices_displaying_potential_discount_codes_and_applied_taxes_for_your_users": {
+  "kind": "lang_key",
+  "new": "create_clean_invoices_users_that",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "create_qr_codes_for_specific_tables": {
+  "kind": "lang_key",
+  "new": "make_separate_qr_code_each",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "current_month_restaurants": {
+  "kind": "lang_key",
+  "new": "current_month_stores",
+  "note": "**current_month_stores**"
+ },
+ "customer_can_send_order_from_anywhere_on_your_whatsapp_complete_chat_and_finalize_order": {
+  "kind": "lang_key",
+  "new": "customers_can_send_orders_from",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "customer_is_waiting_at_table_number": {
+  "kind": "lang_key",
+  "new": "guest_is_asking_help_at",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "default_membership_plan_for_new_users": {
+  "kind": "lang_key",
+  "new": "plan_given_new_accounts",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "earn_money_by_charging_one_time_recurring_or_lifetime_payments_from_your_users_for_custom_plans": {
+  "kind": "lang_key",
+  "new": "charge_users_once_every_period",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "edit_restaurant": {
+  "kind": "lang_key",
+  "new": "edit_store",
+  "note": "**edit_store**"
+ },
+ "enable_quickorder_home_page": {
+  "kind": "lang_key",
+  "new": "enable_store_order_home_page",
+  "note": "**enable_store_order_home_page**"
+ },
+ "enter_label_and_select_recaptcha_v2_im_not_a_robot_checkbox_in_recaptcha_type_field": {
+  "kind": "lang_key",
+  "new": "give_it_label_choose_type",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "external_javascript_or_css_in_header": {
+  "kind": "lang_key",
+  "new": "scripts_or_styles_page_head",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "fill_all_fields_so_we_can_get_some_info_about_you_well_never_send_you_spam": {
+  "kind": "lang_key",
+  "new": "tell_us_little_about_no",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "getPostOption": {
+  "kind": "php_function",
+  "new": "getStoreOption",
+  "note": "**getStoreOption**"
+ },
+ "getPostTemplates": {
+  "kind": "php_function",
+  "new": "getStoreTemplates",
+  "note": "**getStoreTemplates**"
+ },
+ "go_to_the_google_recaptcha_and_register_a_new_site": {
+  "kind": "lang_key",
+  "new": "open_recaptcha_admin_console_add",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "have_a_coupon_click_here_to_enter_your_code": {
+  "kind": "lang_key",
+  "new": "got_discount_code_add_it",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "if_you_have_a_coupon_code_please_apply_it_below": {
+  "kind": "lang_key",
+  "new": "type_discount_code_below",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "important_do_not_edit_or_delete_any_taxes_if_they_are_already_used": {
+  "kind": "lang_key",
+  "new": "note_once_tax_has_been",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "include_a_note_with_reference_so_that_we_know_which_account_to_credit": {
+  "kind": "lang_key",
+  "new": "add_reference_transfer_so_we",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "innovative_solutions_to_create_self_design_qr_digital_menu": {
+  "kind": "lang_key",
+  "new": "build_own_qr_menu_make",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "installation_process_is_very_easy_and_it_takes_less_than_2_minutes": {
+  "kind": "lang_key",
+  "new": "setup_is_quick_takes_about",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "is_there_anything_you_would_like_to_tell_us": {
+  "kind": "lang_key",
+  "new": "what_would_like_us_know",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "limit_exceeded_please_upgrade_your_membership": {
+  "kind": "lang_key",
+  "new": "have_reached_plan_s_limit",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "look_for_the_site_key_and_secret_key_use_them_in_the_form_below_on_this_page": {
+  "kind": "lang_key",
+  "new": "copy_two_keys_google_shows",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "my_restaurants": {
+  "kind": "lang_key",
+  "new": "my_stores",
+  "note": "**my_stores**"
+ },
+ "need_any_support_feel_free_to_contact_us": {
+  "kind": "lang_key",
+  "new": "questions_just_write_us",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "new_offline_payment_request_is_pending": {
+  "held": true,
+  "kind": "lang_key",
+  "new": "bank_transfer_is_waiting_review",
+  "note": "N3 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename"
+ },
+ "new_order_email_to_restaurant_owners": {
+  "kind": "lang_key",
+  "new": "new_order_email_store_owners",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "new_version_available_for_this_plugin": {
+  "kind": "lang_key",
+  "new": "update_is_available_this_plugin",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "no_restaurants_available": {
+  "kind": "lang_key",
+  "new": "no_stores_available",
+  "note": "**no_stores_available**"
+ },
+ "non_login_users_have_to_enter_their_name_and_email_address": {
+  "kind": "lang_key",
+  "new": "guests_must_give_name_email",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "number_of_blogs_on_blog_page": {
+  "kind": "lang_key",
+  "new": "posts_per_blog_page",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "ordering_with_whatsapp_can_help_to_overcome_any_new_sanitary_frictions_no_need_to_browse_through_lengthy_and_outdated_catalogs_no_need_to_worry_about_special_coupon_codes": {
+  "kind": "lang_key",
+  "new": "ordering_whatsapp_can_help_overcome",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "perfect_for_all_restaurant_owners_supporting_multiple_languages_and_you_can_choose_your_desire_language": {
+  "kind": "lang_key",
+  "new": "perfect_all_store_owners_supporting",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "plan_menu_limit_menu_items_per_category": {
+  "kind": "lang_key",
+  "new": "up_items_each_category",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "plan_restaurant_limit_restaurants": {
+  "kind": "lang_key",
+  "new": "plan_store_limit_stores",
+  "note": "**plan_store_limit_stores**"
+ },
+ "plan_scan_limit_scans_per_month": {
+  "kind": "lang_key",
+  "new": "qr_scans_month",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "please_create_a_variant_option_first": {
+  "kind": "lang_key",
+  "new": "create_variant_group_first",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "please_get_in_touch_and_our_expert_support_team_will_answer_all_your_questions": {
+  "kind": "lang_key",
+  "new": "write_us_our_support_team",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "plugin_is_enabled_disable_it_first": {
+  "kind": "lang_key",
+  "new": "turn_plugin_off_before_do",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "post": {
+  "kind": "php_function",
+  "new": "store",
+  "note": "**store** (legacy-model uses only; HTTP verb/Route::post stays)"
+ },
+ "post_id": {
+  "kind": "db_column",
+  "new": "store_id",
+  "note": "**store_id**"
+ },
+ "post_options": {
+  "kind": "db_table,php_function",
+  "new": "store_options",
+  "note": "**store_options**"
+ },
+ "post_templates": {
+  "kind": "folder",
+  "new": "store_templates",
+  "note": "**store_templates**"
+ },
+ "post_views": {
+  "kind": "db_table",
+  "new": "store_views",
+  "note": "**store_views**"
+ },
+ "posts": {
+  "kind": "db_table,folder,php_function",
+  "new": "stores",
+  "note": "**stores**"
+ },
+ "posts.delete": {
+  "kind": "route_name",
+  "new": "stores.delete",
+  "note": "**stores.delete**"
+ },
+ "posts.index": {
+  "kind": "route_name",
+  "new": "stores.index",
+  "note": "**stores.index**"
+ },
+ "provide_a_simple_way_for_people_to_receive_direct_support_for_your_products_and_services_via_whatsapp": {
+  "kind": "lang_key",
+  "new": "let_customers_reach_whatsapp_questions",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "qr-builder": {
+  "kind": "file",
+  "new": "qr-designer",
+  "note": "**qr-designer**"
+ },
+ "quick-reorder-icon": {
+  "kind": "css_class",
+  "new": "app-reorder-icon",
+  "note": "**app-reorder-icon**"
+ },
+ "quick-user-avatar": {
+  "kind": "css_class",
+  "new": "app-user-avatar",
+  "note": "**app-user-avatar**"
+ },
+ "quick-user-box": {
+  "kind": "css_class",
+  "new": "app-user-box",
+  "note": "**app-user-box**"
+ },
+ "quick_alert": {
+  "kind": "js_function,php_function",
+  "new": "app_alert",
+  "note": "**app_alert**"
+ },
+ "quick_alert_error": {
+  "kind": "php_function",
+  "new": "app_alert_error",
+  "note": "**app_alert_error**"
+ },
+ "quick_alert_info": {
+  "kind": "php_function",
+  "new": "app_alert_info",
+  "note": "**app_alert_info**"
+ },
+ "quick_alert_success": {
+  "kind": "php_function",
+  "new": "app_alert_success",
+  "note": "**app_alert_success**"
+ },
+ "quick_switch": {
+  "kind": "php_function",
+  "new": "app_switch",
+  "note": "**app_switch**"
+ },
+ "quick_xor": {
+  "kind": "php_function",
+  "new": "app_xor",
+  "note": "**app_xor**"
+ },
+ "quick_xor_decrypt": {
+  "kind": "php_function",
+  "new": "app_xor_decrypt",
+  "note": "**app_xor_decrypt**"
+ },
+ "quick_xor_encrypt": {
+  "kind": "php_function",
+  "new": "app_xor_encrypt",
+  "note": "**app_xor_encrypt**"
+ },
+ "quickad_debug": {
+  "kind": "prior_list",
+  "new": "juwri_debug",
+  "note": "**juwri_debug**"
+ },
+ "quickorder_enable": {
+  "data_migration": [
+   "app/Core/Database/Migrations/2026_10_26_100100_rename_store_platform_setting_keys.php"
+  ],
+  "kind": "prior_list",
+  "new": "store_order_enable",
+  "note": "**store_order_enable** (platform key, data migration); the per-store legacy key quickorder_enable stays (allowlist-names.txt) for whatsapp_ordering_enabled and whatsapp:migrate-legacy"
+ },
+ "quickorder_homepage_enable": {
+  "data_migration": [
+   "app/Core/Database/Migrations/2026_10_26_100100_rename_store_platform_setting_keys.php"
+  ],
+  "kind": "prior_list",
+  "new": "store_order_homepage_enable",
+  "note": "**store_order_homepage_enable**"
+ },
+ "quickorder_settings": {
+  "kind": "lang_key",
+  "new": "store_order_settings",
+  "note": "**store_order_settings**"
+ },
+ "quickorder_whatsapp_message": {
+  "data_migration": [
+   "app/Core/Database/Migrations/2026_10_26_100100_rename_store_platform_setting_keys.php"
+  ],
+  "kind": "prior_list",
+  "new": "store_order_whatsapp_message",
+  "note": "**store_order_whatsapp_message**"
+ },
+ "reseller_posts": {
+  "kind": "db_table",
+  "new": "reseller_blog_posts",
+  "note": "hand-set"
+ },
+ "restaurant": {
+  "kind": "folder,php_function",
+  "new": "store",
+  "note": "**store**"
+ },
+ "restaurant-header": {
+  "kind": "css_class",
+  "new": "store-header",
+  "note": "**store-header**"
+ },
+ "restaurant.callTheWaiter": {
+  "kind": "route_name",
+  "new": "store.callTheWaiter",
+  "note": "**store.callTheWaiter**"
+ },
+ "restaurant.sendOrder": {
+  "kind": "route_name",
+  "new": "store.submitOrder",
+  "note": "**store.submitOrder**"
+ },
+ "restaurant_color": {
+  "data_migration": [
+   "app/Core/Database/Migrations/2026_10_26_100000_move_renamed_store_setting_paths.php"
+  ],
+  "held": true,
+  "kind": "storage_path",
+  "new": "restaurant_color",
+  "note": "legacy name kept (Opus pass); its stores.settings path moved restaurant.color -> store.color by a data migration"
+ },
+ "restaurant_delivery_charge": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_delivery_charge",
+  "note": "**store_delivery_charge**"
+ },
+ "restaurant_id": {
+  "kind": "db_column",
+  "new": "store_id",
+  "note": "**store_id**"
+ },
+ "restaurant_iyzico_api_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_iyzico_api_key",
+  "note": "**store_iyzico_api_key**"
+ },
+ "restaurant_iyzico_secret_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_iyzico_secret_key",
+  "note": "**store_iyzico_secret_key**"
+ },
+ "restaurant_limit": {
+  "kind": "lang_key",
+  "new": "store_limit",
+  "note": "**store_limit**"
+ },
+ "restaurant_mollie_api_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_mollie_api_key",
+  "note": "**store_mollie_api_key**"
+ },
+ "restaurant_name": {
+  "kind": "lang_key",
+  "new": "store_name",
+  "note": "**store_name**"
+ },
+ "restaurant_paypal_api_app_id": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paypal_api_app_id",
+  "note": "**store_paypal_api_app_id**"
+ },
+ "restaurant_paypal_api_secret": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paypal_api_secret",
+  "note": "**store_paypal_api_secret**"
+ },
+ "restaurant_paypal_sandbox_mode": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paypal_sandbox_mode",
+  "note": "**store_paypal_sandbox_mode**"
+ },
+ "restaurant_paystack_secret_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paystack_secret_key",
+  "note": "**store_paystack_secret_key**"
+ },
+ "restaurant_paytabs_profile_id": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytabs_profile_id",
+  "note": "**store_paytabs_profile_id**"
+ },
+ "restaurant_paytabs_region": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytabs_region",
+  "note": "**store_paytabs_region**"
+ },
+ "restaurant_paytabs_secret_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytabs_secret_key",
+  "note": "**store_paytabs_secret_key**"
+ },
+ "restaurant_paytm_merchant_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytm_merchant_key",
+  "note": "**store_paytm_merchant_key**"
+ },
+ "restaurant_paytm_merchant_mid": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytm_merchant_mid",
+  "note": "**store_paytm_merchant_mid**"
+ },
+ "restaurant_paytm_merchant_website": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytm_merchant_website",
+  "note": "**store_paytm_merchant_website**"
+ },
+ "restaurant_paytm_sandbox_mode": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_paytm_sandbox_mode",
+  "note": "**store_paytm_sandbox_mode**"
+ },
+ "restaurant_razorpay_secret_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_razorpay_secret_key",
+  "note": "**store_razorpay_secret_key**"
+ },
+ "restaurant_send_order_notification": {
+  "data_migration": [
+   "Modules/Reseller/Database/Migrations/2026_10_26_100200_rename_store_option_keys_in_reseller_presets.php"
+  ],
+  "kind": "prior_list",
+  "new": "store_submit_order_notification",
+  "note": "**store_submit_order_notification**; fleet preset/run option keys are moved by a data migration (stores.settings path unchanged)"
+ },
+ "restaurant_settings": {
+  "kind": "lang_key",
+  "new": "store_settings",
+  "note": "**store_settings**"
+ },
+ "restaurant_stripe_secret_key": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_stripe_secret_key",
+  "note": "**store_stripe_secret_key**"
+ },
+ "restaurant_tables": {
+  "kind": "db_table",
+  "new": "store_tables",
+  "note": "**store_tables**"
+ },
+ "restaurant_telr_authkey": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_telr_authkey",
+  "note": "**store_telr_authkey**"
+ },
+ "restaurant_telr_store_id": {
+  "held": true,
+  "kind": "prior_list",
+  "new": "store_telr_store_id",
+  "note": "**store_telr_store_id**"
+ },
+ "restaurant_template": {
+  "data_migration": [
+   "app/Core/Database/Migrations/2026_10_26_100000_move_renamed_store_setting_paths.php",
+   "Modules/Reseller/Database/Migrations/2026_10_26_100200_rename_store_option_keys_in_reseller_presets.php"
+  ],
+  "kind": "lang_key",
+  "new": "store_template",
+  "note": "**store_template**; stores.settings core.restaurant_template -> core.store_template and fleet preset/run option keys are moved by a data migration"
+ },
+ "restaurant_text_editor": {
+  "kind": "prior_list",
+  "new": "store_text_editor",
+  "note": "**store_text_editor**"
+ },
+ "restaurants": {
+  "kind": "lang_key",
+  "new": "stores",
+  "note": "**stores**"
+ },
+ "restaurants.addCategory": {
+  "kind": "route_name",
+  "new": "stores.addCategory",
+  "note": "**stores.addCategory**"
+ },
+ "restaurants.addImageMenuItem": {
+  "kind": "route_name",
+  "new": "stores.addImageMenuItem",
+  "note": "**stores.addImageMenuItem**"
+ },
+ "restaurants.addMenuItem": {
+  "kind": "route_name",
+  "new": "stores.addMenuItem",
+  "note": "**stores.addMenuItem**"
+ },
+ "restaurants.addSubCategory": {
+  "kind": "route_name",
+  "new": "stores.addSubCategory",
+  "note": "**stores.addSubCategory**"
+ },
+ "restaurants.completeOrder": {
+  "kind": "route_name",
+  "new": "stores.completeOrder",
+  "note": "**stores.completeOrder**"
+ },
+ "restaurants.deleteCategory": {
+  "kind": "route_name",
+  "new": "stores.deleteCategory",
+  "note": "**stores.deleteCategory**"
+ },
+ "restaurants.deleteImageMenuItem": {
+  "kind": "route_name",
+  "new": "stores.deleteImageMenuItem",
+  "note": "**stores.deleteImageMenuItem**"
+ },
+ "restaurants.deleteMenuItem": {
+  "kind": "route_name",
+  "new": "stores.deleteMenuItem",
+  "note": "**stores.deleteMenuItem**"
+ },
+ "restaurants.deleteOrder": {
+  "kind": "route_name",
+  "new": "stores.deleteOrder",
+  "note": "**stores.deleteOrder**"
+ },
+ "restaurants.deleteTable": {
+  "kind": "route_name",
+  "new": "stores.deleteTable",
+  "note": "**stores.deleteTable**"
+ },
+ "restaurants.heartbeat": {
+  "kind": "route_name",
+  "new": "stores.heartbeat",
+  "note": "**stores.heartbeat**"
+ },
+ "restaurants.menu": {
+  "kind": "route_name",
+  "new": "stores.menu",
+  "note": "**stores.menu**"
+ },
+ "restaurants.menuAddExtra": {
+  "kind": "route_name",
+  "new": "stores.menuAddExtra",
+  "note": "**stores.menuAddExtra**"
+ },
+ "restaurants.menuAddVariant": {
+  "kind": "route_name",
+  "new": "stores.menuAddVariant",
+  "note": "**stores.menuAddVariant**"
+ },
+ "restaurants.menuAddVariantOption": {
+  "kind": "route_name",
+  "new": "stores.menuAddVariantOption",
+  "note": "**stores.menuAddVariantOption**"
+ },
+ "restaurants.menuDeleteExtra": {
+  "kind": "route_name",
+  "new": "stores.menuDeleteExtra",
+  "note": "**stores.menuDeleteExtra**"
+ },
+ "restaurants.menuDeleteVariant": {
+  "kind": "route_name",
+  "new": "stores.menuDeleteVariant",
+  "note": "**stores.menuDeleteVariant**"
+ },
+ "restaurants.menuDeleteVariantOption": {
+  "kind": "route_name",
+  "new": "stores.menuDeleteVariantOption",
+  "note": "**stores.menuDeleteVariantOption**"
+ },
+ "restaurants.menuItemExtras": {
+  "kind": "route_name",
+  "new": "stores.menuItemExtras",
+  "note": "**stores.menuItemExtras**"
+ },
+ "restaurants.menuReorderExtra": {
+  "kind": "route_name",
+  "new": "stores.menuReorderExtra",
+  "note": "**stores.menuReorderExtra**"
+ },
+ "restaurants.menuReorderVariant": {
+  "kind": "route_name",
+  "new": "stores.menuReorderVariant",
+  "note": "**stores.menuReorderVariant**"
+ },
+ "restaurants.menuReorderVariantOption": {
+  "kind": "route_name",
+  "new": "stores.menuReorderVariantOption",
+  "note": "**stores.menuReorderVariantOption**"
+ },
+ "restaurants.menuUpdateExtra": {
+  "kind": "route_name",
+  "new": "stores.menuUpdateExtra",
+  "note": "**stores.menuUpdateExtra**"
+ },
+ "restaurants.menuUpdateVariant": {
+  "kind": "route_name",
+  "new": "stores.menuUpdateVariant",
+  "note": "**stores.menuUpdateVariant**"
+ },
+ "restaurants.menuUpdateVariantOption": {
+  "kind": "route_name",
+  "new": "stores.menuUpdateVariantOption",
+  "note": "**stores.menuUpdateVariantOption**"
+ },
+ "restaurants.orders": {
+  "kind": "route_name",
+  "new": "stores.orders",
+  "note": "**stores.orders**"
+ },
+ "restaurants.qrbuilder": {
+  "kind": "route_name",
+  "new": "stores.qrDesigner",
+  "note": "**stores.qrDesigner**"
+ },
+ "restaurants.reorderCategory": {
+  "kind": "route_name",
+  "new": "stores.reorderCategory",
+  "note": "**stores.reorderCategory**"
+ },
+ "restaurants.reorderImageMenuItem": {
+  "kind": "route_name",
+  "new": "stores.reorderImageMenuItem",
+  "note": "**stores.reorderImageMenuItem**"
+ },
+ "restaurants.reorderMenuItem": {
+  "kind": "route_name",
+  "new": "stores.reorderMenuItem",
+  "note": "**stores.reorderMenuItem**"
+ },
+ "restaurants.tables": {
+  "kind": "route_name",
+  "new": "stores.tables",
+  "note": "**stores.tables**"
+ },
+ "restaurants.updateCategory": {
+  "kind": "route_name",
+  "new": "stores.updateCategory",
+  "note": "**stores.updateCategory**"
+ },
+ "restaurants.updateImageMenuItem": {
+  "kind": "route_name",
+  "new": "stores.updateImageMenuItem",
+  "note": "**stores.updateImageMenuItem**"
+ },
+ "restaurants.updateMenuItem": {
+  "kind": "route_name",
+  "new": "stores.updateMenuItem",
+  "note": "**stores.updateMenuItem**"
+ },
+ "restaurants.updateSubCategory": {
+  "kind": "route_name",
+  "new": "stores.updateSubCategory",
+  "note": "**stores.updateSubCategory**"
+ },
+ "restaurants.updateTable": {
+  "kind": "route_name",
+  "new": "stores.updateTable",
+  "note": "**stores.updateTable**"
+ },
+ "select_multiple_options_for_multi_language_menu": {
+  "kind": "lang_key",
+  "new": "select_one_language_first_add",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "select_pending_if_you_want_to_hide_this_from_the_frontend": {
+  "kind": "lang_key",
+  "new": "choose_pending_keep_it_off",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "sendOrder": {
+  "kind": "php_function",
+  "new": "submitOrder",
+  "note": "**submitOrder**"
+ },
+ "send_new_order_notification_to_restaurants": {
+  "kind": "lang_key",
+  "new": "send_new_order_notification_stores",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "show_membership_plan_on_home_page": {
+  "kind": "lang_key",
+  "new": "list_plans_home_page",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "show_partners_slider_on_home_page": {
+  "kind": "lang_key",
+  "new": "show_partner_logos_home_page",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "sorry_we_could_not_found_the_blog_you_are_looking_for": {
+  "kind": "lang_key",
+  "new": "that_post_does_not_exist",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "storage/restaurant/cover/default.png": {
+  "kind": "asset_path",
+  "new": "storage/store/cover/default.png",
+  "note": "**storage/store/cover/default.png**"
+ },
+ "storage/restaurant/logo/default.png": {
+  "kind": "asset_path",
+  "new": "storage/store/logo/default.png",
+  "note": "**storage/store/logo/default.png**"
+ },
+ "subscribe_to_our_newsletter_to_stay_informed_about_latest_updates": {
+  "kind": "lang_key",
+  "new": "leave_email_we_will_send",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "tell_us_what_you_think_of_us": {
+  "kind": "lang_key",
+  "new": "how_are_we_doing",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "the_current_restaurant_theme_supports_images_only": {
+  "kind": "lang_key",
+  "new": "current_store_theme_supports_images",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "the_number_of_days_the_trial_plan_can_be_used": {
+  "kind": "lang_key",
+  "new": "how_many_days_trial_lasts",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "the_page_you_are_looking_for_has_not_been_found_on_our_server": {
+  "kind": "lang_key",
+  "new": "link_may_be_old_or",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "the_site_title_is_what_you_would_like_your_website_to_be_known_as_this_will_be_used_in_emails_and_in_the_title_of_your_webpages": {
+  "kind": "lang_key",
+  "new": "name_people_know_site_by",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "these_details_will_be_used_for_the_invoice": {
+  "kind": "lang_key",
+  "new": "printed_every_invoice",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "these_details_will_be_used_in_invoice_and_payments": {
+  "kind": "lang_key",
+  "new": "we_print_this_information_invoices",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "this_email_will_be_used_to_send_emails": {
+  "kind": "lang_key",
+  "new": "outgoing_emails_are_sent_from",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "this_is_the_email_address_to_which_the_contact_and_feedback_emails_will_be_sent": {
+  "kind": "lang_key",
+  "new": "messages_from_contact_feedback_forms",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "this_plugin_is_not_compatible_with_the_current_version_of_your_script_update_your_script_to_version_strongversion_codestrong_or_higher": {
+  "kind": "lang_key",
+  "new": "this_plugin_needs_newer_version",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "this_website_uses_cookies_to_ensure_you_get_the_best_experience_on_our_website": {
+  "kind": "lang_key",
+  "new": "we_use_cookies_keep_this",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "to_find_your_site_key_and_secret_key_follow_the_below_steps": {
+  "kind": "lang_key",
+  "new": "how_get_site_key_secret",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "total_restaurants": {
+  "kind": "lang_key",
+  "new": "total_stores",
+  "note": "**total_stores**"
+ },
+ "try_demo_link_for_quickorder_home_page": {
+  "kind": "lang_key",
+  "new": "try_demo_link_whatsorder_home",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "try_demo_link_is_required_if_quickorder_homepage_enabled": {
+  "kind": "lang_key",
+  "new": "try_demo_link_is_required",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "updatePostOption": {
+  "kind": "php_function",
+  "new": "updateStoreOption",
+  "note": "**updateStoreOption**"
+ },
+ "use_only_alphanumeric_value_without_space_hyphen_allow_slug_will_be_used_for_restaurant_url": {
+  "kind": "lang_key",
+  "new": "use_only_alphanumeric_value_without",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "we_have_received_your_offline_payment_request_we_will_wait_to_receive_your_payment_to_process_your_request": {
+  "kind": "lang_key",
+  "new": "thanks_we_have_request_plan",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "we_would_like_to_hear_your_opinions_about_the_website_we_would_be_grateful_if_you_could_take_the_time_to_fill_out_this_form": {
+  "kind": "lang_key",
+  "new": "opinion_helps_us_improve_site",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "when_disallow_an_error_message_will_be_shown_to_non_verified_users_to_verify_their_email_address": {
+  "kind": "lang_key",
+  "new": "when_off_users_who_have",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "when_disallow_an_verify_email_message_will_be_hide_to_non_verified_users": {
+  "kind": "lang_key",
+  "new": "when_off_users_who_have_2",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "you_can_add_any_javascript_code_and_style_css_this_code_will_be_placed_on_the_head_part": {
+  "kind": "lang_key",
+  "new": "paste_javascript_or_css_here",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "you_can_create_your_own_menu_with_self_design_qr_code_also_multiple_qr_template_makes_it_better": {
+  "kind": "lang_key",
+  "new": "design_qr_code_yourself_pick",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "you_will_be_redirected_to_the_payment_page_for_complete_payment": {
+  "kind": "lang_key",
+  "new": "next_will_go_payment_page",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ },
+ "you_will_get_the_free_plan_automatically_after_your_current_plan_expires": {
+  "held": true,
+  "kind": "lang_key",
+  "new": "when_this_plan_runs_out",
+  "note": "N3 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename"
+ },
+ "your_email_address_is_not_verified_please_verify_your_email_address_to_use_all_the_features": {
+  "held": true,
+  "kind": "lang_key",
+  "new": "please_confirm_email_address_unlock",
+  "note": "N3 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename"
+ },
+ "your_trial_option_was_already_used_you_cant_use_it_anymore": {
+  "kind": "lang_key",
+  "new": "account_has_already_had_its",
+  "note": "N4 (Opus review 10-26): reverted; copied-copy reword, not part of the restaurant->store rename",
+  "held": true
+ }
+}

@@ -1,0 +1,41 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Street Food Bold — chunky type, poster energy. Logical props (RTL). */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --chunky: 'Arial Black', 'Avenir Heavy', Impact, 'Geeza Pro', sans-serif; }
+html, body { background: #666; }
+.sheet {
+    background: var(--bg); color: var(--text); font-family: var(--chunky);
+    width: var(--page-w); min-height: var(--page-h); margin-inline: auto;
+    padding: 11mm; box-shadow: 0 2px 24px rgba(0,0,0,.4);
+    border-block-start: 7mm solid var(--accent);
+}
+.menu-header { text-align: start; margin-block-end: 7mm; }
+.menu-header .rule { inline-size: 30mm; block-size: 2.5mm; background: var(--text); margin-block-start: 2.5mm; }
+.restaurant-name { font-size: 26pt; text-transform: uppercase; letter-spacing: .01em; color: var(--accent); line-height: .95; }
+.tagline { font-size: 10pt; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; opacity: .8; margin-block-start: 2mm; }
+.menu-body { column-count: 2; column-gap: 8mm; }
+.category { break-inside: avoid; margin-block-end: 7mm; }
+.category-name {
+    font-size: 13pt; text-transform: uppercase; letter-spacing: .04em;
+    background: var(--accent); color: var(--bg); display: inline-block;
+    padding: 1.2mm 3mm; margin-block-end: 3mm; transform: skewX(-6deg);
+}
+.item { break-inside: avoid; margin-block-end: 3.6mm; }
+.item-line { display: flex; align-items: baseline; gap: 2mm; }
+.item-name { font-size: 10.5pt; text-transform: uppercase; letter-spacing: .01em; }
+.item-dots { flex: 1; }
+.item-price { font-size: 12pt; color: var(--accent); white-space: nowrap; }
+.item-desc { font-size: 8pt; font-family: Arial, 'Segoe UI', sans-serif; opacity: .8; margin-block-start: .6mm; line-height: 1.35; }
+.item-tags { margin-block-start: .8mm; }
+.tag { display: inline-block; font-size: 6.5pt; letter-spacing: .06em; text-transform: uppercase; border: 2px solid var(--accent); color: var(--accent); padding: .3mm 1.6mm; margin-inline-end: 1.2mm; }
+.item-variants, .item-extras { font-size: 8pt; font-family: Arial, 'Segoe UI', sans-serif; opacity: .85; margin-block-start: .8mm; }
+.menu-footer { font-size: 8.5pt; font-family: Arial, 'Segoe UI', sans-serif; opacity: .75; border-block-start: 2.5mm solid var(--accent); padding-block-start: 3mm; margin-block-start: 6mm; text-align: center; }
+.aspect-a4 { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+.aspect-square { --page-w: 210mm; --page-h: 210mm; }
+.aspect-story { --page-w: 180mm; --page-h: 320mm; }
+.aspect-story .menu-body, .aspect-square .menu-body { column-count: 1; }
+@media print { html, body { background: none; } .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .category, .item { break-inside: avoid; } }
+@page { margin: 0; }

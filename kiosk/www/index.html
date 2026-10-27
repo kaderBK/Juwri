@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>juwri Kiosk</title>
+    <style>
+        html, body { margin: 0; height: 100%; background: #0b1020; color: #fff; font-family: system-ui, sans-serif; }
+        .wrap { height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,.2); border-top-color: #22c55e; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <!--
+      Capacitor loads the restaurant's kiosk web mode via server.url in
+      capacitor.config.json ({slug}/kiosk). This local shell only shows while the
+      WebView connects and as the offline fallback. Kiosk lockdown (launcher mode,
+      relaunchInterval, restoreAfterReboot) is configured through
+      @capgo/capacitor-android-kiosk in the native project — see README.md.
+    -->
+    <div class="wrap">
+        <div class="spinner"></div>
+        <div>Starting kiosk…</div>
+    </div>
+</body>
+</html>

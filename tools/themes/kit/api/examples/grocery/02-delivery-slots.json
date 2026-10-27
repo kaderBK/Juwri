@@ -1,0 +1,259 @@
+{
+  "operationId": "getDeliverySlots",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/delivery/slots",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "order_type": "delivery",
+      "from": "2026-10-02",
+      "days": 3
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:45:30 GMT"
+    },
+    "body": {
+      "timezone": "Asia/Riyadh",
+      "days": [
+        {
+          "date": "2026-10-02",
+          "display": {
+            "id": "d_fri",
+            "label": "Today",
+            "sub": "Fri 2 Oct",
+            "state": "selected"
+          },
+          "slots": [
+            {
+              "id": "dslot_38a6379d00",
+              "starts_at": "2026-10-02T11:00:00+03:00",
+              "ends_at": "2026-10-02T12:00:00+03:00",
+              "state": "available",
+              "capacity_remaining": 6,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_38a6379d00",
+                "label": "11:00 – 12:00",
+                "state": "available"
+              }
+            },
+            {
+              "id": "dslot_9f6c9fdc18",
+              "starts_at": "2026-10-02T12:00:00+03:00",
+              "ends_at": "2026-10-02T13:00:00+03:00",
+              "state": "available",
+              "capacity_remaining": 4,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_9f6c9fdc18",
+                "label": "12:00 – 13:00",
+                "state": "available"
+              }
+            },
+            {
+              "id": "dslot_2ebfe90dc5",
+              "starts_at": "2026-10-02T13:00:00+03:00",
+              "ends_at": "2026-10-02T14:00:00+03:00",
+              "state": "full",
+              "capacity_remaining": 0,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_2ebfe90dc5",
+                "label": "13:00 – 14:00",
+                "state": "full",
+                "sub": "Full"
+              }
+            },
+            {
+              "id": "dslot_a68d5c6027",
+              "starts_at": "2026-10-02T14:00:00+03:00",
+              "ends_at": "2026-10-02T15:00:00+03:00",
+              "state": "available",
+              "capacity_remaining": 8,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_a68d5c6027",
+                "label": "14:00 – 15:00",
+                "state": "available"
+              }
+            },
+            {
+              "id": "dslot_52f41caf64",
+              "starts_at": "2026-10-02T15:00:00+03:00",
+              "ends_at": "2026-10-02T16:00:00+03:00",
+              "state": "available",
+              "capacity_remaining": 8,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_52f41caf64",
+                "label": "15:00 – 16:00",
+                "state": "available"
+              }
+            },
+            {
+              "id": "dslot_53779b4b75",
+              "starts_at": "2026-10-02T16:00:00+03:00",
+              "ends_at": "2026-10-02T17:00:00+03:00",
+              "state": "few",
+              "capacity_remaining": 2,
+              "fee": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "display": {
+                "id": "dslot_53779b4b75",
+                "label": "16:00 – 17:00",
+                "state": "few",
+                "sub": "Few left"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-10-03",
+          "display": {
+            "id": "d_sat",
+            "label": "Tomorrow",
+            "sub": "Sat 3 Oct",
+            "state": "available"
+          },
+          "slots": []
+        },
+        {
+          "date": "2026-10-04",
+          "display": {
+            "id": "d_sun",
+            "label": "Sun 4 Oct",
+            "state": "available"
+          },
+          "slots": []
+        }
+      ],
+      "express": {
+        "available": true,
+        "fee": {
+          "minor": 500,
+          "currency": "SAR",
+          "formatted": "SAR 5.00"
+        },
+        "eta_min_from": 25,
+        "eta_min_to": 35,
+        "display": {
+          "id": "express",
+          "label": "Express · 25–35 min",
+          "amount": {
+            "minor": 500,
+            "currency": "SAR",
+            "formatted": "SAR 5.00"
+          },
+          "amount_label": "+ SAR 5.00",
+          "icon": "zap"
+        }
+      },
+      "picker": {
+        "title": "Delivery time",
+        "days": [
+          {
+            "id": "d_fri",
+            "label": "Today",
+            "sub": "Fri 2 Oct",
+            "state": "selected"
+          },
+          {
+            "id": "d_sat",
+            "label": "Tomorrow",
+            "sub": "Sat 3 Oct",
+            "state": "available"
+          },
+          {
+            "id": "d_sun",
+            "label": "Sun 4 Oct",
+            "state": "available"
+          }
+        ],
+        "groups": [
+          {
+            "label": "Today",
+            "slots": [
+              {
+                "id": "dslot_38a6379d00",
+                "label": "11:00 – 12:00",
+                "state": "available"
+              },
+              {
+                "id": "dslot_9f6c9fdc18",
+                "label": "12:00 – 13:00",
+                "state": "selected"
+              },
+              {
+                "id": "dslot_2ebfe90dc5",
+                "label": "13:00 – 14:00",
+                "state": "full",
+                "sub": "Full"
+              },
+              {
+                "id": "dslot_a68d5c6027",
+                "label": "14:00 – 15:00",
+                "state": "available"
+              },
+              {
+                "id": "dslot_52f41caf64",
+                "label": "15:00 – 16:00",
+                "state": "available"
+              },
+              {
+                "id": "dslot_53779b4b75",
+                "label": "16:00 – 17:00",
+                "state": "few",
+                "sub": "Few left"
+              }
+            ]
+          }
+        ],
+        "selection_label": "Today · 12:00 – 13:00",
+        "timezone_note": "Times are in Riyadh time (GMT+3)",
+        "express": {
+          "id": "express",
+          "label": "Express · 25–35 min",
+          "amount": {
+            "minor": 500,
+            "currency": "SAR",
+            "formatted": "SAR 5.00"
+          },
+          "amount_label": "+ SAR 5.00",
+          "icon": "zap"
+        }
+      }
+    }
+  }
+}

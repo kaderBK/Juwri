@@ -1,0 +1,59 @@
+{
+  "name": "juwri-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "juwri desktop shell \u2014 wraps the POS web app and exposes the LAN print bridge on 127.0.0.1:8543 (rev/parity/contracts/print-bridge.md).",
+  "author": "juwri",
+  "license": "AGPL-3.0-only",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/",
+    "bridge": "node scripts/run-bridge.js",
+    "pack": "electron-builder --dir --publish never",
+    "dist:mac": "electron-builder --mac dmg --publish never",
+    "dist:win": "electron-builder --win nsis --publish never",
+    "add:usb": "npm install escpos-usb@3.0.0-alpha.4 usb@2.11.0 --no-save"
+  },
+  "dependencies": {
+    "electron-store": "8.2.0",
+    "escpos-network": "3.0.0-alpha.5"
+  },
+  "devDependencies": {
+    "electron": "37.6.0",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "com.juwri.desktop",
+    "productName": "juwri Desktop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "src/main/main.js"
+    },
+    "mac": {
+      "category": "public.app-category.business",
+      "target": [
+        "dmg"
+      ],
+      "identity": null
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false
+    },
+    "publish": null
+  }
+}

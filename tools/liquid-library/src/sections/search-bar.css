@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* search-bar */
+.mbs-search-bar { box-sizing: border-box; max-inline-size: 1200px; margin-inline: auto; padding: var(--ts-gap-2, 10px) var(--ts-gap-3, 16px); background: var(--tc-background, #fff); color: var(--tc-text, #111); }
+.mbs-search-bar.is-sticky { position: sticky; inset-block-start: var(--mbs-sticky-top, 0px); z-index: 31; }
+.mbs-search-bar__field { display: flex; align-items: center; gap: 8px; min-block-size: 48px; padding-inline: 14px; border-radius: var(--tr-pill, 999px); background: rgba(var(--tc-text-rgb, 17, 17, 17), .06); color: var(--tc-text-muted, #6b7280); }
+.mbs-search-bar__field:focus-within { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 1px; }
+.mbs-search-bar__input { flex: 1; min-inline-size: 0; block-size: 44px; padding: 0; border: 0; background: none; color: var(--tc-text, #111); font: inherit; font-size: 1rem; outline: none; }
+.mbs-search-bar__input::placeholder { color: var(--tc-text-muted, #6b7280); }
+.mbs-search-bar__sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

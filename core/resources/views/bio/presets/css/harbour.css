@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--harbour .bio-name{font-family:'Fraunces',serif;letter-spacing:.02em}
+.bio--harbour .bio-link:hover{border-color:#c98f43;transform:translateY(-2px)}
+.bio--harbour .bio-link__icon{border:1.5px dashed #3c5c74;border-radius:50%}
+.bio--harbour .bio-socials a{background:#12314a;border:1px solid #1e425e;color:#c98f43}

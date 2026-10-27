@@ -1,0 +1,25 @@
+{
+  "slug": "swiss_grid",
+  "starter": "minimal",
+  "name": "Swiss Grid",
+  "family": "swiss",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Archivo", "weights": [500, 800, 900]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#fbfbf9",
+    "--ink": "#111111",
+    "--muted": "#8a8a84",
+    "--card": "#ffffff",
+    "--accent": "#d94f00",
+    "--accent-ink": "#ffffff",
+    "--radius": "0px",
+    "--shadow": "none",
+    "--font-body": "'Archivo',sans-serif",
+    "--font-display": "'Archivo',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

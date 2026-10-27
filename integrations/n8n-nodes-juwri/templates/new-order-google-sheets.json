@@ -1,0 +1,65 @@
+{
+  "name": "juwri: New order → Google Sheets row",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## New order → Google Sheets\n\n1. Connect your **juwri API** credential.\n2. Connect **Google Sheets** and pick a spreadsheet + sheet with columns: Time, Order ID, Type, Total, Currency, Status.\n3. Activate — a row is appended for every new order.",
+        "height": 220,
+        "width": 320
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [340, 120]
+    },
+    {
+      "parameters": {
+        "events": ["order.created"]
+      },
+      "id": "trigger-1",
+      "name": "On new order",
+      "type": "n8n-nodes-juwri.juwriTrigger",
+      "typeVersion": 1,
+      "position": [720, 300],
+      "webhookId": "juwri-new-order-sheets",
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Time": "={{ $json.created_at }}",
+            "Order ID": "={{ $json.data.order_id }}",
+            "Type": "={{ $json.data.type }}",
+            "Total": "={{ $json.data.total }}",
+            "Currency": "={{ $json.data.currency }}",
+            "Status": "={{ $json.data.status }}"
+          }
+        }
+      },
+      "id": "sheets-1",
+      "name": "Append order row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [980, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": { "id": "3", "name": "Google Sheets account" }
+      }
+    }
+  ],
+  "connections": {
+    "On new order": {
+      "main": [[{ "node": "Append order row", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-new-order-sheets" },
+  "tags": [{ "name": "juwri" }]
+}

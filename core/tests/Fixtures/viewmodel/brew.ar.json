@@ -1,0 +1,1883 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "bloom-coffee-demo",
+            "name": "Bloom Coffee",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Bloom Coffee"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Bloom Coffee"
+            },
+            "tagline": "Order ahead, skip the line",
+            "locale": "ar",
+            "dir": "rtl",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/bloom-coffee-demo?lang=en"
+                },
+                {
+                    "code": "ar",
+                    "name": "ar",
+                    "url": "/bloom-coffee-demo?lang=ar"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "food",
+            "store_type": "cafe",
+            "status": {
+                "open": true,
+                "label": "مفتوح · يُغلق 11:00 م",
+                "next_change_at": "2026-10-04T23:00:00+03:00",
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966550100102",
+                "whatsapp": "966550100102",
+                "address": "Olaya St, Al Olaya, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": false,
+            "hours": [
+                {
+                    "days": [
+                        "Mo"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Tu"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "We"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Th"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Fr"
+                    ],
+                    "opens": "13:00",
+                    "closes": "23:30"
+                },
+                {
+                    "days": [
+                        "Sa"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Su"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                }
+            ]
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Bloom Coffee — Main",
+                "address": "Olaya St, Al Olaya, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "dine_in",
+                    "label": "تناول بالمطعم",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "takeaway",
+                    "label": "سفري",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "delivery",
+                    "label": "التسليم",
+                    "needs_address": true,
+                    "needs_slot": false
+                }
+            ],
+            "selected_order_type": "takeaway",
+            "table": null,
+            "room": null,
+            "schedule_ahead": false,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": true,
+                "order_types": [
+                    "dine_in",
+                    "takeaway"
+                ],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "brew",
+            "settings": {
+                "colors.primary": "#067655",
+                "colors.background": "#F7FAF8",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#152B1F",
+                "colors.accent": "#F2A93B",
+                "layout.radius": "pill",
+                "layout.density": "cozy",
+                "fonts.pair": "jakarta",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#4FD1A1",
+                "colors_dark.background": "#0F1713",
+                "colors_dark.surface": "#18221D",
+                "colors_dark.text": "#EEF5F0",
+                "colors_dark.accent": "#F5B85A",
+                "layout.card": "grid",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "compact",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": true,
+                "menu.show_allergens": true,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "hero",
+                "reorder",
+                "category_nav",
+                "featured",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "hero_title": "Order ahead, skip the line",
+                "featured_title": "Popular",
+                "reorder_title": "Order again",
+                "search_placeholder": "Search the menu"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "القهوة",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}",
+                        "{id:10}",
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}"
+                    ],
+                    "count": 10
+                },
+                {
+                    "id": "{id:14}",
+                    "name": "الماتشا",
+                    "item_ids": [
+                        "{id:15}",
+                        "{id:16}",
+                        "{id:17}",
+                        "{id:18}",
+                        "{id:19}",
+                        "{id:20}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:21}",
+                    "name": "المشروبات الباردة",
+                    "item_ids": [
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}",
+                        "{id:26}",
+                        "{id:27}",
+                        "{id:28}"
+                    ],
+                    "count": 7
+                },
+                {
+                    "id": "{id:29}",
+                    "name": "الشاي",
+                    "item_ids": [
+                        "{id:30}",
+                        "{id:31}",
+                        "{id:32}",
+                        "{id:33}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:34}",
+                    "name": "المخبوزات",
+                    "item_ids": [
+                        "{id:35}",
+                        "{id:36}",
+                        "{id:37}",
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:41}",
+                    "name": "الحلويات",
+                    "item_ids": [
+                        "{id:42}",
+                        "{id:43}",
+                        "{id:44}",
+                        "{id:45}",
+                        "{id:46}",
+                        "{id:47}"
+                    ],
+                    "count": 6
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "إسبريسو",
+                    "url": "/bloom-coffee-demo#item-{id:4}",
+                    "short": "جرعة قصيرة كثيفة من خلطتنا الخاصة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "إسبريسو"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 5
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "إسبريسو مزدوج",
+                    "url": "/bloom-coffee-demo#item-{id:5}",
+                    "short": "جرعتان بنكهة قوية وحلوة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "إسبريسو مزدوج"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 10
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "أمريكانو",
+                    "url": "/bloom-coffee-demo#item-{id:6}",
+                    "short": "إسبريسو مخفف بالماء الساخن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أمريكانو"
+                    },
+                    "from_price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 10
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "كابتشينو",
+                    "url": "/bloom-coffee-demo#item-{id:7}",
+                    "short": "إسبريسو وحليب مبخّر ورغوة كثيفة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كابتشينو"
+                    },
+                    "from_price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "17.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 120,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "فلات وايت",
+                    "url": "/bloom-coffee-demo#item-{id:8}",
+                    "short": "رغوة ناعمة فوق جرعة مزدوجة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فلات وايت"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "لاتيه",
+                    "url": "/bloom-coffee-demo#item-{id:9}",
+                    "short": "إسبريسو ناعم مع الكثير من الحليب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لاتيه"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 150,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:10}": {
+                    "id": "{id:10}",
+                    "name": "كورتادو",
+                    "url": "/bloom-coffee-demo#item-{id:10}",
+                    "short": "إسبريسو وحليب دافئ بأجزاء متساوية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كورتادو"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 80,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "موكا",
+                    "url": "/bloom-coffee-demo#item-{id:11}",
+                    "short": "إسبريسو وشوكولاتة داكنة وحليب مبخّر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "موكا"
+                    },
+                    "from_price": {
+                        "minor": 2000,
+                        "currency": "SAR",
+                        "formatted": "20.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 230,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "سبانش لاتيه",
+                    "url": "/bloom-coffee-demo#item-{id:12}",
+                    "short": "إسبريسو وحليب مع لمسة حليب مكثّف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سبانش لاتيه"
+                    },
+                    "from_price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "21.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 240,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "في 60 مقطّرة",
+                    "url": "/bloom-coffee-demo#item-{id:13}",
+                    "short": "قهوة مقطّرة من أصل واحد تُحضّر يدوياً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "في 60 مقطّرة"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "24.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 5
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "لاتيه ماتشا مثلج",
+                    "url": "/bloom-coffee-demo#item-{id:15}",
+                    "short": "ماتشا فاخرة تُخفق عند الطلب فوق الثلج.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لاتيه ماتشا مثلج"
+                    },
+                    "from_price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "17.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        },
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 140,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "لاتيه ماتشا ساخن",
+                    "url": "/bloom-coffee-demo#item-{id:16}",
+                    "short": "ماتشا مخفوقة مع حليب مبخّر ناعم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لاتيه ماتشا ساخن"
+                    },
+                    "from_price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "ماتشا إسبريسو",
+                    "url": "/bloom-coffee-demo#item-{id:17}",
+                    "short": "ماتشا مع جرعة إسبريسو فوق الحليب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ماتشا إسبريسو"
+                    },
+                    "from_price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 150,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "ماتشا بالفراولة",
+                    "url": "/bloom-coffee-demo#item-{id:18}",
+                    "short": "هريس الفراولة والحليب والماتشا.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ماتشا بالفراولة"
+                    },
+                    "from_price": {
+                        "minor": 2000,
+                        "currency": "SAR",
+                        "formatted": "20.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 190,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:19}": {
+                    "id": "{id:19}",
+                    "name": "ماتشا بجوز الهند",
+                    "url": "/bloom-coffee-demo#item-{id:19}",
+                    "short": "ماتشا فوق ماء جوز الهند والحليب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ماتشا بجوز الهند"
+                    },
+                    "from_price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 160,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "لاتيه هوجيتشا",
+                    "url": "/bloom-coffee-demo#item-{id:20}",
+                    "short": "شاي أخضر محمّص بنكهة المكسرات وكافيين أقل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لاتيه هوجيتشا"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 140,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "لاتيه مثلج",
+                    "url": "/bloom-coffee-demo#item-{id:22}",
+                    "short": "إسبريسو وحليب بارد فوق الثلج.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لاتيه مثلج"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "كولد برو",
+                    "url": "/bloom-coffee-demo#item-{id:23}",
+                    "short": "منقوع 18 ساعة لمذاق ناعم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كولد برو"
+                    },
+                    "from_price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 10
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "سبانش لاتيه مثلج",
+                    "url": "/bloom-coffee-demo#item-{id:24}",
+                    "short": "حلو وكريمي وبارد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سبانش لاتيه مثلج"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 260,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "ليمون بالنعناع",
+                    "url": "/bloom-coffee-demo#item-{id:25}",
+                    "short": "ليمون طازج ونعناع وثلج مجروش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ليمون بالنعناع"
+                    },
+                    "from_price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 110
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "شاي مثلج بالخوخ",
+                    "url": "/bloom-coffee-demo#item-{id:26}",
+                    "short": "شاي أسود وخوخ وعصرة ليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شاي مثلج بالخوخ"
+                    },
+                    "from_price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 90
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "سموذي المانجو",
+                    "url": "/bloom-coffee-demo#item-{id:27}",
+                    "short": "مانجو وزبادي وقليل من العسل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سموذي المانجو"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 210,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "مياه فوّارة",
+                    "url": "/bloom-coffee-demo#item-{id:28}",
+                    "short": "عبوة 330 مل مقدّمة باردة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مياه فوّارة"
+                    },
+                    "price": {
+                        "minor": 600,
+                        "currency": "SAR",
+                        "formatted": "6.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "شاي مغربي بالنعناع",
+                    "url": "/bloom-coffee-demo#item-{id:30}",
+                    "short": "شاي أخضر بالنعناع الطازج يُقدَّم في إبريق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شاي مغربي بالنعناع"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 30
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "شاي كرك",
+                    "url": "/bloom-coffee-demo#item-{id:31}",
+                    "short": "شاي قوي بالهيل والحليب المبخّر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شاي كرك"
+                    },
+                    "from_price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "10.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:32}": {
+                    "id": "{id:32}",
+                    "name": "بابونج",
+                    "url": "/bloom-coffee-demo#item-{id:32}",
+                    "short": "أزهار مجففة مهدّئة بدون كافيين.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بابونج"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "إيرل جراي",
+                    "url": "/bloom-coffee-demo#item-{id:33}",
+                    "short": "شاي أسود معطّر بالبرغموت.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "إيرل جراي"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:35}": {
+                    "id": "{id:35}",
+                    "name": "كرواسون بالزبدة",
+                    "url": "/bloom-coffee-demo#item-{id:35}",
+                    "short": "طبقات هشة مخبوزة هذا الصباح.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كرواسون بالزبدة"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 270,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "كرواسون باللوز",
+                    "url": "/bloom-coffee-demo#item-{id:36}",
+                    "short": "محشو بكريمة اللوز ومرشوش بالسكر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كرواسون باللوز"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        },
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "المكسرات",
+                        "البيض"
+                    ]
+                },
+                "{id:37}": {
+                    "id": "{id:37}",
+                    "name": "كرواسون بالشوكولاتة",
+                    "url": "/bloom-coffee-demo#item-{id:37}",
+                    "short": "قطعتا شوكولاتة داكنة داخل عجينة هشة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كرواسون بالشوكولاتة"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 330,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "سينابون",
+                    "url": "/bloom-coffee-demo#item-{id:38}",
+                    "short": "لفة طرية بالقرفة والسكر وكريمة الجبن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سينابون"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "البيض"
+                    ]
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "مناقيش زعتر",
+                    "url": "/bloom-coffee-demo#item-{id:39}",
+                    "short": "خبز مسطح بالزعتر وزيت الزيتون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناقيش زعتر"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 290,
+                    "allergens": [
+                        "الغلوتين",
+                        "السمسم"
+                    ]
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "كرواسون بالجبنة والزعتر",
+                    "url": "/bloom-coffee-demo#item-{id:40}",
+                    "short": "كرواسون مالح بالجبنة الذائبة والزعتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كرواسون بالجبنة والزعتر"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "13.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 340,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته"
+                    ]
+                },
+                "{id:42}": {
+                    "id": "{id:42}",
+                    "name": "كوكيز الماتشا",
+                    "url": "/bloom-coffee-demo#item-{id:42}",
+                    "short": "كوكيز طري بالشوكولاتة البيضاء والماتشا.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كوكيز الماتشا"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sold_out",
+                            "label": "نفد من المخزون"
+                        },
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": true,
+                    "has_required_choices": false,
+                    "calories": 310,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "البيض"
+                    ]
+                },
+                "{id:43}": {
+                    "id": "{id:43}",
+                    "name": "تشيز كيك باسك",
+                    "url": "/bloom-coffee-demo#item-{id:43}",
+                    "short": "وجه محروق وقلب كريمي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تشيز كيك باسك"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "24.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 430,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "البيض"
+                    ]
+                },
+                "{id:44}": {
+                    "id": "{id:44}",
+                    "name": "كوب تيراميسو",
+                    "url": "/bloom-coffee-demo#item-{id:44}",
+                    "short": "ماسكاربوني وإسبريسو وكاكاو.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كوب تيراميسو"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "22.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 390,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "البيض"
+                    ]
+                },
+                "{id:45}": {
+                    "id": "{id:45}",
+                    "name": "كوكيز التمر والطحينة",
+                    "url": "/bloom-coffee-demo#item-{id:45}",
+                    "short": "كوكيز طري بتمر السكري والطحينة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كوكيز التمر والطحينة"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "10.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 280,
+                    "allergens": [
+                        "الغلوتين",
+                        "السمسم",
+                        "البيض"
+                    ]
+                },
+                "{id:46}": {
+                    "id": "{id:46}",
+                    "name": "براوني الفستق",
+                    "url": "/bloom-coffee-demo#item-{id:46}",
+                    "short": "براوني كثيف بالفستق المحمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "براوني الفستق"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 370,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "المكسرات",
+                        "البيض"
+                    ]
+                },
+                "{id:47}": {
+                    "id": "{id:47}",
+                    "name": "شريحة كيك اللوتس",
+                    "url": "/bloom-coffee-demo#item-{id:47}",
+                    "short": "طبقات كريمة اللوتس وفتات الكراميل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شريحة كيك اللوتس"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "22.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 450,
+                    "allergens": [
+                        "الغلوتين",
+                        "الحليب ومشتقاته",
+                        "البيض"
+                    ]
+                }
+            },
+            "total": 39
+        },
+        "features": {
+            "featured": [
+                "{id:7}",
+                "{id:8}",
+                "{id:12}",
+                "{id:15}",
+                "{id:22}",
+                "{id:31}",
+                "{id:35}",
+                "{id:36}"
+            ],
+            "line_note": {
+                "max_length": 20
+            }
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/bloom-coffee-demo",
+            "cart": "/bloom-coffee-demo#cart",
+            "quote": "/bloom-coffee-demo/quote",
+            "track": "/bloom-coffee-demo#track",
+            "place": "/{store}/send-order",
+            "coupon": "/{store}/coupon",
+            "slots": "/{store}/schedule-slots",
+            "order_lookup": "/{store}/order-lookup"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "after"
+            },
+            "tax": {
+                "mode": "exclusive",
+                "rate": 15,
+                "label": "VAT"
+            }
+        },
+        "i18n": {
+            "add_more": "أضف المزيد",
+            "nothing_in_your_order_yet": "لا شيء في طلبك بعد",
+            "total_to_pay": "المبلغ المستحق",
+            "store_closed": "المتجر مغلق",
+            "ordering_is_paused": "الطلب متوقف مؤقتًا",
+            "waiting_for_connection": "في انتظار الاتصال",
+            "youre_offline": "أنت غير متصل بالإنترنت",
+            "prices_changed_while_you_were_offline": "تغيّرت الأسعار أثناء عدم اتصالك بالإنترنت.",
+            "please_confirm_your_order_again": "يرجى تأكيد طلبك مرة أخرى",
+            "couldnt_update_total_retry": "تعذّر تحديث الإجمالي — أعد المحاولة",
+            "sold_out": "نفد من المخزون",
+            "free": "مجاني",
+            "added_to_your_order": "تمت الإضافة إلى طلبك",
+            "removed_from_your_order": "تمت إزالته من طلبك",
+            "sending_your_order": "جارٍ إرسال طلبك",
+            "needs_your_confirmation": "يحتاج إلى تأكيدك",
+            "order_placed": "تم تقديم الطلب",
+            "order_expired": "انتهت صلاحية الطلب",
+            "could_not_place_the_order": "تعذّر إرسال الطلب",
+            "connect_to_place_this_order": "اتصل بالإنترنت لإتمام الطلب",
+            "offline_prices_may_change": "بدون اتصال: قد تتغيّر الأسعار",
+            "some_items_are_no_longer_available": "بعض العناصر لم تعد متوفرة",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "تمت إزالة الطلبات المنتظرة لأن الطلب دون اتصال تم إيقافه.",
+            "still_there_starting_over_in_n_seconds": "هل ما زلت هنا؟ سنبدأ من جديد خلال :n ثانية",
+            "incorrect_pin": "رمز PIN غير صحيح",
+            "too_many_attempts_wait_a_moment": "محاولات كثيرة. انتظر قليلاً.",
+            "device_setup_pin": "رمز إعداد الجهاز PIN",
+            "enter_the_staff_pin": "أدخل رمز الموظفين",
+            "count_of_total_digits_entered": "تم إدخال :count من :total أرقام",
+            "starting_over_in_seconds_s": "إعادة البدء خلال :seconds ث",
+            "continue": "متابعة",
+            "exit_kiosk": "إنهاء وضع الطلب الذاتي",
+            "connection_lost_pay_at_the_counter_to_order_now": "انقطع الاتصال — ادفع عند الكاونتر لتطلب الآن",
+            "ordering_is_paused_until_the_connection_returns": "الطلب متوقف حتى يعود الاتصال"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "إسبريسو",
+                    "description": "جرعة قصيرة كثيفة من خلطتنا الخاصة.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:1}",
+                            "alt": "إسبريسو"
+                        }
+                    ],
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "option_groups": [
+                        {
+                            "id": "{id:48}",
+                            "label": "إضافات",
+                            "kind": "checkbox",
+                            "required": false,
+                            "min": 0,
+                            "max": 2,
+                            "rule_label": "اختياري · اختر حتى 2",
+                            "options": [
+                                {
+                                    "id": "{id:49}",
+                                    "label": "جرعة إسبريسو إضافية",
+                                    "price_delta": {
+                                        "minor": 400,
+                                        "currency": "SAR",
+                                        "formatted": "4.00 ⁨⃁⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:50}",
+                                    "label": "شراب الفانيلا",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "3.00 ⁨⃁⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:51}",
+                                    "label": "شراب الكراميل",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "3.00 ⁨⃁⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:52}",
+                                    "label": "رغوة باردة",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "3.00 ⁨⃁⁩"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "nutrition": [
+                        {
+                            "label": "السعرات الحرارية",
+                            "value": "5 سعرة"
+                        }
+                    ],
+                    "add_label": "إضافة · 12.00 ⁨⃁⁩"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "إسبريسو",
+                            "qty": 2,
+                            "line_total": {
+                                "minor": 3200,
+                                "currency": "SAR",
+                                "formatted": "32.00 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "إسبريسو"
+                            },
+                            "choices_label": "جرعة إسبريسو إضافية"
+                        },
+                        {
+                            "id": "ln_2",
+                            "item_id": "{id:13}",
+                            "name": "في 60 مقطّرة",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 2400,
+                                "currency": "SAR",
+                                "formatted": "24.00 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "في 60 مقطّرة"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "المجموع الفرعي",
+                            "amount": {
+                                "minor": 5600,
+                                "currency": "SAR",
+                                "formatted": "56.00 ⁨⃁⁩"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "tax",
+                            "label": "VAT 15%",
+                            "amount": {
+                                "minor": 840,
+                                "currency": "SAR",
+                                "formatted": "8.40 ⁨⃁⁩"
+                            },
+                            "kind": "tax"
+                        }
+                    ],
+                    "total": {
+                        "minor": 6440,
+                        "currency": "SAR",
+                        "formatted": "64.40 ⁨⃁⁩"
+                    },
+                    "total_label": "الإجمالي",
+                    "cta_label": "الانتقال إلى الدفع · 64.40 ⁨⃁⁩"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الكاونتر",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "إسبريسو",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 3200,
+                                    "currency": "SAR",
+                                    "formatted": "32.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "إسبريسو"
+                                },
+                                "choices_label": "جرعة إسبريسو إضافية"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:13}",
+                                "name": "في 60 مقطّرة",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 2400,
+                                    "currency": "SAR",
+                                    "formatted": "24.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "في 60 مقطّرة"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 5600,
+                                    "currency": "SAR",
+                                    "formatted": "56.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 840,
+                                    "currency": "SAR",
+                                    "formatted": "8.40 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 6440,
+                            "currency": "SAR",
+                            "formatted": "64.40 ⁨⃁⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · 64.40 ⁨⃁⁩"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/bloom-coffee-demo",
+                "cart": "/bloom-coffee-demo#cart",
+                "quote": "/bloom-coffee-demo/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "تم تقديم الطلب",
+                    "heading": "الطلب رقم {order_no}",
+                    "steps": [
+                        {
+                            "label": "تم تقديم الطلب",
+                            "sub": "12:00 م",
+                            "state": "current"
+                        },
+                        {
+                            "label": "جار التحضير",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "جاهز",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "مكتملة",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "إسبريسو",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 3200,
+                                    "currency": "SAR",
+                                    "formatted": "32.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "إسبريسو"
+                                },
+                                "choices_label": "جرعة إسبريسو إضافية"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:13}",
+                                "name": "في 60 مقطّرة",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 2400,
+                                    "currency": "SAR",
+                                    "formatted": "24.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "في 60 مقطّرة"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 5600,
+                                    "currency": "SAR",
+                                    "formatted": "56.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 840,
+                                    "currency": "SAR",
+                                    "formatted": "8.40 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 6440,
+                            "currency": "SAR",
+                            "formatted": "64.40 ⁨⃁⁩"
+                        },
+                        "total_label": "الإجمالي · الدفع عند الكاونتر"
+                    },
+                    "paid_label": "الدفع عند الكاونتر",
+                    "actions": [
+                        {
+                            "label": "اتصل بالمتجر",
+                            "url": "tel:966550100102",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "واتساب",
+                            "url": "https://wa.me/966550100102",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ],
+                    "location": {
+                        "icon": "map-pin",
+                        "label": "Bloom Coffee",
+                        "sub": "Olaya St, Al Olaya, Riyadh",
+                        "url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+                    }
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "dine_in",
+                        "label": "تناول بالمطعم",
+                        "needs_address": false,
+                        "needs_slot": false
+                    },
+                    {
+                        "key": "takeaway",
+                        "label": "سفري",
+                        "needs_address": false,
+                        "needs_slot": false
+                    }
+                ],
+                "selected_order_type": "takeaway",
+                "table": null,
+                "room": null,
+                "schedule_ahead": false,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": true,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/bloom-coffee-demo",
+                "cart": "/bloom-coffee-demo#cart",
+                "quote": "/bloom-coffee-demo/quote",
+                "track": "/bloom-coffee-demo#track",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/bloom-coffee-demo/kiosk/reset",
+                "kiosk_start": "/bloom-coffee-demo/kiosk",
+                "kiosk_exit": "/bloom-coffee-demo/kiosk/exit",
+                "kiosk_setup": "/bloom-coffee-demo/kiosk/setup"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "bloom-coffee-demo",
+                "name": "Bloom Coffee",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Bloom Coffee"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Bloom Coffee"
+                },
+                "tagline": "Order ahead, skip the line",
+                "locale": "ar",
+                "dir": "rtl",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/bloom-coffee-demo?lang=en"
+                    },
+                    {
+                        "code": "ar",
+                        "name": "ar",
+                        "url": "/bloom-coffee-demo?lang=ar"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "food",
+                "store_type": "cafe",
+                "status": {
+                    "open": false,
+                    "label": "الطلب متوقف مؤقتًا",
+                    "next_change_at": "2026-10-04T23:00:00+03:00",
+                    "paused_reason": "الطلب متوقف مؤقتًا"
+                },
+                "contact": {
+                    "phone": "966550100102",
+                    "whatsapp": "966550100102",
+                    "address": "Olaya St, Al Olaya, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": false,
+                "hours": [
+                    {
+                        "days": [
+                            "Mo"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Tu"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "We"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Th"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Fr"
+                        ],
+                        "opens": "13:00",
+                        "closes": "23:30"
+                    },
+                    {
+                        "days": [
+                            "Sa"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Su"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    }
+                ]
+            }
+        }
+    }
+}

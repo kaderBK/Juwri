@@ -1,0 +1,84 @@
+{%- comment -%}
+  Room list (library v1, B1c) — hotels / stays. Rooms are the store's
+  catalogue items (pick the rooms category, or blank = every item), shown as
+  large cards (card-room snippet) with amenities, rating, the nightly price
+  and a Book button. Book uses the commerce runtime (data-mb-add); when the
+  store does not take orders online, an optional booking link is used
+  instead (https:// or a /path on this site; anything else is ignored).
+{%- endcomment -%}
+{%- liquid
+  assign want = section.settings.category | append: ''
+  assign total = 0
+  for category in menu.categories
+    assign cid = category.id | append: ''
+    if want == '' or want == cid
+      assign n = category.items | size
+      assign total = total | plus: n
+    endif
+  endfor
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = vocab.items
+  endif
+  assign h = section.settings.heading_level | default: 'h2'
+  assign h_card = 'h3'
+  if h == 'h3'
+    assign h_card = 'h4'
+  endif
+
+  assign url = section.settings.booking_url | strip
+  assign url_head = url | slice: 0, 8 | downcase
+  assign url_first = url | slice: 0, 1
+  assign url_second = url | slice: 1, 1
+  assign booking_url = ''
+  if url_head == 'https://'
+    assign booking_url = url
+  elsif url_first == '/' and url_second != '/'
+    assign booking_url = url
+  endif
+-%}
+<section class="mbs-room-list mbs-room-list--{{ section.settings.layout | escape }}" aria-labelledby="mbs-rl-{{ section.id | escape }}" data-mb-catalog>
+  <{{ h }} class="mbs-room-list__title" id="mbs-rl-{{ section.id | escape }}">{{ heading | escape }}</{{ h }}>
+  {%- assign sub = section.settings.subheading | strip -%}
+  {%- if sub != '' -%}<p class="mbs-room-list__sub">{{ sub | escape }}</p>{%- endif -%}
+  {%- if total > 0 -%}
+  <div class="mbs-room-list__grid" data-mb-cat>
+    {%- for category in menu.categories -%}
+      {%- assign cid = category.id | append: '' -%}
+      {%- if want == '' or want == cid -%}
+        {%- for item in category.items -%}
+          {%- render 'card-room', item: item, heading_tag: h_card, show_amenities: section.settings.show_amenities, per_night: section.settings.per_night, booking_url: booking_url, flags: flags, vocab: vocab -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <p class="mbs-room-list__empty">{{ 'Nothing here yet' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Room list",
+  "group": "catalogue",
+  "verticals": ["stays"],
+  "max_per_page": 2,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = your item word, e.g. Rooms)", "default": "" },
+    { "id": "subheading", "type": "textarea", "label": "Intro text", "default": "" },
+    { "id": "heading_level", "type": "select", "label": "Heading level", "options": [
+      { "value": "h2", "label": "H2 (main section)" },
+      { "value": "h3", "label": "H3 (sub-section)" }
+    ], "default": "h2" },
+    { "id": "category", "type": "category", "label": "Rooms category (blank = all items)", "default": "" },
+    { "id": "layout", "type": "select", "label": "Layout", "options": [
+      { "value": "grid", "label": "Grid" },
+      { "value": "stack", "label": "One per row" }
+    ], "default": "grid" },
+    { "id": "show_amenities", "type": "checkbox", "label": "Show amenities from the description (separate with ·)", "default": true },
+    { "id": "per_night", "type": "checkbox", "label": "Show price as per night", "default": true },
+    { "id": "booking_url", "type": "url", "label": "Booking link when online ordering is off (https:// or /path)", "default": "" }
+  ],
+  "presets": [{ "name": "Room list" }]
+}
+{% endschema %}

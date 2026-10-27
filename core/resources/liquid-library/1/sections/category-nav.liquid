@@ -1,0 +1,60 @@
+{%- comment -%}
+  Category navigation (library v1). Variants: chips (scrolling pills), tabs
+  (underlined, scrolling) and image-tiles (category photos). Each link jumps
+  to the menu-grid category block (#mbs-cat-<id>, the runtime's
+  [data-mb-cat]). Categories without items are skipped. Sub-categories: the
+  menu drops expose a flat category list today, so there is nothing nested
+  to render yet. Nothing renders while the store has no items.
+{%- endcomment -%}
+{%- unless menu.is_empty -%}
+{%- assign variant = section.settings.variant -%}
+<nav class="mbs-category-nav mbs-category-nav--{{ variant | escape }}{% if section.settings.sticky %} is-sticky{% endif %}" aria-label="{{ vocab.categories | escape }}">
+  <ul class="mbs-category-nav__list" role="list">
+    {%- assign shown = 0 -%}
+    {%- for category in menu.categories -%}
+      {%- assign n = category.items | size -%}
+      {%- if n > 0 -%}
+      <li class="mbs-category-nav__item">
+        <a class="mbs-category-nav__link" href="#mbs-cat-{{ category.id }}">
+          {%- if variant == 'image-tiles' -%}
+            <span class="mbs-category-nav__thumb">
+              {%- assign cat_img = category.image_url | strip -%}
+              {%- if cat_img != "" -%}
+                {%- assign eager = false -%}
+                {%- if section.settings.eager_first and shown == 0 -%}{%- assign eager = true -%}{%- endif -%}
+                {%- render 'media', src: cat_img, alt: '', width: 160, height: 160, class: 'mbs-category-nav__img', priority: eager, sizes: '80px' -%}
+              {%- else -%}
+                <span class="mbs-category-nav__initial" aria-hidden="true">{{ category.name | slice: 0 | escape }}</span>
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+          <span class="mbs-category-nav__name">{{ category.name | escape }}</span>
+          {%- if section.settings.show_count -%}<span class="mbs-category-nav__count"><bdi>{{ n }}</bdi></span>{%- endif -%}
+        </a>
+      </li>
+      {%- assign shown = shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</nav>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Category navigation",
+  "group": "discover",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "variant", "type": "select", "label": "Style", "options": [
+      { "value": "chips", "label": "Chips" },
+      { "value": "tabs", "label": "Tabs" },
+      { "value": "image-tiles", "label": "Image tiles" }
+    ], "default": "chips" },
+    { "id": "show_count", "type": "checkbox", "label": "Show item count", "default": false },
+    { "id": "sticky", "type": "checkbox", "label": "Stick to the top while scrolling", "default": true },
+    { "id": "eager_first", "type": "checkbox", "label": "Load the first image immediately (section near the top)", "default": false }
+  ],
+  "presets": [{ "name": "Category navigation" }]
+}
+{% endschema %}

@@ -1,0 +1,260 @@
+{% comment %}
+  crave (Liquid) — reference port of the first-party crave Blade theme.
+  App-style ordering menu. ZERO custom JS — search / dietary filter /
+  favourites / language switch / cart / checkout / account + the SPA view
+  router (P8-3) all come from the platform commerce runtime via data-mb-*
+  bindings. Data is the P2-2 Drop contract; every DB string is escaped.
+{% endcomment %}
+<link rel="stylesheet" href="{{ 'css/style.css' | theme_asset }}">
+
+<div class="crave-lq" id="crave-lq">
+
+  {% comment %} One-time splash intro (runtime shows once/session, tap to skip) {% endcomment %}
+  <div class="cl-splash" data-mb-splash hidden aria-hidden="true">
+    <div class="cl-splash-inner">
+      {% if restaurant.logo %}<img class="cl-splash-logo" src="{{ restaurant.logo | media_url: 'logo' }}" alt="">{% endif %}
+      <h1 class="cl-splash-title">{{ restaurant.title | escape }}</h1>
+      {% if restaurant.sub_title %}<p>{{ restaurant.sub_title | escape }}</p>{% endif %}
+      <span class="cl-splash-skip">{{ 'Tap to continue' | t }}</span>
+    </div>
+  </div>
+
+  <main class="cl-views">
+
+  {% comment %} ══════════ HOME ══════════ {% endcomment %}
+  <section class="cl-view is-active" data-mb-view="home">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+
+      <header class="cl-top">
+        <span class="cl-avatar">
+          {% if restaurant.logo %}<img src="{{ restaurant.logo | media_url: 'logo' }}" alt="{{ restaurant.title | escape }}">{% endif %}
+        </span>
+        <div class="cl-id">
+          <h1 class="cl-title">{{ restaurant.title | escape }}</h1>
+          {% if restaurant.sub_title %}<p class="cl-sub">{{ restaurant.sub_title | escape }}</p>{% endif %}
+        </div>
+
+        {% comment %} Open/close + branch status badge {% endcomment %}
+        {% if active_branch %}
+          <span class="cl-badge {% if active_branch.accepts_orders %}is-open{% else %}is-closed{% endif %}">
+            {% if active_branch.accepts_orders %}{{ 'Open' | t }}{% else %}{{ 'Closed' | t }}{% endif %} · {{ active_branch.name | escape }}
+          </span>
+        {% elsif options.open_close_store %}
+          <span class="cl-badge is-open">{{ 'Open' | t }}</span>
+        {% else %}
+          <span class="cl-badge is-closed">{{ 'Closed' | t }}</span>
+        {% endif %}
+
+        {% comment %} Language + currency: a globe icon opens the sheet below {% endcomment %}
+        {% assign lang_count = localization.languages | size %}
+        {% assign cur_count = localization.currencies | size %}
+        {% if lang_count > 1 or cur_count > 1 %}
+          <button type="button" class="cl-globe" data-mb-lang-open aria-label="{{ 'Language' | t }}" aria-haspopup="dialog">
+            <svg class="cl-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
+          </button>
+        {% endif %}
+      </header>
+
+      {% if table %}<p class="cl-table-pill">{{ 'Table' | t }} {{ table.table_no | escape }}</p>{% endif %}
+      {% if customer %}<p class="cl-hello">{{ 'Welcome' | t }}, {{ customer.name | escape }}</p>{% endif %}
+
+      {% comment %} Banners {% endcomment %}
+      {% assign banner_count = banners | size %}
+      {% if banner_count > 0 %}
+        <section class="cl-banners" aria-label="{{ 'Offers' | t }}" data-mb-slider data-mb-slider-interval="5000">
+          {% for banner in banners %}
+            <figure class="cl-banner">
+              {% if banner.image_url %}<img src="{{ banner.image_url }}" alt="{{ banner.title | escape }}" loading="lazy">{% endif %}
+              <figcaption>
+                {% if banner.title %}<b>{{ banner.title | escape }}</b>{% endif %}
+                {% if banner.subtitle %}<span>{{ banner.subtitle | escape }}</span>{% endif %}
+              </figcaption>
+            </figure>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      {% comment %} Search + dietary/favourite filters (runtime-driven) {% endcomment %}
+      {% if options.allow_dietary_filters or flags.allow_order %}
+        <div class="cl-tools">
+          <input class="cl-search" type="search" data-mb-search placeholder="{{ 'Search' | t }}" aria-label="{{ 'Search' | t }}">
+          <div class="cl-filters">
+            <button type="button" class="cl-filter is-on" data-mb-filter="all">{{ 'All' | t }}</button>
+            <button type="button" class="cl-filter" data-mb-filter="fav">♥ <span data-mb-fav-count>0</span></button>
+            <button type="button" class="cl-filter" data-mb-filter="special">{{ 'Special' | t }}</button>
+            <button type="button" class="cl-filter" data-mb-filter="vegan">{{ 'Vegan' | t }}</button>
+            <button type="button" class="cl-filter" data-mb-filter="halal">{{ 'Halal' | t }}</button>
+            <button type="button" class="cl-filter" data-mb-filter="gluten_free">{{ 'Gluten free' | t }}</button>
+          </div>
+        </div>
+      {% endif %}
+
+      {% unless menu.is_empty %}
+      <nav class="cl-chips" aria-label="{{ 'Categories' | t }}">
+        {% for category in menu.categories %}
+          <a class="cl-chip" href="#cl-cat-{{ category.id }}">
+            {% if category.image_url %}<img class="cl-chip-img" src="{{ category.image_url }}" alt="" loading="lazy">{% endif %}
+            {{ category.name | escape }}
+          </a>
+        {% endfor %}
+      </nav>
+
+      {% comment %} Today's specials {% endcomment %}
+      {% assign specials = menu.items | where: 'is_daily_special', true %}
+      {% assign special_count = specials | size %}
+      {% if special_count > 0 %}
+        <section class="cl-cat cl-specials" data-mb-cat>
+          <h2 class="cl-cat-title">★ {{ "Today's specials" | t }}</h2>
+          <div class="cl-grid">
+            {% for item in specials %}{% render 'card', item: item, flags: flags %}{% endfor %}
+          </div>
+        </section>
+      {% endif %}
+
+      {% comment %} Sort + layout controls (runtime reorders the DOM cards) {% endcomment %}
+      <div class="cl-catalog-head">
+        <label class="cl-sort">
+          <select data-mb-sort aria-label="{{ 'Sort' | t }}">
+            <option value="featured">{{ 'Featured' | t }}</option>
+            <option value="price_asc">{{ 'Price: low to high' | t }}</option>
+            <option value="price_desc">{{ 'Price: high to low' | t }}</option>
+            <option value="rating">{{ 'Top rated' | t }}</option>
+          </select>
+        </label>
+        <button type="button" class="cl-layout" data-mb-layout-toggle aria-label="{{ 'Toggle layout' | t }}" aria-pressed="false">
+          <svg class="cl-ic" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>
+        </button>
+      </div>
+
+      <div data-mb-catalog>
+      {% for category in menu.categories %}
+        <section class="cl-cat" id="cl-cat-{{ category.id }}" data-mb-cat>
+          <h2 class="cl-cat-title">
+            {% if category.image_url %}<img class="cl-cat-img" src="{{ category.image_url }}" alt="" loading="lazy">{% endif %}
+            {{ category.name | escape }}
+          </h2>
+          <div class="cl-grid">
+            {% for item in category.items %}{% render 'card', item: item, flags: flags %}{% endfor %}
+          </div>
+        </section>
+      {% endfor %}
+        <div class="cl-empty" data-mb-empty hidden>
+          <p>{{ 'Nothing matches — try clearing filters' | t }}</p>
+        </div>
+      </div>
+      {% endunless %}
+
+      {% if options.allow_call_waiter and flags.on_table %}
+        <button class="cl-waiter" type="button" data-mb-call-waiter>{{ 'Call Waiter' | t }}</button>
+      {% endif %}
+
+      <footer class="cl-foot">
+        {% if restaurant.address %}<p>{{ restaurant.address | escape }}</p>{% endif %}
+        {% if restaurant.phone %}<p><a href="tel:{{ restaurant.phone | escape }}">{{ restaurant.phone | escape }}</a></p>{% endif %}
+        <p class="cl-foot-meta">{{ stats.scans_today }} {{ 'scans today' | t }}</p>
+      </footer>
+      <div class="cl-tail"></div>
+    </div>
+  </section>
+
+  {% comment %} ══════════ FAVOURITES ══════════ {% endcomment %}
+  <section class="cl-view" data-mb-view="favs">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+      <header class="cl-page-head"><h1 class="cl-title">{{ 'Favorites' | t }}</h1></header>
+      <div class="cl-fav-list" data-mb-favs-mount></div>
+      <div class="cl-tail"></div>
+    </div>
+  </section>
+
+  {% comment %} ══════════ CART ══════════ {% endcomment %}
+  {% if flags.allow_order %}
+  <section class="cl-view" data-mb-view="cart">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+      <header class="cl-page-head"><h1 class="cl-title">{{ 'My Cart' | t }}</h1></header>
+      <div class="cl-cart-inview" data-mb-cart-mount></div>
+      <div class="cl-tail"></div>
+    </div>
+  </section>
+  {% endif %}
+
+  {% comment %} ══════════ ACCOUNT / PROFILE ══════════ {% endcomment %}
+  <section class="cl-view" data-mb-view="profile">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+      <header class="cl-page-head"><h1 class="cl-title">{{ 'Account' | t }}</h1></header>
+      <div class="cl-acct-inview" data-mb-account-mount></div>
+      <div class="cl-tail"></div>
+    </div>
+  </section>
+
+  {% comment %} ══════════ PRODUCT (sub-view — runtime renders here) ══════════ {% endcomment %}
+  <section class="cl-view cl-view-product" data-mb-view="product">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+      <div data-mb-product-mount></div>
+    </div>
+  </section>
+
+  {% comment %} ══════════ CONFIRMED (sub-view — after an order) ══════════ {% endcomment %}
+  <section class="cl-view cl-view-confirmed" data-mb-view="confirmed">
+    <div class="cl-view-scroll" data-mb-view-scroll>
+      <div data-mb-confirmed-mount></div>
+    </div>
+  </section>
+
+  </main>
+
+  {% comment %} Option sheet overlay kept as a fallback for no-product-view themes {% endcomment %}
+  <div class="cl-mount" data-mb-item-sheet-mount hidden></div>
+
+  {% comment %} Bottom tab bar — the SPA router drives is-active + the badge {% endcomment %}
+  <nav class="cl-tabbar" data-mb-tabbar aria-label="{{ 'Menu' | t }}">
+    <button class="cl-tab is-on" type="button" data-mb-tab="home">
+      <span class="cl-tab-pill"><svg class="cl-ic" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5M6 10v9h12v-9"/></svg></span>
+      <span class="cl-tab-label">{{ 'Home' | t }}</span>
+    </button>
+    <button class="cl-tab" type="button" data-mb-tab="favs">
+      <span class="cl-tab-pill"><svg class="cl-ic" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.9-8-10.6C4 6.6 6.4 4.5 9 4.5c1.5 0 2.5.9 3 1.7.5-.8 1.5-1.7 3-1.7 2.6 0 5 2.1 5 5.4 0 5.7-8 10.6-8 10.6Z"/></svg></span>
+      <span class="cl-tab-label">{{ 'Favorites' | t }}</span>
+    </button>
+    {% if flags.allow_order %}
+    <button class="cl-tab" type="button" data-mb-tab="cart">
+      <span class="cl-tab-pill"><svg class="cl-ic" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg><i class="cl-tab-badge" data-mb-cart-count data-mb-hide-empty hidden>0</i></span>
+      <span class="cl-tab-label">{{ 'Cart' | t }}</span>
+    </button>
+    {% endif %}
+    <button class="cl-tab" type="button" data-mb-tab="profile">
+      <span class="cl-tab-pill"><svg class="cl-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span>
+      <span class="cl-tab-label">{{ 'Account' | t }}</span>
+    </button>
+  </nav>
+
+  {% comment %} Language + currency sheet (opened by the header globe icon) {% endcomment %}
+  {% assign lang_count = localization.languages | size %}
+  {% assign cur_count = localization.currencies | size %}
+  {% if lang_count > 1 or cur_count > 1 %}
+  <div class="cl-sheet" data-mb-lang-sheet hidden>
+    <div class="cl-sheet-scrim" data-mb-lang-close></div>
+    <div class="cl-sheet-panel" role="dialog" aria-modal="true" aria-label="{{ 'Language' | t }}">
+      <header class="cl-sheet-head"><b>{{ 'Language' | t }}</b>
+        <button type="button" class="mb-sheet-close" data-mb-lang-close aria-label="Close">&times;</button></header>
+      {% if lang_count > 1 %}
+        <div class="cl-sheet-opts">
+          {% for language in localization.languages %}
+            <button type="button" class="cl-sheet-opt{% if localization.current and language.code == localization.current.code %} is-on{% endif %}"
+                    data-mb-set-lang="{{ language.code }}">{{ language.name | escape }}<span>{{ language.code | upcase }}</span></button>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if cur_count > 1 %}
+        <b class="cl-sheet-sub">{{ 'Currency' | t }}</b>
+        <div class="cl-sheet-opts">
+          {% for c in localization.currencies %}
+            <button type="button" class="cl-sheet-opt{% if forloop.first %} is-on{% endif %}" data-mb-currency="{{ c.code }}">{{ c.code }}</button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% commerce %}

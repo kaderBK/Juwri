@@ -1,0 +1,43 @@
+{
+  "operationId": "createHold",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/holds",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fd21-6a80-7e3b-8d41-5c7a9e2f1b36"
+    },
+    "body": {
+      "kind": "booking_slot",
+      "slot_id": "bks_3f2d5ef0853d",
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ],
+      "option_ids": [
+        "019f9e03-278b-717b-b9e2-b16615441e71",
+        "019f9b12-2514-7941-a496-bb4c8e05f95a"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 12:01:10 GMT"
+    },
+    "body": {
+      "id": "01a0fd21-6a80-7c14-9b2e-3f5d7a1c8e02",
+      "token": "hld_7c2e91a4d05b3f68e1a9c4b27d60f3e5",
+      "kind": "booking_slot",
+      "slot_id": "bks_3f2d5ef0853d",
+      "expires_at": "2026-10-02T15:11:10+03:00",
+      "ttl_seconds": 600,
+      "hold_note": "We hold this time for 10 minutes."
+    }
+  }
+}

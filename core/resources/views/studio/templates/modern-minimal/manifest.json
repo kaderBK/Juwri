@@ -1,0 +1,32 @@
+{
+    "name": "Modern Minimal",
+    "aspects": [
+        "a4",
+        "letter",
+        "square",
+        "story"
+    ],
+    "rtl": true,
+    "colors": {
+        "accent": "#111111",
+        "bg": "#ffffff",
+        "text": "#1c1c1c"
+    },
+    "fonts": [
+        {
+            "family": "sans-stack",
+            "stack": "'Helvetica Neue', Helvetica, Arial, 'Segoe UI', sans-serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 24,
+        "columns": 1,
+        "desc_max_chars": 80
+    },
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ],
+    "art_brief": "very subtle abstract geometric shapes in the corners, monochrome, generous empty space"
+}

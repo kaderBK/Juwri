@@ -1,0 +1,43 @@
+{
+    "initialize": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {
+                "tools": {
+                    "listChanged": false
+                }
+            },
+            "serverInfo": {
+                "name": "juwri-mcp",
+                "version": "1.0.0"
+            }
+        }
+    },
+    "ping_raw": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}",
+    "unknown_method": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+            "code": -32601,
+            "message": "Method not found: nope/nope"
+        }
+    },
+    "unknown_tool": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+            "code": -32602,
+            "message": "Unknown tool: nope"
+        }
+    },
+    "needs_write": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+            "code": -32001,
+            "message": "This tool requires a token with the 'restaurants:write' ability."
+        }
+    }
+}

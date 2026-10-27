@@ -1,0 +1,12 @@
+{
+    "status": 422,
+    "body": {
+        "code": "string",
+        "errors": {
+            "signed_transaction": {
+                "list_of": "string"
+            }
+        },
+        "message": "string"
+    }
+}

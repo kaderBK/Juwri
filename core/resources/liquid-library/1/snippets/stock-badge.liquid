@@ -1,0 +1,24 @@
+{%- comment -%}
+  Stock badge (library v1, B1c). Server-renders the item's tracked stock
+  state and carries the commerce runtime v2 hook `data-mb-stock`, which keeps
+  it live as the cart changes. An item with variants counts stock per
+  variant, so its badge starts empty/hidden and the runtime only fills it
+  when every variant is out (same rule as v2's stockState). Other untracked
+  items render nothing — unless the owner marked the item sold out.
+  Params: item (ItemDrop).
+{%- endcomment -%}
+{%- liquid
+  assign state = item.stock_status
+  if item.is_sold_out
+    assign state = 'out'
+  endif
+-%}
+{%- if item.has_variants and item.is_sold_out == false -%}
+<span class="mbs-stock-badge" data-mb-stock="{{ item.id }}" hidden></span>
+{%- elsif state == 'out' -%}
+<span class="mbs-stock-badge is-out" data-mb-stock="{{ item.id }}" data-mb-stock-state="out">{{ 'Out of stock' | t }}</span>
+{%- elsif state == 'low' -%}
+<span class="mbs-stock-badge is-low" data-mb-stock="{{ item.id }}" data-mb-stock-state="low">{{ 'Only :count left' | t | replace: ':count', item.stock_qty }}</span>
+{%- elsif state == 'in' -%}
+<span class="mbs-stock-badge is-in" data-mb-stock="{{ item.id }}" data-mb-stock-state="in">{{ 'In stock' | t }}</span>
+{%- endif -%}

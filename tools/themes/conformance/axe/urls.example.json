@@ -1,0 +1,373 @@
+{
+ "base": "http://localhost:8765",
+ "schemes": [
+  "light",
+  "dark"
+ ],
+ "scheme_mode": "attribute",
+ "viewports": [
+  {
+   "name": "phone",
+   "width": 390,
+   "height": 844
+  },
+  {
+   "name": "desktop",
+   "width": 1440,
+   "height": 900
+  }
+ ],
+ "axe": {
+  "tags": [
+   "wcag2a",
+   "wcag2aa",
+   "wcag21a",
+   "wcag21aa",
+   "wcag22aa"
+  ],
+  "disable_rules": [],
+  "min_impact": "minor"
+ },
+ "pages": [
+  {
+   "name": "table/home/en",
+   "path": "/prototypes/table/en/home.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/home/ar",
+   "path": "/prototypes/table/ar/home.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/item/en",
+   "path": "/prototypes/table/en/item.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/item/ar",
+   "path": "/prototypes/table/ar/item.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/cart/en",
+   "path": "/prototypes/table/en/cart.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/cart/ar",
+   "path": "/prototypes/table/ar/cart.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/checkout/en",
+   "path": "/prototypes/table/en/checkout.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/checkout/ar",
+   "path": "/prototypes/table/ar/checkout.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/track/en",
+   "path": "/prototypes/table/en/track.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/track/ar",
+   "path": "/prototypes/table/ar/track.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/states/en",
+   "path": "/prototypes/table/en/states.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/states/ar",
+   "path": "/prototypes/table/ar/states.html",
+   "lang": "ar"
+  },
+  {
+   "name": "table/kiosk/en",
+   "path": "/prototypes/table/en/kiosk.html",
+   "lang": "en"
+  },
+  {
+   "name": "table/kiosk/ar",
+   "path": "/prototypes/table/ar/kiosk.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/home/en",
+   "path": "/prototypes/brew/en/home.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/home/ar",
+   "path": "/prototypes/brew/ar/home.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/item/en",
+   "path": "/prototypes/brew/en/item.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/item/ar",
+   "path": "/prototypes/brew/ar/item.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/cart/en",
+   "path": "/prototypes/brew/en/cart.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/cart/ar",
+   "path": "/prototypes/brew/ar/cart.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/checkout/en",
+   "path": "/prototypes/brew/en/checkout.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/checkout/ar",
+   "path": "/prototypes/brew/ar/checkout.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/track/en",
+   "path": "/prototypes/brew/en/track.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/track/ar",
+   "path": "/prototypes/brew/ar/track.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/states/en",
+   "path": "/prototypes/brew/en/states.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/states/ar",
+   "path": "/prototypes/brew/ar/states.html",
+   "lang": "ar"
+  },
+  {
+   "name": "brew/kiosk/en",
+   "path": "/prototypes/brew/en/kiosk.html",
+   "lang": "en"
+  },
+  {
+   "name": "brew/kiosk/ar",
+   "path": "/prototypes/brew/ar/kiosk.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/home/en",
+   "path": "/prototypes/basket/en/home.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/home/ar",
+   "path": "/prototypes/basket/ar/home.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/item/en",
+   "path": "/prototypes/basket/en/item.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/item/ar",
+   "path": "/prototypes/basket/ar/item.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/cart/en",
+   "path": "/prototypes/basket/en/cart.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/cart/ar",
+   "path": "/prototypes/basket/ar/cart.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/checkout/en",
+   "path": "/prototypes/basket/en/checkout.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/checkout/ar",
+   "path": "/prototypes/basket/ar/checkout.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/track/en",
+   "path": "/prototypes/basket/en/track.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/track/ar",
+   "path": "/prototypes/basket/ar/track.html",
+   "lang": "ar"
+  },
+  {
+   "name": "basket/states/en",
+   "path": "/prototypes/basket/en/states.html",
+   "lang": "en"
+  },
+  {
+   "name": "basket/states/ar",
+   "path": "/prototypes/basket/ar/states.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/home/en",
+   "path": "/prototypes/aisle/en/home.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/home/ar",
+   "path": "/prototypes/aisle/ar/home.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/item/en",
+   "path": "/prototypes/aisle/en/item.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/item/ar",
+   "path": "/prototypes/aisle/ar/item.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/cart/en",
+   "path": "/prototypes/aisle/en/cart.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/cart/ar",
+   "path": "/prototypes/aisle/ar/cart.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/checkout/en",
+   "path": "/prototypes/aisle/en/checkout.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/checkout/ar",
+   "path": "/prototypes/aisle/ar/checkout.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/track/en",
+   "path": "/prototypes/aisle/en/track.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/track/ar",
+   "path": "/prototypes/aisle/ar/track.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/states/en",
+   "path": "/prototypes/aisle/en/states.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/states/ar",
+   "path": "/prototypes/aisle/ar/states.html",
+   "lang": "ar"
+  },
+  {
+   "name": "aisle/product/en",
+   "path": "/prototypes/aisle/en/product.html",
+   "lang": "en"
+  },
+  {
+   "name": "aisle/product/ar",
+   "path": "/prototypes/aisle/ar/product.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/home/en",
+   "path": "/prototypes/book/en/home.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/home/ar",
+   "path": "/prototypes/book/ar/home.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/item/en",
+   "path": "/prototypes/book/en/item.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/item/ar",
+   "path": "/prototypes/book/ar/item.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/cart/en",
+   "path": "/prototypes/book/en/cart.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/cart/ar",
+   "path": "/prototypes/book/ar/cart.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/checkout/en",
+   "path": "/prototypes/book/en/checkout.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/checkout/ar",
+   "path": "/prototypes/book/ar/checkout.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/track/en",
+   "path": "/prototypes/book/en/track.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/track/ar",
+   "path": "/prototypes/book/ar/track.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/states/en",
+   "path": "/prototypes/book/en/states.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/states/ar",
+   "path": "/prototypes/book/ar/states.html",
+   "lang": "ar"
+  },
+  {
+   "name": "book/time/en",
+   "path": "/prototypes/book/en/time.html",
+   "lang": "en"
+  },
+  {
+   "name": "book/time/ar",
+   "path": "/prototypes/book/ar/time.html",
+   "lang": "ar"
+  }
+ ]
+}

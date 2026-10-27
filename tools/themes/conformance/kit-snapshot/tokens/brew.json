@@ -1,0 +1,342 @@
+{
+  "$schema_note": "Juwri theme tokens v1. Customizer roles (primary, background, surface, text, accent) map 1:1 to colors.* in theme.json; the other colour keys are theme tokens (--x-*) derived in theme.css. Checked by tools/contrast.py (contract §8).",
+  "theme": "brew",
+  "vertical_set": "food (default for new cafe store type)",
+  "default_preset": "matcha",
+  "scheme_default": "auto",
+  "customizer_roles": [
+    "primary",
+    "background",
+    "surface",
+    "text",
+    "accent"
+  ],
+  "presets": {
+    "matcha": {
+      "label": {
+        "en": "Matcha",
+        "ar": "ماتشا"
+      },
+      "source": "matcha",
+      "default_scheme": "light",
+      "layout_overrides": {},
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#067655",
+        "background": "#F7FAF8",
+        "surface": "#FFFFFF",
+        "surface_2": "#EAF2ED",
+        "text": "#152B1F",
+        "muted": "#55665C",
+        "border": "#DDE7E1",
+        "border_strong": "#7F8F86",
+        "accent": "#F2A93B"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#4FD1A1",
+        "background": "#0F1713",
+        "surface": "#18221D",
+        "surface_2": "#223029",
+        "text": "#EEF5F0",
+        "muted": "#A3B5AA",
+        "border": "#2C3A33",
+        "border_strong": "#6F8378",
+        "accent": "#F5B85A"
+      }
+    },
+    "bakery": {
+      "label": {
+        "en": "Bakery",
+        "ar": "مخبز"
+      },
+      "source": "crumb",
+      "default_scheme": "light",
+      "layout_overrides": {
+        "layout.radius": "round",
+        "fonts.pair": "fraunces-jakarta"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#8B5A2B",
+        "background": "#FCFAF7",
+        "surface": "#FFFFFF",
+        "surface_2": "#F3ECE2",
+        "text": "#241A10",
+        "muted": "#6A5A49",
+        "border": "#E9DFD2",
+        "border_strong": "#8E7F6F",
+        "accent": "#F5A623"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#E0A96D",
+        "background": "#17120D",
+        "surface": "#221B14",
+        "surface_2": "#2D241B",
+        "text": "#F7EFE4",
+        "muted": "#BCAA96",
+        "border": "#3A2F24",
+        "border_strong": "#85776A",
+        "accent": "#F5B54A"
+      }
+    },
+    "dessert": {
+      "label": {
+        "en": "Dessert",
+        "ar": "حلويات"
+      },
+      "source": "scoop",
+      "default_scheme": "dark",
+      "layout_overrides": {
+        "layout.image_ratio": "4:3"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#18181B",
+        "background": "#FFFBEA",
+        "surface": "#FFFFFF",
+        "surface_2": "#FFF3C4",
+        "text": "#18181B",
+        "muted": "#5E5A4A",
+        "border": "#F0E6BF",
+        "border_strong": "#8A8470",
+        "accent": "#F5C518"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#F5C518",
+        "background": "#141416",
+        "surface": "#26262A",
+        "surface_2": "#303035",
+        "text": "#F7F7F5",
+        "muted": "#B0B0AA",
+        "border": "#38383E",
+        "border_strong": "#7A7A80",
+        "accent": "#FFC93C"
+      }
+    },
+    "clean": {
+      "label": {
+        "en": "Clean",
+        "ar": "بسيط"
+      },
+      "source": "orbit",
+      "default_scheme": "light",
+      "layout_overrides": {
+        "layout.card": "list"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#C9401B",
+        "background": "#FFFFFF",
+        "surface": "#FFFFFF",
+        "surface_2": "#F2F3F5",
+        "text": "#0F1115",
+        "muted": "#5B6068",
+        "border": "#E4E6EA",
+        "border_strong": "#868B93",
+        "accent": "#22B573"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#FF7A55",
+        "background": "#0F1115",
+        "surface": "#1A1D22",
+        "surface_2": "#24282E",
+        "text": "#F4F5F7",
+        "muted": "#A7ACB4",
+        "border": "#30343B",
+        "border_strong": "#747A83",
+        "accent": "#3DD68C"
+      }
+    }
+  },
+  "color_usage": {
+    "primary": "CTA fill (add, cart bar, place order), active category chip, focus ring, links",
+    "accent": "badges (popular, new), rating stars, offer chips — never body text",
+    "surface_2": "input fill, skeletons, segmented control track, quantity stepper track",
+    "muted": "descriptions, meta (calories, prep time), placeholder — passes 4.5:1, replaces 55% mix for body-size text",
+    "border": "card hairline, dividers (decorative, no contrast requirement)",
+    "border_strong": "input + toggle outlines (3:1 non-text)",
+    "danger/success/warning": "status text + icons; fills use 12% tint of the same colour with the text colour on top",
+    "hero_chip": "chip/segment overlay on a primary fill: #000000 at 18% when on-primary is #ffffff, #ffffff at 18% when on-primary is #111111; label stays on-primary (all presets >= 6.7:1, see sections/brew.md §2)"
+  },
+  "typography": {
+    "font_pair": "jakarta",
+    "heading": "Plus Jakarta Sans 800 (Latin) → IBM Plex Sans Arabic 700",
+    "body": "Plus Jakarta Sans (Latin) → IBM Plex Sans Arabic",
+    "weights": {
+      "body": 400,
+      "strong": 600,
+      "heading": 800
+    },
+    "scale_px": {
+      "xs": 12,
+      "sm": 14,
+      "base": 16,
+      "lg": 18,
+      "xl": 20,
+      "2xl": 24,
+      "3xl": 30,
+      "4xl": 38,
+      "5xl": 48
+    },
+    "roles": {
+      "store_name": {
+        "phone": "3xl/heading/700",
+        "desktop": "5xl/heading/700"
+      },
+      "category_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "item_name": {
+        "phone": "lg/body/600",
+        "desktop": "lg/body/600"
+      },
+      "item_desc": {
+        "phone": "sm/body/400 muted, 2-line clamp",
+        "desktop": "sm/body/400 muted, 2-line clamp"
+      },
+      "price": {
+        "phone": "base/body/600 tabular-nums",
+        "desktop": "base/body/600 tabular-nums"
+      },
+      "sheet_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "total": {
+        "phone": "xl/body/700 tabular-nums",
+        "desktop": "xl/body/700 tabular-nums"
+      },
+      "label": {
+        "phone": "sm/body/600",
+        "desktop": "sm/body/600"
+      },
+      "meta": {
+        "phone": "xs/body/400 muted (min 12px, never smaller)",
+        "desktop": "xs/body/400 muted"
+      }
+    },
+    "line_height": {
+      "latin": {
+        "tight": 1.15,
+        "base": 1.5
+      },
+      "arabic": {
+        "tight": 1.4,
+        "base": 1.7
+      }
+    },
+    "rules": [
+      "no letter-spacing on Arabic",
+      "no uppercase transforms",
+      "headings tight (-0.01em) Latin only",
+      "min body 16px on inputs (iOS zoom)"
+    ]
+  },
+  "radius": {
+    "customizer": "layout.radius",
+    "default": "pill",
+    "values_px": {
+      "card": 26,
+      "control": 999,
+      "chip": 999,
+      "sheet_top": 28,
+      "image": 20
+    }
+  },
+  "spacing": {
+    "customizer": "layout.density",
+    "default": "cozy",
+    "grid_px": 4,
+    "scale_px": {
+      "1": 4,
+      "2": 8,
+      "3": 12,
+      "4": 16,
+      "5": 20,
+      "6": 24,
+      "8": 32,
+      "10": 40,
+      "12": 48,
+      "16": 64
+    },
+    "gutter": {
+      "phone": 16,
+      "desktop": 32
+    },
+    "max_content_px": 1200,
+    "section_gap": {
+      "phone": 32,
+      "desktop": 56
+    }
+  },
+  "sizes": {
+    "target_primary": 44,
+    "target_chip": 32,
+    "header_phone": 56,
+    "category_bar": 52,
+    "cart_bar": 64,
+    "item_thumb_list": 96,
+    "item_thumb_desktop": 120,
+    "icon": 20,
+    "icon_small": 16,
+    "scroll_padding_note": "scroll-padding-top = header + category_bar; scroll-padding-bottom = cart_bar + 16 (WCAG 2.4.11)",
+    "item_card_grid_image": 165
+  },
+  "elevation": {
+    "card": "0 1px 2px rgb(0 0 0 / .06)",
+    "raised": "0 6px 20px rgb(0 0 0 / .10)",
+    "sheet": "0 -8px 32px rgb(0 0 0 / .18)",
+    "dark_note": "dark scheme uses surface steps (surface → surface_2) instead of shadows"
+  },
+  "motion": {
+    "fast_ms": 120,
+    "base_ms": 200,
+    "slow_ms": 320,
+    "ease": "cubic-bezier(.2,.8,.2,1)",
+    "ease_exit": "cubic-bezier(.4,0,1,1)",
+    "patterns": {
+      "sheet_open": "translateY(100%)→0, slow, ease",
+      "add_to_cart": "button label → check, fast; cart bar count bump scale 1→1.08→1, base",
+      "chip_active": "background colour, fast",
+      "skeleton": "opacity pulse 1.2s"
+    },
+    "reduced_motion": "all transforms off; opacity fades ≤ fast only"
+  },
+  "breakpoints_px": {
+    "phone": 0,
+    "tablet": 768,
+    "desktop": 1080,
+    "wide": 1440
+  },
+  "layout": {
+    "card_default": "grid",
+    "image_ratio_default": "1:1",
+    "category_nav_default": "chips",
+    "header_default": "compact",
+    "desktop_cart_default": "panel",
+    "order_type_default": "pickup",
+    "desktop": "2 columns: catalog (chips on top, 4-col grid) | cart panel 360",
+    "counter_flow": "pickup-first: ready-time chip in header, quick add without sheet when an item has no required choices, reorder rail for returning guests"
+  }
+}

@@ -1,0 +1,339 @@
+{
+    "_comment": "Public plan ladder Free -> Starter -> Pro -> Chain (2026-10-05). Generated from the seed pricing catalogue of the billing service: monthly list prices per market in whole units (SAR = AED; EGP live only with the egypt_launch setting), annual = monthly x 0.8 per month rounded down, Chain per branch (minimum 5). Prices exclude VAT. PricingLadderMonotonicTest keeps it equal to the catalogue and monotonic.",
+    "version": "pricing-2026-10-05",
+    "annual_factor_percent": 80,
+    "chain_min_branches": 5,
+    "markets": {
+        "SAR": {
+            "live_flag": null
+        },
+        "AED": {
+            "live_flag": null
+        },
+        "EGP": {
+            "live_flag": "egypt_launch"
+        }
+    },
+    "tiers": [
+        {
+            "plan_key": "free",
+            "display_en": "Free",
+            "display_ar": "الباقة المجانية",
+            "billing": "per store",
+            "prices": {
+                "SAR": {
+                    "monthly": 0,
+                    "annual_per_month": 0
+                },
+                "AED": {
+                    "monthly": 0,
+                    "annual_per_month": 0
+                },
+                "EGP": {
+                    "monthly": 0,
+                    "annual_per_month": 0
+                }
+            },
+            "entitlements": {
+                "agent_api": "0",
+                "allow_ordering": "1",
+                "analytics_pro": "0",
+                "branch_limit": 1,
+                "branch_reports": "0",
+                "category_limit": 999,
+                "coupons": "0",
+                "custom_domain": "0",
+                "delivery": "0",
+                "delivery_relay_limit": 0,
+                "fiscal_sa": "0",
+                "fiscalization": "0",
+                "hide_branding": "0",
+                "inventory": "0",
+                "kds": "0",
+                "loyalty": "0",
+                "marketing_automation": "0",
+                "menu_limit": 999,
+                "odoo_connector": "0",
+                "order_limit": 200,
+                "pos_enabled": "0",
+                "pos_terminal_limit": 0,
+                "reservations": "0",
+                "restaurant_limit": 1,
+                "scan_limit": 999,
+                "staff_limit": 999,
+                "storefront_api": "0",
+                "table_qr": "0",
+                "theme_studio": "0",
+                "waitlist": "0",
+                "whatsapp_order_alerts": "0"
+            },
+            "features": [
+                "allow_ordering"
+            ],
+            "support": "email",
+            "bullets_en": [
+                "1 store with a QR menu and online ordering (pickup and dine-in)",
+                "Up to 200 orders a month (a soft cap: orders above it are still accepted)",
+                "The store QR menu (per-table QR codes come with Starter)",
+                "All free themes, email support"
+            ],
+            "bullets_ar": [
+                "متجر واحد بقائمة QR وطلب أونلاين (استلام وداخل المطعم)",
+                "حتى 200 طلب في الشهر (حدّ مرن: الطلبات بعده تُقبل أيضاً)",
+                "قائمة QR للمتجر (رموز QR لكل طاولة مع باقة البداية)",
+                "كل القوالب المجانية، ودعم بالبريد الإلكتروني"
+            ]
+        },
+        {
+            "plan_key": "starter",
+            "display_en": "Starter",
+            "display_ar": "باقة البداية",
+            "billing": "per store",
+            "prices": {
+                "SAR": {
+                    "monthly": 49,
+                    "annual_per_month": 39
+                },
+                "AED": {
+                    "monthly": 49,
+                    "annual_per_month": 39
+                },
+                "EGP": {
+                    "monthly": 349,
+                    "annual_per_month": 279
+                }
+            },
+            "entitlements": {
+                "agent_api": "0",
+                "allow_ordering": "1",
+                "analytics_pro": "0",
+                "branch_limit": 1,
+                "branch_reports": "0",
+                "category_limit": 999,
+                "coupons": "1",
+                "custom_domain": "0",
+                "delivery": "1",
+                "delivery_relay_limit": 0,
+                "fiscal_sa": "0",
+                "fiscalization": "0",
+                "hide_branding": "0",
+                "inventory": "0",
+                "kds": "0",
+                "loyalty": "1",
+                "marketing_automation": "0",
+                "menu_limit": 999,
+                "odoo_connector": "0",
+                "order_limit": 999,
+                "pos_enabled": "1",
+                "pos_terminal_limit": 1,
+                "reservations": "0",
+                "restaurant_limit": 1,
+                "scan_limit": 999,
+                "staff_limit": 999,
+                "storefront_api": "0",
+                "table_qr": "1",
+                "theme_studio": "0",
+                "waitlist": "0",
+                "whatsapp_order_alerts": "1"
+            },
+            "features": [
+                "allow_ordering",
+                "coupons",
+                "delivery",
+                "loyalty",
+                "pos_enabled",
+                "table_qr",
+                "whatsapp_order_alerts"
+            ],
+            "support": "email",
+            "bullets_en": [
+                "Everything in Free, with unlimited orders",
+                "Per-table QR codes, delivery and delivery zones",
+                "POS on 1 device, loyalty and coupons, WhatsApp order alerts",
+                "ZATCA signing as an add-on (SAR 19), email support"
+            ],
+            "bullets_ar": [
+                "كل ما في الباقة المجانية، مع طلبات غير محدودة",
+                "رموز QR لكل طاولة، والتوصيل ومناطق التوصيل",
+                "نقطة بيع على جهاز واحد، والولاء والقسائم، وتنبيهات الطلبات عبر واتساب",
+                "توقيع فواتير الزكاة والضريبة كإضافة (19 ريالاً)، ودعم بالبريد الإلكتروني"
+            ]
+        },
+        {
+            "plan_key": "pro",
+            "display_en": "Pro",
+            "display_ar": "الباقة الاحترافية",
+            "billing": "per store",
+            "prices": {
+                "SAR": {
+                    "monthly": 99,
+                    "annual_per_month": 79
+                },
+                "AED": {
+                    "monthly": 99,
+                    "annual_per_month": 79
+                },
+                "EGP": {
+                    "monthly": 749,
+                    "annual_per_month": 599
+                }
+            },
+            "entitlements": {
+                "agent_api": "0",
+                "allow_ordering": "1",
+                "analytics_pro": "1",
+                "branch_limit": 1,
+                "branch_reports": "0",
+                "category_limit": 999,
+                "coupons": "1",
+                "custom_domain": "1",
+                "delivery": "1",
+                "delivery_relay_limit": 0,
+                "fiscal_sa": "1",
+                "fiscalization": "1",
+                "hide_branding": "1",
+                "inventory": "1",
+                "kds": "1",
+                "loyalty": "1",
+                "marketing_automation": "1",
+                "menu_limit": 999,
+                "odoo_connector": "0",
+                "order_limit": 999,
+                "pos_enabled": "1",
+                "pos_terminal_limit": 999,
+                "reservations": "1",
+                "restaurant_limit": 1,
+                "scan_limit": 999,
+                "staff_limit": 999,
+                "storefront_api": "0",
+                "table_qr": "1",
+                "theme_studio": "1",
+                "waitlist": "1",
+                "whatsapp_order_alerts": "1"
+            },
+            "features": [
+                "allow_ordering",
+                "analytics_pro",
+                "coupons",
+                "custom_domain",
+                "delivery",
+                "fiscal_sa",
+                "fiscalization",
+                "hide_branding",
+                "inventory",
+                "kds",
+                "loyalty",
+                "marketing_automation",
+                "pos_enabled",
+                "reservations",
+                "table_qr",
+                "theme_studio",
+                "waitlist",
+                "whatsapp_order_alerts"
+            ],
+            "support": "priority",
+            "bullets_en": [
+                "Everything in Starter",
+                "Unlimited POS devices and kitchen screens, inventory",
+                "ZATCA e-invoicing included, reservations and waitlist",
+                "Own domain, no juwri branding, marketing campaigns, Theme Studio",
+                "Faster support (email + WhatsApp, business hours)"
+            ],
+            "bullets_ar": [
+                "كل ما في باقة البداية",
+                "أجهزة نقاط بيع وشاشات مطبخ بلا حدود، والمخزون",
+                "الفوترة الإلكترونية لهيئة الزكاة والضريبة مشمولة، والحجوزات وقائمة الانتظار",
+                "نطاقك الخاص، بدون علامة juwri، وحملات تسويقية، واستوديو القوالب",
+                "دعم أسرع (البريد الإلكتروني وواتساب، في ساعات العمل)"
+            ]
+        },
+        {
+            "plan_key": "chain",
+            "display_en": "Chain",
+            "display_ar": "باقة السلاسل",
+            "billing": "per branch, minimum 5 branches",
+            "prices": {
+                "SAR": {
+                    "monthly": 79,
+                    "annual_per_month": 63
+                },
+                "AED": {
+                    "monthly": 79,
+                    "annual_per_month": 63
+                },
+                "EGP": {
+                    "monthly": 599,
+                    "annual_per_month": 479
+                }
+            },
+            "entitlements": {
+                "agent_api": "1",
+                "allow_ordering": "1",
+                "analytics_pro": "1",
+                "branch_limit": 999,
+                "branch_reports": "1",
+                "category_limit": 999,
+                "coupons": "1",
+                "custom_domain": "1",
+                "delivery": "1",
+                "delivery_relay_limit": 0,
+                "fiscal_sa": "1",
+                "fiscalization": "1",
+                "hide_branding": "1",
+                "inventory": "1",
+                "kds": "1",
+                "loyalty": "1",
+                "marketing_automation": "1",
+                "menu_limit": 999,
+                "odoo_connector": "1",
+                "order_limit": 999,
+                "pos_enabled": "1",
+                "pos_terminal_limit": 999,
+                "reservations": "1",
+                "restaurant_limit": 999,
+                "scan_limit": 999,
+                "staff_limit": 999,
+                "storefront_api": "1",
+                "table_qr": "1",
+                "theme_studio": "1",
+                "waitlist": "1",
+                "whatsapp_order_alerts": "1"
+            },
+            "features": [
+                "agent_api",
+                "allow_ordering",
+                "analytics_pro",
+                "branch_reports",
+                "coupons",
+                "custom_domain",
+                "delivery",
+                "fiscal_sa",
+                "fiscalization",
+                "hide_branding",
+                "inventory",
+                "kds",
+                "loyalty",
+                "marketing_automation",
+                "odoo_connector",
+                "pos_enabled",
+                "reservations",
+                "storefront_api",
+                "table_qr",
+                "theme_studio",
+                "waitlist",
+                "whatsapp_order_alerts"
+            ],
+            "support": "priority_sev1_247",
+            "bullets_en": [
+                "Everything in Pro, priced per branch (minimum 5 branches)",
+                "Multi-branch reports, the storefront API and the Odoo connector",
+                "24/7 support for severity-1 incidents"
+            ],
+            "bullets_ar": [
+                "كل ما في الباقة الاحترافية، بسعر لكل فرع (حدّ أدنى 5 فروع)",
+                "تقارير متعددة الفروع، وواجهة برمجة المتجر، وموصل Odoo",
+                "دعم على مدار الساعة للحوادث من المستوى الأول"
+            ]
+        }
+    ]
+}

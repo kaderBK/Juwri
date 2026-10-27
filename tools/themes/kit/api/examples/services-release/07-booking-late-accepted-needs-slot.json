@@ -1,0 +1,225 @@
+{
+  "operationId": "getBooking",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/bookings/mgt_3d8a61f0c94e27b5a1d0e6c8f492",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 12:45:10 GMT"
+    },
+    "body": {
+      "booking": {
+        "public_id": "01a0fd22-0b40-7a51-8c3d-6e2f9b4a7d15",
+        "number": "SB-4836",
+        "status": "pending_approval",
+        "starts_at": "2026-10-04T16:30:00+03:00",
+        "ends_at": "2026-10-04T17:45:00+03:00",
+        "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+        "service_ids": [
+          "019ed72b-4e00-76d8-a0e0-611df411c074"
+        ],
+        "manage_token": "mgt_3d8a61f0c94e27b5a1d0e6c8f492",
+        "manage_url": "https://sidra-salon.example/booking/mgt_3d8a61f0c94e27b5a1d0e6c8f492",
+        "ics_url": "https://sidra-salon.example/booking/mgt_3d8a61f0c94e27b5a1d0e6c8f492/calendar.ics",
+        "cancel_deadline_at": "2026-10-03T16:30:00+03:00",
+        "reschedule_deadline_at": null
+      },
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "name": "Haircut & blow-dry",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Haircut & blow-dry"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 14000,
+              "currency": "SAR",
+              "formatted": "SAR 140.00"
+            },
+            "choices_label": "Medium"
+          },
+          {
+            "id": "ln_2",
+            "name": "Deep conditioning",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Deep conditioning"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 4000,
+              "currency": "SAR",
+              "formatted": "SAR 40.00"
+            }
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Total",
+            "amount": {
+              "minor": 18000,
+              "currency": "SAR",
+              "formatted": "SAR 180.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "deposit",
+            "label": "Due now (deposit)",
+            "amount": {
+              "minor": 5000,
+              "currency": "SAR",
+              "formatted": "SAR 50.00"
+            },
+            "kind": "deposit",
+            "muted": true,
+            "informational": true
+          },
+          {
+            "key": "due_later",
+            "label": "Due at the salon",
+            "amount": {
+              "minor": 13000,
+              "currency": "SAR",
+              "formatted": "SAR 130.00"
+            },
+            "kind": "due_later",
+            "muted": true,
+            "informational": true
+          }
+        ],
+        "total": {
+          "minor": 18000,
+          "currency": "SAR",
+          "formatted": "SAR 180.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Prices include VAT 15% (SAR 23.48)."
+      },
+      "view": {
+        "number": "SB-4836",
+        "status": "pending_approval",
+        "status_label": "Waiting for the salon",
+        "heading": "The salon will contact you about a new time",
+        "steps": [
+          {
+            "label": "Booked",
+            "sub": "Fri 2 Oct, 3:02 pm",
+            "state": "done"
+          },
+          {
+            "label": "New time",
+            "state": "current"
+          },
+          {
+            "label": "Confirmed",
+            "state": "todo"
+          }
+        ],
+        "location": {
+          "icon": "map-pin",
+          "label": "Sidra Salon, Al Malqa",
+          "sub": "Anas Ibn Malik Rd, Riyadh · Parking at the back"
+        },
+        "quote": {
+          "lines": [
+            {
+              "id": "ln_1",
+              "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+              "name": "Haircut & blow-dry",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Haircut & blow-dry"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 18000,
+                "currency": "SAR",
+                "formatted": "SAR 180.00"
+              },
+              "choices_label": "with Maha · Medium · Deep conditioning"
+            }
+          ],
+          "rows": [
+            {
+              "key": "subtotal",
+              "label": "Total",
+              "amount": {
+                "minor": 18000,
+                "currency": "SAR",
+                "formatted": "SAR 180.00"
+              },
+              "kind": "subtotal"
+            },
+            {
+              "key": "deposit",
+              "label": "Paid · deposit · SAR 50.00",
+              "amount": {
+                "minor": 5000,
+                "currency": "SAR",
+                "formatted": "SAR 50.00"
+              },
+              "kind": "deposit",
+              "muted": true,
+              "informational": true
+            },
+            {
+              "key": "due_later",
+              "label": "Due at the salon",
+              "amount": {
+                "minor": 13000,
+                "currency": "SAR",
+                "formatted": "SAR 130.00"
+              },
+              "kind": "due_later",
+              "muted": true,
+              "informational": true
+            }
+          ],
+          "total": {
+            "minor": 18000,
+            "currency": "SAR",
+            "formatted": "SAR 180.00"
+          },
+          "total_label": "Total",
+          "notes": [
+            "Your time was taken while the payment was late. Sidra Salon will contact you to choose a new time or refund the deposit."
+          ]
+        },
+        "paid_label": "Paid · deposit · SAR 50.00",
+        "actions": [
+          {
+            "label": "Contact the salon",
+            "url": "tel:+966550100105",
+            "kind": "primary",
+            "icon": "phone"
+          }
+        ]
+      },
+      "payment": {
+        "mode": "hosted",
+        "status": "paid",
+        "next_action": null,
+        "amount_now": {
+          "minor": 5000,
+          "currency": "SAR",
+          "formatted": "SAR 50.00"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* menu_card family — printed-menu editorial. A ruled frame holds the profile + menu-line
+   links; links read as carte lines with a dotted leader and a "view" tag on the right. */
+.fam-menu_card .bio-in{padding:44px 20px 0;text-align:center}
+.fam-menu_card .bio-frame{border:1.5px solid var(--rule,var(--ink,#2b371f));
+  outline:1px solid var(--rule,var(--ink,#2b371f));outline-offset:4px;
+  padding:28px 18px 22px;background:var(--card,#faf7ee)}
+.fam-menu_card .bio-avatar{width:64px;height:64px;font-family:var(--font-display,serif);
+  background:transparent;box-shadow:none;font-size:30px}
+.fam-menu_card .bio-name{font-family:var(--font-display,serif);font-weight:600;font-size:27px}
+.fam-menu_card .bio-tagline{font-style:italic;font-family:var(--font-display,serif)}
+.fam-menu_card .bio-blocks{text-align:start;margin-top:12px}
+.fam-menu_card .bio-block{margin-bottom:0}
+
+/* menu-line links */
+.fam-menu_card .bio-link{background:transparent;border:0;box-shadow:none;border-radius:0;
+  padding:13px 2px;gap:8px;align-items:baseline;
+  border-bottom:1px solid color-mix(in srgb,var(--ink,#2b371f) 16%,transparent)}
+.fam-menu_card .bio-link:hover{transform:none;color:var(--accent,#8a4a2b)}
+.fam-menu_card .bio-link__icon{display:none}
+.fam-menu_card .bio-link__body{flex:0 1 auto;min-width:0}
+.fam-menu_card .bio-link__label{font-family:var(--font-display,serif);font-weight:600;font-size:16.5px;white-space:normal}
+.fam-menu_card .bio-link__sub{font-style:italic}
+.fam-menu_card .bio-link__arrow,.fam-menu_card .bio-link__price{margin-inline-start:auto;
+  font-family:var(--font-mono,monospace);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent,#8a4a2b);background:none;padding:0}
+
+/* the reservation CTA is the single loud element */
+.fam-menu_card .bio-cta{background:var(--ink,#2b371f);color:var(--card,#f6f2e6);border-radius:0;
+  font-family:var(--font-display,serif);font-weight:600;letter-spacing:.03em;margin-top:14px}
+.fam-menu_card .bio-cta:hover{background:var(--accent,#8a4a2b)}
+
+/* hours read as a service list */
+.fam-menu_card .bio-hours-card{background:transparent;border:0;box-shadow:none;padding:8px 0 0}
+.fam-menu_card .bio-kicker{text-align:center}
+.fam-menu_card .bio-socials a{border-radius:0;border:1px solid var(--ink,#2b371f);background:transparent}

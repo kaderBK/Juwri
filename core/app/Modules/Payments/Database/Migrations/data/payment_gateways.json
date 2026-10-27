@@ -1,0 +1,188 @@
+[
+ {
+  "id": 1,
+  "payment_install": false,
+  "payment_title": "Paypal",
+  "payment_folder": "paypal"
+ },
+ {
+  "id": 2,
+  "payment_install": false,
+  "payment_title": "Credit & Debit Card",
+  "payment_folder": "stripe"
+ },
+ {
+  "id": 3,
+  "payment_install": true,
+  "payment_title": "Bank Deposit (Offline Payment)",
+  "payment_folder": "wire_transfer"
+ },
+ {
+  "id": 4,
+  "payment_install": false,
+  "payment_title": "2Checkout",
+  "payment_folder": "two_checkout"
+ },
+ {
+  "id": 5,
+  "payment_install": false,
+  "payment_title": "Paystack",
+  "payment_folder": "paystack"
+ },
+ {
+  "id": 6,
+  "payment_install": false,
+  "payment_title": "Payumoney",
+  "payment_folder": "payumoney"
+ },
+ {
+  "id": 7,
+  "payment_install": false,
+  "payment_title": "Paytm",
+  "payment_folder": "paytm"
+ },
+ {
+  "id": 8,
+  "payment_install": false,
+  "payment_title": "CCAvenue",
+  "payment_folder": "ccavenue"
+ },
+ {
+  "id": 9,
+  "payment_install": false,
+  "payment_title": "Mollie",
+  "payment_folder": "mollie"
+ },
+ {
+  "id": 10,
+  "payment_install": false,
+  "payment_title": "Iyzico",
+  "payment_folder": "iyzico"
+ },
+ {
+  "id": 11,
+  "payment_install": false,
+  "payment_title": "Midtrans",
+  "payment_folder": "midtrans"
+ },
+ {
+  "id": 12,
+  "payment_install": false,
+  "payment_title": "PayTabs",
+  "payment_folder": "paytabs"
+ },
+ {
+  "id": 13,
+  "payment_install": false,
+  "payment_title": "Telr",
+  "payment_folder": "telr"
+ },
+ {
+  "id": 14,
+  "payment_install": false,
+  "payment_title": "Razorpay",
+  "payment_folder": "razorpay"
+ },
+ {
+  "id": 15,
+  "payment_install": false,
+  "payment_title": "Paddle",
+  "payment_folder": "paddle"
+ },
+ {
+  "id": 16,
+  "payment_install": false,
+  "payment_title": "Tap",
+  "payment_folder": "tap"
+ },
+ {
+  "id": 17,
+  "payment_install": false,
+  "payment_title": "Flutterwave",
+  "payment_folder": "flutterwave"
+ },
+ {
+  "id": 18,
+  "payment_install": false,
+  "payment_title": "TDSP",
+  "payment_folder": "tdsp"
+ },
+ {
+  "id": 19,
+  "payment_install": false,
+  "payment_title": "Paylink / STC Pay",
+  "payment_folder": "paylink"
+ },
+ {
+  "id": 20,
+  "payment_install": false,
+  "payment_title": "Paymob",
+  "payment_folder": "paymob"
+ },
+ {
+  "id": 21,
+  "payment_install": false,
+  "payment_title": "Geidea",
+  "payment_folder": "geidea"
+ },
+ {
+  "id": 22,
+  "payment_install": false,
+  "payment_title": "Tamara",
+  "payment_folder": "tamara"
+ },
+ {
+  "id": 23,
+  "payment_install": false,
+  "payment_title": "Tabby",
+  "payment_folder": "tabby"
+ },
+ {
+  "id": 24,
+  "payment_install": false,
+  "payment_title": "Fawry",
+  "payment_folder": "fawry"
+ },
+ {
+  "id": 25,
+  "payment_install": false,
+  "payment_title": "Fatora",
+  "payment_folder": "fatora"
+ },
+ {
+  "id": 26,
+  "payment_install": false,
+  "payment_title": "Noon Payments",
+  "payment_folder": "noon"
+ },
+ {
+  "id": 27,
+  "payment_install": false,
+  "payment_title": "GoCardless",
+  "payment_folder": "gocardless"
+ },
+ {
+  "id": 28,
+  "payment_install": false,
+  "payment_title": "Lemon Squeezy",
+  "payment_folder": "lemon_squeezy"
+ },
+ {
+  "id": 29,
+  "payment_install": false,
+  "payment_title": "Wallet Transfer",
+  "payment_folder": "wallet_transfer"
+ },
+ {
+  "id": 30,
+  "payment_install": false,
+  "payment_title": "eCash",
+  "payment_folder": "ecash"
+ },
+ {
+  "id": 31,
+  "payment_install": false,
+  "payment_title": "QRPay",
+  "payment_folder": "qrpay"
+ }
+]

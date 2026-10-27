@@ -1,0 +1,128 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — product view: gallery, details, options, related rail, qty + add */
+.mb-prod { position: relative; }
+.mb-prod-back,
+.mb-prod-fav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .12);
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-background, #fff);
+  color: var(--tc-text-muted, #6b7280);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.mb-prod-back { position: absolute; inset-block-start: 8px; inset-inline-start: 8px; z-index: 2; color: inherit; font-size: 1.8rem; }
+.mb-prod-back:dir(rtl) { transform: scaleX(-1); }
+.mb-prod-fav.is-on { border-color: transparent; background: var(--tc-danger, #d92d20); color: var(--tc-on-primary, #fff); }
+.mb-prod-gallery {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--tr-card, 16px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .06);
+}
+.mb-prod-gallery:empty { display: none; }
+.mb-prod-img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.mb-prod-img[hidden] { display: none; }
+.mb-prod-dots { display: flex; justify-content: center; gap: 2px; }
+.mb-prod-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.mb-prod-dot::before {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .25);
+}
+.mb-prod-dot.is-on::before { inline-size: 18px; background: var(--tc-primary, #3fd463); }
+.mb-prod-body { padding-block-start: var(--ts-gap-3, 16px); }
+.mb-prod-head { display: flex; align-items: flex-start; gap: var(--ts-gap-2, 10px); }
+.mb-prod-head h2 {
+  flex: 1;
+  margin: 0;
+  font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif));
+  font-size: 1.45rem;
+  line-height: 1.25;
+}
+.mb-prod-meta { margin: 6px 0 0; font-size: .85rem; font-weight: 700; color: var(--tc-primary-700, var(--tc-primary, #2fb150)); }
+.mb-prod-desc { margin: 8px 0 0; line-height: 1.55; color: var(--tc-text-muted, #6b7280); }
+.mb-prod-stock { margin: 8px 0 0; font-weight: 700; color: var(--tc-danger, #b42318); }
+.mb-prod-body .mb-item-meta,
+.mb-prod-body .mb-stock { margin-block-start: 8px; }
+.mb-prod-opts { margin-block-start: var(--ts-gap-3, 16px); }
+.mb-prod-related { margin-block-start: var(--ts-gap-4, 24px); }
+.mb-rail {
+  display: flex;
+  gap: var(--ts-gap-2, 10px);
+  overflow-x: auto;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+  padding-block: 4px;
+}
+.mb-rail-card {
+  display: flex;
+  flex: 0 0 140px;
+  flex-direction: column;
+  overflow: hidden;
+  scroll-snap-align: start;
+  padding: 0;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .1);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-surface, var(--tc-background, #fff));
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.mb-rail-card img { display: block; inline-size: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.mb-rail-card b { padding: 8px 10px 0; font-size: .85rem; }
+.mb-rail-card span { padding: 2px 10px 10px; font-size: .85rem; font-weight: 700; color: var(--tc-primary-700, var(--tc-primary, #2fb150)); }
+.mb-prod-cta {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px);
+  margin-block-start: var(--ts-gap-3, 16px);
+  padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-block-start: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .08);
+  background: var(--tc-background, #fff);
+}
+.mb-prod-cta .mb-place { flex: 1; inline-size: auto; }
+.mb-qty {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .16);
+  border-radius: var(--tr-pill, 999px);
+}
+.mb-qty button,
+.mb-cl-qty button {
+  inline-size: 44px;
+  block-size: 44px;
+  border: 0;
+  border-radius: var(--tr-pill, 999px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.mb-qty output { min-inline-size: 28px; font-weight: 800; text-align: center; }

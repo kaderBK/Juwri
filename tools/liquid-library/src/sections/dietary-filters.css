@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* dietary-filters */
+.mbs-dietary-filters { max-inline-size: 1200px; margin-inline: auto; background: var(--tc-background, #fff); color: var(--tc-text, #111); }
+.mbs-dietary-filters.is-sticky { position: sticky; inset-block-start: var(--mbs-sticky-top, 0px); z-index: 30; }
+.mbs-dietary-filters__list { display: flex; gap: 8px; margin: 0; padding: 6px var(--ts-gap-3, 16px) var(--ts-gap-2, 10px); list-style: none; overflow-x: auto; scrollbar-width: none; }
+.mbs-dietary-filters__list > li { flex: none; }
+.mbs-dietary-filters__chip { display: inline-flex; align-items: center; gap: 6px; min-block-size: 44px; padding-inline: 16px; border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .14); border-radius: var(--tr-pill, 999px); background: var(--tc-background, #fff); color: inherit; font: inherit; font-size: .85rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.mbs-dietary-filters__chip.is-on { border-color: var(--tc-primary, #3fd463); background: var(--tc-primary, #3fd463); color: var(--tc-on-primary, #fff); }
+.mbs-dietary-filters__n { font-weight: 400; opacity: .8; }

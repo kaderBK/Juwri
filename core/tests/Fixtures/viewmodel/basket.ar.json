@@ -1,0 +1,3732 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "fresh-mart-demo",
+            "name": "Fresh Mart",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Fresh Mart"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Fresh Mart"
+            },
+            "tagline": "Groceries delivered in 25 minutes",
+            "locale": "ar",
+            "dir": "rtl",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/fresh-mart-demo?lang=en"
+                },
+                {
+                    "code": "ar",
+                    "name": "ar",
+                    "url": "/fresh-mart-demo?lang=ar"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "retail",
+            "store_type": "grocery",
+            "status": {
+                "open": true,
+                "label": "مفتوح · يُغلق 11:59 م",
+                "next_change_at": "2026-10-04T23:59:00+03:00",
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966550100103",
+                "whatsapp": "966550100103",
+                "address": "Al Olaya, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=Al%20Olaya%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": false,
+            "hours": [
+                {
+                    "days": [
+                        "Mo"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Tu"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "We"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Th"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Fr"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Sa"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                },
+                {
+                    "days": [
+                        "Su"
+                    ],
+                    "opens": "08:00",
+                    "closes": "23:59"
+                }
+            ]
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Fresh Mart — Main",
+                "address": "Al Olaya, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "delivery",
+                    "label": "التسليم",
+                    "needs_address": true,
+                    "needs_slot": false
+                },
+                {
+                    "key": "pickup_slot",
+                    "label": "الاستلام",
+                    "needs_address": false,
+                    "needs_slot": true
+                }
+            ],
+            "selected_order_type": "delivery",
+            "table": null,
+            "room": null,
+            "schedule_ahead": true,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": false,
+                "order_types": [],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "basket",
+            "settings": {
+                "colors.primary": "#0B7A3B",
+                "colors.background": "#F6F7F4",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#161A14",
+                "colors.accent": "#FFC83D",
+                "layout.radius": "soft",
+                "layout.density": "compact",
+                "fonts.pair": "instrument",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#45C97A",
+                "colors_dark.background": "#0E1210",
+                "colors_dark.surface": "#171C19",
+                "colors_dark.text": "#F1F5F2",
+                "colors_dark.accent": "#FFC83D",
+                "layout.card": "grid",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "compact",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": false,
+                "menu.show_allergens": true,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "free_delivery",
+                "search",
+                "category_nav",
+                "offers",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "hero_title": "Deals this week",
+                "featured_title": "Deals this week"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "الفواكه والخضار",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}",
+                        "{id:10}",
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}",
+                        "{id:14}",
+                        "{id:15}",
+                        "{id:16}",
+                        "{id:17}",
+                        "{id:18}"
+                    ],
+                    "count": 15
+                },
+                {
+                    "id": "{id:19}",
+                    "name": "الألبان والبيض",
+                    "item_ids": [
+                        "{id:20}",
+                        "{id:21}",
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}",
+                        "{id:26}",
+                        "{id:27}",
+                        "{id:28}",
+                        "{id:29}",
+                        "{id:30}",
+                        "{id:31}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:32}",
+                    "name": "المخبوزات",
+                    "item_ids": [
+                        "{id:33}",
+                        "{id:34}",
+                        "{id:35}",
+                        "{id:36}",
+                        "{id:37}",
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}",
+                        "{id:41}",
+                        "{id:42}"
+                    ],
+                    "count": 10
+                },
+                {
+                    "id": "{id:43}",
+                    "name": "اللحوم والأسماك",
+                    "item_ids": [
+                        "{id:44}",
+                        "{id:45}",
+                        "{id:46}",
+                        "{id:47}",
+                        "{id:48}",
+                        "{id:49}",
+                        "{id:50}",
+                        "{id:51}",
+                        "{id:52}",
+                        "{id:53}",
+                        "{id:54}",
+                        "{id:55}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:56}",
+                    "name": "المشروبات",
+                    "item_ids": [
+                        "{id:57}",
+                        "{id:58}",
+                        "{id:59}",
+                        "{id:60}",
+                        "{id:61}",
+                        "{id:62}",
+                        "{id:63}",
+                        "{id:64}",
+                        "{id:65}",
+                        "{id:66}",
+                        "{id:67}",
+                        "{id:68}"
+                    ],
+                    "count": 12
+                },
+                {
+                    "id": "{id:69}",
+                    "name": "الوجبات الخفيفة",
+                    "item_ids": [
+                        "{id:70}",
+                        "{id:71}",
+                        "{id:72}",
+                        "{id:73}",
+                        "{id:74}",
+                        "{id:75}",
+                        "{id:76}",
+                        "{id:77}",
+                        "{id:78}",
+                        "{id:79}",
+                        "{id:80}"
+                    ],
+                    "count": 11
+                },
+                {
+                    "id": "{id:81}",
+                    "name": "المواد الغذائية",
+                    "item_ids": [
+                        "{id:82}",
+                        "{id:83}",
+                        "{id:84}",
+                        "{id:85}",
+                        "{id:86}",
+                        "{id:87}",
+                        "{id:88}",
+                        "{id:89}",
+                        "{id:90}",
+                        "{id:91}",
+                        "{id:92}",
+                        "{id:93}",
+                        "{id:94}",
+                        "{id:95}",
+                        "{id:96}",
+                        "{id:97}"
+                    ],
+                    "count": 16
+                },
+                {
+                    "id": "{id:98}",
+                    "name": "المنزل",
+                    "item_ids": [
+                        "{id:99}",
+                        "{id:100}",
+                        "{id:101}",
+                        "{id:102}",
+                        "{id:103}",
+                        "{id:104}",
+                        "{id:105}",
+                        "{id:106}",
+                        "{id:107}",
+                        "{id:108}",
+                        "{id:109}"
+                    ],
+                    "count": 11
+                },
+                {
+                    "id": "{id:110}",
+                    "name": "الطفل",
+                    "item_ids": [
+                        "{id:111}",
+                        "{id:112}",
+                        "{id:113}",
+                        "{id:114}",
+                        "{id:115}",
+                        "{id:116}",
+                        "{id:117}",
+                        "{id:118}"
+                    ],
+                    "count": 8
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "موز",
+                    "url": "/fresh-mart-demo#item-{id:4}",
+                    "short": "حلو وناضج يُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "موز"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "6.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00001",
+                    "unit": {
+                        "label": "6.50 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "طماطم عنقودية",
+                    "url": "/fresh-mart-demo#item-{id:5}",
+                    "short": "طماطم عنقودية عصيرية بنكهة غنية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "طماطم عنقودية"
+                    },
+                    "price": {
+                        "minor": 1180,
+                        "currency": "SAR",
+                        "formatted": "11.80 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00002",
+                    "unit": {
+                        "label": "11.80 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "أفوكادو هاس جاهز للأكل",
+                    "url": "/fresh-mart-demo#item-{id:6}",
+                    "short": "لب كريمي ناضج وجاهز اليوم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أفوكادو هاس جاهز للأكل"
+                    },
+                    "price": {
+                        "minor": 995,
+                        "currency": "SAR",
+                        "formatted": "9.95 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1250,
+                        "currency": "SAR",
+                        "formatted": "12.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00003",
+                    "pack_label": "2 pc",
+                    "unit": {
+                        "label": "2 pc · 4.98 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "فراولة",
+                    "url": "/fresh-mart-demo#item-{id:7}",
+                    "short": "حبات حمراء حلوة مقطوفة يدوياً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فراولة"
+                    },
+                    "price": {
+                        "minor": 1495,
+                        "currency": "SAR",
+                        "formatted": "14.95 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00004",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · 59.80 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "توت العليق",
+                    "url": "/fresh-mart-demo#item-{id:8}",
+                    "short": "حامض ومنعش ومناسب مع الزبادي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "توت العليق"
+                    },
+                    "price": {
+                        "minor": 1250,
+                        "currency": "SAR",
+                        "formatted": "12.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00005",
+                    "pack_label": "125 g",
+                    "unit": {
+                        "label": "125 g · 100.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "خيار",
+                    "url": "/fresh-mart-demo#item-{id:9}",
+                    "short": "مقرمش ومنعش يُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خيار"
+                    },
+                    "price": {
+                        "minor": 490,
+                        "currency": "SAR",
+                        "formatted": "4.90 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00006",
+                    "unit": {
+                        "label": "4.90 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:10}": {
+                    "id": "{id:10}",
+                    "name": "تفاح أحمر",
+                    "url": "/fresh-mart-demo#item-{id:10}",
+                    "short": "مقرمش وحلو يُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تفاح أحمر"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "9.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00007",
+                    "unit": {
+                        "label": "9.50 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "برتقال",
+                    "url": "/fresh-mart-demo#item-{id:11}",
+                    "short": "برتقال عصيري يُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "برتقال"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "7.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00008",
+                    "unit": {
+                        "label": "7.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "مانجو",
+                    "url": "/fresh-mart-demo#item-{id:12}",
+                    "short": "حلو برائحة زكية يُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مانجو"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00009",
+                    "unit": {
+                        "label": "18.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "تمر خلاص",
+                    "url": "/fresh-mart-demo#item-{id:13}",
+                    "short": "تمر طري بطعم الكراميل من الأحساء.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تمر خلاص"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "24.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00010",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 48.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:14}": {
+                    "id": "{id:14}",
+                    "name": "ليمون",
+                    "url": "/fresh-mart-demo#item-{id:14}",
+                    "short": "قشرة رقيقة وعصير وفير.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ليمون"
+                    },
+                    "price": {
+                        "minor": 550,
+                        "currency": "SAR",
+                        "formatted": "5.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00011",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 11.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "بطاطس",
+                    "url": "/fresh-mart-demo#item-{id:15}",
+                    "short": "بطاطس متعددة الاستخدامات للقلي أو الخبز.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بطاطس"
+                    },
+                    "price": {
+                        "minor": 790,
+                        "currency": "SAR",
+                        "formatted": "7.90 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00012",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · 3.95 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "بصل",
+                    "url": "/fresh-mart-demo#item-{id:16}",
+                    "short": "بصل أصفر للطبخ.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بصل"
+                    },
+                    "price": {
+                        "minor": 590,
+                        "currency": "SAR",
+                        "formatted": "5.90 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00013",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · 2.95 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "سبانخ صغيرة",
+                    "url": "/fresh-mart-demo#item-{id:17}",
+                    "short": "مغسولة وجاهزة للأكل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سبانخ صغيرة"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "6.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00014",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 32.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "نعناع طازج",
+                    "url": "/fresh-mart-demo#item-{id:18}",
+                    "short": "حزمة كبيرة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "نعناع طازج"
+                    },
+                    "price": {
+                        "minor": 200,
+                        "currency": "SAR",
+                        "formatted": "2.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00015",
+                    "pack_label": "1 pc",
+                    "unit": {
+                        "label": "1 pc · 2.00 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "حليب كامل الدسم",
+                    "url": "/fresh-mart-demo#item-{id:20}",
+                    "short": "حليب طازج مبستر ومتجانس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حليب كامل الدسم"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00016",
+                    "pack_label": "2 L"
+                },
+                "{id:21}": {
+                    "id": "{id:21}",
+                    "name": "حليب قليل الدسم",
+                    "url": "/fresh-mart-demo#item-{id:21}",
+                    "short": "حليب خفيف بنسبة دسم 1٪.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حليب قليل الدسم"
+                    },
+                    "price": {
+                        "minor": 850,
+                        "currency": "SAR",
+                        "formatted": "8.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00017",
+                    "pack_label": "1 L"
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "لبن",
+                    "url": "/fresh-mart-demo#item-{id:22}",
+                    "short": "لبن رائب بارد ومنعش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لبن"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "6.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00018",
+                    "pack_label": "1 L"
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "زبادي يوناني",
+                    "url": "/fresh-mart-demo#item-{id:23}",
+                    "short": "كثيف وكريمي وغني بالبروتين.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "زبادي يوناني"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00019",
+                    "pack_label": "450 g",
+                    "unit": {
+                        "label": "450 g · 26.67 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "زبادي سادة",
+                    "url": "/fresh-mart-demo#item-{id:24}",
+                    "short": "زبادي سادة للاستخدام اليومي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "زبادي سادة"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00020",
+                    "pack_label": "1 kg",
+                    "unit": {
+                        "label": "1 kg · 11.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "لبنة",
+                    "url": "/fresh-mart-demo#item-{id:25}",
+                    "short": "زبادي مصفّى سهل الدهن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لبنة"
+                    },
+                    "price": {
+                        "minor": 1450,
+                        "currency": "SAR",
+                        "formatted": "14.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00021",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 29.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "جبنة حلوم",
+                    "url": "/fresh-mart-demo#item-{id:26}",
+                    "short": "جبنة مثالية للشوي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "جبنة حلوم"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00022",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · 64.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "شرائح جبنة شيدر",
+                    "url": "/fresh-mart-demo#item-{id:27}",
+                    "short": "عشر شرائح مغلفة بشكل فردي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شرائح جبنة شيدر"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1450,
+                        "currency": "SAR",
+                        "formatted": "14.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00023",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 60.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "جبنة كريمية",
+                    "url": "/fresh-mart-demo#item-{id:28}",
+                    "short": "ناعمة وسهلة الدهن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "جبنة كريمية"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "9.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00024",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 47.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:29}": {
+                    "id": "{id:29}",
+                    "name": "زبدة مملحة",
+                    "url": "/fresh-mart-demo#item-{id:29}",
+                    "short": "مخفوقة من القشطة الطازجة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "زبدة مملحة"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "13.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00025",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 65.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "بيض",
+                    "url": "/fresh-mart-demo#item-{id:30}",
+                    "short": "بيض أبيض كبير، طبق 30 حبة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بيض"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "29.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00026",
+                    "pack_label": "30 pc",
+                    "unit": {
+                        "label": "30 pc · 0.97 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "قشطة للخفق",
+                    "url": "/fresh-mart-demo#item-{id:31}",
+                    "short": "دسم 35٪ للحلويات والصلصات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "قشطة للخفق"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "8.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00027",
+                    "pack_label": "250 ml",
+                    "unit": {
+                        "label": "250 ml · 32.00 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "خبز العجين المخمّر",
+                    "url": "/fresh-mart-demo#item-{id:33}",
+                    "short": "مخمّر ببطء بقشرة مقرمشة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خبز العجين المخمّر"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00028",
+                    "pack_label": "800 g",
+                    "unit": {
+                        "label": "800 g · 17.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:34}": {
+                    "id": "{id:34}",
+                    "name": "خبز عربي",
+                    "url": "/fresh-mart-demo#item-{id:34}",
+                    "short": "خبز أبيض طري، 7 أرغفة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خبز عربي"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "3.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00029",
+                    "pack_label": "7 pc",
+                    "unit": {
+                        "label": "7 pc · 0.50 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:35}": {
+                    "id": "{id:35}",
+                    "name": "توست بر",
+                    "url": "/fresh-mart-demo#item-{id:35}",
+                    "short": "شرائح، رغيف 600 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "توست بر"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "5.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00030",
+                    "pack_label": "600 g",
+                    "unit": {
+                        "label": "600 g · 8.33 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "كرواسون بالزبدة",
+                    "url": "/fresh-mart-demo#item-{id:36}",
+                    "short": "أربع حبات كرواسون هشة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كرواسون بالزبدة"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00031",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · 3.00 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:37}": {
+                    "id": "{id:37}",
+                    "name": "خبز بيتا بر",
+                    "url": "/fresh-mart-demo#item-{id:37}",
+                    "short": "ست أرغفة غنية بالألياف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خبز بيتا بر"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "4.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00032",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 0.75 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "خبز برجر",
+                    "url": "/fresh-mart-demo#item-{id:38}",
+                    "short": "خبز طري بالسمسم، 6 حبات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خبز برجر"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "7.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00033",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 1.17 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "خبز تورتيلا",
+                    "url": "/fresh-mart-demo#item-{id:39}",
+                    "short": "8 أرغفة بقطر 25 سم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خبز تورتيلا"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00034",
+                    "pack_label": "8 pc",
+                    "unit": {
+                        "label": "8 pc · 1.13 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "مناقيش زعتر",
+                    "url": "/fresh-mart-demo#item-{id:40}",
+                    "short": "أربع أقراص مخبوزة بالزعتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناقيش زعتر"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00035",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · 3.50 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:41}": {
+                    "id": "{id:41}",
+                    "name": "لفائف القرفة",
+                    "url": "/fresh-mart-demo#item-{id:41}",
+                    "short": "أربع لفائف بطبقة حلوة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لفائف القرفة"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00036",
+                    "pack_label": "4 pc",
+                    "unit": {
+                        "label": "4 pc · 3.75 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:42}": {
+                    "id": "{id:42}",
+                    "name": "ألواح التمر",
+                    "url": "/fresh-mart-demo#item-{id:42}",
+                    "short": "ألواح شوفان طرية بتمر السكري.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ألواح التمر"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00037",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 1.83 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:44}": {
+                    "id": "{id:44}",
+                    "name": "صدر دجاج",
+                    "url": "/fresh-mart-demo#item-{id:44}",
+                    "short": "بدون جلد وعظم، يُقطع عند الطلب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "صدر دجاج"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "SAR",
+                        "formatted": "28.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00038",
+                    "unit": {
+                        "label": "28.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:45}": {
+                    "id": "{id:45}",
+                    "name": "دجاجة كاملة",
+                    "url": "/fresh-mart-demo#item-{id:45}",
+                    "short": "دجاجة كاملة طازجة بوزن 1٫2 كجم تقريباً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "دجاجة كاملة"
+                    },
+                    "price": {
+                        "minor": 2500,
+                        "currency": "SAR",
+                        "formatted": "25.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00039",
+                    "pack_label": "1.2 kg",
+                    "unit": {
+                        "label": "1.2 kg · 20.83 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:46}": {
+                    "id": "{id:46}",
+                    "name": "لحم بقري مفروم",
+                    "url": "/fresh-mart-demo#item-{id:46}",
+                    "short": "قليل الدسم ويُفرم يومياً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لحم بقري مفروم"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "29.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00040",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 58.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:47}": {
+                    "id": "{id:47}",
+                    "name": "كتف غنم",
+                    "url": "/fresh-mart-demo#item-{id:47}",
+                    "short": "بالعظم ومناسب للتحمير البطيء.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كتف غنم"
+                    },
+                    "price": {
+                        "minor": 6900,
+                        "currency": "SAR",
+                        "formatted": "69.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00041",
+                    "unit": {
+                        "label": "69.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:48}": {
+                    "id": "{id:48}",
+                    "name": "ريش غنم",
+                    "url": "/fresh-mart-demo#item-{id:48}",
+                    "short": "مقطعة من القطعية وتُباع بالوزن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ريش غنم"
+                    },
+                    "price": {
+                        "minor": 8900,
+                        "currency": "SAR",
+                        "formatted": "89.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 9900,
+                        "currency": "SAR",
+                        "formatted": "99.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00042",
+                    "unit": {
+                        "label": "89.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:49}": {
+                    "id": "{id:49}",
+                    "name": "ريب آي بقري",
+                    "url": "/fresh-mart-demo#item-{id:49}",
+                    "short": "مرمّر جيداً بقطعة ستيك.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ريب آي بقري"
+                    },
+                    "price": {
+                        "minor": 9900,
+                        "currency": "SAR",
+                        "formatted": "99.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00043",
+                    "unit": {
+                        "label": "99.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:50}": {
+                    "id": "{id:50}",
+                    "name": "أفخاذ دجاج",
+                    "url": "/fresh-mart-demo#item-{id:50}",
+                    "short": "بالجلد، عبوة 900 جرام تقريباً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أفخاذ دجاج"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00044",
+                    "pack_label": "900 g",
+                    "unit": {
+                        "label": "900 g · 21.11 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:51}": {
+                    "id": "{id:51}",
+                    "name": "فيليه هامور",
+                    "url": "/fresh-mart-demo#item-{id:51}",
+                    "short": "هامور محلي بدون جلد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فيليه هامور"
+                    },
+                    "price": {
+                        "minor": 6200,
+                        "currency": "SAR",
+                        "formatted": "62.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00045",
+                    "unit": {
+                        "label": "62.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:52}": {
+                    "id": "{id:52}",
+                    "name": "روبيان مقشر",
+                    "url": "/fresh-mart-demo#item-{id:52}",
+                    "short": "منظّف وجاهز للطبخ.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "روبيان مقشر"
+                    },
+                    "price": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "39.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00046",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 78.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:53}": {
+                    "id": "{id:53}",
+                    "name": "فيليه سلمون",
+                    "url": "/fresh-mart-demo#item-{id:53}",
+                    "short": "سلمون نرويجي بالجلد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فيليه سلمون"
+                    },
+                    "price": {
+                        "minor": 8500,
+                        "currency": "SAR",
+                        "formatted": "85.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00047",
+                    "unit": {
+                        "label": "85.00 ⁨⃁⁩ / كغ",
+                        "sold_by_weight": true
+                    }
+                },
+                "{id:54}": {
+                    "id": "{id:54}",
+                    "name": "كفتة لحم",
+                    "url": "/fresh-mart-demo#item-{id:54}",
+                    "short": "لحم مفروم متبّل جاهز للشوي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كفتة لحم"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "22.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00048",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 55.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:55}": {
+                    "id": "{id:55}",
+                    "name": "شاورما دجاج متبلة",
+                    "url": "/fresh-mart-demo#item-{id:55}",
+                    "short": "متبلة بالثوم والليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شاورما دجاج متبلة"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "21.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Fresh Mart",
+                    "sku": "FM-00049",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 42.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:57}": {
+                    "id": "{id:57}",
+                    "name": "مياه معدنية",
+                    "url": "/fresh-mart-demo#item-{id:57}",
+                    "short": "12 عبوة سعة 500 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مياه معدنية"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Oasis",
+                    "sku": "FM-00050",
+                    "pack_label": "12 pc",
+                    "unit": {
+                        "label": "12 pc · 0.75 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:58}": {
+                    "id": "{id:58}",
+                    "name": "مياه فوّارة",
+                    "url": "/fresh-mart-demo#item-{id:58}",
+                    "short": "معدنية طبيعية، 1 لتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مياه فوّارة"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "4.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Oasis",
+                    "sku": "FM-00051",
+                    "pack_label": "1 L"
+                },
+                "{id:59}": {
+                    "id": "{id:59}",
+                    "name": "عصير برتقال",
+                    "url": "/fresh-mart-demo#item-{id:59}",
+                    "short": "عصير 100٪ غير مركّز.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عصير برتقال"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "9.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00052",
+                    "pack_label": "1 L"
+                },
+                "{id:60}": {
+                    "id": "{id:60}",
+                    "name": "عصير تفاح",
+                    "url": "/fresh-mart-demo#item-{id:60}",
+                    "short": "بدون سكر مضاف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عصير تفاح"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "9.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00053",
+                    "pack_label": "1 L"
+                },
+                "{id:61}": {
+                    "id": "{id:61}",
+                    "name": "مشروب كولا",
+                    "url": "/fresh-mart-demo#item-{id:61}",
+                    "short": "6 علب سعة 330 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مشروب كولا"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00054",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 1.83 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:62}": {
+                    "id": "{id:62}",
+                    "name": "شاي مثلج بالخوخ",
+                    "url": "/fresh-mart-demo#item-{id:62}",
+                    "short": "جاهز للشرب، 1٫5 لتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شاي مثلج بالخوخ"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "7.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00055",
+                    "pack_label": "1.5 L"
+                },
+                "{id:63}": {
+                    "id": "{id:63}",
+                    "name": "قهوة عربية بالهيل",
+                    "url": "/fresh-mart-demo#item-{id:63}",
+                    "short": "تحميص خفيف مطحونة مع الهيل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "قهوة عربية بالهيل"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "21.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00056",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · 84.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:64}": {
+                    "id": "{id:64}",
+                    "name": "أكياس شاي أسود",
+                    "url": "/fresh-mart-demo#item-{id:64}",
+                    "short": "100 كيس بنكهة قوية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أكياس شاي أسود"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "13.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00057",
+                    "pack_label": "100 pc",
+                    "unit": {
+                        "label": "100 pc · 0.13 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:65}": {
+                    "id": "{id:65}",
+                    "name": "مزيج شاي كرك",
+                    "url": "/fresh-mart-demo#item-{id:65}",
+                    "short": "20 كيساً بالحليب والهيل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مزيج شاي كرك"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00058",
+                    "pack_label": "20 pc",
+                    "unit": {
+                        "label": "20 pc · 0.90 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:66}": {
+                    "id": "{id:66}",
+                    "name": "قهوة سريعة التحضير",
+                    "url": "/fresh-mart-demo#item-{id:66}",
+                    "short": "مجففة بالتجميد غنية وناعمة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "قهوة سريعة التحضير"
+                    },
+                    "price": {
+                        "minor": 2900,
+                        "currency": "SAR",
+                        "formatted": "29.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00059",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 145.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:67}": {
+                    "id": "{id:67}",
+                    "name": "عيران",
+                    "url": "/fresh-mart-demo#item-{id:67}",
+                    "short": "6 أكواب سعة 250 مل من مشروب اللبن المملّح.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عيران"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Najd Dairy",
+                    "sku": "FM-00060",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 2.00 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:68}": {
+                    "id": "{id:68}",
+                    "name": "عصير رمان",
+                    "url": "/fresh-mart-demo#item-{id:68}",
+                    "short": "معصور على البارد، 750 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عصير رمان"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sold_out",
+                            "label": "نفد من المخزون"
+                        }
+                    ],
+                    "sold_out": true,
+                    "has_required_choices": false,
+                    "brand": "Sunrise",
+                    "sku": "FM-00061",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · 21.33 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:70}": {
+                    "id": "{id:70}",
+                    "name": "رقائق البطاطس",
+                    "url": "/fresh-mart-demo#item-{id:70}",
+                    "short": "مملحة بخفة، كيس 150 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "رقائق البطاطس"
+                    },
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "6.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00062",
+                    "pack_label": "150 g",
+                    "unit": {
+                        "label": "150 g · 43.33 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:71}": {
+                    "id": "{id:71}",
+                    "name": "شوكولاتة داكنة 70٪",
+                    "url": "/fresh-mart-demo#item-{id:71}",
+                    "short": "لوح ناعم بنكهة كاكاو عميقة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شوكولاتة داكنة 70٪"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00063",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · 120.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:72}": {
+                    "id": "{id:72}",
+                    "name": "شوكولاتة بالحليب",
+                    "url": "/fresh-mart-demo#item-{id:72}",
+                    "short": "لوح كريمي للمشاركة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شوكولاتة بالحليب"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00064",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · 90.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:73}": {
+                    "id": "{id:73}",
+                    "name": "بسكويت التمر",
+                    "url": "/fresh-mart-demo#item-{id:73}",
+                    "short": "بسكويت طري محشو بعجينة التمر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بسكويت التمر"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "10.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00065",
+                    "pack_label": "300 g",
+                    "unit": {
+                        "label": "300 g · 33.33 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:74}": {
+                    "id": "{id:74}",
+                    "name": "مكسرات مشكّلة",
+                    "url": "/fresh-mart-demo#item-{id:74}",
+                    "short": "محمّصة ومملحة بخفة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مكسرات مشكّلة"
+                    },
+                    "price": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "39.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 4500,
+                        "currency": "SAR",
+                        "formatted": "45.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00066",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 78.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:75}": {
+                    "id": "{id:75}",
+                    "name": "فستق حلبي",
+                    "url": "/fresh-mart-demo#item-{id:75}",
+                    "short": "محمّص بقشره.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فستق حلبي"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "SAR",
+                        "formatted": "34.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00067",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · 136.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:76}": {
+                    "id": "{id:76}",
+                    "name": "فشار مملّح",
+                    "url": "/fresh-mart-demo#item-{id:76}",
+                    "short": "جاهز للأكل، 100 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فشار مملّح"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "5.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00068",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · 50.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:77}": {
+                    "id": "{id:77}",
+                    "name": "ألواح الجرانولا",
+                    "url": "/fresh-mart-demo#item-{id:77}",
+                    "short": "6 ألواح شوفان بالعسل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ألواح الجرانولا"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "16.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00069",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 2.67 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:78}": {
+                    "id": "{id:78}",
+                    "name": "مشمش مجفف",
+                    "url": "/fresh-mart-demo#item-{id:78}",
+                    "short": "طري وخالٍ من الكبريت.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مشمش مجفف"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00070",
+                    "pack_label": "250 g",
+                    "unit": {
+                        "label": "250 g · 56.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:79}": {
+                    "id": "{id:79}",
+                    "name": "حلوى الفاكهة المطاطية",
+                    "url": "/fresh-mart-demo#item-{id:79}",
+                    "short": "حلوى مطاطية بنكهات الفاكهة، 140 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حلوى الفاكهة المطاطية"
+                    },
+                    "price": {
+                        "minor": 700,
+                        "currency": "SAR",
+                        "formatted": "7.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00071",
+                    "pack_label": "140 g",
+                    "unit": {
+                        "label": "140 g · 50.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:80}": {
+                    "id": "{id:80}",
+                    "name": "كعكات الأرز",
+                    "url": "/fresh-mart-demo#item-{id:80}",
+                    "short": "خفيفة ومقرمشة، 12 قطعة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كعكات الأرز"
+                    },
+                    "price": {
+                        "minor": 850,
+                        "currency": "SAR",
+                        "formatted": "8.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00072",
+                    "pack_label": "12 pc",
+                    "unit": {
+                        "label": "12 pc · 0.71 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:82}": {
+                    "id": "{id:82}",
+                    "name": "أرز بسمتي",
+                    "url": "/fresh-mart-demo#item-{id:82}",
+                    "short": "أرز طويل الحبة معتّق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أرز بسمتي"
+                    },
+                    "price": {
+                        "minor": 4200,
+                        "currency": "SAR",
+                        "formatted": "42.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 4900,
+                        "currency": "SAR",
+                        "formatted": "49.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00073",
+                    "pack_label": "5 kg",
+                    "unit": {
+                        "label": "5 kg · 8.40 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:83}": {
+                    "id": "{id:83}",
+                    "name": "معكرونة سباغيتي",
+                    "url": "/fresh-mart-demo#item-{id:83}",
+                    "short": "معكرونة من القمح القاسي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "معكرونة سباغيتي"
+                    },
+                    "price": {
+                        "minor": 450,
+                        "currency": "SAR",
+                        "formatted": "4.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00074",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 9.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:84}": {
+                    "id": "{id:84}",
+                    "name": "زيت زيتون بكر ممتاز",
+                    "url": "/fresh-mart-demo#item-{id:84}",
+                    "short": "معصور على البارد من أول حصاد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "زيت زيتون بكر ممتاز"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "SAR",
+                        "formatted": "38.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00075",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · 50.67 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:85}": {
+                    "id": "{id:85}",
+                    "name": "زيت دوار الشمس",
+                    "url": "/fresh-mart-demo#item-{id:85}",
+                    "short": "زيت خفيف للقلي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "زيت دوار الشمس"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00076",
+                    "pack_label": "1.5 L"
+                },
+                "{id:86}": {
+                    "id": "{id:86}",
+                    "name": "سكر أبيض",
+                    "url": "/fresh-mart-demo#item-{id:86}",
+                    "short": "سكر ناعم محبّب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سكر أبيض"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00077",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · 4.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:87}": {
+                    "id": "{id:87}",
+                    "name": "طحين أبيض",
+                    "url": "/fresh-mart-demo#item-{id:87}",
+                    "short": "متعدد الاستخدامات، 2 كجم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "طحين أبيض"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "7.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00078",
+                    "pack_label": "2 kg",
+                    "unit": {
+                        "label": "2 kg · 3.75 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:88}": {
+                    "id": "{id:88}",
+                    "name": "معجون طماطم",
+                    "url": "/fresh-mart-demo#item-{id:88}",
+                    "short": "مركّز مضاعف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "معجون طماطم"
+                    },
+                    "price": {
+                        "minor": 500,
+                        "currency": "SAR",
+                        "formatted": "5.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00079",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 12.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:89}": {
+                    "id": "{id:89}",
+                    "name": "حمص معلّب",
+                    "url": "/fresh-mart-demo#item-{id:89}",
+                    "short": "مطبوخ وجاهز، علبة 400 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حمص معلّب"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "3.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00080",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 8.75 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:90}": {
+                    "id": "{id:90}",
+                    "name": "فول مدمّس",
+                    "url": "/fresh-mart-demo#item-{id:90}",
+                    "short": "متبّل، علبة 400 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "فول مدمّس"
+                    },
+                    "price": {
+                        "minor": 350,
+                        "currency": "SAR",
+                        "formatted": "3.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00081",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 8.75 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:91}": {
+                    "id": "{id:91}",
+                    "name": "طحينة",
+                    "url": "/fresh-mart-demo#item-{id:91}",
+                    "short": "معجون سمسم مطحون بالحجر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "طحينة"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "17.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00082",
+                    "pack_label": "450 g",
+                    "unit": {
+                        "label": "450 g · 37.78 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:92}": {
+                    "id": "{id:92}",
+                    "name": "عسل السدر",
+                    "url": "/fresh-mart-demo#item-{id:92}",
+                    "short": "عسل خام من مرتفعات المملكة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عسل السدر"
+                    },
+                    "price": {
+                        "minor": 4500,
+                        "currency": "SAR",
+                        "formatted": "45.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00083",
+                    "pack_label": "500 g",
+                    "unit": {
+                        "label": "500 g · 90.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:93}": {
+                    "id": "{id:93}",
+                    "name": "خلطة زعتر",
+                    "url": "/fresh-mart-demo#item-{id:93}",
+                    "short": "زعتر وسمسم وسماق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "خلطة زعتر"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00084",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 45.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:94}": {
+                    "id": "{id:94}",
+                    "name": "بهارات الكبسة",
+                    "url": "/fresh-mart-demo#item-{id:94}",
+                    "short": "خلطة لأرز الدجاج واللحم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بهارات الكبسة"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "8.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00085",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · 80.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:95}": {
+                    "id": "{id:95}",
+                    "name": "عدس أحمر",
+                    "url": "/fresh-mart-demo#item-{id:95}",
+                    "short": "عدس أحمر مجروش ينضج خلال 15 دقيقة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "عدس أحمر"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Wheat",
+                    "sku": "FM-00086",
+                    "pack_label": "1 kg",
+                    "unit": {
+                        "label": "1 kg · 9.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:96}": {
+                    "id": "{id:96}",
+                    "name": "تونة قطع",
+                    "url": "/fresh-mart-demo#item-{id:96}",
+                    "short": "بزيت الزيتون، علبة 160 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تونة قطع"
+                    },
+                    "price": {
+                        "minor": 750,
+                        "currency": "SAR",
+                        "formatted": "7.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Red Sea Fisheries",
+                    "sku": "FM-00087",
+                    "pack_label": "160 g",
+                    "unit": {
+                        "label": "160 g · 46.88 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:97}": {
+                    "id": "{id:97}",
+                    "name": "حلاوة طحينية",
+                    "url": "/fresh-mart-demo#item-{id:97}",
+                    "short": "قالب حلاوة طحينية سادة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حلاوة طحينية"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "15.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Green Valley",
+                    "sku": "FM-00088",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 37.50 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:99}": {
+                    "id": "{id:99}",
+                    "name": "سائل غسل الصحون",
+                    "url": "/fresh-mart-demo#item-{id:99}",
+                    "short": "يزيل الدهون برائحة الليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سائل غسل الصحون"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "11.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00089",
+                    "pack_label": "750 ml",
+                    "unit": {
+                        "label": "750 ml · 14.67 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:100}": {
+                    "id": "{id:100}",
+                    "name": "منظف غسيل",
+                    "url": "/fresh-mart-demo#item-{id:100}",
+                    "short": "سائل مركّز، 3 لتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "منظف غسيل"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "SAR",
+                        "formatted": "38.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00090",
+                    "pack_label": "3 L"
+                },
+                "{id:101}": {
+                    "id": "{id:101}",
+                    "name": "معطّر ملابس",
+                    "url": "/fresh-mart-demo#item-{id:101}",
+                    "short": "برائحة العود تدوم طويلاً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "معطّر ملابس"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00091",
+                    "pack_label": "2 L"
+                },
+                "{id:102}": {
+                    "id": "{id:102}",
+                    "name": "مناديل مطبخ",
+                    "url": "/fresh-mart-demo#item-{id:102}",
+                    "short": "6 رولات ماصّة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناديل مطبخ"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "22.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00092",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 3.67 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:103}": {
+                    "id": "{id:103}",
+                    "name": "مناديل حمام",
+                    "url": "/fresh-mart-demo#item-{id:103}",
+                    "short": "24 رولاً ناعماً بطبقتين.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناديل حمام"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "SAR",
+                        "formatted": "34.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 3900,
+                        "currency": "SAR",
+                        "formatted": "39.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00093",
+                    "pack_label": "24 pc",
+                    "unit": {
+                        "label": "24 pc · 1.42 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:104}": {
+                    "id": "{id:104}",
+                    "name": "مناديل وجه",
+                    "url": "/fresh-mart-demo#item-{id:104}",
+                    "short": "5 علب، كل علبة 150 منديلاً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناديل وجه"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "17.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00094",
+                    "pack_label": "5 pc",
+                    "unit": {
+                        "label": "5 pc · 3.40 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:105}": {
+                    "id": "{id:105}",
+                    "name": "أكياس قمامة",
+                    "url": "/fresh-mart-demo#item-{id:105}",
+                    "short": "30 كيساً كبيراً بشريط شد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "أكياس قمامة"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "9.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00095",
+                    "pack_label": "30 pc",
+                    "unit": {
+                        "label": "30 pc · 0.30 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:106}": {
+                    "id": "{id:106}",
+                    "name": "منظف الأسطح",
+                    "url": "/fresh-mart-demo#item-{id:106}",
+                    "short": "بخاخ لجميع الأسطح، 1 لتر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "منظف الأسطح"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "12.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00096",
+                    "pack_label": "1 L"
+                },
+                "{id:107}": {
+                    "id": "{id:107}",
+                    "name": "إسفنج المطبخ",
+                    "url": "/fresh-mart-demo#item-{id:107}",
+                    "short": "6 إسفنجات للتنظيف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "إسفنج المطبخ"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "SAR",
+                        "formatted": "8.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00097",
+                    "pack_label": "6 pc",
+                    "unit": {
+                        "label": "6 pc · 1.33 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:108}": {
+                    "id": "{id:108}",
+                    "name": "ورق ألمنيوم",
+                    "url": "/fresh-mart-demo#item-{id:108}",
+                    "short": "رول 30 متراً بعرض 30 سم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "ورق ألمنيوم"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00098",
+                    "pack_label": "30 m"
+                },
+                "{id:109}": {
+                    "id": "{id:109}",
+                    "name": "صابون سائل لليدين",
+                    "url": "/fresh-mart-demo#item-{id:109}",
+                    "short": "لطيف، عبوة 500 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "صابون سائل لليدين"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "10.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Sparkle",
+                    "sku": "FM-00099",
+                    "pack_label": "500 ml",
+                    "unit": {
+                        "label": "500 ml · 20.00 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:111}": {
+                    "id": "{id:111}",
+                    "name": "حفاضات مقاس 4",
+                    "url": "/fresh-mart-demo#item-{id:111}",
+                    "short": "ماصة للرطوبة، 44 حفاضة، 9–14 كجم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حفاضات مقاس 4"
+                    },
+                    "price": {
+                        "minor": 7900,
+                        "currency": "SAR",
+                        "formatted": "79.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00100",
+                    "pack_label": "44 pc",
+                    "unit": {
+                        "label": "44 pc · 1.80 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:112}": {
+                    "id": "{id:112}",
+                    "name": "مناديل الأطفال",
+                    "url": "/fresh-mart-demo#item-{id:112}",
+                    "short": "خالية من العطور، 80 منديلاً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مناديل الأطفال"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "14.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00101",
+                    "pack_label": "80 pc",
+                    "unit": {
+                        "label": "80 pc · 0.18 ⁨⃁⁩ / قطعة"
+                    }
+                },
+                "{id:113}": {
+                    "id": "{id:113}",
+                    "name": "حليب أطفال المرحلة 1",
+                    "url": "/fresh-mart-demo#item-{id:113}",
+                    "short": "من الولادة حتى 6 أشهر، 400 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حليب أطفال المرحلة 1"
+                    },
+                    "price": {
+                        "minor": 5400,
+                        "currency": "SAR",
+                        "formatted": "54.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00102",
+                    "pack_label": "400 g",
+                    "unit": {
+                        "label": "400 g · 135.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:114}": {
+                    "id": "{id:114}",
+                    "name": "حبوب الأطفال",
+                    "url": "/fresh-mart-demo#item-{id:114}",
+                    "short": "حبوب أرز بالموز، 200 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "حبوب الأطفال"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "17.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00103",
+                    "pack_label": "200 g",
+                    "unit": {
+                        "label": "200 g · 85.00 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:115}": {
+                    "id": "{id:115}",
+                    "name": "شامبو الأطفال",
+                    "url": "/fresh-mart-demo#item-{id:115}",
+                    "short": "بدون دموع، 200 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "شامبو الأطفال"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "18.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00104",
+                    "pack_label": "200 ml",
+                    "unit": {
+                        "label": "200 ml · 90.00 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:116}": {
+                    "id": "{id:116}",
+                    "name": "هريس التفاح للأطفال",
+                    "url": "/fresh-mart-demo#item-{id:116}",
+                    "short": "من عمر 6 أشهر، 120 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "هريس التفاح للأطفال"
+                    },
+                    "price": {
+                        "minor": 550,
+                        "currency": "SAR",
+                        "formatted": "5.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00105",
+                    "pack_label": "120 g",
+                    "unit": {
+                        "label": "120 g · 45.83 ⁨⃁⁩ / كغ"
+                    }
+                },
+                "{id:117}": {
+                    "id": "{id:117}",
+                    "name": "لوشن الأطفال",
+                    "url": "/fresh-mart-demo#item-{id:117}",
+                    "short": "مرطّب، 200 مل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "لوشن الأطفال"
+                    },
+                    "price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "21.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00106",
+                    "pack_label": "200 ml",
+                    "unit": {
+                        "label": "200 ml · 105.00 ⁨⃁⁩ / لتر"
+                    }
+                },
+                "{id:118}": {
+                    "id": "{id:118}",
+                    "name": "كريم التهاب الحفاضات",
+                    "url": "/fresh-mart-demo#item-{id:118}",
+                    "short": "كريم واقٍ بأكسيد الزنك، 100 جرام.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كريم التهاب الحفاضات"
+                    },
+                    "price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "19.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Little Sprout",
+                    "sku": "FM-00107",
+                    "pack_label": "100 g",
+                    "unit": {
+                        "label": "100 g · 190.00 ⁨⃁⁩ / كغ"
+                    }
+                }
+            },
+            "total": 107
+        },
+        "features": {
+            "featured": [
+                "{id:4}",
+                "{id:5}",
+                "{id:13}",
+                "{id:20}",
+                "{id:25}",
+                "{id:30}",
+                "{id:33}",
+                "{id:40}"
+            ],
+            "wishlist": true
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/fresh-mart-demo",
+            "cart": "/fresh-mart-demo#cart",
+            "quote": "/fresh-mart-demo/retail/quote",
+            "track": "/fresh-mart-demo#track",
+            "place": "/fresh-mart-demo/retail/order",
+            "coupon": "/{store}/coupon",
+            "slots": "/fresh-mart-demo/grocery/slots",
+            "order_lookup": "/{store}/order-lookup",
+            "wishlist": "/fresh-mart-demo/wishlist",
+            "stock_alerts": "/fresh-mart-demo/stock-alerts",
+            "hold": "/fresh-mart-demo/grocery/hold"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "after"
+            },
+            "tax": {
+                "mode": "exclusive",
+                "rate": 15,
+                "label": "VAT"
+            }
+        },
+        "i18n": {
+            "add_more": "أضف المزيد",
+            "nothing_in_your_order_yet": "لا شيء في طلبك بعد",
+            "total_to_pay": "المبلغ المستحق",
+            "store_closed": "المتجر مغلق",
+            "ordering_is_paused": "الطلب متوقف مؤقتًا",
+            "waiting_for_connection": "في انتظار الاتصال",
+            "youre_offline": "أنت غير متصل بالإنترنت",
+            "prices_changed_while_you_were_offline": "تغيّرت الأسعار أثناء عدم اتصالك بالإنترنت.",
+            "please_confirm_your_order_again": "يرجى تأكيد طلبك مرة أخرى",
+            "couldnt_update_total_retry": "تعذّر تحديث الإجمالي — أعد المحاولة",
+            "sold_out": "نفد من المخزون",
+            "free": "مجاني",
+            "added_to_your_order": "تمت الإضافة إلى طلبك",
+            "removed_from_your_order": "تمت إزالته من طلبك",
+            "sending_your_order": "جارٍ إرسال طلبك",
+            "needs_your_confirmation": "يحتاج إلى تأكيدك",
+            "order_placed": "تم تقديم الطلب",
+            "order_expired": "انتهت صلاحية الطلب",
+            "could_not_place_the_order": "تعذّر إرسال الطلب",
+            "connect_to_place_this_order": "اتصل بالإنترنت لإتمام الطلب",
+            "offline_prices_may_change": "بدون اتصال: قد تتغيّر الأسعار",
+            "some_items_are_no_longer_available": "بعض العناصر لم تعد متوفرة",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "تمت إزالة الطلبات المنتظرة لأن الطلب دون اتصال تم إيقافه.",
+            "still_there_starting_over_in_n_seconds": "هل ما زلت هنا؟ سنبدأ من جديد خلال :n ثانية",
+            "incorrect_pin": "رمز PIN غير صحيح",
+            "too_many_attempts_wait_a_moment": "محاولات كثيرة. انتظر قليلاً.",
+            "device_setup_pin": "رمز إعداد الجهاز PIN",
+            "enter_the_staff_pin": "أدخل رمز الموظفين",
+            "count_of_total_digits_entered": "تم إدخال :count من :total أرقام",
+            "starting_over_in_seconds_s": "إعادة البدء خلال :seconds ث",
+            "continue": "متابعة",
+            "exit_kiosk": "إنهاء وضع الطلب الذاتي",
+            "connection_lost_pay_at_the_counter_to_order_now": "انقطع الاتصال — ادفع عند الكاونتر لتطلب الآن",
+            "ordering_is_paused_until_the_connection_returns": "الطلب متوقف حتى يعود الاتصال"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "موز",
+                    "brand": "Fresh Mart",
+                    "description": "حلو وناضج يُباع بالوزن.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:1}",
+                            "alt": "موز"
+                        }
+                    ],
+                    "price": {
+                        "minor": 650,
+                        "currency": "SAR",
+                        "formatted": "6.50 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "option_groups": [],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "sku": "FM-00001",
+                    "add_label": "إضافة · 6.50 ⁨⃁⁩"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "موز",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 650,
+                                "currency": "SAR",
+                                "formatted": "6.50 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "موز"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "المجموع الفرعي",
+                            "amount": {
+                                "minor": 650,
+                                "currency": "SAR",
+                                "formatted": "6.50 ⁨⃁⁩"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "delivery",
+                            "label": "التسليم",
+                            "amount": {
+                                "minor": 900,
+                                "currency": "SAR",
+                                "formatted": "9.00 ⁨⃁⁩"
+                            },
+                            "kind": "delivery"
+                        },
+                        {
+                            "key": "free_delivery_remaining",
+                            "label": "أضف 83.50 ⁨⃁⁩ إضافية للحصول على توصيل مجاني",
+                            "amount": {
+                                "minor": 8350,
+                                "currency": "SAR",
+                                "formatted": "83.50 ⁨⃁⁩"
+                            },
+                            "kind": "delivery",
+                            "muted": true,
+                            "informational": true
+                        },
+                        {
+                            "key": "tax",
+                            "label": "VAT 15%",
+                            "amount": {
+                                "minor": 98,
+                                "currency": "SAR",
+                                "formatted": "0.98 ⁨⃁⁩"
+                            },
+                            "kind": "tax"
+                        }
+                    ],
+                    "total": {
+                        "minor": 1648,
+                        "currency": "SAR",
+                        "formatted": "16.48 ⁨⃁⁩"
+                    },
+                    "total_label": "الإجمالي",
+                    "cta_label": "الانتقال إلى الدفع · 16.48 ⁨⃁⁩"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "delivery_methods": [
+                        {
+                            "id": "asap",
+                            "label": "في أقرب وقت ممكن",
+                            "selected": true
+                        },
+                        {
+                            "id": "schedule",
+                            "label": "جدولة"
+                        }
+                    ],
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الاستلام",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        },
+                        {
+                            "id": "country",
+                            "label": "رمز الدولة",
+                            "type": "hidden",
+                            "dir": "ltr",
+                            "required": true
+                        },
+                        {
+                            "id": "address",
+                            "label": "عنوان التوصيل",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "city",
+                            "label": "المدينة",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "notes",
+                            "label": "ملاحظة للسائق",
+                            "type": "text",
+                            "help": "رمز البوابة، الطابق، أين تُترك الأكياس"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "موز",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "6.50 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "موز"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "6.50 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "delivery",
+                                "label": "التسليم",
+                                "amount": {
+                                    "minor": 900,
+                                    "currency": "SAR",
+                                    "formatted": "9.00 ⁨⃁⁩"
+                                },
+                                "kind": "delivery"
+                            },
+                            {
+                                "key": "free_delivery_remaining",
+                                "label": "أضف 83.50 ⁨⃁⁩ إضافية للحصول على توصيل مجاني",
+                                "amount": {
+                                    "minor": 8350,
+                                    "currency": "SAR",
+                                    "formatted": "83.50 ⁨⃁⁩"
+                                },
+                                "kind": "delivery",
+                                "muted": true,
+                                "informational": true
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 98,
+                                    "currency": "SAR",
+                                    "formatted": "0.98 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 1648,
+                            "currency": "SAR",
+                            "formatted": "16.48 ⁨⃁⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · 16.48 ⁨⃁⁩"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/fresh-mart-demo",
+                "cart": "/fresh-mart-demo#cart",
+                "quote": "/fresh-mart-demo/retail/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/fresh-mart-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/fresh-mart-demo/grocery/slots",
+                "order_lookup": "/{store}/order-lookup",
+                "replacement": "/order/track/{track_token}/replacement",
+                "wishlist": "/fresh-mart-demo/wishlist",
+                "stock_alerts": "/fresh-mart-demo/stock-alerts",
+                "hold": "/fresh-mart-demo/grocery/hold"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "تم تقديم الطلب",
+                    "heading": "الطلب رقم {order_no}",
+                    "steps": [
+                        {
+                            "label": "تم تقديم الطلب",
+                            "sub": "12:00 م",
+                            "state": "current"
+                        },
+                        {
+                            "label": "قيد التجهيز",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "في الطريق",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "تم التسليم",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "موز",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "6.50 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "موز"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 650,
+                                    "currency": "SAR",
+                                    "formatted": "6.50 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "delivery",
+                                "label": "التسليم",
+                                "amount": {
+                                    "minor": 900,
+                                    "currency": "SAR",
+                                    "formatted": "9.00 ⁨⃁⁩"
+                                },
+                                "kind": "delivery"
+                            },
+                            {
+                                "key": "free_delivery_remaining",
+                                "label": "أضف 83.50 ⁨⃁⁩ إضافية للحصول على توصيل مجاني",
+                                "amount": {
+                                    "minor": 8350,
+                                    "currency": "SAR",
+                                    "formatted": "83.50 ⁨⃁⁩"
+                                },
+                                "kind": "delivery",
+                                "muted": true,
+                                "informational": true
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 98,
+                                    "currency": "SAR",
+                                    "formatted": "0.98 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 1648,
+                            "currency": "SAR",
+                            "formatted": "16.48 ⁨⃁⁩"
+                        },
+                        "total_label": "الإجمالي · الدفع عند الاستلام"
+                    },
+                    "paid_label": "الدفع عند الاستلام",
+                    "actions": [
+                        {
+                            "label": "اتصل بالمتجر",
+                            "url": "tel:966550100103",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "واتساب",
+                            "url": "https://wa.me/966550100103",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ]
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "pickup_slot",
+                        "label": "الاستلام",
+                        "needs_address": false,
+                        "needs_slot": true
+                    }
+                ],
+                "selected_order_type": "pickup_slot",
+                "table": null,
+                "room": null,
+                "schedule_ahead": true,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "pickup_slot"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": false,
+                    "order_types": [],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/fresh-mart-demo",
+                "cart": "/fresh-mart-demo#cart",
+                "quote": "/fresh-mart-demo/retail/quote",
+                "track": "/fresh-mart-demo#track",
+                "place": "/fresh-mart-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/fresh-mart-demo/grocery/slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/fresh-mart-demo/kiosk/reset",
+                "kiosk_start": "/fresh-mart-demo/kiosk",
+                "kiosk_exit": "/fresh-mart-demo/kiosk/exit",
+                "kiosk_setup": "/fresh-mart-demo/kiosk/setup",
+                "wishlist": "/fresh-mart-demo/wishlist",
+                "stock_alerts": "/fresh-mart-demo/stock-alerts",
+                "hold": "/fresh-mart-demo/grocery/hold"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "fresh-mart-demo",
+                "name": "Fresh Mart",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Fresh Mart"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Fresh Mart"
+                },
+                "tagline": "Groceries delivered in 25 minutes",
+                "locale": "ar",
+                "dir": "rtl",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/fresh-mart-demo?lang=en"
+                    },
+                    {
+                        "code": "ar",
+                        "name": "ar",
+                        "url": "/fresh-mart-demo?lang=ar"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "retail",
+                "store_type": "grocery",
+                "status": {
+                    "open": false,
+                    "label": "الطلب متوقف مؤقتًا",
+                    "next_change_at": "2026-10-04T23:59:00+03:00",
+                    "paused_reason": "الطلب متوقف مؤقتًا"
+                },
+                "contact": {
+                    "phone": "966550100103",
+                    "whatsapp": "966550100103",
+                    "address": "Al Olaya, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=Al%20Olaya%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": false,
+                "hours": [
+                    {
+                        "days": [
+                            "Mo"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Tu"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "We"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Th"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Fr"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Sa"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    },
+                    {
+                        "days": [
+                            "Su"
+                        ],
+                        "opens": "08:00",
+                        "closes": "23:59"
+                    }
+                ]
+            }
+        }
+    }
+}

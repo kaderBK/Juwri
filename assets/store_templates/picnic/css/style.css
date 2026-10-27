@@ -1,0 +1,2087 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   picnic — white/orange/yellow/green ordering-app post_template
+   demo stylesheet (board: "ofsp_ce" food & meal-plan app)
+   ═══════════════════════════════════════════════════════════ */
+
+/* WAVE3-V1 (same root cause as EMBER-B1 / CRUMB-F6). The shared layout builds
+   --theme-color-* with sscanf($store->color,"#%02x%02x%02x"), which does not
+   understand the 3-digit hex form: '#111' yields [17,1,null] and the layout
+   emits the INVALID declaration `--theme-color-1: rgba(17,1,,1)`. An invalid
+   custom property is invalid at computed-value time, and `var(--x, fallback)`
+   does NOT rescue it — the fallback only fires when the variable is *undefined*.
+   That collapsed all 45 picnic rules built on --orange*: the "+" add button on
+   every card, the Full Menu tile, the product page's signature orange hero card
+   and the cart badge all computed to background rgba(0,0,0,0) with white text,
+   i.e. invisible on the white paper face.
+   Registering the tokens means an invalid substitution resolves to picnic's own
+   orange instead of poisoning everything downstream. The shared parser is still
+   the real fix (BLOCKED-SHARED). */
+@property --orange{syntax:"<color>";inherits:true;initial-value:#f4581c}
+@property --orange-deep{syntax:"<color>";inherits:true;initial-value:#d8440f}
+@property --orange-soft{syntax:"<color>";inherits:true;initial-value:#fdeae2}
+
+:root{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is picnic's own value,
+     kept as the var() fallback so an un-customized store — or a render with no
+     token include — is byte-identical to today. Per picnic's theme.json the
+     SURFACE role is the white app face (--paper) and the BACKGROUND role is the
+     warm body chrome (--paper-warm); --gray/--gray-2 are secondary panel fills
+     with no role default of their own, kept literal. */
+  --paper:var(--tc-surface, #ffffff);
+  --paper-warm:var(--tc-background, #fdf6ee);
+  --gray:#f3f4f6;
+  --gray-2:#e9ebee;
+  --stroke:#eceef1;
+  --stroke-2:#dfe2e7;
+  /* ink — --ink-3 was #98a1ab, which measures 2.62:1 on --paper and fails WCAG AA
+     for body text in 40-odd places (card meta, hints, empty states, tk-labels,
+     placeholders). Darkened to 4.6:1 while staying clearly secondary. */
+  --ink:var(--tc-text, #17232e);
+  --ink-2:#525d69;
+  --ink-3:#6b7684;
+  /* brand — picnic's orange is the customizer PRIMARY role. The layout's legacy
+     --theme-color-1 stays in the fallback chain (rule 4): a token-less render
+     still resolves the store's brand, and the @property registration above
+     rescues the layout's invalid-3-digit-hex bug (WAVE3-V1) either way.
+     --orange-deep/-soft read the layout's 0_85/0_12 opacity hooks (NOT
+     --theme-color-1); left on that mechanism, the derived primary-600/-700 ramp
+     differs from these hand-picked shades, so they are not remapped. */
+  --orange:var(--tc-primary, var(--theme-color-1, #f4581c));
+  --orange-deep:var(--theme-color-0_85,#d8440f);
+  --orange-soft:var(--theme-color-0_12,#fdeae2);
+  /* accent — picnic's yellow is the customizer ACCENT role; the deeper/ink/soft
+     yellows below are hand-tuned shades, kept literal (rule 6). */
+  --yellow:var(--tc-accent, #ffc93d);
+  --yellow-deep:#e8ae14;
+  --yellow-ink:#3a2c00;
+  --yellow-soft:#fff3d6;
+  --green:#23a66d;
+  --green-deep:#1b8555;
+  --green-soft:#e3f4ec;
+  /* radius — pill follows the layout.radius scale; --r-card stays literal
+     because picnic's 22px ≠ the "round" default's 18px (rule 3), and img/sheet
+     stay literal (control-radius at "pill" would circle images / reshape sheets). */
+  --r-card:22px;
+  --r-img:16px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-search:55; --z-story:58; --z-toast:60; --z-fly:70; --z-onb:80;
+  /* type — the Poppins / IBM Plex Arabic webfonts were requested from
+     fonts.googleapis.com, which the platform CSP blocks: nothing ever loaded
+     (document.fonts.check('700 16px Poppins') === false) and every page paid for
+     three dead requests. picnic now uses a self-contained system stack, which is
+     also what the geometric-sans look degrades to most gracefully. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Poppins",ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic","Noto Sans Arabic","Geeza Pro",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--font-ui);
+  background:var(--paper-warm);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+[dir="rtl"] body, [dir="rtl"] input, [dir="rtl"] button, [dir="rtl"] textarea{font-family:var(--font-ar)}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,textarea,select{
+  font:inherit;color:var(--ink);background:var(--gray);
+  border:1.5px solid transparent;border-radius:15px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+input:focus,textarea:focus,select:focus{border-color:var(--green);background:var(--paper)}
+::-webkit-scrollbar{display:none}
+
+/* icons */
+.ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-xs{width:15px;height:15px}
+.chev{color:var(--green);stroke-width:2.4}
+[dir="rtl"] .chev{transform:scaleX(-1)}
+
+/* ── stage & phone frame ─────────────────────────────── */
+.stage{
+  height:100dvh;display:flex;align-items:center;justify-content:center;gap:64px;
+  background:
+    radial-gradient(50rem 30rem at 76% 8%,rgba(244,88,28,.09),transparent 60%),
+    radial-gradient(38rem 26rem at 10% 92%,rgba(35,166,109,.10),transparent 60%),
+    radial-gradient(30rem 20rem at 50% 50%,rgba(255,201,61,.12),transparent 65%),
+    var(--paper-warm);
+  padding:24px;
+}
+.stage-note{max-width:260px;color:var(--ink-2)}
+.stage-brand{font-size:56px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1}
+.stage-dot{color:var(--orange)}
+.stage-sub{margin:10px 0 26px;font-size:14px;color:var(--ink-3)}
+.stage-hints{list-style:none;display:grid;gap:11px;font-size:13.5px;line-height:1.45}
+.stage-hints li{padding-inline-start:18px;position:relative}
+.stage-hints li::before{content:"";position:absolute;inset-inline-start:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--orange)}
+.stage-hints li:nth-child(3n+2)::before{background:var(--green)}
+.stage-hints li:nth-child(3n)::before{background:var(--yellow-deep)}
+.stage-hints code{background:#fff;border:1px solid var(--stroke-2);border-radius:6px;padding:1px 6px;font-size:12px;color:var(--green-deep)}
+
+.phone{
+  position:relative;width:401px;height:min(864px,94dvh);
+  background:var(--paper);border-radius:54px;
+  border:1px solid rgba(23,35,46,.08);
+  box-shadow:0 0 0 11px #10161c,0 0 0 12.5px #2c343c,0 44px 90px -30px rgba(23,35,46,.45);
+  overflow:clip;display:flex;flex-direction:column;
+}
+/* Empty spacer clearing the drawn phone bezel — see the note on the .statusbar
+   element in picnic/index.blade.php. It once held a hardcoded fake iOS status bar
+   (9:41, full signal, full battery) which shipped live and sat above the customer's
+   REAL status bar showing the wrong time; the children were deleted from the markup,
+   and their now-unreferenced rules (.sb-time / .sb-island / .sb-icons) with them. */
+.statusbar{
+  flex:none;height:52px;padding:14px 30px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:20;pointer-events:none;color:var(--ink);
+}
+
+@media (max-width:860px){
+  .stage{padding:0;gap:0}
+  .stage-note{display:none}
+  .phone{width:100%;height:100dvh;border-radius:0;border:0;box-shadow:none}
+  .statusbar{display:none}
+}
+
+/* ── app shell & view routing ────────────────────────── */
+.app{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;isolation:isolate}
+.views{position:relative;flex:1;min-height:0}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--paper);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.tail-space{height:118px}
+.tail-space.tall{height:40px}
+
+.page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.page-head h1{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.page-head.sub{justify-content:flex-start;gap:14px}
+.push-end{margin-inline-start:auto}
+
+.fab{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--gray);color:var(--ink);
+  display:grid;place-items:center;flex:none;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+[dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+.fab.fav.is-on .ic{fill:var(--orange);stroke:var(--orange)}
+
+.linkbtn{font-size:13px;font-weight:600;color:var(--ink-2);padding:6px 2px;min-height:32px}
+.linkbtn.green{color:var(--green)}
+
+/* ── onboarding ──────────────────────────────────────── */
+.onb{
+  position:absolute;inset:0;z-index:var(--z-onb);
+  background:var(--paper);
+  transition:opacity .45s var(--ease),visibility 0s linear .45s;
+}
+.onb.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.onb-skip{
+  position:absolute;top:14px;inset-inline-end:20px;z-index:4;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(23,35,46,.10);backdrop-filter:blur(8px);
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+.onb-track{
+  display:flex;height:100%;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+}
+.onb-slide{
+  flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;
+  display:flex;flex-direction:column;
+  padding:60px 30px 104px;position:relative;overflow:hidden;
+}
+.onb-dots{
+  position:absolute;bottom:26px;left:50%;translate:-50% 0;z-index:3;
+  display:flex;gap:7px;
+}
+.onb-dots i{width:7px;height:7px;border-radius:var(--r-pill);background:rgba(23,35,46,.25);transition:all .3s var(--ease)}
+.onb-dots i.is-on{width:24px;background:var(--ink)}
+
+.ob-brand{font-size:19px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:7px}
+.ob-basket{font-size:22px}
+.ob1-title{
+  font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.08;
+  padding-top:44px;display:grid;gap:2px;
+}
+.ob1-title span{display:block;opacity:0;transform:translateY(24px);animation:rise .7s var(--ease) forwards}
+.ob1-title span:nth-child(2){animation-delay:.12s}
+.ob1-title .accent{color:var(--orange)}
+@keyframes rise{to{opacity:1;transform:none}}
+.ob-sub{padding-top:18px;font-size:14.5px;line-height:1.65;color:var(--ink-2);max-width:30ch}
+.ob-sub.light{color:rgba(255,255,255,.85)}
+.ob1-stickers .stk{
+  position:absolute;font-size:30px;width:64px;height:64px;border-radius:24px;
+  display:grid;place-items:center;background:var(--gray);
+  animation:float 4.4s ease-in-out infinite alternate;
+}
+.s-a{top:120px;inset-inline-end:26px;background:var(--orange-soft);rotate:8deg}
+.s-b{top:44%;inset-inline-end:60px;background:var(--yellow-soft);rotate:-7deg;animation-delay:.6s}
+.s-c{bottom:26%;inset-inline-start:24px;background:var(--green-soft);rotate:5deg;animation-delay:1.1s}
+.s-d{bottom:28%;inset-inline-end:30px;rotate:-10deg;animation-delay:.3s}
+@keyframes float{to{translate:0 -13px}}
+
+.ob-cta{
+  margin-top:auto;height:56px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:15.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ob-cta:active{transform:scale(.97)}
+.ob-cta.ink{background:var(--ink);color:var(--paper);box-shadow:0 14px 30px -12px rgba(23,35,46,.55)}
+.ob-cta.white{background:var(--paper);color:var(--ink);box-shadow:0 14px 30px -12px rgba(0,0,0,.35)}
+.ob-cta .arr{font-weight:800}
+[dir="rtl"] .ob-cta .arr,[dir="rtl"] .cta .arr{display:inline-block;transform:scaleX(-1)}
+
+/* slide 2 · yellow */
+.ob2{background:var(--yellow);color:var(--yellow-ink)}
+.ob2-title{font-size:33px;font-weight:800;letter-spacing:-.025em;line-height:1.14;max-width:12ch}
+.ob2-burst{position:relative;flex:1;min-height:170px;display:grid;place-items:center}
+.ob2-burst img{
+  width:min(64%,230px);aspect-ratio:1;object-fit:cover;border-radius:50%;
+  box-shadow:0 30px 50px -18px rgba(58,44,0,.45);
+  animation:burger-pop .8s var(--ease-pop) .1s backwards;
+}
+@keyframes burger-pop{from{transform:scale(.5) rotate(-10deg);opacity:0}}
+.ob2-burst .bit{
+  position:absolute;font-size:30px;filter:drop-shadow(0 8px 10px rgba(58,44,0,.3));
+  animation:float 3.8s ease-in-out infinite alternate;
+}
+.b-1{top:6%;inset-inline-start:16%;animation-delay:.2s}
+.b-2{top:2%;inset-inline-end:20%;font-size:26px}
+.b-3{top:46%;inset-inline-start:6%;animation-delay:.7s}
+.b-4{top:42%;inset-inline-end:7%;font-size:26px;animation-delay:.4s}
+.b-5{bottom:4%;inset-inline-start:26%;font-size:24px;animation-delay:1s}
+.ob-auth{display:grid;gap:10px;padding-top:12px}
+.auth{
+  height:52px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:14px;font-weight:600;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.auth:active{transform:scale(.97)}
+.auth.apple{background:#0b0f13;color:#fff}
+.auth.fb{background:var(--orange);color:#fff;box-shadow:0 10px 24px -10px rgba(216,68,15,.6)}
+.auth.email{background:transparent;border:2px solid rgba(58,44,0,.85);color:var(--yellow-ink)}
+.auth-other{font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;color:rgba(58,44,0,.75);padding:4px}
+
+/* slide 3 · green rider */
+.ob3{background:var(--green);color:#fff;justify-content:flex-end}
+.ob3-title{font-size:33px;font-weight:800;letter-spacing:-.025em;line-height:1.16;max-width:13ch}
+.rider{width:min(84%,300px);margin:auto auto 8px;overflow:visible}
+.rider .cl{fill:rgba(255,255,255,.35)}
+.rider .speed path{stroke:rgba(255,255,255,.7);stroke-width:4;stroke-linecap:round;stroke-dasharray:14 10;animation:dash 1.1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-24}}
+.rider .shadow{fill:rgba(0,0,0,.18)}
+.rider .scoot{animation:bob 2.6s ease-in-out infinite alternate;transform-origin:center}
+@keyframes bob{to{transform:translateY(-7px)}}
+.rider .box{fill:var(--orange);stroke:#fff;stroke-width:3}
+.rider .box-emoji{font-size:22px}
+.rider .frame{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round}
+.rider .deck{fill:var(--ink)}
+.rider .wheel circle{fill:var(--ink)}
+.rider .wheel .hub{fill:#fff}
+.rider .helmet{fill:#fff}
+.rider .visor{fill:none;stroke:var(--orange);stroke-width:4;stroke-linecap:round}
+.rider .suit{fill:var(--yellow)}
+.rider .arm{fill:none;stroke:var(--yellow);stroke-width:8;stroke-linecap:round}
+.ob3 .ob-cta{margin-top:26px}
+
+/* ── home ────────────────────────────────────────────── */
+.home-top{display:flex;align-items:center;gap:11px;padding:12px 2px 4px}
+.avatar{width:46px;height:46px;border-radius:50%;overflow:hidden;border:2px solid var(--stroke-2);flex:none;display:grid;place-items:center;background:var(--paper);color:var(--ink-2);font-weight:800;font-size:18px;cursor:pointer;padding:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar .ic{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8}
+.avatar--me{background:var(--orange);color:#fff;border-color:transparent}
+/* crave-parity branch selector beside the avatar */
+.loc{flex:1;min-width:0;text-align:start;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.loc-label{display:block;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.loc-value{display:flex;align-items:center;gap:5px;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden}
+.loc-value b{overflow:hidden;text-overflow:ellipsis}
+.loc-value .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;color:var(--orange);flex:none}
+.loc-value .ic-xs{width:13px;height:13px;color:var(--ink-3)}
+.hi{flex:1;min-width:0}
+.hi-sub{display:block;font-size:11.5px;color:var(--ink-3);font-weight:500}
+.hi-name{font-size:15px;font-weight:700}
+/* R4: open/closed status chip on its own line under the store name. */
+.open-chip{display:flex;align-items:center;gap:6px;margin-top:2px;font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.open-chip i{width:7px;height:7px;border-radius:50%;flex:none;background:var(--green);animation:pc-open-pulse 2.2s infinite}
+.open-chip.closed{color:var(--ink-3)}
+.open-chip.closed i{background:var(--orange-deep);animation:none}
+@keyframes pc-open-pulse{0%{box-shadow:0 0 0 0 rgba(35,166,109,.5)}70%{box-shadow:0 0 0 6px rgba(35,166,109,0)}100%{box-shadow:0 0 0 0 rgba(35,166,109,0)}}
+.pts-pill{
+  display:inline-flex;align-items:center;gap:6px;flex:none;
+  background:var(--yellow-soft);border:1px solid rgba(232,174,20,.35);
+  color:var(--yellow-ink);font-size:13px;font-weight:700;
+  padding:9px 13px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.pts-pill:active{transform:scale(.93)}
+.pts-pill .ic{color:var(--yellow-deep);fill:var(--yellow);stroke:var(--yellow-deep)}
+.iconbtn{
+  position:relative;width:46px;height:46px;flex:none;border-radius:50%;
+  background:var(--gray);display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn.solid{background:var(--gray-2)}
+.iconbtn.wa{background:var(--green);color:#fff}
+
+.home-headline{padding:16px 2px 4px;font-size:29px;font-weight:800;letter-spacing:-.03em;line-height:1.14}
+.home-headline span{display:block}
+
+/* brand / follow row (crave F2 parity) — store identity + follow CTA,
+   directly under the greeting header. */
+.brand-row{display:flex;align-items:center;gap:12px;padding:10px 2px 2px}
+.brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--gray);display:grid;place-items:center;border:1.5px solid var(--stroke-2)}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = a filled green seal + white check. */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--green)}
+.verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner); wired in JS (picnic closes via the scrim). */
+.sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover as a rounded-bottom band (warm, park-day) ── */
+.pc-cover{position:relative;isolation:isolate;min-block-size:158px;margin:-6px -20px 0;padding:0 20px}
+.pc-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;border-radius:30px;background:var(--gray,#efe7db)}
+.pc-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.pc-cover-scrim{position:absolute;inset:0;border-radius:0 0 30px 30px;background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.10) 46%, rgba(0,0,0,.30) 100%)}
+.pc-cover .home-top{position:relative;z-index:2}
+.pc-cover .home-top{text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.pc-cover .loc-label{color:rgba(255,255,255,.85)}
+.pc-cover .loc-value,.pc-cover .loc-value b{color:#fff}
+.pc-cover .home-top .iconbtn,.pc-cover .home-top .avatar{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.32);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+/* sit the brand row just below the rounded-bottom cover instead of pulling it up
+   onto the photo, where the name/subtitle overlapped the cover's curved edge */
+.brand-row--hero{margin-block-start:8px;position:relative;z-index:3}
+.brand-row--hero .brand-logo{border:3px solid var(--paper-warm);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+
+/* ── collapsing header ── */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--paper);box-shadow:0 6px 18px rgba(0,0,0,.10);
+  border-block-end:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{width:32px;height:32px;border-radius:11px;overflow:hidden;flex:none;background:var(--gray,#efe7db);display:grid;place-items:center}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.followbtn{
+  display:inline-flex;align-items:center;gap:6px;flex:none;
+  padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.followbtn:active{transform:scale(.94)}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--gray);color:var(--ink-2)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+
+/* promo duo */
+.promo-duo{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;padding-top:16px}
+.promo-photo{
+  position:relative;border-radius:var(--r-card);overflow:hidden;aspect-ratio:1.18;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.promo-photo:active{transform:scale(.97)}
+.promo-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pp-shade{position:absolute;inset:0;background:linear-gradient(185deg,rgba(23,35,46,.05) 30%,rgba(23,35,46,.72))}
+.pp-rate{
+  position:absolute;top:10px;inset-inline-start:10px;
+  background:rgba(255,255,255,.92);color:#17232e;
+  font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:var(--r-pill);
+}
+.pp-copy{position:absolute;inset-inline:12px;bottom:11px;color:#fff;display:grid;gap:7px}
+.pp-copy b{font-size:15px;font-weight:700;line-height:1.2}
+.pp-buy{
+  justify-self:start;background:var(--paper);color:var(--ink);
+  font-size:11.5px;font-weight:700;padding:6px 13px;border-radius:var(--r-pill);
+}
+.promo-menu{
+  position:relative;border-radius:var(--r-card);background:var(--orange);color:#fff;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+  padding:16px 14px;text-align:start;overflow:hidden;
+  box-shadow:0 16px 30px -14px rgba(216,68,15,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.promo-menu:active{transform:scale(.97)}
+.promo-menu::after{
+  content:"";position:absolute;inset-inline-end:-34px;top:-34px;width:104px;height:104px;
+  border-radius:50%;background:rgba(255,255,255,.14);
+}
+.pm-icon{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.promo-menu b{font-size:16.5px;font-weight:700;line-height:1.2;padding-top:12px}
+.pm-arrow{
+  width:34px;height:34px;border-radius:50%;background:#fff;color:var(--orange);
+  display:grid;place-items:center;margin-top:10px;
+}
+[dir="rtl"] .pm-arrow .ic{transform:scaleX(-1)}
+
+/* quick duo (yellow meal-plan strip + book) */
+.quick-duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:12px}
+.quick{
+  display:flex;align-items:center;gap:9px;
+  padding:13px 14px;border-radius:18px;font-size:12.5px;font-weight:700;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.quick:active{transform:scale(.97)}
+.quick span:nth-child(2){flex:1;line-height:1.25}
+.quick.plan{background:var(--yellow);color:var(--yellow-ink);box-shadow:0 12px 24px -14px rgba(232,174,20,.7)}
+.quick.plan .chev{color:var(--yellow-ink)}
+.quick.book{background:var(--gray)}
+.q-emoji{font-size:19px}
+
+/* circular category chips */
+.cats{display:flex;align-items:flex-start;gap:16px;overflow-x:auto;padding:22px 2px 6px}
+.cat{flex:none;display:grid;justify-items:center;gap:7px;width:62px}
+.cat-circle{
+  width:60px;height:60px;border-radius:50%;
+  background:var(--gray);display:grid;place-items:center;font-size:24px;
+  border:2px solid transparent;overflow:hidden;
+  transition:all var(--t-fast) var(--ease);
+}
+/* Real category photo fills the circle; the active green ring still shows around it. */
+.cat-circle.has-img{background:var(--gray)}
+.cat-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+/* "ALL" chip: a drawn grid glyph, not a photo. */
+.cat-circle.cat-all svg{width:26px;height:26px;color:var(--ink-2)}
+.cat.is-on .cat-circle.cat-all svg{color:#fff}
+/* Show the FULL name across up to two lines; the 2-line clamp is the safety cap
+   (a very long name ellipsizes on the 2nd line instead of overflowing the chip).
+   Parent flex row is align-items:flex-start so a 2-line chip grows DOWNWARD and
+   every circle stays level. */
+.cat-label{font-size:11px;font-weight:600;color:var(--ink-2);width:74px;text-align:center;line-height:1.25;
+  overflow-wrap:break-word;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.cat.is-on .cat-circle{background:var(--green);border-color:var(--green);box-shadow:0 10px 22px -10px rgba(27,133,85,.65)}
+.cat.is-on .cat-label{color:var(--green);font-weight:700}
+.cat:active .cat-circle{transform:scale(.9)}
+.cat.pop .cat-circle{animation:chip-pop .45s var(--ease-pop)}
+@keyframes chip-pop{45%{transform:scale(1.16)}}
+
+/* section heads */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 20px) 2px 13px}
+.section-head h2{font-size:17.5px;font-weight:700;letter-spacing:-.015em}
+
+/* best-seller grid — alternating white card / photo card */
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:4px}
+.bs-card{
+  position:relative;border-radius:var(--r-card);text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:card-in .5s var(--ease) backwards;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.bs-card:active{transform:scale(.96)}
+.bs-card.a{background:var(--gray);padding:13px;display:flex;flex-direction:column;gap:2px}
+.bs-card.a .bs-thumb{width:78px;height:78px;border-radius:50%;object-fit:cover;margin-bottom:9px;box-shadow:0 10px 18px -8px rgba(23,35,46,.35)}
+.bs-card.a .bs-name{font-size:14px;font-weight:700;line-height:1.25}
+.bs-card.a .bs-meta{font-size:11.5px;color:var(--ink-3);font-weight:500;padding-top:2px}
+.bs-card.a .bs-meta .star{color:var(--yellow-deep);font-weight:700}
+.bs-card.a .bs-foot{display:flex;align-items:center;justify-content:space-between;padding-top:9px}
+.bs-price{font-size:14.5px;font-weight:800}
+/* was stacks ABOVE the live price (not inline beside it) */
+.bs-pricewrap{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.bs-was{margin-inline-end:0 !important;font-size:11px;line-height:1.2}
+.bs-buy{
+  background:var(--green);color:#fff;font-size:11.5px;font-weight:700;
+  padding:8px 14px;border-radius:var(--r-pill);
+  box-shadow:0 8px 16px -8px rgba(27,133,85,.7);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.bs-buy:active{transform:scale(.9)}
+.bs-card.b{overflow:hidden;aspect-ratio:.82;background:var(--gray)}
+.bs-card.b img.bs-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bs-card.b .bs-shade{position:absolute;inset:0;background:linear-gradient(187deg,transparent 42%,rgba(23,35,46,.78))}
+.bs-card.b .bs-copy{position:absolute;inset-inline:12px;bottom:11px;color:#fff}
+.bs-card.b .bs-name{font-size:14px;font-weight:700;line-height:1.25}
+.bs-card.b .bs-meta{font-size:11px;opacity:.85;font-weight:500;padding-top:1px}
+.bs-card.b .bs-price{color:#fff;font-size:13.5px;padding-top:3px;display:block}
+.bs-add{
+  position:absolute;inset-inline-end:10px;bottom:10px;width:34px;height:34px;border-radius:50%;
+  background:var(--orange);color:#fff;display:grid;place-items:center;
+  box-shadow:0 8px 18px -6px rgba(216,68,15,.7);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.bs-add:active{transform:scale(.85)}
+.bs-add .ic{width:17px;height:17px;stroke-width:2.4}
+.bs-fav{
+  position:absolute;top:9px;inset-inline-end:9px;width:31px;height:31px;border-radius:50%;
+  background:rgba(255,255,255,.92);display:grid;place-items:center;color:#525d69;
+  transition:transform var(--t-fast) var(--ease-pop);z-index:2;
+}
+.bs-fav:active{transform:scale(.82)}
+.bs-fav .ic{width:15px;height:15px}
+.bs-fav.is-on{color:var(--orange)}
+.bs-fav.is-on .ic{fill:var(--orange);stroke:var(--orange)}
+.special-badge{
+  position:absolute;top:9px;inset-inline-start:9px;z-index:2;
+  background:var(--orange);color:#fff;font-size:9.5px;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 9px;border-radius:var(--r-pill);
+  box-shadow:0 6px 14px -6px rgba(216,68,15,.8);
+}
+/* Happy-hour offer ribbon — top-start; drops below the special badge when both are live. */
+.bs-hh{
+  position:absolute;top:9px;inset-inline-start:9px;z-index:2;
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;
+  font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 9px;border-radius:var(--r-pill);
+  box-shadow:0 6px 14px -6px rgba(0,0,0,.5);
+}
+.special-badge ~ .bs-hh{top:36px}
+
+.bs-card.sold{opacity:.62}
+.bs-card.sold img{filter:grayscale(.5)}
+.food-row.sold,.rw-card.sold{opacity:.62}
+
+.grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px;grid-column:1/-1}
+.empty-emoji{font-size:44px}
+
+/* ── search overlay ──────────────────────────────────── */
+.search-ov{
+  position:absolute;inset:0;z-index:var(--z-search);
+  background:var(--paper);display:flex;flex-direction:column;
+  padding:14px 20px 0;
+  opacity:0;transform:translateY(4%);
+  transition:opacity .28s var(--ease),transform .28s var(--ease);
+}
+.search-ov.is-open{opacity:1;transform:none}
+.so-bar{display:flex;align-items:center;gap:11px;flex:none}
+.so-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--gray);border-radius:var(--r-pill);
+  padding:0 18px;height:50px;color:var(--ink-3);
+}
+.so-field input{background:none;border:0;padding:0;height:100%;font-size:14.5px}
+.so-field input:focus{background:none;border:0}
+.so-cancel{font-size:13.5px;font-weight:600;color:var(--green);flex:none}
+.so-suggest{padding:20px 2px 6px}
+.so-suggest p{font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:11px}
+.so-results{flex:1;overflow-y:auto;display:grid;gap:9px;align-content:start;padding:10px 0 24px}
+.so-row{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--gray);border-radius:18px;padding:10px 13px;
+  animation:card-in .35s var(--ease) backwards;
+}
+.so-row img{width:46px;height:46px;border-radius:14px;object-fit:cover}
+.so-row b{flex:1;font-size:13.5px;font-weight:600}
+.so-row b small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-top:1px}
+.so-row .price{font-size:13px;font-weight:700;color:var(--orange)}
+.so-empty{text-align:center;color:var(--ink-3);font-size:13.5px;padding:34px 20px}
+
+/* ── foods list ──────────────────────────────────────── */
+.food-rows{display:grid;gap:10px}
+.food-row{
+  display:flex;align-items:center;gap:13px;text-align:start;
+  background:var(--paper);border:1.5px solid var(--stroke);
+  border-radius:20px;padding:10px 14px 10px 10px;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+  animation:card-in .4s var(--ease) backwards;
+}
+[dir="rtl"] .food-row{padding:10px 10px 10px 14px}
+.food-row:active{transform:scale(.975)}
+.food-row img{width:52px;height:52px;border-radius:16px;object-fit:cover;flex:none}
+.food-row b{flex:1;font-size:14.5px;font-weight:600}
+.food-row b small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.food-row .chev{stroke-width:2.6}
+.food-row.hl{
+  background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);
+  box-shadow:0 14px 26px -16px rgba(232,174,20,.8);
+}
+.food-row.hl b small{color:rgba(58,44,0,.6)}
+.food-row.crumb{background:var(--gray);border-color:var(--gray)}
+.food-row.crumb .backchev{transform:rotate(180deg)}
+[dir="rtl"] .food-row.crumb .backchev{transform:none}
+
+/* ── product detail (signature orange card) ──────────── */
+.hero-card{
+  position:relative;background:var(--orange);color:#fff;
+  border-radius:30px;padding:22px 20px 18px;
+  box-shadow:0 26px 50px -22px rgba(216,68,15,.65);
+  overflow:hidden;
+}
+.hero-card::before{
+  content:"";position:absolute;inset-inline-start:-44px;bottom:-44px;width:130px;height:130px;
+  border-radius:50%;background:rgba(255,255,255,.10);
+}
+.hero-kicker{font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+.hero-title{font-size:27px;font-weight:800;letter-spacing:-.02em;line-height:1.12;padding-top:4px}
+.hero-stars{padding-top:6px;font-size:15px;letter-spacing:3px;color:var(--yellow)}
+.hero-photo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 4px}
+.hero-qty{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);color:#fff;
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.hero-qty:active{transform:scale(.85);background:rgba(255,255,255,.3)}
+.hero-photo{position:relative;flex:none}
+.hero-photo img{
+  width:172px;height:172px;border-radius:50%;object-fit:cover;
+  box-shadow:0 26px 44px -14px rgba(58,10,0,.55);
+  animation:plate-float 4.6s ease-in-out infinite alternate;
+}
+@keyframes plate-float{to{translate:0 -9px;rotate:3deg}}
+.hero-qty-badge{
+  position:absolute;bottom:2px;left:50%;translate:-50% 0;
+  background:var(--paper);color:var(--ink);font-size:12.5px;font-weight:800;
+  padding:4px 13px;border-radius:var(--r-pill);
+  box-shadow:0 8px 16px -6px rgba(58,10,0,.4);
+}
+.hero-qty-badge output{font-variant-numeric:tabular-nums}
+/* R8: prev/next gallery arrows overlaid on the circular photo (multi-image dishes
+   only; setProduct toggles [hidden]). Explicit [hidden] rule needed because the
+   base display:grid would otherwise beat the attribute's UA display:none. */
+.gal-arr{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.92);color:#17232e;border:0;cursor:pointer;
+  box-shadow:0 6px 14px -6px rgba(58,10,0,.5);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.gal-arr:active{transform:translateY(-50%) scale(.85)}
+.gal-arr.prev{inset-inline-start:2px}
+.gal-arr.next{inset-inline-end:2px}
+.gal-arr .ic{width:20px;height:20px;stroke-width:2.4}
+.gal-arr[hidden]{display:none}
+.hero-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;padding:14px 0 2px}
+.hmc{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  font-size:11px;font-weight:600;color:#fff;
+  padding:6px 11px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.hero-desc-wrap{padding:12px 2px 4px}
+.hero-desc{
+  font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.88);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.hero-desc.open{-webkit-line-clamp:unset}
+.read-more{font-size:12px;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+.hero-add-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.hero-add{
+  width:100%;height:52px;border-radius:var(--r-pill);
+  background:var(--paper);color:var(--ink);
+  font-size:14.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 14px 26px -12px rgba(58,10,0,.5);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.hero-add-row .hero-add{margin-top:0;flex:1;min-width:0}
+.hero-add:active{transform:scale(.97)}
+.hero-add b{font-weight:800;color:var(--orange)}
+.hero-add:disabled{opacity:.55}
+.ha-plus{
+  width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;
+  display:grid;place-items:center;font-size:16px;font-weight:700;line-height:1;
+}
+/* direct "go to cart" button beside Add to Cart on the product hero; echoes the
+   qty steppers' circular glass style already used in this card. Toggled visible
+   by script.js (syncBadge) only once the cart holds something. */
+.p-cart-jump{
+  flex:none;position:relative;width:52px;height:52px;border-radius:50%;
+  background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);color:#fff;
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.p-cart-jump:active{transform:scale(.94);background:rgba(255,255,255,.3)}
+.p-cart-jump[hidden]{display:none}
+.p-cart-jump .ic{width:22px;height:22px}
+.p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:19px;height:19px;padding:0 4px;border-radius:var(--r-pill);
+  background:var(--green);color:#fff;
+  font-size:10.5px;font-weight:800;line-height:19px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+}
+.page-dots{display:flex;justify-content:center;gap:6px;padding:14px 0 4px}
+.page-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--gray-2);transition:all .3s var(--ease);cursor:pointer}
+.page-dots i.is-on{width:20px;background:var(--ink)}
+
+.p-tags{display:flex;flex-wrap:wrap;gap:8px;padding:14px 2px 2px}
+.tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;color:var(--ink-2);
+  background:var(--gray);padding:7px 13px;border-radius:var(--r-pill);
+}
+.tag.green{background:var(--green-soft);color:var(--green-deep)}
+.tag.orange{background:var(--orange-soft);color:var(--orange-deep)}
+.tag.yellow{background:var(--yellow-soft);color:var(--yellow-ink)}
+
+.p-groups{display:grid;gap:14px;padding:16px 0 2px}
+.opt-group{background:var(--gray);border-radius:var(--r-card);padding:15px}
+.opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.opt-head b{font-size:14.5px;font-weight:700}
+.opt-req{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-deep);background:var(--green-soft);padding:4px 10px;border-radius:var(--r-pill)}
+.opt-req.optional{color:var(--ink-3);background:var(--paper)}
+.opt-list{display:grid;gap:3px}
+.opt{display:flex;align-items:center;gap:11px;padding:9px 6px;border-radius:12px;transition:background var(--t-fast);cursor:pointer}
+.opt:active{background:var(--gray-2)}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:2px solid var(--stroke-2);background:var(--paper);
+  display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.opt-ctl.box{border-radius:7px}
+.opt.is-on .opt-ctl{border-color:var(--green);background:var(--green)}
+.opt-ctl svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-name{flex:1;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink)}
+.opt-price{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--green)}
+
+.rel-block .rail{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 6px}
+.rail-card{
+  flex:0 0 138px;width:138px;scroll-snap-align:start;
+  background:var(--gray);border-radius:var(--r-card);padding:9px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.rail-card:active{transform:scale(.96)}
+.rail-card img{width:100%;aspect-ratio:1.15;object-fit:cover;border-radius:var(--r-img)}
+.rail-card b{display:block;font-size:12.5px;font-weight:700;margin:8px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .price{font-size:12px;color:var(--orange);font-weight:700;padding:0 2px}
+
+/* ── meal plan ───────────────────────────────────────── */
+.mp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:4px 2px 16px}
+.mp-title{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.25;max-width:16ch}
+.mp-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mp-card{
+  background:var(--orange);color:#fff;border-radius:var(--r-card);
+  padding:10px 10px 13px;text-align:start;position:relative;overflow:hidden;
+  box-shadow:0 18px 32px -16px rgba(216,68,15,.6);
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:card-in .5s var(--ease) backwards;
+}
+.mp-card:active{transform:scale(.96)}
+.mp-card::after{content:"";position:absolute;inset-inline-end:-26px;bottom:-26px;width:82px;height:82px;border-radius:50%;background:rgba(255,255,255,.12)}
+.mp-card img{width:100%;aspect-ratio:1.25;object-fit:cover;border-radius:var(--r-img);box-shadow:0 10px 20px -8px rgba(58,10,0,.4)}
+.mp-card b{display:block;font-size:13px;font-weight:700;line-height:1.3;padding:9px 3px 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mp-card small{display:block;font-size:11px;font-weight:600;opacity:.85;padding:0 3px}
+
+.week{background:var(--gray);border-radius:var(--r-card);padding:15px;margin-top:18px}
+.week-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.week-head b{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.week-arr{
+  width:34px;height:34px;border-radius:50%;background:var(--paper);color:var(--green);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.week-arr:active{transform:scale(.85)}
+[dir="rtl"] .week-arr .ic{transform:scaleX(-1)}
+.days{display:flex;justify-content:space-between;gap:4px}
+.day{
+  width:38px;height:46px;border-radius:14px;flex:none;
+  display:grid;place-items:center;
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  background:var(--paper);
+  transition:all var(--t-fast) var(--ease);
+}
+.day.is-on{
+  background:var(--green);color:#fff;
+  box-shadow:0 10px 20px -8px rgba(27,133,85,.7);
+}
+.day.pop{animation:day-pop .45s var(--ease-pop)}
+@keyframes day-pop{45%{transform:scale(1.22)}}
+
+.mp-times{padding-top:16px}
+.mp-times-label{display:block;font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.mp-times .chiprow button.is-on{border-color:var(--green);color:var(--green-deep);background:var(--green-soft)}
+#mpContinue{margin-top:22px}
+
+/* ── points / loyalty ────────────────────────────────── */
+.pts-headrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:4px 2px 6px}
+.pts-head{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.pts-head b{color:var(--orange);font-variant-numeric:tabular-nums}
+.earn-hint{
+  display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink-3);
+  padding:0 2px 16px;
+}
+.earn-hint .ic{color:var(--yellow-deep);fill:var(--yellow);stroke:var(--yellow-deep)}
+.rw-filters{padding-bottom:14px}
+.rw-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rw-card{
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);
+  padding:10px 10px 13px;position:relative;text-align:start;
+  animation:card-in .45s var(--ease) backwards;
+}
+.rw-card img{width:100%;aspect-ratio:1.25;object-fit:cover;border-radius:var(--r-img)}
+.rw-star{
+  position:absolute;top:16px;inset-inline-start:16px;
+  width:30px;height:30px;border-radius:50%;background:#fff;
+  display:grid;place-items:center;box-shadow:0 6px 14px -4px rgba(23,35,46,.3);
+}
+.rw-star svg{width:15px;height:15px;fill:var(--yellow);stroke:var(--yellow-deep);stroke-width:1.4}
+.rw-card b{display:block;font-size:13.5px;font-weight:700;padding:9px 2px 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rw-pts{display:block;font-size:12px;font-weight:700;color:var(--orange);padding:0 2px 9px}
+.rw-get{
+  width:100%;height:38px;border-radius:var(--r-pill);
+  background:var(--green);color:#fff;font-size:12.5px;font-weight:700;
+  box-shadow:0 10px 18px -9px rgba(27,133,85,.75);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.rw-get:active{transform:scale(.94)}
+.rw-card.cant .rw-get{background:var(--gray-2);color:var(--ink-3);box-shadow:none}
+.rw-card.shake{animation:shake .4s var(--ease)}
+@keyframes shake{20%,60%{translate:-5px 0}40%,80%{translate:5px 0}}
+.hist-list{display:grid;gap:8px;padding-bottom:10px}
+.hist-row{display:flex;align-items:center;gap:11px;background:var(--gray);border-radius:15px;padding:12px 14px;font-size:13px;font-weight:600}
+.hist-row span{flex:1}
+.hist-row b{font-variant-numeric:tabular-nums}
+.hist-row b.plus{color:var(--green-deep)}
+.hist-row b.minus{color:var(--orange-deep)}
+
+/* ── cart ────────────────────────────────────────────── */
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);
+  padding:10px;overflow:hidden;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.cart-item img{width:72px;height:72px;object-fit:cover;border-radius:var(--r-img)}
+.ci-name{font-size:14px;font-weight:700;line-height:1.25}
+.ci-opts{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.45}
+.ci-note{font-size:11px;color:var(--green-deep);font-style:italic;margin-top:2px}
+.ci-price{font-size:13.5px;font-weight:800;color:var(--orange);margin-top:4px}
+.ci-reward{
+  display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--green-soft);color:var(--green-deep);
+  padding:3px 8px;border-radius:var(--r-pill);margin-top:4px;
+}
+/* Side column: note/remove tucked top-right, a HORIZONTAL stepper at the
+   bottom — the old vertical +/qty/− stack made every card tall with the
+   left half empty. */
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;align-self:stretch}
+.qty{
+  display:flex;align-items:center;gap:2px;
+  background:var(--gray);border-radius:var(--r-pill);padding:4px;
+}
+.ci-side .qty{flex-direction:row;padding:3px}
+/* 32px stays the tap-target floor; only the readout tightens */
+.ci-side .qty output{font-size:12.5px;min-width:0;padding:2px 4px}
+.qty-btn{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.qty-btn:active{transform:scale(.82);background:var(--paper)}
+.qty output{min-width:24px;text-align:center;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;padding:2px 0}
+.ci-tools{display:flex;gap:2px}
+.ci-notebtn,.ci-remove{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:var(--ink-3)}
+.ci-notebtn .ic,.ci-remove .ic{width:15px;height:15px}
+.ci-notebtn:active{color:var(--green)}
+.ci-remove:active{color:var(--orange)}
+/* ── checkout order summary ── */
+.ck-items{background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);padding:14px;display:grid;gap:11px;margin-bottom:14px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:700}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--orange);text-align:end;font-variant-numeric:tabular-nums}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+
+.cart-tools{display:grid;gap:16px;padding-top:18px}
+.cart-tools h3,.contact h3,.addr h3,.paymethods h3,.tips h3,.pref h3,.orders-block h3{font-size:14.5px;font-weight:700;margin-bottom:11px;letter-spacing:-.01em}
+
+.seg{display:flex;background:var(--gray);border-radius:var(--r-pill);padding:4px;gap:3px}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:16px;height:16px}
+.seg button.is-on{background:var(--ink);color:var(--paper);box-shadow:0 8px 16px -8px rgba(23,35,46,.5)}
+.seg.mini{padding:3px}
+.seg.mini button{padding:7px 13px;flex:none}
+/* Currency switcher reuses .seg.mini; cap its width and let it scroll so a store
+   with many currency codes can't blow out the prefs row (the label keeps its side). */
+#curSeg{max-width:62%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#curSeg::-webkit-scrollbar{display:none}
+#curSeg button{white-space:nowrap}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--green)}
+
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:13px}
+.plan-chip{
+  margin-top:12px;display:flex;align-items:center;gap:9px;
+  background:var(--yellow-soft);border:1.5px dashed rgba(232,174,20,.6);
+  color:var(--yellow-ink);font-size:12.5px;font-weight:700;
+  padding:10px 14px;border-radius:16px;
+}
+.plan-chip span{flex:1}
+.plan-clear{width:26px;height:26px;border-radius:50%;background:rgba(58,44,0,.1);display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--yellow-ink)}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--paper);border:1.5px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .coupon-field{padding:5px 15px 5px 6px}
+.coupon-field .ic{color:var(--orange);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:13.5px}
+.coupon-field input:focus{background:none}
+.coupon-field.is-applied{border-color:var(--green);border-style:solid}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);font-size:12.5px;font-weight:700;
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+.coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--green-deep);font-weight:600}
+.coupon-msg.err{color:var(--orange-deep)}
+
+.totals{background:var(--gray);border-radius:var(--r-card);padding:15px;display:grid;gap:9px}
+.tr{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:500}
+.tr b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tr.disc{color:var(--green-deep)}
+.tr.disc b{color:var(--green-deep)}
+.tr.grand{border-top:1.5px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px;font-weight:700}
+.tr.grand b{font-weight:800;font-size:17px}
+
+.waiter-row{display:flex;gap:10px}
+.waiter-row .ghostbtn{flex:1;justify-content:center}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--gray);font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.sm{padding:8px 14px;font-size:12.5px;min-height:32px}
+
+.wa-row{
+  display:flex;align-items:center;gap:11px;width:100%;
+  background:var(--green-soft);border-radius:18px;
+  padding:14px 15px;color:var(--green-deep);font-size:13.5px;font-weight:700;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.wa-row:active{transform:scale(.97)}
+.wa-row span{flex:1}
+.wa-row .ic:first-child{color:var(--green)}
+
+/* footer cta */
+.p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--paper) 30%);
+  position:relative;z-index:6;
+}
+.p-cta.root{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+.cta{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  font-size:15px;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform var(--t-fast) var(--ease-pop);
+  position:relative;overflow:hidden;
+}
+.cta:active{transform:scale(.97)}
+.cta.ink{background:var(--ink);color:var(--paper);box-shadow:0 14px 30px -12px rgba(23,35,46,.55)}
+.cta.ink b{color:var(--yellow)}
+.cta.green{background:var(--green);color:#fff;box-shadow:0 14px 30px -12px rgba(27,133,85,.6)}
+.cta.google{background:var(--green);color:#fff;box-shadow:0 14px 30px -12px rgba(27,133,85,.6)}
+.cta.wide{width:100%}
+.cta:disabled{opacity:.45;box-shadow:none}
+.cta .arr{font-weight:800}
+.cta b{font-weight:800}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+.g-badge{
+  width:26px;height:26px;border-radius:50%;background:#fff;color:var(--green-deep);
+  display:grid;place-items:center;font-size:14px;font-weight:800;
+}
+
+/* ── checkout ────────────────────────────────────────── */
+.contact,.addr,.paymethods,.tips{padding-top:16px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.map{
+  position:relative;height:104px;border-radius:var(--r-card);overflow:hidden;
+  background:#eef1f4;margin-bottom:9px;
+}
+.map-art{width:100%;height:100%}
+.map-art .mr{stroke:#dde2e8;stroke-width:7;fill:none}
+.map-art .mr.thin{stroke-width:3;stroke:#e5e9ee}
+.map-art .mb{fill:#dfe4ea}
+.pin{position:absolute;left:50%;top:50%;translate:-50% -78%}
+.pin svg{width:34px;height:34px;fill:var(--orange);stroke:var(--orange-deep);stroke-width:1;filter:drop-shadow(0 8px 10px rgba(216,68,15,.4));animation:pin-drop .6s var(--ease-pop)}
+.pin svg circle{fill:#fff;stroke:none}
+@keyframes pin-drop{from{translate:0 -26px;opacity:0}}
+.pin-pulse{position:absolute;left:50%;bottom:-4px;translate:-50% 0;width:26px;height:8px;border-radius:50%;background:rgba(244,88,28,.3);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 7px transparent}}
+/* delivery-address suite: saved-address chips + autocomplete + use-my-location */
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:11px 13px;border:1.5px solid var(--stroke-2);border-radius:15px;background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color var(--t-fast) var(--ease)}
+.saved-addr .ic{flex:none;color:var(--ink-2)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--green);background:var(--green-soft)}
+.saved-addr.is-on .ic{color:var(--green-deep)}
+.addr-field{position:relative}
+.addr-field input#custAddr{padding-inline-end:46px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--orange);background:none;border:0;cursor:pointer}
+.uselocbtn:active{transform:scale(.9)}
+.uselocbtn.is-loading{opacity:.5;animation:pc-spin 1s linear infinite}
+@keyframes pc-spin{to{transform:rotate(360deg)}}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--paper);border:1px solid var(--stroke-2);border-radius:15px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(15,17,21,.35);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--stroke);cursor:pointer}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--gray)}
+.geo-attrib{font-size:10px;color:var(--ink-3);margin-top:7px;text-align:center}
+.dine-chip{
+  margin-top:16px;display:flex;align-items:center;gap:9px;
+  background:var(--green-soft);color:var(--green-deep);
+  font-size:13px;font-weight:700;padding:12px 15px;border-radius:16px;
+}
+
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:18px;
+  padding:12px 14px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.pm.is-on{border-color:var(--green);background:var(--green-soft)}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--gray);display:grid;place-items:center;color:var(--ink-2)}
+.pm.is-on .pm-ic{background:var(--green);color:#fff}
+.pm b{flex:1;font-size:13.5px;font-weight:700}
+.pm b small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-top:1px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.pm.is-on .pm-radio{border-color:var(--green)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
+.cardform{display:grid;gap:9px;padding-top:10px;animation:card-in .35s var(--ease)}
+
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:15px;
+  background:var(--gray);border:1.5px solid transparent;
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--green);color:var(--green-deep);background:var(--green-soft)}
+
+.terms{display:flex;gap:10px;align-items:flex-start;padding:16px 2px 0;font-size:12.5px;color:var(--ink-3);cursor:pointer}
+.terms input{width:17px;height:17px;accent-color:var(--green);margin-top:1px}
+#checkoutTotals{margin-top:18px}
+
+/* ── confirmed ───────────────────────────────────────── */
+.view-center{justify-content:center}
+.confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:6px}
+.basket-art{position:relative;width:210px;height:180px;margin-bottom:6px}
+.basket{width:100%;height:100%;overflow:visible;animation:box-pop .7s var(--ease-pop) .1s backwards}
+@keyframes box-pop{0%{transform:scale(.3) rotate(-10deg);opacity:0}}
+.bk-handle{fill:none;stroke:var(--orange-deep);stroke-width:9;stroke-linecap:round}
+.bk-body{fill:var(--orange)}
+.bk-weave{fill:none;stroke:rgba(255,255,255,.35);stroke-width:3}
+.bk-lip{fill:var(--orange-deep)}
+.check-badge circle{fill:var(--green);stroke:var(--paper);stroke-width:6}
+.check-badge{animation:box-pop .6s var(--ease-pop) .45s backwards}
+.check{stroke:#fff;stroke-width:5.5;fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .75s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confirm-title{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65}
+.confirm-eta{color:var(--ink-2);font-weight:700}
+.confirm-code{
+  font-size:12.5px;font-weight:700;color:var(--orange-deep);
+  background:var(--orange-soft);border:1.5px dashed rgba(216,68,15,.4);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-pts{
+  font-size:12px;font-weight:800;color:var(--green-deep);
+  background:var(--green-soft);padding:7px 14px;border-radius:var(--r-pill);margin-top:4px;
+}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .cta{max-width:280px}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.confirm-actions .ghostbtn{width:100%;max-width:280px;justify-content:center}
+.confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.confirm-actions .ghostbtn:hover{background:var(--gray-2)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#f4581c);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track ───────────────────────────────────────────── */
+.track-card{background:var(--gray);border-radius:var(--r-card);padding:17px;display:grid;gap:16px}
+.track-top{display:flex;justify-content:space-between;align-items:center}
+.tk-label{font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--green-deep)}
+.courier{display:flex;align-items:center;gap:11px;background:var(--paper);border-radius:16px;padding:10px}
+.courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.courier>div{flex:1}
+.courier b{font-size:14px}
+.courier .iconbtn{width:38px;height:38px}
+
+.timeline{list-style:none;display:grid;gap:0;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--gray);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--green);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--green);background:var(--green)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{box-shadow:0 0 0 0 rgba(35,166,109,.5);animation:pulse 2s infinite}
+.tl-copy b{font-size:14px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--ink-3)}
+
+.review-card{margin-top:16px;background:var(--gray);border-radius:var(--r-card);padding:18px;text-align:center}
+.rev-q{font-size:14px;font-weight:700}
+.stars-row{display:flex;justify-content:center;gap:8px;padding-top:12px}
+.stars-row button{
+  font-size:26px;line-height:1;color:var(--stroke-2);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast);
+}
+.stars-row button.lit{color:var(--yellow)}
+.stars-row button:active{transform:scale(.8)}
+.review-card .cta{margin-top:14px;height:48px}
+.rev-thanks{padding-top:12px;color:var(--green-deep);font-weight:700;font-size:13px}
+
+/* ── profile ─────────────────────────────────────────── */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--gray);border-radius:var(--r-card);padding:14px}
+.me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.me-card>div{flex:1}
+.me-card b{font-size:16px;font-weight:700}
+.wallet-card{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:16px 18px;border-radius:var(--r-card);
+  background:var(--orange);color:#fff;
+  box-shadow:0 18px 34px -16px rgba(216,68,15,.6);
+  position:relative;overflow:hidden;
+}
+.wallet-card::after{content:"";position:absolute;inset-inline-end:-30px;top:-30px;width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.14)}
+.wc-label{font-size:11px;font-weight:600;opacity:.85;margin-bottom:2px}
+.wallet-amt{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums}
+.wallet-card .ic{width:26px;height:26px;stroke-width:1.9;position:relative;z-index:1}
+.prof-links{display:grid;gap:9px;padding-top:16px}
+.prof-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:18px;
+  padding:13px 15px;font-size:14px;font-weight:600;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.prof-row:active{transform:scale(.98)}
+.prof-row span:nth-child(2){flex:1}
+.pr-ic{font-size:18px}
+.res-list{display:grid;gap:8px;padding-top:10px}
+.res-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--green-soft);color:var(--green-deep);
+  border-radius:15px;padding:11px 14px;font-size:12.5px;font-weight:700;
+  animation:card-in .4s var(--ease) backwards;
+}
+.res-row.wl{background:var(--yellow-soft);color:var(--yellow-ink)}
+.pref{padding-top:22px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.orders-block{padding-top:22px}
+.lookup-help{font-size:12px;color:var(--ink-3);padding:0 2px 8px;line-height:1.5}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:18px;padding:12px 14px;
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;
+}
+.order-row .ic{color:var(--orange)}
+.order-row>div{flex:1}
+.order-row b{font-size:13.5px;font-weight:700;display:block}
+.order-row small{font-size:11.5px;color:var(--ink-3)}
+.order-status{font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:var(--green-soft);color:var(--green-deep)}
+.orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px}
+#waProfile{margin-top:22px}
+.demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.8}
+
+/* ── tabbar ──────────────────────────────────────────── */
+.tabbar{
+  position:absolute;inset-inline:12px;bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-around;align-items:center;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(18px);
+  border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:8px 10px;
+  box-shadow:0 18px 44px -14px rgba(23,35,46,.35);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.tabbar.is-hidden{transform:translateY(130%);opacity:0;pointer-events:none}
+.tab{color:var(--ink-3);transition:color var(--t-fast)}
+.tab-pill{
+  position:relative;width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.tab:active .tab-pill{transform:scale(.86)}
+.tab.is-on{color:var(--paper)}
+.tab.is-on .tab-pill{background:var(--ink);box-shadow:0 10px 20px -8px rgba(23,35,46,.6)}
+.badge{
+  position:absolute;top:-1px;inset-inline-end:-3px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--orange);color:#fff;
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--paper);
+  transition:transform .25s var(--ease-pop);
+}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+
+/* ── sheets / scrim / toast / chips ──────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(23,35,46,.42);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--paper);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:78%;overflow-y:auto;
+  box-shadow:0 -18px 44px rgba(23,35,46,.18);
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px}
+.sheet h4{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;margin:16px 0 10px}
+.sheet .cta{margin-top:20px;height:52px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--gray);border:1.5px solid transparent;
+  font-size:13px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 8px 18px -8px rgba(27,133,85,.7)}
+.chiprow button.full{opacity:.55;text-decoration:line-through}
+.chiprow button.full.is-on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);text-decoration:none;box-shadow:none}
+.party{display:flex;align-items:center;gap:14px;justify-content:center;background:var(--gray);border-radius:var(--r-pill);padding:7px;width:max-content}
+.party .qty-btn{width:38px;height:38px;background:var(--paper)}
+.party output{min-width:34px;text-align:center;font-weight:800;font-size:16px}
+.wl-box{
+  margin-top:16px;background:var(--yellow-soft);border:1.5px dashed rgba(232,174,20,.6);
+  border-radius:18px;padding:14px;display:grid;gap:10px;
+  font-size:13px;color:var(--yellow-ink);line-height:1.5;
+}
+.wl-box .cta{margin-top:0;height:44px}
+#noteText{margin-bottom:2px}
+
+.toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--paper);font-size:13px;font-weight:600;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(23,35,46,.4);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:var(--green)}
+
+/* fly-to-bag */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(23,35,46,.4);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* hidden attribute must win over component display rules */
+[hidden]{display:none}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] :is(.opt-price,.hmc,.bs-price,.bs-meta,.ci-price,.ci-was,.ci-unit,.tr b,.wallet-amt,.confirm-code,.confirm-pts,#trackCode,#trackEta,.cta b,.rail-card .price,.rw-pts,.pts-pill b,.pts-head b,.hist-row b,#weekLabel,.so-row .price,.hero-qty-badge,.plan-chip span,.res-row span,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] :is(.ck-price,.ck-qty){text-align:right}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] :is(.tr b,.order-line b,.order-line.grand b,.ci-price,.ci-was,.ci-unit){text-align:right}
+
+/* ── account / track secondary pages (first-class picnic components) ── */
+.picnic{position:relative;height:100dvh;background:var(--paper);color:var(--ink);font-family:var(--font-ui);overflow:hidden;isolation:isolate}
+[dir="rtl"] .picnic{font-family:var(--font-ar)}
+.picnic .views{position:relative;height:100%}
+.picnic .view{background:var(--paper)}
+.picnic a{text-decoration:none}
+.picnic .mt{margin-top:14px}
+.picnic .foot-center{display:grid;place-items:center;padding-top:18px}
+.picnic .tk-eta .tk-label{margin-top:5px}
+/* avatar initial in the me-card (account page has no photo) */
+.me-card .me-avatar{
+  width:52px;height:52px;border-radius:50%;flex:none;
+  background:var(--orange-soft);color:var(--orange-deep);
+  display:grid;place-items:center;font-size:22px;font-weight:800;
+}
+/* itemised rows inside track/order cards — match .tr totals rows */
+.order-lines{display:grid;gap:9px}
+.order-line{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--ink-2);font-weight:500}
+.order-line b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:end}
+.order-line small{display:block;font-size:11px;color:var(--ink-3);font-weight:500;margin-top:2px}
+.order-line.disc,.order-line.disc b{color:var(--green-deep)}
+.order-line.grand{border-top:1.5px dashed var(--stroke-2);padding-top:11px;margin-top:2px}
+.order-line.grand span{color:var(--ink);font-weight:700;font-size:15px}
+.order-line.grand b{font-weight:800;font-size:17px}
+/* status notes on the track card */
+.err-box{background:var(--orange-soft);border:1.5px solid rgba(216,68,15,.35);color:var(--orange-deep);border-radius:16px;padding:11px 14px;font-size:12.5px;font-weight:600}
+.minorder{font-size:12.5px;color:var(--orange-deep);font-weight:700;padding:4px 2px}
+.tl.cancelled .tl-node{border-color:var(--orange);background:var(--orange-soft)}
+.tl.cancelled .tl-copy b{color:var(--orange-deep)}
+/* curbside "I'm here" confirmation */
+.imhere-msg{margin-top:10px;font-size:13px;font-weight:700;color:var(--green-deep);text-align:center}
+[dir="rtl"] :is(.order-line b,.order-line.grand b){direction:ltr;unicode-bidi:isolate}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .confetti{display:none}
+}
+
+/* ══════════ theme-parity-2: two-tier nav · filters · banners · branch map ══════════ */
+
+/* secondary sub-category chip row (revealed by renderSubChips for active parent) */
+.subcats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.subcats::-webkit-scrollbar{display:none}
+.subcats[hidden]{display:none}
+.subcat{
+  flex:none;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:var(--gray);color:var(--ink-2);border:1.5px solid transparent;
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.subcat:active{transform:scale(.94)}
+.subcat.is-on{background:var(--green-soft);border-color:var(--green);color:var(--green-deep)}
+
+/* Best-Sellers head tools (Filters + See all) */
+.head-tools{display:flex;align-items:center;gap:12px}
+.filter-btn{display:inline-flex;align-items:center;gap:5px;position:relative}
+.filter-btn .ic{color:var(--ink-2)}
+.filter-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block;margin-inline-start:2px}
+.filter-dot[hidden]{display:none}
+
+/* filter sheet actions */
+.filter-actions{display:flex;gap:10px;margin-top:20px}
+.filter-actions .ghostbtn{flex:none}
+.filter-actions .cta{flex:1;margin:0}
+.opt-group.needs{outline:2px solid var(--orange);outline-offset:2px;animation:chip-pop .4s var(--ease-pop)}
+
+/* admin menu banners */
+.banners{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 2px;scrollbar-width:none;margin-top:6px}
+.banners::-webkit-scrollbar{display:none}
+.banner{
+  flex:none;width:84%;max-width:340px;display:flex;align-items:stretch;gap:0;
+  /* A branded dark navy promo card (yellow kicker + white copy) — stays dark in
+     BOTH modes, so it uses fixed colours, not the flipping --ink/--paper tokens. */
+  border-radius:var(--r-card);overflow:hidden;background:#17232e;color:#fff;
+  box-shadow:0 14px 30px -16px rgba(23,35,46,.55);min-height:104px;
+}
+.banner:active{transform:scale(.985)}
+.banner-copy{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:16px 16px}
+.banner-copy small{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--yellow)}
+.banner-copy b{font-size:16px;font-weight:700;line-height:1.2}
+.banner-cta{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--yellow)}
+.banner-cta .ic{color:var(--yellow)}
+.banner-img{flex:none;width:38%;background:var(--gray)}
+.banner-img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* nearest-branch geo list (shares the Leaflet map sheet) */
+.branch-list{display:grid;gap:8px;margin-top:8px}
+.branch-row{
+  display:flex;align-items:center;gap:12px;padding:13px 14px;text-align:start;
+  border-radius:16px;background:var(--gray);color:var(--ink);width:100%;
+  transition:all var(--t-fast) var(--ease);
+}
+.branch-row:active{transform:scale(.98)}
+.branch-row .ic{flex:none;color:var(--green-deep)}
+.branch-row b{flex:1;display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:700}
+.branch-row b small{font-size:11.5px;font-weight:500;color:var(--ink-3)}
+.branch-dist{font-size:12px;font-weight:600;color:var(--green-deep)}
+
+/* onboarding splash: extra real-photo dishes orbiting the hero (first 3 real items) */
+.ob2-burst img.ob-chip{
+  position:absolute;width:72px;height:72px;aspect-ratio:1;object-fit:cover;border-radius:50%;
+  border:3px solid var(--yellow);box-shadow:0 14px 24px -12px rgba(58,44,0,.5);
+  animation:float 4s ease-in-out infinite alternate;
+}
+.ob2-burst img.ob-chip-0{top:8%;inset-inline-end:6%;animation-delay:.3s}
+.ob2-burst img.ob-chip-1{bottom:6%;inset-inline-start:4%;animation-delay:.8s}
+
+/* ── stories rail + full-screen viewer ───────────────── */
+/* The rail and viewer are toggled with the `hidden` property from script.js.
+   The author `display:` rules below outrank the UA `[hidden]{display:none}`,
+   so honour the attribute explicitly — otherwise an empty feed still leaves a
+   gap above the cat chips and the viewer stays a full-frame click-trap. */
+.stories[hidden],
+.story-view[hidden],
+.sv-cta[hidden]{display:none}
+.stories{display:flex;gap:16px;overflow-x:auto;padding:16px 2px 2px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.story{flex:none;display:grid;justify-items:center;gap:7px;width:66px}
+.story-ring{
+  width:62px;height:62px;border-radius:50%;padding:2.5px;
+  background:linear-gradient(135deg,var(--orange),var(--yellow) 60%,var(--green));
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.story:active .story-ring{transform:scale(.92)}
+.story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--paper);background:var(--gray)}
+.story small{
+  font-size:11px;font-weight:600;color:var(--ink-2);
+  width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.story-view{
+  position:absolute;inset:0;z-index:var(--z-story);
+  background:#000;opacity:0;transition:opacity .3s var(--ease);
+}
+.story-view.is-open{opacity:1}
+.sv-progress{position:absolute;top:calc(12px + env(safe-area-inset-top));inset-inline:14px;z-index:3;display:flex;gap:5px}
+.sv-seg{flex:1;height:2.5px;border-radius:var(--r-pill);background:rgba(255,255,255,.26);overflow:hidden}
+.sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.sv-close{
+  position:absolute;top:calc(26px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;
+  width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.38);color:#fff;
+  display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop);
+}
+.sv-close:active{transform:scale(.9)}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* logical insets so the prev tap-zone follows the reading direction in RTL */
+.sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-nav.prev{inset-inline-start:0}
+.sv-nav.next{inset-inline-end:0}
+.sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:24px 22px calc(30px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(0,0,0,.72),transparent);
+}
+.sv-caption{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.sv-cta{background:var(--paper);color:var(--ink);box-shadow:none}
+
+/* ═══════════════════════════════════════════════════════════
+   THEME-RESCUE — picnic
+   Everything below was added during the theme-rescue audit:
+   a real dark palette, a real responsive ladder, AA contrast,
+   44px touch targets, 16px inputs, and styling for the controls
+   that replaced the demo's fabricated ones.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 1. Type ownership ───────────────────────────────────
+   store_templates/layout.blade.php declares `body{font-family:Roboto!important}`,
+   which flattened every theme's type (BLOCKED-SHARED). `body` itself is not ours
+   to fix, but picnic owns everything inside .stage, so the theme stack is applied
+   there — no !important war, just a more specific selector. */
+.stage, .stage input, .stage button, .stage textarea, .stage select,
+.picnic, .picnic input, .picnic button, .picnic textarea, .picnic select{font-family:var(--font-ui)}
+[dir="rtl"] .stage, [dir="rtl"] .stage input, [dir="rtl"] .stage button,
+[dir="rtl"] .stage textarea, [dir="rtl"] .stage select,
+[dir="rtl"] .picnic, [dir="rtl"] .picnic input, [dir="rtl"] .picnic button,
+[dir="rtl"] .picnic textarea, [dir="rtl"] .picnic select{font-family:var(--font-ar)}
+
+/* ── 2. iOS zoom-on-focus (ALL-F1) ───────────────────────
+   Safari force-zooms on any focused input below 16px and never zooms back — the
+   single most-felt defect in a QR-menu product. Visual size is preserved through
+   padding, not through a smaller font. */
+.stage input, .stage textarea, .stage select,
+.picnic input, .picnic textarea, .picnic select,
+.so-field input, .coupon-field input, #whenTime, .when-time{font-size:16px}
+.terms{font-size:13.5px}
+.terms input{width:20px;height:20px}
+
+/* ── 3. Touch targets (ALL-F2) ───────────────────────────
+   Measured before: .bs-fav 31×31, .bs-add 34×34, .qty-btn 32×32, .fab 42×42,
+   .iconbtn 38×38, .ci-remove/.ci-notebtn 32×32, .week-arr 34×34, .day 38×46.
+   The drawn size is kept (the layout depends on it); a transparent ::after pad
+   raises the HIT area to ≥44×44. */
+/* .bs-fav/.bs-add/.onb-skip/.sv-close excluded: each has its own position:absolute
+   (overlay/close); the grouped position:relative overrode it, dropping them into flow
+   and overlapping card/price text. They keep their ::after hit-pad below. */
+.qty-btn, .ci-remove, .ci-notebtn, .week-arr,
+.iconbtn, .linkbtn, .minibtn, .so-cancel, .day{position:relative}
+.bs-fav::after, .bs-add::after, .qty-btn::after, .ci-remove::after, .ci-notebtn::after,
+.week-arr::after, .iconbtn::after, .linkbtn::after, .minibtn::after, .so-cancel::after,
+.onb-skip::after, .sv-close::after, .day::after{
+  content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:max(100%,44px);height:max(100%,44px);
+}
+.fab{width:44px;height:44px}
+.hero-qty{width:44px;height:44px}
+.bs-buy{min-height:32px;display:inline-flex;align-items:center}
+.bs-card .bs-foot{min-height:44px}
+.chiprow button, .subcat, .cat{min-height:44px}
+.tip-row button{min-height:44px}
+.opt{min-height:48px}
+
+/* ── 4. Responsive ladder ────────────────────────────────
+   picnic shipped ONE width media query (max-width:860px). Below it the app is a
+   full-bleed phone; above it, a 401px device mock stranded in the middle of a
+   1280px screen. The frame now grows with the viewport and the grid gains
+   columns, so a desktop diner gets a page rather than a toy. */
+@media (min-width:430px) and (max-width:860px){
+  .bs-grid{grid-template-columns:repeat(3,1fr)}
+  .bs-card.a .bs-thumb{width:70px;height:70px}
+}
+@media (min-width:861px){
+  .stage{padding:26px 20px}
+  .phone{width:min(560px,100%);height:min(900px,94dvh)}
+  .statusbar{height:22px}
+  .bs-grid{grid-template-columns:repeat(3,1fr)}
+  .food-rows{grid-template-columns:1fr 1fr}
+  .view-scroll{padding-inline:26px}
+}
+@media (min-width:1100px){
+  .phone{width:min(880px,100%)}
+  .bs-grid{grid-template-columns:repeat(4,1fr)}
+  .promo-duo{grid-template-columns:1.6fr 1fr}
+  .quick-duo{grid-template-columns:1fr 1fr 1fr}
+  .quick-duo.solo{grid-template-columns:1fr}
+  .confirm-wrap{padding-inline:80px}
+}
+@media (min-width:1500px){
+  .phone{width:min(1040px,100%)}
+  .bs-grid{grid-template-columns:repeat(5,1fr)}
+}
+/* very small phones: the 2-up grid becomes unreadable under ~340px */
+@media (max-width:359px){
+  .bs-grid{grid-template-columns:1fr}
+  .promo-duo, .quick-duo{grid-template-columns:1fr}
+  .view-scroll{padding-inline:14px}
+}
+.quick-duo.solo{grid-template-columns:1fr}
+
+/* ── 5. Dark mode ────────────────────────────────────────
+   picnic had zero prefers-color-scheme rules. This is a real night palette
+   (warm graphite surfaces, warm off-white ink, the same orange/green/yellow
+   brand accents lifted for contrast) — not an inversion. `auto` follows the OS;
+   the Appearance control in Profile pins light or dark, applied before first
+   paint by the inline boot script so there is no white flash. */
+:root[data-picnic-mode="dark"]{
+  --paper:#14181d;
+  --paper-warm:#0f1216;
+  --gray:#1e242b;
+  --gray-2:#28303a;
+  --stroke:#28303a;
+  --stroke-2:#37414d;
+  --ink:#f1efec;
+  --ink-2:#b3bcc7;
+  --ink-3:#98a3b0;
+  /* brand carries into the night palette via the same PRIMARY token (rule 4).
+     Surfaces/ink stay literal dark values on purpose: a light-authored
+     --tc-background/-surface/-text must never leak in and wash out dark mode. */
+  --orange:var(--tc-primary, var(--theme-color-1, #ff7a45));
+  --orange-deep:var(--theme-color-0_85,#ff9366);
+  --orange-soft:rgba(255,122,69,.16);
+  --yellow:#ffcf5c;
+  --yellow-deep:#ffdd8a;
+  --yellow-ink:#2a2000;
+  --yellow-soft:rgba(255,207,92,.16);
+  --green:#3fc98c;
+  --green-deep:#63dba6;
+  --green-soft:rgba(63,201,140,.16);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-picnic-mode="light"]){
+    --paper:#14181d;
+    --paper-warm:#0f1216;
+    --gray:#1e242b;
+    --gray-2:#28303a;
+    --stroke:#28303a;
+    --stroke-2:#37414d;
+    --ink:#f1efec;
+    --ink-2:#b3bcc7;
+    --ink-3:#98a3b0;
+    --orange:var(--tc-primary, var(--theme-color-1, #ff7a45));
+    --orange-deep:var(--theme-color-0_85,#ff9366);
+    --orange-soft:rgba(255,122,69,.16);
+    --yellow:#ffcf5c;
+    --yellow-deep:#ffdd8a;
+    --yellow-ink:#2a2000;
+    --yellow-soft:rgba(255,207,92,.16);
+    --green:#3fc98c;
+    --green-deep:#63dba6;
+    --green-soft:rgba(63,201,140,.16);
+  }
+}
+/* surfaces that were hard-coded white/black in the light-only build */
+@media (prefers-color-scheme:dark){
+  :root:not([data-picnic-mode="light"]) .phone{border-color:rgba(255,255,255,.08);box-shadow:0 0 0 11px #05070a,0 0 0 12.5px #1b222a,0 44px 90px -30px rgba(0,0,0,.7)}
+  :root:not([data-picnic-mode="light"]) .bs-card.b .bs-shade{background:linear-gradient(187deg,transparent 36%,rgba(0,0,0,.86))}
+  :root:not([data-picnic-mode="light"]) .social-login__btn{background:var(--gray);color:var(--ink);border-color:var(--stroke-2)}
+}
+:root[data-picnic-mode="dark"] .phone{border-color:rgba(255,255,255,.08);box-shadow:0 0 0 11px #05070a,0 0 0 12.5px #1b222a,0 44px 90px -30px rgba(0,0,0,.7)}
+:root[data-picnic-mode="dark"] .bs-card.b .bs-shade{background:linear-gradient(187deg,transparent 36%,rgba(0,0,0,.86))}
+:root[data-picnic-mode="dark"] .social-login__btn{background:var(--gray);color:var(--ink);border-color:var(--stroke-2)}
+:root[data-picnic-mode="dark"] img{filter:brightness(.94)}
+/* The floating tabbar hard-codes a frosted-WHITE background (light-only build);
+   in dark mode that left its light icons/labels invisible on a white pill. */
+:root[data-picnic-mode="dark"] .tabbar{background:rgba(20,24,29,.92)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-picnic-mode="light"]) .tabbar{background:rgba(20,24,29,.92)}
+}
+
+/* ── 6. Controls added by the rescue ─────────────────────── */
+/* promo tile now names a real dish */
+.pp-kicker{display:block;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.92;margin-bottom:2px}
+.pp-copy b{display:block;line-height:1.2}
+
+/* loyalty — real program only */
+.pts-bar{height:8px;border-radius:999px;background:var(--gray-2);overflow:hidden;margin:10px 2px 2px}
+.pts-bar>i{display:block;height:100%;border-radius:999px;background:var(--green);transition:width .5s var(--ease)}
+.rw-ledger{display:grid;gap:8px;padding-top:14px}
+.rw-ledger .hist-row{display:flex;align-items:center;gap:10px;background:var(--gray);border-radius:16px;padding:11px 13px;font-size:13.5px}
+.rw-ledger .hist-row span{flex:1;color:var(--ink-2)}
+.rw-ledger .hist-row small{display:block;font-size:11px;color:var(--ink-3)}
+.rw-ledger .hist-row b.plus{color:var(--green-deep)}
+.rw-ledger .hist-row b.minus{color:var(--orange)}
+
+/* payment note replacing the dead card form */
+.pm-note{font-size:13px;line-height:1.5;color:var(--ink-2);background:var(--gray);border-radius:16px;padding:12px 14px;margin-top:10px}
+
+/* confirmation + track */
+.confirm-total{font-size:15px;font-weight:700;color:var(--ink);padding-top:6px}
+#trackTotals{margin-top:4px}
+.ghostbtn.wide{display:block;width:100%;text-align:center}
+
+/* order history rows */
+.orders-list{display:grid;gap:9px}
+.order-row{display:flex;align-items:center;gap:11px;background:var(--gray);border-radius:18px;padding:11px 13px;width:100%;text-align:start;color:inherit;text-decoration:none}
+.order-row>div{flex:1;min-width:0}
+.order-row b{display:block;font-size:14px}
+.order-row small{display:block;font-size:11.5px;color:var(--ink-3)}
+.order-status{font-size:11.5px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.order-tools{display:flex;gap:6px;flex:none}
+.order-tools .minibtn{padding:8px 12px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:12px;font-weight:700}
+.order-tools .minibtn.ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--stroke-2);text-decoration:none;display:inline-flex;align-items:center}
+.lookup-field{margin:2px 0 8px}
+
+/* reservation sheet fields */
+#reserveSheet .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding-bottom:4px}
+#reserveSheet .wl-box{margin-top:14px}
+
+/* Directional isolation: an English dish name, price or address inside an RTL
+   layout otherwise renders as ".Crispy fried quarter" / "$0.50+". */
+.bs-name,.bs-price,.bs-meta,.ci-name,.ci-price,.ci-opts,.opt-name,.opt-price,
+.hero-title,.hero-desc,.tr b,.order-row b,.order-row small,.so-row b,.food-row b,
+.rail-card b,.rail-card .price,.branch-row b,.rw-ledger .hist-row span{unicode-bidi:isolate}
+
+/* view-only menu (ordering disabled on the store): no bag, no add buttons, no CTA */
+.app.no-order .bs-add,
+.app.no-order .bs-buy,
+.app.no-order .hero-add-row,
+.app.no-order .p-cta,
+.app.no-order .tab[data-tab="cart"],
+.app.no-order .quick.plan{display:none}
+
+/* Keyboard focus rings (a11y). The theme had no :focus-visible rules — every
+   button, link, icon button, category, menu card, banner and nav tab was
+   invisible to keyboard users. One brand-orange ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.picnic a:focus-visible,
+.picnic button:focus-visible,
+.picnic [tabindex]:focus-visible,
+.picnic .card:focus-visible,
+.picnic .cat:focus-visible,
+.picnic .banner:focus-visible,
+.picnic .tab:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+/* inputs keep their own focus treatment; suppress the ring to avoid doubling. */
+.picnic input:focus-visible,
+.picnic textarea:focus-visible,
+.picnic select:focus-visible{outline:none}
+
+/* ── cart line pricing (strike-through / qty×unit) ─────────────────────── */
+.ci-priceline{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:4px}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3);text-decoration:line-through}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.cart-item>img[data-open],.cart-item .ci-name[data-open]{cursor:pointer}
+
+/* ── product reviews ───────────────────────────────────────────────────── */
+.product-reviews{margin-top:16px}
+.product-reviews .pr-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.product-reviews .pr-head h3{font-size:15px;font-weight:800;color:var(--ink)}
+.product-reviews .pr-head span{font-size:12px;font-weight:700;color:var(--ink-3)}
+.product-reviews .pr-card{
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;
+  padding:11px 14px;margin-top:9px;
+}
+.product-reviews .pr-card b{font-size:12.5px;font-weight:800;color:var(--ink);display:block}
+.product-reviews .pr-card p{font-size:12px;color:var(--ink-2);margin:4px 0 0;line-height:1.45}
+.review-stars{font-size:12px;color:var(--orange);letter-spacing:1px}
+.review-stars-dim{color:var(--stroke-2)}
+.product-reviews .pr-empty{font-size:12px;color:var(--ink-3);margin:6px 2px 0}
+
+/* inline per-item quick-rate */
+.picnic .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:9px;font-size:12.5px;font-weight:800;color:var(--ink)}
+.picnic .rate-row>span:first-child{flex:1 1 auto;min-width:0}
+.picnic .rate-stars{display:inline-flex;gap:1px;flex:none}
+.picnic .rate-stars button{padding:5px 3px;font-size:22px;line-height:1;color:var(--stroke-2)}
+.picnic .rate-stars button.is-on{color:var(--yellow)}
+.picnic .rate-thanks{flex:1 0 100%;color:var(--ink-2);font-weight:700}
+
+/* ══════════ customer auth — me-card entry + #authSheet ══════════ */
+/* Login/Logout pill on the profile me-card (picnic pill idiom, brand orange) */
+.auth-pill{
+  flex:none;padding:9px 15px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;background:var(--orange);color:#fff;
+  box-shadow:0 8px 16px -8px rgba(216,68,15,.6);transition:transform var(--t-fast) var(--ease);
+}
+.auth-pill:active{transform:scale(.93)}
+/* the sheet reuses .seg.mini for tabs; forms stack picnic's global inputs */
+.auth-tabs{margin-bottom:12px}
+.auth-err{margin-bottom:10px}
+.auth-form{display:grid;gap:9px}
+.auth-form[hidden]{display:none}
+.auth-form .cta{margin-top:4px;height:52px}
+.auth-sub{font-size:12.5px;color:var(--ink-2);font-weight:600;margin-bottom:9px}
+#otpStep1,#otpStep2{display:grid;gap:9px}
+.otp-boxes{display:flex;gap:9px;justify-content:center;direction:ltr}
+.otp-boxes input{
+  width:52px;height:56px;text-align:center;font-size:22px;font-weight:800;
+  font-variant-numeric:tabular-nums;padding:0;
+}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--paper-warm);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+/* The centred 44px hit box is right for a control with room around it, but in
+   .ci-tools note and trash sit 2px apart and the stepper is 8px above, so the
+   boxes overlapped by 12px — a thumb aiming for "note" could delete the line.
+   Cap the box to the space each control actually owns. */
+.ci-tools :is(.ci-notebtn,.ci-remove)::after{width:34px;height:40px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.minibtn,.onb-skip,.read-more,.ghostbtn.sm,.auth-pill,.day{min-height:44px}
+.week-arr{width:44px;height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.stars-row button{position:relative}
+.stars-row button::after{content:"";position:absolute;inset:-9px -1px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, picnic skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Warm orange badge chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--orange-soft);border:1px solid var(--stroke-2);color:var(--orange-deep);font-weight:600;
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--orange-deep)}
+
+/* ── notification-center panel — picnic skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--paper,#ffffff);--nb-surface-2:var(--orange-soft,#fdeae2);--nb-line:var(--stroke,#eceef1);--nb-ink:var(--ink,#17232e);--nb-accent:var(--orange-deep,#d8440f)}
+
+/* topbar toggle icons (Lane B) — light shows the moon (action = go dark), dark shows the sun */
+#picnicThemeToggle .mb-th-sun{display:none}
+@media (prefers-color-scheme:dark){
+  :root:not([data-picnic-mode="light"]) #picnicThemeToggle .mb-th-sun{display:block}
+  :root:not([data-picnic-mode="light"]) #picnicThemeToggle .mb-th-moon{display:none}
+}
+:root[data-picnic-mode="dark"] #picnicThemeToggle .mb-th-sun{display:block}
+:root[data-picnic-mode="dark"] #picnicThemeToggle .mb-th-moon{display:none}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — picnic skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   100dvh-stage theme; the hub is still a bottom-sheet (crave idiom).
+   1) picnic marks .brand-row#pcBrandRow with data-mb-hotel-chip-slot (its index),
+      so the shared partial mounts the room chip there natively, beside .followbtn;
+   2) this block maps the shared --mbh-* contract onto picnic's own tokens and gives
+      each relocated surface picnic's native look. Scoped under .stage — picnic's
+      REAL DOM root (its @section('content') wrapper; .picnic is only a CSS alias
+      that never lands in the DOM). Tokens live on :root so they resolve globally;
+      the hub relocates into .stage, so .stage #mbHotelHub beats the partial's bare
+      #mbHotelHub on specificity. Only the hub paints an opaque surface (a modal
+      legitimately does); the chip + checkout rows stay translucent/borderless.
+   ═══════════════════════════════════════════════════════════ */
+.stage #mbHotelChip,
+.stage #mbHotelOrderCtrls,
+.stage #mbHotelBook,
+.stage #mbHotelHub{
+  --mbh-surface:var(--paper);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-2);
+  --mbh-accent:var(--orange);
+  --mbh-on-accent:var(--paper);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact soft pill riding the brand row beside the follow button ── */
+.stage #mbHotelChip{
+  margin:0;padding:6px 12px;gap:6px;
+  background:var(--gray);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.stage #mbHotelChip:active{transform:scale(.95)}
+.stage #mbHotelChip .mb-hotel-roomchip__room{color:var(--ink)}
+.stage #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+/* let the brand row wrap the chip to its own line on narrow screens — only when present */
+.stage .brand-row:has(#mbHotelChip){flex-wrap:wrap}
+
+/* ── Hub: picnic's own bottom-sheet look (paper surface, r-sheet corners, grab + round x) ── */
+.stage #mbHotelHubScrim{background:rgba(23,35,46,.42);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.stage #mbHotelHub{
+  background:var(--paper);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  box-shadow:0 -18px 44px rgba(23,35,46,.18);
+}
+.stage #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.stage #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;font-weight:800;letter-spacing:-.02em}
+.stage #mbHotelHub .mb-hotel-hub__x{
+  background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.stage #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.stage #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-2)}
+.stage #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.stage #mbHotelHub .mb-hotel-card summary,
+.stage #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.stage #mbHotelHub .mb-hotel-info-link{color:var(--orange)}
+/* service form controls → picnic inputs / ink-fill CTA (picnic's primary button language) */
+.stage #mbHotelHub .mb-hotel-field{
+  background:var(--gray);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.stage #mbHotelHub .mb-hotel-btn{
+  background:var(--ink);color:var(--paper);border-radius:var(--r-pill);font-weight:700;
+}
+
+/* ── Order-flow controls relocated into the checkout → picnic tender rows ── */
+.stage #mbHotelOrderCtrls{margin:0}
+.stage #mbHotelSched,
+.stage #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.stage #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.stage #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.stage #mbHotelSched input[type="radio"]{accent-color:var(--orange)}
+.stage #mbHotelSched .mb-hotel-field{
+  background:var(--gray);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.stage #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.stage #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.stage #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.stage #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.stage #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.stage #mbHotelCharge input[type="checkbox"]{accent-color:var(--orange)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   RTL-safe (logical props), scheme flip via tokens. Star reuses picnic's
+   --yellow-deep accent (already re-inks light/dark, so no literal here).
+   Scoped under .app — picnic's home app shell — because the review block
+   renders in the home view, which (unlike the account/track/profile
+   sub-pages that wrap in .picnic) has no .picnic root. This keeps the pc-
+   review classes from applying globally, matching the .lime/.vel/.so review
+   blocks that are all root-scoped rather than bare. */
+.app .pc-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.app .pc-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.app .pc-rating-star{color:var(--yellow-deep)}
+.app .pc-rating small{color:var(--ink-3);font-weight:600}
+.app .pc-review-list{display:flex;flex-direction:column;gap:8px}
+.app .pc-review{background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.app .pc-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:800;color:var(--ink)}
+.app .pc-review-star{color:var(--yellow-deep);font-weight:800;white-space:nowrap}
+.app .pc-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.app .pc-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for picnic. Surface,
+   ink, border and radius come from picnic tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.picnic .mb-paypending{
+  --pp-surface:var(--paper,#ffffff);
+  --pp-ink:var(--ink,#17232e);
+  --pp-muted:var(--ink-2,#525d69);
+  --pp-border:var(--stroke-2,#dfe2e7);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,22px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.picnic .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.picnic .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.picnic .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.picnic .mb-paypending-txn:empty{display:none}
+.picnic .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.picnic .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.picnic .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.picnic .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.picnic .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.wa-row.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}

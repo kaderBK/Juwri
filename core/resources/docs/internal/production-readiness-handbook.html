@@ -1,0 +1,2874 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>juwri Production Readiness Handbook</title>
+  <style>
+    :root {
+      --canvas: #101412;
+      --surface: #171c19;
+      --surface-raised: #1d2420;
+      --surface-soft: #202923;
+      --ink: #eef5f0;
+      --muted: #a5b2aa;
+      --faint: #75827a;
+      --line: #303a34;
+      --line-strong: #46534b;
+      --accent: #62d6a3;
+      --accent-ink: #0d261b;
+      --good: #62d6a3;
+      --warn: #e7bd69;
+      --bad: #ef8a83;
+      --info: #87b8e7;
+      --radius: 14px;
+      --shadow: 0 22px 70px rgba(3, 9, 6, 0.28);
+      --sans: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 88% 3%, rgba(98, 214, 163, 0.08), transparent 23rem),
+        var(--canvas);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.58;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 0.2em;
+    }
+
+    a:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      color: var(--accent-ink);
+      background: var(--accent);
+      border-radius: 999px;
+      transform: translateY(-160%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      min-height: 100dvh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      overflow-y: auto;
+      padding: 28px 22px;
+      background: rgba(16, 20, 18, 0.96);
+      border-right: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: var(--accent-ink);
+      background: var(--accent);
+      border-radius: 11px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand strong,
+    .brand span {
+      display: block;
+    }
+
+    .brand strong {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .brand span {
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 12px;
+    }
+
+    .sidebar-label {
+      margin: 24px 0 8px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: grid;
+      gap: 3px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 8px 10px;
+      color: var(--muted);
+      border-left: 2px solid transparent;
+      text-decoration: none;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
+    }
+
+    .nav a:hover,
+    .nav a[aria-current="true"] {
+      color: var(--ink);
+      background: rgba(98, 214, 163, 0.08);
+      border-left-color: var(--accent);
+    }
+
+    .sidebar-meta {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    main {
+      width: min(100%, 1440px);
+      padding: 34px clamp(24px, 4vw, 72px) 80px;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      min-height: 44px;
+      margin-bottom: 22px;
+    }
+
+    .action {
+      min-height: 42px;
+      padding: 0 16px;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .action:hover {
+      background: var(--surface-soft);
+      border-color: var(--accent);
+    }
+
+    .action:active {
+      transform: translateY(1px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: min(720px, calc(100dvh - 90px));
+      padding: clamp(30px, 4vw, 54px);
+      background:
+        linear-gradient(135deg, rgba(98, 214, 163, 0.11), transparent 42%),
+        var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -150px;
+      width: 440px;
+      height: 440px;
+      border: 1px solid rgba(98, 214, 163, 0.2);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 70px rgba(98, 214, 163, 0.025),
+        0 0 0 140px rgba(98, 214, 163, 0.018);
+      pointer-events: none;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      color: var(--accent);
+      background: rgba(98, 214, 163, 0.08);
+      border: 1px solid rgba(98, 214, 163, 0.25);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin-top: 0;
+      letter-spacing: -0.035em;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 28px 0 18px;
+      font-size: clamp(42px, 6.8vw, 86px);
+      font-weight: 650;
+      line-height: 0.98;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.05;
+    }
+
+    h3 {
+      font-size: 21px;
+      line-height: 1.22;
+    }
+
+    h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-footer {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(230px, 0.8fr);
+      gap: 20px;
+      align-items: end;
+      margin-top: clamp(32px, 5vh, 48px);
+    }
+
+    .posture {
+      padding: 22px;
+      background: rgba(10, 18, 14, 0.55);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+    }
+
+    .posture strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--warn);
+      font-size: 18px;
+    }
+
+    .posture p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .meta-card {
+      min-height: 86px;
+      padding: 14px;
+      background: rgba(10, 18, 14, 0.55);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .meta-card span,
+    .metric span {
+      display: block;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .section {
+      margin-top: clamp(70px, 9vw, 116px);
+    }
+
+    .section-intro {
+      max-width: 760px;
+      margin: 0 0 30px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .metric {
+      min-height: 130px;
+      padding: 23px 18px;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric:last-child {
+      border-right: 0;
+    }
+
+    .metric strong {
+      display: block;
+      margin: 13px 0 6px;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1;
+    }
+
+    .metric small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .readiness-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 20px;
+    }
+
+    .panel {
+      min-width: 0;
+      padding: clamp(22px, 3vw, 34px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .panel.tinted {
+      background:
+        linear-gradient(135deg, rgba(98, 214, 163, 0.08), transparent 65%),
+        var(--surface);
+    }
+
+    .release-lanes {
+      display: grid;
+      gap: 15px;
+      margin-top: 24px;
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+    }
+
+    .lane:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .lane strong {
+      font-size: 13px;
+    }
+
+    .lane p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      padding: 3px 9px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.good {
+      color: var(--good);
+      background: rgba(98, 214, 163, 0.07);
+    }
+
+    .status.warn {
+      color: var(--warn);
+      background: rgba(231, 189, 105, 0.07);
+    }
+
+    .status.bad {
+      color: var(--bad);
+      background: rgba(239, 138, 131, 0.07);
+    }
+
+    .status.info {
+      color: var(--info);
+      background: rgba(135, 184, 231, 0.07);
+    }
+
+    .legend {
+      display: grid;
+      gap: 13px;
+      margin-top: 18px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .flow-node {
+      position: relative;
+      min-height: 145px;
+      padding: 18px;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .flow-node:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -13px;
+      z-index: 2;
+      width: 13px;
+      border-top: 1px solid var(--accent);
+    }
+
+    .flow-node code {
+      color: var(--accent);
+      font-size: 11px;
+    }
+
+    .flow-node strong {
+      display: block;
+      margin: 11px 0 7px;
+      font-size: 15px;
+    }
+
+    .flow-node p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin: 30px 0 22px;
+      padding: 12px;
+      background: rgba(23, 28, 25, 0.93);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 34px rgba(3, 9, 6, 0.22);
+    }
+
+    .search-wrap label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      min-height: 43px;
+      padding: 0 14px;
+      color: var(--ink);
+      background: var(--canvas);
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+    }
+
+    .search-wrap input::placeholder {
+      color: #87948c;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: flex-end;
+    }
+
+    .filter {
+      min-height: 38px;
+      padding: 0 12px;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .filter:hover,
+    .filter[aria-pressed="true"] {
+      color: var(--accent-ink);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .feature {
+      min-width: 0;
+      scroll-margin-top: 94px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .feature[hidden] {
+      display: none;
+    }
+
+    .feature-header {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      padding: 25px;
+      background: linear-gradient(90deg, rgba(98, 214, 163, 0.045), transparent 50%);
+    }
+
+    .feature-code {
+      display: grid;
+      width: 54px;
+      height: 54px;
+      place-items: center;
+      color: var(--accent);
+      background: rgba(98, 214, 163, 0.07);
+      border: 1px solid rgba(98, 214, 163, 0.25);
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .feature-header h3 {
+      margin-bottom: 6px;
+    }
+
+    .feature-header p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .feature-body {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 22px;
+      padding: 0 25px 28px;
+    }
+
+    .feature-body > .wide {
+      grid-column: span 8;
+    }
+
+    .feature-body > .narrow {
+      grid-column: span 4;
+    }
+
+    .feature-body > .full {
+      grid-column: 1 / -1;
+    }
+
+    .subpanel {
+      min-width: 0;
+      padding: 20px;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .subpanel h4 {
+      color: var(--ink);
+    }
+
+    .subpanel p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .subpanel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .clean-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .clean-list li {
+      position: relative;
+      padding-left: 17px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .clean-list li::before {
+      content: "";
+      position: absolute;
+      top: 0.72em;
+      left: 0;
+      width: 7px;
+      border-top: 2px solid var(--accent);
+    }
+
+    code,
+    pre {
+      font-family: var(--mono);
+    }
+
+    code {
+      color: #b9e8d2;
+      overflow-wrap: anywhere;
+    }
+
+    .path-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .path-list code {
+      display: block;
+      padding: 8px 10px;
+      color: #cbd7cf;
+      background: #111613;
+      border-left: 2px solid var(--line-strong);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .code-block {
+      position: relative;
+      margin-top: 14px;
+      background: #0d120f;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .code-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 10px 0 14px;
+      color: var(--faint);
+      background: #121814;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .copy {
+      min-height: 29px;
+      padding: 0 9px;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: none;
+    }
+
+    .copy:hover {
+      color: var(--accent-ink);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    pre {
+      margin: 0;
+      padding: 17px;
+      overflow-x: auto;
+      color: #dce7df;
+      font-size: 11px;
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    .note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      color: var(--muted);
+      background: rgba(135, 184, 231, 0.06);
+      border-left: 3px solid var(--info);
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+    }
+
+    .note.warning {
+      background: rgba(231, 189, 105, 0.06);
+      border-left-color: var(--warn);
+    }
+
+    .no-results {
+      display: none;
+      padding: 30px;
+      color: var(--muted);
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .matrix-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--faint);
+      background: var(--surface-raised);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+    .cell-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .cell-status.pass {
+      color: var(--good);
+    }
+
+    .cell-status.ne {
+      color: var(--warn);
+    }
+
+    .cell-status.advisory {
+      color: var(--info);
+    }
+
+    .evidence-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+      gap: 20px;
+    }
+
+    .evidence-callout {
+      display: flex;
+      min-width: 0;
+      min-height: 360px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(25px, 4vw, 44px);
+      background:
+        linear-gradient(145deg, rgba(98, 214, 163, 0.13), transparent 58%),
+        var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .evidence-number {
+      display: block;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: clamp(58px, 8vw, 108px);
+      font-weight: 760;
+      letter-spacing: -0.07em;
+      line-height: 0.85;
+    }
+
+    .evidence-callout p {
+      max-width: 440px;
+      margin: 24px 0 0;
+      color: var(--muted);
+    }
+
+    .evidence-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .evidence-item {
+      display: grid;
+      min-width: 0;
+      grid-template-columns: 105px 1fr;
+      gap: 17px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .evidence-item b {
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .evidence-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .journey-step {
+      min-height: 140px;
+      padding: 16px;
+      background: var(--surface-raised);
+      border-top: 3px solid var(--line-strong);
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    .journey-step.done {
+      border-top-color: var(--good);
+    }
+
+    .journey-step.partial {
+      border-top-color: var(--warn);
+    }
+
+    .journey-step span {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .journey-step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .journey-step small {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .backlog {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 20px;
+    }
+
+    .priority-group {
+      min-width: 0;
+      padding: 26px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .priority-group.critical {
+      border-top: 4px solid var(--warn);
+    }
+
+    .priority-group.debt {
+      border-top: 4px solid var(--info);
+    }
+
+    .backlog-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .backlog-item:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .check {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .backlog-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .backlog-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    details {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    summary {
+      padding: 18px 20px;
+      cursor: pointer;
+      font-weight: 750;
+    }
+
+    details > .details-body {
+      padding: 0 20px 22px;
+      color: var(--muted);
+    }
+
+    .file-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .file-group {
+      min-width: 0;
+      padding: 20px;
+      background: var(--surface-raised);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .file-group h3 {
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+
+    .file-group code {
+      display: block;
+      margin-top: 7px;
+      color: #cbd7cf;
+      font-size: 11px;
+    }
+
+    .signoff {
+      display: grid;
+      min-width: 0;
+      gap: 14px;
+      padding: clamp(24px, 4vw, 44px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .signoff-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.8fr) minmax(200px, 1.2fr) minmax(150px, 0.7fr);
+      gap: 16px;
+      align-items: end;
+      min-height: 54px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .signoff-row span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .fill-line {
+      min-height: 30px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      margin-top: 80px;
+      padding-top: 28px;
+      color: var(--faint);
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .footer code {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    @media (max-width: 1180px) {
+      .metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .metric:nth-child(3) {
+        border-right: 0;
+      }
+
+      .metric:nth-child(-n + 3) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .flow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .flow-node::after {
+        display: none;
+      }
+
+      .journey {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 18px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        margin-bottom: 14px;
+      }
+
+      .sidebar-label,
+      .sidebar-meta {
+        display: none;
+      }
+
+      .nav {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav a {
+        flex: 0 0 auto;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+      }
+
+      main {
+        padding: 22px 18px 60px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-footer,
+      .readiness-grid,
+      .evidence-layout,
+      .backlog {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        position: static;
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+
+      .feature-body > .wide,
+      .feature-body > .narrow {
+        grid-column: 1 / -1;
+      }
+
+      .file-groups {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 15px;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding: 28px 21px;
+      }
+
+      h1 {
+        font-size: clamp(39px, 12.5vw, 60px);
+      }
+
+      .hero-footer {
+        margin-top: 42px;
+      }
+
+      .metrics,
+      .flow,
+      .journey,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric:last-child {
+        border-bottom: 0;
+      }
+
+      .feature-header {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 13px;
+        padding: 20px;
+      }
+
+      .feature-code {
+        width: 44px;
+        height: 44px;
+      }
+
+      .feature-header .status {
+        grid-column: 2;
+        justify-self: start;
+      }
+
+      .feature-body {
+        gap: 14px;
+        padding: 0 20px 20px;
+      }
+
+      .lane,
+      .evidence-item,
+      .legend-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .signoff-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+      :root {
+        --canvas: #ffffff;
+        --surface: #ffffff;
+        --surface-raised: #f5f7f5;
+        --surface-soft: #eef3ef;
+        --ink: #151a17;
+        --muted: #4e5a53;
+        --faint: #5f6b64;
+        --line: #cbd3ce;
+        --line-strong: #9eaaa3;
+        --accent: #167c54;
+        --accent-ink: #ffffff;
+        --good: #167c54;
+        --warn: #8a5d00;
+        --bad: #a6332d;
+        --info: #286797;
+        --shadow: none;
+      }
+
+      body {
+        background: #ffffff;
+      }
+
+      .shell {
+        display: block;
+      }
+
+      .sidebar,
+      .top-actions,
+      .toolbar,
+      .copy {
+        display: none !important;
+      }
+
+      main {
+        width: 100%;
+        padding: 0;
+      }
+
+      .hero {
+        min-height: auto;
+        break-after: page;
+      }
+
+      .section {
+        margin-top: 42px;
+      }
+
+      .feature,
+      .panel,
+      .priority-group,
+      .matrix-wrap,
+      .evidence-item {
+        break-inside: avoid;
+      }
+
+      .feature[hidden] {
+        display: block;
+      }
+
+      a {
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      pre {
+        color: var(--ink);
+        background: #f5f7f5;
+        white-space: pre-wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Handbook navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">MB</div>
+        <div>
+          <strong>juwri</strong>
+          <span>Production handbook</span>
+        </div>
+      </div>
+
+      <p class="sidebar-label">Contents</p>
+      <nav class="nav" id="page-nav">
+        <a href="#overview">Overview</a>
+        <a href="#posture">Release posture</a>
+        <a href="#architecture-flow">Protection flow</a>
+        <a href="#features">Implemented features</a>
+        <a href="#configuration">Configuration</a>
+        <a href="#testing">Test evidence</a>
+        <a href="#browser">Browser coverage</a>
+        <a href="#remaining">Remaining work</a>
+        <a href="#files">File map</a>
+        <a href="#release-checklist">Release checklist</a>
+      </nav>
+
+      <div class="sidebar-meta">
+        Generated: 2026-07-29<br>
+        Base: main<br>
+        Commit: 5fca2205d562<br>
+        State: merged and verified
+      </div>
+    </aside>
+
+    <main id="main-content">
+      <div class="top-actions">
+        <button class="action" id="expand-all" type="button">Expand details</button>
+        <button class="action" id="print-report" type="button">Print handbook</button>
+      </div>
+
+      <header class="hero" id="overview">
+        <span class="kicker">Production readiness audit</span>
+        <h1>Production readiness.</h1>
+        <p class="hero-copy">
+          The complete handbook: what changed, how to operate it, how it was tested, and what remains.
+        </p>
+
+        <div class="hero-footer">
+          <div class="posture">
+            <strong>Conditional release posture</strong>
+            <p>
+              The code and automated gates are strong. Production configuration, production-candidate privileged-role coverage, provider sandbox UAT, and recovery drills still require operator evidence.
+            </p>
+          </div>
+          <div class="meta-grid" aria-label="Source metadata">
+            <div class="meta-card">
+              <span>Integrated scope</span>
+              <strong>PR #609 merged</strong>
+            </div>
+            <div class="meta-card">
+              <span>Exact base</span>
+              <strong>main at 5fca2205</strong>
+            </div>
+            <div class="meta-card">
+              <span>Report mode</span>
+              <strong>Self-contained HTML</strong>
+            </div>
+            <div class="meta-card">
+              <span>Network assets</span>
+              <strong>None</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="section" id="posture">
+        <h2>Release posture</h2>
+        <p class="section-intro">
+          These numbers reflect the completed audit run. Automated proof and manual proof are kept separate so missing role or infrastructure evidence cannot be mistaken for a pass.
+        </p>
+
+        <div class="metrics" aria-label="Audit metrics">
+          <div class="metric">
+            <span>PHP suite</span>
+            <strong>6,093</strong>
+            <small>tests passed</small>
+          </div>
+          <div class="metric">
+            <span>Assertions</span>
+            <strong>28,412</strong>
+            <small>full-suite assertions</small>
+          </div>
+          <div class="metric">
+            <span>Skipped</span>
+            <strong>3</strong>
+            <small>reported, not hidden</small>
+          </div>
+          <div class="metric">
+            <span>MCP servers</span>
+            <strong>5</strong>
+            <small>modernized endpoints</small>
+          </div>
+          <div class="metric">
+            <span>Prod advisories</span>
+            <strong>0</strong>
+            <small>Composer and npm</small>
+          </div>
+          <div class="metric">
+            <span>Legacy themes</span>
+            <strong>8</strong>
+            <small>account views verified</small>
+          </div>
+        </div>
+
+        <div class="readiness-grid" style="margin-top: 20px;">
+          <article class="panel tinted">
+            <h3>What is ready now</h3>
+            <div class="release-lanes">
+              <div class="lane">
+                <span class="status good">Implemented</span>
+                <p>Updater authorization, explicit CSRF exceptions, MCP transport hardening, token transport defaults, health detail privacy, proxy and host trust.</p>
+              </div>
+              <div class="lane">
+                <span class="status good">Verified</span>
+                <p>Full PHP suite, focused security suites, dependency audits, Laravel caches, syntax, style, diff integrity, and selected browser journeys.</p>
+              </div>
+              <div class="lane">
+                <span class="status good">Documented</span>
+                <p>API and MCP behavior, deployment and rollback rules, production scenarios, E2E role setup, and hardening checklist.</p>
+              </div>
+              <div class="lane">
+                <span class="status warn">Conditional</span>
+                <p>Production release still depends on environment secrets, enforcement flips, provider UAT, a production-candidate true-role matrix, and failure-recovery evidence.</p>
+              </div>
+            </div>
+          </article>
+
+          <aside class="panel">
+            <h3>Status language</h3>
+            <div class="legend">
+              <div class="legend-row">
+                <span class="status good">Pass</span>
+                <span>Executed with expected result.</span>
+              </div>
+              <div class="legend-row">
+                <span class="status warn">NE</span>
+                <span>Not executed because prerequisites were absent.</span>
+              </div>
+              <div class="legend-row">
+                <span class="status info">Advisory</span>
+                <span>Visible evidence that does not yet block CI.</span>
+              </div>
+              <div class="legend-row">
+                <span class="status bad">Blocker</span>
+                <span>Required before an unconditional production decision.</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="note success">
+          Issue #608 was completed by merged pull request #609. The verified main snapshot is <code>5fca2205d562a793361a13dee8d0ed1172e3c084</code>; the production-readiness changes are no longer described as local or uncommitted work.
+        </div>
+      </section>
+
+      <section class="section" id="architecture-flow">
+        <h2>How a request is protected</h2>
+        <p class="section-intro">
+          The changes close gaps at the earliest practical layer, then preserve endpoint-specific authorization and business validation behind that boundary.
+        </p>
+
+        <div class="flow" aria-label="Request protection flow">
+          <article class="flow-node">
+            <code>01 ingress</code>
+            <strong>Host and proxy trust</strong>
+            <p>Reject poisoned hosts. Trust forwarded values only from configured proxy addresses or CIDR ranges.</p>
+          </article>
+          <article class="flow-node">
+            <code>02 transport</code>
+            <strong>Origin and CSRF</strong>
+            <p>Browser MCP origins are exact matched. Session writes keep CSRF. Only explicit provider callbacks bypass it.</p>
+          </article>
+          <article class="flow-node">
+            <code>03 identity</code>
+            <strong>Header-first auth</strong>
+            <p>Bearer and storefront headers are the production default. Query credentials require an explicit compatibility switch.</p>
+          </article>
+          <article class="flow-node">
+            <code>04 authorization</code>
+            <strong>Role and tenant scope</strong>
+            <p>Admin, owner, staff, reseller, customer, password confirmation, and store boundaries decide access.</p>
+          </article>
+          <article class="flow-node">
+            <code>05 execution</code>
+            <strong>Validation and audit</strong>
+            <p>Rate limits, provider signatures, validation, idempotency, logs, queues, and release gates protect side effects.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <h2>Implemented features</h2>
+        <p class="section-intro">
+          Filter by area or search any term. Every record includes the reason, implementation path, usage guidance, and verification method.
+        </p>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <label for="feature-search">Search implemented features</label>
+            <input id="feature-search" type="search" placeholder="Search routes, MCP, deploy, CSRF, health, dashboard">
+          </div>
+          <div class="filters" aria-label="Feature filters">
+            <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter" type="button" data-filter="security" aria-pressed="false">Security</button>
+            <button class="filter" type="button" data-filter="mcp" aria-pressed="false">MCP</button>
+            <button class="filter" type="button" data-filter="delivery" aria-pressed="false">CI and deploy</button>
+            <button class="filter" type="button" data-filter="ui" aria-pressed="false">UI</button>
+            <button class="filter" type="button" data-filter="testing" aria-pressed="false">Testing</button>
+          </div>
+        </div>
+
+        <div class="feature-list" id="feature-list">
+          <article class="feature" id="feature-updater" data-category="security" data-search="updater update routes auth admin password confirm maintenance artisan version">
+            <header class="feature-header">
+              <div class="feature-code">SEC-A</div>
+              <div>
+                <h3>Privileged updater boundary</h3>
+                <p>The web updater can enter maintenance mode, execute upgrade PHP, clear caches, and write the application version. Anonymous and non-admin access is now stopped before controller execution.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>How it was added</h4>
+                <p>The complete <code>/update/*</code> route group now requires four middleware checks in order:</p>
+                <div class="code-block">
+                  <div class="code-label"><span>Route boundary</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>installed
+auth
+admin
+password.confirm</code></pre>
+                </div>
+                <p class="note">The controller behavior was not weakened. The fix protects the dangerous entry point and preserves intentional admin upgrade capability.</p>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/routes/web.php</code></li>
+                  <li><code>core/tests/Feature/ProductionSecurityRoutesTest.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to use and test</h4>
+                <ul class="clean-list">
+                  <li>Sign in as an administrator and complete recent password confirmation before opening the updater.</li>
+                  <li>Guests must be redirected to login. Owners, staff, and resellers must be rejected. An admin with stale confirmation must be redirected to re-authenticate.</li>
+                  <li>Execute a real update only in a disposable clone or staging environment with a verified package and backup.</li>
+                </ul>
+                <div class="code-block">
+                  <div class="code-label"><span>Focused regression</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+php artisan test tests/Feature/ProductionSecurityRoutesTest.php</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-csrf" data-category="security" data-search="csrf webhook ipn stripe voice callback api webhooks owner management wildcard">
+            <header class="feature-header">
+              <div class="feature-code">SEC-B</div>
+              <div>
+                <h3>Explicit CSRF callback map</h3>
+                <p>Broad webhook wildcards were replaced with a bounded list of genuine cross-site provider callbacks. Authenticated owner webhook-management writes remain CSRF protected.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>How it was added</h4>
+                <p>The CSRF exemption list now names only the inbound patterns that cannot carry a Laravel session token:</p>
+                <div class="code-block">
+                  <div class="code-label"><span>External callback patterns</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>ipn/*
+webhook/*
+webhooks/reseller/*
+studio/stripe-webhook
+voice/*/incoming</code></pre>
+                </div>
+                <p>MCP, token-authenticated <code>api/v1/*</code>, CSP reports, and the Apple form-post callback retain their documented non-session exemptions.</p>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/app/Http/Middleware/VerifyCsrfToken.php</code></li>
+                  <li><code>core/tests/Feature/ProductionSecurityRoutesTest.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to use and test</h4>
+                <ul class="clean-list">
+                  <li>Provider callbacks should post to their documented explicit route and then pass provider signature verification.</li>
+                  <li>Owner UI code must submit <code>/api/webhooks</code> with its CSRF token. A tokenless session write must return 419.</li>
+                  <li>When adding a provider, add the narrowest path possible and pair it with signature, timestamp, replay, and missing-secret tests.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-mcp" data-category="mcp security" data-search="mcp streamable http protocol origin notification 202 accept get 405 dns rebinding initialize json rpc">
+            <header class="feature-header">
+              <div class="feature-code">MCP-C</div>
+              <div>
+                <h3>MCP Streamable HTTP modernization</h3>
+                <p>All five MCP servers now default to the 2025-06-18 protocol, retain negotiated legacy support, validate browser origins, return 202 for accepted notifications, and reject GET transport use.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>Behavior now</h4>
+                <ul class="clean-list">
+                  <li>Endpoints: <code>/mcp</code>, <code>/mcp/dev</code>, <code>/mcp/storefront</code>, <code>/mcp/catalog</code>, and <code>/mcp/customer</code>.</li>
+                  <li>Supported versions: <code>2024-11-05</code>, <code>2025-03-26</code>, and <code>2025-06-18</code>.</li>
+                  <li>The initialize default is <code>2025-06-18</code>. A supported requested version is echoed.</li>
+                  <li>No Origin is accepted for normal CLI/editor clients. A present Origin must be same-origin or exactly listed in <code>MCP_ALLOWED_ORIGINS</code>.</li>
+                  <li>Notification-only POST requests return HTTP 202 with no JSON body. Mixed batches omit notification responses.</li>
+                  <li>GET returns 405 with <code>Allow: POST</code>. This implementation does not expose an SSE stream.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/app/Http/Controllers/Concerns/HandlesMcpProtocol.php</code></li>
+                  <li><code>core/config/api.php</code></li>
+                  <li><code>core/app/Http/Controllers/*McpController.php</code></li>
+                  <li><code>core/tests/Feature/McpProtocolTest.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to connect</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Initialize request</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>curl -i https://your-site.example/mcp \
+  -X POST \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Content-Type: application/json' \
+  -H 'MCP-Protocol-Version: 2025-06-18' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"release-check","version":"1.0"}}}'</code></pre>
+                </div>
+                <div class="note">
+                  Browser-hosted MCP clients must send their real Origin and the operator must add that exact scheme, host, and port to the allowlist. Server-side clients should omit Origin.
+                </div>
+                <div class="code-block">
+                  <div class="code-label"><span>MCP regression set</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+php artisan test \
+  tests/Feature/McpProtocolTest.php \
+  tests/Feature/DevMcpTest.php \
+  tests/Feature/CatalogMcpTest.php \
+  tests/Feature/CustomerMcpTest.php</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-dependencies" data-category="delivery security testing" data-search="composer audit npm ci workflow dependency advisories abandoned phpstan node 20 nightly">
+            <header class="feature-header">
+              <div class="feature-code">CI-D</div>
+              <div>
+                <h3>Dependency and CI hardening</h3>
+                <p>Dependency policy now blocks known advisories and abandoned packages, CI has a dedicated security-audit lane, nightly uses the supported Node version, and static-analysis findings are visible.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>How it was added</h4>
+                <ul class="clean-list">
+                  <li>Composer config sets <code>policy.advisories.block=true</code> and <code>audit.abandoned=fail</code>.</li>
+                  <li>CI runs <code>composer audit --locked</code> and blocking production npm audits in both <code>core/</code> and <code>desktop/</code>.</li>
+                  <li>Build-only npm advisory output remains visible as advisory evidence.</li>
+                  <li>Nightly Node changed from 18 to 20 to match the package requirement.</li>
+                  <li>PHPStan level 6 is blocking in CI with zero unsuppressed errors. The reviewed baseline contains 5,696 suppressions, down from 6,176 by 480, and the ratchet prevents suppression growth on pull requests.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/composer.json</code></li>
+                  <li><code>.github/workflows/ci.yml</code></li>
+                  <li><code>.github/workflows/nightly.yml</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to run locally</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Dependency gates</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+composer validate --strict
+composer audit --locked
+npm audit --omit=dev
+
+cd ../desktop
+npm audit --omit=dev</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-deploy" data-category="delivery security" data-search="deploy maintenance trap artisan up health secret ff-only migration rollback atomic supervisor log rotation">
+            <header class="feature-header">
+              <div class="feature-code">OPS-E</div>
+              <div>
+                <h3>Failure-safe deployment workflow</h3>
+                <p>Deploys cannot silently skip health verification, cannot proceed without required configuration, and use an EXIT trap to restore service after any failure inside the maintenance window.</p>
+              </div>
+              <span class="status good">Implemented</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>Deployment lifecycle</h4>
+                <ul class="clean-list">
+                  <li>A preflight job verifies all six required secrets before SSH.</li>
+                  <li>The remote script uses <code>set -eu</code> and registers <code>restore_service</code> on EXIT.</li>
+                  <li><code>artisan down --secret</code> uses a required maintenance bypass secret.</li>
+                  <li><code>git pull --ff-only</code> refuses implicit merges.</li>
+                  <li>Dependencies, migrations, assets, config, routes, and views are rebuilt under the maintenance window.</li>
+                  <li><code>artisan up</code> runs on success, and the EXIT trap retries it when a command fails.</li>
+                  <li>A mandatory configured health URL must return success.</li>
+                  <li>No automatic source reset claims to reverse a forward database migration.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Required GitHub secrets</h4>
+                <ul class="path-list">
+                  <li><code>DEPLOY_HOST</code></li>
+                  <li><code>DEPLOY_USER</code></li>
+                  <li><code>DEPLOY_SSH_KEY</code></li>
+                  <li><code>DEPLOY_PATH</code></li>
+                  <li><code>DEPLOY_UP_SECRET</code></li>
+                  <li><code>DEPLOY_HEALTHZ_URL</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to operate and test</h4>
+                <ul class="clean-list">
+                  <li>Configure the health URL with the production <code>HEALTHZ_TOKEN</code> query value when detailed readiness is protected.</li>
+                  <li>Review every migration for expand, backfill, and later contract compatibility before release.</li>
+                  <li>Prefer atomic release directories with a symlink switch where the host supports them.</li>
+                  <li>In staging, force a failure after <code>artisan down</code> and prove the application returns from maintenance while the workflow still fails visibly.</li>
+                  <li>Confirm supervisor rotates <code>worker.log</code> at 50 MB with 10 backups and restarts workers on new code.</li>
+                </ul>
+                <div class="note warning">
+                  A successful workflow definition is not deployment proof. Failure injection, queue restart, health monitoring, backup restore, and migration-compatible recovery remain operator-run scenarios.
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-api-boundaries" data-category="security" data-search="api bearer query token fallback health healthz proxy trust host reset link">
+            <header class="feature-header">
+              <div class="feature-code">SEC-F</div>
+              <div>
+                <h3>API transport, health, proxy, and host boundaries</h3>
+                <p>Production credentials default to headers, health details default to private, forwarded headers require explicit proxies, and trusted hosts include verified tenant domains without accepting arbitrary Host input.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>What changed</h4>
+                <ul class="clean-list">
+                  <li><code>TOKEN_QUERY_FALLBACK</code> defaults to false in production. Local and test environments retain explicit compatibility unless disabled.</li>
+                  <li>Owner and storefront token middleware accept query credentials only when the setting is enabled. Deprecated use is surfaced.</li>
+                  <li>A production <code>/healthz</code> request without a matching token returns generic status only. DB, cache, storage, queue, scheduler, and version details stay hidden.</li>
+                  <li><code>TRUSTED_PROXIES</code> supports exact comma-separated IPs or CIDRs. A wildcard is documented only for infrastructure exclusively reachable through a trusted load balancer.</li>
+                  <li>Trusted hosts include the application domain, verified restaurant domains, and active reseller custom domains.</li>
+                  <li>Password reset links use the configured application URL rather than untrusted request-host input.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/config/auth.php</code></li>
+                  <li><code>core/app/Http/Middleware/ApiTokenAuth.php</code></li>
+                  <li><code>core/app/Http/Middleware/StorefrontTokenAuth.php</code></li>
+                  <li><code>core/app/Http/Controllers/HealthController.php</code></li>
+                  <li><code>core/config/trustedproxy.php</code></li>
+                  <li><code>core/app/Http/Middleware/TrustHosts.php</code></li>
+                  <li><code>core/app/Mails/ResetPassword.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to use</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Production environment</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>APP_ENV=production
+APP_DEBUG=false
+TOKEN_QUERY_FALLBACK=false
+HEALTHZ_TOKEN=replace-with-a-long-random-secret
+TRUSTED_PROXIES=10.20.0.10,10.20.0.0/24</code></pre>
+                </div>
+                <div class="code-block">
+                  <div class="code-label"><span>Header-first API call</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>curl https://your-site.example/api/v1/stores \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer replace-with-api-token'</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-auth-providers" data-category="security testing" data-search="customer login register password throttle hungerstation sms twilio webhook signature fail closed">
+            <header class="feature-header">
+              <div class="feature-code">SEC-G</div>
+              <div>
+                <h3>Customer authentication and provider fail-closed behavior</h3>
+                <p>Customer session and API entry points now share stronger password defaults and tighter throttling, while HungerStation and SMS callbacks reject unsigned traffic when secrets are absent.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>How it was added</h4>
+                <ul class="clean-list">
+                  <li>Customer login and registration use named rate limiters instead of leaving high-volume authentication unbounded.</li>
+                  <li>Session and API registration use Laravel <code>Password::defaults()</code> for policy alignment.</li>
+                  <li>HungerStation ingest rejects missing credentials when signature verification is enabled.</li>
+                  <li>SMS inbound processing defaults <code>SMS_INBOUND_ALLOW_UNSIGNED=false</code> and rejects requests without the required provider secret.</li>
+                  <li>Valid provider fixtures still exercise the intended ingest and consent paths.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/app/Http/Controllers/Api/V1/CustomerAuthController.php</code></li>
+                  <li><code>core/app/Http/Controllers/User/CustomerAuthController.php</code></li>
+                  <li><code>core/app/Http/Controllers/HungerStationWebhookController.php</code></li>
+                  <li><code>core/app/Http/Controllers/SmsWebhookController.php</code></li>
+                  <li><code>core/config/sms.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to test</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Authentication and callback regression</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+php artisan test \
+  tests/Feature/ApiCustomerAuthTest.php \
+  tests/Feature/HungerStationOrderIngestTest.php \
+  tests/Feature/AgentSmsTest.php \
+  tests/Feature/SmsFeatureTest.php</code></pre>
+                </div>
+                <p class="note warning">Code tests do not replace sandbox callback UAT. Each enabled provider still needs real signature, timestamp, tamper, retry, and replay evidence.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-dashboard-context" data-category="ui security testing" data-search="dashboard store branch session race context customizer turbo sidebar sync">
+            <header class="feature-header">
+              <div class="feature-code">UI-H</div>
+              <div>
+                <h3>Store and branch context synchronization</h3>
+                <p>Dashboard context, sidebar selection, and theme customizer state stay aligned across navigation and Turbo updates, with session request blocking documented to reduce concurrent context races.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>Behavior now</h4>
+                <ul class="clean-list">
+                  <li>The dashboard synchronizes the selected store and branch through <code>SyncDashboardStore</code>.</li>
+                  <li>Sidebar and context controls render from the same selected context.</li>
+                  <li>The theme customizer updates its store target, all related selects, and preview together.</li>
+                  <li>Turbo compatibility avoids the prior browser console warning during navigation updates.</li>
+                  <li><code>SESSION_BLOCK</code> and lock timing keys are documented for serialized session mutations.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Configuration</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Session locking</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>SESSION_BLOCK=true
+SESSION_BLOCK_STORE=redis
+SESSION_BLOCK_LOCK_SECONDS=10
+SESSION_BLOCK_WAIT_SECONDS=10</code></pre>
+                </div>
+              </div>
+              <div class="subpanel full">
+                <h4>How to use and test</h4>
+                <ul class="clean-list">
+                  <li>Switch store and branch from the dashboard, reload, and open a second dashboard tab. Both must resolve a permitted synchronized context.</li>
+                  <li>Open the theme customizer, switch from Crave to Matcha and back, and confirm every select plus the preview changes together.</li>
+                  <li>Keep production session and lock stores on shared infrastructure when the application runs on multiple workers or hosts.</li>
+                </ul>
+                <div class="code-block">
+                  <div class="code-label"><span>Focused dashboard tests</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+php artisan test \
+  tests/Feature/DashboardContextDefaultTest.php \
+  tests/Feature/MarketplaceCustomizerTest.php</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-mobile-views" data-category="ui testing" data-search="mobile owner dashboard overflow topbar language period account legacy themes null created date">
+            <header class="feature-header">
+              <div class="feature-code">UI-I</div>
+              <div>
+                <h3>Mobile dashboard and legacy account resilience</h3>
+                <p>The owner shell no longer overflows at narrow widths, important topbar controls remain usable, the period bar wraps, and eight legacy account templates tolerate orders without a creation timestamp.</p>
+              </div>
+              <span class="status good">Verified</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>What changed</h4>
+                <ul class="clean-list">
+                  <li>At a 390px audit viewport, lower-priority search and theme controls collapse while language, notifications, and account remain accessible.</li>
+                  <li>Topbar action targets meet the 44px touch-target goal.</li>
+                  <li>The dashboard period selector wraps instead of forcing horizontal overflow.</li>
+                  <li>A test-isolated render confirmed document and body widths remain within the viewport.</li>
+                  <li>Aurora, Crave, Feast, Glow, Lala, Matcha, Velvet, and Vivid account views render a safe fallback when <code>created_at</code> is null.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>assets/templates/old-theme/css/old-theme-skin.css</code></li>
+                  <li><code>core/resources/views/templates/old-theme/partials/topbar.blade.php</code></li>
+                  <li><code>core/resources/views/templates/old-theme/partials/periodbar.blade.php</code></li>
+                  <li><code>core/resources/views/store_templates/*/account.blade.php</code></li>
+                  <li><code>core/tests/Feature/LegacyOrderAccountViewTest.php</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to test</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Eight-theme regression</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+php artisan test tests/Feature/LegacyOrderAccountViewTest.php</code></pre>
+                </div>
+                <p class="note">The browser pass measured a 375px document and body width with no horizontal overflow, a 167px context selector, and 44px language, notification, and account targets.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-test-system" data-category="testing delivery" data-search="production scenarios role matrix e2e owner customer staff reseller admin docs release signoff">
+            <header class="feature-header">
+              <div class="feature-code">QA-J</div>
+              <div>
+                <h3>Durable production test system</h3>
+                <p>A comprehensive scenario catalog and role-aware browser journey turn this audit into a repeatable release process instead of a one-time checklist.</p>
+              </div>
+              <span class="status good">Documented</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>What was added</h4>
+                <ul class="clean-list">
+                  <li>Stable scenario IDs across automated, security, API, webhook, MCP, browser, deployment, recovery, and observability cases.</li>
+                  <li>A public, customer, owner, staff, reseller, and admin role matrix with required and forbidden behavior.</li>
+                  <li>Release prerequisites, status definitions, evidence fields, and final GO, NO-GO, or CONDITIONAL sign-off.</li>
+                  <li>A <code>role-pages-smoke</code> E2E journey that runs seeded owner and customer paths by default.</li>
+                  <li>True staff, reseller, and admin paths run only with dedicated credentials. Missing credentials are logged as not configured and never counted as pass.</li>
+                  <li>Every actor runs in an isolated browser context. Customer coverage requires a real password login, a persistent authenticated-session probe, the exact account URL, and the active logout UI.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Key files</h4>
+                <ul class="path-list">
+                  <li><code>core/resources/docs/internal/production-test-scenarios.md</code></li>
+                  <li><code>core/tests/e2e/journeys/role-pages-smoke.js</code></li>
+                  <li><code>core/app/Models/Customer.php</code></li>
+                  <li><code>core/tests/Feature/CustomerAccountTest.php</code></li>
+                  <li><code>core/tests/e2e/README.md</code></li>
+                  <li><code>core/tests/e2e/run.js</code></li>
+                </ul>
+              </div>
+              <div class="subpanel full">
+                <h4>How to run role coverage</h4>
+                <div class="code-block">
+                  <div class="code-label"><span>Credential-driven role smoke</span><button class="copy" type="button">Copy</button></div>
+                  <pre><code>cd core
+E2E_BASE_URL=https://your-site.test \
+E2E_STAFF_USER=staff-user \
+E2E_STAFF_PASS=staff-password \
+E2E_RESELLER_EMAIL=reseller@example.test \
+E2E_RESELLER_PASS=reseller-password \
+E2E_ADMIN_EMAIL=admin@example.test \
+E2E_ADMIN_PASS=admin-password \
+npm run test:e2e -- role-pages-smoke</code></pre>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature" id="feature-docs" data-category="mcp delivery testing security" data-search="documentation api mcp runbook checklist error rate limits auth token storefront cookbook reseller payments architecture">
+            <header class="feature-header">
+              <div class="feature-code">DOC-K</div>
+              <div>
+                <h3>API, MCP, deployment, and internal documentation</h3>
+                <p>The code changes are reflected in developer guides and operator runbooks, including protocol headers, origin rules, token migration, route caching, failure recovery, and release sign-off.</p>
+              </div>
+              <span class="status good">Updated</span>
+            </header>
+            <div class="feature-body">
+              <div class="subpanel wide">
+                <h4>Documentation coverage</h4>
+                <ul class="clean-list">
+                  <li>MCP server, editor connection, and tool documentation now describe 2025-06-18, legacy negotiation, Accept guidance, Origin behavior, 202 notifications, and GET 405.</li>
+                  <li>API authentication and storefront cookbook documentation prefer headers and describe the local-only query fallback migration path.</li>
+                  <li>Error and rate-limit documentation includes MCP transport failures.</li>
+                  <li>The deploy runbook and hardening checklist mark route caching as supported and explain mandatory health, maintenance recovery, trusted proxies, CSP, abuse modes, and migration-safe release discipline.</li>
+                  <li>Internal architecture, payments, testing, and reseller gateway references were aligned with the implemented behavior.</li>
+                </ul>
+              </div>
+              <div class="subpanel narrow">
+                <h4>Read next</h4>
+                <ul class="path-list">
+                  <li><code>core/resources/docs/dev/mcp/mcp-servers.md</code></li>
+                  <li><code>core/resources/docs/dev/api/auth-tokens.md</code></li>
+                  <li><code>core/resources/docs/internal/deploy-runbook.md</code></li>
+                  <li><code>deploy/PROD-HARDENING-CHECKLIST.md</code></li>
+                  <li><code>core/resources/docs/internal/production-test-scenarios.md</code></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="no-results" id="no-results">No implemented feature matches this filter and search.</div>
+      </section>
+
+      <section class="section" id="configuration">
+        <h2>Production configuration</h2>
+        <p class="section-intro">
+          Code supplies safe defaults where compatibility permits. The deployment owner must set environment-specific secrets and enforcement values before release.
+        </p>
+
+        <div class="readiness-grid">
+          <article class="panel tinted">
+            <h3>Recommended production baseline</h3>
+            <div class="code-block">
+              <div class="code-label"><span>Environment template</span><button class="copy" type="button">Copy</button></div>
+              <pre><code>APP_ENV=production
+APP_DEBUG=false
+
+TOKEN_QUERY_FALLBACK=false
+HEALTHZ_TOKEN=replace-with-a-long-random-secret
+TRUSTED_PROXIES=10.20.0.10,10.20.0.0/24
+MCP_ALLOWED_ORIGINS=
+
+SESSION_BLOCK=true
+SESSION_BLOCK_STORE=redis
+SESSION_BLOCK_LOCK_SECONDS=10
+SESSION_BLOCK_WAIT_SECONDS=10
+
+SMS_INBOUND_ALLOW_UNSIGNED=false
+SMS_PROVIDER=twilio
+TWILIO_SID=replace-with-provider-account
+TWILIO_TOKEN=replace-with-provider-secret
+TWILIO_FROM=replace-with-provider-number
+
+CSP_ENFORCE=true
+CSP_ENFORCE_DASHBOARD=false
+
+ABUSE_MODE=enforce
+ABUSE_MODE_AI=enforce
+ABUSE_MODE_MCP=enforce
+ABUSE_MODE_PUBLIC_WRITE=enforce
+ABUSE_MODE_SIGNUP=enforce
+ABUSE_MODE_UPLOAD=enforce
+ABUSE_MODE_WEBHOOK_IN=enforce</code></pre>
+            </div>
+          </article>
+
+          <aside class="panel">
+            <h3>Safe rollout order</h3>
+            <div class="release-lanes">
+              <div class="lane">
+                <strong>Secrets first</strong>
+                <p>Set health, provider, deploy, proxy, session, and infrastructure values through the secret manager.</p>
+              </div>
+              <div class="lane">
+                <strong>Observe</strong>
+                <p>Review CSP reports and abuse warn-mode events using production-like traffic.</p>
+              </div>
+              <div class="lane">
+                <strong>Enforce</strong>
+                <p>Enable storefront CSP and abuse controls after allowlists and thresholds are proven.</p>
+              </div>
+              <div class="lane">
+                <strong>Privileged CSP</strong>
+                <p>Enable dashboard CSP only after owner, staff, reseller, and admin browser coverage passes.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="note warning">
+          Leave <code>MCP_ALLOWED_ORIGINS</code> blank for server-to-server and editor clients that omit Origin. Add entries only for real browser-hosted clients. Never copy example secrets into production.
+        </div>
+      </section>
+
+      <section class="section" id="testing">
+        <h2>Test evidence</h2>
+        <p class="section-intro">
+          The final audit ran the full suite and a post-format focused regression. Dependency, syntax, cache, and browser evidence are listed independently.
+        </p>
+
+        <div class="evidence-layout">
+          <article class="evidence-callout">
+            <div>
+              <span class="status good">Full suite pass</span>
+              <span class="evidence-number">6,093</span>
+              <p>PHP tests passed with 28,412 assertions. Three tests were skipped and retained in the report.</p>
+            </div>
+            <code>php artisan test</code>
+          </article>
+
+          <div class="evidence-stack">
+            <article class="evidence-item">
+              <b>43 / 146</b>
+              <p>Post-Pint order-sensitive targeted regression: 43 tests and 146 assertions passed.</p>
+            </article>
+            <article class="evidence-item">
+              <b>1 / 24</b>
+              <p>Legacy order account render regression passed 24 assertions across eight themes.</p>
+            </article>
+            <article class="evidence-item">
+              <b>0 advisories</b>
+              <p><code>composer audit --locked</code>, core production npm audit, and desktop production npm audit reported no advisories.</p>
+            </article>
+            <article class="evidence-item">
+              <b>Cache gates</b>
+              <p>Configuration, route, and view caches built successfully. Route caching is supported and was cleared after verification.</p>
+            </article>
+            <article class="evidence-item">
+              <b>Integrity</b>
+              <p>Composer validation, touched-PHP Pint, PHP lint, Node syntax checks, workflow YAML parsing, and <code>git diff --check</code> passed.</p>
+            </article>
+            <article class="evidence-item">
+              <b>Blocking PHPStan</b>
+              <p>PHPStan level 6 passed in 2m 6s with zero unsuppressed errors. The 5,696-entry baseline ratchet passed in 18s after removing 480 suppressions from the previous 6,176.</p>
+            </article>
+            <article class="evidence-item">
+              <b>PR #609 CI</b>
+              <p>PHPUnit passed in 8m 18s, prefixed PHPUnit in 8m 8s, coverage floor in 17m 44s, Blade view cache in 24s, MySQL migration in 1m 18s, Pint in 36s, dependency audit in 26s, and PHP lint in 23s.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top: 20px;">
+          <div class="code-label"><span>Release gate sequence</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>cd core
+composer validate --strict
+composer audit --locked
+npm audit --omit=dev
+php artisan test
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+cd ..
+git diff --check
+
+cd desktop
+npm audit --omit=dev</code></pre>
+        </div>
+
+        <div class="matrix-wrap" style="margin-top: 20px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Gate</th>
+                <th>Result</th>
+                <th>Evidence</th>
+                <th>Release meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PHP feature suite</strong></td>
+                <td><span class="cell-status pass">PASS</span></td>
+                <td>6,093 passed, 3 skipped, 28,412 assertions</td>
+                <td>Server behavior regression gate is green.</td>
+              </tr>
+              <tr>
+                <td><strong>Security focused set</strong></td>
+                <td><span class="cell-status pass">PASS</span></td>
+                <td>Updater, CSRF, health, tokens, MCP, and providers</td>
+                <td>New security boundaries have automated regression coverage.</td>
+              </tr>
+              <tr>
+                <td><strong>Production dependencies</strong></td>
+                <td><span class="cell-status pass">PASS</span></td>
+                <td>Composer, core npm, desktop npm</td>
+                <td>No known production advisory found in locked dependencies.</td>
+              </tr>
+              <tr>
+                <td><strong>Optimized Laravel boot</strong></td>
+                <td><span class="cell-status pass">PASS</span></td>
+                <td>Config, route, and view caches</td>
+                <td>Release can use production caching.</td>
+              </tr>
+              <tr>
+                <td><strong>Static analysis</strong></td>
+                <td><span class="cell-status pass">PASS</span></td>
+                <td>Blocking level 6; 0 unsuppressed errors; baseline 5,696</td>
+                <td>New findings and baseline growth block CI; existing suppressions remain tracked debt.</td>
+              </tr>
+              <tr>
+                <td><strong>True privileged role E2E</strong></td>
+                <td><span class="cell-status advisory">LOCAL PASS</span></td>
+                <td>Owner, staff, reseller, admin, and customer completed in one isolated-context run</td>
+                <td>Repeat against the release candidate with enforced CSP before final sign-off.</td>
+              </tr>
+              <tr>
+                <td><strong>CSP enforcement readiness</strong></td>
+                <td><span class="cell-status pass">LOCAL PASS</span></td>
+                <td>All 17 retained themes completed real-product search/result, product, required modifiers, cart/minimum order, and a guarded checkout-contract audit under enforcing CSP</td>
+                <td>Repeat on the exact release candidate; controlled order submission, provider settlement, and abuse load remain separate gates.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="browser">
+        <h2>Browser coverage</h2>
+        <p class="section-intro">
+          Browser results record the actor actually used. Owner access to admin or reseller pages is not accepted as privileged-role coverage.
+        </p>
+
+        <div class="journey" aria-label="Browser journey coverage">
+          <article class="journey-step done">
+            <span>Owner</span>
+            <strong>Core dashboard</strong>
+            <small>Dashboard, restaurants, orders, customers, and settings rendered.</small>
+          </article>
+          <article class="journey-step done">
+            <span>Owner</span>
+            <strong>Customizer sync</strong>
+            <small>Crave to Matcha to Crave updated three selects and preview, then restored.</small>
+          </article>
+          <article class="journey-step done">
+            <span>Customer</span>
+            <strong>Account</strong>
+            <small>Seeded session login and account page passed in E2E.</small>
+          </article>
+          <article class="journey-step done">
+            <span>Public</span>
+            <strong>Storefront cart</strong>
+            <small>Crave product add, cart count, and toast passed. No order submitted.</small>
+          </article>
+          <article class="journey-step done">
+            <span>Mobile</span>
+            <strong>390px owner shell</strong>
+            <small>No horizontal overflow. Critical actions and period selector remained usable.</small>
+          </article>
+          <article class="journey-step done">
+            <span>Privileged roles</span>
+            <strong>Dedicated local smoke</strong>
+            <small>Admin, reseller, and staff authenticated with their own local records; protected page and denial checks passed.</small>
+          </article>
+        </div>
+
+        <div class="readiness-grid" style="margin-top: 20px;">
+          <article class="panel">
+            <h3>Automated browser evidence</h3>
+            <ul class="clean-list">
+              <li><code>role-pages-smoke</code> passed 1 of 1 selected journey in 91,400 ms.</li>
+              <li>Executed roles were owner, staff, reseller, admin, and customer; <code>not-configured=none</code>.</li>
+              <li>Every role used an isolated browser context to prevent cookie and service-worker contamination.</li>
+              <li>Admin dashboard/orders/settings and reseller overview/customers/security rendered without application errors.</li>
+              <li>Staff PWA Orders and Kitchen rendered; owner settings returned 403 and the admin URL redirected to the staff dashboard.</li>
+              <li>Customer password login, authenticated-session probe, exact account URL, and active logout UI passed.</li>
+              <li><code>retained-template-csp</code> passed real-product search → visible result → product → modifiers → cart/minimum order → checkout contract across all 17 retained themes in report-only mode (107,320 ms), isolated enforcing mode (177,392 ms), and 390×844 mobile mode (107,353 ms). Mobile mode found no checkout document overflow or off-viewport final action. The submission guard prevented order placement.</li>
+              <li>The supporting role/auth/tenant/IDOR suite passed 171 tests with 565 assertions; the post-fix focused customer suite passed 33 tests with 114 assertions.</li>
+              <li>Screenshots are retained by the runner under <code>core/tests/e2e/__screenshots__/</code>.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>Console and network evidence</h3>
+            <ul class="clean-list">
+              <li>No same-origin application console error was found on the executed paths.</li>
+              <li>The dedicated-role pass had no admin/reseller/staff application console error; the login sequence emitted the known old-theme Swiper too-few-slides warning.</li>
+              <li>No same-origin 500 response was accepted as a pass.</li>
+              <li><code>/admin</code> redirected and <code>/reseller</code> returned 403 for the owner session, which proves denial only.</li>
+              <li><strong>Storefront CSP remediation verified:</strong> static and runtime-generated event handlers were replaced by a nonce-authorized declarative bridge; <code>script-src-attr 'none'</code> is explicit, style compatibility is isolated to <code>style-src-attr</code>, and WATI is omitted under enforcement. The strict matrix passed search/result → product → modifiers → cart/minimum order → guarded checkout contract on all 17 retained themes with zero CSP refusals.</li>
+              <li><strong>Nonce/cache defect fixed:</strong> enforcing mode disables anonymous storefront HTML ETag reuse, preventing a 304 response with a fresh policy nonce from reusing a cached body carrying the old nonce. The focused policy/WATI/cache suite passed 8 tests with 19 assertions.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="panel" style="margin-top: 20px;">
+          <h3>Real account lifecycle evidence · 2026-07-29 to 2026-07-30</h3>
+          <p>
+            This second browser pass created accounts and performed real local
+            mutations. It is intentionally stricter than the role/page matrix.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Actor</th><th>Lifecycle</th><th>Result</th><th>Evidence</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Owner</strong></td>
+                  <td>Anonymous signup → trial dashboard → real image uploads → Orbit store → category/item → table QR → public storefront</td>
+                  <td><span class="cell-status pass">PASS AFTER FIXES</span></td>
+                  <td>Owner <code>10011</code> created store <code>3448</code>, item <code>63498</code> (“Lifecycle Bowl”, <code>$24.50</code>), and table QR <code>23</code>. Required uploads and the table-number range are now enforced in the UI.</td>
+                </tr>
+                <tr>
+                  <td><strong>Staff</strong></td>
+                  <td>Owner-created cashier → password login → PWA → compose and place order</td>
+                  <td><span class="cell-status pass">PASS</span></td>
+                  <td>Cashier created local order <code>#99806</code>; role correctly lacked manager task creation.</td>
+                </tr>
+                <tr>
+                  <td><strong>Reseller</strong></td>
+                  <td>Anonymous partner signup → Free workspace → portal customer creation → scoped detail</td>
+                  <td><span class="cell-status pass">PASS AFTER FIXES</span></td>
+                  <td>Partner <code>10013</code> provisioned reseller <code>4</code>; the new visible form created customer <code>10014</code>. Signup is transactional and fails cleanly before user creation when tier reference data is absent.</td>
+                </tr>
+                <tr>
+                  <td><strong>Customer</strong></td>
+                  <td>Registration → authenticated account → cart → takeaway/cashier checkout → live tracking</td>
+                  <td><span class="cell-status pass">PASS AFTER FIX</span></td>
+                  <td>Crave/Matcha/Glow now collect and submit password confirmation. Customer created and tracked Espresso order <code>#99807</code> for <code>$12.00</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="clean-list" style="margin-top: 16px;">
+            <li>Lifecycle regression suite: <strong>102 tests / 378 assertions</strong>.</li>
+            <li>Final isolated role matrix: owner, staff, reseller, admin, and customer passed with <code>not-configured=none</code> in <strong>131,931 ms</strong>.</li>
+            <li>Disposable identities use the <code>codex.lifecycle.*.20260729@example.test</code> namespace.</li>
+            <li>Local test password: <code>CodexLifecycle!2026</code>. Never copy these fixtures into production.</li>
+            <li>Retained IDs: owner <code>10011</code>, store <code>3448</code>, menu <code>63498</code>, QR table <code>23</code>, staff <code>19</code>, customer <code>33</code>, reseller <code>4</code>, reseller customer <code>10014</code>, orders <code>99806</code> and <code>99807</code>.</li>
+            <li>Failed pre-fix orphan user <code>10012</code> was removed; labeled lifecycle fixtures remain for repeat testing.</li>
+          </ul>
+          <div class="callout info" style="margin-top: 16px;">
+            <strong>Supported template test scope</strong>
+            <p>Crave, Matcha, Glow, Aurora, Vivid, Feast, Velvet, Dough, Plate, Lime, Picnic, Orbit, Velora, Crumb, Soiree, Scoop, and Ember. Other bundled templates are scheduled for removal and are outside the release matrix.</p>
+          </div>
+          <div class="callout success" style="margin-top: 16px;">
+            <strong>Orbit, Velora, and Crumb reported-defect regression</strong>
+            <p>Language, stories, linked offers, category selection, home order/address controls, account discovery, product navigation/reviews, Crumb location and modifier preservation, guest order lookup, and tracking were rechecked as customer interactions. Pay-on-counter orders <code>#99814</code> (Orbit), <code>#99815</code> (Velora), and <code>#99816</code> (Crumb) returned real tracking URLs; the first two immediately appeared in their order-history UI, while Crumb now exposes both local history and phone/email lookup. The focused three-theme browser journey passed in 23,893 ms and Orbit’s 1600×1000 regression passed in 7,939 ms.</p>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top: 20px;">
+          <div class="code-label"><span>Repeat the default role smoke</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>cd core
+E2E_BASE_URL=https://juwri.test \
+npm run test:e2e -- role-pages-smoke</code></pre>
+        </div>
+      </section>
+
+      <section class="section" id="remaining">
+        <h2>What remains</h2>
+        <p class="section-intro">
+          The remaining list is deliberately concrete. Configuration and manual proof are release work even when no additional code change is required.
+        </p>
+
+        <div class="backlog">
+          <article class="priority-group critical">
+            <span class="status warn">Before production</span>
+            <h3 style="margin-top: 16px;">Operator and environment proof</h3>
+
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Configure required deploy secrets</strong>
+                <p>Set host, user, SSH key, path, maintenance secret, and protected health URL in GitHub.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Set production security environment</strong>
+                <p>Configure health token, exact trusted proxies, shared session locking, provider secrets, and header-only API tokens.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Enforce abuse controls</strong>
+                <p>Review warn-mode events, tune thresholds, then set the global and six scoped abuse modes to enforce.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Repeat CSP matrix on the release candidate</strong>
+                <p>The 17-theme search/result/product/modifier/cart/checkout-contract matrix now passes under enforcement and at a 390×844 mobile viewport. It does not click the final action or place an order. Repeat it on the exact candidate, add controlled order-submission/provider cases plus assistive-technology and real-browser/device checks, and retain console/network evidence before enabling the production flag.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Run true-role browser matrix</strong>
+                <p>The dedicated local smoke is complete. Repeat the matrix against the release candidate with production-like CSP, 2FA, least-privilege assignments, and retained evidence; record missing or blocked flows as NE or BLOCKED.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Seed reseller reference tiers during deployment</strong>
+                <p>Run the idempotent <code>ResellerTierSeeder</code> in every target environment. The application now returns a clear 503 without creating an orphan if the Free tier is missing, but deployment must still supply the reference data.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Run provider sandbox UAT</strong>
+                <p>Exercise payment, delivery, HungerStation, SMS, and voice signatures, tampering, replay, retry, and idempotency.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Prove recovery</strong>
+                <p>Inject a deploy failure after maintenance starts, restore a backup to isolation, and drill the migration-compatible forward-fix plan.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="priority-group debt">
+            <span class="status info">Engineering backlog</span>
+            <h3 style="margin-top: 16px;">Visible debt and follow-up</h3>
+
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Reduce PHPStan debt</strong>
+                <p>Continue reducing the reviewed 5,696-entry baseline. Analysis is already blocking at level 6, and the ratchet prevents suppression growth.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Migrate PHPUnit metadata</strong>
+                <p>Replace doc-comment metadata before PHPUnit 12 removes support.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Resolve route-sweep cases</strong>
+                <p>Add valid fixtures for <code>/api/v1/stores/{id}/guests</code> and <code>/segments</code> so the informational sweep can execute them.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Adopt atomic releases where possible</strong>
+                <p>Use release directories and a symlink switch so code, dependencies, and assets change as one unit.</p>
+              </div>
+            </div>
+            <div class="backlog-item">
+              <span class="check" aria-hidden="true"></span>
+              <div>
+                <strong>Keep migrations backward compatible</strong>
+                <p>Use expand, backfill, and later contract stages. Do not assume source rollback reverses schema state.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="files">
+        <h2>Implementation file map</h2>
+        <p class="section-intro">
+          This map identifies the primary change locations. The live worktree also contains earlier feature work and user-owned translations that are outside the audit-only scope.
+        </p>
+
+        <div class="file-groups">
+          <article class="file-group">
+            <h3>Security boundaries</h3>
+            <code>core/routes/web.php</code>
+            <code>core/routes/apiv1.php</code>
+            <code>core/app/Http/Middleware/VerifyCsrfToken.php</code>
+            <code>core/app/Http/Middleware/ApiTokenAuth.php</code>
+            <code>core/app/Http/Middleware/StorefrontTokenAuth.php</code>
+            <code>core/app/Http/Middleware/TrustHosts.php</code>
+            <code>core/app/Http/Middleware/TrustProxies.php</code>
+            <code>core/config/auth.php</code>
+            <code>core/config/trustedproxy.php</code>
+          </article>
+
+          <article class="file-group">
+            <h3>MCP transport</h3>
+            <code>core/app/Http/Controllers/Concerns/HandlesMcpProtocol.php</code>
+            <code>core/app/Http/Controllers/McpController.php</code>
+            <code>core/app/Http/Controllers/DevMcpController.php</code>
+            <code>core/app/Http/Controllers/StorefrontMcpController.php</code>
+            <code>core/app/Http/Controllers/CatalogMcpController.php</code>
+            <code>core/app/Http/Controllers/CustomerMcpController.php</code>
+            <code>core/config/api.php</code>
+          </article>
+
+          <article class="file-group">
+            <h3>Health, auth, and providers</h3>
+            <code>core/app/Http/Controllers/HealthController.php</code>
+            <code>core/app/Http/Controllers/Api/V1/CustomerAuthController.php</code>
+            <code>core/app/Http/Controllers/User/CustomerAuthController.php</code>
+            <code>core/app/Http/Controllers/HungerStationWebhookController.php</code>
+            <code>core/app/Http/Controllers/SmsWebhookController.php</code>
+            <code>core/config/sms.php</code>
+            <code>core/app/Mails/ResetPassword.php</code>
+          </article>
+
+          <article class="file-group">
+            <h3>CI and operations</h3>
+            <code>core/composer.json</code>
+            <code>.github/workflows/ci.yml</code>
+            <code>.github/workflows/deploy.yml</code>
+            <code>.github/workflows/nightly.yml</code>
+            <code>deploy/PROD-HARDENING-CHECKLIST.md</code>
+            <code>deploy/supervisor/juwri-worker.conf</code>
+            <code>core/resources/docs/internal/deploy-runbook.md</code>
+          </article>
+
+          <article class="file-group">
+            <h3>Dashboard and storefront UI</h3>
+            <code>assets/templates/old-theme/css/old-theme-skin.css</code>
+            <code>assets/templates/old-theme/js/turbo-compat.js</code>
+            <code>core/app/Http/Middleware/SyncDashboardStore.php</code>
+            <code>core/app/Http/Controllers/User/DashboardController.php</code>
+            <code>core/app/Http/Controllers/User/ThemeCustomizerController.php</code>
+            <code>core/resources/views/templates/old-theme/partials/*.blade.php</code>
+            <code>core/resources/views/store_templates/*/account.blade.php</code>
+          </article>
+
+          <article class="file-group">
+            <h3>Tests and durable docs</h3>
+            <code>core/tests/Feature/ProductionSecurityRoutesTest.php</code>
+            <code>core/tests/Feature/LegacyOrderAccountViewTest.php</code>
+            <code>core/tests/Feature/McpProtocolTest.php</code>
+            <code>core/tests/Feature/HealthCheckTest.php</code>
+            <code>core/tests/Feature/StorefrontApiTest.php</code>
+            <code>core/tests/e2e/journeys/role-pages-smoke.js</code>
+            <code>core/resources/docs/internal/production-test-scenarios.md</code>
+            <code>core/resources/docs/dev/mcp/*.md</code>
+            <code>core/resources/docs/dev/api/*.md</code>
+          </article>
+        </div>
+
+        <details style="margin-top: 20px;">
+          <summary>Working-tree ownership note</summary>
+          <div class="details-body">
+            <p>
+              The worktree is intentionally dirty. The report does not claim every changed line was created by the production audit. Existing dashboard context, customizer, session, Turbo, and translation edits were preserved. The user-owned files under <code>core/lang/{ar,de,en,es,fr,hi,pt,ru,tr,ur,zh}/lang.php</code> were not overwritten or reformatted by this documentation work.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="release-checklist">
+        <h2>Release sign-off</h2>
+        <p class="section-intro">
+          Complete this section for the actual release candidate. Link evidence instead of relying on memory or verbal confirmation.
+        </p>
+
+        <div class="signoff">
+          <div class="signoff-row">
+            <span>Release tag or commit</span>
+            <div class="fill-line"></div>
+            <span>Date and tester</span>
+          </div>
+          <div class="signoff-row">
+            <span>Candidate environment</span>
+            <div class="fill-line"></div>
+            <span>Backup restore point</span>
+          </div>
+          <div class="signoff-row">
+            <span>Automated gates</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL</span>
+          </div>
+          <div class="signoff-row">
+            <span>Public and customer</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Owner</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Staff</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Reseller</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Admin</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>API, MCP, and providers</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Deploy and recovery drill</span>
+            <div class="fill-line"></div>
+            <span>PASS / FAIL / NE</span>
+          </div>
+          <div class="signoff-row">
+            <span>Release decision</span>
+            <div class="fill-line"></div>
+            <span>GO / NO-GO / CONDITIONAL</span>
+          </div>
+          <div class="signoff-row">
+            <span>Approver and conditions</span>
+            <div class="fill-line"></div>
+            <span>Follow-up references</span>
+          </div>
+        </div>
+
+        <div class="readiness-grid" style="margin-top: 20px;">
+          <article class="panel">
+            <h3>Open directly</h3>
+            <p style="color: var(--muted);">Open this file in a modern browser. All styling and interaction are embedded, so no build or internet connection is required.</p>
+          </article>
+          <article class="panel">
+            <h3>Serve from the repository</h3>
+            <div class="code-block">
+              <div class="code-label"><span>Local web server</span><button class="copy" type="button">Copy</button></div>
+              <pre><code>python3 -m http.server 8000</code></pre>
+            </div>
+            <p style="margin-bottom: 0; color: var(--muted); font-size: 12px;">Then open <code>http://localhost:8000/core/resources/docs/internal/production-readiness-handbook.html</code>.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>
+          <strong style="color: var(--ink);">juwri Production Readiness Handbook</strong><br>
+          Engineering and operations artifact. Generated 2026-07-29; verified after PR #609.
+        </div>
+        <code>main / 5fca2205d562a793361a13dee8d0ed1172e3c084</code>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const features = Array.from(document.querySelectorAll(".feature"));
+      const filters = Array.from(document.querySelectorAll(".filter"));
+      const search = document.getElementById("feature-search");
+      const noResults = document.getElementById("no-results");
+      let activeFilter = "all";
+
+      const applyFeatureFilter = () => {
+        const query = search.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        features.forEach((feature) => {
+          const categories = feature.dataset.category.split(/\s+/);
+          const searchable = `${feature.dataset.search} ${feature.textContent}`.toLowerCase();
+          const categoryMatches = activeFilter === "all" || categories.includes(activeFilter);
+          const queryMatches = query === "" || searchable.includes(query);
+          const visible = categoryMatches && queryMatches;
+          feature.hidden = !visible;
+          if (visible) visibleCount += 1;
+        });
+
+        noResults.style.display = visibleCount === 0 ? "block" : "none";
+      };
+
+      filters.forEach((filter) => {
+        filter.addEventListener("click", () => {
+          activeFilter = filter.dataset.filter;
+          filters.forEach((item) => item.setAttribute("aria-pressed", String(item === filter)));
+          applyFeatureFilter();
+        });
+      });
+
+      search.addEventListener("input", applyFeatureFilter);
+
+      document.querySelectorAll(".copy").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const code = button.closest(".code-block").querySelector("code").textContent;
+          try {
+            await navigator.clipboard.writeText(code);
+            const original = button.textContent;
+            button.textContent = "Copied";
+            window.setTimeout(() => {
+              button.textContent = original;
+            }, 1400);
+          } catch (error) {
+            button.textContent = "Select code";
+            window.setTimeout(() => {
+              button.textContent = "Copy";
+            }, 1400);
+          }
+        });
+      });
+
+      const details = Array.from(document.querySelectorAll("details"));
+      const expandButton = document.getElementById("expand-all");
+      expandButton.addEventListener("click", () => {
+        const shouldOpen = details.some((detail) => !detail.open);
+        details.forEach((detail) => {
+          detail.open = shouldOpen;
+        });
+        expandButton.textContent = shouldOpen ? "Collapse details" : "Expand details";
+      });
+
+      document.getElementById("print-report").addEventListener("click", () => window.print());
+
+      const navLinks = Array.from(document.querySelectorAll("#page-nav a"));
+      const sections = navLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+          if (!visible) return;
+          navLinks.forEach((link) => {
+            link.setAttribute("aria-current", String(link.getAttribute("href") === `#${visible.target.id}`));
+          });
+        }, { rootMargin: "-18% 0px -68% 0px", threshold: [0.01, 0.25] });
+
+        sections.forEach((section) => observer.observe(section));
+      }
+    })();
+  </script>
+</body>
+</html>

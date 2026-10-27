@@ -1,0 +1,28 @@
+{
+  "slug": "sticker_pop",
+  "starter": "cafe",
+  "name": "Sticker Pop",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Baloo 2", "weights": [600, 700, 800]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(170deg,#ffc24b 0%,#ff8e53 42%,#ff5f8f 100%)",
+    "--ink": "#3b1f0e",
+    "--muted": "#8a5a33",
+    "--card": "#fff8ec",
+    "--btn-fg": "#3b1f0e",
+    "--btn-border": "#3b1f0e",
+    "--btn-border-width": "3px",
+    "--accent": "#3b1f0e",
+    "--accent-ink": "#ffe9c9",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#3b1f0e",
+    "--radius": "22px",
+    "--shadow": "0 6px 0 rgba(59,31,14,.28)",
+    "--font-body": "'Baloo 2',sans-serif",
+    "--font-display": "'Baloo 2',sans-serif"
+  }
+}

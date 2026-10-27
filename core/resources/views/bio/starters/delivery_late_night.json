@@ -1,0 +1,11 @@
+{
+  "key": "delivery_late_night",
+  "name": "Delivery & late night",
+  "sections": {"hours": true, "socials": false, "capture": false, "map": true, "whatsapp": true, "reviews": false},
+  "blocks": [
+    {"type": "delivery_apps", "label": "Order delivery", "priority": 100, "requires": "delivery", "config": {"apps": []}},
+    {"type": "menu", "label": "Full menu", "priority": 90, "config": {"prefill": "menu"}},
+    {"type": "featured_dish", "label": "Tonight's special", "priority": 70, "requires": "menu_items", "config": {"title": "Tonight's special"}},
+    {"type": "announcement", "label": "Open late", "priority": 60, "config": {"text": "Kitchen open late — order now"}}
+  ]
+}

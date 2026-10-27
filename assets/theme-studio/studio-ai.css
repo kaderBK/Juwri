@@ -1,0 +1,269 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Theme Studio — AI theme builder panel (owner/design/studio-ai-panel.blade.php,
+ * behaviour in studio-ai.js). Owner UI kit tokens (--ui-*), logical properties only
+ * so the panel mirrors in Arabic; bottom sheet on phones (the kit's .ui-sheet).
+ */
+
+/* ── Entry points ────────────────────────────────────────────────── */
+.ts-ai-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-3) var(--ui-space-4);
+  margin-block: var(--ui-space-2) var(--ui-space-4);
+  padding: var(--ui-space-4) var(--ui-space-5);
+  border: 1px solid var(--ui-accent-ring);
+  border-radius: var(--ui-r-card);
+  background: var(--ui-accent-soft);
+}
+.ts-ai-entry__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--ui-r-tile);
+  background: var(--ui-surface);
+  color: var(--ui-accent-text);
+}
+.ts-ai-entry__text { flex: 1 1 320px; min-inline-size: 0; }
+.ts-ai-entry__title { margin: 0; font-size: var(--ui-fs-section); font-weight: 700; color: var(--ui-ink); }
+.ts-ai-entry__lead { margin: 4px 0 0; color: var(--ui-ink-2); max-inline-size: 62ch; }
+.ts-ai-entry__btn { flex: 0 0 auto; }
+
+/* ── Panel ───────────────────────────────────────────────────────── */
+.ts-ai.ui-sheet { max-block-size: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; }
+@media (min-width: 768px) and (max-width: 899.98px) {
+  .ts-ai.ui-sheet { inline-size: min(720px, calc(100vw - 32px)); }
+}
+.ts-ai__view[hidden] { display: none; }
+.ts-ai__form { display: flex; flex-direction: column; gap: var(--ui-space-4); }
+.ts-ai__alert { margin: 0; }
+.ts-ai__group { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.ts-ai__group > legend { padding: 0; margin-block-end: var(--ui-space-2); }
+.ts-ai__field textarea { resize: vertical; min-block-size: 88px; }
+.ts-ai__fieldfoot { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--ui-space-3); margin-block-start: 4px; }
+.ts-ai__fieldfoot .ui-field__help { margin: 0; }
+.ts-ai__count { flex: 0 0 auto; font-size: var(--ui-fs-caption); color: var(--ui-ink-3); font-variant-numeric: tabular-nums; }
+.ts-ai__count.is-near { color: var(--ui-warning); font-weight: 600; }
+.ts-ai__group.ui-field--error .ui-field__help { color: var(--ui-danger); }
+
+.ts-ai__chips { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); }
+
+.ts-ai__options { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--ui-space-2); }
+/* Kit radio (.ui-check) inside an option card. */
+.ts-ai__option.ui-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--ui-control-line);
+  border-radius: var(--ui-r-input);
+  background: var(--ui-surface);
+  cursor: pointer;
+}
+.ts-ai__option:hover { border-color: var(--ui-accent); }
+.ts-ai__option:has(input:checked) { border-color: var(--ui-accent); background: var(--ui-accent-soft); }
+.ts-ai__option:has(input:focus-visible) { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+.ts-ai__option.ui-check input { flex-shrink: 0; margin-block-start: 1px; }
+.ts-ai__option-text { display: flex; flex-direction: column; gap: 2px; min-inline-size: 0; }
+.ts-ai__option-label { font-weight: 600; color: var(--ui-ink); }
+.ts-ai__option-hint { font-size: var(--ui-fs-caption); color: var(--ui-ink-2); }
+
+.ts-ai__colors { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); }
+.ts-ai__colors:not(:empty) { margin-block-end: var(--ui-space-2); }
+.ts-ai__color {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-block: 4px;
+  padding-inline: 4px 2px;
+  border: 1px solid var(--ui-control-line);
+  border-radius: var(--ui-r-pill);
+  background: var(--ui-surface);
+}
+.ts-ai__color-input {
+  inline-size: 34px;
+  block-size: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.ts-ai__color-input::-webkit-color-swatch-wrapper { padding: 0; }
+.ts-ai__color-input::-webkit-color-swatch { border: 1px solid var(--ui-line); border-radius: 50%; }
+.ts-ai__color-input::-moz-color-swatch { border: 1px solid var(--ui-line); border-radius: 50%; }
+.ts-ai__color-code { font-family: var(--ui-font-mono); font-size: var(--ui-fs-caption); color: var(--ui-ink-2); direction: ltr; }
+.ts-ai__color-rm { inline-size: 32px; block-size: 32px; font-size: 18px; line-height: 1; }
+.ts-ai__addcolor[hidden] { display: none; }
+
+.ts-ai__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-space-2);
+  margin-block-start: var(--ui-space-2);
+}
+.ts-ai__remaining { flex: 1 1 200px; margin: 0; font-size: var(--ui-fs-label); color: var(--ui-ink-2); }
+.ts-ai__remaining[hidden] { display: none; }
+.ts-ai__note { margin: var(--ui-space-2) 0 0; font-size: var(--ui-fs-label); color: var(--ui-ink-2); }
+.ts-ai__h { margin: 0 0 var(--ui-space-3); font-size: var(--ui-fs-section); font-weight: 700; }
+.ts-ai__h:focus { outline: none; }
+.ts-ai__h:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+
+/* ── Progress ────────────────────────────────────────────────────── */
+.ts-ai__progress { padding-block: var(--ui-space-4); }
+.ts-ai__bar {
+  position: relative;
+  block-size: 8px;
+  border-radius: var(--ui-r-pill);
+  background: var(--ui-inset);
+  overflow: hidden;
+}
+.ts-ai__bar-fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 4%;
+  border-radius: inherit;
+  background: var(--ui-accent);
+}
+/* Eases towards 92 % over ~60 s; the real finish swaps the view. */
+.ts-ai__bar.is-running .ts-ai__bar-fill { animation: ts-ai-fill 60s cubic-bezier(0.1, 0.7, 0.3, 1) forwards; }
+@keyframes ts-ai-fill { from { inline-size: 4%; } to { inline-size: 92%; } }
+.ts-ai__stage { margin: var(--ui-space-3) 0 0; font-weight: 600; color: var(--ui-ink); min-block-size: 1.5em; }
+
+/* ── Proposal cards ──────────────────────────────────────────────── */
+.ts-ai__cards {
+  list-style: none;
+  margin: var(--ui-space-3) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ui-space-4);
+}
+.ts-ai-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  min-inline-size: 0;
+  padding: var(--ui-space-3);
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-card);
+  background: var(--ui-surface);
+}
+.ts-ai-card__phone {
+  --ts-ai-scale: 0.6;
+  position: relative;
+  /* content-box: the 390×844 ratio is the screen itself, the bezel sits outside. */
+  box-sizing: content-box;
+  inline-size: calc(100% - 12px);
+  max-inline-size: 220px;
+  margin-inline: auto;
+  aspect-ratio: 390 / 844;
+  border: 6px solid var(--ui-hero-bg);
+  border-radius: 26px;
+  background: var(--ui-inset);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--ui-line), var(--ui-shadow-raised);
+}
+.ts-ai-card__frame {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 390px;
+  block-size: 844px;
+  border: 0;
+  background: var(--ui-surface);
+  transform: scale(var(--ts-ai-scale));
+  transform-origin: top left;
+  opacity: 0;
+  transition: opacity var(--ui-motion-base) var(--ui-ease-standard);
+}
+[dir="rtl"] .ts-ai-card__frame { transform-origin: top right; }
+.ts-ai-card__phone.is-loaded .ts-ai-card__frame { opacity: 1; }
+.ts-ai-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-space-2);
+  font-size: var(--ui-fs-caption);
+  color: var(--ui-ink-3);
+}
+.ts-ai-card__phone.is-loaded .ts-ai-card__placeholder { visibility: hidden; }
+.ts-ai-card__spinner {
+  inline-size: 22px;
+  block-size: 22px;
+  border: 3px solid var(--ui-line);
+  border-block-start-color: var(--ui-accent);
+  border-radius: 50%;
+  animation: ts-ai-spin 0.9s linear infinite;
+}
+@keyframes ts-ai-spin { to { transform: rotate(360deg); } }
+.ts-ai-card__body { display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; }
+.ts-ai-card__name { margin: 0; font-size: var(--ui-fs-lead); font-weight: 700; }
+.ts-ai-card__why { margin: 0; color: var(--ui-ink-2); font-size: var(--ui-fs-label); line-height: 1.5; }
+.ts-ai-card__swatches { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ts-ai-card__swatch {
+  display: block;
+  inline-size: 22px;
+  block-size: 22px;
+  border: 1px solid var(--ui-line);
+  border-radius: 50%;
+}
+.ts-ai-card__font, .ts-ai-card__meta { margin: 0; font-size: var(--ui-fs-caption); color: var(--ui-ink-2); }
+.ts-ai-card__font { color: var(--ui-ink); font-weight: 600; }
+.ts-ai-card__font .ts-ai-card__meta { font-weight: 400; }
+.ts-ai-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ui-space-2) var(--ui-space-3); margin-block-start: auto; padding-block-start: var(--ui-space-2); }
+.ts-ai-card__use { flex: 1 1 auto; }
+.ts-ai-card__full { font-size: var(--ui-fs-label); font-weight: 600; color: var(--ui-accent-text); }
+.ts-ai-card__confirm {
+  padding: var(--ui-space-2) var(--ui-space-3);
+  border: 1px solid var(--ui-warning-line);
+  border-radius: var(--ui-r-input);
+  background: var(--ui-warning-bg);
+  font-size: var(--ui-fs-label);
+}
+.ts-ai-card__confirm[hidden] { display: none; }
+.ts-ai-card__confirm p { margin: 0 0 var(--ui-space-2); }
+.ts-ai-card__confirm-actions { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); justify-content: flex-end; }
+.ts-ai__pager { margin: var(--ui-space-2) 0 0; text-align: center; font-size: var(--ui-fs-label); color: var(--ui-ink-2); min-block-size: 1em; }
+.ts-ai__pager:empty { display: none; }
+
+/* ── Tablets / phones: cards become a swipe row (one live preview at a time) ── */
+@media (max-width: 899.98px) {
+  .ts-ai__cards {
+    display: flex;
+    gap: var(--ui-space-3);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-block-end: var(--ui-space-2);
+    scrollbar-width: none;
+  }
+  .ts-ai__cards::-webkit-scrollbar { display: none; }
+  .ts-ai-card { flex: 0 0 86%; scroll-snap-align: center; }
+  .ts-ai-card__phone { max-inline-size: 210px; }
+  .ts-ai__actions { flex-direction: column-reverse; align-items: stretch; }
+  .ts-ai__actions .ui-btn { inline-size: 100%; min-block-size: 48px; }
+  .ts-ai__remaining { flex: 0 0 auto; text-align: center; }
+  .ts-ai-entry { padding: var(--ui-space-4); }
+  .ts-ai-entry__btn { inline-size: 100%; }
+  .ts-ai__options { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-ai__bar.is-running .ts-ai__bar-fill { animation: none; inline-size: 60%; }
+  .ts-ai-card__spinner { animation-duration: 2.4s; }
+  .ts-ai-card__frame { transition: none; }
+}

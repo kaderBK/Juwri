@@ -1,0 +1,10 @@
+{
+  "chain_id": "CHAIN_TEST_1",
+  "vendor_id": "VENDOR_TEST_1",
+  "page": 1,
+  "total": 2,
+  "products": [
+    { "sku": "SKU-001", "title": "Margherita Pizza", "price": 30.00, "active": true, "quantity": 100, "category": "Pizza" },
+    { "sku": "SKU-002", "title": "Cola", "price": 5.00, "active": true, "quantity": 200, "category": "Drinks" }
+  ]
+}

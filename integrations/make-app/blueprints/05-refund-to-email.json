@@ -1,0 +1,27 @@
+{
+  "name": "juwri → Email: refund notification",
+  "description": "When a refund is completed in juwri, send an email notification.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "juwri:watchRefundCompleted",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "email:ActionSendEmail",
+      "version": 4,
+      "parameters": {},
+      "mapper": {
+        "to": ["finance@example.com"],
+        "subject": "Refund completed for order #{{1.data.order_id}}",
+        "html": "Amount {{1.data.amount}} via {{1.data.method}}."
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    }
+  ],
+  "metadata": { "instant": true }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "whatsapp-link",
+    "name": "WhatsApp Link (wa.me)",
+    "description": "Click-to-chat WhatsApp ordering via wa.me deep links, reusing the restaurant's existing WhatsApp numbers. The free, no-API provider and guaranteed fallback for the WhatsApp channel.",
+    "image": "",
+    "version": "1.0",
+    "min_app_version": "1.0",
+    "url": "",
+    "author": "juwri",
+    "author_url": "",
+    "settings_route": "admin.whatsapp.settings",
+    "whatsapp_provider": "link",
+    "whatsapp_driver": "Juwri\\Modules\\Messaging\\Services\\WhatsApp\\Drivers\\LinkProvider"
+}

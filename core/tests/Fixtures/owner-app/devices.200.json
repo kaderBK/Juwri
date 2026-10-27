@@ -1,0 +1,12 @@
+{
+    "status": 200,
+    "body": {
+        "device": {
+            "id": "int",
+            "name": "string",
+            "restaurant_id": "int",
+            "store_id": "int"
+        },
+        "success": "bool"
+    }
+}

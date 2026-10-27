@@ -1,0 +1,23 @@
+{
+  "slug": "chat_landing",
+  "starter": "delivery_late_night",
+  "name": "Chat Landing",
+  "family": "chat",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#e9e2d8",
+    "--ink": "#1e2126",
+    "--muted": "#7d8288",
+    "--card": "#ffffff",
+    "--accent": "#106e5a",
+    "--accent-ink": "#ffffff",
+    "--radius": "16px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

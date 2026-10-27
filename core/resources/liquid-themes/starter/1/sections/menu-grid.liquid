@@ -1,0 +1,52 @@
+{% comment %}
+  Vertical-aware catalog grid. The vocab catalog/items/categories words
+  replace the hardcoded "Menu"/"Dishes"/"Categories" copy so a goods store
+  reads "Catalog"/"Products" and a services store reads "Services"/
+  "Bookings" — same markup, same data-mb-* bindings.
+{% endcomment %}
+<main class="st-menu" id="st-catalog" aria-label="{{ vocab.catalog }}">
+  <h2 class="st-catalog-heading">{{ vocab.catalog }}</h2>
+  <p class="st-catalog-count">{{ menu.items | size }} {{ vocab.items }}</p>
+
+  {% unless menu.is_empty %}
+    <nav class="st-cats" aria-label="{{ vocab.categories }}">
+      {% for category in menu.categories %}
+        <a class="st-cat-link" href="#st-cat-{{ category.id }}" aria-label="{{ vocab.category }}: {{ category.name | escape }}">{{ category.name | escape }}</a>
+      {% endfor %}
+    </nav>
+
+    {% for category in menu.categories %}
+      <section class="st-cat" id="st-cat-{{ category.id }}">
+        <h3>{{ category.name | escape }}</h3>
+        <div class="st-grid">
+          {% comment %} render is scope-isolated — pass vocab explicitly or the snippet sees nothing. {% endcomment %}
+          {% for item in category.items %}
+            {% render 'item-card', item: item, can_order: flags.allow_order, vocab: vocab %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  {% else %}
+    <p class="st-empty">{{ 'Nothing here yet' | t }}</p>
+  {% endunless %}
+</main>
+
+{% if flags.allow_order %}
+  <button class="st-cart" type="button" data-mb-open-cart>
+    {{ 'Cart' | t }} · <span data-mb-cart-count>0</span> · <span data-mb-cart-total></span>
+  </button>
+{% endif %}
+
+<div data-mb-item-sheet-mount hidden></div>
+<div data-mb-cart-mount hidden></div>
+
+{% commerce %}
+
+{% schema %}
+{
+  "name": "Catalog grid",
+  "settings": [
+    { "id": "columns", "type": "select", "label": "Columns", "options": ["2", "3", "4"], "default": "3" }
+  ]
+}
+{% endschema %}

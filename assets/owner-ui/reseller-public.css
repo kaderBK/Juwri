@@ -1,0 +1,197 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner UI kit — reseller white-label public pages (WI-16r).
+ *
+ * Loaded by core/resources/views/reseller/public/partials/kit-head.blade.php on the
+ * reseller's standalone pages: public site layout (page blocks, blog), landing,
+ * /pricing, signup, sale link, suspension wall and the portal 2FA challenge.
+ * The accent is the RESELLER's brand colour (--theme-color from kit-head); themes
+ * follow html[data-theme] (theme-paint); direction follows html[dir] — logical
+ * properties only. Colours come from the --ui-* tokens.
+ */
+
+/* ── Page frame ────────────────────────────────────────────────────────── */
+.rpub {
+  margin: 0;
+  min-block-size: 100vh;
+  background: var(--ui-bg);
+  color: var(--ui-ink);
+  font-size: var(--ui-fs-body);
+  line-height: 1.55;
+}
+.rpub *, .rpub *::before, .rpub *::after { box-sizing: border-box; }
+.rpub img { max-inline-size: 100%; }
+.rpub a { color: var(--ui-accent-text); }
+.rpub a.ui-btn { color: var(--_fg); }
+.rpub p { margin-block: 0 var(--ui-space-3); }
+.rpub p:last-child { margin-block-end: 0; }
+
+.rpub-wrap { inline-size: 100%; max-inline-size: 1140px; margin-inline: auto; padding-inline: var(--ui-space-4); }
+.rpub-wrap--narrow { max-inline-size: 540px; }
+.rpub-wrap--mid { max-inline-size: 672px; }
+.rpub-wrap--text { max-inline-size: 792px; }
+.rpub-wrap--video { max-inline-size: 892px; }
+
+.rpub-section { padding-block: var(--ui-space-8); }
+
+/* ── Header / nav / footer ─────────────────────────────────────────────── */
+.rpub-header { border-block-end: 1px solid var(--ui-line); background: var(--ui-surface); }
+.rpub-header__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ui-space-3); padding-block: var(--ui-space-4); }
+.rpub-brand { display: inline-flex; align-items: center; gap: var(--ui-space-2); color: var(--ui-ink); font-size: var(--ui-fs-section); font-weight: 700; text-decoration: none; }
+.rpub .rpub-brand { color: var(--ui-ink); }
+.rpub-brand img { max-block-size: 36px; inline-size: auto; }
+.rpub-nav { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ui-space-2) var(--ui-space-4); }
+.rpub .rpub-nav__link { color: var(--ui-ink); font-weight: 500; text-decoration: none; }
+.rpub .rpub-nav__link:hover { color: var(--ui-accent-text); }
+
+.rpub-footer { margin-block-start: var(--ui-space-8); padding-block: var(--ui-space-6); border-block-start: 1px solid var(--ui-line); color: var(--ui-ink-2); font-size: var(--ui-fs-label); text-align: center; }
+.rpub-footer__links { margin-block-end: var(--ui-space-2); }
+.rpub .rpub-footer__links a { color: var(--ui-ink-2); text-decoration: none; }
+.rpub .rpub-footer__links a:hover { color: var(--ui-accent-text); }
+
+.rpub-toolbar { margin-block-end: var(--ui-space-3); }
+
+/* Draft preview strip (page / page-html preview). */
+.rpub-preview { padding: var(--ui-space-1) var(--ui-space-4); background: var(--ui-warning-bg); color: var(--ui-warning); font-size: var(--ui-fs-label); font-weight: 600; text-align: center; }
+
+/* ── Type ──────────────────────────────────────────────────────────────── */
+.rpub-h1 { overflow-wrap: anywhere; margin: 0 0 var(--ui-space-3); font-family: var(--ui-font-display); font-size: clamp(30px, 5vw, var(--ui-fs-hero-lg)); font-weight: 800; letter-spacing: var(--ui-track-hero); line-height: 1.1; }
+.rpub-h1--page { font-size: var(--ui-fs-title); letter-spacing: var(--ui-track-display); }
+.rpub-h1--article { margin-block-start: var(--ui-space-4); font-size: clamp(26px, 4vw, 36px); }
+.rpub-h2 { margin: 0 0 var(--ui-space-5); font-family: var(--ui-font-display); font-size: clamp(22px, 3vw, 28px); font-weight: 700; letter-spacing: var(--ui-track-display); line-height: 1.2; }
+.rpub-h2--quiet { font-family: var(--ui-font); font-size: var(--ui-fs-section); font-weight: 600; color: var(--ui-ink-2); letter-spacing: 0; }
+.rpub-lead { margin-block: 0 var(--ui-space-5); color: var(--ui-ink-2); font-size: var(--ui-fs-section); }
+
+/* ── Intro (logo + heading above a form / plans) ───────────────────────── */
+.rpub-intro { margin-block-end: var(--ui-space-6); text-align: center; }
+.rpub-intro__logo { display: block; max-block-size: 48px; inline-size: auto; margin: 0 auto var(--ui-space-4); }
+.rpub-intro .rpub-hero__sub { margin-inline: auto; }
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.rpub-hero { padding-block: var(--ui-space-12); text-align: center; }
+.rpub-hero__sub { max-inline-size: 640px; margin-inline: auto; }
+.rpub-hero--start { text-align: start; }
+.rpub-hero--start .rpub-hero__sub { margin-inline: 0; }
+.rpub-hero--image { background-position: center; background-size: cover; color: var(--ui-hero-ink); }
+.rpub-hero--image .rpub-lead { color: var(--ui-hero-ink); }
+
+/* ── CTA banner ────────────────────────────────────────────────────────── */
+.rpub-cta { margin-block: var(--ui-space-6); padding-block: var(--ui-space-12); background: var(--ui-accent); color: var(--ui-on-accent); text-align: center; }
+.rpub-cta--gradient { background: linear-gradient(135deg, var(--ui-accent), color-mix(in srgb, var(--ui-accent) 70%, transparent)); }
+.rpub-cta__title { margin: 0 0 var(--ui-space-5); font-family: var(--ui-font-display); font-size: clamp(24px, 3.4vw, 32px); font-weight: 800; letter-spacing: var(--ui-track-display); }
+
+/* ── Column grids (feature grid, gallery, testimonials, blog) ──────────── */
+.rpub-cols { display: grid; gap: var(--ui-space-4); grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .rpub-cols[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rpub-cols[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rpub-cols[data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.rpub-feature { display: flex; flex-direction: column; gap: var(--ui-space-2); }
+.rpub-feature__title { margin: 0; font-size: var(--ui-fs-lead); font-weight: 700; }
+.rpub-feature__body { margin: 0; color: var(--ui-ink-2); }
+.rpub-quote { margin: 0; display: flex; flex-direction: column; gap: var(--ui-space-2); }
+.rpub-quote blockquote { margin: 0; font-style: italic; }
+.rpub-gallery__item { display: block; }
+.rpub-gallery__item img { display: block; inline-size: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--ui-r-tile); }
+.rpub-logos { gap: var(--ui-space-6); }
+.rpub-logos img { max-block-size: 40px; inline-size: auto; opacity: 0.75; }
+.rpub-video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--ui-r-card); background: var(--ui-inset); }
+.rpub-video iframe { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; border: 0; }
+
+/* ── FAQ ───────────────────────────────────────────────────────────────── */
+.rpub-faq { --ui-gap: var(--ui-space-2); }
+.rpub-faq__item { padding: var(--ui-space-3) var(--ui-space-4); border: 1px solid var(--ui-line); border-radius: var(--ui-r-tile); background: var(--ui-surface); }
+.rpub-faq__item summary { font-weight: 600; cursor: pointer; }
+.rpub-faq__body { margin-block-start: var(--ui-space-2); color: var(--ui-ink-2); }
+
+/* ── Plan cards ────────────────────────────────────────────────────────── */
+.rpub-plans { display: grid; gap: var(--ui-space-4); grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 360px)); justify-content: center; }
+.rpub-plans__empty { grid-column: 1 / -1; }
+.rpub-plan { display: flex; flex-direction: column; gap: var(--ui-space-1); }
+.rpub-plan--rec { border: 2px solid var(--ui-accent); box-shadow: var(--ui-shadow-raised); }
+.rpub-plan__head { margin-block-end: var(--ui-space-2); }
+.rpub-plan__name { margin: 0; font-size: var(--ui-fs-lead); font-weight: 700; }
+.rpub-plan__desc { margin: 0 0 var(--ui-space-2); color: var(--ui-ink-2); font-size: var(--ui-fs-label); }
+.rpub-plan__price { margin-block-end: var(--ui-space-1); }
+.rpub-plan__amount { color: var(--ui-accent-text); font-size: 30px; font-weight: 800; }
+.rpub-plan__meta { display: flex; align-items: center; gap: var(--ui-space-1); font-size: var(--ui-fs-label); }
+.rpub-plan__lines { flex: 1 1 auto; margin: var(--ui-space-3) 0; padding: 0; list-style: none; }
+.rpub-plan__lines li { display: flex; align-items: flex-start; gap: var(--ui-space-2); margin-block-end: var(--ui-space-2); }
+.rpub-plan__lines svg { flex-shrink: 0; margin-block-start: 3px; color: var(--ui-accent-text); }
+.rpub-plan__cta { margin-block-start: auto; }
+
+.rpub-paynote { display: flex; align-items: center; justify-content: center; gap: var(--ui-space-1); margin: var(--ui-space-4) 0 0; color: var(--ui-ink-2); font-size: var(--ui-fs-label); }
+.rpub-paynote--start { justify-content: flex-start; margin-block-start: var(--ui-space-3); }
+
+/* ── Signup plan picker (radio cards) ──────────────────────────────────── */
+.rpub-fieldset { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.rpub-fieldset legend { padding: 0; }
+.rpub-fieldset__more { margin-block-start: var(--ui-space-4); }
+.rpub-planpick { display: grid; gap: var(--ui-space-2); grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.rpub-planpick__opt { position: relative; }
+.rpub-planpick__opt input { position: absolute; opacity: 0; pointer-events: none; }
+.rpub-planpick__opt label { display: flex; flex-direction: column; align-items: center; gap: 2px; block-size: 100%; margin: 0; padding: var(--ui-space-3) var(--ui-space-2); border: 2px solid var(--ui-control-line); border-radius: var(--ui-r-tile); background: var(--ui-surface); font-weight: 600; text-align: center; cursor: pointer; transition: border-color var(--ui-motion-fast) var(--ui-ease-standard); }
+.rpub-planpick__opt input:checked + label { border-color: var(--ui-accent); background: var(--ui-accent-soft); }
+.rpub-planpick__opt input:focus-visible + label { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+.rpub-planpick__price { color: var(--ui-accent-text); font-size: var(--ui-fs-section); font-weight: 800; }
+.rpub-planpick__opt small { font-weight: 400; }
+
+/* ── Centered card pages (suspension wall, 2FA, sale link) ─────────────── */
+.rpub-center { display: grid; place-items: center; min-block-size: 100vh; padding: var(--ui-space-4); }
+.rpub-center__card { inline-size: 100%; max-inline-size: 460px; box-shadow: var(--ui-shadow-raised); }
+.rpub-center__card--sm { max-inline-size: 400px; }
+.rpub-card__title { margin: 0 0 var(--ui-space-2); font-size: var(--ui-fs-section); font-weight: 700; }
+.rpub-card__title--start { font-size: 22px; }
+.rpub-card__cta { margin-block-start: var(--ui-space-5); }
+.rpub-card__foot { margin-block-start: var(--ui-space-5); }
+.rpub-errors { margin-block-end: var(--ui-space-4); }
+.rpub-errors p { margin: 0; }
+.rpub-sale__price { margin-block: var(--ui-space-2) var(--ui-space-4); font-size: 34px; font-weight: 800; }
+.rpub-sale__price .ui-text-2 { font-size: var(--ui-fs-body); font-weight: 500; }
+.rpub-code { min-block-size: 52px; font-size: var(--ui-fs-section); font-weight: 600; letter-spacing: 0.4em; text-align: center; direction: ltr; }
+
+/* Round icon chip (replaces the retired kpi-chip). */
+.rpub-chip { display: inline-flex; align-items: center; justify-content: center; inline-size: 48px; block-size: 48px; margin-block-end: var(--ui-space-3); border-radius: 50%; background: var(--ui-accent-soft); color: var(--ui-accent-text); }
+.rpub-chip--success { background: var(--ui-success-bg); color: var(--ui-success); }
+.rpub-chip--warning { background: var(--ui-warning-bg); color: var(--ui-warning); }
+
+/* ── Language switch (native <details>, no JS) ─────────────────────────── */
+.rpub-lang { position: relative; display: inline-block; }
+.rpub-lang > summary { list-style: none; }
+.rpub-lang > summary::-webkit-details-marker { display: none; }
+/* A closed <details> must not lay its menu out at all: some engines keep an absolutely positioned
+   child of a closed details in layout, and on a phone the 160px menu then widens the page (the
+   reseller public pages scrolled sideways by ~30px at 390px). */
+.rpub-lang:not([open]) > .rpub-lang__menu { display: none; }
+.rpub-lang__menu { position: absolute; inset-inline-end: 0; z-index: 20; min-inline-size: 160px; margin: var(--ui-space-1) 0 0; padding: var(--ui-space-1); list-style: none; border: 1px solid var(--ui-line); border-radius: var(--ui-r-tile); background: var(--ui-surface); box-shadow: var(--ui-shadow-raised); }
+.rpub .rpub-lang__item { display: block; padding: var(--ui-space-2) var(--ui-space-3); border-radius: 10px; color: var(--ui-ink); text-decoration: none; }
+.rpub .rpub-lang__item:hover { background: var(--ui-inset); }
+.rpub .rpub-lang__item[aria-current="true"] { background: var(--ui-inset); font-weight: 700; }
+
+/* ── Blog ──────────────────────────────────────────────────────────────── */
+.rpub-post { display: flex; flex-direction: column; }
+.rpub-post__cover { display: block; inline-size: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.rpub-post__body { display: flex; flex: 1 1 auto; flex-direction: column; gap: var(--ui-space-1); padding: var(--ui-space-4) var(--ui-space-5); }
+.rpub-post__title { margin: 0; font-size: var(--ui-fs-lead); font-weight: 700; }
+.rpub .rpub-post__title a { color: var(--ui-ink); text-decoration: none; }
+.rpub .rpub-post__title a:hover { color: var(--ui-accent-text); }
+.rpub-post__excerpt { flex: 1 1 auto; color: var(--ui-ink-2); font-size: var(--ui-fs-label); }
+.rpub-post__more { align-self: flex-start; }
+.rpub-post__meta { margin-block-end: var(--ui-space-5); font-size: var(--ui-fs-label); --ui-gap: var(--ui-space-2); }
+.rpub-post__hero { display: block; inline-size: 100%; margin-block-end: var(--ui-space-5); border-radius: var(--ui-r-card); }
+.rpub-pager { margin-block-start: var(--ui-space-6); }
+.rpub .rpub-back { display: inline-flex; align-items: center; gap: var(--ui-space-1); color: var(--ui-ink-2); font-size: var(--ui-fs-label); text-decoration: none; }
+
+/* ── Rich text (purified operator HTML) ────────────────────────────────── */
+.rpub-prose { overflow-wrap: anywhere; }
+.rpub-prose > :first-child { margin-block-start: 0; }
+.rpub-prose h1, .rpub-prose h2, .rpub-prose h3, .rpub-prose h4 { margin-block: var(--ui-space-6) var(--ui-space-3); line-height: 1.25; }
+.rpub-prose p, .rpub-prose ul, .rpub-prose ol, .rpub-prose blockquote { margin-block: 0 var(--ui-space-4); }
+.rpub-prose ul, .rpub-prose ol { padding-inline-start: var(--ui-space-6); }
+.rpub-prose blockquote { padding-inline-start: var(--ui-space-4); border-inline-start: 3px solid var(--ui-accent); color: var(--ui-ink-2); }
+.rpub-prose img { block-size: auto; border-radius: var(--ui-r-tile); }
+.rpub-prose table { inline-size: 100%; border-collapse: collapse; }
+.rpub-prose th, .rpub-prose td { padding: var(--ui-space-2); border: 1px solid var(--ui-line); text-align: start; }

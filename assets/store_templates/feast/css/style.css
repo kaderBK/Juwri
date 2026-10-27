@@ -1,0 +1,2497 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* =============================================================================
+   FEAST — premium food-delivery app theme
+   Mobile-first app chrome · coral accent · spring bottom sheets · motion
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   FEAST-F2 · brand-colour immunity.
+   The shared layout builds --theme-color-* with sscanf($c,"#%02x%02x%02x"),
+   which cannot read a 3-digit shorthand: a store whose colour is `#111` emits
+   `--theme-color-1: rgba(17,1,,1)` — syntactically INVALID. A var() fallback
+   only fires when a variable is *missing*, never when it is *invalid*, so the
+   bad token used to propagate into --ff-accent and poison all 69 declarations
+   that reference it (every primary CTA rendered with no fill at all).
+   Registering the tokens with an explicit <color> syntax makes an invalid
+   substitution fall back to feast's own coral instead. A valid brand colour
+   still drives the theme exactly as before.
+   -------------------------------------------------------------------------- */
+@property --ff-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #ff5a3c;
+}
+@property --ff-accent-0_15 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgba(255, 90, 60, .12);
+}
+
+:root {
+    /* palette — role colours flow from the Customizer v2 token layer
+       (theme-tokens.blade.php); the literal after each comma is feast's own
+       value, kept as the var() fallback so a store that customized nothing —
+       or a render with no token include — is byte-identical to today. */
+    --ff-page:        var(--tc-background, #eef0f4);
+    /* white content surface (the customizer SURFACE role); --ff-bg is feast's
+       canonical card/base white, its three siblings are the same surface at the
+       same value, so all four follow the one role for a coherent recolour. */
+    --ff-bg:          var(--tc-surface, #ffffff);
+    --ff-bg-dark:     var(--tc-surface, #ffffff);   /* legacy token used by inline drawer styles */
+    --ff-bg-card:     var(--tc-surface, #ffffff);
+    --ff-bg-sheet:    var(--tc-surface, #ffffff);
+    --ff-surface:     #f5f6f8;   /* hand-tuned neutral, not the white surface — literal */
+    --ff-surface-2:   #eef0f4;   /* hand-tuned neutral — literal */
+
+    --ff-ink:         var(--tc-text, #14161c);
+    --ff-text-primary:var(--tc-text, #14161c);   /* legacy alias — same ink role */
+    --ff-muted:       #5d6572;   /* P6-95: 5.4:1 on the canvas (was #6b7280, 4.47:1) */
+    --ff-text-muted:  #5d6572;   /* legacy alias */
+    /* FEAST-F20 · was #9aa0ac, which measures 2.63:1 on the white card — well under
+       the 4.5:1 floor. This carries real copy (follower counts, timestamps, the
+       receipt's own row labels), not decoration. */
+    --ff-faint:       #6e7482;
+
+    --ff-line:        #ececf0;
+    --ff-border-gold:       #ececf0;         /* legacy alias (neutral now) */
+    --ff-border-gold-focus: rgba(255,90,60,.45);
+
+    /* brand — feast's coral is the customizer PRIMARY role. Rule 4: --tc-primary
+       wins when the owner set it, else the store's legacy --theme-color-1 (which
+       the shared layout still emits as rgba), else feast's own coral. The
+       @property immunity above still catches an invalid --theme-color-1. */
+    --ff-accent:      var(--tc-primary, var(--theme-color-1, #ff5a3c));
+    /* secondary accent — the customizer ACCENT role (schema colors.accent
+       default #ff8a3d == this literal); drives the gradient's second stop. */
+    --ff-accent-2:    var(--tc-accent, #ff8a3d);
+    --ff-accent-ink:  #ffffff;
+    --ff-accent-0_15: var(--theme-color-0_15, rgba(255,90,60,.12));
+    --ff-accent-soft: rgba(255,90,60,.10);
+    --ff-accent-gradient: linear-gradient(135deg, var(--ff-accent) 0%, var(--ff-accent-2) 100%);
+
+    --ff-veg:   #1aa251;
+    --ff-nonveg:#e0322f;
+    --ff-star:  #ffb020;
+    --ff-green: #12b76a;
+
+    /* fonts — the selected self-hosted pairing (WI-T2) → --tf-heading/--tf-body;
+       pair unset (feast exposes no font picker yet) emits no --tf-*, so these
+       degrade to feast's own stacks. RTL Arabic is handled separately below with
+       named system faces, untouched by this. */
+    --ff-font-headings: 'Saudi Riyal', var(--tf-heading, 'Plus Jakarta Sans', system-ui, sans-serif);
+    --ff-font-body:     var(--tf-body, 'Saudi Riyal', 'Inter', system-ui, sans-serif);
+
+    /* radius — ISS-B-302: emission is OVERRIDES-ONLY (Tokens::forTemplate resolves
+       withDefaults=false), so an untouched store emits no --tr-*, and each var here
+       falls back to feast's original literal — the default look is unchanged. The
+       customizer's layout.radius wins the moment an owner sets Corner style. */
+    --ff-r-lg: var(--tr-card, 22px);
+    --ff-r-md: var(--tr-card, 16px);
+    --ff-r-sm: var(--tr-control, 12px);
+
+    --ff-shadow-sm: 0 1px 2px rgba(16,20,30,.05), 0 4px 14px rgba(16,20,30,.05);
+    --ff-shadow-md: 0 6px 22px rgba(16,20,30,.09);
+    --ff-shadow-lg: 0 18px 50px rgba(16,20,30,.18);
+    --ff-shadow-accent: 0 10px 26px rgba(255,90,60,.35);
+
+    --ff-app-w: 540px;
+    --ff-ease:  cubic-bezier(.22,1,.36,1);
+    --ff-spring:cubic-bezier(.34,1.56,.64,1);
+    --ff-t: .32s var(--ff-ease);
+}
+
+/* ---- base ---- */
+/* FEAST-F6 · the shared layout ships `body{font-family:'Roboto',sans-serif!important}`,
+   so feast's Inter/Plus Jakarta pairing was downloaded and then discarded on every
+   page. An !important can only be beaten by a more specific !important. */
+html body { font-family: var(--ff-font-body) !important; }
+
+/* FEAST-F19 · Inter and Plus Jakarta Sans ship NO Arabic glyphs, and neither stack
+   named an Arabic face, so every Arabic string fell through to the browser's default
+   serif. Measured: Arabic set in `Inter` was 67.83px wide vs 67.21px in `serif` and
+   76.62px in `system-ui` — i.e. it WAS the serif. RTL now names real system Arabic
+   faces first. No new webfont: the brief forbids adding CDN assets and these ship
+   with the OS. */
+html[dir="rtl"] body,
+html[dir="rtl"] .feast-container,
+html[dir="rtl"] .feast-container input,
+html[dir="rtl"] .feast-container textarea,
+html[dir="rtl"] .feast-container select {
+    font-family: "SF Arabic", "Geeza Pro", "Noto Sans Arabic", "Segoe UI",
+                 Tahoma, system-ui, sans-serif !important;
+}
+html[dir="rtl"] .feast-container h1,
+html[dir="rtl"] .feast-container h2,
+html[dir="rtl"] .feast-container h3,
+html[dir="rtl"] .feast-container h4,
+html[dir="rtl"] .ff-hero-title,
+html[dir="rtl"] .ff-detail-title,
+html[dir="rtl"] .ff-brand-name,
+html[dir="rtl"] .ff-total-row,
+html[dir="rtl"] .ff-lang-code,
+html[dir="rtl"] .ff-cur-code {
+    font-family: "SF Arabic", "Geeza Pro", "Noto Sans Arabic", "Segoe UI",
+                 Tahoma, system-ui, sans-serif;
+}
+
+.feast-container {
+    background: var(--ff-page);
+    color: var(--ff-ink);
+    font-family: var(--ff-font-body);
+    min-block-size: 100vh;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    padding-block-end: 92px;             /* room for tab bar */
+    max-inline-size: var(--ff-app-w);
+    margin-inline: auto;
+    box-shadow: 0 0 60px rgba(16,20,30,.06);
+}
+.feast-container *,
+.feast-container *::before,
+.feast-container *::after { box-sizing: border-box; }
+
+.feast-container h1, .feast-container h2, .feast-container h3, .feast-container h4 {
+    font-family: var(--ff-font-headings);
+    margin: 0;
+    letter-spacing: -.01em;
+}
+.feast-container p { margin: 0; }
+.feast-container button { font-family: inherit; }
+
+.feast-container input,
+.feast-container textarea,
+.feast-container select {
+    font-family: var(--ff-font-body);
+    font-size: 15px;
+    inline-size: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--ff-line);
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-surface);
+    color: var(--ff-ink);
+    outline: none;
+    transition: border-color var(--ff-t), background var(--ff-t);
+}
+.feast-container input:focus,
+.feast-container textarea:focus,
+.feast-container select:focus {
+    border-color: var(--ff-accent);
+    background: var(--ff-bg);
+}
+.feast-container input::placeholder,
+.feast-container textarea::placeholder { color: var(--ff-faint); }
+
+/* ============================ APP TOP BAR ================================== */
+.ff-appbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-block-end: 1px solid transparent;
+    transition: box-shadow var(--ff-t), border-color var(--ff-t);
+}
+.ff-appbar.is-stuck {
+    box-shadow: var(--ff-shadow-sm);
+    border-block-end-color: var(--ff-line);
+}
+.ff-appbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 18px;
+}
+.ff-appbar-loc { display: flex; flex-direction: column; min-width: 0; }
+.ff-appbar-eyebrow {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ff-faint);
+    font-weight: 600;
+}
+.ff-appbar-addr {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--ff-ink);
+    font-weight: 700;
+    font-size: 15px;
+    max-inline-size: 220px;
+}
+.ff-appbar-addr svg { inline-size: 16px; block-size: 16px; color: var(--ff-accent); flex: none; }
+.ff-appbar-addr b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ff-appbar-actions { display: flex; align-items: center; gap: 8px; }
+.ff-icon-btn {
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--ff-line);
+    background: var(--ff-bg);
+    color: var(--ff-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform var(--ff-t), box-shadow var(--ff-t);
+}
+.ff-icon-btn:hover { box-shadow: var(--ff-shadow-sm); }
+.ff-icon-btn:active { transform: scale(.92); }
+.ff-icon-btn svg { inline-size: 20px; block-size: 20px; }
+.ff-account-avatar {
+    inline-size: 30px;
+    block-size: 30px;
+    border-radius: 50%;
+    background: var(--ff-accent-gradient);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ff-font-headings);
+    font-weight: 800;
+    font-size: 14px;
+}
+
+/* ============================ HERO ======================================== */
+.ff-hero { position: relative; }
+.ff-hero-cover {
+    position: relative;
+    block-size: 168px;
+    /* FEAST-F21 · most stores carry `default.png`, which 404s, so this gradient IS
+       what the customer sees. It used to be a flat neutral slate that read as a
+       loading error; it is now brand-tinted so a cover-less store still looks like
+       the restaurant rather than a broken image. */
+    background:
+        radial-gradient(120% 90% at 15% 0%, var(--ff-accent) 0%, transparent 62%),
+        linear-gradient(120deg, #2a2f3a, #454b5a);
+    overflow: hidden;
+}
+.ff-hero-cover-img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.ff-hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 100%);
+}
+.ff-hero-body {
+    position: relative;
+    margin: -46px 16px 0;
+    background: var(--ff-bg);
+    border-radius: var(--ff-r-lg);
+    padding: 16px 18px 18px;
+    box-shadow: var(--ff-shadow-md);
+    z-index: 2;
+}
+.ff-hero-top { display: flex; align-items: center; gap: 13px; }
+.ff-hero-logo {
+    inline-size: 60px;
+    block-size: 60px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 3px solid var(--ff-bg);
+    box-shadow: var(--ff-shadow-sm);
+    margin-block-start: -34px;
+    background: var(--ff-surface);
+    flex: none;
+}
+.ff-hero-titles { min-width: 0; }
+.ff-hero-title { font-size: 22px; font-weight: 800; color: var(--ff-ink); }
+.ff-hero-sub { color: var(--ff-muted); font-size: 13.5px; margin-block-start: 2px; }
+.ff-hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-block-start: 14px; }
+.ff-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    background: var(--ff-surface);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ff-muted);
+    text-decoration: none;
+}
+.ff-chip svg { inline-size: 14px; block-size: 14px; color: var(--ff-accent); }
+.ff-chip-live { color: var(--ff-green); background: rgba(18,183,106,.10); }
+.ff-live-dot {
+    inline-size: 7px; block-size: 7px; border-radius: 50%;
+    background: var(--ff-green);
+    box-shadow: 0 0 0 0 rgba(18,183,106,.5);
+    animation: ffPulse 1.8s infinite;
+}
+@keyframes ffPulse { 70% { box-shadow: 0 0 0 7px rgba(18,183,106,0); } 100% { box-shadow: 0 0 0 0 rgba(18,183,106,0); } }
+.ff-hero-desc { color: var(--ff-muted); font-size: 13.5px; line-height: 1.55; margin-block-start: 12px; }
+
+.ff-banners { padding: 16px 16px 0; }
+/* the include leaves whitespace text nodes behind, so :empty never matches on a
+   store with no banners — key off element children instead of the padding shows */
+.ff-banners:not(:has(*)) { display: none; }
+
+/* ============================ STICKY NAV + CATEGORIES ===================== */
+.ff-nav-bar-sticky {
+    position: sticky;
+    top: 64px;
+    z-index: 30;
+    background: color-mix(in srgb, var(--ff-page) 88%, transparent);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    padding-block: 12px 6px;
+    margin-block-start: 16px;
+    transition: box-shadow var(--ff-t);
+}
+.ff-nav-bar-sticky.is-stuck { box-shadow: 0 6px 16px rgba(16,20,30,.06); }
+.ff-nav-bar-inner { padding-inline: 16px; }
+.ff-search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ff-bg);
+    border: 1.5px solid var(--ff-line);
+    border-radius: 999px;
+    padding: 4px 6px 4px 16px;
+    box-shadow: var(--ff-shadow-sm);
+    transition: border-color var(--ff-t);
+}
+.ff-search-box:focus-within { border-color: var(--ff-accent); }
+.ff-search-icon { inline-size: 19px; block-size: 19px; color: var(--ff-faint); flex: none; }
+#ff-search-input {
+    border: none; background: transparent; box-shadow: none;
+    padding: 10px 0; inline-size: 100%; font-size: 15px;
+}
+#ff-search-input:focus { background: transparent; }
+#ff-search-clear {
+    border: none; background: var(--ff-surface-2); color: var(--ff-muted);
+    inline-size: 30px; block-size: 30px; border-radius: 50%;
+    font-size: 20px; line-height: 1; cursor: pointer; flex: none; padding: 0;
+}
+
+/* SEARCH-RUN: sticky bar is now a button opening a full-screen overlay */
+.ff-search-trigger {
+    flex: 1; min-inline-size: 0; display: flex; align-items: center;
+    border: none; background: transparent; box-shadow: none; cursor: pointer;
+    padding: 12px 0; font: inherit; text-align: start; color: var(--ff-faint);
+}
+.ff-search-ph { flex: 1; min-inline-size: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-searchlayer {
+    position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column;
+    inline-size: 100%; max-inline-size: var(--ff-app-w); margin-inline: auto;
+    background: var(--ff-bg); opacity: 0; transform: translateY(10px);
+    transition: opacity .24s ease, transform .24s ease; pointer-events: none;
+}
+.ff-searchlayer.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.ff-searchlayer[hidden] { display: none; }
+.ff-sl-top { display: flex; align-items: center; gap: 10px; padding: calc(14px + env(safe-area-inset-top)) 18px 12px; }
+.ff-sl-field {
+    flex: 1; display: flex; align-items: center; gap: 10px; color: var(--ff-faint);
+    background: var(--ff-bg-card); border: 1.5px solid var(--ff-line); border-radius: 999px; padding: 0 16px; block-size: 48px;
+}
+.ff-sl-field input { flex: 1; min-inline-size: 0; border: none; background: transparent; box-shadow: none; padding: 0; block-size: 100%; font-size: 15px; color: var(--ff-ink); }
+.ff-sl-cancel { border: none; background: none; color: var(--ff-ink); font: inherit; font-weight: 700; font-size: 14px; padding: 6px; cursor: pointer; flex: none; }
+.ff-sl-results { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 6px 14px 120px; }
+.ff-sl-row {
+    display: flex; align-items: center; gap: 12px; inline-size: 100%; text-align: start;
+    padding: 9px 8px; border-radius: 16px; color: inherit; text-decoration: none;
+    animation: ff-sl-in .28s ease backwards;
+}
+.ff-sl-row:active { background: var(--ff-bg-card); }
+.ff-sl-row img, .ff-sl-noimg { inline-size: 52px; block-size: 52px; border-radius: 12px; object-fit: cover; flex: none; background: var(--ff-bg-card); }
+.ff-sl-row > div { flex: 1; min-inline-size: 0; }
+.ff-sl-row b { display: block; font-size: 14.5px; font-weight: 700; color: var(--ff-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-sl-row small { display: block; color: var(--ff-faint); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-block-start: 2px; }
+.ff-sl-price { font-weight: 800; font-size: 14px; flex: none; color: var(--ff-ink); }
+.ff-sl-none { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 64px 24px; color: var(--ff-faint); text-align: center; }
+.ff-sl-none svg { inline-size: 60px; block-size: 60px; fill: none; stroke: currentColor; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
+@keyframes ff-sl-in { from { opacity: 0; transform: translateY(8px); } }
+
+.ff-categories-nav { margin-block-start: 12px; }
+.ff-categories-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-block-end: 4px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+}
+.ff-categories-scroll::-webkit-scrollbar { display: none; }
+.ff-cat-btn {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    inline-size: 68px;
+    scroll-snap-align: start;
+    padding: 0;
+}
+.ff-cat-thumb {
+    inline-size: 60px;
+    block-size: 60px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--ff-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid transparent;
+    transition: transform var(--ff-spring), border-color var(--ff-t), box-shadow var(--ff-t);
+}
+/* FEAST-F8 · the letter fallback sits UNDER the image; when the image 404s the
+   <img> removes itself and the letter is simply what is left. */
+.ff-cat-thumb { position: relative; }
+.ff-cat-thumb img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+}
+.ff-cat-emoji, .ff-cat-thumb-fallback {
+    font-family: var(--ff-font-headings);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+    inline-size: 100%; block-size: 100%;
+    display: flex; align-items: center; justify-content: center;
+}
+.ff-cat-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ff-muted);
+    max-inline-size: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color var(--ff-t);
+}
+.ff-cat-btn:active .ff-cat-thumb { transform: scale(.9); }
+.ff-cat-btn.active .ff-cat-thumb {
+    border-color: var(--ff-accent);
+    box-shadow: var(--ff-shadow-accent);
+    transform: translateY(-2px);
+}
+.ff-cat-btn.active .ff-cat-label { color: var(--ff-ink); font-weight: 700; }
+
+/* ============================ MENU ======================================== */
+.ff-menu-main { padding: 8px 16px 0; }
+.ff-menu-section { padding-block-start: var(--ts-gap-4, 22px); scroll-margin-top: 150px; }
+.ff-section-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-block-end: 12px;
+}
+.ff-category-title { font-size: 19px; font-weight: 800; color: var(--ff-ink); }
+.ff-section-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ff-faint);
+    background: var(--ff-surface);
+    padding: 2px 9px;
+    border-radius: 999px;
+}
+.ff-menu-grid { display: flex; flex-direction: column; gap: 12px; }
+
+/* app-style dish row */
+.ff-menu-card {
+    display: flex;
+    gap: 14px;
+    background: var(--ff-bg);
+    border-radius: var(--ff-r-md);
+    padding: 14px;
+    box-shadow: var(--ff-shadow-sm);
+    cursor: pointer;
+    position: relative;
+    transition: transform .18s var(--ff-ease), box-shadow var(--ff-t);
+}
+.ff-menu-card:hover { box-shadow: var(--ff-shadow-md); }
+.ff-menu-card:active { transform: scale(.985); }
+.ff-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ff-card-labels { display: flex; align-items: center; gap: 8px; margin-block-end: 5px; min-height: 14px; }
+.ff-card-labels:empty { display: none; }
+.ff-label-tag {
+    inline-size: 15px; block-size: 15px; border-radius: 4px;
+    border: 1.6px solid currentColor; position: relative; flex: none;
+}
+.ff-label-tag::after {
+    content: ""; position: absolute; inset: 0; margin: auto;
+    inline-size: 7px; block-size: 7px; border-radius: 50%; background: currentColor;
+}
+.ff-label-veg { color: var(--ff-veg); }
+.ff-label-nonveg { color: var(--ff-nonveg); }
+.ff-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ff-muted);
+    background: var(--ff-surface);
+    padding: 2px 8px;
+    border-radius: 6px;
+    letter-spacing: .01em;
+}
+.ff-tag-pop { color: var(--ff-star); background: rgba(255,176,32,.12); }
+.ff-card-name { font-size: 15.5px; font-weight: 700; color: var(--ff-ink); line-height: 1.3; }
+.ff-card-desc {
+    color: var(--ff-muted);
+    font-size: 12.8px;
+    line-height: 1.5;
+    margin-block-start: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.ff-card-meta { display: flex; align-items: center; gap: 10px; margin-block-start: 9px; }
+.ff-card-price { font-family: var(--ff-font-headings); font-size: 16px; font-weight: 800; color: var(--ff-ink); }
+/* was stacks ABOVE the live price (not inline beside it) */
+.ff-pricewrap { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.ff-card-was { margin-inline-end: 0 !important; font-size: 11px; line-height: 1.2; }
+.ff-card-rating { font-size: 12.5px; font-weight: 700; color: var(--ff-star); }
+.ff-card-kcal { font-size: 12px; color: var(--ff-faint); font-weight: 600; }
+.ff-card-tags { display: flex; gap: 6px; margin-block-start: 8px; flex-wrap: wrap; }
+.ff-card-tags:empty { display: none; }
+
+.ff-card-media {
+    position: relative;
+    inline-size: 108px;
+    block-size: 108px;
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-surface);
+    flex: none;
+}
+.ff-card-img {
+    inline-size: 108px;
+    block-size: 108px;
+    object-fit: cover;
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-surface);
+}
+/* image 404 → hide broken img, keep a clean neutral tile with the + button */
+.ff-card-media-empty .ff-card-img { display: none; }
+.ff-card-media-empty::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--ff-r-sm);
+    background:
+        radial-gradient(circle at 50% 42%, var(--ff-surface-2) 0 30%, transparent 31%),
+        var(--ff-surface);
+    opacity: .9;
+}
+/* dish rows that ship no image at all: drop the media tile, right-align the + button */
+.ff-menu-card:not(:has(.ff-card-img)) .ff-card-media {
+    inline-size: 40px;
+    block-size: auto;
+    background: none;
+    align-self: center;
+}
+.ff-menu-card:not(:has(.ff-card-img)) .ff-quick-add-btn {
+    position: static;
+    transform: none;
+}
+[dir="rtl"] .ff-menu-card:not(:has(.ff-card-img)) .ff-quick-add-btn { transform: none; }
+.ff-quick-add-btn {
+    position: absolute;
+    inset-block-end: -12px;
+    inset-inline-end: 50%;
+    transform: translateX(50%);
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 13px;
+    border: 3px solid var(--ff-bg);
+    background: var(--ff-bg);
+    color: var(--ff-accent);
+    box-shadow: var(--ff-shadow-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s var(--ff-spring), background var(--ff-t), color var(--ff-t);
+}
+[dir="rtl"] .ff-quick-add-btn { transform: translateX(-50%); }
+.ff-quick-add-btn:hover { background: var(--ff-accent); color: #fff; }
+.ff-quick-add-btn:active { transform: translateX(50%) scale(.85); }
+[dir="rtl"] .ff-quick-add-btn:active { transform: translateX(-50%) scale(.85); }
+.ff-quick-add-btn.ff-added { background: var(--ff-green); color: #fff; border-color: var(--ff-bg); }
+
+.ff-menu-card.ff-sold-out { opacity: .62; }
+.ff-menu-card.ff-sold-out .ff-card-img { filter: grayscale(.7); }
+.ff-soldout-label {
+    position: absolute;
+    inset-block-end: 6px;
+    inset-inline: 6px;
+    text-align: center;
+    background: rgba(20,22,28,.82);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 0;
+    border-radius: 8px;
+}
+.ff-no-items { text-align: center; color: var(--ff-muted); padding: 60px 0; }
+.ff-tab-spacer { block-size: 8px; }
+
+/* ============================ FLOATING CART BAR =========================== */
+.ff-cart-floating-btn {
+    position: fixed;
+    inset-block-end: 84px;
+    inset-inline: 0;
+    margin-inline: auto;
+    max-inline-size: calc(var(--ff-app-w) - 32px);
+    inline-size: calc(100% - 32px);
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 18px;
+    background: var(--ff-accent-gradient);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    box-shadow: var(--ff-shadow-accent);
+    cursor: pointer;
+    font-family: var(--ff-font-headings);
+    font-weight: 700;
+    animation: ffCartIn .4s var(--ff-spring);
+}
+@keyframes ffCartIn { from { transform: translateY(30px); opacity: 0; } }
+.ff-cart-icon-wrap { position: relative; display: inline-flex; align-items: center; gap: 9px; font-size: 15px; }
+.ff-cart-badge {
+    background: #fff;
+    color: var(--ff-accent);
+    min-inline-size: 22px;
+    block-size: 22px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12.5px;
+    font-weight: 800;
+    padding-inline: 6px;
+}
+.ff-cart-btn-price { font-size: 16px; font-weight: 800; }
+
+/* ============================ BOTTOM TAB BAR ============================== */
+.ff-tabbar {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    margin-inline: auto;
+    max-inline-size: var(--ff-app-w);
+    z-index: 45;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,255,255,.9);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-block-start: 1px solid var(--ff-line);
+}
+.ff-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 0;
+    color: var(--ff-faint);
+    font-size: 10.5px;
+    font-weight: 600;
+    transition: color var(--ff-t);
+    position: relative;
+}
+.ff-tab svg { inline-size: 23px; block-size: 23px; transition: transform .25s var(--ff-spring); }
+.ff-tab.is-on { color: var(--ff-accent); }
+.ff-tab.is-on svg { transform: translateY(-2px) scale(1.06); }
+.ff-tab:active svg { transform: scale(.85); }
+.ff-tab-cart-wrap { position: relative; display: inline-flex; }
+.ff-tab-cart-badge {
+    position: absolute;
+    inset-block-start: -5px;
+    inset-inline-end: -8px;
+    background: var(--ff-accent);
+    color: #fff;
+    min-inline-size: 17px;
+    block-size: 17px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 4px;
+    border: 2px solid var(--ff-bg);
+    animation: ffPop .3s var(--ff-spring);
+}
+@keyframes ffPop { from { transform: scale(0); } }
+
+/* ============================ DRAWERS (bottom sheets) ===================== */
+.ff-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    visibility: hidden;
+    pointer-events: none;
+}
+.ff-drawer[aria-hidden="false"] { visibility: visible; pointer-events: auto; }
+.ff-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(16,20,30,.5);
+    opacity: 0;
+    transition: opacity .3s var(--ff-ease);
+    backdrop-filter: blur(2px);
+}
+.ff-drawer[aria-hidden="false"] .ff-drawer-backdrop { opacity: 1; }
+.ff-drawer-sheet {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    margin-inline: auto;
+    max-inline-size: var(--ff-app-w);
+    max-block-size: 92vh;
+    background: var(--ff-bg-sheet);
+    border-radius: 26px 26px 0 0;
+    box-shadow: var(--ff-shadow-lg);
+    transform: translateY(101%);
+    transition: transform .42s var(--ff-spring);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.ff-drawer[aria-hidden="false"] .ff-drawer-sheet { transform: translateY(0); }
+.ff-drawer-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 10px;
+    flex: none;
+}
+.ff-drawer-drag-handle {
+    position: absolute;
+    inset-block-start: 8px;
+    inset-inline: 0;
+    margin-inline: auto;
+    inline-size: 40px;
+    block-size: 4px;
+    border-radius: 999px;
+    background: var(--ff-surface-2);
+}
+.ff-drawer-title { font-size: 18px; font-weight: 800; color: var(--ff-ink); }
+.ff-drawer-close {
+    inline-size: 34px;
+    block-size: 34px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ff-surface);
+    color: var(--ff-muted);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    margin-inline-start: auto;
+    transition: background var(--ff-t);
+}
+.ff-drawer-close:hover { background: var(--ff-surface-2); }
+.ff-drawer-content { overflow-y: auto; padding: 4px 18px 26px; -webkit-overflow-scrolling: touch; }
+
+/* detail sheet */
+.ff-detail-img-wrap {
+    margin: -4px -18px 16px;
+    block-size: 240px;
+    overflow: hidden;
+    background: var(--ff-surface);
+}
+.ff-detail-img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.ff-detail-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.ff-detail-title { font-size: 21px; font-weight: 800; color: var(--ff-ink); }
+.ff-detail-price { font-family: var(--ff-font-headings); font-size: 19px; font-weight: 800; color: var(--ff-accent); white-space: nowrap; }
+.ff-detail-desc { color: var(--ff-muted); font-size: 14px; line-height: 1.6; margin-block-start: 8px; }
+.ff-detail-options { margin-block-start: 18px; display: flex; flex-direction: column; gap: 18px; }
+.ff-option-title { font-size: 14px; font-weight: 700; color: var(--ff-ink); margin-block-end: 10px; }
+.ff-options-list { display: flex; flex-direction: column; gap: 8px; }
+.ff-radio-option, .ff-checkbox-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--ff-line);
+    border-radius: var(--ff-r-sm);
+    cursor: pointer;
+    transition: border-color var(--ff-t), background var(--ff-t);
+    font-size: 14px;
+}
+.ff-radio-option:has(:checked), .ff-checkbox-option:has(:checked) {
+    border-color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+}
+.ff-option-left { display: flex; align-items: center; gap: 10px; }
+.ff-option-left input { inline-size: 18px; block-size: 18px; accent-color: var(--ff-accent); flex: none; padding: 0; }
+.ff-option-price { font-weight: 700; color: var(--ff-muted); font-size: 13px; }
+.ff-opt-thumb { inline-size: 36px; block-size: 36px; border-radius: var(--ff-r-sm); object-fit: cover; flex: none; background: var(--ff-line); }
+
+.ff-detail-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-block-start: 22px;
+}
+.ff-qty-selectors {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--ff-surface);
+    border-radius: 14px;
+    padding: 5px;
+    flex: none;
+}
+.ff-qty-btn {
+    inline-size: 38px;
+    block-size: 38px;
+    border-radius: 11px;
+    border: none;
+    background: var(--ff-bg);
+    color: var(--ff-ink);
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--ff-shadow-sm);
+    transition: transform var(--ff-t);
+}
+.ff-qty-btn:active { transform: scale(.9); }
+.ff-qty-val { min-inline-size: 26px; text-align: center; font-weight: 800; font-size: 16px; }
+
+/* ============================ BUTTONS ===================================== */
+.ff-btn-primary {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 15px;
+    background: var(--ff-accent-gradient);
+    color: #fff;
+    font-family: var(--ff-font-headings);
+    font-size: 15.5px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: var(--ff-shadow-accent);
+    transition: transform var(--ff-t), box-shadow var(--ff-t), opacity var(--ff-t);
+}
+.ff-btn-primary:hover { transform: translateY(-1px); }
+.ff-btn-primary:active { transform: scale(.98); }
+.ff-btn-primary:disabled { opacity: .6; cursor: default; box-shadow: none; }
+.ff-btn-primary.success-state { background: var(--ff-green); box-shadow: 0 10px 26px rgba(18,183,106,.32); }
+
+/* direct "go to cart" button beside Add to Order on the dish sheet; an
+   outline pill (not the solid accent CTA) so it reads as the secondary
+   action, with an accent-coloured count badge. Toggled visible by
+   updateCartUI() only once the cart holds something. */
+.ff-cart-jump {
+    flex: none;
+    position: relative;
+    inline-size: 52px;
+    block-size: 52px;
+    border-radius: 999px;
+    background: var(--ff-bg);
+    border: 1.5px solid var(--ff-line);
+    color: var(--ff-ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: var(--ff-shadow-sm);
+    transition: transform var(--ff-t);
+}
+.ff-cart-jump:active { transform: scale(.94); }
+.ff-cart-jump[hidden] { display: none; }
+.ff-cart-jump svg { inline-size: 22px; block-size: 22px; }
+.ff-cart-jump-count {
+    position: absolute;
+    top: -4px;
+    inset-inline-end: -4px;
+    min-inline-size: 20px;
+    block-size: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--ff-accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 20px;
+    text-align: center;
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============================ CART / CHECKOUT ============================= */
+.ff-cart-list { display: flex; flex-direction: column; gap: 12px; margin-block-end: 8px; }
+.ff-cart-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding-block-end: 12px;
+    border-block-end: 1px solid var(--ff-line);
+}
+.ff-cart-item:last-child { border-block-end: none; }
+.ff-cart-item-info { flex: 1; min-width: 0; }
+.ff-cart-item-name { font-weight: 700; font-size: 14.5px; color: var(--ff-ink); }
+/* reopen affordance: the name is a button that reopens the item drawer */
+button.ff-cart-item-name { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; text-align: start; display: block; }
+.ff-cart-item-was { color: var(--ff-faint); font-weight: 400; font-size: 12.5px; text-decoration: line-through; margin-inline-start: .35em; }
+.ff-cart-item-unit { color: var(--ff-faint); font-size: 11.5px; }
+.ff-cart-item-rm { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--ff-faint); transition: color .2s; }
+.ff-cart-item-rm:hover { color: var(--ff-accent); }
+.ff-cart-item-rm svg { width: 16px; height: 16px; }
+.ff-cart-item.removing { opacity: 0; transform: translateX(12px); transition: opacity .25s, transform .25s; }
+[dir="rtl"] .ff-cart-item.removing { transform: translateX(-12px); }
+[dir="rtl"] .ff-cart-item-was, [dir="rtl"] .ff-cart-item-unit { text-align: right; }
+.ff-cart-item-customizations { color: var(--ff-faint); font-size: 12px; margin-block-start: 3px; line-height: 1.4; }
+/* price at top, qty+trash on ONE horizontal actions row at the bottom — the
+   old remove-below-stepper stack added a dead row to every card */
+.ff-cart-item-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 8px; align-self: stretch; }
+.ff-cart-item-actions { display: flex; align-items: center; gap: 6px; }
+.ff-cart-item-price { font-weight: 800; font-family: var(--ff-font-headings); color: var(--ff-ink); font-size: 14.5px; }
+.ff-cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ff-surface);
+    border-radius: 10px;
+    padding: 3px;
+}
+.ff-cart-item-qty-btn {
+    /* 32px floor: these are the only way to change a line's quantity */
+    inline-size: 32px;
+    block-size: 32px;
+    border: none;
+    border-radius: 8px;
+    background: var(--ff-bg);
+    color: var(--ff-ink);
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: var(--ff-shadow-sm);
+}
+.ff-cart-item-qty span { min-inline-size: 18px; text-align: center; font-weight: 700; font-size: 13.5px; }
+
+/* Combo / "Meal deals" lines reuse .ff-cart-item but carry only price + ×qty —
+   no qty stepper, no trash. The base .ff-cart-item-right uses space-between for
+   the normal 3-child stack (price / unit / actions); with just two children a
+   tall parts list stretches the column and scatters ×qty to the bottom. Pack
+   the pair at the top so ×qty sits tight under the price, still trailing-edge
+   aligned via the inherited align-items:flex-end (RTL-safe). */
+.ff-cart-item--combo .ff-cart-item-right { justify-content: flex-start; gap: 2px; }
+
+.ff-coupon-section { margin: 16px 0; }
+.ff-coupon-input-wrap { display: flex; gap: 8px; }
+.ff-coupon-input-wrap input { flex: 1; }
+#ff-coupon-apply-btn {
+    flex: none;
+    padding: 0 20px;
+    border: none;
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-ink);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity var(--ff-t);
+}
+#ff-coupon-apply-btn:active { opacity: .8; }
+.ff-coupon-message { font-size: 12.5px; margin-block-start: 7px; font-weight: 600; }
+.ff-coupon-message.ff-coupon-success { color: var(--ff-green); }
+.ff-coupon-message.ff-coupon-error { color: var(--ff-nonveg); }
+
+.ff-cart-summary {
+    background: var(--ff-surface);
+    border-radius: var(--ff-r-md);
+    padding: 14px 16px;
+    margin-block-end: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+.ff-summary-row { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--ff-muted); }
+.ff-summary-row span:last-child { font-weight: 600; color: var(--ff-ink); }
+/* FEAST-F14 · was `!important`; matching the base rule's specificity is enough. */
+.ff-summary-row.ff-sum-discount-row span:last-child { color: var(--ff-green); }
+.ff-total-row {
+    border-block-start: 1px dashed var(--ff-line);
+    padding-block-start: 10px;
+    margin-block-start: 2px;
+    font-family: var(--ff-font-headings);
+    font-size: 16px;
+}
+.ff-summary-row.ff-total-row span { font-weight: 800; color: var(--ff-ink); }
+
+.ff-checkout-form { display: flex; flex-direction: column; }
+.ff-form-group { margin-block-end: 14px; }
+.ff-form-group > label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ff-ink);
+    margin-block-end: 6px;
+}
+.wa-optin { color: var(--ff-muted); }
+.wa-optin input { inline-size: auto; padding: 0; }
+
+.ff-order-type-tabs { display: flex; gap: 8px; }
+.ff-tab-btn {
+    flex: 1;
+    padding: 11px 6px;
+    border: 1.5px solid var(--ff-line);
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-bg);
+    color: var(--ff-muted);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all var(--ff-t);
+}
+.ff-tab-btn.active {
+    border-color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+    color: var(--ff-accent);
+}
+
+.ff-payment-options { display: flex; flex-direction: column; gap: 8px; }
+.ff-payment-option { cursor: pointer; }
+.ff-payment-option input { display: none; }
+.ff-payment-box {
+    display: block;
+    padding: 13px 15px;
+    border: 1.5px solid var(--ff-line);
+    border-radius: var(--ff-r-sm);
+    transition: all var(--ff-t);
+}
+.ff-payment-option input:checked + .ff-payment-box {
+    border-color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+}
+.ff-payment-title { font-weight: 700; font-size: 14px; color: var(--ff-ink); }
+
+.ff-checkout-errors {
+    background: rgba(224,50,47,.10);
+    border: 1px solid rgba(224,50,47,.3);
+    color: var(--ff-nonveg);
+    border-radius: var(--ff-r-sm);
+    padding: 11px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-block-end: 12px;
+}
+.ff-btn-submit { inline-size: 100%; margin-block-start: 4px; padding: 16px; font-size: 16px; }
+
+/* ============================ RESERVATION / WAITLIST STRIP ================ */
+.ff-booking-strip {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 30px 16px 40px;
+    max-inline-size: var(--ff-app-w);
+    margin-inline: auto;
+}
+.ff-booking-btn {
+    flex: 1 1 190px;
+    min-block-size: 52px;
+    padding: 14px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: var(--ff-bg);
+    border: 1.5px solid var(--ff-line);
+    color: var(--ff-accent);
+    border-radius: var(--ff-r-md);
+    font-family: var(--ff-font-headings);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--ff-shadow-sm);
+    transition: border-color var(--ff-t), transform var(--ff-t);
+}
+.ff-booking-btn span { color: var(--ff-ink); }
+.ff-booking-btn:hover { border-color: var(--ff-accent); }
+.ff-booking-btn:active { transform: scale(.97); }
+
+/* ============================ AUTH / ACCOUNT / LOYALTY ==================== */
+.ff-auth-tabs { display: flex; gap: 6px; margin-block-end: 18px; border-block-end: 1px solid var(--ff-line); }
+.ff-auth-tabs button {
+    flex: 1;
+    padding: 11px 6px;
+    background: none;
+    border: none;
+    border-block-end: 2.5px solid transparent;
+    color: var(--ff-muted);
+    font-family: var(--ff-font-headings);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all var(--ff-t);
+}
+.ff-auth-tabs button.is-on { color: var(--ff-accent); border-block-end-color: var(--ff-accent); }
+.ff-auth-err {
+    background: rgba(224,50,47,.10);
+    border: 1px solid rgba(224,50,47,.3);
+    color: var(--ff-nonveg);
+    border-radius: var(--ff-r-sm);
+    padding: 10px 13px;
+    font-size: 13px;
+    margin-block-end: 14px;
+}
+
+.ff-account-hello {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-block-end: 18px;
+    margin-block-end: 6px;
+    border-block-end: 1px solid var(--ff-line);
+}
+.ff-account-avatar-lg { inline-size: 52px; block-size: 52px; font-size: 24px; border-radius: 16px; }
+.ff-account-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 4px;
+    color: var(--ff-ink);
+    text-decoration: none;
+    border-block-end: 1px solid var(--ff-line);
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: color var(--ff-t);
+}
+.ff-account-link:hover { color: var(--ff-accent); }
+.ff-account-logout {
+    inline-size: 100%;
+    margin-block-start: 22px;
+    padding: 13px;
+    background: var(--ff-surface);
+    border: none;
+    color: var(--ff-nonveg);
+    border-radius: var(--ff-r-sm);
+    font-family: var(--ff-font-body);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background var(--ff-t);
+}
+.ff-account-logout:hover { background: rgba(224,50,47,.09); }
+
+.ff-loyalty {
+    margin-block-start: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--ff-accent-soft), rgba(255,138,61,.06));
+    border: 1px solid var(--ff-accent-0_15);
+    border-radius: var(--ff-r-md);
+    text-align: center;
+}
+.ff-loyalty-head { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--ff-accent); font-family: var(--ff-font-headings); font-weight: 700; font-size: 15px; }
+.ff-loyalty-num { font-family: var(--ff-font-headings); font-size: 42px; font-weight: 800; color: var(--ff-ink); line-height: 1.1; margin: 6px 0 2px; }
+.ff-loyalty-sub { color: var(--ff-muted); font-size: 12.5px; margin-block-end: 14px; }
+.ff-stamp-dots { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.ff-stamp-dot {
+    inline-size: 30px;
+    block-size: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1.5px solid var(--ff-border-gold-focus);
+    color: var(--ff-border-gold-focus);
+    font-size: 13px;
+    transition: all var(--ff-t);
+}
+.ff-stamp-dot.is-on { background: var(--ff-accent-gradient); border-color: var(--ff-accent); color: #fff; transform: scale(1.05); }
+.ff-loyalty-bar { block-size: 9px; border-radius: 999px; background: var(--ff-surface-2); overflow: hidden; }
+.ff-loyalty-bar > i { display: block; block-size: 100%; inline-size: 0; background: var(--ff-accent-gradient); transition: inline-size .6s var(--ff-ease); }
+.ff-loyalty-ok { color: var(--ff-green); font-size: 13px; font-weight: 600; margin-block-start: 10px; }
+
+/* order success + google review */
+.ff-success-order { display: inline-block; margin: 0 auto 20px; padding: 5px 14px; border: 1.5px dashed var(--ff-line); border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--ff-text-muted); letter-spacing: .02em; }
+.ff-success-check {
+    inline-size: 68px;
+    block-size: 68px;
+    margin: 8px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--ff-accent-gradient);
+    color: #fff;
+    font-size: 36px;
+    font-weight: 700;
+    box-shadow: var(--ff-shadow-accent);
+    animation: ffCheck .5s var(--ff-spring);
+}
+@keyframes ffCheck { from { transform: scale(0) rotate(-30deg); } }
+.ff-greview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: start;
+    padding: 15px 16px;
+    background: rgba(255,176,32,.09);
+    border: 1px solid rgba(255,176,32,.3);
+    border-radius: var(--ff-r-md);
+    color: var(--ff-ink);
+    text-decoration: none;
+    transition: transform var(--ff-t), border-color var(--ff-t);
+}
+.ff-greview:hover { transform: translateY(-1px); border-color: var(--ff-star); }
+.ff-greview-copy { flex: 1; display: flex; flex-direction: column; }
+.ff-greview-copy b { font-family: var(--ff-font-headings); font-weight: 700; font-size: 15px; }
+.ff-greview-copy small { color: var(--ff-muted); font-size: 12.5px; }
+
+/* ============================ ACCOUNT / TRACK PAGES ====================== */
+.ff-account-page { max-inline-size: var(--ff-app-w); margin-inline: auto; padding: 22px 18px 60px; }
+.ff-account-page-head { display: flex; align-items: center; gap: 12px; margin-block-end: 22px; }
+.ff-account-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 42px;
+    block-size: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--ff-line);
+    background: var(--ff-bg);
+    color: var(--ff-ink);
+    text-decoration: none;
+    transition: border-color var(--ff-t);
+    box-shadow: var(--ff-shadow-sm);
+}
+.ff-account-back:hover { border-color: var(--ff-accent); color: var(--ff-accent); }
+.ff-account-page-title { font-size: 24px; font-weight: 800; color: var(--ff-ink); }
+.ff-account-hello-page { border: 1px solid var(--ff-line); border-radius: var(--ff-r-md); padding: 16px 18px; gap: 14px; background: var(--ff-bg); box-shadow: var(--ff-shadow-sm); }
+.ff-account-hello-page > div:nth-child(2) { flex: 1; }
+.ff-credit-banner {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-block-start: 14px; padding: 14px 18px;
+    background: var(--ff-accent-soft);
+    border: 1px solid var(--ff-accent-0_15);
+    border-radius: var(--ff-r-md);
+    color: var(--ff-accent);
+    font-family: var(--ff-font-headings); font-weight: 700;
+}
+.ff-orders-block { margin-block-start: 26px; }
+.ff-orders-h3 {
+    font-size: 18px; font-weight: 800; color: var(--ff-ink);
+    margin-block-end: 14px; padding-inline-start: 12px;
+    border-inline-start: 3px solid var(--ff-accent);
+}
+.ff-reorder-msg { color: var(--ff-nonveg); font-size: 13px; margin-block-end: 12px; }
+.ff-order-card {
+    background: var(--ff-bg); border: 1px solid var(--ff-line);
+    border-radius: var(--ff-r-md); padding: 16px 18px; margin-block-end: 14px;
+    box-shadow: var(--ff-shadow-sm);
+}
+.ff-order-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.ff-order-date { color: var(--ff-faint); font-size: 12px; }
+.ff-order-id { font-family: var(--ff-font-headings); font-size: 17px; font-weight: 800; color: var(--ff-ink); }
+.ff-order-status {
+    display: inline-block; padding: 3px 12px; border-radius: 999px;
+    background: var(--ff-accent-soft); color: var(--ff-accent);
+    font-size: 12px; font-weight: 700;
+}
+.ff-order-total { color: var(--ff-muted); font-size: 13px; margin-block-start: 5px; font-weight: 600; }
+.ff-order-lines {
+    margin-block-start: 14px; padding-block-start: 12px;
+    border-block-start: 1px solid var(--ff-line);
+    display: flex; flex-direction: column; gap: 8px;
+}
+.ff-order-line { color: var(--ff-ink); font-size: 13.5px; }
+.ff-order-line small { color: var(--ff-muted); display: block; font-size: 12px; }
+.ff-order-total-line {
+    border-block-start: 1px dashed var(--ff-line); padding-block-start: 10px; margin-block-start: 2px;
+    font-family: var(--ff-font-headings); font-size: 16px; font-weight: 800; color: var(--ff-ink);
+}
+.ff-order-actions { display: flex; gap: 10px; margin-block-start: 14px; }
+.ff-ghostbtn {
+    padding: 10px 16px;
+    background: var(--ff-surface);
+    border: none;
+    color: var(--ff-ink);
+    border-radius: var(--ff-r-sm);
+    font-family: var(--ff-font-body); font-weight: 700; font-size: 13px;
+    cursor: pointer; text-decoration: none; transition: background var(--ff-t);
+}
+.ff-ghostbtn:hover { background: var(--ff-accent-soft); color: var(--ff-accent); }
+.ff-orders-empty { text-align: center; padding: 40px 0; color: var(--ff-muted); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+/* track timeline */
+.ff-timeline { list-style: none; margin: 18px 0 0; padding: 0; }
+.ff-tl { display: grid; grid-template-columns: 30px 1fr; grid-template-rows: auto 1fr; column-gap: 14px; position: relative; }
+.ff-tl-node {
+    grid-row: 1; grid-column: 1;
+    inline-size: 30px; block-size: 30px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; border: 2px solid var(--ff-line);
+    color: transparent; font-size: 14px; background: var(--ff-bg); z-index: 1;
+    transition: all var(--ff-t);
+}
+.ff-tl-line { grid-row: 2; grid-column: 1; inline-size: 2px; block-size: 100%; background: var(--ff-line); justify-self: center; }
+.ff-tl-copy { grid-column: 2; grid-row: 1 / span 2; padding-block-end: 24px; }
+.ff-tl-copy b { font-family: var(--ff-font-headings); font-weight: 700; font-size: 15px; color: var(--ff-faint); display: block; }
+.ff-tl-copy small { color: var(--ff-faint); font-size: 12.5px; }
+.ff-tl.done .ff-tl-node, .ff-tl.now .ff-tl-node { background: var(--ff-accent-gradient); border-color: var(--ff-accent); color: #fff; }
+.ff-tl.now .ff-tl-node { box-shadow: 0 0 0 5px var(--ff-accent-soft); }
+.ff-tl.done .ff-tl-copy b, .ff-tl.now .ff-tl-copy b { color: var(--ff-ink); }
+.ff-tl.done .ff-tl-line { background: var(--ff-accent); }
+.ff-tl.cancelled .ff-tl-node { border-color: var(--ff-nonveg); }
+.ff-track-alert {
+    margin-block-start: 12px; padding: 11px 14px; border-radius: var(--ff-r-sm);
+    background: rgba(224,50,47,.09); border: 1px solid rgba(224,50,47,.3);
+    color: var(--ff-nonveg); font-size: 13px;
+}
+
+/* ============================ MOTION ===================================== */
+/* FEAST-F16 · the reveal used to be an unconditional `opacity:0` waiting for JS to
+   add .is-in. If the script failed, was blocked, or the IntersectionObserver never
+   fired, the ENTIRE menu stayed invisible — an animation gating content. The hidden
+   state is now scoped to html.ff-js, which only the theme's own pre-paint script
+   sets, so with no JS the menu simply renders. */
+.ff-js .ff-reveal { opacity: 0; transform: translateY(16px); }
+.ff-js .ff-reveal.is-in { opacity: 1; transform: none; transition: opacity .5s var(--ff-ease), transform .5s var(--ff-ease); }
+
+@media (prefers-reduced-motion: reduce) {
+    .feast-container *,
+    .feast-container *::before,
+    .feast-container *::after {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+    }
+    .ff-reveal { opacity: 1; transform: none; }
+}
+
+/* ============================ RESPONSIVE ================================= */
+/* FEAST-F4 · before this block feast had exactly ONE width media query — a 560px
+   cap — so the menu was a single 560px column at every width. At 1440 that left
+   880px of dead page either side and the dish list never gained a second column.
+   The app-shell metaphor is kept: the "phone" simply grows into a real app stage,
+   and the dish rows become a genuine multi-column grid. */
+@media (min-width: 600px) {
+    :root { --ff-app-w: 560px; }
+    .feast-container { margin-block: 0; }
+}
+
+@media (min-width: 760px) {
+    :root { --ff-app-w: 720px; }
+    .ff-menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+    }
+    .ff-menu-card { block-size: 100%; }
+    .ff-menu-main { padding-inline: 22px; }
+}
+
+@media (min-width: 1080px) {
+    :root { --ff-app-w: 1040px; }
+    .ff-menu-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ff-hero-cover { block-size: 300px; }
+    .ff-menu-main { padding-inline: 26px; }
+}
+
+/* The fixed chrome (tab bar, floating cart bar, sheets) is centred on the stage
+   rather than stretched across it — a 1040px-wide bottom tab bar reads as a
+   desktop toolbar, not an app. */
+@media (min-width: 1080px) {
+    .ff-tabbar { max-inline-size: 620px; border-radius: var(--ff-r-lg) var(--ff-r-lg) 0 0; }
+    .ff-cart-floating-btn { max-inline-size: 560px; }
+    .ff-drawer-sheet { max-inline-size: 620px; margin-inline: auto; }
+}
+
+/* ============================ DARK FACE ================================== */
+/* FEAST-F5 · feast shipped no dark mode at all: zero prefers-color-scheme rules,
+   so a diner in a dark-themed phone got a full-brightness white app. This is a
+   real palette in feast's own family — warm charcoal paper, the coral accent
+   kept because that IS the brand — not an inversion. `[data-ff-face]` lets the
+   in-theme appearance control override the system preference (and persist). */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-ff-face="light"]) {
+        --ff-page:        #0f1014;
+        --ff-bg:          #17181e;
+        --ff-bg-dark:     #17181e;
+        --ff-bg-card:     #17181e;
+        --ff-bg-sheet:    #1b1d24;
+        --ff-surface:     #22242c;
+        --ff-surface-2:   #2a2d36;
+
+        --ff-ink:         #f4f5f7;
+        --ff-text-primary:#f4f5f7;
+        --ff-muted:       #a3a8b4;
+        --ff-text-muted:  #a3a8b4;
+        --ff-faint:       #99a0ad;
+
+        --ff-line:        #2e313a;
+        --ff-border-gold: #2e313a;
+
+        --ff-accent-soft: rgba(255,90,60,.16);
+        --ff-veg:   #35c97a;
+        --ff-nonveg:#ff6b68;
+        --ff-green: #35c97a;
+
+        --ff-shadow-sm: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+        --ff-shadow-md: 0 6px 22px rgba(0,0,0,.45);
+        --ff-shadow-lg: 0 18px 50px rgba(0,0,0,.6);
+    }
+}
+:root[data-ff-face="dark"] {
+    --ff-page:        #0f1014;
+    --ff-bg:          #17181e;
+    --ff-bg-dark:     #17181e;
+    --ff-bg-card:     #17181e;
+    --ff-bg-sheet:    #1b1d24;
+    --ff-surface:     #22242c;
+    --ff-surface-2:   #2a2d36;
+
+    --ff-ink:         #f4f5f7;
+    --ff-text-primary:#f4f5f7;
+    --ff-muted:       #a3a8b4;
+    --ff-text-muted:  #a3a8b4;
+    --ff-faint:       #99a0ad;
+
+    --ff-line:        #2e313a;
+    --ff-border-gold: #2e313a;
+
+    --ff-accent-soft: rgba(255,90,60,.16);
+    --ff-veg:   #35c97a;
+    --ff-nonveg:#ff6b68;
+    --ff-green: #35c97a;
+
+    --ff-shadow-sm: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+    --ff-shadow-md: 0 6px 22px rgba(0,0,0,.45);
+    --ff-shadow-lg: 0 18px 50px rgba(0,0,0,.6);
+}
+
+/* The frosted bars hardcoded a white fill, so they stayed bright on the dark
+   face. They now take it from a token that follows the palette. */
+:root { --ff-bar-fill: rgba(255,255,255,.86); }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-ff-face="light"]) { --ff-bar-fill: rgba(23,24,30,.88); }
+}
+:root[data-ff-face="dark"] { --ff-bar-fill: rgba(23,24,30,.88); }
+.ff-appbar, .ff-tabbar, .ff-nav-bar-sticky { background: var(--ff-bar-fill); }
+
+/* ============================ TOUCH TARGETS ============================== */
+/* FEAST-F10 · 57 tappable controls measured below the 44px minimum — every sheet
+   close button was 34×34 and the card's quick-add was 40×40. The visual size is
+   preserved; the HIT AREA is grown with a transparent ::after so nothing in the
+   layout shifts. */
+/* NB: .ff-quick-add-btn and .ff-splash-skip are already absolutely positioned —
+   re-declaring `position` on them would tear them out of their anchors. */
+.ff-drawer-close,
+.ff-icon-btn,
+.ff-qty-btn { position: relative; }
+.ff-drawer-close::after,
+.ff-icon-btn::after,
+.ff-filter-btn::after,
+.ff-quick-add-btn::after,
+.ff-splash-skip::after,
+.ff-qty-btn::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    transform: translate(-50%, -50%);
+}
+.ff-tip-row button, .ff-cat-btn, .ff-subcat, .ff-chiprow button { min-block-size: 44px; }
+
+/* FEAST-F11 · inputs below 16px make iOS Safari zoom the whole page on focus and
+   never zoom back out — the single most common "this site is broken on my phone"
+   complaint. Only the touch face is bumped; desktop keeps the tighter scale. */
+@media (max-width: 1079px) {
+    .feast-container input,
+    .feast-container textarea,
+    .feast-container select,
+    /* the search field and the OTP boxes are ID-selected elsewhere, so they need
+       an ID here too or they keep their 15px and still trigger the zoom */
+    #feast-app #ff-search-input,
+    #feast-app #ff-coupon-code,
+    #feast-app #ff-custom-tip,
+    #feast-app #ff-gift-card-code { font-size: 16px; }
+}
+
+/* FEAST-F13 · the no-results / empty-cart state was a bare grey <p> in the middle
+   of a void. Given a mark, a headline and breathing room it reads as designed. */
+.ff-no-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    color: var(--ff-muted);
+    padding: 54px 20px;
+    font-size: 14px;
+}
+.ff-no-items::before {
+    content: "";
+    inline-size: 58px;
+    block-size: 58px;
+    border-radius: 20px;
+    background: var(--ff-accent-soft);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5a3c' stroke-width='1.6' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.6-3.6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 26px 26px;
+    margin-block-end: 4px;
+}
+/* ============================ APPBAR CONTROLS ============================ */
+.ff-appbar-actions { display: flex; align-items: center; gap: 8px; }
+.ff-face-ic-light { display: none; }
+:root[data-ff-face="dark"] .ff-face-ic-dark { display: none; }
+:root[data-ff-face="dark"] .ff-face-ic-light { display: block; }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-ff-face="light"]) .ff-face-ic-dark { display: none; }
+    :root:not([data-ff-face="light"]) .ff-face-ic-light { display: block; }
+}
+#ff-face-toggle svg { inline-size: 19px; block-size: 19px; }
+.ff-lang-wrap { position: relative; }
+.ff-lang-code { font-size: 12.5px; font-weight: 800; letter-spacing: .02em; font-family: var(--ff-font-headings); }
+.ff-lang-menu {
+    position: absolute;
+    inset-block-start: calc(100% + 8px);
+    inset-inline-end: 0;
+    z-index: 60;
+    min-inline-size: 156px;
+    padding: 6px;
+    background: var(--ff-bg);
+    border: 1px solid var(--ff-line);
+    border-radius: var(--ff-r-md);
+    box-shadow: var(--ff-shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.ff-lang-menu[hidden] { display: none; }
+.ff-lang-item {
+    display: flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding: 0 12px;
+    border-radius: var(--ff-r-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ff-ink);
+    text-decoration: none;
+}
+.ff-lang-item:hover { background: var(--ff-surface); }
+.ff-lang-item.is-on { background: var(--ff-accent-soft); color: var(--ff-accent); }
+/* Currency switcher — mirrors the language dropdown; the seg reuses .ff-seg-mini. */
+.ff-cur-wrap { position: relative; }
+.ff-cur-code { font-size: 12.5px; font-weight: 800; letter-spacing: .02em; font-family: var(--ff-font-headings); }
+.ff-cur-menu {
+    position: absolute;
+    inset-block-start: calc(100% + 8px);
+    inset-inline-end: 0;
+    z-index: 60;
+    max-inline-size: 240px;
+    padding: 10px;
+    background: var(--ff-bg);
+    border: 1px solid var(--ff-line);
+    border-radius: var(--ff-r-md);
+    box-shadow: var(--ff-shadow-md);
+}
+.ff-cur-menu[hidden] { display: none; }
+.ff-cur-menu .ff-seg-mini { max-inline-size: 216px; }
+
+/* FEAST-F17 · monogram logo fallback. The letter is the element's own text; the
+   <img> covers it when it loads and removes itself when it 404s. */
+.ff-logo-mono {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-family: var(--ff-font-headings);
+    font-weight: 800;
+    color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+}
+.ff-logo-mono > img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+}
+.ff-hero-logo.ff-logo-mono { font-size: 26px; }
+.ff-brand-logo.ff-logo-mono { font-size: 18px; }
+
+/* FEAST-F18 · the floating bar's money block, now captioned */
+.ff-cart-btn-money { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
+.ff-cart-btn-money small { font-size: 10.5px; font-weight: 600; opacity: .75; }
+
+.ff-no-items p { font-weight: 600; color: var(--ff-ink); }
+/* an empty BAG is not a failed search — give it its own mark */
+.ff-cart-list .ff-no-items::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5a3c' stroke-width='1.6' stroke-linecap='round'><path d='M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'/><path d='M3 6h18'/><path d='M16 10a4 4 0 0 1-8 0'/></svg>");
+}
+
+/* ============================ REVIEW WIDGET ============================== */
+.ff-review-widget {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ff-line);
+}
+.ff-review-widget .ff-option-title { margin-bottom: 10px; }
+.ff-star-row { display: flex; gap: 4px; }
+.ff-star {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--ff-line);
+    transition: color .12s ease, transform .12s ease;
+}
+.ff-star:hover { transform: scale(1.08); }
+.ff-star.is-active { color: var(--ff-star); }
+.ff-review-fields { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.ff-review-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--ff-line);
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-surface);
+    color: var(--ff-ink);
+    font-family: var(--ff-font-body);
+    font-size: 14px;
+}
+.ff-review-input:focus { outline: none; border-color: var(--ff-border-gold-focus); }
+textarea.ff-review-input { min-height: 60px; resize: vertical; }
+.ff-review-fields .ff-btn-primary { align-self: flex-start; }
+.ff-review-thanks {
+    padding: 8px 0;
+    color: var(--ff-accent);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7)
+   ═══════════════════════════════════════════════════════════ */
+
+/* shared helpers */
+.ff-noscroll { overflow: hidden; }
+.ff-sheet-sub { color: var(--ff-text-muted); font-size: 13px; margin-bottom: 12px; }
+.ff-linkbtn { display: block; margin: 12px auto 0; padding: 8px 12px; min-block-size: 32px; background: none; border: 0; color: var(--ff-accent); font-weight: 600; font-size: 13px; cursor: pointer; }
+.ff-drawer-tall .ff-drawer-sheet { max-height: 90vh; }
+.ff-ic-xs { width: 15px; height: 15px; }
+.ff-toast {
+    position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%) translateY(14px);
+    z-index: 400; background: var(--ff-ink); color: #fff; padding: 10px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; box-shadow: var(--ff-shadow-lg); opacity: 0; pointer-events: none;
+    transition: opacity var(--ff-t), transform var(--ff-t); max-width: 80vw; text-align: center;
+}
+.ff-toast.is-on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* F2 · brand / follow row */
+.ff-brand-row { display: flex; align-items: center; gap: 12px; padding: 14px 18px; max-width: var(--ff-app-w); margin: 0 auto; }
+.ff-brand-logo { width: 56px; height: 56px; border-radius: 16px; overflow: hidden; flex: none; background: var(--ff-surface); display: grid; place-items: center; border: 1.5px solid var(--ff-line); }
+.ff-brand-logo img { width: 100%; height: 100%; object-fit: cover; }
+.ff-brand-info { flex: 1; min-width: 0; }
+.ff-brand-name { display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 800; letter-spacing: -.01em; color: var(--ff-ink); font-family: var(--ff-font-headings); }
+.ff-brand-followers { display: block; font-size: 12px; color: var(--ff-faint); margin-top: 2px; }
+/* verified = an actual seal medallion (filled brand seal + white check), inline
+   after the store name (title/aria-label carry the accessible name). */
+.ff-verified-badge { display: inline-flex; align-items: center; vertical-align: middle; flex: none; line-height: 0; }
+.ff-verified-badge .vb-seal { width: 17px; height: 17px; display: block; }
+.ff-verified-badge .vb-seal-fill { fill: var(--ff-green); }
+.ff-verified-badge .vb-seal-check { fill: #fff; }
+.ff-followbtn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 999px; background: var(--ff-accent); color: var(--ff-accent-ink); font-size: 13px; font-weight: 700; flex: none; border: 0; cursor: pointer; transition: transform var(--ff-t), background var(--ff-t); }
+.ff-followbtn:active { transform: scale(.94); }
+.ff-followbtn .ff-following-label { display: none; }
+.ff-followbtn.is-on { background: var(--ff-surface); color: var(--ff-text-muted); border: 1.5px solid var(--ff-line); }
+.ff-followbtn.is-on .ff-follow-label, .ff-followbtn.is-on .ff-ic-xs { display: none; }
+.ff-followbtn.is-on .ff-following-label { display: inline; }
+
+/* B1/B2 · shared follower-count partial classes (proof line under the name) */
+.ff-brand-row .brand-followers { display: block; font-size: 12px; color: var(--ff-faint); margin-top: 2px; }
+.ff-brand-row .brand-followers--cta { color: var(--ff-accent); font-weight: 700; }
+.ff-brand-row .brand-dot { color: var(--ff-faint); }
+.ff-brand-row .brand-viewers b { color: var(--ff-ink); font-weight: 800; }
+
+
+/* B5 · scale-pop beat on a successful follow */
+@keyframes ffFollowPop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.ff-followbtn--pop { animation: ffFollowPop .25s var(--ff-ease); }
+@media (prefers-reduced-motion: reduce) { .ff-followbtn--pop { animation: none; } }
+
+/* B7 · story ring on the brand logo when stories are live */
+.ff-brand-logo--live { border: 0; padding: 2.5px; background: var(--ff-accent-gradient); cursor: pointer; }
+.ff-brand-logo--live img { border: 2px solid var(--ff-bg); border-radius: 11px; }
+
+/* B6 · Following sheet rows */
+.ff-follow-sheet-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--ff-line); font-size: 15px; color: var(--ff-ink); }
+.ff-follow-sheet-row input[type="checkbox"] { width: 44px; height: 26px; appearance: none; -webkit-appearance: none; background: var(--ff-surface); border: 1.5px solid var(--ff-line); border-radius: 999px; position: relative; cursor: pointer; transition: background .2s; flex: none; }
+.ff-follow-sheet-row input[type="checkbox"]::after { content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--ff-shadow-sm); transition: inset-inline-start .2s; }
+.ff-follow-sheet-row input[type="checkbox"]:checked { background: var(--ff-accent); }
+.ff-follow-sheet-row input[type="checkbox"]:checked::after { inset-inline-start: 22px; }
+.ff-followsheet-unfollow { width: 100%; margin-top: 16px; background: rgba(224,50,47,.1); color: var(--ff-nonveg); border: 0; padding: 13px; border-radius: 999px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: var(--ff-font-headings); }
+.ff-followsheet-cancel { width: 100%; margin-top: 10px; background: none; border: 1.5px solid var(--ff-line); color: var(--ff-muted); padding: 13px; border-radius: 999px; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+/* B8 · About sheet */
+.ff-about-rating { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: var(--ff-ink); margin: 4px 0 14px; }
+.ff-about-star { color: var(--ff-star); }
+.ff-about-rating small { color: var(--ff-muted); font-weight: 500; }
+.ff-about-list { display: flex; flex-direction: column; }
+.ff-about-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--ff-line); color: var(--ff-ink); font-size: 14px; text-decoration: none; }
+.ff-about-row svg { width: 19px; height: 19px; flex: none; color: var(--ff-accent); }
+.ff-about-row span { min-width: 0; word-break: break-word; }
+.ff-about-reviews { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+.ff-about-review-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; }
+.ff-about-review p { color: var(--ff-muted); font-size: 13px; margin-top: 4px; line-height: 1.5; }
+
+/* F3 · stories rail + viewer */
+.ff-stories-rail { display: flex; gap: 14px; overflow-x: auto; padding: 4px 18px 14px; scrollbar-width: none; max-width: var(--ff-app-w); margin: 0 auto; }
+/* the author display above outranks the UA [hidden] rule — restore it, or the empty
+   rail keeps its 18px of padding as a dead band under the brand row */
+.ff-stories-rail[hidden] { display: none; }
+.ff-stories-rail::-webkit-scrollbar { display: none; }
+.ff-story-bubble { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: none; width: 66px; background: none; border: 0; cursor: pointer; }
+.ff-sb-ring { width: 60px; height: 60px; border-radius: 50%; padding: 2.5px; background: var(--ff-accent-gradient); display: grid; place-items: center; }
+.ff-sb-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--ff-bg); }
+.ff-story-bubble small { font-size: 11px; color: var(--ff-text-muted); max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ff-story-viewer { position: fixed; inset: 0; z-index: 500; background: #000; opacity: 0; transition: opacity .3s var(--ff-ease); }
+.ff-story-viewer.is-open { opacity: 1; }
+.ff-sv-progress { position: absolute; top: calc(12px + env(safe-area-inset-top)); inset-inline: 12px; z-index: 3; display: flex; gap: 5px; }
+.ff-sv-seg { flex: 1; height: 3px; border-radius: 3px; background: rgba(255,255,255,.28); overflow: hidden; }
+.ff-sv-seg i { display: block; height: 100%; width: 0; background: #fff; transition: width .05s linear; }
+.ff-sv-close { position: absolute; top: calc(26px + env(safe-area-inset-top)); inset-inline-end: 16px; z-index: 4; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,.35); color: #fff; display: grid; place-items: center; border: 0; cursor: pointer; }
+.ff-sv-close svg { width: 20px; height: 20px; }
+/* 36px story-close → 44px tap floor. */
+.ff-sv-close::after { content: ""; position: absolute; inset: -4px; }
+.ff-sv-stage { position: absolute; inset: 0; display: flex; align-items: flex-end; }
+.ff-sv-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ff-sv-nav { position: absolute; top: 0; bottom: 0; width: 35%; z-index: 2; background: transparent; border: 0; cursor: pointer; }
+.ff-sv-nav.prev { inset-inline-start: 0; }
+.ff-sv-nav.next { inset-inline-end: 0; }
+.ff-sv-foot { position: relative; z-index: 3; width: 100%; padding: 24px 22px calc(30px + env(safe-area-inset-bottom)); background: linear-gradient(to top, rgba(0,0,0,.72), transparent); }
+.ff-sv-caption { color: #fff; font-size: 17px; font-weight: 700; line-height: 1.3; margin-bottom: 14px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+.ff-sv-cta { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 26px; }
+.ff-sv-cta[hidden] { display: none; }
+
+/* F1 · meal-plan CTA + sheet */
+.ff-mealplan-cta { display: flex; align-items: center; gap: 12px; width: 100%; text-align: start; background: var(--ff-accent-soft); border: 1.5px solid var(--ff-accent-0_15); border-radius: 16px; padding: 13px 15px; margin-bottom: 14px; cursor: pointer; transition: transform var(--ff-t); }
+.ff-mealplan-cta:active { transform: scale(.98); }
+.ff-mealplan-cta .ff-mp-ic { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,90,60,.12); display: grid; place-items: center; color: var(--ff-accent); flex: none; }
+.ff-mealplan-cta .ff-mp-ic svg { width: 20px; height: 20px; }
+.ff-mealplan-cta .ff-mp-copy { flex: 1; }
+.ff-mealplan-cta .ff-mp-copy b { display: block; font-size: 14px; font-weight: 700; color: var(--ff-ink); }
+.ff-mealplan-cta .ff-mp-copy small { display: block; font-size: 11.5px; color: var(--ff-text-muted); margin-top: 2px; }
+.ff-mealplan-cta .ff-mp-arr { width: 18px; height: 18px; color: var(--ff-faint); flex: none; }
+.ff-seg-mini { display: flex; gap: 6px; flex-wrap: wrap; }
+.ff-seg-mini button { padding: 8px 14px; border-radius: 999px; background: var(--ff-surface); border: 1.5px solid var(--ff-line); font-size: 12.5px; font-weight: 700; color: var(--ff-text-muted); cursor: pointer; }
+.ff-seg-mini button.is-on { border-color: var(--ff-accent); color: var(--ff-accent); background: var(--ff-accent-soft); }
+.ff-chiprow { display: flex; gap: 6px; flex-wrap: wrap; }
+.ff-chiprow button { padding: 8px 12px; border-radius: 999px; background: var(--ff-surface); border: 1.5px solid var(--ff-line); font-size: 12.5px; font-weight: 700; color: var(--ff-text-muted); cursor: pointer; }
+.ff-chiprow button.is-on { border-color: var(--ff-accent); color: var(--ff-accent); background: var(--ff-accent-soft); }
+#cvMpDone .ff-ghostbtn { display: inline-block; margin-top: 12px; }
+
+/* F4 · branch map */
+.ff-branchmap { width: 100%; height: 240px; border-radius: 16px; overflow: hidden; background: var(--ff-surface); margin-bottom: 8px; }
+.ff-branchmap .leaflet-container { height: 100%; background: var(--ff-surface); font: inherit; }
+.ff-branch-list { display: grid; gap: 8px; margin-top: 8px; }
+.ff-branch-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; padding: 12px 14px; border-radius: 14px; background: var(--ff-surface); border: 1.5px solid var(--ff-line); cursor: pointer; }
+.ff-branch-row svg { width: 18px; height: 18px; color: var(--ff-accent); flex: none; }
+.ff-branch-row b { flex: 1; font-size: 13.5px; font-weight: 700; color: var(--ff-ink); }
+.ff-branch-row b small { display: block; font-weight: 500; font-size: 11.5px; color: var(--ff-text-muted); margin-top: 2px; }
+.ff-branch-dist { font-size: 12px; font-weight: 700; color: var(--ff-accent); flex: none; }
+.ff-nearest-branch-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; padding: 10px 15px; border-radius: 999px; background: var(--ff-surface); border: 1.5px solid var(--ff-line); font-size: 13px; font-weight: 700; color: var(--ff-text-muted); cursor: pointer; }
+.ff-nearest-branch-btn svg { color: var(--ff-accent); }
+.ff-geo-attrib { font-size: 10.5px; color: var(--ff-faint); margin: 6px 2px 0; }
+
+/* F5 · address autocomplete */
+.ff-saved-addrs { display: grid; gap: 8px; margin-bottom: 10px; }
+.ff-saved-addr { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; padding: 10px 12px; border: 1.5px solid var(--ff-line); border-radius: 14px; background: var(--ff-bg-card); color: var(--ff-ink); cursor: pointer; }
+.ff-saved-addr svg { flex: none; width: 18px; height: 18px; color: var(--ff-text-muted); }
+.ff-saved-addr .ff-sa-text { min-width: 0; display: grid; gap: 1px; }
+.ff-saved-addr .ff-sa-text b { font-size: 13px; font-weight: 700; }
+.ff-saved-addr .ff-sa-text small { font-size: 11.5px; color: var(--ff-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-saved-addr.is-on { border-color: var(--ff-accent); box-shadow: 0 0 0 1px var(--ff-accent); }
+.ff-saved-addr.is-on svg { color: var(--ff-accent); }
+.ff-addr-field { position: relative; }
+.ff-addr-field textarea#ff-address { padding-inline-end: 46px; }
+.ff-uselocbtn { position: absolute; top: 8px; inset-inline-end: 8px; width: 34px; height: 34px; display: grid; place-items: center; color: var(--ff-accent); background: var(--ff-bg); border: 1.5px solid var(--ff-line); border-radius: 10px; cursor: pointer; }
+.ff-uselocbtn svg { width: 18px; height: 18px; }
+.ff-uselocbtn.is-loading { opacity: .5; animation: ff-spin 1s linear infinite; }
+@keyframes ff-spin { to { transform: rotate(360deg); } }
+.ff-addr-suggest { position: absolute; top: calc(100% + 6px); inset-inline: 0; z-index: 20; background: var(--ff-bg-card); border: 1px solid var(--ff-line); border-radius: 14px; overflow: hidden; box-shadow: var(--ff-shadow-md); max-height: 230px; overflow-y: auto; }
+.ff-addr-opt { display: block; width: 100%; text-align: start; padding: 11px 15px; font-size: 13px; color: var(--ff-ink); border: 0; border-bottom: 1px solid var(--ff-line); background: none; cursor: pointer; }
+.ff-addr-opt:last-child { border-bottom: 0; }
+.ff-addr-opt:active, .ff-addr-opt:hover { background: var(--ff-surface); }
+
+/* F6 · rich reviews */
+.ff-reviews { padding: 6px 0 4px; margin-top: 16px; border-top: 1px solid var(--ff-line); }
+.ff-rv-head { display: flex; gap: 18px; background: var(--ff-surface); border: 1px solid var(--ff-line); border-radius: 16px; padding: 16px; margin: 12px 0; }
+.ff-rv-avg { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none; min-width: 78px; }
+.ff-rv-avg b { font-size: 32px; font-weight: 800; line-height: 1; color: var(--ff-ink); }
+.ff-rv-avg small { font-size: 11px; color: var(--ff-faint); margin-top: 4px; }
+.ff-stars-mini { color: var(--ff-star); font-size: 13px; letter-spacing: 1px; }
+.ff-stars-mini .ff-s-dim { color: var(--ff-line); }
+.ff-rv-dist { flex: 1; display: flex; flex-direction: column; gap: 5px; justify-content: center; }
+.ff-rv-bar { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--ff-faint); }
+.ff-rv-bar em { font-style: normal; width: 10px; text-align: end; }
+.ff-rv-bar i { flex: 1; height: 6px; border-radius: 3px; background: var(--ff-surface-2); overflow: hidden; }
+.ff-rv-bar i s { display: block; height: 100%; background: var(--ff-star); border-radius: 3px; }
+.ff-rv-bar b { width: 20px; text-align: end; font-weight: 700; color: var(--ff-text-muted); }
+.ff-rv-filters { display: flex; gap: 8px; margin-bottom: 12px; }
+.ff-rv-filters button { padding: 7px 14px; border-radius: 999px; background: var(--ff-surface); border: 1.5px solid var(--ff-line); font-size: 12.5px; font-weight: 700; color: var(--ff-text-muted); cursor: pointer; }
+.ff-rv-filters button.is-on { border-color: var(--ff-accent); color: var(--ff-accent); background: var(--ff-accent-soft); }
+.ff-rv-list { display: grid; gap: 12px; }
+.ff-rv-item { background: var(--ff-surface); border: 1px solid var(--ff-line); border-radius: 14px; padding: 13px 15px; }
+.ff-rv-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.ff-rv-item-top b { font-size: 13.5px; font-weight: 700; color: var(--ff-ink); }
+.ff-rv-verified { font-size: 10.5px; font-weight: 800; color: var(--ff-green); background: rgba(18,183,106,.1); padding: 2px 8px; border-radius: 999px; }
+.ff-rv-item p { font-size: 13px; color: var(--ff-text-muted); line-height: 1.5; margin-top: 6px; }
+.ff-rv-photos { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.ff-rv-photos img { width: 66px; height: 66px; border-radius: 11px; object-fit: cover; border: 1px solid var(--ff-line); }
+.ff-rv-empty { font-size: 13px; color: var(--ff-faint); text-align: center; padding: 22px 0; }
+
+/* F7 · OTP checkout gate */
+.ff-otp-boxes { display: flex; gap: 8px; justify-content: center; margin: 8px 0 4px; }
+.ff-otp-boxes input { width: 46px; height: 56px; font-size: 21px; text-align: center; border: 1.5px solid var(--ff-line); border-radius: 12px; background: var(--ff-bg); color: var(--ff-ink); }
+.ff-otp-boxes input:focus { border-color: var(--ff-accent); }
+
+/* RTL: physical pins for number-guarded insets */
+[dir="rtl"] .ff-uselocbtn { inset-inline-end: 8px; }
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .ff-tabbar (bottom 0 + 63px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(57px + env(safe-area-inset-bottom, 0px)); }
+
+/* ── agent-chat FAB clearance (transient, stacks on the tabbar) ────────────
+   Feast is the one theme with both: the persistent .ff-tabbar (handled by the
+   static offset above) AND a floating cart button that sits above it at
+   inset-block-end:84px once the cart fills. Same inline-style proxy as velvet.
+   This rule is more specific than the plain :root above, so it wins while the
+   button is shown and falls back to the tabbar-only offset when it is not.
+   Button: bottom 84px + 48px tall — measured clearance 134px, so 127 leaves an
+   8px gap. (Measured, not derived: the CSS arithmetic said 122 and that cleared
+   by under 4px.) */
+:root:has(#ff-cart-toggle[style*="display: flex"]) { --agent-fab-offset: calc(127px + env(safe-area-inset-bottom, 0px)); }
+
+/* ============================ PARITY-2: nav sub-chips, tips, waiter,
+   dietary filter, specials rail, splash ================================== */
+
+/* [hidden] guard — class-level display: below overrides the UA hidden rule,
+   so re-assert it for the sub-row + its groups. */
+.ff-subcats[hidden], .ff-subgroup[hidden] { display: none !important; }
+
+/* Secondary (sub-category) chip row — swaps per active parent */
+.ff-subcats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin-block-start: 12px;
+    padding-block-end: 2px;
+    scrollbar-width: none;
+}
+.ff-subcats::-webkit-scrollbar { display: none; }
+.ff-subgroup { display: flex; gap: 8px; }
+.ff-subcat {
+    flex: none;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--ff-surface);
+    border: 1.5px solid var(--ff-line);
+    font-family: var(--ff-font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ff-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color var(--ff-t), border-color var(--ff-t), background var(--ff-t);
+}
+.ff-subcat.is-on {
+    color: var(--ff-accent);
+    border-color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+    font-weight: 700;
+}
+
+/* Dietary filter trigger button (inside the search box) */
+.ff-filter-btn {
+    position: relative;
+    flex: none;
+    inline-size: 34px;
+    block-size: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background: var(--ff-surface-2);
+    color: var(--ff-ink);
+    cursor: pointer;
+    transition: background var(--ff-t), color var(--ff-t);
+}
+.ff-filter-btn svg { inline-size: 18px; block-size: 18px; }
+.ff-filter-btn:active { background: var(--ff-accent-soft); color: var(--ff-accent); }
+.ff-filter-dot {
+    position: absolute;
+    inset-block-start: 5px;
+    inset-inline-end: 5px;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    background: var(--ff-accent);
+    border: 1.5px solid var(--ff-bg);
+}
+.ff-filter-group-title {
+    font-family: var(--ff-font-headings);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ff-ink);
+    margin: 16px 0 9px;
+}
+.ff-filter-group-title:first-child { margin-block-start: 4px; }
+.ff-filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-block-start: 22px;
+}
+.ff-filter-actions .ff-btn-primary { flex: 1; }
+.ff-btn-ghost {
+    padding: 13px 18px;
+    border-radius: var(--ff-r-md);
+    background: var(--ff-surface);
+    border: 1.5px solid var(--ff-line);
+    font-family: var(--ff-font-headings);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ff-ink);
+    cursor: pointer;
+}
+.ff-btn-ghost:active { transform: scale(.98); }
+
+/* Store credit / wallet (reuses .ff-checkbox-option; just carries sibling rhythm) */
+.ff-wallet-section { margin: 4px 0 16px; }
+.ff-wallet-section .ff-wallet-option { margin: 0; }
+
+/* Tips */
+.ff-tip-section { margin: 4px 0 16px; }
+.ff-tip-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ff-muted);
+    margin-block-end: 9px;
+}
+.ff-tip-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.ff-tip-row button {
+    flex: 1;
+    min-inline-size: 56px;
+    padding: 9px 6px;
+    border-radius: var(--ff-r-sm);
+    background: var(--ff-surface);
+    border: 1.5px solid var(--ff-line);
+    font-family: var(--ff-font-body);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ff-muted);
+    cursor: pointer;
+    transition: color var(--ff-t), border-color var(--ff-t), background var(--ff-t);
+}
+.ff-tip-row button.is-on {
+    color: var(--ff-accent);
+    border-color: var(--ff-accent);
+    background: var(--ff-accent-soft);
+}
+#ff-custom-tip {
+    inline-size: 100%;
+    margin-block-start: 9px;
+    padding: 11px 13px;
+    border-radius: var(--ff-r-sm);
+    border: 1.5px solid var(--ff-line);
+    background: var(--ff-bg);
+    font-family: var(--ff-font-body);
+    font-size: 14px;
+    color: var(--ff-ink);
+}
+
+/* Call the waiter */
+.ff-waiter-row { margin: 4px 0 14px; }
+.ff-waiter-btn {
+    inline-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 16px;
+    border-radius: var(--ff-r-md);
+    background: var(--ff-surface);
+    border: 1.5px solid var(--ff-border-gold-focus);
+    font-family: var(--ff-font-headings);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ff-accent);
+    cursor: pointer;
+    transition: background var(--ff-t);
+}
+.ff-waiter-btn svg { inline-size: 19px; block-size: 19px; }
+.ff-waiter-btn:active { background: var(--ff-accent-soft); }
+.ff-waiter-btn:disabled { opacity: .6; cursor: default; }
+
+/* Today's specials rail */
+.ff-specials { padding: 18px 16px 6px; }
+.ff-specials-head { margin-block-end: 12px; }
+.ff-specials-kicker {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ff-accent);
+    margin-block-end: 3px;
+}
+.ff-specials-title {
+    font-family: var(--ff-font-headings);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ff-ink);
+}
+.ff-specials-rail {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-block-end: 6px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+}
+.ff-specials-rail::-webkit-scrollbar { display: none; }
+.ff-special-card {
+    flex: none;
+    inline-size: 168px;
+    background: var(--ff-bg);
+    border: 1px solid var(--ff-line);
+    border-radius: var(--ff-r-md);
+    overflow: hidden;
+    box-shadow: var(--ff-shadow-sm);
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: transform var(--ff-spring), box-shadow var(--ff-t);
+}
+.ff-special-card:active { transform: scale(.97); }
+.ff-special-card.ff-sold-out { opacity: .65; cursor: default; }
+.ff-special-media {
+    position: relative;
+    block-size: 108px;
+    background:
+        radial-gradient(circle at 50% 42%, var(--ff-surface-2) 0 30%, transparent 31%),
+        var(--ff-surface);
+}
+.ff-special-media img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.ff-special-media-empty { background: var(--ff-surface); }
+.ff-special-soldout {
+    position: absolute;
+    inset-block-start: 8px;
+    inset-inline-start: 8px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(20,22,28,.72);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+.ff-special-body { padding: 10px 12px 12px; }
+.ff-special-name {
+    font-family: var(--ff-font-headings);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ff-ink);
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-block-end: 6px;
+    min-block-size: 34px;
+}
+.ff-special-price {
+    font-family: var(--ff-font-headings);
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ff-accent);
+}
+
+/* Bespoke splash */
+.ff-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--ff-bg);
+    animation: ff-splash-out .6s var(--ff-ease) 2.1s forwards;
+}
+.ff-splash.is-hidden { opacity: 0; pointer-events: none; transition: opacity .5s var(--ff-ease); }
+.ff-splash-inner { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ff-splash-logo {
+    inline-size: 72px;
+    block-size: 72px;
+    border-radius: 20px;
+    object-fit: cover;
+    margin-block-end: 18px;
+    box-shadow: var(--ff-shadow-md);
+    animation: ff-splash-pop .7s var(--ff-spring) both;
+}
+.ff-splash-hero {
+    position: relative;
+    inline-size: 190px;
+    block-size: 100px;
+    margin-block-end: 6px;
+}
+.ff-splash-ring {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 96px;
+    block-size: 96px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px dashed var(--ff-accent);
+    opacity: .35;
+    animation: ff-splash-spin 8s linear infinite;
+}
+.ff-splash-pop {
+    position: absolute;
+    inline-size: 58px;
+    block-size: 58px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--ff-shadow-md);
+    animation: ff-splash-pop .7s var(--ff-spring) both;
+}
+.ff-splash-pop-0 { inset-block-start: 20px; inset-inline-start: 8px;  animation-delay: .06s; }
+.ff-splash-pop-1 { inset-block-start: 0;    inset-inline-start: 66px; inline-size: 66px; block-size: 66px; animation-delay: .14s; }
+.ff-splash-pop-2 { inset-block-start: 24px; inset-inline-end: 8px;    animation-delay: .22s; }
+.ff-splash-title {
+    font-family: var(--ff-font-headings);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ff-ink);
+    margin-block-start: 12px;
+}
+.ff-splash-tag { font-size: 13.5px; color: var(--ff-muted); margin-block-start: 4px; }
+.ff-splash-skip {
+    position: absolute;
+    inset-block-end: 34px;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: var(--ff-surface);
+    border: 1px solid var(--ff-line);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ff-muted);
+    cursor: pointer;
+}
+@keyframes ff-splash-pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes ff-splash-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes ff-splash-out { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@media (prefers-reduced-motion: reduce) {
+    .ff-splash { animation-delay: 1.2s; }
+    .ff-splash-ring { animation: none; }
+}
+
+/* Keyboard focus rings (a11y). Only inputs styled :focus — every button,
+   link, icon button, category, menu card, order-type option and nav tab was
+   invisible to keyboard users. One coral-accent ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.feast-container a:focus-visible,
+.feast-container button:focus-visible,
+.feast-container [tabindex]:focus-visible,
+.feast-container .ff-card:focus-visible,
+.feast-container .ff-cat-btn:focus-visible,
+.feast-container .ff-chip:focus-visible { outline: 2px solid var(--ff-accent); outline-offset: 2px; }
+/* inputs already show a focus treatment; suppress the ring to avoid doubling. */
+.feast-container input:focus-visible,
+.feast-container textarea:focus-visible,
+.feast-container select:focus-visible { outline: none; }
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Same centred-overlay idiom .ff-qty-btn already uses. The trash icon draws at
+   16px inside 4px of padding; the actions row leaves 6px between controls, so
+   the inline size stays narrow and the block size carries it to 44px. */
+.ff-cart-item-rm { position: relative; }
+.ff-cart-item-rm::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 32px;
+    block-size: 44px;
+    transform: translate(-50%, -50%);
+}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.ff-splash-skip,.ff-followbtn,.ff-linkbtn,.ff-tab-btn{min-block-size:44px}
+.ff-drawer-close{inline-size:44px;block-size:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.ff-order-type-tabs button,.ff-auth-tabs button{min-block-size:44px}
+
+/* ── R2 · splash session-gate: hide instantly (pre-paint) on a repeat view ── */
+:root.ff-splash-seen .ff-splash { display: none !important; }
+
+/* ── R4 · open-now chip (rides the .ff-chip pill; a dot instead of an icon) ── */
+.ff-open-chip { gap: 6px; }
+.ff-open-chip i {
+    inline-size: 7px; block-size: 7px; border-radius: 50%;
+    background: var(--ff-green); flex: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ff-green) 22%, transparent);
+}
+.ff-open-chip.is-closed { color: #ef4444; }
+.ff-open-chip.is-closed i { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.20); }
+
+/* ── R5 · guest recent-orders block (top of the cart drawer) ── */
+.ff-recent-orders { margin-bottom: 14px; }
+.ff-recent-orders-title {
+    display: block; font-size: 12px; font-weight: 700; letter-spacing: .02em;
+    text-transform: uppercase; color: var(--ff-faint); margin-bottom: 8px;
+}
+.ff-recent-orders-list { display: grid; gap: 8px; }
+.ff-recent-order-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 10px 12px; border: 1.5px solid var(--ff-line); border-radius: 14px;
+    background: var(--ff-bg-card); color: var(--ff-ink); text-decoration: none;
+}
+.ff-recent-order-row div { display: grid; gap: 1px; min-width: 0; }
+.ff-recent-order-row b { font-size: 13px; font-weight: 700; }
+.ff-recent-order-row small { font-size: 11.5px; color: var(--ff-faint); }
+.ff-recent-order-row svg { flex: none; inline-size: 16px; block-size: 16px; color: var(--ff-faint); }
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   these themes had a static ring + snap recolour; add change-driven
+   pop/flash + animate the connector recolour. Neutralised by the
+   global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.ff-tl-line{transition:background .5s ease}
+.ff-tl.done .ff-tl-node{animation:mbStepPop .5s ease}
+.ff-tl.now .ff-tl-copy{animation:mbStepFlash .8s ease}
+.ff-tl:last-child.done .ff-tl-node{animation:mbDone .7s ease}
+
+/* ── MC-34 currency-estimate notice, feast skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Surface chip; follows the face toggle via role tokens. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--ff-surface);border:1px solid var(--ff-surface-2);color:var(--ff-muted);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--ff-muted)}
+
+/* ── notification-center panel — feast skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--ff-bg-card,#ffffff);--nb-surface-2:var(--ff-surface-2,#eef0f4);--nb-line:var(--ff-surface-2,#eef0f4);--nb-ink:var(--ff-ink,#14161c);--nb-muted:var(--ff-muted,#6b7280);--nb-accent:var(--ff-accent,#ff5a3c)}
+
+/* Favourites — card heart + drawer rows (feast shipped without favourites) */
+.ff-menu-card { position: relative; }
+.ff-fav-btn { position: absolute; top: 8px; inset-inline-end: 8px; z-index: 3; inline-size: 34px; block-size: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(20,20,20,.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff; cursor: pointer; padding: 0; }
+/* 34px card heart → 44px tap floor (FEAST-F10 pattern). */
+.ff-fav-btn::after { content: ""; position: absolute; inset: -5px; }
+.ff-fav-btn svg { inline-size: 18px; block-size: 18px; }
+.ff-fav-btn.is-fav { color: var(--ff-accent, #e5484d); }
+.ff-fav-btn.is-fav svg { fill: currentColor; }
+.ff-fav-title { margin: 0 0 14px; font-size: 20px; }
+.ff-fav-row { display: flex; align-items: center; gap: 12px; padding: 11px 2px; border-block-end: 1px solid var(--ff-line); color: inherit; text-decoration: none; }
+.ff-fav-row-img { inline-size: 54px; block-size: 54px; border-radius: 10px; object-fit: cover; flex: none; background: rgba(127,127,127,.14); }
+.ff-fav-row-body { display: flex; flex-direction: column; gap: 3px; min-inline-size: 0; }
+.ff-fav-row-name { font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ff-fav-row-price { font-size: 13px; color: var(--ff-muted, #888); }
+.ff-fav-empty { text-align: center; padding: 40px 16px; color: var(--ff-muted, #888); }
+.ff-fav-empty p { font-size: 16px; margin: 0 0 6px; font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — feast skin  (lane C · copy-adapt of the crave L0 reference)
+   ───────────────────────────────────────────────────────────
+   Feast is a bespoke-sheet family: its native sheet is the .ff-drawer bottom sheet
+   (rounded-top .ff-drawer-sheet, translateY, spring) toggled by [aria-hidden] — so the
+   shared #mbHotelHub is tuned to that same look here (--ff-bg-sheet surface, 26px top
+   corners, --ff-shadow-lg, spring, drag handle, circular close). Chip mounts natively
+   in .ff-brand-row (data-mb-hotel-chip-slot) beside the follow button. Scoped under
+   .feast-container (feast's root, into which the hub is relocated); both schemes re-ink
+   automatically because every --mbh-* maps onto an --ff-* token that flips with
+   data-ff-face / prefers-color-scheme.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Token contract → feast's real tokens */
+.feast-container #mbHotelChip,
+.feast-container #mbHotelOrderCtrls,
+.feast-container #mbHotelBook,
+.feast-container #mbHotelHub{
+  --mbh-surface:var(--ff-bg-sheet);
+  --mbh-ink:var(--ff-ink);
+  --mbh-muted:var(--ff-muted);
+  --mbh-accent:var(--ff-accent);
+  --mbh-on-accent:var(--ff-accent-ink);
+  --mbh-border:var(--ff-line);
+  --mbh-radius:var(--ff-r-lg);
+  --mbh-font:var(--ff-font-body);
+}
+
+/* ── Room chip: a ghost pill sitting with the follow button in .ff-brand-row ── */
+.feast-container #mbHotelChip{
+  margin:0;padding:8px 14px;gap:7px;flex:none;
+  background:var(--ff-surface);border:1.5px solid var(--ff-line);color:var(--ff-muted);
+  border-radius:999px;font-size:13px;font-weight:700;
+  transition:transform var(--ff-t),background var(--ff-t);
+}
+.feast-container #mbHotelChip:hover{background:var(--ff-surface-2);}
+.feast-container #mbHotelChip:active{transform:scale(.94)}
+.feast-container #mbHotelChip .mb-hotel-roomchip__ic{color:var(--ff-accent)}
+.feast-container #mbHotelChip .mb-hotel-roomchip__room{color:var(--ff-ink)}
+.feast-container #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ff-muted)}
+
+/* ── Hub: feast's .ff-drawer bottom sheet (rounded-top, spring, drag handle) ── */
+.feast-container #mbHotelHubScrim{background:rgba(16,20,30,.5);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
+.feast-container #mbHotelHub{
+  max-inline-size:min(620px,100%);
+  background:var(--ff-bg-sheet);color:var(--ff-ink);
+  border:0;border-start-start-radius:26px;border-start-end-radius:26px;
+  box-shadow:var(--ff-shadow-lg);
+  transition:transform .42s var(--ff-spring);
+}
+.feast-container #mbHotelHub .mb-hotel-hub__grab{background:var(--ff-surface-2);inline-size:40px;block-size:4px;}
+.feast-container #mbHotelHub .mb-hotel-hub__head{padding:12px 18px 10px;}
+.feast-container #mbHotelHub .mb-hotel-hub__title{font-family:var(--ff-font-headings);font-size:18px;font-weight:800;color:var(--ff-ink);}
+.feast-container #mbHotelHub .mb-hotel-hub__x{
+  background:var(--ff-surface);border:0;color:var(--ff-muted);
+  inline-size:34px;block-size:34px;border-radius:50%;font-size:1.35rem;opacity:1;
+}
+.feast-container #mbHotelHub .mb-hotel-hub__x:hover{background:var(--ff-surface-2);}
+.feast-container #mbHotelHub .mb-hotel-hub__greet{color:var(--ff-muted)}
+.feast-container #mbHotelHub .mb-hotel-card{border-color:var(--ff-line)}
+.feast-container #mbHotelHub .mb-hotel-card summary,
+.feast-container #mbHotelHub .mb-hotel-card__t{color:var(--ff-ink)}
+.feast-container #mbHotelHub .mb-hotel-info-link{color:var(--ff-accent)}
+/* service form controls → feast inputs / accent CTA */
+.feast-container #mbHotelHub .mb-hotel-field{
+  background:var(--ff-surface);border:1.5px solid var(--ff-line);color:var(--ff-ink);border-radius:var(--ff-r-sm);
+}
+.feast-container #mbHotelHub .mb-hotel-btn{
+  background:var(--ff-accent);color:var(--ff-accent-ink);border-radius:999px;font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → feast control rows ── */
+.feast-container #mbHotelOrderCtrls{margin:0}
+.feast-container #mbHotelSched,
+.feast-container #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--ff-line);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ff-ink);
+}
+.feast-container #mbHotelSched .mb-hotel-card__t{
+  font-family:var(--ff-font-headings);font-size:14.5px;font-weight:800;color:var(--ff-ink);margin-bottom:11px;
+}
+.feast-container #mbHotelSched .mb-hotel-modes label{color:var(--ff-muted);font-weight:600}
+.feast-container #mbHotelSched input[type="radio"]{accent-color:var(--ff-accent)}
+.feast-container #mbHotelSched .mb-hotel-field{
+  background:var(--ff-surface);border:1.5px solid var(--ff-line);color:var(--ff-ink);border-radius:var(--ff-r-sm);
+}
+.feast-container #mbHotelSched .mb-hotel-note{color:var(--ff-muted)}
+.feast-container #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.feast-container #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.feast-container #mbHotelCharge .mb-hotel-greet__room{color:var(--ff-ink);font-weight:700}
+.feast-container #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ff-muted)}
+.feast-container #mbHotelCharge input[type="checkbox"]{accent-color:var(--ff-accent)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for feast. Surface,
+   ink, border and radius come from feast tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.feast-container .mb-paypending{
+  --pp-surface:var(--ff-bg-card,#ffffff);
+  --pp-ink:var(--ff-ink,#14161c);
+  --pp-muted:var(--ff-muted,#6b7280);
+  --pp-border:var(--ff-line,#ececf0);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--ff-r-md,16px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.feast-container .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.feast-container .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.feast-container .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.feast-container .mb-paypending-txn:empty{display:none}
+.feast-container .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.feast-container .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.feast-container .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.feast-container .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.feast-container .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}

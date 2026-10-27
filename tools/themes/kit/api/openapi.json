@@ -1,0 +1,4851 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Juwri Storefront API (all store types, D14)",
+    "version": "1.7.0-draft",
+    "description": "Design for P3-06b. Additive to /api/v1/storefront (API-1). Display shapes come from the Storefront View Model (kit/viewmodel/viewmodel.schema.json); machine fields sit next to them. Owner decisions API-1…34 (kit/api/README.md §8) are applied. `x-plan-features` on each operation lists the plan features the store owner's plan must include (API-5, API-13)."
+  },
+  "servers": [
+    {
+      "url": "https://{host}",
+      "variables": {
+        "host": {
+          "default": "example.juwri.app"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Store"
+    },
+    {
+      "name": "Catalog"
+    },
+    {
+      "name": "Fulfilment"
+    },
+    {
+      "name": "Booking"
+    },
+    {
+      "name": "Holds"
+    },
+    {
+      "name": "Cart"
+    },
+    {
+      "name": "Orders"
+    },
+    {
+      "name": "Kiosk"
+    },
+    {
+      "name": "Customer"
+    },
+    {
+      "name": "Legacy aliases"
+    }
+  ],
+  "paths": {
+    "/api/v1/storefront/store": {
+      "get": {
+        "operationId": "getStore",
+        "summary": "Store, branch, ordering context and money settings",
+        "tags": [
+          "Store"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          }
+        ],
+        "description": "View Model `store`, `branch`, `context` and `money` blocks. Replaces the food-shaped `GET /restaurant` (kept as an alias).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/catalog": {
+      "get": {
+        "operationId": "getCatalog",
+        "summary": "Catalog page: categories, item cards, facets, search",
+        "tags": [
+          "Catalog"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "description": "Server search (Scout, J27-B)."
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "explode": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "description": "Facet filters by facet id, e.g. filter[size]=m&filter[colour]=sand&filter[brand]=b1. Comma = OR inside a facet."
+          },
+          {
+            "name": "in_stock",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Minor units."
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Minor units."
+          },
+          {
+            "name": "vehicle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "aisle fitment (D12): the shopper's vehicle, only for stores with fitment: `year|make|model` (optionally `|submodel|engine`) or `vin:<VIN or its first characters>`. Keeps only the products that fit it (a confirmed fitment); every card carries `fits_vehicle`. An invalid key is 422."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "relevance",
+                "position",
+                "price_asc",
+                "price_desc",
+                "newest"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 48
+            }
+          }
+        ],
+        "description": "View Model `catalog`. Small menus return every item in one page (food); a food menu of more than 300 items is paged like the large catalogs. Large catalogs (grocery, retail) paginate with an opaque cursor (`next_cursor`). Replaces `GET /menu` (kept as an alias with its legacy shape).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/items/{item_id}": {
+      "get": {
+        "operationId": "getItem",
+        "summary": "Item detail: option groups, variants, pack size, weighed rules, service duration",
+        "tags": [
+          "Catalog"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ItemId"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/items/{item_id}/variants": {
+      "get": {
+        "operationId": "getItemVariants",
+        "summary": "Variant matrix with live stock per variant",
+        "tags": [
+          "Catalog"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ItemId"
+          }
+        ],
+        "description": "Short cache (`max-age=30`). Stock is a state (`in_stock`, `low`, `out`, `untracked`); an exact quantity appears only at or below the store's low-stock threshold (API-6).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VariantsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "grocery",
+          "retail"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/shipping/quote": {
+      "post": {
+        "operationId": "quoteShipping",
+        "summary": "Shipping methods with fees and delivery dates for an address and cart",
+        "tags": [
+          "Fulfilment"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingQuoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingQuoteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "retail"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/delivery/slots": {
+      "get": {
+        "operationId": "getDeliverySlots",
+        "summary": "Delivery or pickup slots per day with remaining capacity",
+        "tags": [
+          "Fulfilment"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "name": "order_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrderTypeKey"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Store-local date; default today."
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 14,
+              "default": 3
+            }
+          },
+          {
+            "name": "zone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque zone key returned by the quote for the address; capacity is per branch and zone."
+          },
+          {
+            "name": "after_slot",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Laundry: return delivery slots at least the turnaround after this pickup slot."
+          }
+        ],
+        "description": "`Cache-Control: no-store`. basket checkout slots, laundry pickup + delivery slots, food schedule-ahead (replaces the web-only `{restaurant}/schedule-slots`). Every listed slot is held for 10 minutes with `POST /holds` (`kind = delivery_slot`, API-11) before submit; slots held by someone else count against `capacity_remaining`.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliverySlotsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "grocery",
+          "food",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/booking/staff": {
+      "get": {
+        "operationId": "getBookingStaff",
+        "summary": "Staff who can perform the chosen services",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ServiceIds"
+          },
+          {
+            "$ref": "#/components/parameters/ManageTokenHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingStaffResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ],
+        "description": "Needs the `booking_api` plan feature (API-5, else 403 `booking_api_not_enabled`). With `X-Manage-Token` (reschedule, API-8) only staff at the booking's price are listed."
+      }
+    },
+    "/api/v1/storefront/booking/days": {
+      "get": {
+        "operationId": "getBookingDays",
+        "summary": "Day strip: which days have free slots",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ServiceIds"
+          },
+          {
+            "$ref": "#/components/parameters/OptionIds"
+          },
+          {
+            "$ref": "#/components/parameters/StaffId"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31,
+              "default": 14
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ManageTokenHeader"
+          }
+        ],
+        "description": "409 `bookings_not_open` when the store has no hours yet (D13). With `X-Manage-Token` (reschedule, API-8) a day is `available` only when it has a slot at the booking's price. Needs the `booking_api` plan feature (API-5, else 403 `booking_api_not_enabled`).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDaysResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/booking/slots": {
+      "get": {
+        "operationId": "getBookingSlots",
+        "summary": "Free slots per staff for one day",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ServiceIds"
+          },
+          {
+            "$ref": "#/components/parameters/OptionIds"
+          },
+          {
+            "$ref": "#/components/parameters/StaffId"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "at_home",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Service at the customer's address (adds travel buffer, radius check)."
+          },
+          {
+            "$ref": "#/components/parameters/ManageTokenHeader"
+          }
+        ],
+        "description": "`Cache-Control: no-store`. Slots already held by someone else are returned as `full`. With `X-Manage-Token` (reschedule, API-8) only slots at the booking's price are listed and the answer carries `reschedule_of`. Needs the `booking_api` plan feature (API-5, else 403 `booking_api_not_enabled`).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingSlotsResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/holds": {
+      "post": {
+        "operationId": "createHold",
+        "summary": "Hold a booking, delivery, pickup or laundry slot for 10 minutes",
+        "tags": [
+          "Holds"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/ManageTokenHeader"
+          }
+        ],
+        "description": "10-minute hold, same mechanism for every slot type (API-11): booking slots when the customer continues (book §5), grocery delivery slots (API-3), food schedule-ahead pickup and delivery slots, and laundry pickup + delivery slots. The hold is re-checked at submit (`POST /bookings`, `POST /orders`, reschedule); an expired or lost hold answers 409 `hold_expired` / `slot_taken` (booking) or `slot_full` (delivery) with `details.next_free_slot`. Returns a `token` that must be sent as `X-Hold-Token` to release or use the hold. Creating a new hold for the same `Idempotency-Key` replays the first one. Limits: at most 3 live holds per token per IP. A hosted order or booking made from the hold binds it to its 15-minute payment window (API-10). `kind = booking_slot` also needs the `booking_api` plan feature (403 `booking_api_not_enabled`); other holds need only `storefront_api`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HoldRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Held",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hold"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services",
+          "grocery",
+          "food"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ],
+        "x-plan-features-by-kind": {
+          "booking_slot": [
+            "storefront_api",
+            "booking_api"
+          ],
+          "delivery_slot": [
+            "storefront_api"
+          ]
+        }
+      }
+    },
+    "/api/v1/storefront/holds/{hold_id}": {
+      "delete": {
+        "operationId": "releaseHold",
+        "summary": "Release a hold early",
+        "tags": [
+          "Holds"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/HoldId"
+          },
+          {
+            "$ref": "#/components/parameters/HoldToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Released, and the pending hosted order or booking (deposit) bound to it was cancelled (\"Release holds during payment\" on, API-24a, API-26).",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "`no-store`"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HoldReleased"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Released (also returned when already expired). No pending payment was bound to the hold."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "x-store-types": [
+          "services",
+          "grocery",
+          "food"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ],
+        "description": "Releases a booking or delivery hold. A booking hold also needs the `booking_api` plan feature. A hold bound to a pending hosted order or a booking waiting for its hosted deposit (API-10; one rule for both, API-26) follows the per-store setting \"Release holds during payment\" (API-24a, `StoreResponse.holds.release_during_payment`, off by default): off, it is not released and the call answers 409 `hold_in_use` (the payment window releases it); on, the release cancels the pending order or booking, frees the slot and answers 200 `HoldReleased` naming what was cancelled. A plain hold answers 204. API-29: when a release cancels a pending order or booking, core sends the customer the flow's payment-not-completed message only if the store has \"Message when a customer cancels a pending payment\" on (off by default; a notification setting, not exposed here).",
+        "x-plan-features-by-kind": {
+          "booking_slot": [
+            "storefront_api",
+            "booking_api"
+          ],
+          "delivery_slot": [
+            "storefront_api"
+          ]
+        }
+      }
+    },
+    "/api/v1/storefront/quote": {
+      "post": {
+        "operationId": "quoteCart",
+        "summary": "Server-priced quote for a cart (the only source of totals)",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          }
+        ],
+        "description": "No side effects. Lines that cannot be sold come back as `warnings`, never silently dropped. Returns a `quote_hash` the submit must echo (contract §5.3 re-quote). A cart that carries a booking hold also needs the `booking_api` plan feature (API-5).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/orders": {
+      "post": {
+        "operationId": "createOrder",
+        "summary": "Place an order (food, grocery, retail, laundry)",
+        "tags": [
+          "Orders"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ],
+            "CustomerToken": []
+          },
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyOrder"
+          },
+          {
+            "$ref": "#/components/parameters/HoldTokenOptional"
+          }
+        ],
+        "description": "Existing path, widened. `payment.mode` is `pay_later` or `hosted` (API-2); for `hosted` the 201 carries `payment.next_action.url` (core-hosted payment page) and `next_action.expires_at` = creation + 15 minutes (API-10). The order starts as `pending_payment`; if it is still unpaid when the window ends it is cancelled (`status = cancelled`, `payment.status = failed`) and its slot, hold and reserved stock are released. The client polls `GET /orders/{track_token}` after the shopper returns to `return_url`. A slot must be held first (`hold_id` + `X-Hold-Token`; grocery delivery, food schedule-ahead, laundry; API-3, API-11); the hold is re-checked here (409 `hold_expired` / `slot_full` with `details.next_free_slot`), consumed by a `pay_later` order, and bound to a `hosted` order until its payment window ends. 409 `quote_changed` carries the new quote in `details.quote`; the client shows old vs new and resubmits with the new hash. `Idempotency-Key` is required with the new body. The legacy body (`items`, `type`, `client_uuid`; idempotency key optional, in the body or the header, until the sunset, API-17) stays accepted until the alias sunset and is marked deprecated (API-4): its responses carry `Deprecation`/`Sunset`, and its errors use the `ApiError` envelope.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/OrderSubmitRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/LegacyOrderRequest"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created (or replayed: `Idempotent-Replayed: true`). New body → `OrderCreated`. Legacy body → the frozen `LegacyOrderCreated` plus the deprecation headers.",
+            "headers": {
+              "Deprecation": {
+                "$ref": "#/components/headers/Deprecation"
+              },
+              "Sunset": {
+                "$ref": "#/components/headers/Sunset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OrderCreated"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LegacyOrderCreated"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/orders/{track_token}": {
+      "get": {
+        "operationId": "getOrder",
+        "summary": "Order status and receipt",
+        "tags": [
+          "Orders"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/TrackToken"
+          }
+        ],
+        "description": "Poll after the shopper returns from the hosted payment page; `payment` is the source of truth. A payment that arrives after the 15-minute window (API-21) leaves the order `cancelled` with `payment.status = received_late` until the store owner refunds it (always allowed, API-28) or accepts it (API-27): `placed` when the slot and stock were re-reserved, else `pending_approval` with the payment `paid` or `authorised` until the owner picks another slot or refunds. A card hold accepted into `pending_approval` that lapses at the gateway first (`payment.authorisation_expires_at`) cancels the order automatically, with the hold `voided` and nothing charged (API-32). The `track_token` never changes. `Cache-Control: no-store`. `GET /api/v1/track/{token}` stays as an alias with its legacy shape.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatusResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/bookings": {
+      "post": {
+        "operationId": "createBooking",
+        "summary": "Confirm a booking from a held slot",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ],
+            "CustomerToken": []
+          },
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/HoldToken"
+          }
+        ],
+        "description": "The hold is re-checked server-side (double-booking guard, P3-10). 409 `hold_expired` / `slot_taken` include `details.next_free_slot`. Deposits (D8) are paid with `payment.mode = hosted` (API-2): the booking starts as `pending_payment` and becomes `confirmed` when the deposit is paid; poll `GET /bookings/{manage_token}` after the shopper returns to `return_url`. Payment window (API-10): `next_action.expires_at` = creation + 15 minutes; the hold is bound to the booking until then, and an unpaid booking is cancelled and its slot released. Guest rule (API-7): with the store's `verify_guest_phone` off a guest books with `customer.name` + `customer.phone`; with it on a customer token with a verified phone is required (403 `phone_verification_required`; get one with the storefront OTP endpoints, API-14) and its phone wins over the body. Walk-in bookings made with a `kiosk` token are exempt (API-15): no customer token, never `phone_verification_required`, and the quote never lists `verified_phone`. Needs the `booking_api` plan feature (API-5, else 403 `booking_api_not_enabled`); with a kiosk token also `kiosk_api` and `kiosk` (API-13).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingSubmitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created (or replayed)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingCreated"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/bookings/{manage_token}": {
+      "get": {
+        "operationId": "getBooking",
+        "summary": "Booking status (signed manage token)",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ManageToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ],
+        "description": "A deposit that arrives after the 15-minute window (API-21) leaves the booking `cancelled` with `payment.status = received_late` until the store owner refunds it (always allowed, API-28) or accepts it (API-27): `confirmed` when the slot was still free, else `pending_approval` with `payment.status = paid` until the owner picks another slot (`confirmed`) or refunds (`cancelled`). The `manage_token` never changes. Needs the `booking_api` plan feature (API-5, else 403 `booking_api_not_enabled`)."
+      }
+    },
+    "/api/v1/storefront/bookings/{manage_token}/cancel": {
+      "post": {
+        "operationId": "cancelBooking",
+        "summary": "Cancel a booking",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ],
+            "CustomerToken": []
+          },
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ManageToken"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "description": "Follows D7/D8: before the cancellation deadline the deposit is refunded only when the store has deposit refunds on (D7, off by default; with refunds off the policy says \"Deposits are not refunded\"). After the deadline the deposit is kept. Response carries the refund row in `quote`. Idempotent. Guest rule (API-7): when the store's `verify_guest_phone` is on, a customer token for the booking's phone is required (403 `phone_verification_required`); when off, the manage token is enough. Needs the `booking_api` plan feature (API-5).",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/bookings/{manage_token}/reschedule": {
+      "post": {
+        "operationId": "rescheduleBooking",
+        "summary": "Reschedule a booking to a held slot",
+        "tags": [
+          "Booking"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ],
+            "CustomerToken": []
+          },
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "booking_api"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          },
+          {
+            "$ref": "#/components/parameters/ManageToken"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/HoldToken"
+          }
+        ],
+        "description": "API-7, in v1. List slots and hold the new one in reschedule mode (`X-Manage-Token` on `GET /booking/slots` and `POST /holds`, `kind = booking_slot`, 10 minutes). The server re-checks the hold (409 `hold_expired` / `slot_taken` with `details.next_free_slot`), checks `booking.reschedule_deadline_at` (409 `past_deadline`; API-9: always equal to `cancel_deadline_at`, one store setting) and that the booking is `confirmed` (409 `booking_not_active`). Same price only (API-8): if the held slot's price for the booking's services and options differs from the booking's price (e.g. another staff level), it answers 409 `price_changed` and nothing changes; a change of price means cancel and rebook. No money moves on reschedule: no payment step, `payment` and the quote totals stay as they were, the paid deposit carries over (D8). Then it moves the booking in one step: the old slot is freed, the hold is consumed, and `public_id`, `number` and `manage_token` stay the same. Idempotent: same key + same body replays the first response (`Idempotent-Replayed: true`). Guest rule (API-7): when the store's `verify_guest_phone` is on, a customer token for the booking's phone is required (403 `phone_verification_required`); when off, the manage token is enough. Needs the `booking_api` plan feature (API-5).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RescheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rescheduled (or replayed)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/storefront/kiosk": {
+      "get": {
+        "operationId": "getKiosk",
+        "summary": "Kiosk context for a kiosk device token",
+        "tags": [
+          "Kiosk"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "kiosk"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/Branch"
+          }
+        ],
+        "description": "Only for tokens minted with the `kiosk` scope. Every call made with a kiosk token needs both plan features (API-13): `kiosk_api` (else 403 `kiosk_api_not_enabled`, `details.feature = kiosk_api`) and the existing `kiosk` feature (else 403 `kiosk_not_enabled`, `details.feature = kiosk`), plus the store's `kiosk_enabled` toggle (else 403 `kiosk_not_enabled` without `details.feature`). `kiosk_api` does not imply `kiosk`. PINs are never returned. Orders and bookings placed with a kiosk token are tagged `source=kiosk` server-side; the body cannot set it.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KioskResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api",
+          "kiosk_api",
+          "kiosk"
+        ]
+      }
+    },
+    "/api/v1/storefront/menu": {
+      "get": {
+        "operationId": "legacyMenu",
+        "summary": "DEPRECATED alias (legacy food shape) of GET /catalog",
+        "tags": [
+          "Legacy aliases"
+        ],
+        "deprecated": true,
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Legacy shape from PublicController::menu (float prices, integer ids). Frozen: unchanged until removal.",
+            "headers": {
+              "Deprecation": {
+                "$ref": "#/components/headers/Deprecation"
+              },
+              "Sunset": {
+                "$ref": "#/components/headers/Sunset"
+              },
+              "Link": {
+                "$ref": "#/components/headers/Link"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyMenuResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "x-plan-features": [
+          "storefront_api"
+        ],
+        "description": "Removed 12 months after launch (API-4). Successor: `GET /api/v1/storefront/catalog`."
+      }
+    },
+    "/api/v1/storefront/restaurant": {
+      "get": {
+        "operationId": "legacyRestaurant",
+        "summary": "DEPRECATED alias (legacy food shape) of GET /store",
+        "tags": [
+          "Legacy aliases"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "menu:read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Legacy shape from StorefrontController::restaurant. Frozen: unchanged until removal.",
+            "headers": {
+              "Deprecation": {
+                "$ref": "#/components/headers/Deprecation"
+              },
+              "Sunset": {
+                "$ref": "#/components/headers/Sunset"
+              },
+              "Link": {
+                "$ref": "#/components/headers/Link"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyRestaurantResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "x-plan-features": [
+          "storefront_api"
+        ],
+        "deprecated": true,
+        "description": "Removed 12 months after launch (API-4). Successor: `GET /api/v1/storefront/store`."
+      }
+    },
+    "/api/v1/track/{token}": {
+      "get": {
+        "operationId": "legacyTrack",
+        "summary": "DEPRECATED alias (legacy shape) of GET /api/v1/storefront/orders/{track_token}",
+        "tags": [
+          "Legacy aliases"
+        ],
+        "deprecated": true,
+        "security": [],
+        "x-plan-features": [],
+        "description": "Public, `throttle:120,1`, no storefront token (today's behaviour). Removed 12 months after launch (API-4). Successor: `GET /api/v1/storefront/orders/{track_token}`.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order track token."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Legacy shape from PublicController::track (float `total`). Frozen: unchanged until removal.",
+            "headers": {
+              "Deprecation": {
+                "$ref": "#/components/headers/Deprecation"
+              },
+              "Sunset": {
+                "$ref": "#/components/headers/Sunset"
+              },
+              "Link": {
+                "$ref": "#/components/headers/Link"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyTrackResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/menu/{restaurantId}": {
+      "get": {
+        "operationId": "legacyPublicMenu",
+        "summary": "DEPRECATED public menu (legacy food shape); successor GET /api/v1/storefront/catalog",
+        "tags": [
+          "Legacy aliases"
+        ],
+        "deprecated": true,
+        "security": [],
+        "x-plan-features": [],
+        "description": "Public, `throttle:120,1`, no storefront token (today's `PublicController::menu`): integer store id in the path, the servability gate before the ETag check, `ETag` = menu-cache signature, `public, max-age=120`, 304 on `If-None-Match`. Deprecated with the other aliases (API-12): from launch it carries `Deprecation`/`Sunset`/`Link`, and it is removed 12 months after launch. Successor: `GET /api/v1/storefront/catalog` (needs a `menu:read` storefront token).",
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Integer store id (legacy)."
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Legacy shape from PublicController::menu (float prices, integer ids). Frozen: unchanged until removal.",
+            "headers": {
+              "Deprecation": {
+                "$ref": "#/components/headers/Deprecation"
+              },
+              "Sunset": {
+                "$ref": "#/components/headers/Sunset"
+              },
+              "Link": {
+                "$ref": "#/components/headers/Link"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyMenuResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/storefront/customer/otp/request": {
+      "post": {
+        "operationId": "requestCustomerOtp",
+        "summary": "Text a one-time code to a phone",
+        "tags": [
+          "Customer"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "description": "Storefront-token OTP for headless clients (API-14). Needs the `order:write` scope and an `Idempotency-Key` (API-24c). The store comes from the token, never from the path or body; writes enforce the token's Origin allowlist (fails closed for `browser` tokens). Rate limits as Juwri's customer OTP today: 6 per minute per IP (route throttle) and 3 codes per phone per 10 minutes (`SmsOtpService`), plus the `storefront-write` limiter; over a limit it answers 429 `rate_limited` with `Retry-After`. Answers 202 with the same body for every well-formed phone, whether or not it has an account (no enumeration); a malformed phone is 422 `validation_failed`. The code lasts 10 minutes and a new request replaces it. Same `Idempotency-Key` + same body replays the first answer (no second text). Needs only the `storefront_api` plan feature. `Cache-Control: no-store`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpRequestAccepted"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    },
+    "/api/v1/storefront/customer/otp/verify": {
+      "post": {
+        "operationId": "verifyCustomerOtp",
+        "summary": "Verify the code and get a customer token",
+        "tags": [
+          "Customer"
+        ],
+        "security": [
+          {
+            "StorefrontToken": [
+              "order:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "description": "Storefront-token OTP for headless clients (API-14). Needs the `order:write` scope and an `Idempotency-Key` (API-24c). The store comes from the token, never from the path or body; writes enforce the token's Origin allowlist (fails closed for `browser` tokens). Rate limits as today: 10 per minute per IP (route throttle), 5 wrong attempts per code (then the code is void), plus `storefront-write`; 429 `rate_limited` with `Retry-After`. A wrong, used or expired code answers 422 `otp_invalid`, the same for every phone. On success the code is consumed, the customer of this store with that phone is found or created, `phone_verified_at` is set, and a customer token is returned: use it as `Authorization: Bearer` for bookings, cancel and reschedule when the store's `verify_guest_phone` is on (API-7). Same `Idempotency-Key` + same body replays the first answer (no second text). Needs only the `storefront_api` plan feature. `Cache-Control: no-store`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OtpVerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpVerified"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-store-types": [
+          "food",
+          "grocery",
+          "retail",
+          "services"
+        ],
+        "x-plan-features": [
+          "storefront_api"
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "StorefrontToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Storefront-Token",
+        "description": "Per-store token (StorefrontTokenAuth). Scopes: menu:read, order:write, agent, kiosk (new). Store is resolved from the token only. A `kiosk` token is minted per device and can make the `menu:read` and `order:write` calls of its own store (API-24d) (orders and bookings are tagged `source=kiosk` server-side). Plan features (API-5, API-13): every call needs `storefront_api`; booking operations also need `booking_api`; every call with a `kiosk` token also needs both `kiosk_api` and the existing `kiosk` feature (`kiosk_api` does not imply `kiosk`), plus the store's `kiosk_enabled`.",
+        "x-kiosk-plan-features": [
+          "kiosk_api",
+          "kiosk"
+        ]
+      },
+      "CustomerToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Optional customer token; must belong to the same store. Headless clients get one from the storefront-token OTP endpoints (`POST /api/v1/storefront/customer/otp/request` + `…/verify`, API-14), which also verify the phone; customer apps keep `/api/v1/restaurants/{id}/customer/login` and `…/otp/verify`. Required for bookings, cancel and reschedule when the store's `verify_guest_phone` is on (API-7), except for walk-in bookings made with a `kiosk` token (API-15)."
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "message",
+          "code"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine code. Existing ApiError codes plus the storefront codes in README §6."
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "details": {
+            "type": "object",
+            "description": "Machine data for recovery: quote, next_free_slot, feature, line ids.",
+            "properties": {
+              "quote": {
+                "$ref": "#/components/schemas/QuoteResponse"
+              },
+              "next_free_slot": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/BookingSlot"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DeliverySlot"
+                  }
+                ],
+                "description": "BookingSlot for booking holds (has `staff_id`), DeliverySlot for delivery-slot holds (never has `staff_id`); the branches are disjoint on `staff_id`."
+              },
+              "line_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "feature": {
+                "enum": [
+                  "storefront_api",
+                  "booking_api",
+                  "kiosk_api",
+                  "kiosk"
+                ],
+                "description": "With the `*_api_not_enabled` 403s: the missing plan feature key. With `kiosk_not_enabled`: `kiosk` when the plan lacks the kiosk feature; absent when the store's `kiosk_enabled` toggle is off (API-13)."
+              }
+            }
+          }
+        }
+      },
+      "OrderTypeKey": {
+        "$ref": "../viewmodel/viewmodel.schema.json#/properties/context/properties/order_types/items/properties/key"
+      },
+      "StockState": {
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "properties": {
+          "state": {
+            "enum": [
+              "in_stock",
+              "low",
+              "out",
+              "untracked"
+            ]
+          },
+          "qty": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Only when state = low (at or below the store's low-stock threshold); null otherwise."
+          },
+          "label": {
+            "type": "string",
+            "description": "Server copy, e.g. 'Only 2 left in M'."
+          }
+        },
+        "description": "Stock as a state (API-6). The exact quantity is exposed only when the item or variant is at or below the store's low-stock threshold."
+      },
+      "Address": {
+        "type": "object",
+        "required": [
+          "country"
+        ],
+        "properties": {
+          "address_id": {
+            "type": "string",
+            "description": "Saved address of the signed-in customer."
+          },
+          "line1": {
+            "type": "string"
+          },
+          "line2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 300
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "description": "E.164"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "marketing_opt_in": {
+            "type": "boolean",
+            "description": "N5; default false"
+          }
+        }
+      },
+      "StoreResponse": {
+        "type": "object",
+        "required": [
+          "store",
+          "context",
+          "money"
+        ],
+        "properties": {
+          "store": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/store"
+          },
+          "branch": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/branch"
+          },
+          "context": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/context"
+          },
+          "money": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/money"
+          },
+          "features": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/features"
+          },
+          "booking": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Booking rules a client needs before checkout (services stores; null otherwise).",
+            "required": [
+              "verify_guest_phone"
+            ],
+            "properties": {
+              "verify_guest_phone": {
+                "type": "boolean",
+                "default": false,
+                "description": "Per-store setting \"Verify guest phone\" (API-7), off by default. Off: a guest books, cancels and reschedules with name + phone and the manage token. On: those calls also need a customer token (`Authorization: Bearer`) of the same store whose phone is verified, from the storefront OTP endpoints (`POST /api/v1/storefront/customer/otp/request` + `…/verify`, API-14) or customer login; else 403 `phone_verification_required`. Kiosk walk-in bookings (a `kiosk` token) are exempt (API-15)."
+              }
+            }
+          },
+          "substitution": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "API-22: the store-defined \"If it's out of stock\" option group for the order-level preference (`CartRequest.substitution_preference`), with option `public_id`s. Items that take a per-line choice name their group in `ItemResponse.substitution_group_id` (usually this same group). Null when the store takes no substitution choice (e.g. non-grocery stores). API-25: `picker_actions` maps every option of the group to exactly one fixed picker action (`offer_replacement`, `call_customer`, `remove_item`); the store names the options, the action drives the picker flow (basket §8, §10). API-30: a `call_customer` option also names its no-answer `fallback` (`offer_replacement` or `remove_item`, default `remove_item`).",
+            "required": [
+              "group",
+              "default_option_id",
+              "picker_actions"
+            ],
+            "properties": {
+              "group": {
+                "$ref": "../viewmodel/viewmodel.schema.json#/$defs/OptionGroup",
+                "description": "Display group; `group.id` is the group `public_id` (API-20) and `group.options[].id` the option `public_id`s."
+              },
+              "default_option_id": {
+                "$ref": "#/components/schemas/OptionId",
+                "description": "Option used when the cart sends no `substitution_preference`; one of `group.options[].id`."
+              },
+              "picker_actions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/SubstitutionPickerAction"
+                },
+                "description": "API-25: exactly one entry per option of `group.options[]` (same option ids, no others, none twice), each with its picker action. Several options may share an action."
+              }
+            }
+          },
+          "holds": {
+            "type": "object",
+            "description": "Slot-hold rules a client needs before checkout (API-24a).",
+            "required": [
+              "release_during_payment"
+            ],
+            "properties": {
+              "release_during_payment": {
+                "type": "boolean",
+                "default": false,
+                "description": "Per-store setting \"Release holds during payment\" (API-24a), off by default. One setting for every hold bound to a pending hosted payment (API-26): a delivery or pickup slot of a hosted order (grocery, food schedule-ahead, laundry) and a booking slot of a booking waiting for its hosted deposit. Off: `DELETE /holds/{hold_id}` on such a hold answers 409 `hold_in_use`; the shopper finishes or abandons the payment and the 15-minute window releases the hold (API-10). On: that release cancels the pending order or booking and frees the slot; the answer is 200 `HoldReleased` with the cancelled order or booking. Clients use it to decide whether to offer \"change time\" while a hosted payment is open. Whether the customer then gets the payment-not-completed message is a separate notification setting in core (API-29), not in this payload."
+              }
+            }
+          }
+        }
+      },
+      "CatalogResponse": {
+        "type": "object",
+        "required": [
+          "catalog"
+        ],
+        "properties": {
+          "catalog": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/catalog"
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SellRule": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "description": "Machine selling rule next to the display ItemDetail.",
+        "properties": {
+          "kind": {
+            "enum": [
+              "unit",
+              "pack",
+              "weighed",
+              "service",
+              "per_piece"
+            ]
+          },
+          "pack_size": {
+            "type": "number"
+          },
+          "pack_unit": {
+            "enum": [
+              "g",
+              "kg",
+              "ml",
+              "l",
+              "pc"
+            ]
+          },
+          "unit_price": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+          },
+          "unit_price_per": {
+            "enum": [
+              "kg",
+              "100g",
+              "l",
+              "100ml",
+              "pc"
+            ]
+          },
+          "weight_option_group": {
+            "$ref": "#/components/schemas/OptionGroupId",
+            "description": "`public_id` (UUIDv7, API-20) of the option group holding the store-defined weight steps; one of `item.option_groups[].id`. Each step is an option with a UUIDv7 `public_id` (API-18)."
+          },
+          "cap_percent": {
+            "type": "integer",
+            "description": "Weighed cap over the estimate, default 10 (basket §9)."
+          },
+          "duration_min": {
+            "type": "integer"
+          },
+          "buffer_min": {
+            "type": "integer"
+          },
+          "qty_max": {
+            "type": "integer"
+          }
+        }
+      },
+      "Variant": {
+        "type": "object",
+        "required": [
+          "id",
+          "options",
+          "price",
+          "stock"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "gtin": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "propertyNames": {
+              "$ref": "#/components/schemas/OptionGroupId"
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/OptionId"
+            },
+            "description": "Option group `public_id` (API-20) -> option `public_id` (API-18), e.g. the colour group and the size group. Labels come from the item's `option_groups` in `GET /items/{item_id}` (same group and option ids)."
+          },
+          "price": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+          },
+          "compare_at": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+          },
+          "stock": {
+            "$ref": "#/components/schemas/StockState"
+          },
+          "image": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Image"
+          },
+          "notify_available": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ItemResponse": {
+        "type": "object",
+        "required": [
+          "item",
+          "sell"
+        ],
+        "properties": {
+          "item": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/ItemDetail"
+          },
+          "sell": {
+            "$ref": "#/components/schemas/SellRule"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Variant"
+            },
+            "description": "Present when the item has a variant matrix."
+          },
+          "stock": {
+            "$ref": "#/components/schemas/StockState"
+          },
+          "substitution_group_id": {
+            "$ref": "#/components/schemas/OptionGroupId",
+            "description": "API-22: the `public_id` of the item's \"If it's out of stock\" option group, one of `item.option_groups[].id`. The store sets this group up like any other option group (usually its store-level group, `StoreResponse.substitution`). The chosen option goes in `CartLine.substitution`, never in `option_ids`, and it does not change the price. Its options' picker actions are in `substitution_picker_actions` (API-25). Absent when the item takes no substitution choice."
+          },
+          "substitution_picker_actions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/SubstitutionPickerAction"
+            },
+            "description": "API-25: present exactly when `substitution_group_id` is: one entry per option of that group (same option ids, no others, none twice), each with its fixed picker action. Equal to `StoreResponse.substitution.picker_actions` when the item uses the store-level group."
+          }
+        },
+        "description": "`item.option_groups[].id` are option group `public_id`s (UUIDv7, API-20) and `item.option_groups[].options[].id` are option `public_id`s (UUIDv7, API-18); options go back in `CartLine.option_ids`. One group is different: the group named by `substitution_group_id` (the store-defined \"If it's out of stock\" choice, API-22) holds normal option `public_id`s too, but its chosen option goes in `CartLine.substitution`, not in `option_ids`."
+      },
+      "VariantsResponse": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "variants"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Variant"
+            }
+          }
+        }
+      },
+      "CartLine": {
+        "type": "object",
+        "required": [
+          "item_id",
+          "qty"
+        ],
+        "properties": {
+          "line_id": {
+            "type": "string",
+            "description": "Client id, echoed in quote lines and warnings."
+          },
+          "item_id": {
+            "type": "string"
+          },
+          "variant_id": {
+            "type": "string"
+          },
+          "option_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionId"
+            },
+            "description": "Modifiers, weight step, or variant options when variant_id is absent: option `public_id`s (API-18)."
+          },
+          "qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "substitution": {
+            "$ref": "#/components/schemas/OptionId",
+            "description": "API-22: \"If it's out of stock\" for this line: an option `public_id` from the item's substitution group (`ItemResponse.substitution_group_id`). The options are store-defined, not fixed values. Not priced, not in `option_ids`. Absent: the order-level `substitution_preference` applies. An option of another group, or a substitution on an item without a substitution group, answers 422 `validation_failed`."
+          }
+        }
+      },
+      "CartRequest": {
+        "type": "object",
+        "required": [
+          "order_type",
+          "lines"
+        ],
+        "properties": {
+          "order_type": {
+            "$ref": "#/components/schemas/OrderTypeKey"
+          },
+          "lines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/CartLine"
+            }
+          },
+          "coupon": {
+            "type": "string"
+          },
+          "tip": {
+            "type": "object",
+            "properties": {
+              "choice_id": {
+                "type": "string"
+              },
+              "minor": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "shipping_method_id": {
+            "type": "string"
+          },
+          "slot_id": {
+            "type": "string",
+            "description": "Delivery / pickup slot (laundry: the pickup), or booking slot."
+          },
+          "express": {
+            "type": "boolean"
+          },
+          "hold_id": {
+            "type": "string",
+            "description": "Slot hold from `POST /holds` (`kind = delivery_slot`, API-3, API-11): grocery delivery, food schedule-ahead, laundry. Send its token as `X-Hold-Token` on `POST /orders`."
+          },
+          "substitution_preference": {
+            "$ref": "#/components/schemas/OptionId",
+            "description": "API-22: order-level \"If it's out of stock\" choice: an option `public_id` of the store's substitution group (`StoreResponse.substitution.group`). It applies to every line without its own `substitution`. Absent: the store's default (`StoreResponse.substitution.default_option_id`). An option of another group answers 422 `validation_failed`."
+          },
+          "table": {
+            "type": "string",
+            "description": "Signed table token from the QR (food dine-in)."
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payment_method_id": {
+            "type": "string",
+            "description": "Changes the quote when a method has a fee or a weighed rule."
+          },
+          "payment_mode": {
+            "enum": [
+              "pay_later",
+              "hosted"
+            ],
+            "description": "Optional on `POST /quote`: the payment mode the shopper has picked so far (API-2). Not a priced input and not part of `quote_hash`. It only drives `requires[]`: `return_url` is listed when it is `hosted`. When it is not in the answer's `payment_modes`, the quote adds the warning `payment_mode_unavailable`. On `POST /orders` `payment.mode` is authoritative; `payment_mode`, if sent, must equal it (else 422 `validation_failed`)."
+          },
+          "return_slot_id": {
+            "type": "string",
+            "description": "Laundry: the delivery-back slot, held with `slot_id` in the same hold (API-11)."
+          }
+        }
+      },
+      "QuoteResponse": {
+        "type": "object",
+        "required": [
+          "quote",
+          "quote_hash",
+          "expires_at"
+        ],
+        "properties": {
+          "quote": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Quote"
+          },
+          "quote_hash": {
+            "type": "string",
+            "description": "Hash of priced inputs + totals; echo it on submit."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "weighed": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "estimate",
+              "cap",
+              "cap_percent"
+            ],
+            "description": "Present when the cart has weighed lines (basket §9, owner-approved; contract §5 shown == charged). `estimate`: sum of the `line_total`s of the weighed lines (`QuoteLine.estimate = true`) at the chosen weight steps; it is already inside `quote.total`. `cap`: `estimate` × (1 + `cap_percent` / 100), rounded to the currency's minor unit; the most those lines can cost. The basket can therefore end up to `cap` − `estimate` above `quote.total`, never more: a card hold authorises `quote.total` + (`cap` − `estimate`) (`PaymentState.hold_amount`) and captures the actual amount; cash pays the actual amount.",
+            "properties": {
+              "estimate": {
+                "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money",
+                "description": "Estimated amount of the weighed lines only (not the basket total)."
+              },
+              "cap": {
+                "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money",
+                "description": "Upper bound of the weighed lines: estimate × (1 + cap_percent / 100)."
+              },
+              "cap_percent": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Store tolerance, default 10 (store-adjustable)."
+              }
+            }
+          },
+          "payment_methods": {
+            "type": "array",
+            "items": {
+              "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Choice"
+            },
+            "description": "Already filtered: weighed baskets hide gateways without authorise/capture unless the D7 switch is on."
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "code"
+              ],
+              "properties": {
+                "code": {
+                  "enum": [
+                    "out_of_stock",
+                    "price_changed",
+                    "below_minimum",
+                    "out_of_zone",
+                    "slot_full",
+                    "coupon_invalid",
+                    "item_unavailable",
+                    "qty_capped",
+                    "payment_mode_unavailable"
+                  ]
+                },
+                "line_id": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "address",
+                "slot",
+                "hold",
+                "shipping_method",
+                "customer_phone",
+                "verified_phone",
+                "table",
+                "return_url"
+              ]
+            },
+            "description": "What the submit still needs for this order type. `hold`: a delivery-slot hold (grocery, API-3) or a booking hold. `verified_phone`: the store has \"Verify guest phone\" on, so a booking needs a customer token (API-7); never listed for a `kiosk` token (API-15). `return_url`: listed only when the request's `payment_mode` is `hosted` (no `payment_mode` → never listed; the submit still needs `payment.return_url` for `hosted`)."
+          },
+          "payment_modes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "pay_later",
+                "hosted"
+              ]
+            },
+            "description": "Payment modes the store allows for this cart (API-2), independent of the requested `payment_mode`. `hosted` is listed only when an online method can take this cart (weighed baskets: authorise/capture gateways only, D7). The submit's `payment.mode` must be one of them (else 422 `payment_mode_unavailable`)."
+          }
+        }
+      },
+      "ShippingQuoteRequest": {
+        "type": "object",
+        "required": [
+          "address",
+          "lines"
+        ],
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CartLine"
+            }
+          }
+        }
+      },
+      "ShippingMethod": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "fee",
+          "display"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "standard",
+              "express",
+              "pickup_in_store"
+            ]
+          },
+          "carrier": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fee": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+          },
+          "earliest_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "latest_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "cutoff_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Order by this time for these dates."
+          },
+          "pickup_branch_id": {
+            "type": "string"
+          },
+          "display": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Choice"
+          }
+        }
+      },
+      "ShippingQuoteResponse": {
+        "type": "object",
+        "required": [
+          "methods"
+        ],
+        "properties": {
+          "methods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShippingMethod"
+            }
+          },
+          "zone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ships_to_address": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeliverySlot": {
+        "type": "object",
+        "required": [
+          "id",
+          "starts_at",
+          "ends_at",
+          "state",
+          "display"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Opaque; encodes branch, zone and window. Hold it with `POST /holds` (`kind = delivery_slot`) before submit, whatever the order type (API-3, API-11)."
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "enum": [
+              "available",
+              "few",
+              "full",
+              "closed"
+            ]
+          },
+          "capacity_remaining": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "null = unlimited"
+          },
+          "fee": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+          },
+          "display": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Slot"
+          }
+        },
+        "not": {
+          "required": [
+            "staff_id"
+          ]
+        },
+        "description": "A delivery or pickup window. Never carries `staff_id` (that is what makes it disjoint from `BookingSlot`, which requires it, in `Error.details.next_free_slot`)."
+      },
+      "DeliverySlotsResponse": {
+        "type": "object",
+        "required": [
+          "timezone",
+          "days"
+        ],
+        "properties": {
+          "timezone": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "date",
+                "slots"
+              ],
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "display": {
+                  "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Slot"
+                },
+                "slots": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeliverySlot"
+                  }
+                }
+              }
+            }
+          },
+          "express": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "available": {
+                "type": "boolean"
+              },
+              "fee": {
+                "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money"
+              },
+              "eta_min_from": {
+                "type": "integer"
+              },
+              "eta_min_to": {
+                "type": "integer"
+              },
+              "display": {
+                "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Choice"
+              }
+            }
+          },
+          "picker": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/SlotPicker"
+          }
+        }
+      },
+      "BookingStaffResponse": {
+        "type": "object",
+        "required": [
+          "staff"
+        ],
+        "properties": {
+          "staff": {
+            "type": "array",
+            "items": {
+              "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Staff"
+            }
+          },
+          "any_staff": {
+            "type": "boolean",
+            "description": "Store allows 'Any staff'."
+          }
+        }
+      },
+      "BookingDaysResponse": {
+        "type": "object",
+        "required": [
+          "timezone",
+          "days"
+        ],
+        "properties": {
+          "timezone": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "date",
+                "state"
+              ],
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "state": {
+                  "enum": [
+                    "available",
+                    "few",
+                    "full",
+                    "closed"
+                  ]
+                },
+                "first_slot_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "display": {
+                  "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Slot"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BookingSlot": {
+        "type": "object",
+        "required": [
+          "id",
+          "staff_id",
+          "starts_at",
+          "ends_at",
+          "state"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Opaque; encodes staff + start + service set + chosen options."
+          },
+          "staff_id": {
+            "type": "string"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "enum": [
+              "available",
+              "full"
+            ]
+          },
+          "display": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Slot"
+          }
+        },
+        "description": "A bookable start time for one staff member and the chosen services + options. `staff_id` is required (it tells a `BookingSlot` from a `DeliverySlot`)."
+      },
+      "BookingSlotsResponse": {
+        "type": "object",
+        "required": [
+          "date",
+          "timezone",
+          "slots"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "total_duration_min": {
+            "type": "integer",
+            "description": "Duration of the services + chosen options (`option_ids`), in minutes; each slot is this long (plus travel buffer at home)."
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookingSlot"
+            }
+          },
+          "picker": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/SlotPicker"
+          },
+          "next_free_slot": {
+            "$ref": "#/components/schemas/BookingSlot"
+          },
+          "reschedule_of": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "Booking `public_id` when the request sent `X-Manage-Token` (reschedule mode, API-8): every listed slot has the booking's price. Absent or null otherwise."
+          }
+        }
+      },
+      "HoldRequest": {
+        "type": "object",
+        "required": [
+          "kind",
+          "slot_id"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "booking_slot",
+              "delivery_slot"
+            ]
+          },
+          "slot_id": {
+            "type": "string"
+          },
+          "service_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 4,
+            "description": "Required for `booking_slot`; ignored for `delivery_slot`."
+          },
+          "option_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionId"
+            },
+            "maxItems": 40,
+            "description": "`booking_slot`: the `option_ids` the slots were listed with (they set the duration); ignored for `delivery_slot`."
+          },
+          "return_slot_id": {
+            "type": "string",
+            "description": "Laundry only (`delivery_slot`): the delivery-back slot, listed with `after_slot = slot_id`. Held together with `slot_id`; both are re-checked at submit. One hold covers both slots (API-23)."
+          }
+        },
+        "description": "API-11: one 10-minute hold for every slot type. `booking_slot`: a slot from `GET /booking/slots`, with the same `service_ids` and `option_ids` as the slots query (the slot id encodes them); with `X-Manage-Token` the hold is for rescheduling that booking. `delivery_slot`: any slot from `GET /delivery/slots`, whatever its `order_type`: grocery delivery (API-3), food schedule-ahead pickup or delivery, laundry pickup; the slot id already encodes branch, zone and window. Laundry holds its pickup slot and its delivery-back slot together: `slot_id` is the pickup and `return_slot_id` the delivery (from `GET /delivery/slots?after_slot=`), one hold, one token (API-23, confirmed)."
+      },
+      "Hold": {
+        "type": "object",
+        "required": [
+          "id",
+          "token",
+          "kind",
+          "slot_id",
+          "expires_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string",
+            "description": "Secret; send as X-Hold-Token. Returned once."
+          },
+          "kind": {
+            "enum": [
+              "booking_slot",
+              "delivery_slot"
+            ]
+          },
+          "slot_id": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "10 minutes after creation. When a hosted order or booking is created from the hold (API-10), the hold is bound to it and its expiry moves to the payment window (`payment.next_action.expires_at`, created + 15 min); a bound hold cannot be reused, and it is released early only when the store has \"Release holds during payment\" on (API-24a), which cancels the pending order or booking."
+          },
+          "ttl_seconds": {
+            "type": "integer",
+            "description": "600 (10 minutes) for every kind (API-11)."
+          },
+          "hold_note": {
+            "type": "string",
+            "description": "Server copy, e.g. 'We hold this time for 10 minutes'."
+          },
+          "return_slot_id": {
+            "type": "string",
+            "description": "Laundry: the held delivery-back slot (echo of the request)."
+          },
+          "booking_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Booking `public_id` when the hold was made with `X-Manage-Token` for a reschedule (API-8)."
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "description": "API-2. `pay_later`: unpaid order (cash, card on delivery or at the counter). `hosted`: the response carries `payment.next_action.url`, a core-hosted payment page on the store's host; gateway scripts, card fields and wallets never leave core (contract §5.4). Covers normal online payment, weighed-item card holds (authorise now, capture after weighing, basket §9) and booking deposits (D8). The mode must be one of the quote's `payment_modes` (else 422 `payment_mode_unavailable`). Hosted orders never enter the offline queue (contract §5.5). The hosted payment window is 15 minutes (API-10).",
+        "properties": {
+          "mode": {
+            "enum": [
+              "pay_later",
+              "hosted"
+            ]
+          },
+          "method_id": {
+            "type": "string",
+            "description": "Optional preselected method from the quote's `payment_methods` (else 422 `payment_method_unavailable`). Without it the hosted page lists the methods."
+          },
+          "return_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Required when `mode = hosted`. Where the hosted page sends the shopper after success, failure or cancel. Its origin must be in the storefront token's allowed origins (the same allowlist as writes); otherwise 422 `return_url_not_allowed`. Query parameters added on return are hints only: the client reads the outcome from `GET /orders/{track_token}` (or `GET /bookings/{manage_token}`)."
+          }
+        },
+        "if": {
+          "properties": {
+            "mode": {
+              "const": "hosted"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "mode",
+            "return_url"
+          ]
+        }
+      },
+      "OrderSubmitRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CartRequest"
+          },
+          {
+            "type": "object",
+            "required": [
+              "quote_hash"
+            ],
+            "properties": {
+              "quote_hash": {
+                "type": "string"
+              },
+              "customer": {
+                "$ref": "#/components/schemas/Customer"
+              },
+              "payment": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            }
+          }
+        ]
+      },
+      "PaymentState": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "description": "Payment outcome; every status here is public (API-19 confirms `voided` and `kept`). For `hosted`: `pending` until the gateway confirms, then `paid` (or `authorised` for a weighed-item card hold, which becomes `paid` once the actual amount is captured after weighing) or `failed`. After payment: `partially_refunded` (part came back, e.g. the weighed-item difference when the store charges the cap and refunds the rest, D7; an itemised order refund; a grocery line the picker removed after the card was captured, which is always refunded whatever the D7 switches say, API-31), `refunded` (all of `amount_now` came back, e.g. a booking deposit cancelled before the deadline with deposit refunds on, D7/D8), `voided` (an `authorised` hold released without capture, e.g. the order was cancelled before weighing, or the hold expired at the gateway while the order waited in `pending_approval`, API-32), `kept` (a paid booking deposit the store keeps: cancelled after the deadline, or deposit refunds off; D7/D8, Juwri `deposit_status = kept`). Learn it by polling `GET /orders/{track_token}` / `GET /bookings/{manage_token}` after the shopper comes back to `return_url`; the gateway webhook to core is the source of truth, never the return URL. Hosted payment window (API-10): 15 minutes from creation (`next_action.expires_at`). An order or booking still unpaid then is cancelled (`cancelled`, `payment.status = failed`, `next_action` null) and its slot, hold and stock are released. Late payment (API-21): a payment the gateway confirms after the window has ended does not revive the order or booking and is not refunded automatically. The order or booking stays `cancelled` (its slot, hold and stock stay released), `payment.status` is `received_late`, `next_action` is null and `amount_now` is the amount received (authorised, for a weighed-item card hold). It shows in the store dashboard and the store owner decides per case: refund it (`refunded` with `refunded_amount`, or `voided` for an authorised hold; the order or booking stays `cancelled`) or accept it. Refunding a late payment is always allowed (API-28): the per-flow refund switches (D7) do not apply, because the order or booking never went ahead. Accepting (API-27) re-reserves the slot and stock automatically when they are still free: the payment becomes `paid` or `authorised` and the order moves to `placed`, a booking to `confirmed`. When the slot or stock is no longer free, the money is accepted (`paid` or `authorised`) and the record waits for the owner as `pending_approval` (order and booking); the dashboard asks the owner to pick another slot or adjust the order (then `placed` / `confirmed`) or to refund it (then `cancelled` with `refunded` or `voided`, still outside D7). Late card hold expiring (API-32): an `authorised` hold carries `authorisation_expires_at`, when the gateway lets the authorisation lapse; the dashboard warns the owner before then. If it lapses while the order still waits in `pending_approval`, the order is cancelled automatically (`cancelled`) and the hold voided (`voided`, nothing charged; `next_action` null), and the customer (`grocery.late_hold_expired`) and the owner are told that nothing was charged. Every outcome keeps the same record, `public_id`, number and tracking link (`track_token` / `manage_token`). Until the owner has decided (`received_late`) and while the owner picks a new slot (`pending_approval`), a client shows that the store will contact the shopper; it never offers a retry for that order.",
+        "properties": {
+          "mode": {
+            "enum": [
+              "pay_later",
+              "hosted"
+            ]
+          },
+          "status": {
+            "enum": [
+              "not_required",
+              "pay_later",
+              "pending",
+              "authorised",
+              "paid",
+              "failed",
+              "partially_refunded",
+              "refunded",
+              "voided",
+              "kept",
+              "received_late"
+            ]
+          },
+          "next_action": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Present while a hosted payment is still open (`pending`, or `failed` with retry on the hosted page inside the window). Send the shopper to `url` before `expires_at`.",
+            "properties": {
+              "type": {
+                "const": "redirect"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "Core-hosted payment page on the store's host."
+              },
+              "expires_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "End of the hosted payment window: order or booking creation + 15 minutes (API-10). After it the page no longer takes payment, and the order or booking is cancelled and its slot, hold and stock released."
+              }
+            },
+            "required": [
+              "type",
+              "url",
+              "expires_at"
+            ]
+          },
+          "amount_now": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money",
+            "description": "Charged or authorised now (deposit for bookings)."
+          },
+          "hold_amount": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money",
+            "description": "Weighed baskets with a card hold: the amount authorised now = `quote.total` + (`weighed.cap` − `weighed.estimate`) (basket §9)."
+          },
+          "refunded_amount": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Money",
+            "description": "With `partially_refunded` / `refunded`: the total returned so far (`refunded` = `amount_now`). Refunds happen when the store has turned refunds on for that flow (D7), except a late payment (API-21) the owner refunds: that refund is always allowed, whatever the refund switch (API-28); and a grocery line removed after the card was captured (`remove_item`, API-31), which is always refunded too."
+          },
+          "authorisation_expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "API-32: with `authorised` (a weighed-item card hold), when the gateway's authorisation lapses (set by the gateway when it authorises; core stores it). Kept after the hold is `voided` because it lapsed. Clients may show it; the store dashboard warns the owner before it. An accepted late hold (API-27) that is still `pending_approval` at this time is cancelled automatically and voided. Absent or null when the gateway gives no expiry (and on every non-hold payment)."
+          }
+        }
+      },
+      "OrderRef": {
+        "type": "object",
+        "required": [
+          "public_id",
+          "number",
+          "status",
+          "track_token"
+        ],
+        "properties": {
+          "public_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending_payment",
+              "pending_approval",
+              "placed",
+              "accepted",
+              "preparing",
+              "ready",
+              "shipped",
+              "on_the_way",
+              "delivered",
+              "completed",
+              "cancelled",
+              "refunded"
+            ],
+            "description": "Public order status, derived from Juwri's DB status (`orders.status`, `OrderStatus` enum + legacy strings), `delivery_status` and the shipment: `unpaid` → `pending_payment` (a hosted payment is open; it moves on once `payment.status` is `paid` or `authorised`); `pending_approval` → `pending_approval` (staff-approve dine-in); `new` / legacy `pending` → `placed`; `accepted` → `accepted`; `preparing` → `preparing`; `ready` and `call_bill` → `ready` (API-16); `on_delivery`, or `delivery_status` `picked_up` / `out_for_delivery`, or an active courier → `on_the_way`; a shipment shipped but not delivered → `shipped`; `delivered` → `delivered`; `completed` → `completed`; `cancelled` → `cancelled`; `refunded` → `refunded`. Any other or unknown legacy string reads as `placed` (API-16). The View Model `Order.status` is the theme's step key and may be finer (e.g. grocery `picking` while the order is `preparing`); where it uses one of these values it equals this one. A hosted order cancelled at the window end stays `cancelled` when a late payment arrives (API-21, `payment.status = received_late`) until the owner refunds it (API-28) or accepts it (API-27): `placed` when its slot and stock could be re-reserved, else `pending_approval` with `payment.status` `paid` or `authorised` while the owner picks another slot or adjusts the order (then `placed`) or refunds it (then `cancelled`). If an accepted card hold (`authorised`) lapses at the gateway while the order is still `pending_approval` (`payment.authorisation_expires_at`), the order moves to `cancelled` automatically with `payment.status = voided` (API-32)."
+          },
+          "track_token": {
+            "type": "string"
+          },
+          "track_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "OrderCreated": {
+        "type": "object",
+        "required": [
+          "order",
+          "quote",
+          "payment"
+        ],
+        "properties": {
+          "order": {
+            "$ref": "#/components/schemas/OrderRef"
+          },
+          "quote": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Quote"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentState"
+          },
+          "replayed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "OrderStatusResponse": {
+        "type": "object",
+        "required": [
+          "order",
+          "view"
+        ],
+        "properties": {
+          "order": {
+            "$ref": "#/components/schemas/OrderRef"
+          },
+          "view": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Order"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentState"
+          }
+        }
+      },
+      "BookingSubmitRequest": {
+        "type": "object",
+        "required": [
+          "hold_id",
+          "service_ids",
+          "quote_hash",
+          "customer"
+        ],
+        "properties": {
+          "hold_id": {
+            "type": "string"
+          },
+          "service_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "option_ids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionId"
+            },
+            "description": "The options the hold was made with (same set as `HoldRequest.option_ids`); must equal the hold's set (422 `validation_failed` otherwise).",
+            "maxItems": 40
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "quote_hash": {
+            "type": "string"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/Payment"
+          }
+        }
+      },
+      "BookingRef": {
+        "type": "object",
+        "required": [
+          "public_id",
+          "number",
+          "status",
+          "starts_at",
+          "ends_at",
+          "manage_token"
+        ],
+        "properties": {
+          "public_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "confirmed",
+              "pending_payment",
+              "pending_approval",
+              "cancelled",
+              "completed",
+              "no_show"
+            ],
+            "description": "Public booking status. `pending_payment`: a hosted deposit is open (API-10). `confirmed`: booked (deposit paid if required). `pending_approval` (new in 1.6.0, API-27): the store owner accepted a late deposit (`payment.status = paid`) but the slot was no longer free; the booking waits for the owner to pick another slot (then `confirmed`) or to refund the deposit (then `cancelled`, `refunded`, outside D7, API-28). Same record and manage token throughout; `reschedule_deadline_at` is null and cancel / reschedule answer 409 `booking_not_active` until it is `confirmed`. `cancelled`, `completed`, `no_show` as in Juwri. A late deposit (API-21) leaves the booking `cancelled` with `payment.status = received_late` until the owner decides."
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "staff_id": {
+            "type": "string"
+          },
+          "service_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "manage_token": {
+            "type": "string"
+          },
+          "manage_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "ics_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "cancel_deadline_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Last moment a cancel keeps the D7/D8 before-deadline deposit rule (store setting, default 24 h before `starts_at`, D8)."
+          },
+          "reschedule_deadline_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Last moment `POST /bookings/{manage_token}/reschedule` is accepted. API-9: the same store setting as the cancellation deadline, so it always equals `cancel_deadline_at`; null = cannot be rescheduled (not `confirmed`)."
+          }
+        }
+      },
+      "BookingCreated": {
+        "type": "object",
+        "required": [
+          "booking",
+          "quote",
+          "payment"
+        ],
+        "properties": {
+          "booking": {
+            "$ref": "#/components/schemas/BookingRef"
+          },
+          "quote": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Quote"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentState"
+          },
+          "replayed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "BookingResponse": {
+        "type": "object",
+        "required": [
+          "booking"
+        ],
+        "properties": {
+          "booking": {
+            "$ref": "#/components/schemas/BookingRef"
+          },
+          "quote": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Quote"
+          },
+          "view": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/$defs/Order"
+          },
+          "policy_note": {
+            "type": "string"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentState"
+          }
+        }
+      },
+      "KioskResponse": {
+        "type": "object",
+        "required": [
+          "kiosk",
+          "context"
+        ],
+        "properties": {
+          "kiosk": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/context/properties/kiosk"
+          },
+          "context": {
+            "$ref": "../viewmodel/viewmodel.schema.json#/properties/context"
+          }
+        }
+      },
+      "LegacyOrderRequest": {
+        "type": "object",
+        "deprecated": true,
+        "required": [
+          "items"
+        ],
+        "description": "DEPRECATED (API-4). Today's body, detected by `items` without `lines` (`not: required lines` keeps the `oneOf` disjoint). Integer ids, DB `type` literals (`on-table`, `takeaway`, …), pay-later only. Removed 12 months after launch with the other aliases. Errors now use the `ApiError` envelope (`{message, code}`; e.g. 403 `storefront_api_not_enabled`, 422 `validation_failed`, `invalid_order_type`, `unprocessable`) instead of `{error}`.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "item_id",
+                "quantity"
+              ],
+              "properties": {
+                "item_id": {
+                  "type": "integer"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "variation": {
+                  "type": "integer"
+                },
+                "extras": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "type": {
+            "type": "string",
+            "description": "DB fulfilment literal."
+          },
+          "table_number": {
+            "type": "string"
+          },
+          "customer_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "coupon_code": {
+            "type": "string"
+          },
+          "client_uuid": {
+            "type": "string",
+            "description": "Idempotency key of the legacy body (today's behaviour, optional until the sunset, API-17). When both are sent, the body `client_uuid` wins over the `Idempotency-Key` header."
+          },
+          "scheduled_at": {
+            "type": "string",
+            "description": "YYYY-MM-DD HH:MM, store local time."
+          }
+        },
+        "not": {
+          "required": [
+            "lines"
+          ]
+        }
+      },
+      "LegacyOrderCreated": {
+        "type": "object",
+        "deprecated": true,
+        "x-frozen": true,
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "order_id",
+          "total",
+          "discount",
+          "coupon_applied",
+          "wallet_applied",
+          "scheduled_at",
+          "track_token",
+          "continue_url",
+          "track_url",
+          "eta_range"
+        ],
+        "description": "DEPRECATED (API-4), FROZEN. The 201 body for the legacy request body: today's result of `StorefrontController::createOrder` → `AgentToolsService::createOrder` (float major-unit amounts, integer ids). Unchanged until removal. Disjoint from `OrderCreated`: it is closed and has `ok`/`order_id` where `OrderCreated` has `order`/`quote`/`payment`.",
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "order_id": {
+            "type": "integer",
+            "description": "Integer order id (legacy)."
+          },
+          "total": {
+            "type": "number",
+            "description": "Major units, float (`Order::total`)."
+          },
+          "discount": {
+            "type": "number",
+            "description": "Major units, rounded to the currency exponent."
+          },
+          "coupon_applied": {
+            "type": "boolean"
+          },
+          "wallet_applied": {
+            "type": "number",
+            "description": "Major units."
+          },
+          "scheduled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`Y-m-d H:i`, store local time; null = as soon as possible."
+          },
+          "track_token": {
+            "type": "string"
+          },
+          "continue_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Machine tracking: `GET /api/v1/track/{token}` (`legacyTrack`)."
+          },
+          "track_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Human tracking page `/order/track/{token}`."
+          },
+          "eta_range": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Prep-time estimate in minutes, e.g. `20-30`; null when unknown."
+          }
+        }
+      },
+      "RescheduleRequest": {
+        "type": "object",
+        "required": [
+          "hold_id"
+        ],
+        "description": "Move a confirmed booking to a newly held slot (API-7). Services, options and price stay the same (API-8); no money moves.",
+        "properties": {
+          "hold_id": {
+            "type": "string",
+            "description": "A `booking_slot` hold from `POST /holds` for the new slot (10 minutes), made with `X-Manage-Token` and the booking's `service_ids` and `option_ids`. Its token goes in `X-Hold-Token`."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "LegacyMenuItem": {
+        "type": "object",
+        "deprecated": true,
+        "x-frozen": true,
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "image",
+          "gallery",
+          "is_popular",
+          "variants",
+          "variant_groups",
+          "extras"
+        ],
+        "description": "DEPRECATED, FROZEN. One item of `PublicController::publicMenuItemArray`. Food stores add `is_vegan`, `is_halal`, `is_gluten_free`, `calories`; other verticals add `brand`, `weight`, `stock` (tracked items), and per capability `age_restricted`, `expiry_date`/`batch_no`, `fitments`.",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "price": {
+            "type": "number",
+            "description": "Major units, float."
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "is_popular": {
+            "type": "boolean"
+          },
+          "is_vegan": {
+            "type": "boolean"
+          },
+          "is_halal": {
+            "type": "boolean"
+          },
+          "is_gluten_free": {
+            "type": "boolean"
+          },
+          "calories": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "brand": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "weight": {
+            "type": "number"
+          },
+          "stock": {
+            "type": "integer",
+            "description": "Exact quantity (legacy only; the new API exposes stock states, API-6)."
+          },
+          "age_restricted": {
+            "type": "boolean"
+          },
+          "expiry_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "batch_no": {
+            "type": "string"
+          },
+          "fitments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "year",
+                "make",
+                "model",
+                "submodel",
+                "label"
+              ],
+              "properties": {
+                "year": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "null"
+                  ]
+                },
+                "make": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "null"
+                  ]
+                },
+                "model": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "null"
+                  ]
+                },
+                "submodel": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": [
+                    "string",
+                    "integer",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "price",
+                "options"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The legacy `variation` value."
+                },
+                "price": {
+                  "type": "number"
+                },
+                "options": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "description": "Group title → chosen value."
+                }
+              }
+            }
+          },
+          "variant_groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "options",
+                "required",
+                "min_select",
+                "max_select",
+                "option_prices"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Option labels."
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "min_select": {
+                  "type": "integer"
+                },
+                "max_select": {
+                  "type": "integer"
+                },
+                "option_prices": {
+                  "type": "array",
+                  "items": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "description": "Major-unit prices aligned to `options`; empty when none is priced."
+                }
+              }
+            }
+          },
+          "extras": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "price",
+                "image"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The legacy `extras[]` value."
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "price": {
+                  "type": "number"
+                },
+                "image": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LegacyMenuResponse": {
+        "type": "object",
+        "deprecated": true,
+        "x-frozen": true,
+        "additionalProperties": false,
+        "required": [
+          "store",
+          "categories"
+        ],
+        "description": "DEPRECATED (API-4), FROZEN. Today's `PublicController::menu` body (served for the token's store by `StorefrontController::menu`): active categories in position order, each with its active, not sold-out items. Integer ids, float major-unit prices. Unchanged until removal.",
+        "properties": {
+          "store": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title",
+              "slug",
+              "store_type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "store_type": {
+                "type": "string"
+              }
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "items"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LegacyMenuItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LegacyRestaurantResponse": {
+        "type": "object",
+        "deprecated": true,
+        "x-frozen": true,
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "slug",
+          "description",
+          "phone",
+          "address",
+          "store_type",
+          "vertical"
+        ],
+        "description": "DEPRECATED (API-4), FROZEN. Today's `StorefrontController::restaurant` body: basic store fields plus `SummarizesVertical::verticalSummary()`. Unchanged until removal.",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "store_type": {
+            "type": "string"
+          },
+          "vertical": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "group",
+              "capabilities",
+              "fulfillment_modes"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string"
+              },
+              "capabilities": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "food_attrs",
+                  "variant_goods",
+                  "fitment",
+                  "age_gate",
+                  "expiry",
+                  "service"
+                ],
+                "properties": {
+                  "food_attrs": {
+                    "type": "boolean"
+                  },
+                  "variant_goods": {
+                    "type": "boolean"
+                  },
+                  "fitment": {
+                    "type": "boolean"
+                  },
+                  "age_gate": {
+                    "type": "boolean"
+                  },
+                  "expiry": {
+                    "type": "boolean"
+                  },
+                  "service": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "fulfillment_modes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "DB fulfilment literals."
+              }
+            }
+          }
+        }
+      },
+      "LegacyTrackResponse": {
+        "type": "object",
+        "deprecated": true,
+        "x-frozen": true,
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "type",
+          "type_label",
+          "store_type",
+          "delivery_status",
+          "is_paid",
+          "total",
+          "placed_at",
+          "shipment",
+          "timeline",
+          "items",
+          "driver",
+          "courier"
+        ],
+        "description": "DEPRECATED (API-4), FROZEN. Today's `PublicController::track` body. `status` and `type` are DB literals (not the public `OrderRef.status`), `total` is a float in major units. Unchanged until removal.",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "description": "DB `orders.status` literal."
+          },
+          "type": {
+            "type": "string",
+            "description": "DB fulfilment literal."
+          },
+          "type_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "store_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "delivery_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_paid": {
+            "type": "boolean"
+          },
+          "total": {
+            "type": "number"
+          },
+          "placed_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "shipment": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "carrier",
+              "tracking_number",
+              "shipped_at",
+              "delivered_at"
+            ],
+            "properties": {
+              "status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "carrier": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "tracking_number": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "shipped_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "delivered_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          },
+          "timeline": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "maxItems": 0,
+            "additionalProperties": false,
+            "description": "Only the timestamps that are set; an empty JSON array (PHP `[]`) when none is.",
+            "properties": {
+              "preparing_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "ready_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "picked_up_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "out_for_delivery_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "delivered_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "completed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "quantity"
+              ],
+              "properties": {
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "quantity": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "driver": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "description": "Only while the order is `out_for_delivery` / `picked_up`.",
+            "required": [
+              "name",
+              "phone",
+              "lat",
+              "lng",
+              "location_updated_at"
+            ],
+            "properties": {
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "lat": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "lng": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "location_updated_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          },
+          "courier": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "description": "Third-party courier delivery (Uber Direct, DoorDash), when one is active.",
+            "required": [
+              "provider",
+              "status",
+              "eta_minutes",
+              "tracking_url",
+              "lat",
+              "lng",
+              "location_updated_at"
+            ],
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "eta_minutes": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "tracking_url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              },
+              "lat": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "lng": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "location_updated_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      "OptionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+        "description": "Option or modifier `public_id` (UUIDv7, API-18): weight steps, sizes, add-ons, service options, variant option values. Never a slug or an integer."
+      },
+      "OtpRequest": {
+        "type": "object",
+        "required": [
+          "phone"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "E.164 or a local number the store's country can normalise."
+          }
+        }
+      },
+      "OtpRequestAccepted": {
+        "type": "object",
+        "required": [
+          "message",
+          "expires_in_seconds"
+        ],
+        "additionalProperties": false,
+        "description": "The same answer for every well-formed phone, whether or not it already has a customer account at this store (API-14: the API never reveals that). Closed on purpose: no account flag.",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Server copy, e.g. 'If this number can get texts, we sent it a code.'"
+          },
+          "expires_in_seconds": {
+            "const": 600,
+            "description": "Code lifetime (today's SmsOtpService TTL, 10 minutes)."
+          }
+        }
+      },
+      "OtpVerifyRequest": {
+        "type": "object",
+        "required": [
+          "phone",
+          "code"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "phone": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          },
+          "device": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Token name, e.g. the client app."
+          }
+        }
+      },
+      "OtpVerified": {
+        "type": "object",
+        "required": [
+          "token",
+          "token_type",
+          "customer"
+        ],
+        "additionalProperties": false,
+        "description": "A customer token of the token's store with a verified phone (sets `phone_verified_at`). The customer is found or created by phone (today's `firstOrCreate`), so a new and an existing phone answer the same way.",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Send as `Authorization: Bearer`. Returned once."
+          },
+          "token_type": {
+            "const": "Bearer"
+          },
+          "expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "null = no expiry (today's CustomerToken default)."
+          },
+          "customer": {
+            "type": "object",
+            "required": [
+              "public_id",
+              "phone",
+              "phone_verified_at"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "public_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "phone": {
+                "type": "string",
+                "description": "Normalised E.164."
+              },
+              "phone_verified_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      },
+      "OptionGroupId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+        "description": "Option group `public_id` (UUIDv7, API-20): weight steps, colour, size, add-on groups, service option groups and the store's \"If it's out of stock\" group (API-22). Never a slug such as `weight` or `size`."
+      },
+      "HoldReleased": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hold_id",
+          "released",
+          "cancelled"
+        ],
+        "description": "Answer of `DELETE /holds/{hold_id}` when the hold was bound to a pending hosted order or booking and the store has \"Release holds during payment\" on (API-24a): the slot is freed and the pending order or booking is cancelled (a booking waiting for its deposit too, API-26). Core sends the payment-not-completed message only when the store has \"Message when a customer cancels a pending payment\" on (API-29, off by default). A plain hold (no pending payment) is released with 204 and no body.",
+        "properties": {
+          "hold_id": {
+            "type": "string"
+          },
+          "released": {
+            "const": true
+          },
+          "cancelled": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "public_id",
+              "number",
+              "status"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "order",
+                  "booking"
+                ]
+              },
+              "public_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "number": {
+                "type": "string"
+              },
+              "status": {
+                "const": "cancelled"
+              },
+              "track_token": {
+                "type": "string",
+                "description": "Order: the same `track_token`; `GET /orders/{track_token}` now shows it `cancelled`."
+              },
+              "manage_token": {
+                "type": "string",
+                "description": "Booking: the same `manage_token`."
+              }
+            }
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentState",
+            "description": "The cancelled order's payment: `failed` with `next_action` null, as when the window ends unpaid (API-10). The hosted page stops taking payment; a payment the gateway still confirms afterwards is a late payment (API-21, `received_late`)."
+          }
+        }
+      },
+      "PickerAction": {
+        "enum": [
+          "offer_replacement",
+          "call_customer",
+          "remove_item"
+        ],
+        "description": "API-25: the fixed picker action behind one store-defined \"If it's out of stock\" option. The store names its options freely; each one maps to exactly one action, and the action drives the picker app (basket §8, §10). `offer_replacement`: the picker proposes a replacement, which the shopper sees on the tracking page as \"Changes to review\" (ordered vs replacement, Keep replacement / Refund instead, new estimated total; grocery.replacement_needed); without an answer before dispatch the order-level preference applies. `call_customer`: the picker phones the shopper (the order's customer phone) before changing the line; with no answer the option's store-set `fallback` applies (`offer_replacement` or `remove_item`, default `remove_item`; API-30). `remove_item`: the picker removes the line from the order (an authorised card hold captures less, pay later collects less; a line removed after the card was captured is always refunded, whatever the D7 refund switches say, because the shopper never got it: `partially_refunded` with `refunded_amount`, API-31). Clients use it to describe an option (e.g. say that a call will come) and never to price anything; the choice itself stays the option `public_id`."
+      },
+      "SubstitutionPickerAction": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "option_id",
+          "action"
+        ],
+        "description": "API-25: one option of a substitution group and its picker action. API-30: a `call_customer` option also carries `fallback`, what the picker does when the shopper does not answer the call (store-set per option: `offer_replacement` or `remove_item`, default `remove_item`); `fallback` is required with `call_customer` and absent with the other actions.",
+        "properties": {
+          "option_id": {
+            "$ref": "#/components/schemas/OptionId",
+            "description": "One of the group's `options[].id`."
+          },
+          "action": {
+            "$ref": "#/components/schemas/PickerAction"
+          },
+          "fallback": {
+            "enum": [
+              "offer_replacement",
+              "remove_item"
+            ],
+            "description": "API-30: present exactly when `action` is `call_customer`. The action the picker takes when the call goes unanswered: `offer_replacement` (propose a replacement, which the shopper reviews on the tracking page) or `remove_item` (remove the line). Store-set per option; the store default is `remove_item`. Like `action`, it describes the option and never prices it."
+          }
+        },
+        "if": {
+          "required": [
+            "action"
+          ],
+          "properties": {
+            "action": {
+              "const": "call_customer"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "fallback"
+          ]
+        },
+        "else": {
+          "not": {
+            "required": [
+              "fallback"
+            ]
+          }
+        }
+      }
+    },
+    "parameters": {
+      "AcceptLanguage": {
+        "name": "Accept-Language",
+        "in": "header",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Store locale for labels and `formatted`; falls back to the store default. Part of the ETag."
+      },
+      "Branch": {
+        "name": "branch",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Branch public_id; must belong to the token's store (404 otherwise)."
+      },
+      "IfNoneMatch": {
+        "name": "If-None-Match",
+        "in": "header",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "description": "Client UUIDv7 (J27-A2). Stored as client_uuid; unique per store."
+      },
+      "HoldToken": {
+        "name": "X-Hold-Token",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ItemId": {
+        "name": "item_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Item public_id (UUIDv7)."
+      },
+      "HoldId": {
+        "name": "hold_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "TrackToken": {
+        "name": "track_token",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ManageToken": {
+        "name": "manage_token",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Signed manage token (book §7)."
+      },
+      "ServiceIds": {
+        "name": "service_ids",
+        "in": "query",
+        "required": true,
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 4
+        }
+      },
+      "StaffId": {
+        "name": "staff_id",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "default": "any"
+        },
+        "description": "Staff public_id or `any`."
+      },
+      "HoldTokenOptional": {
+        "name": "X-Hold-Token",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Required when the body carries `hold_id` (slot hold: grocery delivery, food schedule-ahead, laundry; API-3, API-11)."
+      },
+      "IdempotencyKeyOrder": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "description": "Client UUIDv7 (J27-A2), stored as client_uuid, unique per store. REQUIRED for the new body (`OrderSubmitRequest`, 422 `validation_failed` without it). For the deprecated legacy body (`LegacyOrderRequest`) it stays optional until the alias sunset (API-17), as today: the body `client_uuid` is accepted instead, and wins when both are sent. OpenAPI cannot make a header conditional on the body, so it is `required: false` here; `check_examples.py` enforces the rule per body type."
+      },
+      "OptionIds": {
+        "name": "option_ids",
+        "in": "query",
+        "required": false,
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/OptionId"
+          },
+          "maxItems": 40
+        },
+        "description": "Chosen options and add-ons of the services: the same option `public_id`s (UUIDv7, API-18) as `CartLine.option_ids` and `BookingSubmitRequest.option_ids`. Options change duration and price (book §5), so free days and slots are computed for services + options. Omit only when no service has options; the same option rules as the quote apply (422 `validation_failed` for a missing required choice or an option of another service)."
+      },
+      "ManageTokenHeader": {
+        "name": "X-Manage-Token",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Reschedule mode (API-8): the booking's signed manage token. When sent, staff, days and slots are computed for rescheduling that booking: only staff and slots whose price for the booking's services and options equals the booking's price are returned (others are left out), and the booking's own current slot does not count as taken. On `POST /holds` it ties the hold to the booking (`Hold.booking_id`); a hold that overlaps the booking's own slot is refused without it. Sent as a header, never in the URL query (API-24b)."
+      }
+    },
+    "responses": {
+      "Unauthenticated": {
+        "description": "Missing, invalid or revoked token (`unauthenticated`).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "`forbidden` (scope missing, origin not allowed), `storefront_api_not_enabled` / `booking_api_not_enabled` / `kiosk_api_not_enabled` (plan lacks that feature, API-5; `details.feature` names the key), `feature_disabled` (platform kill switch), `kiosk_not_enabled` (kiosk token: the plan lacks the `kiosk` feature, `details.feature = kiosk`, or the store's `kiosk_enabled` is off; API-13), `phone_verification_required` (API-7; never for a kiosk walk-in, API-15).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Unknown id, or store not servable (suspended / inactive plan).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "`quote_changed`, `idempotency_conflict`, `slot_taken`, `slot_full`, `hold_expired`, `hold_in_use` (API-10; only while the store's \"Release holds during payment\" is off, API-24a), `price_changed` (reschedule, API-8), `past_deadline`, `booking_not_active`, `bookings_not_open`, `store_closed`.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Unprocessable": {
+        "description": "`validation_failed` and business rules: `out_of_zone`, `below_minimum`, `out_of_stock`, `invalid_order_type`, `payment_method_unavailable`, `payment_mode_unavailable`, `return_url_not_allowed`, `otp_invalid` (API-14).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "`rate_limited`",
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "ETag": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "Weak validator from StorefrontMenuCache::signature + locale + branch."
+      },
+      "CacheControl": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "`public, max-age=120` for store/catalog/item; `no-store` for slots, holds, quotes, orders, bookings and OTP."
+      },
+      "Deprecation": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "Sent on every legacy alias response from launch (API-4), same pattern as the deprecated query-string token today: `Deprecation: true`, plus `Link: </developers>; rel=\"deprecation\"` and `Link: <successor path>; rel=\"successor-version\"`."
+      },
+      "Sunset": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "HTTP-date of removal: launch date + 12 months (API-4). The exact date is set at launch."
+      },
+      "Link": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "`rel=\"deprecation\"` (developer docs) and `rel=\"successor-version\"` (new endpoint)."
+      }
+    }
+  }
+}

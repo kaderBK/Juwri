@@ -1,0 +1,27 @@
+{
+  "slug": "honey_hive",
+  "starter": "cafe",
+  "name": "Honey Hive",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]}
+  ],
+  "tokens": {
+    "--bg": "#fff8e8",
+    "--ink": "#3d3116",
+    "--muted": "#8a7440",
+    "--card": "#ffffff",
+    "--btn-border": "#ecd9a0",
+    "--btn-border-width": "1.5px",
+    "--accent": "#f5c93c",
+    "--accent-ink": "#3d3116",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#3d3116",
+    "--radius": "14px",
+    "--shadow": "0 3px 0 #ecd9a0",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

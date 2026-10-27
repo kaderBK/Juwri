@@ -1,0 +1,61 @@
+# Development: the working tree is mounted, the Octane worker restarts after every request (so code changes show at once),
+# MySQL is a service. From the repository root:
+#   cp docker/env.example docker/.env      # then fill APP_KEY and the DB passwords
+#   docker compose -f docker/compose.dev.yml --env-file docker/.env up --build
+name: juwri-dev
+
+x-app: &app
+  build:
+    context: ..
+    dockerfile: Dockerfile
+    target: app
+  env_file: [.env]
+  environment:
+    APP_ENV: local
+    APP_DEBUG: "true"
+    OPCACHE_VALIDATE: "1"
+    OCTANE_MAX_REQUESTS: "1"
+    FRANKENPHP_WORKERS: "1"
+    DB_HOST: db
+  volumes:
+    - ..:/app
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app
+    ports: ["8080:8080"]
+
+  queue:
+    <<: *app
+    command: ["queue"]
+
+  scheduler:
+    <<: *app
+    command: ["scheduler"]
+
+  # Live updates (see compose.prod.yml). Only useful with BROADCAST_CONNECTION=reverb in docker/.env.
+  reverb:
+    <<: *app
+    command: ["reverb"]
+    ports: ["${REVERB_SERVER_PORT:-8081}:${REVERB_SERVER_PORT:-8081}"]
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-juwri}
+      MYSQL_USER: ${DB_USERNAME:-juwri}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in docker/.env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in docker/.env}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  db-data:

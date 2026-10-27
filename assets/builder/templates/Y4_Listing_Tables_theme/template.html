@@ -1,0 +1,34 @@
+<style>
+.mbt { --mbt-accent: #4f46e5; --mbt-ink: #17171c; --mbt-muted: #5b5b66; --mbt-line: #ece9e2; --mbt-soft: #f4f2ed; color: var(--mbt-ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6; }
+.mbt *, .mbt *::before, .mbt *::after { box-sizing: border-box; }
+.mbt img { display: block; max-width: 100%; height: auto; border-radius: 14px; }
+.mbt-section { padding: 48px 20px; }
+.mbt-wrap { max-width: 1040px; margin: 0 auto; }
+.mbt-hero { background: var(--mbt-soft); text-align: center; }
+.mbt-hero h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 48px); line-height: 1.15; }
+.mbt-lead { margin: 0 auto; max-width: 36em; color: var(--mbt-muted); font-size: 18px; }
+.mbt h2 { margin: 0 0 10px; font-size: clamp(22px, 3vw, 30px); line-height: 1.2; }
+.mbt h3 { margin: 12px 0 6px; font-size: 19px; }
+.mbt p { margin: 0 0 10px; }
+.mbt-muted { color: var(--mbt-muted); }
+.mbt-btn { display: inline-block; margin-top: 18px; padding: 12px 24px; border-radius: 999px; background: var(--mbt-accent); color: #fff; font-weight: 600; text-decoration: none; }
+.mbt-row { display: grid; gap: 24px; }
+.mbt-cols-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: center; }
+.mbt-cols-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.mbt-card { padding: 22px; border: 1px solid var(--mbt-line); border-radius: 18px; background: #fff; }
+.mbt-split { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: center; text-align: start; }
+.mbt-center { text-align: center; }
+.mbt-form { display: grid; gap: 12px; max-width: 520px; margin: 0 auto; }
+.mbt-form input, .mbt-form textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--mbt-line); border-radius: 12px; font: inherit; }
+.mbt-form button { padding: 12px 24px; border: 0; border-radius: 999px; background: var(--mbt-accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+.mbt-table { width: 100%; border-collapse: collapse; }
+.mbt-table th, .mbt-table td { padding: 12px 10px; border-bottom: 1px solid var(--mbt-line); text-align: start; }
+.mbt-table td:last-child, .mbt-table th:last-child { text-align: end; white-space: nowrap; }
+.mbt-price { font-size: 34px; font-weight: 700; margin: 6px 0; }
+.mbt-plan ul { margin: 12px 0 0; padding-inline-start: 18px; color: var(--mbt-muted); }
+.mbt-plan--featured { border-color: var(--mbt-accent); box-shadow: 0 10px 30px rgba(79, 70, 229, .12); }
+</style>
+<div class="mbt">
+<section class="mbt-section mbt-hero"><div class="mbt-wrap"><h1>Welcome to {{store.name}}</h1><p class="mbt-lead">Tell visitors in one or two sentences what you offer and why they will like it.</p><a class="mbt-btn" href="#">Order now</a></div></section>
+<section class="mbt-section"><div class="mbt-wrap"><h2>Price list</h2><table class="mbt-table"><thead><tr><th>Item</th><th>Details</th><th>Price</th></tr></thead><tbody><tr><td><strong>Espresso</strong></td><td class="mbt-muted">Single shot</td><td>2.50</td></tr><tr><td><strong>Flat white</strong></td><td class="mbt-muted">Double shot, steamed milk</td><td>3.80</td></tr><tr><td><strong>Fresh orange juice</strong></td><td class="mbt-muted">Squeezed to order</td><td>4.20</td></tr><tr><td><strong>Breakfast plate</strong></td><td class="mbt-muted">Eggs, bread, salad</td><td>9.50</td></tr></tbody></table></div></section>
+</div>

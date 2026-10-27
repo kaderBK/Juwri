@@ -1,0 +1,40 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ============================================================
+   Bio pages — APPEARANCE overrides (bio-t15 Lane B). Loaded LAST
+   before the token block, so it beats the preset's residual CSS.
+   APPEND-ONLY: avatar-shape, cover image, --bg-scrim dim overlay,
+   pattern/image background support. Colors/fonts/radii come through
+   the TOKEN layer (BioAppearance::toTokens merged in the controller),
+   NOT here — this file is for structural appearance CSS only. No
+   external url() except via inline style="" the layout sets; this
+   text is inlined into the ONE nonced style. Honor dir="rtl".
+   ============================================================ */
+
+/* B3 backgrounds — the .bio-body inline `style="background-image:…"` (set by
+   the layout from BioAppearance::backgroundImageStyle(), PRO image bg only)
+   paints UNDER everything else; .bio itself keeps painting the --bg token
+   (solid/gradient/pattern/preset) as its own background so a failed/absent
+   image still shows a sane fallback color. --bg-scrim dims the image for
+   text legibility — a plain full-bleed tint, never blocking clicks, and
+   painted behind the page content (DOM order: ::before is the first box in
+   .bio, so every real child paints after/above it; z-index below pins that
+   even where a preset's own CSS gives a child z-index). 0 by default (no
+   scrim token emitted unless bg_type is actually 'image' — SPEC §3). */
+.bio-body{background-repeat:no-repeat;background-position:center;background-size:cover}
+/* When a PRO image background is set (body gets .bio-body--img from the layout),
+   the .bio column must go transparent so the body image shows THROUGH the page —
+   otherwise the column's own opaque --bg (base.css) covers it edge-to-edge on any
+   viewport <= the column width (i.e. every phone), and the image only ever peeked
+   in the desktop side-margins. The ::before scrim below still dims it for legibility,
+   and .bio-body keeps its own --bg as the fallback if the image fails to load. */
+.bio-body--img .bio{background:transparent}
+.bio::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:rgba(0,0,0,var(--bg-scrim,0))}
+.bio-in,.bio-profile,.bio-blocks,.bio-pow,.bio-hero,.bio-heroid{position:relative;z-index:1}
+
+/* B5 header — avatar shape rides the --avatar-radius token, consumed
+   directly by base.css's own .bio-avatar rule (see base.css); cover_image/
+   show_cover ride the existing $profile['cover'] resolution
+   (BioPublicController::bioProfile) — no new markup needed here. */

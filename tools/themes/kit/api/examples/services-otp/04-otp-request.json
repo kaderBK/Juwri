@@ -1,0 +1,30 @@
+{
+  "operationId": "requestCustomerOtp",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/customer/otp/request",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fc4b-e91d-7c89-9048-65debb9b79ba"
+    },
+    "body": {
+      "phone": "+966551234567"
+    }
+  },
+  "response": {
+    "status": 202,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:01:40 GMT"
+    },
+    "body": {
+      "message": "If this number can get texts, we sent it a 6-digit code.",
+      "expires_in_seconds": 600
+    }
+  }
+}

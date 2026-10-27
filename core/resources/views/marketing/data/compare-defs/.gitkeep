@@ -1,0 +1,4 @@
+# Comparison-hub competitor defs (SEO W4.x).
+# One PHP file per cite-checked competitor; filename = URL slug (compare/{slug}).
+# See App\Services\CompareDefs and home/compare.blade.php for the array shape.
+# Empty until a real, verified competitor lands (W4.1 GloriaFood first).

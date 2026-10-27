@@ -1,0 +1,3330 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ---------------------------------------------------------------------
+   Velvet QR Menu Theme Stylesheet
+   --------------------------------------------------------------------- */
+
+/* ── VELVET-F1 · brand-colour immunity (B10) ───────────────────────────────
+   The shared layout builds --theme-color-* with sscanf($c,"#%02x%02x%02x"),
+   which cannot read a 3-digit hex: the lane store's #111 emits the literal
+   token stream `rgba(17,1,,1)`. That IS a syntactically legal custom-property
+   value, so it is stored, the var() FALLBACK NEVER FIRES, and every rule that
+   substitutes it becomes invalid-at-computed-value-time. Measured before this
+   fix: --v-accent resolved to rgb(0,0,0), --v-accent-gradient to `none`, the
+   Send-Order button rendered black-on-black, and .v-category-title's
+   border-inline-start collapsed to 0px — the entire gold identity was gone.
+
+   Registering the two accent tokens with a `<color>` syntax makes the invalid
+   substitution fail HERE, at the token, where the guaranteed initial-value
+   catches it, instead of poisoning ~everything downstream. A well-formed brand
+   colour (#c2410c -> rgba(196,65,12,1)) still parses as <color> and still
+   drives the theme. Root cause is shared code — logged as B10, not edited. */
+@property --v-accent {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #d4af37;
+}
+@property --v-accent-0_15 {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgba(212, 175, 55, 0.15);
+}
+
+:root {
+    /* surfaces — role colours flow from the Customizer v2 token layer
+       (theme-tokens.blade.php); the literal after each comma is velvet's own
+       value, kept as the var() fallback so a store that customized nothing —
+       or a render with no token include — is byte-identical to today. */
+    --v-bg-dark: var(--tc-background, #0f0e0c);
+    --v-bg-card: var(--tc-surface, #161512);
+    /* radius — ISS-B-302: velvet hardcoded its sharp 2px card / 999px pill radii,
+       so layout.radius saved but never applied. Route the two dominant structural
+       radii through the customizer's --tr-* tokens, each falling back to velvet's
+       original literal (emission is overrides-only, so an untouched store is
+       byte-identical). Corner style now reshapes velvet's cards and capsules. */
+    --v-r-card:    var(--tr-card, 2px);
+    --v-r-control: var(--tr-control, 2px);
+    --v-r-pill:    var(--tr-pill, 999px);
+    --v-bg-sheet: #1a1814;              /* second (sheet) surface tone; only one surface role exists, keep literal */
+    --v-border-gold: rgba(212, 175, 55, 0.15);       /* hand-tuned gold-alpha stroke, keep literal */
+    --v-border-gold-focus: rgba(212, 175, 55, 0.4);  /* hand-tuned gold-alpha stroke, keep literal */
+
+    /* brand — velvet's gold accent is the Customizer PRIMARY role. The
+       --theme-color-1 read is preserved in the fallback chain (per rule 4): the
+       new token wins, the legacy brand var is next, the gold literal is last. */
+    --v-accent: var(--tc-primary, var(--theme-color-1, #d4af37));
+    --v-accent-0_15: var(--theme-color-0_15, rgba(212, 175, 55, 0.15));
+    --v-accent-gradient: linear-gradient(135deg, var(--v-accent) 0%, #aa8625 100%);
+
+    --v-text-primary: var(--tc-text, #f5f4f0);
+    --v-text-muted: #a3a097;
+    /* fonts — heading/display → --tf-heading, body → --tf-body. The pair is
+       emitted only when the owner set one; otherwise these degrade to velvet's
+       own stacks. */
+    --v-font-headings: 'Saudi Riyal', var(--tf-heading, 'Playfair Display', serif);
+    --v-font-body: var(--tf-body, 'Saudi Riyal', 'Outfit', sans-serif);
+
+    --v-transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Desktop: the phone column grows up into a centred canvas instead of
+       stretching a 597px card across 1280px (VELVET-F5). */
+    --v-page-max: 1100px;
+}
+
+/* Base resets & layout */
+#velvet-app {
+    background-color: var(--v-bg-dark);
+    color: var(--v-text-primary);
+    font-family: var(--v-font-body);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: clip; /* prevent horizontal scroll without breaking position: sticky */
+    padding-bottom: 90px; /* space for floating cart button */
+}
+
+/* Ambient Backdrops */
+.v-ambient-1 {
+    position: absolute;
+    top: -10%;
+    left: -20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.v-ambient-2 {
+    position: absolute;
+    top: 50%;
+    right: -20%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Directional layout support */
+.rtl-dir {
+    direction: rtl;
+    text-align: right;
+}
+.ltr-dir {
+    direction: ltr;
+    text-align: left;
+}
+
+/* VELVET-F2 · Arabic type. Playfair Display and Outfit carry ZERO Arabic
+   glyphs, so under /lang/ar every heading and every label fell through to the
+   browser's generic serif — the store name, the sheet titles and the whole
+   checkout form rendered in a default system serif while the theme claimed a
+   luxe display face. Tajawal is already linked unconditionally by the shared
+   layout, so this costs no new request. The Latin faces stay FIRST in each
+   stack: font fallback is per-glyph, so an English dish name inside an Arabic
+   page still renders in Playfair/Outfit. */
+.rtl-dir {
+    /* owner's chosen pair still wins under Arabic; the Latin+Arabic fallback
+       stacks follow if none was set (mirrors the base rule above). */
+    --v-font-headings: 'Saudi Riyal', var(--tf-heading, 'Playfair Display', 'Tajawal', 'Noto Naskh Arabic', 'Geeza Pro', serif);
+    --v-font-body: var(--tf-body, 'Saudi Riyal', 'Outfit', 'Tajawal', 'Noto Sans Arabic', system-ui, sans-serif);
+}
+.rtl-dir input,
+.rtl-dir textarea,
+.rtl-dir select,
+.rtl-dir button {
+    font-family: var(--v-font-body);
+}
+
+/* Header & Cover */
+.v-header {
+    position: relative;
+    padding: 24px 20px;
+    z-index: 2;
+}
+
+.v-cover-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.v-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4) contrast(1.1);
+}
+
+.v-cover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to top, var(--v-bg-dark) 0%, transparent 100%);
+}
+
+.v-header-content {
+    margin-top: 40px;
+}
+
+.v-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.v-restaurant-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--v-accent);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    background-color: var(--v-bg-card);
+    object-fit: cover;
+}
+
+.v-brand-details {
+    flex: 1;
+}
+
+.v-restaurant-title {
+    font-family: var(--v-font-headings);
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #ffffff 30%, #f3e9cb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.v-restaurant-subtitle {
+    font-size: 14px;
+    color: var(--v-accent);
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.v-restaurant-desc {
+    font-size: 14px;
+    color: var(--v-text-muted);
+    line-height: 1.6;
+    margin: 16px 0;
+}
+
+.v-restaurant-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    font-size: 13px;
+    color: var(--v-text-muted);
+    border-top: 1px solid var(--v-border-gold);
+    padding-top: 16px;
+}
+
+.v-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.v-meta-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--v-accent);
+}
+
+.v-scans-badge {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* Branch Selector */
+.v-branch-selector-wrap {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+.v-branch-label {
+    color: var(--v-text-muted);
+}
+.v-branch-options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.v-branch-options::-webkit-scrollbar {
+    display: none;
+}
+.v-branch-btn {
+    white-space: nowrap;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    text-decoration: none;
+    transition: var(--v-transition);
+}
+.v-branch-btn.active, .v-branch-btn:hover {
+    border-color: var(--v-accent);
+    color: #fff;
+    background-color: var(--v-accent-0_15);
+}
+
+/* Sticky Navigation & Search */
+.v-nav-bar-sticky {
+    position: sticky;
+    top: 0;
+    background-color: rgba(15, 14, 12, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 10;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+
+.v-nav-bar-inner {
+    padding: 12px 20px 4px 20px;
+}
+
+.v-search-box {
+    position: relative;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.v-search-icon {
+    position: absolute;
+    inset-inline-start: 12px;
+    width: 18px;
+    height: 18px;
+    color: var(--v-text-muted);
+    pointer-events: none;
+}
+
+#v-search-input {
+    width: 100%;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 24px;
+    padding: 10px 16px;
+    padding-inline-start: 38px;
+    padding-inline-end: 32px;
+    color: var(--v-text-primary);
+    font-size: 14px;
+    font-family: var(--v-font-body);
+    transition: var(--v-transition);
+}
+
+#v-search-input:focus {
+    outline: none;
+    border-color: var(--v-accent);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+#v-search-clear {
+    position: absolute;
+    inset-inline-end: 12px;
+    background: none;
+    border: none;
+    color: var(--v-text-muted);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Category Navigation */
+.v-categories-nav {
+    margin-bottom: 8px;
+}
+
+.v-categories-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+}
+
+.v-categories-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.v-cat-btn {
+    background: none;
+    border: none;
+    color: var(--v-text-muted);
+    font-family: var(--v-font-body);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--v-transition);
+}
+
+.v-cat-btn.active {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+    font-weight: 600;
+}
+
+/* Menu Grid */
+.v-menu-main {
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.v-category-title {
+    font-family: var(--v-font-headings);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 28px 0 16px 0;
+    color: #fff;
+    border-inline-start: 3px solid var(--v-accent);
+    padding-inline-start: 10px;
+}
+
+.v-menu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .v-menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── VELVET-F5 · desktop. Measured before: at 1280 the menu column ran the full
+   1249px and each card was 597px wide with a 180px image; at 1440, 677px. The
+   phone layout simply stretched. Everything the page owns now shares one
+   centred 1100px canvas (the stories rail and banner slider already used
+   exactly this width, so the whole page finally lines up), and the card grid
+   gains a third column once there is room for one at a sane card width. ── */
+@media (min-width: 1000px) {
+    .v-menu-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (min-width: 768px) {
+    .v-header,
+    .v-nav-bar-inner,
+    .v-menu-main {
+        max-inline-size: var(--v-page-max);
+        margin-inline: auto;
+    }
+    .v-cover-wrapper {
+        height: 260px;
+    }
+    /* A 1265px-wide bottom sheet is a wall. Cap it, centre it, and round all
+       four corners so it reads as a dialog rather than a broken drawer. */
+    .v-drawer-sheet {
+        max-inline-size: 560px;
+        margin-inline: auto;
+        border-radius: 20px;
+        border: 1px solid var(--v-accent);
+        bottom: 24px;
+        max-height: calc(100vh - 48px);
+    }
+    .v-cart-sheet {
+        max-inline-size: 680px;
+    }
+}
+
+/* Menu Card */
+.v-menu-card {
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--v-transition);
+    cursor: pointer;
+}
+
+.v-menu-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--v-accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.v-card-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.v-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v-menu-card:hover .v-card-img {
+    transform: scale(1.05);
+}
+
+.v-badge {
+    position: absolute;
+    top: 12px;
+    inset-inline-start: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+}
+
+.v-badge-popular {
+    background-color: var(--v-accent);
+    color: #000;
+}
+
+.v-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* VELVET-F8 · data-driven card flags, so a photoless item still says what it is. */
+.v-card-flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+.v-chip-flag {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: var(--v-r-pill, 999px);
+    line-height: 1.5;
+}
+.v-chip-popular {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+    border: 1px solid var(--v-border-gold-focus);
+}
+.v-chip-special {
+    background: var(--v-accent-gradient);
+    color: #0f0e0c;
+    border: 1px solid transparent;
+}
+
+.v-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.v-card-name {
+    font-family: var(--v-font-headings);
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.v-card-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--v-accent);
+}
+
+.v-card-desc {
+    font-size: 13px;
+    color: var(--v-text-muted);
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+    flex-grow: 1;
+}
+
+.v-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.v-card-labels {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Dietary Dot Badge */
+.v-label-tag {
+    width: 14px;
+    height: 14px;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.v-label-tag::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+.v-label-veg {
+    border-color: #2e7d32;
+}
+.v-label-veg::after {
+    background-color: #2e7d32;
+}
+.v-label-nonveg {
+    border-color: #c62828;
+}
+.v-label-nonveg::after {
+    background-color: #c62828;
+}
+
+.v-label-text {
+    font-size: 11px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--v-text-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.v-quick-add-btn {
+    background: var(--v-accent-gradient);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    /* VELVET-F6 · was 32x32 — under the 44px touch floor on the single most
+       tapped control in the theme. The gold disc still reads 32px; the extra
+       12px is transparent hit area carved out of the padding. */
+    width: 44px;
+    height: 44px;
+    background-clip: content-box;
+    padding: 6px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+
+.v-quick-add-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Sold Out State */
+.v-sold-out {
+    opacity: 0.65;
+    pointer-events: none;
+}
+.v-sold-out .v-card-img {
+    filter: grayscale(100%);
+}
+.v-soldout-label {
+    font-size: 12px;
+    color: #c62828;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Drawer / Modal Sheet System */
+.v-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    visibility: hidden;
+    pointer-events: none;
+    transition: visibility 0.4s;
+}
+
+.v-drawer[aria-hidden="false"] {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.v-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v-drawer[aria-hidden="false"] .v-drawer-backdrop {
+    opacity: 1;
+}
+
+.v-drawer-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--v-bg-sheet);
+    border-top: 1px solid var(--v-accent);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.v-drawer[aria-hidden="false"] .v-drawer-sheet {
+    transform: translateY(0);
+}
+
+.v-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+
+/* VELVET-F4 · the item-detail and order-success sheets have no title, and the
+   drag handle is position:absolute — so `space-between` left the close button
+   as the only in-flow child and parked it at flex-START (measured x=16 on a
+   599px sheet, while the titled cart sheet put its X at x=551). Two sheets in
+   the same theme closed from opposite corners. Push the lone control to the
+   inline-end so every sheet closes from the same place, in both directions. */
+.v-drawer-header > .v-drawer-close:only-of-type {
+    margin-inline-start: auto;
+}
+
+.v-drawer-drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: var(--v-r-card, 2px);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.v-drawer-title {
+    font-family: var(--v-font-headings);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.v-drawer-close {
+    /* Glyph is only ~14px wide — pad the button out to a 32px touch target. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin: -4px;
+    background: none;
+    border: none;
+    color: var(--v-text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.v-drawer-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    scrollbar-width: thin;
+}
+
+/* Detail Modal Content styling */
+.v-detail-img-wrap {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid var(--v-border-gold);
+}
+.v-detail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.v-detail-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.v-detail-title {
+    font-family: var(--v-font-headings);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+.v-detail-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--v-accent);
+}
+.v-detail-desc {
+    font-size: 14px;
+    color: var(--v-text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Options / Customizable sections */
+.v-option-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    color: var(--v-accent);
+}
+
+.v-option-group {
+    border-top: 1px solid var(--v-border-gold);
+    padding: 16px 0;
+}
+
+.v-radio-option, .v-checkbox-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-radio-option:hover, .v-checkbox-option:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+.v-option-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.v-option-price {
+    color: var(--v-accent);
+    font-weight: 500;
+}
+.v-opt-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex: none;
+    border: 1px solid var(--v-border-gold);
+}
+
+/* Detail Qty Selector */
+.v-detail-qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--v-border-gold);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+.v-qty-selectors {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 20px;
+    padding: 4px;
+}
+.v-qty-btn {
+    background: none;
+    border: none;
+    color: var(--v-text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-qty-btn:hover {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+}
+.v-qty-val {
+    font-size: 16px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.v-btn-primary {
+    background: var(--v-accent-gradient);
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-family: var(--v-font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-btn-primary:hover {
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Add-to-cart CTA + the "view cart" jump button sit together on the right of
+   the qty row, so the row's own space-between still reads as two groups. */
+.v-detail-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Product-sheet "view cart" jump — hidden until the cart has items, mirrors
+   the qty stepper's circular button treatment. */
+.v-cart-jump {
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-cart-jump:hover {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+}
+.v-cart-jump[hidden] {
+    display: none;
+}
+.v-cart-jump-count {
+    position: absolute;
+    top: -6px;
+    inset-inline-end: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background-color: var(--v-accent);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating Cart Button */
+.v-cart-floating-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--v-accent-gradient);
+    border: none;
+    border-radius: 30px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    cursor: pointer;
+    min-width: 160px;
+    color: #000;
+    transition: var(--v-transition);
+}
+.v-cart-floating-btn:hover {
+    transform: translateX(-50%) scale(1.03);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.2);
+}
+.v-cart-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.v-cart-badge {
+    position: absolute;
+    top: -8px;
+    /* VELVET-F3 · was a hardcoded `right`, so in Arabic the counter sat over the
+       middle of the pill instead of mirroring to the icon's outer corner. */
+    inset-inline-end: -10px;
+    background-color: #ff3b30;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+.v-cart-btn-price {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* Cart Items & Summary Layout */
+.v-cart-list {
+    margin-bottom: 20px;
+}
+.v-cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+.v-cart-item-info {
+    flex-grow: 1;
+    padding-inline-end: 16px;
+}
+.v-cart-item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 2px;
+}
+.v-cart-item-customizations {
+    font-size: 11px;
+    color: var(--v-text-muted);
+}
+/* Side column: remove tucked top-right next to the price, the qty pill at the
+   bottom — the old price/unit/qty/trash stack made every line taller with the
+   left half empty. */
+.v-cart-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 6px;
+    align-self: stretch;
+}
+.v-cart-item-toprow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.v-cart-item-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--v-accent);
+}
+/* pre-discount / per-unit hints + remove control on cart lines */
+.v-cart-item-priceline {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.v-cart-item-was {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--v-text-muted);
+}
+.v-cart-item-unit {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--v-text-muted);
+}
+button.v-cart-item-name {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: start;
+    font-family: inherit;
+}
+.v-cart-item-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--v-text-muted);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.v-cart-item-remove:active {
+    color: var(--v-accent);
+}
+.v-cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2px 6px;
+}
+.v-cart-item-qty-btn {
+    /* 20px square missed the 32px touch-target floor; keep the glyph size and
+       grow only the hit area so the pill's proportions are unchanged. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--v-text-primary);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Combo ("Meal deals") lines reuse .v-cart-item but are read-only summaries with
+   no per-line trash/qty controls. A normal row's price is inset from the trailing
+   edge by the 32px remove button + 4px toprow gap; without those, the combo price
+   would sit flush and protrude past the normal price column. Inset the combo's
+   right column by the same 36px so both price columns line up. Logical property =
+   RTL-safe. Later in file + higher specificity (0,2,0) than base .v-cart-item-right
+   (0,1,0), so it wins without touching normal rows. */
+.v-cart-item--combo .v-cart-item-right {
+    padding-inline-end: 36px;
+}
+
+/* Coupon section */
+.v-coupon-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+.v-coupon-input-wrap {
+    display: flex;
+    gap: 8px;
+}
+#v-coupon-code {
+    flex-grow: 1;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--v-text-primary);
+    font-family: var(--v-font-body);
+}
+#v-coupon-apply-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--v-font-body);
+}
+.v-coupon-message {
+    font-size: 12px;
+    margin-top: 6px;
+}
+.v-coupon-success { color: #2e7d32; }
+.v-coupon-error { color: #c62828; }
+
+.v-cart-summary {
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+.v-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--v-text-muted);
+    margin-bottom: 8px;
+}
+.v-sum-discount-row {
+    color: #2e7d32;
+}
+.v-total-row {
+    border-top: 1px solid var(--v-border-gold);
+    padding-top: 10px;
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Checkout Form styling */
+.v-checkout-form {
+    border-top: 1px solid var(--v-border-gold);
+    padding-top: 24px;
+}
+.v-form-group {
+    margin-bottom: 16px;
+}
+.v-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--v-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+/* VELVET-F7 · every checkout field inherited the UA default (measured 13.33px):
+   too small to read, and under 16px iOS Safari ZOOMS THE PAGE on focus and
+   never zooms back — the diner types their address through a magnified,
+   horizontally-scrolled checkout. Widened to all input types the form uses. */
+.v-form-group input,
+.v-form-group textarea,
+.v-form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--v-text-primary);
+    font-family: var(--v-font-body);
+    font-size: 16px;
+    line-height: 1.4;
+}
+.v-form-group input[type="checkbox"],
+.v-form-group input[type="radio"] {
+    width: auto;
+    min-height: 0;
+}
+/* Same zoom trap on the two loose inputs outside .v-form-group. */
+#v-search-input,
+#v-coupon-code,
+#v-custom-tip,
+#v-gift-card-code,
+.v-review-input {
+    font-size: 16px;
+}
+
+/* VELVET-F10 · Chrome paints autofilled fields with its own opaque light-blue
+   (measured rgb(232,240,254) on black text) and neither `background` nor
+   `color` can override it — on a near-black theme a returning customer's
+   checkout turned into white boxes, and the coupon row lit up like an error.
+   The inset box-shadow is the only way to repaint the control, and
+   -webkit-text-fill-color the only way to recolour the text. */
+#velvet-app input:-webkit-autofill,
+#velvet-app input:-webkit-autofill:hover,
+#velvet-app input:-webkit-autofill:focus,
+#velvet-app textarea:-webkit-autofill,
+#velvet-app select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--v-bg-card) inset;
+    box-shadow: 0 0 0 1000px var(--v-bg-card) inset;
+    -webkit-text-fill-color: var(--v-text-primary);
+    caret-color: var(--v-text-primary);
+    transition: background-color 5000s ease-in-out 0s;
+}
+.v-form-group input:focus,
+.v-form-group textarea:focus {
+    outline: none;
+    border-color: var(--v-accent);
+}
+
+.v-order-type-tabs {
+    display: flex;
+    gap: 8px;
+}
+.v-tab-btn {
+    flex: 1;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    transition: var(--v-transition);
+}
+.v-tab-btn.active {
+    background-color: var(--v-accent-0_15);
+    border-color: var(--v-accent);
+    color: var(--v-accent);
+    font-weight: 600;
+}
+
+.v-payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.v-payment-option {
+    cursor: pointer;
+    position: relative;
+}
+.v-payment-option input {
+    position: absolute;
+    opacity: 0;
+}
+.v-payment-box {
+    display: block;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 8px;
+    padding: 12px;
+    transition: var(--v-transition);
+}
+.v-payment-option input:checked + .v-payment-box {
+    border-color: var(--v-accent);
+    background-color: var(--v-accent-0_15);
+}
+.v-payment-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.v-checkout-errors {
+    background-color: rgba(198, 40, 40, 0.1);
+    border: 1px solid #c62828;
+    color: #e57373;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.v-btn-submit {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.v-no-items {
+    text-align: center;
+    color: var(--v-text-muted);
+    padding: 40px 0;
+}
+
+/* VELVET-F9 · designed no-results state (was a blank void). */
+.v-empty-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    padding: 56px 20px 64px;
+}
+.v-empty-results[hidden] { display: none; }
+.v-empty-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 56px;
+    block-size: 56px;
+    margin-bottom: 6px;
+    border: 1px solid var(--v-border-gold-focus);
+    border-radius: 50%;
+    color: var(--v-accent);
+    font-size: 22px;
+}
+.v-empty-title {
+    font-family: var(--v-font-headings);
+    font-size: 19px;
+    color: var(--v-text-primary);
+    margin: 0;
+}
+.v-empty-cta { margin-top: 10px; }
+
+/* ============================ PARITY: account / auth / loyalty / success ==== */
+.v-account-row {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+}
+.v-account-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    border-radius: var(--v-r-pill, 999px);
+    font-family: var(--v-font-body);
+    font-size: 13.5px;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-account-chip:hover {
+    border-color: var(--v-accent);
+    color: var(--v-accent);
+}
+.v-account-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 22px;
+    block-size: 22px;
+    border-radius: 50%;
+    background: var(--v-accent-gradient);
+    color: #1a1814;
+    font-family: var(--v-font-headings);
+    font-weight: 700;
+    font-size: 12px;
+}
+.v-account-avatar-lg {
+    inline-size: 46px;
+    block-size: 46px;
+    font-size: 22px;
+}
+
+/* auth tabs */
+.v-auth-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+.v-auth-tabs button {
+    flex: 1;
+    padding: 10px 6px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--v-text-muted);
+    font-family: var(--v-font-headings);
+    font-size: 15px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-auth-tabs button.is-on {
+    color: var(--v-accent);
+    border-bottom-color: var(--v-accent);
+}
+.v-auth-err {
+    background: rgba(200, 60, 60, .12);
+    border: 1px solid rgba(200, 60, 60, .35);
+    color: #e79a9a;
+    border-radius: var(--v-r-card, 2px);
+    padding: 9px 12px;
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+/* account drawer */
+.v-account-hello {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 18px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--v-border-gold);
+}
+.v-account-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 4px;
+    color: var(--v-text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--v-border-gold);
+    font-size: 14.5px;
+    transition: var(--v-transition);
+}
+.v-account-link:hover { color: var(--v-accent); }
+.v-account-logout {
+    width: 100%;
+    margin-top: 22px;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    border-radius: var(--v-r-card, 2px);
+    font-family: var(--v-font-body);
+    font-size: 14px;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-account-logout:hover {
+    border-color: rgba(200, 60, 60, .5);
+    color: #e79a9a;
+}
+
+/* loyalty card */
+.v-loyalty {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(212, 175, 55, .05);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 3px;
+    text-align: center;
+}
+.v-loyalty-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--v-accent);
+    font-family: var(--v-font-headings);
+    font-size: 15px;
+}
+.v-loyalty-num {
+    font-family: var(--v-font-headings);
+    font-size: 42px;
+    color: var(--v-text-primary);
+    line-height: 1.1;
+    margin: 6px 0 2px;
+}
+.v-loyalty-sub {
+    color: var(--v-text-muted);
+    font-size: 12.5px;
+    margin-bottom: 14px;
+}
+.v-stamp-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+.v-stamp-dot {
+    inline-size: 30px;
+    block-size: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-border-gold-focus);
+    font-size: 13px;
+    transition: var(--v-transition);
+}
+.v-stamp-dot.is-on {
+    background: var(--v-accent-gradient);
+    border-color: var(--v-accent);
+    color: #1a1814;
+}
+.v-loyalty-bar {
+    block-size: 8px;
+    border-radius: var(--v-r-pill, 999px);
+    background: var(--v-border-gold);
+    overflow: hidden;
+}
+.v-loyalty-bar > i {
+    display: block;
+    block-size: 100%;
+    inline-size: 0;
+    background: var(--v-accent-gradient);
+    transition: inline-size .5s ease;
+}
+.v-loyalty-ok {
+    color: var(--v-accent);
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+/* order-success + google review */
+.v-success-check {
+    inline-size: 64px;
+    block-size: 64px;
+    margin: 8px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--v-accent-gradient);
+    color: #1a1814;
+    font-size: 34px;
+    font-weight: 700;
+}
+.v-success-orderno {
+    display: inline-block;
+    margin: 12px auto 0;
+    padding: 5px 14px;
+    border: 1px dashed var(--v-border-gold-focus);
+    border-radius: var(--v-r-card, 2px);
+    color: var(--v-accent);
+    font-family: var(--v-font-headings);
+    font-size: 14px;
+    letter-spacing: .03em;
+}
+.v-greview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: start;
+    padding: 14px 16px;
+    background: rgba(212, 175, 55, .06);
+    border: 1px solid var(--v-border-gold-focus);
+    border-radius: 3px;
+    color: var(--v-text-primary);
+    text-decoration: none;
+    transition: var(--v-transition);
+}
+.v-greview:hover { border-color: var(--v-accent); }
+.v-greview-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.v-greview-copy b { font-family: var(--v-font-headings); font-size: 15px; }
+.v-greview-copy small { color: var(--v-text-muted); font-size: 12.5px; }
+
+/* ============================ PARITY: account / track pages ================= */
+.v-account-page {
+    max-inline-size: 640px;
+    margin-inline: auto;
+    padding: 24px 18px 60px;
+}
+.v-account-page-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+.v-account-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    text-decoration: none;
+    transition: var(--v-transition);
+}
+.v-account-back:hover { border-color: var(--v-accent); color: var(--v-accent); }
+/* The chevron glyph is a hardcoded left-pointing path; "back" travels the other
+   way in RTL, so mirror it. Covers both the account and track headers. */
+.rtl-dir .v-account-back svg { transform: scaleX(-1); }
+.v-account-page-title {
+    font-family: var(--v-font-headings);
+    font-size: 26px;
+    color: var(--v-text-primary);
+}
+.v-account-hello-page {
+    border: 1px solid var(--v-border-gold);
+    border-radius: 3px;
+    padding: 16px 18px;
+    gap: 14px;
+}
+.v-account-hello-page > div:nth-child(2) { flex: 1; }
+.v-credit-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding: 12px 18px;
+    background: rgba(212, 175, 55, .07);
+    border: 1px solid var(--v-border-gold-focus);
+    border-radius: 3px;
+    color: var(--v-accent);
+    font-family: var(--v-font-headings);
+}
+.v-orders-block { margin-top: 26px; }
+.v-orders-h3 {
+    font-family: var(--v-font-headings);
+    font-size: 18px;
+    color: var(--v-text-primary);
+    margin-bottom: 14px;
+    padding-inline-start: 12px;
+    border-inline-start: 3px solid var(--v-accent);
+}
+.v-reorder-msg {
+    color: #e79a9a;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+.v-order-card {
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 3px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+.v-order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.v-order-date { color: var(--v-text-muted); font-size: 12px; }
+.v-order-id { font-family: var(--v-font-headings); font-size: 17px; color: var(--v-text-primary); }
+.v-order-status {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: var(--v-r-pill, 999px);
+    background: var(--v-accent-0_15);
+    color: var(--v-accent);
+    font-size: 12px;
+    letter-spacing: .03em;
+}
+.v-order-total { color: var(--v-text-muted); font-size: 13px; margin-top: 5px; }
+.v-order-lines {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--v-border-gold);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.v-order-line { color: var(--v-text-primary); font-size: 13.5px; }
+.v-order-line small { color: var(--v-text-muted); display: block; font-size: 12px; }
+.v-order-total-line {
+    border-top: 1px dashed var(--v-border-gold);
+    padding-top: 10px;
+    margin-top: 2px;
+    font-family: var(--v-font-headings);
+    font-size: 16px;
+    color: var(--v-accent);
+}
+.v-order-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+.v-ghostbtn {
+    padding: 9px 16px;
+    background: transparent;
+    border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-accent);
+    border-radius: var(--v-r-card, 2px);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    letter-spacing: .03em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--v-transition);
+}
+.v-ghostbtn:hover { background: var(--v-accent-0_15); border-color: var(--v-accent); }
+.v-orders-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--v-text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+/* track timeline */
+.v-timeline { list-style: none; margin: 18px 0 0; padding: 0; }
+.v-tl {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 14px;
+    position: relative;
+}
+.v-tl-node {
+    grid-row: 1;
+    grid-column: 1;
+    inline-size: 28px;
+    block-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--v-border-gold-focus);
+    color: transparent;
+    font-size: 13px;
+    background: var(--v-bg-dark);
+    z-index: 1;
+}
+.v-tl-line {
+    grid-row: 2;
+    grid-column: 1;
+    inline-size: 1px;
+    block-size: 100%;
+    background: var(--v-border-gold);
+    justify-self: center;
+}
+.v-tl-copy { grid-column: 2; grid-row: 1 / span 2; padding-bottom: 22px; }
+.v-tl-copy b { font-family: var(--v-font-headings); font-size: 15px; color: var(--v-text-muted); display: block; }
+.v-tl-copy small { color: var(--v-text-muted); font-size: 12.5px; opacity: .7; }
+.v-tl.done .v-tl-node, .v-tl.now .v-tl-node {
+    background: var(--v-accent-gradient);
+    border-color: var(--v-accent);
+    color: #1a1814;
+}
+.v-tl.now .v-tl-node { box-shadow: 0 0 0 4px var(--v-accent-0_15); }
+.v-tl.done .v-tl-copy b, .v-tl.now .v-tl-copy b { color: var(--v-text-primary); }
+.v-tl.done .v-tl-line { background: var(--v-accent); }
+.v-tl.cancelled .v-tl-node { border-color: #c04040; }
+.v-track-alert {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: var(--v-r-card, 2px);
+    background: rgba(200, 60, 60, .12);
+    border: 1px solid rgba(200, 60, 60, .35);
+    color: #e79a9a;
+    font-size: 13px;
+}
+
+/* Inline "Rate this dish" review widget */
+.v-review-widget {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--v-border-gold);
+}
+.v-review-title {
+    font-family: var(--v-font-headings);
+    color: var(--v-text-primary);
+    font-size: 16px;
+    margin: 0 0 10px;
+}
+.v-star-row {
+    display: flex;
+    gap: 6px;
+}
+.v-star-btn {
+    /* 26px glyph alone falls under the 32px touch-target floor. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--v-border-gold-focus);
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+.v-star-btn:hover {
+    transform: scale(1.1);
+}
+.v-star-btn.v-star-on {
+    color: var(--v-accent);
+}
+.v-review-fields {
+    display: none;
+    margin-top: 12px;
+}
+.v-review-fields.v-review-fields-open {
+    display: block;
+}
+.v-review-input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background-color: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 8px;
+    color: var(--v-text-primary);
+    font-family: var(--v-font-body);
+    font-size: 14px;
+}
+.v-review-input:focus {
+    outline: none;
+    border-color: var(--v-border-gold-focus);
+}
+.v-review-textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+.v-review-submit {
+    width: auto;
+    padding: 10px 22px;
+    font-size: 14px;
+}
+.v-review-thanks {
+    color: var(--v-accent);
+    font-size: 14px;
+    padding: 8px 0;
+    margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7) — velvet gold/dark palette
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* F2 · verified badge + follow */
+.v-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-inline-start: 8px;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: var(--v-accent-gradient);
+    color: #0f0e0c;
+}
+.v-verified-badge svg { width: 12px; height: 12px; }
+.v-follow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.v-followbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid var(--v-border-gold-focus);
+    background: transparent;
+    color: var(--v-accent);
+    border-radius: var(--v-r-card, 2px);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    letter-spacing: .03em;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-followbtn:hover { background: var(--v-accent-0_15); }
+.v-followbtn .v-following-label { display: none; }
+.v-followbtn.is-on { background: var(--v-accent-gradient); color: #0f0e0c; border-color: transparent; }
+.v-followbtn.is-on .v-follow-label { display: none; }
+.v-followbtn.is-on .v-following-label { display: inline; }
+.v-follower-count { color: var(--v-text-muted); font-size: 12.5px; }
+
+/* B1/B2 · shared follower-count partial classes (proof line in the follow row) */
+.v-follow-row .brand-followers { color: var(--v-text-muted); font-size: 12.5px; }
+.v-follow-row .brand-followers--cta { color: var(--v-accent); font-weight: 600; }
+.v-follow-row .brand-dot { color: var(--v-text-muted); }
+.v-follow-row .brand-viewers b { color: var(--v-text-primary); font-weight: 700; }
+
+/* B9 · verified pill is already icon-only in velvet; keep the aria-label. */
+
+/* B5 · scale-pop beat on a successful follow */
+@keyframes vFollowPop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.v-followbtn--pop { animation: vFollowPop .25s cubic-bezier(.16,1,.3,1); }
+@media (prefers-reduced-motion: reduce) { .v-followbtn--pop { animation: none; } }
+
+/* B7 · story ring on the brand logo when stories are live (gradient border on the img) */
+.v-restaurant-logo--live {
+    border: 3px solid transparent;
+    background-image: linear-gradient(var(--v-bg-card), var(--v-bg-card)), var(--v-accent-gradient);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    cursor: pointer;
+}
+
+/* B6 · Following drawer rows */
+.v-follow-sheet-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--v-border-gold); font-size: 15px; color: var(--v-text-primary); }
+.v-follow-sheet-row input[type="checkbox"] { width: 44px; height: 26px; appearance: none; -webkit-appearance: none; background: var(--v-bg-sheet); border: 1px solid var(--v-border-gold-focus); border-radius: var(--v-r-pill, 999px); position: relative; cursor: pointer; transition: background .2s; flex: none; }
+.v-follow-sheet-row input[type="checkbox"]::after { content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: inset-inline-start .2s; }
+.v-follow-sheet-row input[type="checkbox"]:checked { background: var(--v-accent); }
+.v-follow-sheet-row input[type="checkbox"]:checked::after { inset-inline-start: 20px; }
+.v-followsheet-unfollow { width: 100%; margin-top: 16px; background: rgba(224,80,72,.14); color: #f0837b; border: 0; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: var(--v-font-body); }
+.v-followsheet-cancel { width: 100%; margin-top: 10px; background: none; border: 1px solid var(--v-border-gold); color: var(--v-text-muted); padding: 13px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; font-family: var(--v-font-body); }
+
+/* B8 · About drawer */
+.v-about-rating { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: var(--v-text-primary); margin-bottom: 14px; }
+.v-about-star { color: var(--v-accent); }
+.v-about-rating small { color: var(--v-text-muted); font-weight: 400; }
+.v-about-list { display: flex; flex-direction: column; }
+.v-about-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--v-border-gold); color: var(--v-text-primary); font-size: 14px; text-decoration: none; }
+.v-about-row svg { width: 19px; height: 19px; flex: none; color: var(--v-accent); }
+.v-about-row span { min-width: 0; word-break: break-word; }
+.v-about-reviews { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+.v-about-review-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; }
+.v-about-review p { color: var(--v-text-muted); font-size: 13px; margin-top: 4px; line-height: 1.5; }
+
+/* F3 · stories rail + viewer */
+/* These are toggled via the `hidden` property in script.js. The author
+   `display` rules below outrank the UA `[hidden] { display: none }`, so the
+   attribute must be honoured explicitly — otherwise the fixed, opacity:0
+   viewer stays a full-viewport click-trap over the whole menu. */
+.v-stories-rail[hidden],
+.v-story-viewer[hidden],
+.v-sv-cta[hidden] {
+    display: none;
+}
+.v-stories-rail {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 16px 20px 4px;
+    max-width: 1100px;
+    margin-inline: auto;
+    scrollbar-width: none;
+}
+.v-stories-rail::-webkit-scrollbar { display: none; }
+.v-story-bubble {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 68px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--v-text-muted);
+}
+.v-sb-ring {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 2px;
+    background: var(--v-accent-gradient);
+    display: block;
+}
+.v-sb-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 2px solid var(--v-bg-dark); }
+.v-story-bubble small { font-size: 11px; max-width: 66px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.v-story-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    background: rgba(8, 7, 6, 0.96);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+.v-story-viewer.is-open { opacity: 1; }
+.v-sv-progress { display: flex; gap: 4px; padding: 14px 14px 6px; }
+.v-sv-seg { flex: 1; height: 3px; border-radius: var(--v-r-card, 2px); background: rgba(255,255,255,.25); overflow: hidden; }
+.v-sv-seg i { display: block; height: 100%; width: 0; background: var(--v-accent); }
+.v-sv-close {
+    position: absolute; top: 26px; inset-inline-end: 16px; z-index: 2;
+    background: none; border: none; color: #fff; cursor: pointer;
+}
+.v-sv-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; }
+.v-sv-media { max-width: 100%; max-height: 100%; object-fit: contain; }
+.v-sv-nav { position: absolute; top: 0; bottom: 0; width: 40%; background: none; border: none; cursor: pointer; }
+.v-sv-nav.prev { inset-inline-start: 0; }
+.v-sv-nav.next { inset-inline-end: 0; }
+.v-sv-foot {
+    position: absolute; inset-inline: 0; bottom: 0; padding: 24px 20px 34px;
+    background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+    text-align: center;
+}
+.v-sv-caption { color: #fff; font-size: 15px; margin: 0 0 12px; }
+.v-sv-cta { display: inline-flex; width: auto; padding: 10px 26px; }
+
+/* Saved addresses (logged-in delivery) */
+.v-saved-addrs {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 0 0 10px;
+}
+.v-saved-addr {
+    display: inline-flex; align-items: center; gap: 8px;
+    max-width: 100%;
+    padding: 8px 12px; text-align: start;
+    background: var(--v-bg-card); border: 1px solid var(--v-border-gold);
+    border-radius: var(--v-r-card, 2px); color: var(--v-text-muted); cursor: pointer;
+}
+.v-saved-addr.is-on {
+    border-color: var(--v-accent); background: var(--v-accent-0_15); color: var(--v-accent);
+}
+.v-saved-addr svg { flex: none; }
+.v-sa-text { display: flex; flex-direction: column; min-width: 0; }
+.v-sa-text b { font-size: 12.5px; color: var(--v-text-primary); }
+.v-saved-addr.is-on .v-sa-text b { color: var(--v-accent); }
+.v-sa-text small {
+    font-size: 11px; color: var(--v-text-muted);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;
+}
+
+/* F5 · address autocomplete */
+.v-addr-field { position: relative; }
+.v-useloc-btn {
+    position: absolute; top: 8px; inset-inline-end: 8px;
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    background: var(--v-bg-card); border: 1px solid var(--v-border-gold); border-radius: var(--v-r-card, 2px);
+    color: var(--v-accent); cursor: pointer;
+}
+.v-useloc-btn.is-loading { opacity: .5; pointer-events: none; }
+.v-addr-suggest {
+    position: absolute; inset-inline: 0; top: 100%; z-index: 20;
+    background: var(--v-bg-sheet); border: 1px solid var(--v-border-gold-focus);
+    border-radius: var(--v-r-card, 2px); margin-top: 4px; max-height: 220px; overflow-y: auto;
+}
+.v-addr-opt {
+    display: block; width: 100%; text-align: start;
+    padding: 10px 12px; background: none; border: none; border-bottom: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary); font-size: 13px; cursor: pointer;
+}
+.v-addr-opt:hover { background: var(--v-accent-0_15); }
+.v-geo-attrib { color: var(--v-text-muted); font-size: 10.5px; margin: 6px 0 0; }
+.v-nearest-branch-btn {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    padding: 8px 14px; background: transparent; border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-accent); border-radius: var(--v-r-card, 2px); font-size: 13px; cursor: pointer;
+}
+.v-nearest-branch-btn:hover { background: var(--v-accent-0_15); }
+
+/* F4 · branch map */
+.v-branchmap { width: 100%; height: 260px; border-radius: var(--v-r-card, 2px); overflow: hidden; border: 1px solid var(--v-border-gold); }
+.v-branchmap .leaflet-container { background: var(--v-bg-card); }
+.v-branch-geo-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.v-branch-geo-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold); border-radius: var(--v-r-card, 2px);
+    color: var(--v-text-primary); cursor: pointer; text-align: start;
+}
+.v-branch-geo-row:hover { border-color: var(--v-border-gold-focus); }
+.v-branch-geo-row b { flex: 1; display: flex; flex-direction: column; font-weight: 500; }
+.v-branch-geo-row small { color: var(--v-text-muted); font-weight: 400; font-size: 11.5px; }
+.v-branch-dist { color: var(--v-accent); font-size: 12px; }
+
+/* F1 · meal-plan */
+.v-mealplan-cta {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 14px 16px; margin: 4px 0 14px;
+    background: var(--v-accent-0_15); border: 1px solid var(--v-border-gold-focus);
+    border-radius: var(--v-r-card, 2px); color: var(--v-text-primary); cursor: pointer; text-align: start;
+}
+.v-mp-ic { color: var(--v-accent); display: flex; }
+.v-mp-copy { flex: 1; display: flex; flex-direction: column; }
+.v-mp-copy b { font-family: var(--v-font-headings); font-size: 14.5px; }
+.v-mp-copy small { color: var(--v-text-muted); font-size: 12px; }
+.v-mp-arr { color: var(--v-accent); }
+.v-mp-summary { color: var(--v-text-muted); font-size: 13px; margin: 0 0 12px; }
+.v-mp-cadence, .v-mp-days { display: flex; gap: 8px; flex-wrap: wrap; }
+.v-mp-cadence button, .v-mp-days button {
+    padding: 8px 14px; background: transparent; border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary); border-radius: var(--v-r-card, 2px); font-size: 13px; cursor: pointer;
+}
+.v-mp-cadence button.is-on, .v-mp-days button.is-on { background: var(--v-accent-gradient); color: #0f0e0c; border-color: transparent; }
+.v-mp-done { text-align: center; padding: 18px 0; }
+
+/* F6 · reviews */
+/* Inline "Rate this dish" quick-rate — reuses .v-star-row/.v-star-btn; a star tap
+   opens the shared review sheet (window.mbItemReviews.open) preselected. */
+.v-rate-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.v-rate-row .v-rate-label { margin: 0; }
+.v-rate-stars { flex: none; }
+
+.v-reviews { margin-top: 22px; border-top: 1px solid var(--v-border-gold); padding-top: 18px; }
+.v-rv-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.v-rv-section-head h4 { font-family: var(--v-font-headings); font-size: 17px; margin: 0; }
+.v-rv-write {
+    padding: 6px 14px; background: transparent; border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-accent); border-radius: var(--v-r-card, 2px); font-size: 12.5px; cursor: pointer;
+}
+.v-rv-head { display: flex; gap: 18px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.v-rv-avg { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.v-rv-avg b { font-family: var(--v-font-headings); font-size: 34px; line-height: 1; color: var(--v-accent); }
+.v-rv-avg small { color: var(--v-text-muted); font-size: 11.5px; }
+.v-rv-dist { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 4px; }
+.v-rv-bar { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--v-text-muted); }
+.v-rv-bar em { width: 10px; font-style: normal; }
+.v-rv-bar i { flex: 1; height: 6px; background: var(--v-bg-card); border-radius: 3px; overflow: hidden; }
+.v-rv-bar s { display: block; height: 100%; background: var(--v-accent); }
+.v-rv-bar b { width: 20px; text-align: end; font-weight: 500; }
+.v-rv-filters { display: flex; gap: 8px; margin-bottom: 14px; }
+.v-rv-filters button {
+    padding: 6px 14px; background: transparent; border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted); border-radius: 20px; font-size: 12.5px; cursor: pointer;
+}
+.v-rv-filters button.is-on { background: var(--v-accent-0_15); color: var(--v-accent); border-color: var(--v-border-gold-focus); }
+.v-rv-list { display: flex; flex-direction: column; gap: 14px; }
+.v-rv-item { border-bottom: 1px solid var(--v-border-gold); padding-bottom: 14px; }
+.v-rv-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.v-rv-item-top b { font-size: 13.5px; }
+.v-rv-verified { color: var(--v-accent); font-size: 11px; }
+.v-rv-item p { color: var(--v-text-muted); font-size: 13px; margin: 6px 0 0; }
+.v-rv-photos { display: flex; gap: 8px; margin-top: 8px; }
+.v-rv-photos img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--v-r-card, 2px); }
+.v-rv-empty { color: var(--v-text-muted); font-size: 13px; text-align: center; padding: 14px 0; }
+.v-stars-mini { color: var(--v-accent); letter-spacing: 1px; }
+.v-stars-mini .v-s-dim { color: var(--v-border-gold-focus); }
+.v-rv-stars { display: flex; gap: 6px; margin: 4px 0 14px; }
+
+/* F7 · OTP boxes */
+.v-otp-boxes { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
+.v-otp-boxes input {
+    width: 44px; height: 54px; text-align: center; font-size: 22px;
+    background: var(--v-bg-card); border: 1px solid var(--v-border-gold-focus);
+    border-radius: var(--v-r-card, 2px); color: var(--v-text-primary);
+}
+.v-otp-boxes input:focus { outline: none; border-color: var(--v-accent); }
+.v-linkbtn {
+    display: block; width: 100%; margin-top: 12px; padding: 6px;
+    background: none; border: none; color: var(--v-accent); font-size: 13px; cursor: pointer; text-align: center;
+}
+
+/* ── VELVET-F6 · touch targets ────────────────────────────────────────────
+   Measured before: quick-add 32x32, category chip 45x30, filter button 36x32,
+   every sheet close button 32x32, both qty steppers 32x32. A prior wave had
+   treated 32px as the floor; the floor is 44. Glyph sizes are untouched — only
+   the hit areas grow, so nothing about the theme's proportions changes except
+   the chip row getting the breathing room it wanted anyway. */
+.v-cat-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+}
+.v-filter-btn {
+    width: 44px;
+    height: 44px;
+}
+.v-subcat {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+}
+.v-drawer-close {
+    width: 44px;
+    height: 44px;
+    margin: -6px;
+}
+.v-qty-btn,
+.v-cart-item-qty-btn {
+    width: 44px;
+    height: 44px;
+}
+.v-qty-selectors {
+    gap: 4px;
+}
+.v-cart-item-qty {
+    gap: 0;
+    padding: 0 4px;
+}
+
+/* toast */
+.v-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px);
+    z-index: 4000; padding: 11px 20px; border-radius: var(--v-r-card, 2px);
+    background: var(--v-bg-sheet); border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-text-primary); font-size: 13.5px; opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+}
+.v-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+/* RTL: keep distances/numbers LTR-friendly */
+.rtl-dir .v-branch-dist, .rtl-dir .v-otp-boxes { direction: ltr; }
+
+/* ── agent-chat FAB clearance (transient) ──────────────────────────────────
+   Velvet has no persistent bottom bar, only the floating cart button, which its
+   JS shows/hides via an inline style.display. There is no state class to hang a
+   :has() off, but the serialized style attribute is a faithful proxy
+   (style.display='flex' always serializes to "display: flex;"), and it is
+   state-accurate: it stops matching the moment the button is hidden again.
+   Button: bottom 24px + 50px tall — measured clearance 74px, so 66 leaves an
+   8px gap. The button is centred and the FAB is inline-end anchored, so they
+   only actually collide once the viewport is narrow enough for the two to meet;
+   lifting is harmless at wider widths since it only applies with a full cart. */
+:root:has(#v-cart-toggle[style*="display: flex"]) { --agent-fab-offset: calc(66px + env(safe-area-inset-bottom, 0px)); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   parity-2 wave-4 — two-tier nav · dietary filters · tips · call-waiter ·
+   daily-specials rail · bespoke splash                              (velvet-styled)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Sold-out badge on cards / specials */
+.v-badge-soldout {
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    border: 1px solid var(--v-border-gold);
+}
+
+/* ── Two-tier category nav ────────────────────────────────────────────────── */
+.v-categories-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.v-categories-scroll { flex: 1 1 auto; min-width: 0; }
+
+.v-filter-btn {
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 44 square, not 36x32 — see the touch-target block above. */
+    width: 44px;
+    height: 44px;
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 20px;
+    color: var(--v-text-muted);
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-filter-btn:hover { border-color: var(--v-accent); color: var(--v-accent); }
+.v-filter-btn svg { width: 18px; height: 18px; }
+.v-filter-dot {
+    position: absolute;
+    top: 4px;
+    inset-inline-end: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--v-accent);
+}
+
+/* Secondary sub-category chip row */
+.v-subcats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 8px;
+    padding-bottom: 2px;
+}
+.v-subcats::-webkit-scrollbar { display: none; }
+.v-subgroup { display: flex; gap: 8px; }
+.v-subcat {
+    background: none;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--v-transition);
+}
+.v-subcat.active {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+    border-color: var(--v-border-gold-focus);
+}
+/* [hidden] guard — the flex `display` above would otherwise beat the attribute */
+.v-subcats[hidden],
+.v-subgroup[hidden] { display: none !important; }
+
+/* ── Dietary / spice / allergen filter drawer ─────────────────────────────── */
+.v-filter-h4 {
+    font-family: var(--v-font-headings);
+    font-size: 15px;
+    color: #fff;
+    margin: 16px 0 8px;
+}
+.v-chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
+.v-chiprow button {
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-chiprow button.active {
+    background-color: var(--v-accent-0_15);
+    color: var(--v-accent);
+    border-color: var(--v-border-gold-focus);
+}
+.v-filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+.v-filter-actions .v-ghostbtn { flex: 0 0 auto; }
+.v-filter-actions .v-btn-primary { flex: 1 1 auto; }
+
+/* ── Tips ─────────────────────────────────────────────────────────────────── */
+.v-tip-section { margin: 12px 0 4px; }
+.v-tip-label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--v-text-muted);
+    margin-bottom: 8px;
+}
+.v-tip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.v-tip-row button {
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-tip-row button.active {
+    background: var(--v-accent-gradient);
+    color: #0f0e0c;
+    border-color: transparent;
+    font-weight: 600;
+}
+#v-custom-tip {
+    width: 100%;
+    margin-top: 9px;
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--v-text-primary);
+    font-size: 14px;
+}
+#v-custom-tip:focus { outline: none; border-color: var(--v-accent); }
+
+/* ── Call waiter (dine-in) ────────────────────────────────────────────────── */
+.v-waiter-row { margin-bottom: 14px; }
+.v-waiter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--v-border-gold-focus);
+    color: var(--v-accent);
+    font-family: var(--v-font-body);
+    font-size: 14px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-waiter-btn:hover { background: var(--v-accent-0_15); }
+.v-waiter-btn svg { width: 18px; height: 18px; }
+.v-waiter-btn:disabled { opacity: .6; cursor: default; }
+
+/* ── Today's specials rail ────────────────────────────────────────────────── */
+.v-specials-section { margin-bottom: 10px; }
+.v-specials-head { margin-bottom: 4px; }
+.v-specials-kicker {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--v-accent);
+    margin-bottom: 2px;
+}
+.v-specials-title { margin-top: 4px; }
+.v-specials-rail {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px 2px 10px;
+    scroll-snap-type: x mandatory;
+}
+.v-specials-rail::-webkit-scrollbar { display: none; }
+.v-special-card {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border-gold);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-special-card:hover { border-color: var(--v-border-gold-focus); transform: translateY(-2px); }
+.v-special-card.v-sold-out { opacity: .7; }
+.v-special-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--v-bg-sheet);
+}
+.v-special-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.v-special-img-wrap.v-special-noimg::after {
+    content: "✦";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--v-border-gold-focus);
+    font-size: 28px;
+}
+.v-special-body { padding: 12px 14px; }
+.v-special-name {
+    font-family: var(--v-font-headings);
+    font-size: 15px;
+    color: #fff;
+    margin: 0 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.v-special-price { color: var(--v-accent); font-weight: 600; font-size: 14px; }
+
+/* ── Bespoke velvet splash ────────────────────────────────────────────────── */
+.v-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(120% 120% at 50% 30%, #1a1814 0%, var(--v-bg-dark) 70%);
+    animation: vSplashOut .7s ease 2.3s forwards;
+}
+.v-splash-hidden { animation: none; opacity: 0; visibility: hidden; pointer-events: none; }
+.v-splash-inner { text-align: center; animation: vSplashIn .8s ease both; }
+.v-splash-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid var(--v-border-gold-focus);
+    margin-bottom: 20px;
+}
+.v-splash-hero {
+    position: relative;
+    width: 180px;
+    height: 120px;
+    margin: 0 auto 22px;
+}
+.v-splash-ring {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 130px;
+    height: 130px;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--v-border-gold-focus);
+    border-radius: 50%;
+    animation: vSplashSpin 14s linear infinite;
+}
+.v-splash-pop {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--v-bg-dark);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .5);
+}
+.v-splash-pop-0 { top: 0; left: 50%; transform: translateX(-50%); }
+.v-splash-pop-1 { bottom: 0; left: 12px; }
+.v-splash-pop-2 { bottom: 0; right: 12px; }
+.v-splash-title {
+    font-family: var(--v-font-headings);
+    font-size: 28px;
+    color: #fff;
+    margin: 0 0 4px;
+}
+.v-splash-tag { color: var(--v-accent); font-size: 13px; letter-spacing: .06em; }
+.v-splash-skip {
+    position: absolute;
+    bottom: 34px;
+    inset-inline-end: 24px;
+    background: none;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-muted);
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+@keyframes vSplashIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes vSplashOut { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@keyframes vSplashSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .v-splash-ring { animation: none; }
+}
+
+/* Language switch row (added — velvet shipped no language control). */
+.v-lang-row {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.v-lang-btn {
+    min-inline-size: 40px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    border-radius: var(--v-r-pill, 999px);
+    font-family: var(--v-font-body);
+    font-size: 12px;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-lang-btn:hover { border-color: var(--v-accent); color: var(--v-accent); }
+.v-lang-btn.is-on { border-color: var(--v-accent); color: var(--v-accent); background: color-mix(in srgb, var(--v-accent) 12%, transparent); }
+
+/* Keyboard focus rings (a11y). Only inputs styled :focus — every button,
+   link, icon button, category, menu card, order-type option and nav control
+   was invisible to keyboard users. One gold-accent ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.velvet-container a:focus-visible,
+.velvet-container button:focus-visible,
+.velvet-container [tabindex]:focus-visible {
+    outline: 2px solid var(--v-accent);
+    outline-offset: 2px;
+}
+/* inputs already show an accent treatment on focus; suppress the ring to avoid
+   a double indicator. */
+.velvet-container input:focus-visible,
+.velvet-container textarea:focus-visible,
+.velvet-container select:focus-visible { outline: none; }
+
+/* Language drawer: one row per language, readable at any list length. */
+.v-lang-btn .v-lang-globe { vertical-align: -2px; margin-inline-end: 5px; }
+.v-lang-list { display: grid; gap: 8px; }
+.v-lang-item {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 12px 14px; border-radius: 12px; text-align: start;
+    border: 1px solid var(--v-border, rgba(255,255,255,.12));
+    background: transparent; color: inherit; cursor: pointer;
+}
+.v-lang-item b { font-weight: 600; font-size: 14px; }
+.v-lang-item .v-lang-code {
+    min-inline-size: 34px; text-align: center; flex: none;
+    font-size: 11px; letter-spacing: .04em; color: var(--v-text-muted);
+    border: 1px solid var(--v-border, rgba(255,255,255,.12)); border-radius: var(--v-r-pill, 999px); padding: 4px 6px;
+}
+.v-lang-item.is-on { border-color: var(--v-accent); color: var(--v-accent); }
+.v-lang-item.is-on .v-lang-code { border-color: var(--v-accent); color: var(--v-accent); }
+
+/* Currency switch (MC): header chip reuses .v-lang-btn; the drawer body holds a
+   wrap of pill options (#curSeg) styled to match the language pills. */
+.v-cur-row { margin-top: 12px; display: flex; justify-content: center; }
+.v-cur-btn .v-cur-glyph { vertical-align: -2px; margin-inline-end: 5px; }
+.v-cur-note { color: var(--v-text-muted); font-size: 12px; line-height: 1.5; margin: 0 0 14px; }
+.v-cur-seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.v-cur-seg button {
+    min-inline-size: 56px;
+    padding: 9px 14px;
+    background: transparent;
+    border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+    border-radius: var(--v-r-pill, 999px);
+    font-family: var(--v-font-body);
+    font-size: 13px;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: var(--v-transition);
+}
+.v-cur-seg button:hover { border-color: var(--v-accent); color: var(--v-accent); }
+.v-cur-seg button.is-on { border-color: var(--v-accent); color: var(--v-accent); background: color-mix(in srgb, var(--v-accent) 12%, transparent); }
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   The qty buttons already sit at 44px; the remove control was left at 32px. */
+.v-cart-item-remove { position: relative; }
+.v-cart-item-remove::after { content: ""; position: absolute; inset: -6px; }
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.v-tab-btn,.v-splash-skip,.v-followbtn,.v-lang-btn,.v-account-chip,.v-linkbtn{min-block-size:44px}
+.v-star-btn{position:relative}
+.v-star-btn::after{content:"";position:absolute;inset:-6px -1px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.v-order-type-tabs button,.v-auth-tabs button{min-block-size:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.v-chiprow button{min-block-size:44px}
+
+/* ── R4 · open-now / closed status chip (header meta row) ── */
+.v-open-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; letter-spacing: .02em;
+    background-color: var(--v-accent-0_15); color: var(--v-accent);
+}
+.v-open-chip i {
+    inline-size: 7px; block-size: 7px; border-radius: 50%;
+    background: currentColor; flex: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 22%, transparent);
+}
+.v-open-chip.is-closed {
+    background-color: rgba(210, 90, 74, 0.14); color: #d25a4a;
+}
+
+/* ── R5 · guest recent orders (cart drawer) ─────────────── */
+.v-recent-orders {
+    margin: 0 0 16px; padding: 12px;
+    background: var(--v-bg-card); border: 1px solid var(--v-border-gold);
+    border-radius: 4px;
+}
+.v-recent-orders-title {
+    margin: 0 0 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .04em; text-transform: uppercase; color: var(--v-text-muted);
+}
+.v-recent-orders-list { display: flex; flex-direction: column; gap: 6px; }
+.v-recent-order {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 3px; text-decoration: none;
+    background: var(--v-bg-sheet); border: 1px solid var(--v-border-gold);
+    color: var(--v-text-primary);
+}
+.v-recent-order:hover { border-color: var(--v-accent); }
+.v-recent-order-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.v-recent-order-info b { font-size: 13px; }
+.v-recent-order-info small { font-size: 11px; color: var(--v-text-muted); }
+.v-recent-order svg { flex: none; color: var(--v-accent); }
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   these themes had a static ring + snap recolour; add change-driven
+   pop/flash + animate the connector recolour. Neutralised by the
+   global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.v-tl-line{transition:background .5s ease}
+.v-tl.done .v-tl-node{animation:mbStepPop .5s ease}
+.v-tl.now .v-tl-copy{animation:mbStepFlash .8s ease}
+.v-tl:last-child.done .v-tl-node{animation:mbDone .7s ease}
+
+/* ── MC-34 currency-estimate notice, velvet skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Gold-hairline lounge chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius: var(--v-r-pill, 999px);padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--v-bg-card);border:1px solid var(--v-border-gold-focus);color:var(--v-text-muted);font-family:var(--v-font-body);letter-spacing:.04em;
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--v-accent)}
+
+/* ── notification-center panel — velvet skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--v-bg-card,#161512);--nb-surface-2:var(--v-bg-sheet,#1a1814);--nb-line:var(--v-border-gold,rgba(212,175,55,.15));--nb-ink:var(--v-text-primary,#f5f4f0);--nb-muted:var(--v-text-muted,#a3a097);--nb-accent:var(--v-accent,#d4af37)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VELVET 2.0 · redesign layer (2026-08)
+   Customer UI ratings put velvet at the bottom of the retained set. The audit
+   found: a full screen of stacked centered buttons before any food, brand-
+   accent text painted raw over photos (illegible with dark brand colours),
+   one-item-per-screen cards, sub-affordance 28px add buttons, and no trace of
+   the "velvet lounge" identity beyond a serif. This layer restyles the same
+   DOM — no id/class/JS contract changes — into a dense, luxurious dark-lounge
+   look: champagne hairlines, lifted accent for text, 2-up mobile card grid,
+   44px tap targets. Source order beats the base rules above by design.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Readable lift of ANY brand colour for text on the dark ground: blend the
+       accent toward champagne so a #5b2a86 store no longer paints 3:1 purple
+       on near-black. Falls back to the raw accent where color-mix is absent. */
+    --v-accent-text: var(--v-accent);
+    --v-hairline: var(--v-border-gold);
+}
+@supports (color: color-mix(in srgb, red 50%, white)) {
+    :root {
+        --v-accent-text: color-mix(in srgb, var(--v-accent) 46%, #f3e9cb);
+        --v-hairline: color-mix(in srgb, var(--v-accent) 24%, transparent);
+    }
+}
+
+/* ── Header: taller cover, real scrim, quiet subtitle ─────────────────── */
+.v-cover-wrapper { height: 216px; }
+.v-cover-img { filter: brightness(.52) saturate(1.05); }
+.v-cover-overlay {
+    height: 150px;
+    background: linear-gradient(to top, var(--v-bg-dark) 12%, rgba(15,14,12,.55) 55%, transparent 100%);
+}
+.v-header-content { margin-top: 72px; }
+.v-restaurant-logo {
+    width: 78px; height: 78px; border-width: 2.5px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.6), 0 0 0 6px rgba(15,14,12,.55);
+}
+.v-restaurant-title { font-size: 30px; letter-spacing: -.2px; }
+/* The subtitle painted the raw brand colour over the cover photo — illegible
+   on half the palettes. Quiet caps in warm parchment instead. */
+.v-restaurant-subtitle {
+    color: #beb9a9; font-size: 11.5px; font-weight: 600; letter-spacing: .17em;
+}
+.v-restaurant-desc { max-inline-size: 640px; }
+.v-restaurant-meta { border-top-color: var(--v-hairline); gap: 8px 8px; padding-top: 14px; }
+.v-meta-item {
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.07);
+    padding: 7px 12px; border-radius: var(--v-r-pill, 999px);
+}
+.v-open-chip { border-radius: var(--v-r-pill, 999px); }
+
+/* ── Utility bar: lang / currency / account / bell inline ─────────────── */
+.v-utility-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin-top: 14px;
+}
+/* Keep the legacy per-row wrappers (JS hooks live on the buttons) but let the
+   buttons lay out as bar children. display:contents strips their margins. */
+.v-utility-bar .v-lang-row,
+.v-utility-bar .v-cur-row,
+.v-utility-bar .v-account-row { display: contents; }
+.v-utility-bar .v-lang-btn,
+.v-utility-bar .v-account-chip {
+    margin: 0; min-height: 40px; border-radius: var(--v-r-pill, 999px);
+    border-color: var(--v-hairline);
+}
+.v-utility-bar .v-account-chip { padding-block: 8px; }
+
+/* ── Sticky nav: denser, glassier ─────────────────────────────────────── */
+.v-nav-bar-sticky {
+    background-color: rgba(15,14,12,.82);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    border-bottom-color: var(--v-hairline);
+}
+#v-search-input { padding-block: 12px; font-size: 14.5px; }
+.v-cat-btn {
+    font-size: 13.5px; font-weight: 600; padding: 9px 16px; min-height: 38px;
+    border: 1px solid transparent;
+}
+.v-cat-btn:hover { color: var(--v-text-primary); }
+.v-cat-btn.active {
+    background: var(--v-accent-gradient);
+    color: #15130e;
+    border-color: transparent;
+    box-shadow: 0 4px 16px -6px var(--v-accent);
+}
+
+/* ── Menu: 2-up on phones, compact luxe cards ─────────────────────────── */
+.v-menu-main { padding: 16px 16px 28px; }
+.v-category-title {
+    font-size: 20px;
+    border-inline-start: 0; padding-inline-start: 0;
+    display: flex; align-items: center; gap: 10px;
+}
+.v-category-title::after {
+    content: ""; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--v-hairline), transparent);
+}
+.v-menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 1000px) { .v-menu-grid { gap: 16px; } }
+
+.v-menu-card { border-radius: 14px; border-color: rgba(255,255,255,.07); }
+.v-menu-card:hover { border-color: var(--v-hairline); }
+.v-card-image-wrap { height: 128px; }
+.v-card-body { padding: 11px 12px 12px; }
+.v-card-flags { margin-bottom: 7px; }
+.v-card-header { flex-direction: column; align-items: stretch; gap: 3px; margin-bottom: 6px; }
+.v-card-name { font-size: 15px; line-height: 1.25; }
+.v-card-price { font-size: 15px; color: var(--v-accent-text); }
+.v-card-desc {
+    font-size: 12px; margin-bottom: 10px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.v-label-text { white-space: nowrap; }
+/* 44px add affordance (was 28px): the one control every diner needs. */
+.v-quick-add-btn {
+    width: 40px; height: 40px; min-width: 40px; border-radius: var(--v-r-pill, 999px);
+    background: var(--v-accent-gradient); color: #15130e; border: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px -4px var(--v-accent);
+    transition: var(--v-transition);
+}
+.v-quick-add-btn:hover { transform: scale(1.06); filter: brightness(1.08); }
+.v-quick-add-btn svg { width: 16px; height: 16px; }
+
+@media (min-width: 768px) {
+    .v-card-image-wrap { height: 176px; }
+    .v-card-body { padding: 14px 16px 15px; }
+    .v-card-name { font-size: 16.5px; }
+    .v-card-desc { font-size: 12.5px; }
+}
+
+/* ── Specials rail: tighter, kicker in lifted accent ──────────────────── */
+.v-specials-kicker { color: var(--v-accent-text); letter-spacing: .16em; }
+.v-special-card { border-color: rgba(255,255,255,.07); }
+.v-special-price { color: var(--v-accent-text); }
+
+/* ── Follow row + sheets pick up the hairline ─────────────────────────── */
+.v-followbtn { border-color: var(--v-hairline); }
+.v-drawer-sheet { border-top: 1px solid var(--v-hairline); }
+
+/* ── 2.0b · brand-safe gradient + contrast catches ─────────────────────── */
+/* The base gradient's tail is hard-coded gold (#aa8625): with a purple brand
+   colour the add button ran purple→gold mud. Derive the tail from the accent
+   itself so every palette gets a clean monochrome sheen. */
+@supports (color: color-mix(in srgb, red 50%, white)) {
+    :root {
+        --v-accent-gradient: linear-gradient(135deg,
+            color-mix(in srgb, var(--v-accent) 86%, #fff) 0%,
+            color-mix(in srgb, var(--v-accent) 82%, #000) 100%);
+    }
+    /* Ink on the accent: dark on light accents, parchment on dark accents is
+       impossible in pure CSS — keep near-black, but lift button brightness. */
+    .v-quick-add-btn, .v-cat-btn.active, .v-chip-special, .v-followbtn.is-on {
+        color: #fff;
+    }
+}
+/* Raw-accent text on dark ground → lifted accent (Open chip, follow row). */
+.v-open-chip { color: var(--v-accent-text); }
+.v-open-chip i { background: currentColor; }
+.v-followbtn { color: var(--v-accent-text); }
+.v-follow-hint, #cvBrandRow .v-follower-count { color: #beb9a9; }
+/* Card dietary labels: one quiet line, never a second row. */
+.v-card-labels { flex-wrap: nowrap; overflow: hidden; min-width: 0; }
+.v-card-labels .v-label-text { overflow: hidden; text-overflow: ellipsis; }
+/* Stories: the caption under every bubble is the STORE name six times over —
+   pure noise. The ring already signals "story". */
+.v-story-bubble small { display: none; }
+.v-story-bubble { gap: 0; }
+/* Raw-accent brand-row hint (shared partial's .brand-followers) → lifted. */
+#cvBrandRow .brand-followers { color: var(--v-accent-text); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VELVET 2.1 · round 2 — detail drawer + checkout sheet (2026-08)
+   Audit: the dish drawer stacked TWO full rating modules (the shared partial's
+   histogram + the theme's own summary with the same bars); checkout labels and
+   line-item prices painted the raw brand colour; the send button and order-type
+   tabs were flat. Same DOM, CSS only.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The shared reviews extension (.mbr-x) duplicates the theme's own richer
+   summary (avg + bars + filters + write) rendered directly below it. */
+#cvReviews .mbr-x { display: none; }
+
+/* drawer hierarchy */
+.v-detail-title { font-size: 21px; }
+.v-detail-price { color: var(--v-accent-text); font-size: 18px; }
+.v-rate-label { color: #beb9a9; letter-spacing: .14em; }
+.v-rv-head b, .v-rv-avg, .v-reviews .v-rv-score { color: var(--v-accent-text); }
+.v-detail-cta-group .v-btn-primary { min-height: 46px; }
+.v-qty-selectors button { border-color: var(--v-hairline); }
+
+/* checkout: quiet caps labels, gradient submit, legible tabs */
+.v-form-group label { color: #beb9a9; letter-spacing: .12em; }
+.v-cart-item-price { color: var(--v-accent-text); }
+.v-btn-submit { min-height: 50px; font-size: 15.5px; color: #fff; }
+.v-tab-btn { min-height: 42px; border-radius: 12px; }
+.v-tab-btn.active {
+    background: var(--v-accent-gradient);
+    color: #fff; border-color: transparent; font-weight: 700;
+    box-shadow: 0 4px 16px -6px var(--v-accent);
+}
+.v-payment-options label, .v-payment-options .v-payment-option {
+    border-radius: 12px;
+}
+/* summary rows */
+.v-cart-summary b, .v-cart-total b { color: var(--v-accent-text); }
+
+/* ═══ VELVET 2.2 · home-page pass (2026-08) ─ get the food on screen ═══
+   Measured: 1700px of preamble before the first menu item on a phone —
+   479px header, 413px banner slider, 277px specials rail. Same DOM. */
+/* banner slider: a promo, not a hero — cap it */
+.mbs { margin-block-end: 10px; }
+.mbs__img { aspect-ratio: 16 / 7; max-block-size: 220px; }
+@media (max-width: 640px) { .mbs__img { aspect-ratio: 16 / 7; } }
+/* header: brand card, not a landing essay */
+.v-header { padding: 18px 16px 12px; }
+.v-cover-wrapper { height: 178px; }
+.v-header-content { margin-top: 46px; }
+.v-restaurant-logo { width: 68px; height: 68px; }
+.v-restaurant-title { font-size: 26px; }
+.v-restaurant-desc {
+    margin: 10px 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.v-restaurant-meta { padding-top: 10px; gap: 6px; }
+.v-meta-item { padding: 5px 10px; font-size: 12px; }
+.v-open-chip { font-size: 12px; }
+.v-utility-bar { margin-top: 10px; }
+.v-utility-bar .v-lang-btn, .v-utility-bar .v-account-chip { min-height: 36px; font-size: 12.5px; }
+/* stories + specials: rails, tight */
+.v-stories-rail { padding-block: 8px 4px; }
+.v-specials-section { margin-bottom: 2px; }
+.v-specials-head { margin-bottom: 0; }
+.v-specials-title { font-size: 18px; margin-top: 2px; }
+.v-special-card { width: 148px; min-width: 148px; }
+.v-special-img-wrap { height: 88px; }
+.v-special-body { padding: 8px 10px 10px; }
+.v-special-name { font-size: 12.5px; }
+.v-special-price { font-size: 13px; }
+/* The specials rail lives at body level since the category-order reorder, and
+   the injected offers/order-type strips park beside it — on desktop they ran
+   full-bleed left while the header/menu sat on the centred 1100px canvas. */
+@media (min-width: 768px) {
+    #v-specials-section, #mbOffersStrip, #mbOrderType, #cvStoriesRail {
+        max-inline-size: var(--v-page-max);
+        margin-inline: auto;
+        padding-inline: 16px;
+    }
+}
+
+/* ═══ VELVET 3.0 · sticky topbar (the theme had NO header chrome) ═══ */
+:root { --v-topbar-h: 58px; }
+.v-topbar {
+    position: sticky; top: 0; z-index: 40;
+    display: flex; align-items: center; gap: 10px;
+    min-height: var(--v-topbar-h);
+    padding: 8px 16px;
+    background: rgba(15,14,12,.88);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    border-bottom: 1px solid var(--v-hairline);
+}
+.v-topbar-brand { display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1; }
+.v-topbar-brand img {
+    width: 34px; height: 34px; border-radius: 50%; object-fit: cover;
+    border: 1.5px solid var(--v-hairline); background: var(--v-bg-card);
+}
+.v-topbar-brand b {
+    font-family: var(--v-font-headings); font-size: 16.5px; font-weight: 700;
+    color: var(--v-text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.v-topbar-actions { display: flex; align-items: center; gap: 6px; flex: none; }
+.v-topbar-actions .v-lang-btn,
+.v-topbar-actions .v-account-chip { margin: 0; min-height: 38px; border-radius: var(--v-r-pill, 999px); border-color: var(--v-hairline); }
+/* icon-only account chip on narrow screens (avatar/icon stays) */
+@media (max-width: 600px) {
+    .v-topbar-actions .v-account-chip span:last-of-type { display: none; }
+    .v-topbar-actions .v-account-chip { padding-inline: 11px; }
+}
+/* the search+categories bar now sticks BELOW the topbar */
+.v-nav-bar-sticky { top: var(--v-topbar-h); }
+/* header sheds the old inline-controls spacing */
+.v-header-content { margin-top: 40px; }
+/* branch selector: an inline row, not a grey billboard */
+.mbc-branch-switcher {
+    background: none !important; border: 1px solid var(--v-hairline) !important;
+    border-radius: var(--v-r-pill, 999px) !important; padding: 4px 6px 4px 14px !important;
+    margin-block: 10px !important; box-shadow: none !important;
+    display: inline-flex !important; align-items: center; gap: 8px; width: auto !important;
+}
+.mbc-branch-switcher select {
+    background: transparent !important; border: 0 !important; color: var(--v-text-primary) !important;
+    font-size: 13px !important; padding: 6px 26px 6px 4px !important; min-height: 34px;
+}
+
+/* ═══ VELVET 3.1 · bottom dock (soiree-parity) ═══ */
+:root { --v-dock-h: 62px; }
+.v-dock {
+    position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 30; display: flex; gap: 2px;
+    width: calc(100vw - 16px); max-width: 460px;
+    padding: 6px; border-radius: var(--v-r-pill, 999px);
+    background: rgba(22,20,17,.92);
+    backdrop-filter: blur(18px) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+    border: 1px solid var(--v-hairline);
+    box-shadow: 0 12px 40px -12px rgba(0,0,0,.7);
+}
+.v-dock-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    min-width: 0; flex: 1 1 0; padding: 7px 4px 6px; border: 0; border-radius: var(--v-r-pill, 999px);
+    background: none; color: var(--v-text-muted); cursor: pointer;
+    font-family: var(--v-font-body); font-size: 10.5px; font-weight: 600;
+    transition: var(--v-transition);
+}
+.v-dock-btn span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Card heart + favourites drawer rows */
+.v-menu-card { position: relative; }
+.v-fav-btn { position: absolute; top: 8px; inset-inline-end: 8px; z-index: 3; width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(20,18,15,.55); backdrop-filter: blur(6px); color: #fff; cursor: pointer; padding: 0; }
+/* 34px card heart → 44px tap floor (VELVET-F6 pattern). */
+.v-fav-btn::after { content: ""; position: absolute; inset: -5px; }
+.v-fav-btn svg { width: 18px; height: 18px; }
+.v-fav-btn.is-fav { color: var(--v-accent, #e5484d); }
+.v-fav-btn.is-fav svg { fill: currentColor; }
+.v-fav-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--v-hairline); color: inherit; text-decoration: none; }
+.v-fav-row-img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex: none; background: rgba(127,127,127,.14); }
+.v-fav-row-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.v-fav-row-name { font-family: var(--v-font-headings); font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.v-fav-row-price { font-size: 13px; color: var(--v-text-muted); }
+.v-fav-empty { text-align: center; padding: 40px 16px; color: var(--v-text-muted); }
+.v-fav-empty p { font-family: var(--v-font-headings); font-size: 16px; margin: 0 0 6px; }
+.v-dock-btn svg { width: 20px; height: 20px; }
+/* Active tab sits on the GOLD gradient — #fff on gold is ~2.1:1. Use the theme's
+   own on-accent ink (as .v-followbtn.is-on / .v-chip-special do on the same gradient). */
+.v-dock-btn.is-on { background: var(--v-accent-gradient); color: #0f0e0c; }
+.v-dock-badge {
+    position: absolute; top: 2px; inset-inline-end: 8px;
+    min-width: 16px; height: 16px; padding: 0 4px; border-radius: 99px;
+    background: var(--v-accent); color: #fff; font-style: normal;
+    font-size: 10px; font-weight: 800; line-height: 16px; text-align: center;
+    border: 2px solid rgba(22,20,17,.95);
+}
+/* floating cart pill + page tail clear the dock */
+.v-cart-floating-btn { bottom: calc(var(--v-dock-h) + 22px); }
+.v-menu-main { padding-bottom: calc(var(--v-dock-h) + 28px); }
+:root { --agent-fab-offset: calc(var(--v-dock-h) + 20px + env(safe-area-inset-bottom, 0px)); }
+
+/* ═══ VELVET 4.0 · design-review grind, desktop pass ═══ */
+/* D2: the ambient blobs are absolutely positioned against BODY (the app root
+   isn't positioned), inflating the scroll canvas ~560px past the content —
+   a white void at the page tail. Contain and clip them, and paint the root. */
+#velvet-app { position: relative; overflow: clip; background: var(--v-bg-dark); min-height: 100vh; }
+/* D1: capping the slider by max-height made the image shrink WIDTH (aspect
+   lock) — a black void with a floating arrow filled the rest of the track. */
+@media (min-width: 641px) {
+    .mbs__img { width: 100%; height: 232px; aspect-ratio: auto; object-fit: cover; }
+}
+/* D3: the 2-up mobile grid out-ordered the base's 3-col desktop rule */
+@media (min-width: 1000px) { .v-menu-grid { grid-template-columns: repeat(3, 1fr); } }
+/* D4: floating cart pill sat dead-centre over the dock and card content */
+@media (min-width: 768px) {
+    .v-cart-floating-btn { left: auto; inset-inline-end: 26px; transform: none; }
+}
+/* D5: richer cover on desktop (mobile keeps 178px), restoring the base 260px
+   my unqualified mobile cut clobbered */
+@media (min-width: 768px) { .v-cover-wrapper { height: 264px; } .v-header-content { margin-top: 118px; } }
+/* D6: specials cards scale up with the viewport instead of hugging a corner */
+@media (min-width: 1000px) {
+    .v-special-card { width: 200px; min-width: 200px; }
+    .v-special-img-wrap { height: 122px; }
+    .v-special-name { font-size: 13.5px; }
+}
+/* specials rail: a 404 photo marks the wrap .v-special-noimg — drop the empty
+   grey media box, the card reads name + price (same rule as the offers strip) */
+.v-special-img-wrap.v-special-noimg { display: none; }
+/* M1: the centre-floating cart pill sat on top of menu cards, the slider and
+   the dock at every width — bottom corner, clear of the dock, all widths. */
+.v-cart-floating-btn {
+    left: auto; inset-inline-end: 16px; transform: none;
+    bottom: calc(var(--v-dock-h) + 24px);
+}
+@media (min-width: 768px) { .v-cart-floating-btn { inset-inline-end: 26px; } }
+
+/* ═══ VELVET 4.1 · PAGE CANVAS (the "big white space") ═══
+   Two compounding bugs, both invisible to scroll-height metrics because the
+   white sits OUTSIDE the app box:
+   1. the UA's `body{margin:8px}` was never reset — a white frame down every
+      edge of a near-black page;
+   2. neither `html` nor `body` painted anything, so the browser canvas (white)
+      showed through that frame, through any gap when a filtered menu is
+      shorter than the viewport, and across the whole overscroll/rubber-band
+      area when you hit the end of the page — which reads as a big white block
+      under the menu.
+   soiree never shows this because its shell is position:fixed inset:0 and
+   paints the full viewport; these themes scroll the document, so the document
+   itself has to carry the colour. */
+html, body { margin: 0; background: var(--v-bg-dark, #0f0e0c); }
+html { color-scheme: dark; }
+
+/* ═══ VELVET 4.2 · vertical rhythm + text contrast ═══ */
+/* Reported: "the slider is touching the story". Measured gaps between the
+   top-level home sections were 0/0/2/0/0px — header, stories, slider,
+   specials, offers, order-type and the sticky nav all butted together with no
+   breathing room, so the page read as one undifferentiated stack. */
+:root { --v-rhythm: 18px; }
+#cvStoriesRail { margin-block: var(--v-rhythm) 0; }
+.mbs { margin-block: var(--v-rhythm) var(--v-rhythm); }
+#v-specials-section { margin-block: var(--v-rhythm) 0; }
+#mbOffersStrip { margin-block: var(--v-rhythm) 0; }
+#mbOrderType { margin-block: var(--v-rhythm) var(--v-rhythm); }
+@media (min-width: 768px) { :root { --v-rhythm: 24px; } }
+
+/* Reported: "some text is not in the good color to be seen correctly".
+   A WCAG pass over every visible text node found three failures, all of them
+   accent-coloured text sitting on an accent-coloured fill: */
+/* the price on the floating cart pill measured 1.09:1 — effectively invisible */
+.v-cart-btn-price, .v-cart-floating-btn { color: #fff; }
+.v-cart-badge { color: #fff; background: #c62828; }
+/* "Popular" chip: raw accent on a 15%-accent tint measured 1.84:1 */
+.v-chip-popular { color: var(--v-accent-text); background: rgba(255,255,255,.07); }
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — velvet skin  (lane C · copy-adapt of the crave L0 reference)
+   ───────────────────────────────────────────────────────────
+   Velvet is a bespoke-sheet family and DARK-ONLY (no re-ink flip). Its native sheet
+   is the .v-drawer bottom sheet (.v-drawer-sheet: --v-bg-sheet surface, 24px top
+   corners, gold hairline top edge, translateY) toggled by [aria-hidden] — so the
+   shared #mbHotelHub is tuned to that same look here. Velvet has NO radius token, so
+   --mbh-radius is a literal (16px, its card radius) and controls stay sharp (2px,
+   velvet's luxe control shape). Chip mounts natively in .v-follow-row
+   (data-mb-hotel-chip-slot) beside the follow button. Scoped under .velvet-container
+   (velvet's root, into which the hub is relocated).
+   ═══════════════════════════════════════════════════════════ */
+
+/* Token contract → velvet's real tokens (single dark palette, no scheme flip) */
+.velvet-container #mbHotelChip,
+.velvet-container #mbHotelOrderCtrls,
+.velvet-container #mbHotelBook,
+.velvet-container #mbHotelHub{
+  --mbh-surface:var(--v-bg-sheet);
+  --mbh-ink:var(--v-text-primary);
+  --mbh-muted:var(--v-text-muted);
+  --mbh-accent:var(--v-accent);
+  --mbh-on-accent:#0f0e0c;
+  --mbh-border:var(--v-hairline);
+  --mbh-radius:16px;
+  --mbh-font:var(--v-font-body);
+}
+
+/* ── Room chip: a sharp card-pill sitting with the follow button in .v-follow-row ── */
+.velvet-container #mbHotelChip{
+  margin:0;padding:7px 14px;gap:7px;flex:none;
+  background:var(--v-bg-card);border:1px solid var(--v-border-gold);color:var(--v-text-primary);
+  border-radius: var(--v-r-card, 2px);font-size:13px;font-weight:600;letter-spacing:.03em;
+  transition:var(--v-transition);
+}
+.velvet-container #mbHotelChip:hover{background:var(--v-accent-0_15);border-color:var(--v-border-gold-focus);}
+.velvet-container #mbHotelChip .mb-hotel-roomchip__ic{color:var(--v-accent)}
+.velvet-container #mbHotelChip .mb-hotel-roomchip__room{color:var(--v-text-primary)}
+.velvet-container #mbHotelChip .mb-hotel-roomchip__guest{color:var(--v-text-muted)}
+
+/* ── Hub: velvet's .v-drawer bottom sheet (24px top corners, gold hairline, blur) ── */
+.velvet-container #mbHotelHubScrim{background:rgba(0,0,0,.75);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.velvet-container #mbHotelHub{
+  background:var(--v-bg-sheet);color:var(--v-text-primary);
+  border:0;border-top:1px solid var(--v-hairline);
+  border-start-start-radius:24px;border-start-end-radius:24px;
+  box-shadow:0 -8px 32px rgba(0,0,0,.6);
+  transition:transform .4s cubic-bezier(0.16,1,0.3,1);
+}
+.velvet-container #mbHotelHub .mb-hotel-hub__grab{background:rgba(255,255,255,.15);inline-size:40px;block-size:4px;}
+.velvet-container #mbHotelHub .mb-hotel-hub__head{padding:12px 20px 10px;border-bottom:1px solid var(--v-border-gold);}
+.velvet-container #mbHotelHub .mb-hotel-hub__title{font-family:var(--v-font-headings);font-size:20px;font-weight:600;color:#fff;}
+.velvet-container #mbHotelHub .mb-hotel-hub__x{
+  background:transparent;border:0;color:var(--v-text-muted);
+  inline-size:34px;block-size:34px;font-size:1.4rem;opacity:1;
+}
+.velvet-container #mbHotelHub .mb-hotel-hub__x:hover{color:var(--v-accent);}
+.velvet-container #mbHotelHub .mb-hotel-hub__greet{color:var(--v-text-muted)}
+.velvet-container #mbHotelHub .mb-hotel-card{border-color:var(--v-border-gold)}
+.velvet-container #mbHotelHub .mb-hotel-card summary,
+.velvet-container #mbHotelHub .mb-hotel-card__t{color:var(--v-text-primary)}
+.velvet-container #mbHotelHub .mb-hotel-info-link{color:var(--v-accent)}
+/* service form controls → velvet sharp inputs / gold-gradient CTA */
+.velvet-container #mbHotelHub .mb-hotel-field{
+  background:var(--v-bg-card);border:1px solid var(--v-border-gold-focus);color:var(--v-text-primary);border-radius: var(--v-r-card, 2px);
+}
+.velvet-container #mbHotelHub .mb-hotel-btn{
+  background:var(--v-accent-gradient);color:#0f0e0c;border-radius: var(--v-r-card, 2px);font-weight:700;letter-spacing:.03em;
+}
+
+/* ── Order-flow controls in the checkout → velvet control rows ── */
+.velvet-container #mbHotelOrderCtrls{margin:0}
+.velvet-container #mbHotelSched,
+.velvet-container #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--v-border-gold);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--v-text-primary);
+}
+.velvet-container #mbHotelSched .mb-hotel-card__t{
+  font-family:var(--v-font-headings);font-size:15px;font-weight:600;color:var(--v-text-primary);margin-bottom:11px;
+}
+.velvet-container #mbHotelSched .mb-hotel-modes label{color:var(--v-text-muted);font-weight:500}
+.velvet-container #mbHotelSched input[type="radio"]{accent-color:var(--v-accent)}
+.velvet-container #mbHotelSched .mb-hotel-field{
+  background:var(--v-bg-card);border:1px solid var(--v-border-gold-focus);color:var(--v-text-primary);border-radius: var(--v-r-card, 2px);
+}
+.velvet-container #mbHotelSched .mb-hotel-note{color:var(--v-text-muted)}
+.velvet-container #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.velvet-container #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.velvet-container #mbHotelCharge .mb-hotel-greet__room{color:var(--v-text-primary);font-weight:600}
+.velvet-container #mbHotelCharge .mb-hotel-greet__welcome{color:var(--v-text-muted)}
+.velvet-container #mbHotelCharge input[type="checkbox"]{accent-color:var(--v-accent)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for velvet. Surface,
+   ink, border and radius come from velvet tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.velvet-container .mb-paypending{
+  --pp-surface:var(--v-bg-card,#161512);
+  --pp-ink:var(--v-text-primary,#f5f4f0);
+  --pp-muted:var(--v-text-muted,#a3a097);
+  --pp-border:var(--v-border-gold,rgba(212,175,55,.15));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:14px;
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.velvet-container .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.velvet-container .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.velvet-container .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.velvet-container .mb-paypending-txn:empty{display:none}
+.velvet-container .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.velvet-container .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.velvet-container .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.velvet-container .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.velvet-container .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* ISS-B-301: layout.density → inter-section rhythm. Emission is overrides-only,
+   so the 0px fallback keeps an untouched store unchanged; a density choice adds
+   vertical space between menu sections. */
+.v-menu-section { margin-block-start: var(--ts-gap-4, 0px); }

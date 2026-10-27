@@ -1,0 +1,9 @@
+:root { --x-brand: #123456; }
+:root[data-scheme="dark"] { --x-brand: #abcdef; }
+@media (prefers-color-scheme: dark) { :root[data-scheme="auto"] { --x-brand: #fff; } }
+.card { background: var(--x-surface); margin-inline-start: 8px; text-align: start; }
+.hero { background-position: right center; /* conformance:allow-physical */ }
+/* conformance:allow-physical */
+.x { left: 0; }
+.y { background: url("data:image/svg+xml,%3Csvg fill='%23fff'/%3E"); }
+#main { color: var(--x-text); }

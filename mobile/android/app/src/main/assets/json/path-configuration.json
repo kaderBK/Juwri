@@ -1,0 +1,68 @@
+{
+    "settings": {
+        "version": 2,
+        "account_deletion_path": "/settings/delete-account"
+    },
+    "rules": [
+        {
+            "patterns": [
+                ".*"
+            ],
+            "properties": {
+                "context": "default",
+                "pull_to_refresh_enabled": true,
+                "uri": "hotwire://fragment/web"
+            }
+        },
+        {
+            "patterns": [
+                "/new$",
+                "/create$",
+                "/edit$",
+                "/new\\?",
+                "/create\\?",
+                "/edit\\?"
+            ],
+            "properties": {
+                "context": "modal",
+                "pull_to_refresh_enabled": false,
+                "uri": "hotwire://fragment/web/modal/sheet"
+            }
+        },
+        {
+            "patterns": [
+                "^/login",
+                "^/[a-z]{2}/login"
+            ],
+            "properties": {
+                "context": "default",
+                "presentation": "replace_root",
+                "uri": "hotwire://fragment/login"
+            }
+        },
+        {
+            "patterns": [
+                "/recede_historical_location$"
+            ],
+            "properties": {
+                "presentation": "pop"
+            }
+        },
+        {
+            "patterns": [
+                "/resume_historical_location$"
+            ],
+            "properties": {
+                "presentation": "none"
+            }
+        },
+        {
+            "patterns": [
+                "/refresh_historical_location$"
+            ],
+            "properties": {
+                "presentation": "refresh"
+            }
+        }
+    ]
+}

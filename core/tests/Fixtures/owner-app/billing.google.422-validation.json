@@ -1,0 +1,15 @@
+{
+    "status": 422,
+    "body": {
+        "code": "string",
+        "errors": {
+            "product_id": {
+                "list_of": "string"
+            },
+            "purchase_token": {
+                "list_of": "string"
+            }
+        },
+        "message": "string"
+    }
+}

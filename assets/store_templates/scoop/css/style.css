@@ -1,0 +1,1868 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   scoop — black × yellow ice-cream post_template · demo css
+   two modes: charcoal item screens ↔ yellow catalog screens
+   ═══════════════════════════════════════════════════════════ */
+
+:root{
+  /* WI-T5 — role colours flow from the Customizer v2 token layer
+     (_partials/theme-tokens.blade.php). The literal after each comma is scoop's
+     own value, kept as the var() fallback so a store that customized nothing —
+     or a render where the token block emitted nothing — is byte-identical to
+     today. Only the four roles scoop actually paints from are wired: primary
+     (brand yellow), background, surface, text. Everything else stays literal. */
+  /* surfaces */
+  --black:var(--tc-background,#141416);
+  --charcoal:#1D1D1F;
+  --panel:var(--tc-surface,#26262A);
+  --panel-2:#2E2E33;
+  --stroke:rgba(255,255,255,.08);
+  --stroke-2:rgba(255,255,255,.14);
+  /* yellow mode — brand is the PRIMARY role (the .scoop scope below wires the
+     legacy per-store --scoop-brand into the same chain). --yellow-2 is scoop's
+     second yellow (gradient/highlight partner, == theme.json accent default);
+     left literal so recolouring one role can never split the paired yellows. */
+  --yellow:var(--tc-primary,#F5C518);
+  --yellow-2:#FFC93C;
+  --y-ink:#141416;
+  --y-stroke:rgba(20,20,22,.14);
+  --y-soft:rgba(20,20,22,.55);
+  /* ink on dark */
+  --ink:var(--tc-text,#F7F7F5);
+  --ink-2:#C9C9CC;
+  --gray:#8E8E90;
+  /* flavour dots */
+  --dot-vanilla:#F6EBD9;
+  --dot-choco:#6B4A32;
+  /* radius — pill follows the layout.radius scale (round → 999px, a no-op match).
+     card stays literal: scoop's 20px is intentionally off the "round" step (18px),
+     so wiring --tr-card would visibly reshape every card. img/sheet stay literal
+     too — control-radius at "pill" would circle images / reshape the sheets. */
+  --r-card:20px;
+  --r-img:16px;
+  --r-pill:var(--tr-pill,999px);
+  --r-sheet:26px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.5,.5,1);
+  --t-fast:170ms;
+  --t-view:380ms;
+  --t-mode:520ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-story:46; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — scoop is a single-family theme (Manrope for both body and its big
+     display titles, differentiated only by weight/tracking), so the one UI stack
+     maps to --tf-body; a "none" pairing (the default) emits no --tf-*, degrading
+     to Manrope. --font-ar shares --tf-body per the crave pattern: a chosen pair's
+     body stack ends in an Arabic face, so RTL follows the pairing too. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Manrope",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--font-ui);
+  background:#0B0B0C;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+[dir="rtl"] body, [dir="rtl"] input, [dir="rtl"] button, [dir="rtl"] textarea, [dir="rtl"] select{font-family:var(--font-ar)}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,textarea,select{
+  font:inherit;color:var(--ink);background:var(--panel);
+  border:1px solid var(--stroke);border-radius:14px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+input::placeholder,textarea::placeholder{color:var(--gray)}
+input:focus,textarea:focus,select:focus{border-color:var(--yellow);background:var(--panel-2)}
+::-webkit-scrollbar{display:none}
+
+/* icons */
+.ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-xs{width:15px;height:15px}
+
+/* ── stage & phone frame ─────────────────────────────── */
+.stage{
+  position:relative;
+  height:100dvh;display:flex;align-items:center;justify-content:center;gap:64px;
+  background:
+    radial-gradient(50rem 30rem at 76% 8%,rgba(245,197,24,.09),transparent 60%),
+    radial-gradient(40rem 26rem at 10% 92%,rgba(245,197,24,.05),transparent 60%),
+    #0B0B0C;
+  padding:24px;overflow:hidden;
+}
+/* dotted decorative grid — the board corner motif */
+.stage-dots{
+  position:absolute;top:46px;right:56px;width:230px;height:170px;pointer-events:none;
+  background-image:radial-gradient(rgba(245,197,24,.5) 1.6px,transparent 1.6px);
+  background-size:23px 23px;
+  -webkit-mask-image:radial-gradient(closest-side at 70% 30%,#000 55%,transparent);
+          mask-image:radial-gradient(closest-side at 70% 30%,#000 55%,transparent);
+}
+.stage-dots.two{
+  top:auto;right:auto;bottom:60px;left:48px;width:180px;height:130px;
+  background-image:radial-gradient(rgba(255,255,255,.22) 1.4px,transparent 1.4px);
+  background-size:21px 21px;
+  -webkit-mask-image:radial-gradient(closest-side at 30% 70%,#000 55%,transparent);
+          mask-image:radial-gradient(closest-side at 30% 70%,#000 55%,transparent);
+}
+.stage-note{max-width:252px;color:var(--ink-2);position:relative}
+.stage-brand{font-size:58px;font-weight:800;letter-spacing:-.04em;color:var(--ink);line-height:1}
+.stage-dot{color:var(--yellow)}
+.stage-sub{margin:10px 0 26px;font-size:14px;color:var(--gray)}
+.stage-hints{list-style:none;display:grid;gap:12px;font-size:13.5px;line-height:1.45}
+.stage-hints li{padding-inline-start:18px;position:relative}
+.stage-hints li::before{content:"";position:absolute;inset-inline-start:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--yellow)}
+.stage-hints code{background:var(--panel);border:1px solid var(--stroke);border-radius:6px;padding:1px 6px;font-size:12px;color:var(--yellow)}
+
+.phone{
+  position:relative;width:401px;height:min(864px,94dvh);
+  background:var(--charcoal);border-radius:54px;
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 0 0 11px #060708,0 0 0 12.5px #26292d,0 44px 90px -30px rgba(0,0,0,.85);
+  overflow:clip;display:flex;flex-direction:column;
+  transition:background-color var(--t-mode) var(--ease);
+}
+.phone[data-mode="yellow"]{background:var(--yellow)}
+
+@media (max-width:860px){
+  .stage{padding:0;gap:0}
+  .stage-note,.stage-dots{display:none}
+  .phone{width:100%;height:100dvh;border-radius:0;border:0;box-shadow:none}
+}
+
+/* ── app shell + mode crossfade ──────────────────────── */
+.app{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;isolation:isolate}
+.views{position:relative;flex:1;min-height:0}
+
+/* views are transparent — the phone background crossfades dark ↔ yellow
+   while views themselves fade/lift, giving the two-mode signature */
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  visibility:hidden;pointer-events:none;
+  opacity:0;transform:translateY(16px) scale(.995);
+  transition:opacity var(--t-view) var(--ease),transform var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  opacity:1;transform:none;
+  transition:opacity var(--t-view) var(--ease),transform var(--t-view) var(--ease);
+  z-index:2;
+}
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.tail-space{height:118px}
+.tail-space.tall{height:40px}
+.view-center{justify-content:center}
+
+/* dot grid helper reused on splash + product hero */
+.dotgrid{
+  position:absolute;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.5px);
+  background-size:20px 20px;
+}
+
+/* ── splash (dark) ───────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--charcoal);color:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;
+  padding:96px 32px 0;overflow:hidden;
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+.splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.sp-a{top:70px;right:26px;width:150px;height:120px}
+.sp-b{bottom:36%;left:18px;width:110px;height:90px;background-image:radial-gradient(rgba(245,197,24,.4) 1.5px,transparent 1.5px)}
+.splash-brand{
+  font-size:64px;font-weight:800;letter-spacing:-.045em;line-height:1;
+  opacity:0;translate:0 24px;animation:sp-in .7s var(--ease) .1s forwards;
+}
+.splash-brand span{color:var(--yellow)}
+.splash-tag{
+  margin-top:12px;font-size:14px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gray);
+  opacity:0;translate:0 18px;animation:sp-in .7s var(--ease) .26s forwards;
+}
+@keyframes sp-in{to{opacity:1;translate:0 0}}
+.splash-hero{position:absolute;inset-inline:0;bottom:-46px;height:54%;pointer-events:none}
+.splash-blob{
+  position:absolute;inset-inline-start:-16%;bottom:-24%;width:132%;height:112%;
+  background:linear-gradient(126deg,var(--yellow-2) 0%,var(--yellow) 48%,#D9A80B 100%);
+  border-radius:48% 52% 42% 58%/56% 46% 54% 44%;
+  animation:blob-drift 9s ease-in-out infinite alternate;
+}
+@keyframes blob-drift{to{border-radius:54% 46% 56% 44%/44% 58% 42% 56%;transform:rotate(3deg) scale(1.03)}}
+.splash-cup{
+  position:absolute;inset-inline-start:50%;bottom:-8%;width:88%;aspect-ratio:1;object-fit:cover;
+  border-radius:50%;transform:translateX(-50%);
+  box-shadow:0 30px 60px -18px rgba(0,0,0,.6);
+  animation:cup-rise 1s var(--ease-pop) .4s backwards,bob 5s ease-in-out 1.5s infinite;
+}
+[dir="rtl"] .splash-cup{transform:translateX(50%)}
+@keyframes cup-rise{from{transform:translateX(-50%) translateY(70px) rotate(-7deg);opacity:0}}
+.splash-mini{position:absolute;width:66px;height:66px;object-fit:cover;border-radius:20px;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.m-a{inset-inline-start:8%;bottom:56%;rotate:-13deg;animation:chip-float 4s ease-in-out infinite alternate}
+.m-b{inset-inline-end:7%;bottom:47%;rotate:10deg;animation:chip-float 4.6s ease-in-out .4s infinite alternate-reverse}
+@keyframes chip-float{to{translate:0 -14px}}
+.splash-skip{
+  position:absolute;top:18px;inset-inline-end:22px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.09);backdrop-filter:blur(8px);
+  font-size:13px;font-weight:700;color:var(--ink);
+}
+
+/* ── shared heads ────────────────────────────────────── */
+.y-head,.d-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px 6px}
+.y-head.sub,.d-head.sub{justify-content:flex-start}
+.y-title{font-size:40px;font-weight:800;letter-spacing:-.035em;color:var(--y-ink);line-height:1.05}
+.y-title.sm{font-size:27px}
+.d-title{font-size:44px;font-weight:800;letter-spacing:-.035em;color:var(--ink);line-height:1.02}
+.d-title.sm{font-size:24px}
+.y-tools{display:flex;gap:8px}
+/* filter/grid render in the header but relocateBrowseTools() moves them into the
+   order bar; keep them hidden until it settles their home, so they don't flash */
+#filterBtn:not(.browse-tool--ready),#gridBtn:not(.browse-tool--ready){display:none}
+/* Filter + layout toggles are relocated (script.js) onto the shared order-type
+   bar: chips on the start, browse tools on the end of the same line. */
+#mbOrderType{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#mbOrderType .mbt-seg{min-width:0}
+/* .mbt-seg .mbt-chip (1,2,0) out-specifies the shared partial's inline
+   #mbOrderType .mbt-chip (1,1,0) so this compaction actually wins. */
+#mbOrderType .mbt-seg .mbt-chip{padding:7px 12px}
+#mbOrderType .mbt-tools{display:flex;align-items:center;gap:6px;flex:none}
+/* Trimmed to 36px on the bar (their 44px ::after tap area is kept) so three
+   order-type chips + two toggles fit one line even on a ~360px phone. */
+#mbOrderType .mbt-tools .toolbtn{width:36px;height:36px}
+#mbOrderType .mbt-tools .toolbtn .ic{width:19px;height:19px}
+.toolbtn{
+  position:relative;width:44px;height:44px;border-radius:50%;flex:none;
+  background:rgba(20,20,22,.08);border:1px solid var(--y-stroke);color:var(--y-ink);
+  display:inline-flex;align-items:center;justify-content:center;gap:1px;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.toolbtn:active{transform:scale(.9)}
+.toolbtn .chev{width:11px;height:11px;margin-inline-start:-3px}
+.toolbtn.dark{background:var(--panel);border-color:var(--stroke);color:var(--ink)}
+.toolbtn .dot{position:absolute;top:8px;inset-inline-end:9px;width:8px;height:8px;border-radius:50%;background:var(--y-ink);outline:2.5px solid var(--yellow)}
+
+/* ── R4 · open/closed status chip (yellow home header) ── */
+.status-strip{display:flex;align-items:center;padding:0 2px 4px}
+.open-chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--y-soft)}
+.open-chip i{width:8px;height:8px;border-radius:50%;background:#37D66B;box-shadow:0 0 0 0 rgba(55,214,107,.5);animation:scoopPulse 2.2s infinite}
+.open-chip.closed i{background:#E5484D;animation:none}
+@keyframes scoopPulse{70%{box-shadow:0 0 0 7px transparent}}
+
+/* ── F2 · brand / follow row (crave parity) ──────────────
+   Sits directly on the yellow home field (no card), so it borrows the same
+   "dark chip on yellow" contrast as roundback.onyellow / toolbtn rather than
+   the app's dark-mode panel tokens. */
+.brand-row{display:flex;align-items:center;gap:12px;padding:2px 2px 12px}
+.brand-logo{
+  width:54px;height:54px;border-radius:16px;overflow:hidden;flex:none;
+  background:rgba(20,20,22,.08);border:1px solid var(--y-stroke);
+  display:grid;place-items:center;
+}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--y-ink)}
+.brand-followers{display:block;font-size:12px;color:var(--y-soft);margin-top:2px}
+/* verified = a filled yellow seal + dark check (bright yellow → dark check). */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--yellow)}
+.verified-badge .vb-seal-check{fill:var(--y-ink)}
+/* explicit sheet close (top corner); wired in JS (scoop closes via the scrim). */
+.sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--y-ink) 10%,transparent);color:var(--y-ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover clipped by a big convex arc (looking over a scoop) ── */
+.scoop-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:192px}
+.scoop-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--y-ink);border-radius:0 0 50% 50% / 0 0 26% 26%}
+.scoop-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.scoop-cover-scrim{position:absolute;inset:0;border-radius:0 0 50% 50% / 0 0 26% 26%;background:linear-gradient(180deg, rgba(0,0,0,.36), rgba(0,0,0,.06) 40%, rgba(0,0,0,.24) 100%)}
+.scoop-cover .y-head,.scoop-cover .status-strip,.scoop-cover .qc-cen-slot{position:relative;z-index:2}
+.scoop-cover .y-head{text-shadow:0 1px 4px rgba(0,0,0,.42)}
+.scoop-cover .y-title{color:#fff}
+.scoop-cover .toolbtn{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.3);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.scoop-cover .open-chip{color:#fff}
+.brand-row--hero{margin-block-start:-16px;position:relative;z-index:3}
+.brand-row--hero .brand-logo{border:3px solid var(--yellow);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+
+/* ── collapsing header (sunny yellow bar) ── */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--y-ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--yellow);box-shadow:0 6px 18px rgba(0,0,0,.18);
+  border-block-end:1px solid rgba(20,20,22,.12);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;background:var(--y-ink);display:grid;place-items:center}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+.cv-condensed-actions .cv-cbtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(20,20,22,.1);color:var(--y-ink);border:0;cursor:pointer}
+.cv-condensed-actions .cv-cbtn .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.followbtn{
+  display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--black);color:var(--yellow);border:1px solid transparent;
+  font-size:13px;font-weight:800;flex:none;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.followbtn:active{transform:scale(.94)}
+.followbtn:disabled{opacity:.6}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:rgba(20,20,22,.1);color:var(--y-ink);border-color:var(--y-stroke)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+
+.roundback{
+  width:46px;height:46px;border-radius:50%;flex:none;
+  background:var(--panel);border:1px solid var(--stroke-2);color:var(--ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.roundback:active{transform:scale(.88)}
+.roundback.onyellow{background:rgba(20,20,22,.1);border-color:var(--y-stroke);color:var(--y-ink)}
+[dir="rtl"] .roundback .ic{transform:scaleX(-1)}
+
+/* ── underline tabs (the signature nav) ──────────────── */
+.tabs{
+  position:relative;display:flex;gap:22px;overflow-x:auto;
+  padding:16px 2px 12px;
+}
+.tabs button{
+  /* padding-top carries the tap target to the 32px floor; the ink is anchored
+     to the row's bottom, so growing the top leaves it and the text put */
+  flex:none;font-size:12.5px;font-weight:600;letter-spacing:.01em;
+  color:var(--y-soft);padding:5px 1px 8px;white-space:nowrap;
+  transition:color var(--t-fast) var(--ease);
+}
+.tabs button.is-on{color:var(--y-ink);font-weight:800}
+.tabs .tabs-ink{
+  position:absolute;bottom:10px;left:0;width:18px;height:3px;border-radius:2px;
+  background:var(--y-ink);
+  transition:transform .38s var(--ease-pop),width .38s var(--ease);
+}
+.tabs.dark button{color:var(--gray)}
+.tabs.dark button.is-on{color:var(--ink)}
+.tabs.dark .tabs-ink{background:var(--yellow)}
+
+/* ── yellow home ─────────────────────────────────────── */
+/* SEARCH-RUN: orbit-style full-screen overlay (relocated to app root) */
+.searchpop{
+  position:absolute;inset:0;z-index:58;display:flex;flex-direction:column;
+  background:var(--yellow);color:var(--y-ink);
+  opacity:0;transform:translateY(10px);pointer-events:none;visibility:hidden;
+  transition:opacity .24s var(--ease),transform .24s var(--ease),visibility 0s linear .24s;
+}
+.searchpop.is-open{opacity:1;transform:none;pointer-events:auto;visibility:visible;
+  transition:opacity .24s var(--ease),transform .24s var(--ease)}
+.sp-top{display:flex;gap:9px;align-items:center;padding:calc(14px + env(safe-area-inset-top)) 20px 12px}
+.sp-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 14px 120px}
+.sp-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
+  padding:9px 8px;border-radius:16px;color:inherit;text-decoration:none;
+  animation:sp-in .28s var(--ease) backwards;animation-delay:var(--d,0ms);
+}
+.sp-row:active{background:rgba(20,20,22,.06)}
+.sp-thumb{flex:none;width:54px;height:54px;border-radius:12px;overflow:hidden;background:rgba(20,20,22,.06);display:block}
+.sp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.sp-meta{flex:1;min-width:0}
+.sp-meta b{display:block;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-meta small{display:block;color:var(--y-soft);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.sp-price{flex:none;font-weight:800;font-size:14px}
+.sp-none{display:flex;flex-direction:column;align-items:center;gap:14px;padding:64px 24px;color:var(--y-soft);text-align:center}
+.sp-none svg{width:60px;height:60px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+@keyframes sp-in{from{opacity:0;transform:translateY(8px)}}
+.searchfield{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:rgba(20,20,22,.08);border:1px solid var(--y-stroke);border-radius:var(--r-pill);
+  padding:0 16px;height:48px;color:var(--y-ink);
+}
+.searchfield input{background:none;border:0;padding:0;height:100%;font-size:16px;color:var(--y-ink)}
+.searchfield input::placeholder{color:var(--y-soft)}
+.searchfield input:focus{background:none}
+.searchclose{
+  width:48px;height:48px;border-radius:50%;flex:none;
+  background:var(--black);color:var(--yellow);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.searchclose:active{transform:scale(.9)}
+
+.promo{
+  position:relative;display:flex;align-items:center;width:100%;
+  background:var(--black);color:var(--ink);border-radius:var(--r-card);
+  padding:16px 18px;margin:4px 0 10px;overflow:hidden;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.promo:active{transform:scale(.98)}
+.promo-copy{position:relative;z-index:2;display:grid;gap:4px;max-width:64%}
+.promo-kicker{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--yellow)}
+.promo-title{font-size:16.5px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.promo-code{font-size:11.5px;color:var(--gray);margin-top:2px}
+.promo-code b{
+  color:var(--y-ink);background:var(--yellow);border-radius:6px;
+  padding:2px 7px;font-weight:800;margin-inline-start:4px;letter-spacing:.04em;
+}
+.promo-img{
+  position:absolute;inset-inline-end:-24px;top:50%;translate:0 -50%;
+  width:120px;height:120px;object-fit:cover;border-radius:50%;
+  box-shadow:0 14px 30px rgba(0,0,0,.4);
+  transition:transform .6s var(--ease);
+}
+.promo:hover .promo-img{transform:rotate(8deg) scale(1.05)}
+
+/* staggered black cards on yellow */
+.stagger{display:flex;gap:14px;align-items:flex-start;padding-top:6px}
+.stagger .col{flex:1;min-width:0;display:grid;gap:var(--ts-gap-3, 14px)}
+.stagger .col.offset{padding-top:34px}
+.stagger.is-list{display:grid}
+.stagger.is-list .col{padding-top:0}
+
+.pcard{
+  position:relative;background:var(--black);color:var(--ink);
+  border-radius:var(--r-card);padding:14px 14px 12px;text-align:start;width:100%;
+  box-shadow:0 16px 34px -18px rgba(20,20,22,.55);
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:card-in .5s var(--ease) backwards;
+  animation-delay:var(--d,0ms);
+  cursor:pointer;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(20px)}}
+.pcard:active{transform:scale(.965)}
+.pc-head{display:flex;justify-content:space-between;gap:10px}
+.pc-name{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.pc-desc{font-size:12.5px;line-height:1.45;color:var(--ink-2);margin-top:5px}
+.pc-rail{display:grid;gap:6px;justify-items:center;flex:none}
+.pc-fav{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--yellow);color:var(--y-ink);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.pc-fav:active{transform:scale(.82)}
+.pc-fav .ic{width:15px;height:15px}
+.pc-fav.is-on .ic{fill:var(--y-ink)}
+.pc-dot{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--panel);color:var(--gray);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast);
+}
+.pc-dot:active{transform:scale(.82)}
+.pc-dot .ic{width:12.5px;height:12.5px}
+.pc-dot.is-on{color:var(--yellow)}
+.pc-imgwrap{position:relative;margin:11px 0 10px}
+.pc-imgwrap img{width:100%;aspect-ratio:1.04;object-fit:cover;border-radius:var(--r-img);transition:transform .5s var(--ease)}
+.pcard:hover .pc-imgwrap img{transform:scale(1.04)}
+.stagger.is-list .pc-imgwrap img{aspect-ratio:1.9}
+.pc-special{
+  position:absolute;top:9px;inset-inline-start:9px;
+  background:var(--yellow);color:var(--y-ink);
+  font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 10px;border-radius:var(--r-pill);
+}
+/* Happy-hour offer ribbon — thumbnail bottom-start, clear of .pc-special (top). */
+.pc-hh{
+  position:absolute;bottom:9px;inset-inline-start:9px;z-index:2;
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;
+  font-size:11px;font-weight:800;letter-spacing:.03em;
+  padding:5px 10px;border-radius:var(--r-pill);
+  box-shadow:0 4px 12px rgba(0,0,0,.24);
+}
+.pc-was{opacity:.5;font-weight:600;font-size:.8em;margin-inline-end:.35em}
+.pc-soldout{
+  position:absolute;inset:0;border-radius:var(--r-img);
+  background:rgba(20,20,22,.66);backdrop-filter:blur(2px) grayscale(1);
+  display:grid;place-items:center;
+  font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);
+}
+.pc-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.pc-stock{display:block;font-size:11.5px;font-weight:600;color:var(--gray)}
+.pc-stock.low{color:var(--yellow)}
+.pc-price{font-size:17px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+@media (max-width:420px){.pc-price{font-size:15px}}
+.pc-cart{
+  display:inline-flex;align-items:center;gap:6px;flex:none;
+  background:var(--yellow);color:var(--y-ink);
+  font-size:13px;font-weight:800;
+  padding:11px 15px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.pc-cart:active{transform:scale(.9)}
+.pc-cart .ic{width:14px;height:14px;stroke-width:2}
+.pc-cart:disabled{opacity:.4}
+
+/* ── dark product page ───────────────────────────────── */
+.p-stagewrap{position:relative;margin:2px 0 6px;min-height:290px;display:grid;place-items:center}
+.p-dots{top:6px;inset-inline-start:2px;width:130px;height:110px}
+.p-ring{
+  position:absolute;width:262px;height:262px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(245,197,24,.16),rgba(245,197,24,.05) 62%,transparent 74%);
+}
+.p-photo{
+  width:246px;height:246px;object-fit:cover;border-radius:50%;
+  box-shadow:0 34px 60px -20px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.06);
+  animation:bob 4.4s ease-in-out infinite;
+}
+@keyframes bob{50%{translate:0 -11px}}
+.p-rail{
+  position:absolute;inset-inline-end:2px;top:8px;
+  display:grid;gap:10px;justify-items:center;
+}
+.rail-fav{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  writing-mode:vertical-rl;text-orientation:mixed;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:14px 9px;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-2);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),color var(--t-fast);
+}
+[dir="rtl"] .rail-fav{writing-mode:vertical-lr}
+.rail-fav .ic{width:15px;height:15px;rotate:90deg}
+[dir="rtl"] .rail-fav .ic{rotate:-90deg}
+.rail-fav:active{transform:scale(.92)}
+.rail-fav.is-on{background:var(--yellow);border-color:var(--yellow);color:var(--y-ink)}
+.rail-fav.is-on .ic{fill:var(--y-ink)}
+.rail-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink-2);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),color var(--t-fast);
+}
+.rail-btn:active{transform:scale(.85)}
+.rail-btn .ic{width:16px;height:16px}
+.rail-btn.is-on{background:var(--yellow);border-color:var(--yellow);color:var(--y-ink)}
+
+.p-buy{padding:6px 2px 0}
+.p-stock{display:block;font-size:11.5px;font-weight:600;color:var(--gray)}
+.p-stock.low{color:var(--yellow)}
+.p-stock.out{color:#FF7A6B}
+.p-price{font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+
+.p-meta{display:flex;flex-wrap:wrap;gap:8px;padding:14px 0 4px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:700;color:var(--ink-2);
+  background:var(--panel);border:1px solid var(--stroke);
+  padding:7px 12px;border-radius:var(--r-pill);
+}
+.meta-chip .ic{width:13px;height:13px}
+.meta-chip.star{color:var(--yellow)}
+.meta-chip.star .ic{fill:currentColor;stroke:none}
+.meta-chip.tag{color:var(--yellow)}
+
+/* option cards — the "Base ice cream" swatch card */
+.optcard{
+  background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:15px;margin-top:14px;
+}
+.optcard-head{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.optcard-head b{font-size:14.5px;font-weight:800;flex:1}
+.optcard-ic{
+  width:34px;height:34px;border-radius:11px;flex:none;
+  background:var(--panel-2);color:var(--yellow);display:grid;place-items:center;
+}
+.optcard-ic .ic{width:17px;height:17px}
+.optcard-tag{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+/* #global-modifiers: a required group reads louder than an optional one */
+.optcard-tag.req{color:var(--y-ink);background:var(--yellow);border-radius:999px;padding:2px 7px}
+.optcard-hint{font-size:10.5px;font-weight:700;color:var(--gray)}
+/* the add-gate flashes the group that is still unanswered */
+.optcard.needs{border-color:var(--yellow);animation:optNeeds .5s var(--ease-pop)}
+@keyframes optNeeds{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media (prefers-reduced-motion:reduce){.optcard.needs{animation:none}}
+/* single-select options read as a dot, multi-select keeps the checkbox square */
+.extra.is-radio .extra-box{border-radius:50%}
+
+.swatches{display:flex;flex-wrap:wrap;gap:9px}
+.swatch{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--charcoal);border:1.5px solid var(--stroke);border-radius:var(--r-pill);
+  padding:9px 14px;font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.swatch:active{transform:scale(.93)}
+.swatch .sw-dot{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.swatch .sw-check{
+  width:0;overflow:hidden;display:grid;place-items:center;
+  transition:width .25s var(--ease);
+}
+.swatch .sw-check svg{width:13px;height:13px;stroke:var(--y-ink);stroke-width:3;fill:none;transform:scale(.3);opacity:0;transition:all .28s var(--ease-pop) .05s}
+.swatch.is-on{background:var(--panel-2);border-color:var(--yellow);color:var(--ink)}
+.swatch.is-on .sw-check{width:17px;background:var(--yellow);height:17px;border-radius:50%}
+.swatch.is-on .sw-check svg{transform:none;opacity:1}
+.swatch .sw-delta{font-size:11px;font-weight:700;color:var(--gray)}
+.swatch.is-on .sw-delta{color:var(--yellow)}
+
+.extras{display:grid;gap:3px}
+.extra{
+  display:flex;align-items:center;gap:11px;padding:9px 5px;border-radius:12px;width:100%;text-align:start;
+  transition:background var(--t-fast);
+}
+.extra:active{background:var(--charcoal)}
+.extra-box{
+  width:21px;height:21px;flex:none;border-radius:7px;
+  border:2px solid var(--stroke-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.extra.is-on .extra-box{border-color:var(--yellow);background:var(--yellow)}
+.extra-box svg{width:11px;height:11px;stroke:var(--y-ink);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.extra.is-on .extra-box svg{opacity:1;transform:none}
+.extra-name{flex:1;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.extra.is-on .extra-name{color:var(--ink)}
+.extra-price{font-size:12.5px;font-weight:700;color:var(--gray)}
+.extra.is-on .extra-price{color:var(--yellow)}
+
+.p-desc{padding:16px 2px 2px;font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.p-desc b{display:block;color:var(--ink);font-weight:800;font-size:14px;margin-bottom:4px}
+
+/* product footer: back ← · qty − 2 + · yellow To-cart pill */
+.p-cta{
+  flex:none;display:flex;gap:11px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  position:relative;z-index:6;
+}
+.p-cta.lift{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+.qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:5px;
+}
+.qty-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.qty-btn:active{transform:scale(.82);background:var(--panel-2)}
+.qty output{min-width:26px;text-align:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.tocart{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  background:var(--yellow);color:var(--y-ink);
+  font-size:15px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 12px 28px -10px rgba(245,197,24,.45);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast),opacity var(--t-fast);
+  position:relative;overflow:hidden;
+}
+.tocart:active{transform:scale(.97)}
+.tocart .ic{width:18px;height:18px;stroke-width:2}
+.tocart b{font-weight:800;opacity:.6}
+.tocart.wide{width:100%}
+.tocart:disabled{opacity:.4;box-shadow:none}
+.tocart .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(20,20,22,.25);border-top-color:var(--y-ink);
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+
+/* product footer: a direct jump to the cart, shown once anything is in it (orbit parity) */
+.p-cart-jump{
+  flex:none;position:relative;width:46px;height:46px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--stroke-2);color:var(--ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.p-cart-jump:active{transform:scale(.88)}
+.p-cart-jump[hidden]{display:none}
+.p-cart-jump .ic{width:20px;height:20px}
+.p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);
+  background:var(--yellow);color:var(--y-ink);
+  font-size:10.5px;font-weight:800;line-height:18px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+}
+
+/* generic pills */
+.blackpill{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--black);color:var(--yellow);
+  padding:15px 30px;border-radius:var(--r-pill);
+  font-size:14.5px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+  box-shadow:0 14px 30px -12px rgba(20,20,22,.6);
+}
+.blackpill:active{transform:scale(.95)}
+.blackpill.sm{padding:10px 18px;font-size:12.5px}
+.yellowpill{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--yellow);color:var(--y-ink);
+  padding:13px 24px;border-radius:var(--r-pill);
+  font-size:13.5px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.yellowpill:active{transform:scale(.95)}
+.yellowpill.sm{padding:10px 18px;font-size:12.5px}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--panel);border:1px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.sm{padding:8px 14px;font-size:12.5px}
+.ghostlink{font-size:13.5px;font-weight:700;color:var(--y-soft);padding:10px}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--panel-2);font-size:12.5px;font-weight:700;
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+
+/* ── cart (dark) ─────────────────────────────────────── */
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:11px;overflow:hidden;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.ci-row{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center}
+.ci-row img{width:70px;height:70px;object-fit:cover;border-radius:var(--r-img)}
+.ci-im{flex:none;padding:0;background:none;border:0;cursor:pointer}
+.ci-name{display:block;padding:0;background:none;border:0;text-align:start;color:var(--ink);font-size:14px;font-weight:800;line-height:1.25;cursor:pointer}
+.ci-priceline{display:flex;align-items:baseline;gap:7px;margin-top:5px;flex-wrap:wrap}
+.ci-price{font-size:14px;font-weight:800;color:var(--yellow)}
+.ci-was{font-size:11px;color:var(--gray);text-decoration:line-through}
+.ci-unit{font-size:10.5px;color:var(--gray);font-weight:700}
+.ci-tools{display:flex;align-items:center;gap:5px}
+.ci-rm{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;color:var(--gray);background:none;border:0;cursor:pointer}
+.ci-rm:active{color:var(--ink)}
+.ci-rm .ic{width:14px;height:14px}
+.ci-opts{font-size:11px;color:var(--gray);margin-top:3px;line-height:1.45}
+.ci-side{display:flex;flex-direction:column;align-items:center;gap:5px}
+.ci-side .qty{padding:3px}
+.ci-side .qty-btn{width:36px;height:36px}
+.ci-side .qty output{font-size:13px;min-width:20px}
+/* ── checkout order summary (dark) ── */
+.ck-items{background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px;display:grid;gap:11px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ck-edit{background:none;border:0;padding:4px 0;font-size:12.5px;font-weight:800;color:var(--y-soft);cursor:pointer}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--gray);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--gray)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--yellow);text-align:end;font-variant-numeric:tabular-nums}
+.ck-price del{display:block;font-size:10.5px;color:var(--gray);font-weight:600}
+.ci-note-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10.5px;font-weight:700;color:var(--gray);
+  padding:4px 8px;border-radius:var(--r-pill);
+  min-height:44px;
+}
+.ci-note-btn .ic{width:11px;height:11px}
+.ci-note-btn.is-on{color:var(--yellow)}
+.ci-note{margin-top:9px}
+.ci-note input{font-size:16px;padding:10px 13px;border-radius:12px}
+.cart-tools{display:grid;gap:16px;padding-top:16px}
+.block h3{font-size:14px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em}
+
+.seg{display:flex;background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px}
+/* #langSeg renders its options as <a> (real /lang/{code} links), so every seg
+   rule has to cover anchors too — button-only selectors left the language pills
+   unstyled (bare underlined links). */
+.seg button, .seg a{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--gray);
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic, .seg a .ic{width:16px;height:16px}
+.seg button.is-on, .seg a.is-on{background:var(--yellow);color:var(--y-ink)}
+.seg.mini{padding:3px}
+.seg.mini button, .seg.mini a{padding:7px 13px;flex:none}
+.seg.center{justify-content:center;margin-bottom:14px}
+.seg.center button, .seg.center a{flex:1}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--yellow)}
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:16px;min-height:44px}
+.waiter-row{display:flex;gap:10px;padding-top:12px}
+.waiter-row .ghostbtn{flex:1;justify-content:center;border-color:var(--yellow);color:var(--yellow)}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .coupon-field{padding:5px 15px 5px 6px}
+.coupon-field .ic{color:var(--yellow);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:16px}
+.coupon-field input:focus{background:none}
+.coupon-field.is-applied{border-color:var(--yellow);border-style:solid}
+.coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--yellow)}
+.coupon-msg.err{color:#FF7A6B}
+
+.totals{background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding:15px;display:grid;gap:9px}
+.tr{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr b{font-weight:600;font-variant-numeric:tabular-nums}
+.tr.disc{color:var(--yellow)}
+.tr .free{color:var(--yellow);font-weight:800}
+.tr.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px}
+.tr.grand b{font-weight:800;font-size:17px}
+
+.wa-order{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:13px 16px;border-radius:var(--r-pill);
+  background:var(--panel);border:1px solid var(--stroke);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.wa-order:active{transform:scale(.97)}
+.wa-order .ic:first-child{color:#4AD97C}
+.wa-order.line{justify-content:flex-start;border-radius:16px;margin-top:18px}
+.wa-order.line span{flex:1;text-align:start}
+.wa-order .arr{color:var(--gray)}
+[dir="rtl"] .wa-order .arr{transform:scaleX(-1)}
+
+/* ── checkout ────────────────────────────────────────── */
+.block{padding-top:14px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.addr-field{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:0 14px}
+.addr-field .ic{color:var(--yellow)}
+.addr-field input{background:none;border:0;padding:13px 0}
+.addr-field input:focus{background:none}
+/* delivery address: autocomplete + use-my-location + saved addresses */
+.addr-wrap{position:relative}
+.addr-wrap .addr-field input{padding-inline-end:40px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--yellow);background:none;border:0;cursor:pointer}
+.uselocbtn:active{transform:scale(.9)}
+.uselocbtn.is-loading{opacity:.5;animation:spin .8s linear infinite}
+/* product reviews */
+.product-reviews:empty{display:none}
+.review-card{background:var(--panel-2);border:1px solid var(--stroke);border-radius:var(--r-img);padding:12px 14px;margin-bottom:9px}
+.review-card b{display:block;font-size:12.5px;font-weight:800}
+.review-stars{display:inline-block;font-size:12px;color:var(--yellow);letter-spacing:2px;margin:2px 0}
+.review-stars-dim{color:var(--gray);opacity:.45}
+.review-card p{font-size:12.5px;color:var(--ink-2);line-height:1.5;margin:2px 0 0}
+.reviews-empty{font-size:12.5px;color:var(--gray)}
+/* inline product quick-rate stars */
+.rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:2px 0 12px;font-size:13px;font-weight:800;color:var(--ink)}
+.rate-row .rate-label{flex:1 1 auto;min-width:0}
+.rate-stars{display:flex;gap:0;flex:none;color:var(--yellow)}
+.rate-stars button{padding:7px;background:none;border:0;cursor:pointer;line-height:0}
+.rate-stars button .ic{width:22px;height:22px;fill:none;stroke:currentColor;opacity:.4;transition:opacity .15s,fill .15s}
+.rate-stars button.is-on .ic{fill:currentColor;stroke:currentColor;opacity:1}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--panel);border:1px solid var(--stroke-2);border-radius:14px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(0,0,0,.5);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--stroke);cursor:pointer}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--panel-2)}
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1.5px solid var(--stroke);border-radius:14px;background:var(--panel);color:var(--ink);cursor:pointer}
+.saved-addr .ic{flex:none;color:var(--ink-2)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--yellow);box-shadow:0 0 0 1px var(--yellow)}
+.saved-addr.is-on .ic{color:var(--yellow)}
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--panel);border:1.5px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.pm.is-on{border-color:var(--yellow);background:rgba(245,197,24,.06)}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--panel-2);display:grid;place-items:center;color:var(--ink-2)}
+.pm.is-on .pm-ic{background:var(--yellow);color:var(--y-ink)}
+.pm b{flex:1;font-size:14px;font-weight:800}
+.pm b small{display:block;font-weight:500;font-size:11.5px;color:var(--gray);margin-top:2px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.pm.is-on .pm-radio{border-color:var(--yellow)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--yellow)}
+.cardform{display:grid;gap:9px;padding-top:10px;animation:card-in .35s var(--ease)}
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:14px;
+  background:var(--panel);border:1.5px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--yellow);color:var(--yellow);background:rgba(245,197,24,.07)}
+#checkoutTotals{margin-top:18px}
+
+/* ── confirmed (yellow) ──────────────────────────────── */
+.confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:7px;color:var(--y-ink)}
+.bigcheck{width:150px;height:150px;margin-bottom:8px;animation:pop-in .7s var(--ease-pop) .1s backwards}
+@keyframes pop-in{0%{transform:scale(.3) rotate(-8deg);opacity:0}}
+.bigcheck svg{width:100%;height:100%}
+.bigcheck circle{fill:var(--black)}
+.bigcheck .check{stroke:var(--yellow);stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .6s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confirm-title{font-size:29px;font-weight:800;letter-spacing:-.025em}
+.confirm-sub{font-size:13.5px;color:var(--y-soft);line-height:1.6;font-weight:600}
+.confirm-code{
+  font-size:13px;font-weight:800;color:var(--y-ink);
+  border:1.5px dashed rgba(20,20,22,.4);
+  padding:8px 18px;border-radius:var(--r-pill);margin-top:10px;
+  font-variant-numeric:tabular-nums;
+}
+.pts-chip{
+  background:var(--black);color:var(--yellow);
+  font-size:12px;font-weight:800;letter-spacing:.03em;
+  padding:7px 15px;border-radius:var(--r-pill);margin-top:4px;
+  animation:pop-in .6s var(--ease-pop) .9s backwards;
+}
+.confirm-actions{display:grid;gap:8px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .blackpill{min-width:230px}
+/* Match the Track order pill's footprint — the bare text link hugging its own
+   text next to a 230px primary read as an afterthought. */
+.confirm-actions .ghostlink{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-width:230px;padding:13px 30px;border-radius:var(--r-pill);
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.confirm-actions .ghostlink .ic{width:17px;height:17px}
+.confirm-actions .ghostlink:hover{background:var(--panel-2)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#141416);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track (dark) ────────────────────────────────────── */
+.track-card{background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding:17px;display:grid;gap:16px;margin-top:6px}
+.track-top{display:flex;justify-content:space-between;align-items:center}
+.tk-label{font-size:11px;color:var(--gray);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--yellow)}
+.timeline{list-style:none;display:grid;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--panel);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:var(--y-ink);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--yellow);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--yellow);background:var(--yellow)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{box-shadow:0 0 0 0 rgba(245,197,24,.5);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}}
+.tl-copy b{font-size:14px;font-weight:800;display:block;color:var(--gray);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--gray)}
+
+.review-card{margin-top:14px;background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding:17px;text-align:center}
+.review-q{font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.stars{display:flex;justify-content:center;gap:8px;padding-top:12px}
+.stars button{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--charcoal);border:1px solid var(--stroke);
+  display:grid;place-items:center;color:var(--gray);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast),border-color var(--t-fast);
+}
+.stars button:active{transform:scale(.85)}
+.stars button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+.stars button.is-on{color:var(--yellow);border-color:var(--yellow)}
+.stars button.is-on svg{fill:currentColor}
+.google-cta{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:14px;padding:13px;border-radius:var(--r-pill);
+  background:var(--yellow);color:var(--y-ink);
+  font-size:13.5px;font-weight:800;text-decoration:none;
+  animation:card-in .4s var(--ease);
+}
+.g-mark{
+  width:24px;height:24px;border-radius:50%;background:var(--black);color:var(--yellow);
+  display:grid;place-items:center;font-size:13px;font-weight:800;
+}
+.review-bad{display:grid;gap:9px;padding-top:13px;animation:card-in .4s var(--ease)}
+.review-bad textarea{resize:none;font-size:13px}
+.review-bad .yellowpill{justify-self:end}
+.review-thanks{padding-top:12px;color:var(--yellow);font-weight:800;font-size:13px}
+
+/* ── profile (dark) ──────────────────────────────────── */
+.points-card{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:linear-gradient(126deg,var(--yellow-2),var(--yellow) 55%,#E4B10E);
+  color:var(--y-ink);border-radius:var(--r-card);padding:17px 18px;margin-top:6px;
+}
+.points-card .tk-label{color:rgba(20,20,22,.6)}
+.pts-amt{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+/* identity card — customer-auth entry on the profile view */
+.me-card{
+  display:flex;align-items:center;gap:13px;
+  background:var(--charcoal);border:1.5px solid var(--stroke);
+  border-radius:var(--r-card);padding:15px 16px;margin-top:6px;
+}
+.me-avatar{
+  flex:none;width:44px;height:44px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--yellow);color:var(--y-ink);
+  font-size:18px;font-weight:800;
+}
+.me-avatar .ic{color:var(--y-ink)}
+.me-meta{flex:1;min-width:0}
+.me-meta b{display:block;font-size:14.5px;font-weight:800}
+.me-meta small{display:block;font-size:12px;font-weight:600;color:var(--gray);margin-top:2px}
+/* auth sheet — tab panels reuse .seg + .book-form; only the OTP boxes are new */
+#authSheet .err-box{margin-top:0;margin-bottom:12px}
+.otp-boxes{display:flex;gap:10px;justify-content:center;margin-top:4px}
+.otp-boxes input{
+  width:52px;min-height:56px;text-align:center;
+  font-size:22px;font-weight:800;
+  background:var(--panel-2);border:1.5px solid var(--stroke-2);border-radius:14px;color:var(--ink);
+}
+.otp-boxes input:focus{border-color:var(--yellow);outline:none}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.prow{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;margin-bottom:9px;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.prow:active{transform:scale(.98)}
+.prow .ic:first-child{color:var(--yellow)}
+.prow b{flex:1;font-size:13.5px;font-weight:800}
+.prow small{font-size:11.5px;color:var(--gray);font-weight:600}
+.prow .arr{color:var(--gray)}
+[dir="rtl"] .prow .arr{transform:scaleX(-1)}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--panel);border:1px solid var(--stroke);border-radius:16px;padding:12px 14px;
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;
+}
+.order-row .ic{color:var(--yellow)}
+.order-row>div{flex:1}
+.order-row b{font-size:13.5px;font-weight:800;display:block}
+.order-row small{font-size:11.5px;color:var(--gray)}
+.order-status{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:rgba(245,197,24,.12);color:var(--yellow)}
+.orders-empty{font-size:13px;color:var(--gray);padding:6px 2px}
+/* Find-my-orders (guest) — reuses .searchfield + .orders-list; just the layout. */
+.order-lookup{display:grid;gap:10px;margin-top:14px}
+.order-lookup .lookup-field{margin:0}
+.order-lookup .blackpill.sm{justify-self:start}
+.order-lookup #lookupResults:empty{display:none}
+.demo-foot{text-align:center;font-size:11px;color:var(--gray);padding:26px 0 4px;opacity:.7}
+
+/* ── bottom nav — floating black pill ────────────────── */
+.navbar{
+  position:absolute;inset-inline:20px;bottom:calc(16px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--black);
+  border:1px solid rgba(255,255,255,.1);border-radius:var(--r-pill);
+  padding:9px;
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.7);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.navbar.is-hidden{transform:translateY(130%);opacity:0;pointer-events:none}
+/* A GLOBAL layout rule (`div#view-order-wrapper, .navbar{z-index:99999999}`)
+   collides with this theme's generic `.navbar` class and pins the bottom nav far
+   above the sheet/scrim/splash layer the theme carefully stacks over it (--z-sheet
+   50 > --z-nav 30). Re-scope it back to the theme's own token — this selector
+   (0,2,0) outranks the global `.navbar` (0,1,0) without touching the shared rule. */
+.scoop .navbar{z-index:var(--z-nav)}
+.nav-item{flex:1;display:grid;justify-items:center;color:var(--gray);transition:color var(--t-fast)}
+.nav-chip{
+  position:relative;display:inline-flex;align-items:center;gap:7px;
+  padding:11px 16px;border-radius:var(--r-pill);
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.nav-item:active .nav-chip{transform:scale(.9)}
+.nav-item .ic{width:19px;height:19px}
+.nav-label{font-size:11.5px;font-weight:800;letter-spacing:.01em;max-width:0;overflow:hidden;opacity:0;transition:max-width .35s var(--ease),opacity .25s var(--ease)}
+.nav-item.is-on{color:var(--y-ink)}
+.nav-item.is-on .nav-chip{background:var(--yellow)}
+.nav-item.is-on .nav-label{max-width:60px;opacity:1}
+.badge{
+  position:absolute;top:2px;inset-inline-end:6px;
+  min-width:18px;height:18px;border-radius:var(--r-pill);
+  background:var(--yellow);color:var(--y-ink);
+  font-size:10px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--black);
+  transition:transform .25s var(--ease-pop);
+}
+.nav-item.is-on .badge{background:var(--black);color:var(--yellow);outline-color:var(--yellow)}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+
+/* ── nav polish ─────────────────────────────────────────
+   Brighter, slightly larger icons; a subtle top sheen + crisper border on the
+   pill; a soft glow under the active chip; and hover feedback on pointer devices.
+   `.navbar .nav-item` outranks the plain `.nav-item` dark-mode colour rule below. */
+.navbar{
+  border-color:rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 20px 44px -14px rgba(0,0,0,.72);
+}
+.navbar .nav-item{color:rgba(255,255,255,.62)}
+.navbar .nav-item .ic{width:21px;height:21px;stroke-width:2}
+.navbar .nav-item.is-on{color:var(--y-ink)}
+.navbar .nav-item.is-on .nav-chip{box-shadow:0 8px 18px -7px color-mix(in srgb,var(--yellow) 55%,transparent)}
+@media (hover:hover) and (pointer:fine){
+  .navbar .nav-item:not(.is-on):hover{color:rgba(255,255,255,.95)}
+  .navbar .nav-item:not(.is-on):hover .nav-chip{background:rgba(255,255,255,.08)}
+}
+@keyframes badge-bump{40%{transform:scale(1.5)}}
+
+/* ── empty states ────────────────────────────────────── */
+.empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--y-soft);font-size:14px;font-weight:600}
+.empty-art{width:76px;height:76px;stroke:currentColor;fill:none;stroke-width:2;opacity:.65;stroke-linecap:round;stroke-linejoin:round}
+.empty.dark{color:var(--gray)}
+
+/* ── sheets / scrim / toast ──────────────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(8,9,10,.62);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--panel);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-top:1px solid var(--stroke-2);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:80%;overflow-y:auto;color:var(--ink);
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:12px}
+.sheet h4{font-size:11.5px;font-weight:800;color:var(--gray);letter-spacing:.05em;text-transform:uppercase;margin:16px 0 10px}
+.sheet-sub{font-size:13px;color:var(--gray);margin-bottom:14px}
+.sheet-sub b{color:var(--yellow);font-size:15px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--charcoal);border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--yellow);color:var(--yellow);background:rgba(245,197,24,.07)}
+.rowlist{display:grid;gap:8px}
+.rrow{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--charcoal);border:1.5px solid var(--stroke);border-radius:16px;padding:13px 15px;
+  transition:border-color var(--t-fast);
+}
+.rrow.is-on{border-color:var(--yellow)}
+.rrow .ic{color:var(--yellow)}
+.rrow b{flex:1;font-size:13.5px;font-weight:800}
+.rrow b small{display:block;font-weight:600;font-size:11.5px;color:var(--gray);margin-top:2px}
+.rrow-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none;transition:all var(--t-fast)}
+.rrow.is-on .rrow-check{border-color:var(--yellow);background:var(--yellow)}
+.rrow .cost{
+  flex:none;font-size:11px;font-weight:800;color:var(--yellow);
+  background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);
+  padding:5px 11px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.rrow:disabled{opacity:.4}
+.sheet-actions{display:flex;gap:10px;padding-top:20px}
+.sheet-actions .tocart{height:50px}
+.book-panel h4:first-child{margin-top:4px}
+.wait-info{
+  font-size:13.5px;font-weight:700;color:var(--ink-2);text-align:center;
+  background:var(--charcoal);border:1px dashed var(--stroke-2);border-radius:16px;padding:16px;
+}
+
+.toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--black);border:1px solid rgba(255,255,255,.14);
+  color:var(--ink);font-size:13px;font-weight:700;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:var(--yellow)}
+
+/* fly-to-cart (arc) */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:60px;height:60px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(0,0,0,.5);
+}
+
+/* hidden attribute must win over component display rules */
+[hidden]{display:none!important}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] :is(.pc-price,.p-price,.ci-price,.meta-chip,.tr b,.tocart b,.pts-amt,.confirm-code,.pts-chip,#trackCode,#trackEta,.extra-price,.sw-delta,.promo-code b,#filterCount,.badge,.sheet-sub b,.order-row b,.ci-was,.ci-unit,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] :is(.ck-price,.ck-qty){text-align:right}
+/* .badge is absolutely positioned with inset-inline-end, which resolves against
+   the element's OWN direction — the forced ltr above un-mirrors it on RTL
+   pages. Pin the mirrored corner explicitly (crumb fcard-rate lesson). */
+[dir="rtl"] .badge{inset-inline-end:auto;right:auto;left:6px}
+/* display:block members: isolation alone leaves them flush-left in RTL */
+[dir="rtl"] :is(.order-row b,.ci-price,.ci-was,.ci-unit){text-align:right}
+/* latin wordmarks keep their trailing dot on the right in RTL */
+.stage-brand,.splash-brand{direction:ltr;unicode-bidi:isolate}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .confetti{display:none}
+  .p-photo,.splash-cup{animation:none}
+  /* §9.4 — never leave entrance-animated content invisible */
+  .splash-brand,.splash-tag,.pcard,.cart-item{opacity:1!important;translate:none!important;transform:none!important}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCTION OVERRIDES (theme wiring — not in the standalone demo)
+   ═══════════════════════════════════════════════════════════ */
+/* brand yellow adopts the PRIMARY token first (WI-T5); the legacy per-store
+   --scoop-brand (injected inline from colors.primary in index/track/account.blade)
+   stays as the resilience fallback for the render path where theme-tokens emits
+   nothing, then scoop's literal yellow. This .scoop scope shadows the :root
+   --yellow above, so the token wiring has to live here to take effect. */
+.scoop{--yellow:var(--tc-primary, var(--scoop-brand, #F5C518));}
+/* the theme fills the layout's <body>; no marketing stage chrome in production */
+.scoop.stage{gap:0}
+/* generic image fallback — a broken menu photo must never leave a black box.
+   scoopImgFail() drops the src and tags the img, so the cone glyph paints in
+   place of the dead gap the old visibility:hidden left behind. */
+.pc-imgwrap img[src=""],.p-photo[src=""]{visibility:hidden}
+img.no-img{
+  background:var(--panel-2)
+    url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='%238E8E90' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 26a10 10 0 0 1 20 0'/%3E%3Cpath d='M20 26h24L32 52 20 26Z'/%3E%3C/svg%3E")
+    center/34% no-repeat;
+  box-shadow:none; /* otherwise a missing photo reads as a dark blob */
+}
+/* empty-state helpers reused by cart list when server-driven */
+.view-scroll{-webkit-overflow-scrolling:touch}
+
+/* ── account + track pages (server-rendered, dark mode) ── */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px 16px;margin:6px 0 18px}
+.me-card > div{flex:1;min-width:0}
+.me-card b{display:block;font-size:16px;font-weight:800}
+.me-avatar{width:46px;height:46px;border-radius:50%;background:var(--yellow);color:var(--y-ink);display:grid;place-items:center;font-weight:800;font-size:19px;flex:none}
+.orders-block{margin-top:22px}
+.orders-block h3{font-size:14px;font-weight:800;letter-spacing:-.01em;margin:0 0 11px}
+.orders-block .orders-list .track-card{margin-top:0}
+.order-lines{border-top:1px solid var(--stroke);margin-top:12px;padding-top:10px;display:grid;gap:6px}
+.order-line span{font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column}
+.order-line small{color:var(--gray);font-size:12px}
+.grid-empty{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:48px 20px;color:var(--ink-2)}
+.grid-empty .empty-art{width:64px;height:64px;fill:none;stroke:var(--gray);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.6}
+.track-card .order-lines .order-line{padding:0;flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.track-card .order-lines .order-line span{flex-direction:column}
+.track-card .order-lines .order-line b{white-space:nowrap}
+.err-box{margin-top:12px;background:rgba(255,90,90,.12);border:1px solid rgba(255,90,90,.3);color:#ff8a8a;border-radius:12px;padding:11px 14px;font-size:13.5px}
+.minorder{margin-top:12px;color:var(--yellow);font-size:13.5px;font-weight:600}
+.wa-line{display:flex;align-items:center;gap:11px;width:100%;margin-top:16px;background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:14px 18px;color:var(--ink);font-weight:700;font-size:14px;text-decoration:none}
+.wa-line .arr{margin-inline-start:auto;color:var(--gray)}
+[dir="rtl"] .wa-line .arr{transform:scaleX(-1)}
+.wa-line svg:first-child{color:#25D366}
+.tk-eta .tk-label{margin-top:5px;margin-bottom:0}
+.view-scroll > .track-card ~ .track-card{margin-top:14px}
+.order-line.grand{border-top:1px dashed var(--stroke-2);padding-top:10px;margin-top:2px}
+.order-line.grand span{color:var(--ink);font-weight:700}
+.order-line.grand b{font-size:16px;font-weight:800;color:var(--yellow)}
+#cv-curbside-card{text-align:center;gap:0}
+#cv-curbside-card .blackpill{width:100%}
+.imhere-msg{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--yellow)}
+.track-foot{display:grid;place-items:center;padding-top:18px}
+
+/* ── two-tier nav · secondary sub-category chips (yellow home) ── */
+.subtabs{
+  display:flex;gap:8px;overflow-x:auto;
+  padding:0 2px 4px;margin:-4px 0 2px;
+  scrollbar-width:none;
+}
+.subtabs::-webkit-scrollbar{display:none}
+.subtabs button{
+  flex:none;padding:6px 13px;border-radius:var(--r-pill);
+  background:rgba(20,20,22,.05);border:1.5px solid var(--y-stroke);
+  font-size:12px;font-weight:700;color:var(--y-soft);white-space:nowrap;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.subtabs button:active{transform:scale(.93)}
+.subtabs button.is-on{background:var(--y-ink);border-color:var(--y-ink);color:var(--yellow)}
+
+/* ── stories rail (yellow home) ──────────────────────── */
+.stories{
+  display:flex;gap:14px;overflow-x:auto;
+  padding:6px 2px 4px;margin:4px 0 2px;scrollbar-width:none;
+}
+.stories::-webkit-scrollbar{display:none}
+.stories[hidden]{display:none}
+.story{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px}
+.story-ring{
+  width:60px;height:60px;border-radius:50%;padding:2.5px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--y-ink),var(--dot-choco));
+  box-shadow:0 10px 20px -12px rgba(20,20,22,.6);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.story:active .story-ring{transform:scale(.93)}
+.story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--yellow)}
+.story small{
+  font-size:11px;font-weight:700;color:var(--y-soft);
+  max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* ── story viewer (full-screen, dark) ────────────────── */
+.storyview{
+  position:absolute;inset:0;z-index:var(--z-story);
+  background:var(--black);
+  opacity:0;transition:opacity .32s var(--ease);
+}
+.storyview.is-open{opacity:1}
+.sv-progress{position:absolute;top:calc(12px + env(safe-area-inset-top));inset-inline:14px;z-index:3;display:flex;gap:5px}
+.sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.24);overflow:hidden}
+.sv-seg i{display:block;height:100%;width:0;background:var(--yellow);transition:width .05s linear}
+.sv-close{
+  position:absolute;top:calc(26px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;
+  width:44px;height:44px;border-radius:50%;background:rgba(20,20,22,.55);color:var(--ink);
+  display:grid;place-items:center;border:1px solid var(--stroke-2);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.sv-close:active{transform:scale(.9)}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-nav.prev{inset-inline-start:0}
+.sv-nav.next{inset-inline-end:0}
+.sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:26px 22px calc(28px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(11,11,12,.86),transparent);
+}
+.sv-caption{font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.3;color:#fff;margin-bottom:14px;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+.sv-cta{width:100%;flex:none;text-decoration:none}
+
+/* ── admin banners (yellow home) ─────────────────────── */
+.banners{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:4px 2px 6px;margin:6px 0 2px;scrollbar-width:none;
+}
+.banners::-webkit-scrollbar{display:none}
+.banner{
+  position:relative;flex:none;scroll-snap-align:start;
+  width:84%;min-height:104px;display:flex;align-items:center;
+  border-radius:var(--r-card);overflow:hidden;text-decoration:none;
+  padding:16px 18px;background:var(--y-ink);color:var(--yellow);
+  border:1px solid var(--y-stroke);
+}
+.banner.alt{background:linear-gradient(120deg,#2E2E33,var(--black));color:var(--yellow-2)}
+.banner-copy{position:relative;z-index:2;display:flex;flex-direction:column;gap:4px;max-width:64%}
+.banner-kicker{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.banner-title{font-size:16px;font-weight:800;letter-spacing:-.01em;line-height:1.15;color:#fff}
+.banner-btn{align-self:flex-start;margin-top:6px;padding:5px 12px;border-radius:var(--r-pill);background:var(--yellow);color:var(--y-ink);font-size:11.5px;font-weight:800}
+.banner-img{position:absolute;inset-inline-end:0;top:0;height:100%;width:44%;object-fit:cover;z-index:1;opacity:.9}
+[dir="rtl"] .banner-img{transform:scaleX(-1)}
+.banner-img.no-img{display:none}
+
+/* ── nearest-branch map picker (dark sheet) ──────────── */
+.sheet.sheet-tall{max-height:88%}
+.branchmap{
+  width:100%;height:260px;border-radius:var(--r-img);overflow:hidden;
+  background:var(--charcoal);border:1px solid var(--stroke);margin-bottom:10px;
+}
+.branchmap .leaflet-container{width:100%;height:100%;background:var(--charcoal)}
+.geo-attrib{font-size:10.5px;color:var(--gray);margin:0 2px 10px}
+.branch-list{display:flex;flex-direction:column;gap:8px}
+.branch-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  padding:13px 15px;border-radius:var(--r-card);
+  background:var(--charcoal);border:1px solid var(--stroke);
+  color:var(--ink);font-weight:700;font-size:13.5px;text-decoration:none;
+  transition:border-color var(--t-fast) var(--ease);
+}
+.branch-row:active{transform:scale(.98)}
+.branch-row.is-on{border-color:var(--yellow)}
+.branch-row .ic:first-child{color:var(--yellow);flex:none}
+.branch-row b{flex:1;display:flex;flex-direction:column;gap:2px;font-weight:800}
+.branch-row b small{font-size:11px;color:var(--gray);font-weight:600}
+.branch-dist{font-size:11.5px;font-weight:800;color:var(--yellow)}
+.branch-check{width:9px;height:9px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.branch-row.is-on .branch-check{background:var(--yellow);border-color:var(--yellow)}
+
+/* ═══════════════════════════════════════════════════════════
+   THEME-RESCUE (wave 2) — see rev/theme-rescue/findings/scoop.md
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── the theme's own typeface actually applies ────────────
+   The shared layout ships an inline `body{font-family:Roboto,sans-serif}` that loads
+   AFTER this stylesheet, so at equal specificity it won every cascade: Manrope was
+   downloaded and never drawn, and Arabic fell back to Roboto instead of IBM Plex Sans
+   Arabic. `html body` (0,0,2) settles it without !important. */
+html body,
+html body button, html body input, html body textarea, html body select, html body optgroup {
+  /* !important is unavoidable here: the shared layout's own rule is
+     `body{font-family:'Roboto',sans-serif !important}` (store_templates/layout.blade.php
+     :352-362, Arabic gets tajawal), and an !important declaration can only be beaten by
+     a MORE SPECIFIC !important one. Logged as BLOCKED-SHARED; the real fix is for that
+     layout rule to drop !important so themes can set their own type. */
+  font-family: var(--font-ui) !important;
+}
+/* `dir` sits ON <html>, so a descendant selector `[dir=rtl] html body` can never
+   match — the Arabic face silently kept rendering in the Latin family. */
+html[dir="rtl"] body,
+html[dir="rtl"] body button, html[dir="rtl"] body input,
+html[dir="rtl"] body textarea, html[dir="rtl"] body select,
+[dir="rtl"] body, [dir="rtl"] body button, [dir="rtl"] body input,
+[dir="rtl"] body textarea, [dir="rtl"] body select {
+  font-family: var(--font-ar) !important;
+}
+
+/* ── keyboard visibility (the theme had no focus ring anywhere) ── */
+.scoop :is(button,a,input,textarea,select,[tabindex]):focus-visible {
+  outline: 2.5px solid var(--yellow);
+  outline-offset: 2px;
+  /* No `border-radius` here: it overrode the focused element's own radius, so
+     round controls (fav/dot/qty circles) snapped to an 8px rounded-square ring
+     on focus. The outline follows each control's native radius instead. */
+}
+.phone[data-mode="yellow"] :is(button,a,input,[tabindex]):focus-visible { outline-color: var(--y-ink); }
+
+/* ── 44px hit areas without changing the drawn size ────── */
+.pc-fav, .pc-dot, .ci-side .qty-btn, .qty-btn, .minibtn, .toolbtn, .searchclose { position: relative; }
+.pc-fav::after, .pc-dot::after, .ci-side .qty-btn::after, .qty-btn::after {
+  content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 44px; height: 44px; border-radius: 50%;
+}
+.minibtn { min-height: 44px; }
+.tabs button { padding-block: 12px 10px; }         /* was 5px/8px — a 25px-tall chip */
+.subtabs button { min-height: 38px; }
+.tip-row button { min-height: 48px; }
+.chiprow button { min-height: 44px; }
+
+/* ── the one badge a card has earned ───────────────────── */
+.pc-special.is-pop { background: var(--panel-2); color: var(--yellow); box-shadow: inset 0 0 0 1px var(--stroke-2); }
+
+/* ── order-type field (replaces the invented Table 01–12 select) ── */
+.ot-field { display: grid; gap: 6px; }
+.ot-field-label { font-size: 12px; font-weight: 700; color: var(--gray); padding-inline-start: 2px; }
+.ot-field input { font-size: 16px; min-height: 48px; }
+.ot-hint .ic { flex: none; }
+
+/* ── removable coupon chip ─────────────────────────────── */
+.coupon-field.is-applied input { color: var(--yellow); font-weight: 800; letter-spacing: .04em; }
+.coupon-clear {
+  width: 44px; height: 44px; padding: 0; flex: none; border-radius: 50%;
+  display: grid; place-items: center; background: var(--panel-2); color: var(--ink-2);
+}
+
+/* ── reservation / waitlist forms (real POSTs) ─────────── */
+.book-form { display: grid; gap: 2px; }
+.book-form h4 { margin: 14px 0 6px; }
+.book-form input, .book-form textarea { font-size: 16px; min-height: 48px; }
+#signinBlock { padding-top: 18px; }
+#signinBlock .social-login__btn { min-height: 48px; }
+
+/* ── orders list rows are links now ────────────────────── */
+a.order-row { text-decoration: none; color: inherit; }
+div.order-row { cursor: default; }
+.confirm-actions a.blackpill { text-decoration: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT APPEARANCE
+   scoop is a two-mode theme (yellow catalog ↔ charcoal detail). Light mode turns the
+   CHARCOAL half into paper and leaves the yellow half and the signature black cards
+   alone — that is the brand. Dark stays the default for every store; the diner opts in
+   from Profile → Appearance, and only the explicit "System" choice follows the OS.
+   ═══════════════════════════════════════════════════════════ */
+.scoop[data-appearance="light"] {
+  --charcoal: #F4F2EC;
+  --panel:    #FFFFFF;
+  --panel-2:  #EFEDE6;
+  --stroke:   rgba(20,20,22,.10);
+  --stroke-2: rgba(20,20,22,.20);
+  --ink:      #16161A;
+  --ink-2:    #45454C;
+  --gray:     #6E6E76;
+}
+@media (prefers-color-scheme: light) {
+  .scoop[data-appearance="system"] {
+    --charcoal: #F4F2EC;
+    --panel:    #FFFFFF;
+    --panel-2:  #EFEDE6;
+    --stroke:   rgba(20,20,22,.10);
+    --stroke-2: rgba(20,20,22,.20);
+    --ink:      #16161A;
+    --ink-2:    #45454C;
+    --gray:     #6E6E76;
+  }
+}
+/* Surfaces that are BLACK BY BRAND keep light type on them in both faces — otherwise
+   the flip paints near-black text onto the black menu cards and the nav pill. */
+.scoop[data-appearance="light"], .scoop[data-appearance="system"] { --onblack: #F7F7F5; --onblack-mute: #A2A2A8; }
+.scoop { --onblack: var(--ink); --onblack-mute: var(--gray); }
+.pcard, .promo, .navbar, .toast, .storyview { color: var(--onblack); }
+.pcard .pc-desc, .promo-code, .toast, .nav-item { color: var(--onblack-mute); }
+.pcard .pc-name, .promo-title, .pc-price, .toast span { color: var(--onblack); }
+.scoop[data-appearance="light"] body, .scoop[data-appearance="light"] { background: #E9E6DE; }
+.scoop[data-appearance="light"] .pc-dot { background: rgba(255,255,255,.10); color: #C9C9CC; }
+.scoop[data-appearance="light"] .pc-soldout { color: #F7F7F5; }
+.scoop[data-appearance="light"] .stage,
+.scoop[data-appearance="system"] .stage { background: #E9E6DE; }
+.scoop[data-appearance="light"] .splash,
+.scoop[data-appearance="system"] .splash { color: var(--ink); }
+.scoop[data-appearance="light"] .p-photo { box-shadow: 0 24px 46px -22px rgba(20,20,22,.35), 0 0 0 1px rgba(20,20,22,.06); }
+.scoop[data-appearance="light"] .scrim { background: rgba(60,58,50,.42); }
+.scoop[data-appearance="light"] .tl-node svg,
+.scoop[data-appearance="light"] .extra-box svg,
+.scoop[data-appearance="light"] .swatch .sw-check svg { stroke: var(--y-ink); }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — the theme shipped ONE width query (max-width:860px). Above it every
+   customer on a laptop got a 401px iPhone mock-up, complete with a fake device bezel,
+   floating in 880px of black void; below it a 768px tablet got phone cards stretched to
+   357px wide. It now grows into a real bounded app.
+   ═══════════════════════════════════════════════════════════ */
+@media (min-width: 861px) {
+  .stage { padding: 0; gap: 0; align-items: stretch; }
+  .stage-note, .stage-dots { display: none; }
+  .phone {
+    width: min(100%, var(--stage, 980px));
+    height: 100dvh; margin-inline: auto;
+    border-radius: 0; border: 0;
+    box-shadow: 0 0 0 1px var(--stroke), 0 40px 90px -40px rgba(0,0,0,.6);
+  }
+  /* wider gutters, and a real 3-up menu grid (JS picks the column count) */
+  .view-scroll { padding-inline: 34px; }
+  /* reading columns: a cart row or a checkout field has no business being 900px wide */
+  .view[data-view="cart"] .view-scroll,
+  .view[data-view="checkout"] .view-scroll,
+  .view[data-view="profile"] .view-scroll { padding-inline: max(34px, calc((100% - 660px) / 2)); }
+  .p-cta { max-width: 720px; margin-inline: auto; width: 100%; }
+  .navbar { inset-inline: auto; left: 50%; transform: translateX(-50%); width: min(460px, calc(100% - 40px)); }
+  .navbar.is-hidden { transform: translateX(-50%) translateY(130%); }
+  .sheet { inset-inline: auto; left: 50%; transform: translateX(-50%) translateY(105%); width: min(560px, 100%); border-radius: var(--r-sheet); bottom: 22px; }
+  .sheet.is-open { transform: translateX(-50%); }
+  /* the product hero was a 246px circle adrift in a 900px column */
+  .p-stagewrap { min-height: 340px; }
+  .p-photo { width: 300px; height: 300px; }
+  .p-ring { width: 330px; height: 330px; }
+  .y-title { font-size: 46px; }
+  .d-title { font-size: 48px; }
+}
+@media (min-width: 1180px) { .stage { --stage: 1120px; } }
+/* black-card children that must not inherit the light face */
+.pcard .pc-stock, .pcard .pc-foot > span > .pc-stock { color: var(--onblack-mute); }
+.scoop[data-appearance="light"] .dotgrid { background-image: radial-gradient(rgba(20,20,22,.14) 1.5px, transparent 1.5px); }
+.scoop[data-appearance="light"] .splash-skip { background: rgba(20,20,22,.07); border: 1px solid var(--stroke); }
+/* `body{color:var(--ink)}` resolves --ink at BODY level, where the :root (dark) value
+   still lives — the appearance tokens are scoped to #scoop. Anything that merely
+   INHERITED its colour therefore stayed near-white on the light face (profile rows
+   measured 1.07:1). Re-anchoring the inherited colour inside the scoped subtree. */
+.scoop { color: var(--ink); }
+/* a 3-column grid starts at 620px, so the floating pill and the sheets must stop
+   stretching there too (a 728px-wide nav pill with three items reads as a broken bar) */
+@media (min-width: 620px) and (max-width: 860px) {
+  .navbar { inset-inline: auto; left: 50%; transform: translateX(-50%); width: min(460px, calc(100% - 40px)); }
+  .navbar.is-hidden { transform: translateX(-50%) translateY(130%); }
+  .sheet { inset-inline: auto; left: 50%; transform: translateX(-50%) translateY(105%); width: min(560px, 100%); }
+  .sheet.is-open { transform: translateX(-50%); }
+  .view-scroll { padding-inline: 28px; }
+  .p-cta { max-width: 660px; margin-inline: auto; width: 100%; }
+}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--panel-2);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ci-rm{position:relative}
+.ci-rm::after{content:"";position:absolute;inset:-7px -2px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+.pc-cart,.yellowpill.sm,.nav-item,.splash-skip,.ghostbtn.sm{min-height:44px}
+.qty-btn{position:relative}
+.qty-btn::after{content:"";position:absolute;inset:-3px -2px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button, .seg a{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.tabs button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, scoop skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Charcoal chip, yellow coins icon. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--panel);border:1px solid var(--stroke-2);color:var(--ink);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--yellow)}
+
+/* ── notification-center panel — scoop skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--panel,#26262A);--nb-surface-2:var(--panel-2,#2E2E33);--nb-line:var(--stroke,rgba(255,255,255,.08));--nb-ink:var(--ink,#F7F7F5);--nb-muted:var(--ink-2,#C9C9CC);--nb-accent:var(--yellow,#F5C518)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — parity with the splash tagline + crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--y-soft);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — scoop skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   100dvh-stage theme, default DARK (light/system via data-appearance); the hub is
+   still a bottom-sheet (crave idiom).
+   1) scoop marks .brand-row#cvBrandRow with data-mb-hotel-chip-slot (its index), so
+      the shared partial mounts the room chip there natively, beside the follow button;
+   2) this block maps the shared --mbh-* contract onto scoop's own tokens and gives
+      each relocated surface scoop's native look. Scoped under .scoop (scoop's root is
+      .stage.scoop#scoop, a direct child of <main>, so the relocated hub lands inside
+      it and .scoop #mbHotelHub beats the partial's bare #mbHotelHub on specificity).
+      scoop's --panel/--ink/--stroke flip under [data-appearance=light/system], so the
+      layer re-inks on the appearance change through the mapping. Only the hub paints an
+      opaque surface (a modal legitimately does); the chip + checkout rows stay borderless.
+   ═══════════════════════════════════════════════════════════ */
+.scoop #mbHotelChip,
+.scoop #mbHotelOrderCtrls,
+.scoop #mbHotelBook,
+.scoop #mbHotelHub{
+  --mbh-surface:var(--panel);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-2);
+  --mbh-accent:var(--yellow);
+  --mbh-on-accent:var(--y-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact panel pill riding the brand row beside the follow button ── */
+.scoop #mbHotelChip{
+  margin:0;padding:6px 12px;gap:6px;
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.scoop #mbHotelChip:active{transform:scale(.95)}
+.scoop #mbHotelChip .mb-hotel-roomchip__ic{color:var(--yellow)}
+.scoop #mbHotelChip .mb-hotel-roomchip__room{color:var(--ink)}
+.scoop #mbHotelChip .mb-hotel-roomchip__guest{color:var(--gray)}
+/* let the brand row wrap the chip to its own line on narrow screens — only when present */
+.scoop .brand-row:has(#mbHotelChip){flex-wrap:wrap}
+
+/* ── Hub: scoop's own bottom-sheet look (panel surface, r-sheet corners, top hairline, grab + round x) ── */
+.scoop #mbHotelHubScrim{background:rgba(8,9,10,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.scoop #mbHotelHub{
+  background:var(--panel);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.scoop #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.scoop #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;font-weight:800;letter-spacing:-.02em}
+.scoop #mbHotelHub .mb-hotel-hub__x{
+  background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.scoop #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.scoop #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-2)}
+.scoop #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.scoop #mbHotelHub .mb-hotel-card summary,
+.scoop #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.scoop #mbHotelHub .mb-hotel-info-link{color:var(--ink)}
+/* service form controls → scoop inputs / yellow-fill CTA (scoop's primary button language) */
+.scoop #mbHotelHub .mb-hotel-field{
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.scoop #mbHotelHub .mb-hotel-btn{
+  background:var(--yellow);color:var(--y-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls relocated into the checkout → scoop tender rows ── */
+.scoop #mbHotelOrderCtrls{margin:0}
+.scoop #mbHotelSched,
+.scoop #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.scoop #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.scoop #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.scoop #mbHotelSched input[type="radio"]{accent-color:var(--yellow)}
+.scoop #mbHotelSched .mb-hotel-field{
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.scoop #mbHotelSched .mb-hotel-note{color:var(--gray)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.scoop #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.scoop #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.scoop #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.scoop #mbHotelCharge .mb-hotel-greet__welcome{color:var(--gray)}
+.scoop #mbHotelCharge input[type="checkbox"]{accent-color:var(--yellow)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .scoop, RTL-safe (logical props), scheme-flip via tokens (scoop
+   ships a light block too). Reuses --panel/--stroke and the --yellow accent. */
+.scoop .sc-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.scoop .sc-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--panel);border:1px solid var(--stroke-2);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.scoop .sc-rating-star{color:var(--yellow)}
+.scoop .sc-rating small{color:var(--ink-2);font-weight:600}
+.scoop .sc-review-list{display:flex;flex-direction:column;gap:8px}
+.scoop .sc-review{background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.scoop .sc-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.scoop .sc-review-star{color:var(--yellow);font-weight:800;white-space:nowrap}
+.scoop .sc-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.scoop .sc-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for scoop. Surface,
+   ink, border and radius come from scoop tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.scoop .mb-paypending{
+  --pp-surface:var(--panel,#26262A);
+  --pp-ink:var(--ink,#F7F7F5);
+  --pp-muted:var(--ink-2,#C9C9CC);
+  --pp-border:var(--stroke-2,rgba(255,255,255,.14));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,20px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.scoop .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.scoop .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.scoop .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.scoop .mb-paypending-txn:empty{display:none}
+.scoop .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.scoop .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.scoop .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.scoop .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.scoop .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.wa-order.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* Bottom navbar must stay inside the frame on narrow phones. The six nav chips'
+   fixed padding + the active chip's expanding label outgrew the inset navbar around
+   410px and spilled past the frame edge (reported: "navbar goes outside ≤410").
+   Tighten the inset + chip padding, and go icon-only (the yellow active chip already
+   marks the tab) so all six fit. */
+@media (max-width:410px){
+  .scoop .navbar{inset-inline:8px;padding:7px}
+  .scoop .nav-chip{padding:9px 10px}
+  .scoop .nav-item.is-on .nav-label{max-width:0;opacity:0}
+}
+
+/* ── Address map picker + clear-device-data (shared engines, scoop-skinned) ──
+   Trigger mirrors scoop's secondary pill (.ghostbtn.sm); the map lives in the
+   theme's own .sheet.sheet-tall bottom sheet (== #branchMapSheet); the clear-data
+   control is a native profile row (.wa-order.line). */
+.map-trigger{width:100%;justify-content:center;margin-top:10px}
+.map-trigger .ic{width:17px;height:17px;color:var(--yellow);fill:none;stroke:currentColor}
+/* picker sheet + its map canvas — taller than the branch map since dropping a pin
+   is the primary interaction here (brief: ≈ min(52vh,360px) for a bottom sheet). */
+.map-sheet .map-canvas{height:min(52vh,360px);margin-bottom:12px}
+.map-preview{font-size:12.5px;line-height:1.45;color:var(--ink-2);text-align:center;margin:0 2px 4px;min-height:18px}
+.map-sheet .sheet-actions .tocart .ic{width:18px;height:18px;color:var(--y-ink);fill:none;stroke:currentColor}
+/* centre pin the engine injects (.mb-map-pin) — scoop-yellow teardrop */
+.mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
+.mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--yellow);border:2px solid var(--y-ink)}
+.mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--y-ink)}
+/* clear-saved-data row — neutral (not WhatsApp green), warms on press */
+.cleardata .ic:first-child{color:var(--gray)}
+.cleardata:active .ic:first-child{color:var(--yellow)}
+.device-data-hint{margin:8px 4px 0;font-size:11px;line-height:1.5;color:var(--gray);text-align:center}

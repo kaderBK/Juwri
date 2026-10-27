@@ -1,0 +1,124 @@
+{
+  "version": 2,
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#7c5cff"
+        },
+        "colors.background": {
+          "default": "#0e1014"
+        },
+        "colors.surface": {
+          "default": "#faf7f1"
+        },
+        "colors.text": {
+          "default": "#211f26"
+        },
+        "colors.accent": {
+          "default": "#7c5cff"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Colors",
+      "fields": [
+        {
+          "id": "colors.paper",
+          "type": "color",
+          "label": "Page background",
+          "default": "#faf8f4"
+        }
+      ]
+    },
+    {
+      "group": "Layout",
+      "fields": [
+        {
+          "id": "toggles.cover_page",
+          "type": "toggle",
+          "label": "Show cover page",
+          "default": true
+        },
+        {
+          "id": "toggles.show_prices",
+          "type": "toggle",
+          "label": "Show prices",
+          "default": true
+        },
+        {
+          "id": "toggles.show_thumbnails",
+          "type": "toggle",
+          "label": "Show item images",
+          "default": true
+        }
+      ]
+    },
+    {
+      "group": "Story entry point",
+      "fields": [
+        {
+          "id": "stories.entry",
+          "type": "select",
+          "label": "Stories entry style",
+          "default": "inherit",
+          "options": [
+            "inherit",
+            "none",
+            "ribbon",
+            "orb",
+            "toolbar",
+            "capsule",
+            "tassel",
+            "seal",
+            "dogear",
+            "filmstrip",
+            "medallion",
+            "sheet"
+          ],
+          "option_labels": {
+            "inherit": "Inherit platform default",
+            "none": "No entry point",
+            "ribbon": "Gilded bookmark ribbon",
+            "orb": "Glass story orb",
+            "toolbar": "Toolbar story button",
+            "capsule": "Title capsule",
+            "tassel": "Leather page tassel",
+            "seal": "Wax seal",
+            "dogear": "Dog-ear page curl",
+            "filmstrip": "Filmstrip tray",
+            "medallion": "Spine medallion",
+            "sheet": "Bottom-sheet peek"
+          },
+          "option_previews": {
+            "inherit": "global/stories-entries/previews/inherit.svg",
+            "none": "global/stories-entries/previews/none.svg",
+            "ribbon": "global/stories-entries/previews/ribbon.svg",
+            "orb": "global/stories-entries/previews/orb.svg",
+            "toolbar": "global/stories-entries/previews/toolbar.svg",
+            "capsule": "global/stories-entries/previews/capsule.svg",
+            "tassel": "global/stories-entries/previews/tassel.svg",
+            "seal": "global/stories-entries/previews/seal.svg",
+            "dogear": "global/stories-entries/previews/dogear.svg",
+            "filmstrip": "global/stories-entries/previews/filmstrip.svg",
+            "medallion": "global/stories-entries/previews/medallion.svg",
+            "sheet": "global/stories-entries/previews/sheet.svg"
+          }
+        }
+      ]
+    },
+    {
+      "include": "splash"
+    },
+    {
+      "include": "share"
+    }
+  ]
+}

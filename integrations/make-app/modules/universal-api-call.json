@@ -1,0 +1,44 @@
+{
+  "name": "makeApiCall",
+  "label": "Make an API Call",
+  "description": "Performs an arbitrary authenticated call to the juwri API (advanced).",
+  "type": "universal",
+  "subtype": "regular",
+  "connection": "juwri",
+  "help": "For endpoints without a dedicated module. The path is appended to /api/v1. Review-mandatory module.",
+  "parameters": [
+    {
+      "name": "url",
+      "type": "text",
+      "label": "URL path",
+      "required": true,
+      "default": "/stores",
+      "help": "Path after /api/v1, e.g. /stores or /stores/12/menu."
+    },
+    {
+      "name": "method",
+      "type": "select",
+      "label": "Method",
+      "default": "GET",
+      "options": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+    },
+    { "name": "qs", "type": "array", "label": "Query string", "spec": [
+      { "name": "key", "type": "text", "label": "Key" },
+      { "name": "value", "type": "text", "label": "Value" }
+    ] },
+    { "name": "headers", "type": "array", "label": "Headers", "spec": [
+      { "name": "key", "type": "text", "label": "Key" },
+      { "name": "value", "type": "text", "label": "Value" }
+    ] },
+    { "name": "body", "type": "any", "label": "Body" }
+  ],
+  "communication": {
+    "url": "{{baseUrl}}/api/v1{{parameters.url}}",
+    "method": "{{parameters.method}}",
+    "qs": "{{toCollection(parameters.qs; 'key'; 'value')}}",
+    "headers": "{{toCollection(parameters.headers; 'key'; 'value')}}",
+    "body": "{{parameters.body}}",
+    "response": { "output": "{{body}}" }
+  },
+  "interface": []
+}

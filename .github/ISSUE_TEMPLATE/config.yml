@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://juwri.com/security
+    about: Never open a public issue for a vulnerability. Read SECURITY.md in this repository, use private vulnerability reporting, or email security@juwri.com.

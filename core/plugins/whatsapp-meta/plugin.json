@@ -1,0 +1,14 @@
+{
+    "id": "whatsapp-meta",
+    "name": "WhatsApp via Meta Cloud API",
+    "description": "Official WhatsApp Business Cloud API: templates, interactive buttons/lists, catalog and Flow ordering, delivery/read receipts, and inbound webhooks. Supports platform keys or per-restaurant BYOK (Embedded Signup).",
+    "image": "",
+    "version": "1.0",
+    "min_app_version": "1.0",
+    "url": "",
+    "author": "juwri",
+    "author_url": "",
+    "settings_route": "admin.whatsapp.settings",
+    "whatsapp_provider": "meta",
+    "whatsapp_driver": "Juwri\\Modules\\Messaging\\Services\\WhatsApp\\Drivers\\MetaProvider"
+}

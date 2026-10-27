@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) JUWRI LTD
+# P6-167: templated queue worker, the systemd alternative to deploy/supervisor/juwri-worker.conf.
+# Pick supervisor OR systemd, never both. Instances: juwri-queue@default and juwri-queue@heavy (the heavy one gets
+# its connection, queue and 1900 s stop timeout from juwri-queue@heavy.service.d/). Install with install.sh, which
+# fills in ACCOUNT, the install root and the PHP binary.
+#
+# Do NOT add --stop-when-empty: its absence is how juwri knows a daemon is running, so the scheduler's cron-drain
+# fallback switches itself off (no double consumer).
+#
+# Stop = SIGTERM: the worker finishes the job it is on and exits (TimeoutStopSec is the longest job it may finish;
+# systemd only kills after that). Reload = `queue:restart`: every worker leaves after its current job and systemd
+# starts it again with the new code. That is what you run after a deploy: `systemctl reload 'juwri-queue@*'`
+# (or `php artisan queue:restart`; same effect, Restart=always brings the workers back).
+[Unit]
+Description=juwri queue worker (%i)
+After=network.target mysqld.service mariadb.service mysql.service redis.service
+StartLimitIntervalSec=300
+StartLimitBurst=20
+
+[Service]
+Type=simple
+User=ACCOUNT
+Group=ACCOUNT
+WorkingDirectory=JUWRI_CORE
+Environment=JUWRI_QUEUE_ARGS=--queue=%i
+ExecStart=PHP_BIN artisan queue:work $JUWRI_QUEUE_ARGS --sleep=1 --tries=3 --max-time=3600
+ExecReload=PHP_BIN artisan queue:restart
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=300
+Restart=always
+RestartSec=3
+SyslogIdentifier=juwri-queue-%i
+
+# Hardening. ProtectSystem=full makes /usr, /boot and /etc read-only (the app writes only under its own tree and /tmp);
+# "strict" would need every writable path listed and breaks cPanel's layouts, so it is not used.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

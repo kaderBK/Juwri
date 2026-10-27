@@ -1,0 +1,31 @@
+{
+    "name": "Cafe Pastel",
+    "aspects": [
+        "a4",
+        "letter",
+        "square"
+    ],
+    "colors": {
+        "accent": "#d96f4e",
+        "bg": "#fdf6f0",
+        "text": "#4a3f38"
+    },
+    "fonts": [
+        {
+            "family": "rounded-stack",
+            "stack": "'Avenir Next Rounded', 'Trebuchet MS', 'Segoe UI', 'Geeza Pro', sans-serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 26,
+        "columns": 2,
+        "desc_max_chars": 85
+    },
+    "art_brief": "soft watercolor pastel washes with tiny coffee and pastry illustrations in the corners",
+    "rtl": true,
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ]
+}

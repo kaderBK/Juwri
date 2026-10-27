@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 72" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="st" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#2a3040"/><stop offset=".55" stop-color="#1f2430"/><stop offset="1" stop-color="#171b25"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="72" rx="6" fill="url(#st)"/>
+  <rect x="17" y="26" width="31" height="32" rx="2" fill="#efe8da"/>
+  <rect x="48" y="26" width="31" height="32" rx="2" fill="#f6f1e7"/>
+  <rect x="46.5" y="26" width="3" height="32" fill="#10131a" opacity=".22"/>
+  <rect x="22" y="32" width="21" height="2.5" rx="1.25" fill="#b9a67c"/>
+  <rect x="22" y="38" width="21" height="2" rx="1" fill="#d9cfba"/>
+  <rect x="22" y="43" width="16" height="2" rx="1" fill="#d9cfba"/>
+  <rect x="53" y="32" width="21" height="2.5" rx="1.25" fill="#b9a67c"/>
+  <rect x="53" y="38" width="21" height="2" rx="1" fill="#d9cfba"/>
+  <rect x="53" y="43" width="16" height="2" rx="1" fill="#d9cfba"/>
+  <circle cx="16" cy="15" r="12" fill="#8b5cf6" opacity=".22"/>
+  <circle cx="16" cy="15" r="8" fill="none" stroke="#d4af37" stroke-width="2"/>
+  <path d="M8.6 12.4A8 8 0 0 1 18.5 7.4" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="16" cy="15" r="6" fill="#2a3040" stroke="#ffffff" stroke-opacity=".18"/>
+  <circle cx="23.5" cy="8" r="3" fill="#d4af37" stroke="#1f2430" stroke-width="1.5"/>
+</svg>

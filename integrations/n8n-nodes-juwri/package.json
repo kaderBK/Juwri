@@ -1,0 +1,60 @@
+{
+  "name": "n8n-nodes-juwri",
+  "version": "0.1.0",
+  "description": "n8n community node for juwri: manage orders, menu items and customers, and trigger workflows from restaurant webhook events.",
+  "keywords": [
+    "n8n-community-node-package",
+    "juwri",
+    "restaurant",
+    "ordering",
+    "webhooks"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/juwri/n8n-nodes-juwri",
+  "author": {
+    "name": "juwri",
+    "email": "developers@juwri.example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juwri/n8n-nodes-juwri.git"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/JuwriApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Juwri/Juwri.node.js",
+      "dist/nodes/JuwriTrigger/JuwriTrigger.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-n8n-nodes-base": "^1.16.7",
+    "n8n-workflow": "^1.82.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.9"
+  }
+}

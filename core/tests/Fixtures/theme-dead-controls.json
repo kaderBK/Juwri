@@ -1,0 +1,38 @@
+{
+    "_comment": "Customizer v2 (WI-C0-6): controls a theme's schema offers that no blade reads yet. ThemeSchemaLintTest fails if a NEW one appears, and fails again if an entry here becomes read \u2014 so this file only ever shrinks. It is the debt list WI-T1..T5 work through.",
+    "themes": {
+        "crumb": [
+            "texts.search_placeholder"
+        ],
+        "dough": [
+            "texts.search_placeholder"
+        ],
+        "lime": [
+            "texts.search_placeholder"
+        ],
+        "orbit": [
+            "texts.search_placeholder"
+        ],
+        "pageview": [
+            "colors.paper",
+            "toggles.cover_page",
+            "toggles.show_prices",
+            "toggles.show_thumbnails"
+        ],
+        "picnic": [
+            "texts.search_placeholder"
+        ],
+        "plate": [
+            "texts.search_placeholder"
+        ],
+        "scoop": [
+            "texts.search_placeholder"
+        ],
+        "soiree": [
+            "texts.search_placeholder"
+        ],
+        "velora": [
+            "texts.search_placeholder"
+        ]
+    }
+}

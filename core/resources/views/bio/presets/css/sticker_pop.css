@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--sticker_pop .bio-name{color:#fff8ec;text-shadow:0 2.5px 0 #3b1f0e}
+.bio--sticker_pop .bio-avatar{border:4px solid #3b1f0e;border-radius:38px;transform:rotate(-4deg);box-shadow:0 8px 0 rgba(59,31,14,.25)}
+.bio--sticker_pop .bio-link:hover{transform:translateY(-3px);box-shadow:0 9px 0 rgba(59,31,14,.28)}
+.bio--sticker_pop .bio-link:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(59,31,14,.28)}
+.bio--sticker_pop .bio-socials a{border:2.5px solid #3b1f0e;box-shadow:0 4px 0 rgba(59,31,14,.28)}

@@ -1,0 +1,30 @@
+{
+    "name": "Fine Dining Ornate",
+    "aspects": [
+        "a4",
+        "letter"
+    ],
+    "colors": {
+        "accent": "#b08d3e",
+        "bg": "#f8f5ee",
+        "text": "#26221c"
+    },
+    "fonts": [
+        {
+            "family": "serif-stack",
+            "stack": "Didot, 'Playfair Display', Georgia, 'Amiri', 'Geeza Pro', serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 22,
+        "columns": 2,
+        "desc_max_chars": 100
+    },
+    "art_brief": "ornate gold filigree corner flourishes and fine art-deco frame lines on ivory paper",
+    "rtl": true,
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ]
+}

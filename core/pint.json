@@ -1,0 +1,10 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "blank_line_after_opening_tag": false,
+        "fully_qualified_strict_types": {
+            "import_symbols": true,
+            "phpdoc_tags": []
+        }
+    }
+}

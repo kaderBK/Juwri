@@ -1,0 +1,43 @@
+{
+    "label": "Lounge",
+    "categories": [
+        {
+            "name": "Signature Mocktails",
+            "name_ar": "موكتيلات مميزة",
+            "items": [
+                {"name": "Virgin Mojito", "name_ar": "موهيتو عذراء", "description": "Lime, mint and soda.", "description_ar": "ليمون ونعناع وصودا.", "price": 6.00, "vegan": true, "popular": true},
+                {"name": "Berry Spritz", "name_ar": "بيري سبريتز", "description": "Mixed berries and sparkling water.", "description_ar": "توت مشكل وماء فوار.", "price": 6.50, "vegan": true},
+                {"name": "Passion Sunrise", "name_ar": "شروق الباشن", "description": "Passion fruit and orange.", "description_ar": "فاكهة العاطفة والبرتقال.", "price": 6.50, "vegan": true},
+                {"name": "Cucumber Cooler", "name_ar": "منعش الخيار", "description": "Cucumber, lime and elderflower.", "description_ar": "خيار وليمون وزهر البلسان.", "price": 6.00, "vegan": true}
+            ]
+        },
+        {
+            "name": "Fresh Juices",
+            "name_ar": "عصائر طازجة",
+            "items": [
+                {"name": "Orange Juice", "name_ar": "عصير برتقال", "description": "Freshly squeezed.", "description_ar": "طازج معصور.", "price": 4.50, "vegan": true},
+                {"name": "Green Detox", "name_ar": "ديتوكس أخضر", "description": "Apple, celery, cucumber, mint.", "description_ar": "تفاح وكرفس وخيار ونعناع.", "price": 5.50, "vegan": true},
+                {"name": "Watermelon", "name_ar": "بطيخ", "description": "Cool and hydrating.", "description_ar": "منعش ومرطب.", "price": 4.50, "vegan": true}
+            ]
+        },
+        {
+            "name": "Small Plates",
+            "name_ar": "أطباق صغيرة",
+            "items": [
+                {"name": "Hummus & Pita", "name_ar": "حمص وخبز", "description": "Creamy hummus, warm pita.", "description_ar": "حمص كريمي وخبز دافئ.", "price": 6.00, "vegan": true, "popular": true},
+                {"name": "Halloumi Sticks", "name_ar": "أصابع الحلوم", "description": "Grilled and golden.", "description_ar": "مشوية وذهبية.", "price": 7.00},
+                {"name": "Chicken Skewers", "name_ar": "أسياخ الدجاج", "description": "Marinated and char-grilled.", "description_ar": "متبلة ومشوية على الفحم.", "price": 8.50},
+                {"name": "Mixed Olives", "name_ar": "زيتون مشكل", "description": "Marinated with herbs.", "description_ar": "متبل بالأعشاب.", "price": 4.00, "vegan": true}
+            ]
+        },
+        {
+            "name": "Sweet Bites",
+            "name_ar": "حلويات صغيرة",
+            "items": [
+                {"name": "Chocolate Fondant", "name_ar": "فوندان الشوكولاتة", "description": "Warm with a molten center.", "description_ar": "دافئ بقلب سائل.", "price": 6.50, "popular": true},
+                {"name": "Baklava Trio", "name_ar": "بقلاوة", "description": "Three pieces with pistachio.", "description_ar": "ثلاث قطع مع الفستق.", "price": 5.50},
+                {"name": "Fruit Plate", "name_ar": "طبق فواكه", "description": "Seasonal fresh fruit.", "description_ar": "فواكه موسمية طازجة.", "price": 5.00, "vegan": true}
+            ]
+        }
+    ]
+}

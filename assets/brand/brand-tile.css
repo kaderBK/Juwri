@@ -1,0 +1,77 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ============================================================================
+ * Brand tile — the animated gradient frame around the platform logo.
+ *
+ * Same treatment as the landing-page pricing cards (.pricing-card-bg): a
+ * gradient artwork as the outer surface, slowly panning, with the logo sitting
+ * on a solid inner tile.
+ *
+ * Shared by every shell (superadmin, owner, reseller, public site, auth), so
+ * the effect is defined once here and the artwork is chosen server-side in
+ * Settings → Logo & Favicon → Logo background effect, which sets
+ * --brand-logo-bg (see partials/brand-tile.blade.php).
+ *
+ * Usage:  <a class="brand-tile"><img src="…"></a>
+ *   .brand-tile--dark  → inner tile for dark surfaces (footers, hero panels)
+ *   .brand-tile--sm    → tighter frame for small marks (nav bars)
+ * When the effect is switched off the server omits --brand-logo-bg and
+ * .brand-tile collapses to a plain, unstyled wrapper.
+ * ========================================================================= */
+
+.brand-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 16px;
+  background-image: var(--brand-logo-bg, none);
+  background-size: cover;
+  background-position: 0 0;
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .12);
+  /* Speed comes from Settings → Logo & Favicon (--brand-logo-speed); 0s = static. */
+  animation: brand-bganim var(--brand-logo-speed, 20s) linear infinite;
+}
+
+/* Only the tile's own decoration is set here. Sizing is deliberately left to
+   whatever already sizes the logo in each shell (.navbar-brand img,
+   .site-nav__logo, the sidebar rail rules) — declaring width/height here would
+   out-specify those and blow the logo up to its natural size. */
+.brand-tile > img {
+  display: block;
+  border-radius: 12px;
+  background: var(--brand-tile-inner, #fff);
+  padding: 2px;
+  max-width: 100%;
+}
+
+.brand-tile--sm { padding: 3px; border-radius: 12px; }
+.brand-tile--sm > img { border-radius: 9px; }
+
+/* Dark surfaces (site footer, auth hero) — a white inner tile would punch a
+   bright hole in the panel. */
+.brand-tile--dark { --brand-tile-inner: rgba(255, 255, 255, .08); }
+
+/* Effect off: the server stamps data-brand-tile="off" on <html>, so the frame
+   collapses to a plain wrapper rather than leaving an empty bevel. */
+[data-brand-tile="off"] .brand-tile {
+  padding: 0;
+  border-radius: 0;
+  background-image: none;
+  box-shadow: none;
+  animation: none;
+}
+[data-brand-tile="off"] .brand-tile > img {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+}
+
+@keyframes brand-bganim {
+  50% { background-position: 100% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-tile { animation: none; }
+}

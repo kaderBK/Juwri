@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) JUWRI LTD
+# P6-167: one scheduler tick (the systemd form of the crontab line). Started every minute by juwri-scheduler.timer.
+# Use this OR the cron line from HOSTING.md section 3 step 4, not both.
+[Unit]
+Description=juwri scheduler tick (schedule:run)
+After=network.target mysqld.service mariadb.service mysql.service
+
+[Service]
+Type=oneshot
+User=ACCOUNT
+Group=ACCOUNT
+WorkingDirectory=JUWRI_CORE
+ExecStart=PHP_BIN artisan schedule:run
+TimeoutStartSec=300
+SyslogIdentifier=juwri-scheduler
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+UMask=0027

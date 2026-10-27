@@ -1,0 +1,26 @@
+{% comment %}
+  One catalog item. data-mb-open (product deep-link) + data-mb-add (cart) are
+  the commerce runtime's binding contract — carry them on every card, food or
+  not. The add button's label comes from the vocab add-to-cart word, so it
+  reads "Add to cart" / "Book" / "Add to order" for the right vertical. vocab
+  must be passed in explicitly by the caller (render is scope-isolated).
+{% endcomment %}
+<article class="st-card{% if item.is_sold_out %} is-out{% endif %}"
+         data-mb-item="{{ item.id }}"
+         data-mb-open="{{ item.id }}"
+         data-mb-name="{{ item.name | escape }}"
+         data-mb-price="{{ item.price }}">
+  {% if item.image %}<img src="{{ item.image | media_url: 'menu' }}" alt="{{ item.name | escape }}" loading="lazy">{% endif %}
+  <h3>{{ item.name | escape }}</h3>
+  {% if item.description %}<p>{{ item.description | escape }}</p>{% endif %}
+  <footer>
+    <b class="st-price" data-mb-money="{{ item.price }}">{{ item.price | money }}</b>
+    {% if can_order %}
+      {% if item.is_sold_out %}
+        <span class="st-soldout">{{ 'Sold out' | t }}</span>
+      {% else %}
+        <button type="button" class="st-add" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart }} — {{ item.name | escape }}">{{ vocab.add_to_cart }}</button>
+      {% endif %}
+    {% endif %}
+  </footer>
+</article>

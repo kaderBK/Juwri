@@ -1,0 +1,2063 @@
+{
+ "store": {
+  "public_id": "st_fresh_mart",
+  "slug": "fresh-mart-demo",
+  "name": "فريش مارت",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "فريش مارت"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "فريش مارت"
+  },
+  "tagline": "بقالتك تصلك خلال 25 دقيقة",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/fresh-mart-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/fresh-mart-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "grocery",
+  "status": {
+   "open": true,
+   "label": "مفتوح · يغلق 12 ص",
+   "next_change_at": "2026-10-03T00:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0103",
+   "whatsapp": "+966 55 010 0103",
+   "address": "العليا، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/fresh-mart"
+   }
+  ],
+  "rating": {
+   "avg": 4.6,
+   "count": 2310
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/fresh-mart-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/fresh-mart-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "شركة فريش مارت للأسواق",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-3303",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-3303",
+    "label": "الرقم الضريبي"
+   },
+   "address": "العليا، الرياض 12214"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "الفرع الرئيسي",
+   "address": "العليا، الرياض"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "pickup",
+    "label": "استلام الآن",
+    "needs_address": false,
+    "needs_slot": false
+   }
+  ],
+  "selected_order_type": "pickup",
+  "schedule_ahead": false,
+  "refunds": {
+   "weighed_difference": true,
+   "deposits": false,
+   "returns": false
+  },
+  "kiosk": {
+   "on": true,
+   "idle_seconds": 60,
+   "show_identity": false,
+   "order_types": [
+    "pickup"
+   ],
+   "print": {
+    "auto": true,
+    "width": 48
+   }
+  }
+ },
+ "theme": {
+  "slug": "basket",
+  "preset": "fresh",
+  "settings": {
+   "colors.primary": "#0B7A3B",
+   "colors.background": "#F6F7F4",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#161A14",
+   "colors.accent": "#FFC83D",
+   "layout.radius": "soft",
+   "layout.density": "compact",
+   "fonts.pair": "instrument",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#45C97A",
+   "colors_dark.background": "#0E1210",
+   "colors_dark.surface": "#171C19",
+   "colors_dark.text": "#F1F5F2",
+   "colors_dark.accent": "#FFC83D",
+   "layout.card": "grid",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": true,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "search",
+   "category_nav",
+   "offers",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "hero_title": "عروض الأسبوع",
+   "featured_title": "عروض الأسبوع",
+   "search_placeholder": "ابحث بين 107 منتجاً"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "fruits-veg",
+    "name": "الفواكه والخضار",
+    "item_ids": [
+     "bananas",
+     "tomatoes-on-the-vine",
+     "avocado-hass-ready-to-eat",
+     "strawberries",
+     "raspberries",
+     "cucumbers",
+     "red-apples",
+     "oranges",
+     "mango",
+     "khalas-dates",
+     "lemons",
+     "onions"
+    ],
+    "count": 15,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الفواكه والخضار"
+    }
+   },
+   {
+    "id": "dairy-eggs",
+    "name": "الألبان والبيض",
+    "item_ids": [
+     "full-fat-milk",
+     "low-fat-milk",
+     "greek-yoghurt",
+     "labneh",
+     "cheddar-slices",
+     "eggs"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الألبان والبيض"
+    }
+   },
+   {
+    "id": "bakery",
+    "name": "المخبوزات",
+    "item_ids": [
+     "sourdough-loaf",
+     "arabic-flatbread",
+     "wholemeal-toast",
+     "butter-croissants",
+     "wholemeal-pita",
+     "zaatar-manakish"
+    ],
+    "count": 10,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "المخبوزات"
+    }
+   },
+   {
+    "id": "meat-fish",
+    "name": "اللحوم والأسماك",
+    "item_ids": [
+     "chicken-breast-fillet",
+     "whole-chicken",
+     "lamb-chops",
+     "beef-ribeye",
+     "peeled-shrimp",
+     "marinated-chicken-shawarma"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "اللحوم والأسماك"
+    }
+   },
+   {
+    "id": "drinks",
+    "name": "المشروبات",
+    "item_ids": [
+     "mineral-water",
+     "sparkling-water",
+     "orange-juice",
+     "arabic-coffee-with-cardamom",
+     "karak-tea-mix",
+     "pomegranate-juice"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "المشروبات"
+    }
+   },
+   {
+    "id": "snacks",
+    "name": "الوجبات الخفيفة",
+    "item_ids": [
+     "potato-chips",
+     "dark-chocolate-70",
+     "milk-chocolate",
+     "mixed-nuts",
+     "granola-bars",
+     "fruit-gummies"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الوجبات الخفيفة"
+    }
+   },
+   {
+    "id": "pantry",
+    "name": "المواد الغذائية",
+    "item_ids": [
+     "basmati-rice",
+     "spaghetti",
+     "extra-virgin-olive-oil",
+     "sunflower-oil",
+     "white-sugar",
+     "sidr-honey"
+    ],
+    "count": 16,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "المواد الغذائية"
+    }
+   },
+   {
+    "id": "household",
+    "name": "المنزل",
+    "item_ids": [
+     "dishwashing-liquid",
+     "laundry-detergent",
+     "fabric-softener",
+     "paper-towels",
+     "toilet-tissue",
+     "aluminium-foil"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "المنزل"
+    }
+   },
+   {
+    "id": "baby",
+    "name": "الطفل",
+    "item_ids": [
+     "nappies-size-4",
+     "baby-wipes",
+     "infant-formula-stage-1",
+     "baby-cereal",
+     "baby-shampoo",
+     "nappy-rash-cream"
+    ],
+    "count": 8,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الطفل"
+    }
+   }
+  ],
+  "items": {
+   "bananas": {
+    "id": "bananas",
+    "name": "موز",
+    "url": "/fresh-mart-demo/item/bananas",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "موز"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حلو وناضج يُباع بالوزن.",
+    "unit": {
+     "label": "1 كجم · 6.50 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "cart_qty": 2,
+    "price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "6.50 ر.س"
+    }
+   },
+   "tomatoes-on-the-vine": {
+    "id": "tomatoes-on-the-vine",
+    "name": "طماطم عنقودية",
+    "url": "/fresh-mart-demo/item/tomatoes-on-the-vine",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "طماطم عنقودية"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "طماطم عنقودية عصيرية بنكهة غنية.",
+    "unit": {
+     "label": "1 كجم · 11.80 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "cart_qty": 3,
+    "price": {
+     "minor": 1180,
+     "currency": "SAR",
+     "formatted": "11.80 ر.س"
+    }
+   },
+   "avocado-hass-ready-to-eat": {
+    "id": "avocado-hass-ready-to-eat",
+    "name": "أفوكادو هاس جاهز للأكل",
+    "url": "/fresh-mart-demo/item/avocado-hass-ready-to-eat",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أفوكادو هاس جاهز للأكل"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −20%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لب كريمي ناضج وجاهز اليوم.",
+    "compare_at": {
+     "minor": 1250,
+     "currency": "SAR",
+     "formatted": "12.50 ر.س"
+    },
+    "unit": {
+     "label": "2 قطع"
+    },
+    "cart_qty": 1,
+    "price": {
+     "minor": 995,
+     "currency": "SAR",
+     "formatted": "9.95 ر.س"
+    }
+   },
+   "strawberries": {
+    "id": "strawberries",
+    "name": "فراولة",
+    "url": "/fresh-mart-demo/item/strawberries",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "فراولة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حبات حمراء حلوة مقطوفة يدوياً.",
+    "unit": {
+     "label": "250 جم"
+    },
+    "cart_qty": 1,
+    "price": {
+     "minor": 1495,
+     "currency": "SAR",
+     "formatted": "14.95 ر.س"
+    }
+   },
+   "raspberries": {
+    "id": "raspberries",
+    "name": "توت العليق",
+    "url": "/fresh-mart-demo/item/raspberries",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "توت العليق"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حامض ومنعش ومناسب مع الزبادي.",
+    "unit": {
+     "label": "125 جم"
+    },
+    "price": {
+     "minor": 1250,
+     "currency": "SAR",
+     "formatted": "12.50 ر.س"
+    }
+   },
+   "cucumbers": {
+    "id": "cucumbers",
+    "name": "خيار",
+    "url": "/fresh-mart-demo/item/cucumbers",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "خيار"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مقرمش ومنعش يُباع بالوزن.",
+    "unit": {
+     "label": "1 كجم · 4.90 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 490,
+     "currency": "SAR",
+     "formatted": "4.90 ر.س"
+    }
+   },
+   "red-apples": {
+    "id": "red-apples",
+    "name": "تفاح أحمر",
+    "url": "/fresh-mart-demo/item/red-apples",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تفاح أحمر"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مقرمش وحلو يُباع بالوزن.",
+    "unit": {
+     "label": "1 كجم · 9.50 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 950,
+     "currency": "SAR",
+     "formatted": "9.50 ر.س"
+    }
+   },
+   "oranges": {
+    "id": "oranges",
+    "name": "برتقال",
+    "url": "/fresh-mart-demo/item/oranges",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "برتقال"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −22%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "برتقال عصيري يُباع بالوزن.",
+    "compare_at": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    },
+    "unit": {
+     "label": "1 كجم · 7.00 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "7.00 ر.س"
+    }
+   },
+   "mango": {
+    "id": "mango",
+    "name": "مانجو",
+    "url": "/fresh-mart-demo/item/mango",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مانجو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حلو برائحة زكية يُباع بالوزن.",
+    "unit": {
+     "label": "1 كجم · 18.00 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "khalas-dates": {
+    "id": "khalas-dates",
+    "name": "تمر خلاص",
+    "url": "/fresh-mart-demo/item/khalas-dates",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تمر خلاص"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تمر طري بطعم الكراميل من الأحساء.",
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "lemons": {
+    "id": "lemons",
+    "name": "ليمون",
+    "url": "/fresh-mart-demo/item/lemons",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ليمون"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "قشرة رقيقة وعصير وفير.",
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 550,
+     "currency": "SAR",
+     "formatted": "5.50 ر.س"
+    }
+   },
+   "onions": {
+    "id": "onions",
+    "name": "بصل",
+    "url": "/fresh-mart-demo/item/onions",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بصل"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "بصل أصفر للطبخ.",
+    "unit": {
+     "label": "2 كجم"
+    },
+    "price": {
+     "minor": 590,
+     "currency": "SAR",
+     "formatted": "5.90 ر.س"
+    }
+   },
+   "full-fat-milk": {
+    "id": "full-fat-milk",
+    "name": "حليب كامل الدسم",
+    "url": "/fresh-mart-demo/item/full-fat-milk",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حليب كامل الدسم"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حليب طازج مبستر ومتجانس.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "2 لتر"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "low-fat-milk": {
+    "id": "low-fat-milk",
+    "name": "حليب قليل الدسم",
+    "url": "/fresh-mart-demo/item/low-fat-milk",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حليب قليل الدسم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حليب خفيف بنسبة دسم 1٪.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "1 لتر"
+    },
+    "price": {
+     "minor": 850,
+     "currency": "SAR",
+     "formatted": "8.50 ر.س"
+    }
+   },
+   "greek-yoghurt": {
+    "id": "greek-yoghurt",
+    "name": "زبادي يوناني",
+    "url": "/fresh-mart-demo/item/greek-yoghurt",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "زبادي يوناني"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كثيف وكريمي وغني بالبروتين.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "450 جم"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "labneh": {
+    "id": "labneh",
+    "name": "لبنة",
+    "url": "/fresh-mart-demo/item/labneh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لبنة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "زبادي مصفّى سهل الدهن.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 1450,
+     "currency": "SAR",
+     "formatted": "14.50 ر.س"
+    }
+   },
+   "cheddar-slices": {
+    "id": "cheddar-slices",
+    "name": "شرائح جبنة شيدر",
+    "url": "/fresh-mart-demo/item/cheddar-slices",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شرائح جبنة شيدر"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −17%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عشر شرائح مغلفة بشكل فردي.",
+    "compare_at": {
+     "minor": 1450,
+     "currency": "SAR",
+     "formatted": "14.50 ر.س"
+    },
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "200 جم"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "eggs": {
+    "id": "eggs",
+    "name": "بيض",
+    "url": "/fresh-mart-demo/item/eggs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بيض"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "بيض أبيض كبير، طبق 30 حبة.",
+    "allergens": [
+     "البيض"
+    ],
+    "unit": {
+     "label": "30 قطع"
+    },
+    "price": {
+     "minor": 2900,
+     "currency": "SAR",
+     "formatted": "29.00 ر.س"
+    }
+   },
+   "sourdough-loaf": {
+    "id": "sourdough-loaf",
+    "name": "خبز العجين المخمّر",
+    "url": "/fresh-mart-demo/item/sourdough-loaf",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "خبز العجين المخمّر"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مخمّر ببطء بقشرة مقرمشة.",
+    "allergens": [
+     "الغلوتين"
+    ],
+    "unit": {
+     "label": "800 جم"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "arabic-flatbread": {
+    "id": "arabic-flatbread",
+    "name": "خبز عربي",
+    "url": "/fresh-mart-demo/item/arabic-flatbread",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "خبز عربي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "خبز أبيض طري، 7 أرغفة.",
+    "allergens": [
+     "الغلوتين"
+    ],
+    "unit": {
+     "label": "7 قطع"
+    },
+    "price": {
+     "minor": 350,
+     "currency": "SAR",
+     "formatted": "3.50 ر.س"
+    }
+   },
+   "wholemeal-toast": {
+    "id": "wholemeal-toast",
+    "name": "توست بر",
+    "url": "/fresh-mart-demo/item/wholemeal-toast",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "توست بر"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "شرائح، رغيف 600 جرام.",
+    "allergens": [
+     "الغلوتين"
+    ],
+    "unit": {
+     "label": "600 جم"
+    },
+    "price": {
+     "minor": 500,
+     "currency": "SAR",
+     "formatted": "5.00 ر.س"
+    }
+   },
+   "butter-croissants": {
+    "id": "butter-croissants",
+    "name": "كرواسون بالزبدة",
+    "url": "/fresh-mart-demo/item/butter-croissants",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كرواسون بالزبدة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أربع حبات كرواسون هشة.",
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "unit": {
+     "label": "4 قطع"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "wholemeal-pita": {
+    "id": "wholemeal-pita",
+    "name": "خبز بيتا بر",
+    "url": "/fresh-mart-demo/item/wholemeal-pita",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "خبز بيتا بر"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "ست أرغفة غنية بالألياف.",
+    "allergens": [
+     "الغلوتين"
+    ],
+    "unit": {
+     "label": "6 قطع"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "4.50 ر.س"
+    }
+   },
+   "zaatar-manakish": {
+    "id": "zaatar-manakish",
+    "name": "مناقيش زعتر",
+    "url": "/fresh-mart-demo/item/zaatar-manakish",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناقيش زعتر"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أربع أقراص مخبوزة بالزعتر.",
+    "allergens": [
+     "الغلوتين",
+     "السمسم"
+    ],
+    "unit": {
+     "label": "4 قطع"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "chicken-breast-fillet": {
+    "id": "chicken-breast-fillet",
+    "name": "صدر دجاج",
+    "url": "/fresh-mart-demo/item/chicken-breast-fillet",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "صدر دجاج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "بدون جلد وعظم، يُقطع عند الطلب.",
+    "unit": {
+     "label": "1 كجم · 28.00 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "28.00 ر.س"
+    }
+   },
+   "whole-chicken": {
+    "id": "whole-chicken",
+    "name": "دجاجة كاملة",
+    "url": "/fresh-mart-demo/item/whole-chicken",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "دجاجة كاملة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "دجاجة كاملة طازجة بوزن 1٫2 كجم تقريباً.",
+    "unit": {
+     "label": "1.2 كجم"
+    },
+    "price": {
+     "minor": 2500,
+     "currency": "SAR",
+     "formatted": "25.00 ر.س"
+    }
+   },
+   "lamb-chops": {
+    "id": "lamb-chops",
+    "name": "ريش غنم",
+    "url": "/fresh-mart-demo/item/lamb-chops",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ريش غنم"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −10%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مقطعة من القطعية وتُباع بالوزن.",
+    "compare_at": {
+     "minor": 9900,
+     "currency": "SAR",
+     "formatted": "99.00 ر.س"
+    },
+    "unit": {
+     "label": "1 كجم · 89.00 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "89.00 ر.س"
+    }
+   },
+   "beef-ribeye": {
+    "id": "beef-ribeye",
+    "name": "ريب آي بقري",
+    "url": "/fresh-mart-demo/item/beef-ribeye",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ريب آي بقري"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مرمّر جيداً بقطعة ستيك.",
+    "unit": {
+     "label": "1 كجم · 99.00 ر.س / كجم",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 9900,
+     "currency": "SAR",
+     "formatted": "99.00 ر.س"
+    }
+   },
+   "peeled-shrimp": {
+    "id": "peeled-shrimp",
+    "name": "روبيان مقشر",
+    "url": "/fresh-mart-demo/item/peeled-shrimp",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "روبيان مقشر"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "منظّف وجاهز للطبخ.",
+    "allergens": [
+     "القشريات"
+    ],
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "39.00 ر.س"
+    }
+   },
+   "marinated-chicken-shawarma": {
+    "id": "marinated-chicken-shawarma",
+    "name": "شاورما دجاج متبلة",
+    "url": "/fresh-mart-demo/item/marinated-chicken-shawarma",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شاورما دجاج متبلة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "متبلة بالثوم والليمون.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "21.00 ر.س"
+    }
+   },
+   "mineral-water": {
+    "id": "mineral-water",
+    "name": "مياه معدنية",
+    "url": "/fresh-mart-demo/item/mineral-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مياه معدنية"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "12 عبوة سعة 500 مل.",
+    "unit": {
+     "label": "12 قطع"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    }
+   },
+   "sparkling-water": {
+    "id": "sparkling-water",
+    "name": "مياه فوّارة",
+    "url": "/fresh-mart-demo/item/sparkling-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مياه فوّارة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "معدنية طبيعية، 1 لتر.",
+    "unit": {
+     "label": "1 لتر"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "4.50 ر.س"
+    }
+   },
+   "orange-juice": {
+    "id": "orange-juice",
+    "name": "عصير برتقال",
+    "url": "/fresh-mart-demo/item/orange-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عصير برتقال"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عصير 100٪ غير مركّز.",
+    "unit": {
+     "label": "1 لتر"
+    },
+    "price": {
+     "minor": 950,
+     "currency": "SAR",
+     "formatted": "9.50 ر.س"
+    }
+   },
+   "arabic-coffee-with-cardamom": {
+    "id": "arabic-coffee-with-cardamom",
+    "name": "قهوة عربية بالهيل",
+    "url": "/fresh-mart-demo/item/arabic-coffee-with-cardamom",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "قهوة عربية بالهيل"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تحميص خفيف مطحونة مع الهيل.",
+    "unit": {
+     "label": "250 جم"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "21.00 ر.س"
+    }
+   },
+   "karak-tea-mix": {
+    "id": "karak-tea-mix",
+    "name": "مزيج شاي كرك",
+    "url": "/fresh-mart-demo/item/karak-tea-mix",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مزيج شاي كرك"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "20 كيساً بالحليب والهيل.",
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "20 قطع"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "pomegranate-juice": {
+    "id": "pomegranate-juice",
+    "name": "عصير رمان",
+    "url": "/fresh-mart-demo/item/pomegranate-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عصير رمان"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "نفدت الكمية"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": false,
+    "short": "معصور على البارد، 750 مل.",
+    "unit": {
+     "label": "750 مل"
+    },
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "potato-chips": {
+    "id": "potato-chips",
+    "name": "رقائق البطاطس",
+    "url": "/fresh-mart-demo/item/potato-chips",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "رقائق البطاطس"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مملحة بخفة، كيس 150 جرام.",
+    "unit": {
+     "label": "150 جم"
+    },
+    "price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "6.50 ر.س"
+    }
+   },
+   "dark-chocolate-70": {
+    "id": "dark-chocolate-70",
+    "name": "شوكولاتة داكنة 70٪",
+    "url": "/fresh-mart-demo/item/dark-chocolate-70",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شوكولاتة داكنة 70٪"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لوح ناعم بنكهة كاكاو عميقة.",
+    "allergens": [
+     "الحليب ومشتقاته",
+     "الصويا"
+    ],
+    "unit": {
+     "label": "100 جم"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "milk-chocolate": {
+    "id": "milk-chocolate",
+    "name": "شوكولاتة بالحليب",
+    "url": "/fresh-mart-demo/item/milk-chocolate",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شوكولاتة بالحليب"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لوح كريمي للمشاركة.",
+    "allergens": [
+     "الحليب ومشتقاته",
+     "الصويا",
+     "المكسرات"
+    ],
+    "unit": {
+     "label": "100 جم"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    }
+   },
+   "mixed-nuts": {
+    "id": "mixed-nuts",
+    "name": "مكسرات مشكّلة",
+    "url": "/fresh-mart-demo/item/mixed-nuts",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مكسرات مشكّلة"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −13%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "محمّصة ومملحة بخفة.",
+    "compare_at": {
+     "minor": 4500,
+     "currency": "SAR",
+     "formatted": "45.00 ر.س"
+    },
+    "allergens": [
+     "المكسرات",
+     "الفول السوداني"
+    ],
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "39.00 ر.س"
+    }
+   },
+   "granola-bars": {
+    "id": "granola-bars",
+    "name": "ألواح الجرانولا",
+    "url": "/fresh-mart-demo/item/granola-bars",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ألواح الجرانولا"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "6 ألواح شوفان بالعسل.",
+    "allergens": [
+     "الغلوتين",
+     "المكسرات"
+    ],
+    "unit": {
+     "label": "6 قطع"
+    },
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "fruit-gummies": {
+    "id": "fruit-gummies",
+    "name": "حلوى الفاكهة المطاطية",
+    "url": "/fresh-mart-demo/item/fruit-gummies",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حلوى الفاكهة المطاطية"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حلوى مطاطية بنكهات الفاكهة، 140 جرام.",
+    "unit": {
+     "label": "140 جم"
+    },
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "7.00 ر.س"
+    }
+   },
+   "basmati-rice": {
+    "id": "basmati-rice",
+    "name": "أرز بسمتي",
+    "url": "/fresh-mart-demo/item/basmati-rice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أرز بسمتي"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "sale",
+      "label": "تخفيض −14%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أرز طويل الحبة معتّق.",
+    "compare_at": {
+     "minor": 4900,
+     "currency": "SAR",
+     "formatted": "49.00 ر.س"
+    },
+    "unit": {
+     "label": "5 كجم"
+    },
+    "price": {
+     "minor": 4200,
+     "currency": "SAR",
+     "formatted": "42.00 ر.س"
+    }
+   },
+   "spaghetti": {
+    "id": "spaghetti",
+    "name": "معكرونة سباغيتي",
+    "url": "/fresh-mart-demo/item/spaghetti",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "معكرونة سباغيتي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "معكرونة من القمح القاسي.",
+    "allergens": [
+     "الغلوتين"
+    ],
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "4.50 ر.س"
+    }
+   },
+   "extra-virgin-olive-oil": {
+    "id": "extra-virgin-olive-oil",
+    "name": "زيت زيتون بكر ممتاز",
+    "url": "/fresh-mart-demo/item/extra-virgin-olive-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "زيت زيتون بكر ممتاز"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "معصور على البارد من أول حصاد.",
+    "unit": {
+     "label": "750 مل"
+    },
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "38.00 ر.س"
+    }
+   },
+   "sunflower-oil": {
+    "id": "sunflower-oil",
+    "name": "زيت دوار الشمس",
+    "url": "/fresh-mart-demo/item/sunflower-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "زيت دوار الشمس"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "زيت خفيف للقلي.",
+    "unit": {
+     "label": "1.5 لتر"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "white-sugar": {
+    "id": "white-sugar",
+    "name": "سكر أبيض",
+    "url": "/fresh-mart-demo/item/white-sugar",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سكر أبيض"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "سكر ناعم محبّب.",
+    "unit": {
+     "label": "2 كجم"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    }
+   },
+   "sidr-honey": {
+    "id": "sidr-honey",
+    "name": "عسل السدر",
+    "url": "/fresh-mart-demo/item/sidr-honey",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عسل السدر"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عسل خام من مرتفعات المملكة.",
+    "unit": {
+     "label": "500 جم"
+    },
+    "price": {
+     "minor": 4500,
+     "currency": "SAR",
+     "formatted": "45.00 ر.س"
+    }
+   },
+   "dishwashing-liquid": {
+    "id": "dishwashing-liquid",
+    "name": "سائل غسل الصحون",
+    "url": "/fresh-mart-demo/item/dishwashing-liquid",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سائل غسل الصحون"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "يزيل الدهون برائحة الليمون.",
+    "unit": {
+     "label": "750 مل"
+    },
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    }
+   },
+   "laundry-detergent": {
+    "id": "laundry-detergent",
+    "name": "منظف غسيل",
+    "url": "/fresh-mart-demo/item/laundry-detergent",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "منظف غسيل"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "سائل مركّز، 3 لتر.",
+    "unit": {
+     "label": "3 لتر"
+    },
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "38.00 ر.س"
+    }
+   },
+   "fabric-softener": {
+    "id": "fabric-softener",
+    "name": "معطّر ملابس",
+    "url": "/fresh-mart-demo/item/fabric-softener",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "معطّر ملابس"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "برائحة العود تدوم طويلاً.",
+    "unit": {
+     "label": "2 لتر"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "paper-towels": {
+    "id": "paper-towels",
+    "name": "مناديل مطبخ",
+    "url": "/fresh-mart-demo/item/paper-towels",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناديل مطبخ"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "6 رولات ماصّة.",
+    "unit": {
+     "label": "6 قطع"
+    },
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   },
+   "toilet-tissue": {
+    "id": "toilet-tissue",
+    "name": "مناديل حمام",
+    "url": "/fresh-mart-demo/item/toilet-tissue",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناديل حمام"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −13%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "24 رولاً ناعماً بطبقتين.",
+    "compare_at": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "39.00 ر.س"
+    },
+    "unit": {
+     "label": "24 قطع"
+    },
+    "price": {
+     "minor": 3400,
+     "currency": "SAR",
+     "formatted": "34.00 ر.س"
+    }
+   },
+   "aluminium-foil": {
+    "id": "aluminium-foil",
+    "name": "ورق ألمنيوم",
+    "url": "/fresh-mart-demo/item/aluminium-foil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ورق ألمنيوم"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "رول 30 متراً بعرض 30 سم.",
+    "unit": {
+     "label": "30 م"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "nappies-size-4": {
+    "id": "nappies-size-4",
+    "name": "حفاضات مقاس 4",
+    "url": "/fresh-mart-demo/item/nappies-size-4",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حفاضات مقاس 4"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "ماصة للرطوبة، 44 حفاضة، 9–14 كجم.",
+    "unit": {
+     "label": "44 قطع"
+    },
+    "price": {
+     "minor": 7900,
+     "currency": "SAR",
+     "formatted": "79.00 ر.س"
+    }
+   },
+   "baby-wipes": {
+    "id": "baby-wipes",
+    "name": "مناديل الأطفال",
+    "url": "/fresh-mart-demo/item/baby-wipes",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناديل الأطفال"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "خالية من العطور، 80 منديلاً.",
+    "unit": {
+     "label": "80 قطع"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "infant-formula-stage-1": {
+    "id": "infant-formula-stage-1",
+    "name": "حليب أطفال المرحلة 1",
+    "url": "/fresh-mart-demo/item/infant-formula-stage-1",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حليب أطفال المرحلة 1"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "من الولادة حتى 6 أشهر، 400 جرام.",
+    "allergens": [
+     "الحليب ومشتقاته",
+     "الصويا"
+    ],
+    "unit": {
+     "label": "400 جم"
+    },
+    "price": {
+     "minor": 5400,
+     "currency": "SAR",
+     "formatted": "54.00 ر.س"
+    }
+   },
+   "baby-cereal": {
+    "id": "baby-cereal",
+    "name": "حبوب الأطفال",
+    "url": "/fresh-mart-demo/item/baby-cereal",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حبوب الأطفال"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حبوب أرز بالموز، 200 جرام.",
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "unit": {
+     "label": "200 جم"
+    },
+    "price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "17.00 ر.س"
+    }
+   },
+   "baby-shampoo": {
+    "id": "baby-shampoo",
+    "name": "شامبو الأطفال",
+    "url": "/fresh-mart-demo/item/baby-shampoo",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شامبو الأطفال"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "بدون دموع، 200 مل.",
+    "unit": {
+     "label": "200 مل"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "nappy-rash-cream": {
+    "id": "nappy-rash-cream",
+    "name": "كريم التهاب الحفاضات",
+    "url": "/fresh-mart-demo/item/nappy-rash-cream",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كريم التهاب الحفاضات"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كريم واقٍ بأكسيد الزنك، 100 جرام.",
+    "unit": {
+     "label": "100 جم"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   }
+  },
+  "total": 107,
+  "next_page_url": "/fresh-mart-demo?page=2"
+ },
+ "features": {
+  "offers": [
+   {
+    "id": "off_weekly",
+    "title": "عروض الأسبوع على الفواكه والخضار"
+   },
+   {
+    "id": "off_free",
+    "title": "توصيل مجاني للطلبات فوق 90 ر.س",
+    "code": "FRESH"
+   }
+  ],
+  "barcode_scan": true
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/fresh-mart-demo/cart",
+  "quote": "/fresh-mart-demo/quote",
+  "place": "/fresh-mart-demo/order",
+  "track": "/fresh-mart-demo/track",
+  "coupon": "/fresh-mart-demo/coupon",
+  "otp": "/fresh-mart-demo/otp",
+  "account": "/fresh-mart-demo/account",
+  "search": "/fresh-mart-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "cart",
+  "cart": {
+   "lines": [
+    {
+     "id": "ln_1",
+     "item_id": "bananas",
+     "name": "موز",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "موز"
+     },
+     "qty": 2,
+     "line_total": {
+      "minor": 1300,
+      "currency": "SAR",
+      "formatted": "13.00 ر.س"
+     },
+     "unit_label": "1 كغ · 6.50 ر.س / كغ"
+    },
+    {
+     "id": "ln_2",
+     "item_id": "tomatoes-on-the-vine",
+     "name": "طماطم عنقودية",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "طماطم عنقودية"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 590,
+      "currency": "SAR",
+      "formatted": "5.90 ر.س"
+     },
+     "unit_label": "500 غ · بالوزن",
+     "estimate": true,
+     "note": "تقديري: تدفع حسب الوزن الفعلي، بحد أقصى 6.49 ر.س"
+    },
+    {
+     "id": "ln_3",
+     "item_id": "strawberries",
+     "name": "فراولة",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "فراولة"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1495,
+      "currency": "SAR",
+      "formatted": "14.95 ر.س"
+     },
+     "unit_label": "250 غ"
+    },
+    {
+     "id": "ln_4",
+     "item_id": "full-fat-milk",
+     "name": "حليب كامل الدسم",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "حليب كامل الدسم"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1900,
+      "currency": "SAR",
+      "formatted": "19.00 ر.س"
+     },
+     "unit_label": "2 لتر"
+    },
+    {
+     "id": "ln_5",
+     "item_id": "sourdough-loaf",
+     "name": "خبز العجين المخمّر",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "خبز العجين المخمّر"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1400,
+      "currency": "SAR",
+      "formatted": "14.00 ر.س"
+     },
+     "unit_label": "800 غ"
+    }
+   ],
+   "rows": [
+    {
+     "key": "subtotal",
+     "label": "المنتجات (6)",
+     "amount": {
+      "minor": 6685,
+      "currency": "SAR",
+      "formatted": "66.85 ر.س"
+     },
+     "kind": "subtotal"
+    },
+    {
+     "key": "estimate_cap",
+     "label": "قد تضيف المنتجات الموزونة حتى",
+     "amount": {
+      "minor": 59,
+      "currency": "SAR",
+      "formatted": "0.59 ر.س"
+     },
+     "kind": "estimate_cap",
+     "muted": true,
+     "informational": true
+    }
+   ],
+   "total": {
+    "minor": 6685,
+    "currency": "SAR",
+    "formatted": "66.85 ر.س"
+   },
+   "total_label": "الإجمالي التقديري",
+   "tax_note": "الأسعار تشمل ضريبة القيمة المضافة 15% (8.72 ر.س). قد تغيّر المنتجات الموزونة الإجمالي بما يصل إلى 0.59 ر.س.",
+   "substitution_preference": "استبدله بمنتج مشابه (بنفس السعر أو أقل)",
+   "cta_label": "ادفع عند الكاشير · 66.85 ر.س"
+  }
+ }
+}

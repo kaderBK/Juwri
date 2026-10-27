@@ -1,0 +1,127 @@
+{%- comment -%}
+  Menu grid (library v1) — the food catalogue. Every category with items
+  becomes a [data-mb-cat] block (#mbs-cat-<id>, the category-nav target)
+  whose cards are direct children of one grid, so the runtime's search,
+  dietary filters, sort (data-mb-sort) and layout toggle
+  (data-mb-layout-toggle → .is-list on [data-mb-catalog]) work in place.
+  Card styles: photo-card, list-row, compact, magazine, text-only (list-row
+  without images). Add buttons only when the store takes orders
+  (flags.allow_order); sold-out items stay visible, labelled, not addable.
+  Emits {% commerce %} — the engine writes the runtime once per page, so
+  this is safe beside the header that also hosts it. Place with section id
+  "menu" so hero / tab-bar "jump to menu" links land here.
+{%- endcomment -%}
+{%- liquid
+  assign card = section.settings.card
+  assign show_image = true
+  if card == 'text-only'
+    assign show_image = false
+  endif
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = vocab.catalog
+  endif
+  assign cols_m = section.settings.columns_mobile | plus: 0 | at_least: 1 | at_most: 2
+  assign cols_d = section.settings.columns_desktop | plus: 0 | at_least: 1 | at_most: 4
+  if card == 'list-row' or card == 'text-only' or card == 'magazine'
+    assign cols_m = 1
+    if cols_d > 2
+      assign cols_d = 2
+    endif
+  endif
+  assign add_label = vocab.add_to_cart
+  assign first_done = false
+-%}
+<section class="mbs-menu-grid mbs-menu-grid--{{ card | escape }}" style="--mbs-cols-m: {{ cols_m }}; --mbs-cols-d: {{ cols_d }}" aria-labelledby="mbs-menu-{{ section.id | escape }}">
+  <div class="mbs-menu-grid__head">
+    <h2 class="mbs-menu-grid__title{% unless section.settings.show_heading %} mbs-menu-grid__sr{% endunless %}" id="mbs-menu-{{ section.id | escape }}">{{ heading | escape }}</h2>
+    {%- if section.settings.show_tools and menu.is_empty == false -%}
+    <div class="mbs-menu-grid__tools">
+      <label class="mbs-menu-grid__sort">
+        <span class="mbs-menu-grid__sr">{{ 'Sort' | t }}</span>
+        <select class="mbs-menu-grid__select" data-mb-sort>
+          <option value="featured">{{ 'Featured' | t }}</option>
+          <option value="price_asc">{{ 'Price: low to high' | t }}</option>
+          <option value="price_desc">{{ 'Price: high to low' | t }}</option>
+          <option value="rating">{{ 'Top rated' | t }}</option>
+        </select>
+      </label>
+      <button type="button" class="mbs-menu-grid__toggle" data-mb-layout-toggle aria-pressed="false" aria-label="{{ 'Toggle layout' | t }}">{%- render 'icon', name: 'menu', size: 20 -%}</button>
+    </div>
+    {%- endif -%}
+  </div>
+
+  {%- if menu.is_empty -%}
+  <p class="mbs-menu-grid__empty">{{ 'Nothing here yet — check back soon' | t }}</p>
+  {%- else -%}
+  <div class="mbs-menu-grid__catalog" data-mb-catalog>
+    {%- for category in menu.categories -%}
+      {%- assign n = category.items | size -%}
+      {%- if n > 0 -%}
+      <section class="mbs-menu-grid__cat" id="mbs-cat-{{ category.id }}" data-mb-cat aria-labelledby="mbs-cat-h-{{ category.id }}">
+        <h3 class="mbs-menu-grid__cat-title" id="mbs-cat-h-{{ category.id }}">
+          {%- assign cat_img = category.image_url | strip -%}
+          {%- if section.settings.show_category_images and cat_img != "" -%}
+            {%- render 'media', src: cat_img, alt: '', width: 96, height: 96, class: 'mbs-menu-grid__cat-img', priority: false, sizes: '40px' -%}
+          {%- endif -%}
+          <span>{{ category.name | escape }}</span>
+        </h3>
+        <div class="mbs-menu-grid__list">
+          {%- for item in category.items -%}
+            {%- liquid
+              assign eager = false
+              if section.settings.eager_first and first_done == false
+                assign eager = true
+              endif
+              assign first_done = true
+            -%}
+            {%- case card -%}
+              {%- when 'list-row', 'text-only' -%}
+                {%- render 'card-row', item: item, allow_order: flags.allow_order, show_desc: section.settings.show_description, show_rating: section.settings.show_rating, show_badges: section.settings.show_badges, show_image: show_image, show_fav: section.settings.show_favorite, catalog: true, eager: eager -%}
+              {%- when 'compact' -%}
+                {%- render 'card-compact', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: section.settings.show_rating, show_badges: section.settings.show_badges, show_image: true, show_fav: section.settings.show_favorite, catalog: true, eager: eager -%}
+              {%- when 'magazine' -%}
+                {%- render 'card-magazine', item: item, allow_order: flags.allow_order, show_desc: section.settings.show_description, show_rating: section.settings.show_rating, show_badges: section.settings.show_badges, show_image: true, show_fav: section.settings.show_favorite, catalog: true, eager: eager, add_label: add_label -%}
+              {%- else -%}
+                {%- render 'card-photo', item: item, allow_order: flags.allow_order, show_desc: section.settings.show_description, show_rating: section.settings.show_rating, show_badges: section.settings.show_badges, show_image: true, show_fav: section.settings.show_favorite, catalog: true, eager: eager -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </section>
+      {%- endif -%}
+    {%- endfor -%}
+    <p class="mbs-menu-grid__none" data-mb-empty hidden>{{ 'Nothing matches — try clearing filters' | t }}</p>
+  </div>
+  {%- endif -%}
+</section>
+{% commerce %}
+
+{% schema %}
+{
+  "name": "Menu grid",
+  "group": "catalogue",
+  "verticals": ["food"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Menu)", "default": "" },
+    { "id": "show_heading", "type": "checkbox", "label": "Show heading", "default": true },
+    { "id": "card", "type": "select", "label": "Card style", "options": [
+      { "value": "photo-card", "label": "Photo card" },
+      { "value": "list-row", "label": "List row" },
+      { "value": "compact", "label": "Compact tile" },
+      { "value": "magazine", "label": "Magazine" },
+      { "value": "text-only", "label": "Text only" }
+    ], "default": "photo-card" },
+    { "id": "columns_mobile", "type": "range", "label": "Columns on phones", "min": 1, "max": 2, "step": 1, "default": 2 },
+    { "id": "columns_desktop", "type": "range", "label": "Columns on desktop", "min": 1, "max": 4, "step": 1, "default": 3 },
+    { "id": "show_description", "type": "checkbox", "label": "Show descriptions", "default": true },
+    { "id": "show_rating", "type": "checkbox", "label": "Show ratings", "default": true },
+    { "id": "show_badges", "type": "checkbox", "label": "Show badges (offer, popular, dietary)", "default": true },
+    { "id": "show_favorite", "type": "checkbox", "label": "Favorite (heart) button", "default": true },
+    { "id": "show_category_images", "type": "checkbox", "label": "Category images beside titles", "default": false },
+    { "id": "show_tools", "type": "checkbox", "label": "Sort + layout toggle", "default": true },
+    { "id": "eager_first", "type": "checkbox", "label": "Load the first image immediately (section near the top)", "default": false }
+  ],
+  "presets": [{ "name": "Menu grid" }]
+}
+{% endschema %}

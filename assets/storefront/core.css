@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* juwri storefront core CSS (shared by every kit theme; <= 15 KB budget, this is well under 1 KB).
+   Behaviour only: no colours, no spacing, no type. Themes style sheets, dialogs and the queue badge. */
+.juwri-scroll-lock { overflow: hidden; }
+[data-juwri-sheet][hidden], [data-juwri-empty][hidden], [data-juwri-filled][hidden], [data-juwri-stale][hidden],
+[data-juwri-queue-badge][hidden], template[data-juwri-row], template[data-juwri-line], template[data-juwri-queue-item] { display: none !important; }
+[inert] { pointer-events: none; }

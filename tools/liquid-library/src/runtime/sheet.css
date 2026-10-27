@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — option sheet (the host section positions the sheet; this skins its inside) */
+.mb-sheet-head {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ts-gap-2, 10px);
+  padding: var(--ts-gap-3, 16px);
+  background: var(--tc-background, #fff);
+  font-size: 1.1rem;
+}
+.mb-sheet-close,
+.mb-addr-del {
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  border: 0;
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .06);
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.mb-sheet-body { padding-inline: var(--ts-gap-3, 16px); }
+.mb-sheet-foot {
+  position: sticky;
+  inset-block-end: 0;
+  padding: var(--ts-gap-2, 10px) var(--ts-gap-3, 16px) 0;
+  background: var(--tc-background, #fff);
+}

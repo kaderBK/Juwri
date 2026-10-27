@@ -1,0 +1,84 @@
+{
+  "entries": [
+    {
+      "date": "2026-09-10",
+      "version": "multi-vertical-1.0",
+      "product": "platform",
+      "breaking": false,
+      "title": "Sell beyond restaurants: retail, car parts, pharmacy and laundry store types",
+      "body": "When you create a store you can now pick a store type beyond Restaurant: Retail, Cosmetics, Clothing, Car parts, Laundry & services, or Pharmacy (OTC only — no prescriptions, ever). Each type gets its own catalog: goods stores (Retail, Cosmetics, Clothing, Car parts, Pharmacy) add brands, a size/colour variant grid with its own SKU and stock per combination, and render through the new Shelf grid storefront theme; Car parts stores additionally get a vehicle Year/Make/Model fitment list with OEM and cross-reference search; Pharmacy stores add an age-confirmation flag plus batch/expiry tracking with a low-stock-style alert; Laundry & services stores price per item or per kilogram, take bookings through the new Booking storefront theme, and track jobs on a Received-Processing-Ready-Out for delivery-Done service board. New fulfillment methods — ship to address, pickup slot, appointment, and in-store — join the existing dine-in/takeaway/delivery/room-service set, each store offering only what makes sense for what it sells. This is a plan feature or add-on (\"Sell beyond restaurants\"); existing restaurants are completely unaffected either way. See the Help Center guide, Choosing your store type."
+    },
+    {
+      "date": "2026-09-10",
+      "version": "multi-vertical-api-mcp-1.0",
+      "product": "api",
+      "breaking": false,
+      "title": "Vertical stores in the Admin API and MCP",
+      "body": "The Admin API's restaurant resource and the Admin MCP's list_restaurants/get_restaurant_settings now include store_type and a vertical capability summary. New read-only Admin API endpoints and matching MCP tools (list_brands, list_variants, list_shipments, list_fitments, list_expiring_items) expose a vertical store's brands, product variants, shipments, and vehicle fitments, gated by the same \"Sell beyond restaurants\" plan feature. The Storefront API's order type field is no longer restricted to takeaway/on-table for every store — the valid set now depends on the store's own type."
+    },
+    {
+      "date": "2026-08-27",
+      "version": "payments-syria-1.0",
+      "product": "payments",
+      "breaking": false,
+      "title": "Syrian payment gateways: wallet transfer, eCash and QRPay",
+      "body": "Stores can now take online payments through three Syria-focused tenders. Wallet Transfer is a manual tender for Syriatel Cash, MTN Cash and Sham Cash: the diner sends the total in their wallet app and submits the transaction reference, and the store owner confirms it against their wallet SMS from the Order Hub before the order is marked paid — no third-party account needed, so it works immediately once you add your wallet numbers on the restaurant Payments tab. eCash and QRPay are online acquirers configured from the admin Payment Gateways screen; they stay dark until you complete each provider's merchant onboarding and enter the credentials. The order-tracking page shows a themed \"payment awaiting confirmation\" banner with the reference while a wallet transfer is pending. See the Help Center guide, Wallet transfer & Syrian gateways."
+    },
+    {
+      "date": "2026-08-27",
+      "version": "biolink-2.0",
+      "product": "biolink",
+      "breaking": false,
+      "title": "Link-in-bio: new blocks, appearance depth, and click insights",
+      "body": "The link-in-bio page gains a full block catalogue: opening hours with a live open/closed pill, a call/WhatsApp/SMS button set, reservations, a customer-reviews badge, grouped delivery-app buttons, a gift-card and a loyalty/wallet button, a photo gallery, an FAQ accordion, an event/RSVP block, and a tip jar. Any block can now carry a schedule (a repeating happy-hour window or a seasonal date range) and be pinned or highlighted. A new Appearance tab customises colours, button style and shape, backgrounds (solid, gradient, pattern, or a Pro image background), a curated font pairing, header and avatar options, and sharing/SEO metadata. Insights add per-source and per-device breakdowns, automatic UTM tagging of outbound links, and — on the analytics add-on — coarse, privacy-safe country and referrer breakdowns plus a CSV export. See the Help Center guide, Link-in-bio page."
+    },
+    {
+      "date": "2026-08-20",
+      "version": "hotel-pms-1.0",
+      "product": "hotel",
+      "breaking": false,
+      "title": "Hotel PMS, growth tools, and POS additions",
+      "body": "The hotel module gains a lightweight PMS: room types, rate plans, an availability calendar, reservations with a full check-in to check-out lifecycle, housekeeping, banquet events, and public online booking (request or instant). Growth tools add buy-one-get-one offers, loyalty point expiry, referral rewards, duplicate-customer merging, supplier balances, branch-to-branch stock transfers, and a low-stock digest. The point of sale gains item-level refunds, cash-drawer handoff, a printer fallback, terminals, tax snapshots, rush mode, and per-branch order types. Staff can enable two-factor sign-in. New webhook events (refund.completed, reservation.created/cancelled, customer.created, shift.opened/closed) and new MCP read tools round out the API."
+    },
+    {
+      "date": "2026-08-07",
+      "version": "docs-1.0",
+      "product": "docs",
+      "breaking": false,
+      "title": "Help Center, AI-ready docs, and drift CI",
+      "body": "The owner Help Center is live at /help-center with in-dashboard contextual help, search, and a was-this-helpful signal. Every page is also raw markdown (append .md or send Accept: text/markdown), and /llms.txt plus /.well-known/mcp.json advertise the surfaces to AI agents. New CI gates keep the API docs, webhook events, and integration links from drifting."
+    },
+    {
+      "date": "2026-08-06",
+      "version": "billing-2.1",
+      "product": "billing",
+      "breaking": false,
+      "title": "Add-on capacity notice",
+      "body": "When your plan plus add-ons would exceed an internal cap, the Add-ons page now surfaces the shortfall instead of silently truncating it."
+    },
+    {
+      "date": "2026-08-05",
+      "version": "webhooks-1.4",
+      "product": "api",
+      "breaking": true,
+      "title": "Webhook signature verification is now fail-closed",
+      "body": "Inbound WhatsApp webhooks with a bad or missing signature are rejected (HTTP 403). Integrations must send a valid signature; re-save your sender configuration to refresh keys."
+    },
+    {
+      "date": "2026-08-01",
+      "version": "fusion-1.0",
+      "product": "marketplace",
+      "breaking": false,
+      "title": "Fusion multi-cart marketplace",
+      "body": "Shoppers can browse many stores in one marketplace and hold a separate cart per store, checking out one cart or all available carts at once. See the shopper guide at /fusion/help."
+    },
+    {
+      "date": "2026-07-31",
+      "version": "pos-2.0",
+      "product": "pos",
+      "breaking": false,
+      "title": "POS drawer accountability and full Z-report",
+      "body": "The point of sale gained cash-drawer open/close shifts, an X report (so-far) and a full Z report, void/refund controls with reasons, and table merge/move — all from the register UI."
+    }
+  ]
+}

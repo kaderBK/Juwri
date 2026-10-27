@@ -1,0 +1,120 @@
+{
+    "plain": {
+        "mimo": {
+            "categories": [
+                {
+                    "name": "Mains",
+                    "items": [
+                        {
+                            "name": "Kabsa",
+                            "price": 30
+                        }
+                    ]
+                }
+            ]
+        },
+        "anthropic": {
+            "categories": [
+                {
+                    "name": "Mains",
+                    "items": [
+                        {
+                            "name": "Kabsa",
+                            "price": 30
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "fenced": {
+        "mimo": {
+            "title": "Hello",
+            "tags": [
+                "a",
+                "b"
+            ]
+        },
+        "anthropic": {
+            "title": "Hello",
+            "tags": [
+                "a",
+                "b"
+            ]
+        }
+    },
+    "fenced_no_lang": {
+        "mimo": {
+            "ok": true
+        },
+        "anthropic": {
+            "ok": true
+        }
+    },
+    "prose_wrapped": {
+        "mimo": {
+            "name": "Bio",
+            "links": []
+        },
+        "anthropic": {
+            "name": "Bio",
+            "links": []
+        }
+    },
+    "unicode": {
+        "mimo": {
+            "ar": "كبسة",
+            "emoji": "🍛",
+            "escaped": "é"
+        },
+        "anthropic": {
+            "ar": "كبسة",
+            "emoji": "🍛",
+            "escaped": "é"
+        }
+    },
+    "top_level_list": {
+        "mimo": [
+            {
+                "a": 1
+            },
+            {
+                "a": 2
+            }
+        ],
+        "anthropic": [
+            {
+                "a": 1
+            },
+            {
+                "a": 2
+            }
+        ]
+    },
+    "nested_numbers": {
+        "mimo": {
+            "price": 12.5,
+            "qty": 0,
+            "neg": -1,
+            "big": 12345678901,
+            "null": null,
+            "bool": false
+        },
+        "anthropic": {
+            "price": 12.5,
+            "qty": 0,
+            "neg": -1,
+            "big": 12345678901,
+            "null": null,
+            "bool": false
+        }
+    },
+    "after_retry": {
+        "mimo": {
+            "second": "try"
+        },
+        "anthropic": {
+            "second": "try"
+        }
+    }
+}

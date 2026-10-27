@@ -1,0 +1,179 @@
+{
+    "name": "Grocery",
+    "description": "A fast shop: sticky search, promo banners, image category tiles, deals and a dense product grid with filters, sort and stock badges.",
+    "vertical": "retail",
+    "priority": "fast_ordering",
+    "tokens": {
+        "colors.primary": "#1f7a3f",
+        "colors.background": "#f5f8f4",
+        "colors.surface": "#ffffff",
+        "colors.text": "#14261a",
+        "colors.accent": "#a3410a",
+        "layout.radius": "soft",
+        "layout.density": "compact"
+    },
+    "font_pair": "inter",
+    "translations": {
+        "ar": {
+            "name": "بقالة",
+            "description": "متجر سريع: بحث ثابت، لافتات عروض، بلاطات تصنيفات بالصور، صفقات وشبكة منتجات كثيفة بفلاتر وترتيب وشارات مخزون."
+        }
+    },
+    "layout": {
+        "sections": {
+            "announcement": {
+                "type": "announcement-bar",
+                "settings": {
+                    "source": "store",
+                    "tone": "primary"
+                }
+            },
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "split",
+                    "sticky": true,
+                    "show_tagline": false
+                }
+            },
+            "search": {
+                "type": "search-bar",
+                "settings": {
+                    "sticky": true
+                }
+            },
+            "banners": {
+                "type": "banners-slider",
+                "settings": {
+                    "aspect": "wide",
+                    "autoplay": true,
+                    "interval": 5
+                }
+            },
+            "status": {
+                "type": "store-status",
+                "settings": []
+            },
+            "stories": {
+                "type": "stories-rail",
+                "settings": {
+                    "ring": "gradient",
+                    "size": "s"
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "image-tiles",
+                    "sticky": false
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "popular",
+                    "card": "compact",
+                    "limit": 12
+                }
+            },
+            "products": {
+                "type": "product-grid",
+                "settings": {
+                    "image_ratio": "square",
+                    "columns_mobile": "2",
+                    "columns_desktop": 5,
+                    "show_filters": true,
+                    "show_sort": true,
+                    "show_search": false
+                }
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "bar",
+                    "above_tabbar": true
+                }
+            },
+            "tabbar": {
+                "type": "bottom-tabbar",
+                "settings": {
+                    "style": "bar",
+                    "show_labels": true
+                },
+                "blocks": {
+                    "tab-home": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "home"
+                        }
+                    },
+                    "tab-catalog": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "products"
+                        }
+                    },
+                    "tab-search": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "search"
+                        }
+                    },
+                    "tab-cart": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    },
+                    "tab-profile": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "profile"
+                        }
+                    }
+                },
+                "block_order": [
+                    "tab-home",
+                    "tab-catalog",
+                    "tab-search",
+                    "tab-cart",
+                    "tab-profile"
+                ]
+            }
+        },
+        "order": [
+            "announcement",
+            "header",
+            "search",
+            "banners",
+            "status",
+            "stories",
+            "catnav",
+            "offers",
+            "featured",
+            "products",
+            "reviews",
+            "footer",
+            "cart-bar",
+            "tabbar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

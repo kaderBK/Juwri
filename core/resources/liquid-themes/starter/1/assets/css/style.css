@@ -1,0 +1,29 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Starter theme — minimal, logical properties only (RTL-safe). Vertical-aware:
+   no vertical-specific colours/imagery here, only layout — copy comes from
+   the {{ vocab }} global in the .liquid files, not this stylesheet. */
+.st-hero{padding:24px 20px;text-align:center}
+.st-logo{inline-size:64px;block-size:64px;border-radius:999px;object-fit:cover}
+.st-hero h1{margin:8px 0 4px;font-size:1.5rem}
+.st-hero p{margin:0;color:#666}
+.st-table{display:inline-block;margin-block-start:8px;padding:4px 12px;border-radius:999px;background:#eee}
+.st-hero-cta{display:inline-block;margin-block-start:14px;padding:10px 22px;border-radius:999px;background:#111;color:#fff;text-decoration:none;font-size:.9rem;font-weight:600}
+.st-menu{max-inline-size:960px;margin-inline:auto;padding:0 20px}
+.st-catalog-heading{margin:8px 0 14px;font-size:1.3rem;text-align:center}
+.st-catalog-count{margin:0 0 14px;text-align:center;color:#777;font-size:.8rem}
+.st-cats{display:flex;gap:8px;overflow-x:auto;padding-block-end:12px;margin-block-end:8px}
+.st-cat-link{flex:0 0 auto;padding:6px 14px;border-radius:999px;border:1px solid #e5e5e5;color:#111;text-decoration:none;font-size:.8rem;white-space:nowrap}
+.st-cat h3{margin:24px 0 12px;font-size:1.1rem}
+.st-empty{text-align:center;color:#777;padding:32px 0}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.st-card{border:1px solid #e5e5e5;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.st-card.is-out{opacity:.55}
+.st-card img{inline-size:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}
+.st-card h3{margin:0;font-size:.95rem}
+.st-card p{margin:0;color:#777;font-size:.8rem}
+.st-card footer{margin-block-start:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.st-add{padding:6px 14px;border-radius:999px;border:0;background:#111;color:#fff;cursor:pointer;font-size:.78rem;font-weight:600;white-space:nowrap}
+.st-soldout{color:#a33;font-size:.78rem;font-weight:600}
+.st-cart{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);padding:12px 24px;border-radius:999px;border:0;background:#111;color:#fff;cursor:pointer}

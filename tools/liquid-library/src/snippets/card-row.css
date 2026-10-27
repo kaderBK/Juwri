@@ -1,0 +1,14 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* card-row snippet (list row / text only); shared parts live in card-photo.css */
+.mbs-card-row { position: relative; display: flex; gap: var(--ts-gap-3, 16px); padding-block: var(--ts-gap-3, 16px); border-block-end: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .08); }
+.mbs-card-row[hidden] { display: none; }
+.mbs-card-row__body { display: flex; flex: 1; flex-direction: column; gap: 6px; min-inline-size: 0; }
+.mbs-card-row__name { margin: 0; font-family: var(--tf-heading); font-size: 1rem; }
+.mbs-card-row__desc { display: -webkit-box; margin: 0; overflow: hidden; color: var(--tc-text-muted, #6b7280); font-size: .85rem; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.mbs-card-row__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-block-start: auto; }
+.mbs-card-row__side { position: relative; display: flex; flex: none; align-items: flex-start; gap: 4px; }
+.mbs-card-row__img { inline-size: 104px; block-size: 104px; border-radius: var(--tr-control, 12px); background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+.mbs-card-row__img ~ .mbs-card-row__fav { position: absolute; inset-block-start: 2px; inset-inline-end: 2px; }
+.mbs-card-row__img ~ .mbs-card-row__add { position: absolute; inset-block-end: -8px; inset-inline-end: -8px; box-shadow: 0 0 0 3px var(--tc-background, #fff); }

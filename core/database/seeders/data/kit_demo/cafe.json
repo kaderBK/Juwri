@@ -1,0 +1,1564 @@
+{
+ "store": {
+  "slug": "bloom-coffee-demo",
+  "name": {
+   "en": "Bloom Coffee",
+   "ar": "بلوم للقهوة"
+  },
+  "tagline": {
+   "en": "Order ahead, skip the line",
+   "ar": "اطلب مسبقاً وتجاوز الطابور"
+  },
+  "store_type": "cafe",
+  "theme": "brew",
+  "preset": "matcha",
+  "currency": "SAR",
+  "tax": {
+   "mode": "exclusive",
+   "rate": 15
+  },
+  "order_types": [
+   "takeaway",
+   "on-table",
+   "delivery"
+  ],
+  "pickup": {
+   "ready_minutes": 8,
+   "hold_minutes": 20,
+   "branch": {
+    "en": "Olaya branch",
+    "ar": "فرع العليا"
+   }
+  },
+  "hours": {
+   "timezone": "Asia/Riyadh",
+   "weekly": {
+    "sun": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ],
+    "mon": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ],
+    "tue": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ],
+    "wed": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ],
+    "thu": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ],
+    "fri": [
+     [
+      "13:00",
+      "23:30"
+     ]
+    ],
+    "sat": [
+     [
+      "07:00",
+      "23:00"
+     ]
+    ]
+   }
+  },
+  "address": {
+   "en": "Olaya St, Al Olaya, Riyadh",
+   "ar": "شارع العليا، حي العليا، الرياض"
+  },
+  "phone": "+966 55 010 0102",
+  "phone_is_demo": true,
+  "identity": {
+   "legal_name": {
+    "en": "Bloom Coffee Trading Est.",
+    "ar": "مؤسسة بلوم للقهوة التجارية"
+   },
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-2202",
+    "label": {
+     "en": "Commercial registration (CR)",
+     "ar": "السجل التجاري"
+    }
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-2202",
+    "label": {
+     "en": "VAT number",
+     "ar": "الرقم الضريبي"
+    }
+   },
+   "address": {
+    "en": "Olaya Street, Al Olaya, Riyadh 12213",
+    "ar": "شارع العليا، حي العليا، الرياض 12213"
+   }
+  },
+  "identity_is_demo": true,
+  "description": {
+   "en": "Specialty coffee, ceremonial matcha and fresh bakes. Order ahead and pick up in minutes.",
+   "ar": "قهوة مختصة وماتشا فاخرة ومخبوزات طازجة. اطلب مسبقاً واستلم طلبك خلال دقائق."
+  }
+ },
+ "allergen_catalog": [
+  {
+   "key": "gluten",
+   "title": {
+    "en": "Gluten",
+    "ar": "الغلوتين"
+   }
+  },
+  {
+   "key": "dairy",
+   "title": {
+    "en": "Dairy",
+    "ar": "الحليب ومشتقاته"
+   }
+  },
+  {
+   "key": "nuts",
+   "title": {
+    "en": "Tree nuts",
+    "ar": "المكسرات"
+   }
+  },
+  {
+   "key": "sesame",
+   "title": {
+    "en": "Sesame",
+    "ar": "السمسم"
+   }
+  },
+  {
+   "key": "eggs",
+   "title": {
+    "en": "Eggs",
+    "ar": "البيض"
+   }
+  },
+  {
+   "key": "soy",
+   "title": {
+    "en": "Soy",
+    "ar": "الصويا"
+   }
+  }
+ ],
+ "modifier_library": [
+  {
+   "key": "size",
+   "title": {
+    "en": "Size",
+    "ar": "الحجم"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "modifiers": [
+    {
+     "title": {
+      "en": "Small",
+      "ar": "صغير"
+     },
+     "price": "0.00"
+    },
+    {
+     "title": {
+      "en": "Regular",
+      "ar": "وسط"
+     },
+     "price": "4.00",
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Large",
+      "ar": "كبير"
+     },
+     "price": "8.00"
+    }
+   ]
+  },
+  {
+   "key": "milk",
+   "title": {
+    "en": "Milk",
+    "ar": "نوع الحليب"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "modifiers": [
+    {
+     "title": {
+      "en": "Whole",
+      "ar": "كامل الدسم"
+     },
+     "price": "0.00",
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Skimmed",
+      "ar": "قليل الدسم"
+     },
+     "price": "0.00"
+    },
+    {
+     "title": {
+      "en": "Oat",
+      "ar": "الشوفان"
+     },
+     "price": "2.00"
+    },
+    {
+     "title": {
+      "en": "Almond",
+      "ar": "اللوز"
+     },
+     "price": "2.00"
+    },
+    {
+     "title": {
+      "en": "Coconut",
+      "ar": "جوز الهند"
+     },
+     "price": "2.00"
+    }
+   ]
+  },
+  {
+   "key": "sweetness",
+   "title": {
+    "en": "Sweetness",
+    "ar": "درجة الحلاوة"
+   },
+   "kind": "variant",
+   "required": false,
+   "min_select": 0,
+   "max_select": 1,
+   "modifiers": [
+    {
+     "title": {
+      "en": "None",
+      "ar": "بدون سكر"
+     },
+     "price": "0.00"
+    },
+    {
+     "title": {
+      "en": "Light",
+      "ar": "خفيفة"
+     },
+     "price": "0.00"
+    },
+    {
+     "title": {
+      "en": "Normal",
+      "ar": "عادية"
+     },
+     "price": "0.00",
+     "default": true
+    }
+   ]
+  },
+  {
+   "key": "extras_coffee",
+   "title": {
+    "en": "Extras",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "modifiers": [
+    {
+     "title": {
+      "en": "Extra espresso shot",
+      "ar": "جرعة إسبريسو إضافية"
+     },
+     "price": "4.00"
+    },
+    {
+     "title": {
+      "en": "Vanilla syrup",
+      "ar": "شراب الفانيلا"
+     },
+     "price": "3.00"
+    },
+    {
+     "title": {
+      "en": "Caramel syrup",
+      "ar": "شراب الكراميل"
+     },
+     "price": "3.00"
+    },
+    {
+     "title": {
+      "en": "Cold foam",
+      "ar": "رغوة باردة"
+     },
+     "price": "3.00"
+    }
+   ]
+  },
+  {
+   "key": "extras_matcha",
+   "title": {
+    "en": "Extras",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "modifiers": [
+    {
+     "title": {
+      "en": "Extra matcha shot",
+      "ar": "جرعة ماتشا إضافية"
+     },
+     "price": "4.00"
+    },
+    {
+     "title": {
+      "en": "Vanilla syrup",
+      "ar": "شراب الفانيلا"
+     },
+     "price": "3.00"
+    },
+    {
+     "title": {
+      "en": "Cold foam",
+      "ar": "رغوة باردة"
+     },
+     "price": "3.00"
+    }
+   ]
+  },
+  {
+   "key": "serving",
+   "title": {
+    "en": "Serving",
+    "ar": "طريقة التقديم"
+   },
+   "kind": "variant",
+   "required": false,
+   "min_select": 0,
+   "max_select": 1,
+   "modifiers": [
+    {
+     "title": {
+      "en": "Warmed",
+      "ar": "مسخّن"
+     },
+     "price": "0.00",
+     "default": true
+    },
+    {
+     "title": {
+      "en": "As is",
+      "ar": "كما هو"
+     },
+     "price": "0.00"
+    }
+   ]
+  }
+ ],
+ "categories": [
+  {
+   "slug": "coffee",
+   "position": 0,
+   "name": {
+    "en": "Coffee",
+    "ar": "القهوة"
+   },
+   "description": {
+    "en": "Espresso-based, roasted in the Kingdom",
+    "ar": "مشروبات الإسبريسو من محمصة محلية"
+   }
+  },
+  {
+   "slug": "matcha",
+   "position": 1,
+   "name": {
+    "en": "Matcha",
+    "ar": "الماتشا"
+   },
+   "description": {
+    "en": "Ceremonial-grade, whisked to order",
+    "ar": "ماتشا فاخرة تُخفق عند الطلب"
+   }
+  },
+  {
+   "slug": "cold",
+   "position": 2,
+   "name": {
+    "en": "Cold drinks",
+    "ar": "المشروبات الباردة"
+   },
+   "description": {
+    "en": "Iced, sparkling and blended",
+    "ar": "مثلجة وفوّارة ومخفوقة"
+   }
+  },
+  {
+   "slug": "tea",
+   "position": 3,
+   "name": {
+    "en": "Tea",
+    "ar": "الشاي"
+   },
+   "description": {
+    "en": "Loose leaf and karak",
+    "ar": "شاي أوراق وكرك"
+   }
+  },
+  {
+   "slug": "bakery",
+   "position": 4,
+   "name": {
+    "en": "Bakery",
+    "ar": "المخبوزات"
+   },
+   "description": {
+    "en": "Baked every morning",
+    "ar": "تُخبز كل صباح"
+   }
+  },
+  {
+   "slug": "desserts",
+   "position": 5,
+   "name": {
+    "en": "Desserts",
+    "ar": "الحلويات"
+   },
+   "description": {
+    "en": "Cakes, cookies and cups",
+    "ar": "كيك وكوكيز وأكواب"
+   }
+  }
+ ],
+ "items": [
+  {
+   "slug": "espresso",
+   "category": "coffee",
+   "position": 0,
+   "name": {
+    "en": "Espresso",
+    "ar": "إسبريسو"
+   },
+   "description": {
+    "en": "A short, syrupy shot of our house blend.",
+    "ar": "جرعة قصيرة كثيفة من خلطتنا الخاصة."
+   },
+   "price": "12.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 5,
+   "allergens": [],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Espresso, a short, syrupy shot of our house blend, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "double-espresso",
+   "category": "coffee",
+   "position": 1,
+   "name": {
+    "en": "Double espresso",
+    "ar": "إسبريسو مزدوج"
+   },
+   "description": {
+    "en": "Two shots, bold and sweet.",
+    "ar": "جرعتان بنكهة قوية وحلوة."
+   },
+   "price": "15.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 10,
+   "allergens": [],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Double espresso, two shots, bold and sweet, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "americano",
+   "category": "coffee",
+   "position": 2,
+   "name": {
+    "en": "Americano",
+    "ar": "أمريكانو"
+   },
+   "description": {
+    "en": "Espresso lengthened with hot water.",
+    "ar": "إسبريسو مخفف بالماء الساخن."
+   },
+   "price": "14.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 10,
+   "allergens": [],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Americano, espresso lengthened with hot water, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "cappuccino",
+   "category": "coffee",
+   "position": 3,
+   "name": {
+    "en": "Cappuccino",
+    "ar": "كابتشينو"
+   },
+   "description": {
+    "en": "Espresso, steamed milk, thick foam.",
+    "ar": "إسبريسو وحليب مبخّر ورغوة كثيفة."
+   },
+   "price": "17.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 120,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Cappuccino, espresso, steamed milk, thick foam, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "flat-white",
+   "category": "coffee",
+   "position": 4,
+   "name": {
+    "en": "Flat white",
+    "ar": "فلات وايت"
+   },
+   "description": {
+    "en": "Velvety microfoam over a double shot.",
+    "ar": "رغوة ناعمة فوق جرعة مزدوجة."
+   },
+   "price": "18.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 130,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Flat white, velvety microfoam over a double shot, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "latte",
+   "category": "coffee",
+   "position": 5,
+   "name": {
+    "en": "Latte",
+    "ar": "لاتيه"
+   },
+   "description": {
+    "en": "Smooth espresso with plenty of milk.",
+    "ar": "إسبريسو ناعم مع الكثير من الحليب."
+   },
+   "price": "18.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 150,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Latte, smooth espresso with plenty of milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "cortado",
+   "category": "coffee",
+   "position": 6,
+   "name": {
+    "en": "Cortado",
+    "ar": "كورتادو"
+   },
+   "description": {
+    "en": "Equal parts espresso and warm milk.",
+    "ar": "إسبريسو وحليب دافئ بأجزاء متساوية."
+   },
+   "price": "16.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 80,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "milk",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Cortado, equal parts espresso and warm milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "mocha",
+   "category": "coffee",
+   "position": 7,
+   "name": {
+    "en": "Mocha",
+    "ar": "موكا"
+   },
+   "description": {
+    "en": "Espresso, dark chocolate and steamed milk.",
+    "ar": "إسبريسو وشوكولاتة داكنة وحليب مبخّر."
+   },
+   "price": "20.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 230,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Mocha, espresso, dark chocolate and steamed milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "spanish-latte",
+   "category": "coffee",
+   "position": 8,
+   "name": {
+    "en": "Spanish latte",
+    "ar": "سبانش لاتيه"
+   },
+   "description": {
+    "en": "Espresso, milk and a swirl of condensed milk.",
+    "ar": "إسبريسو وحليب مع لمسة حليب مكثّف."
+   },
+   "price": "21.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 240,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Spanish latte, espresso, milk and a swirl of condensed milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "v60-pour-over",
+   "category": "coffee",
+   "position": 9,
+   "name": {
+    "en": "V60 pour-over",
+    "ar": "في 60 مقطّرة"
+   },
+   "description": {
+    "en": "Single-origin filter coffee, brewed by hand.",
+    "ar": "قهوة مقطّرة من أصل واحد تُحضّر يدوياً."
+   },
+   "price": "24.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 5,
+   "allergens": [],
+   "prep_minutes": 6,
+   "badges": [
+    "new"
+   ],
+   "modifier_groups": [],
+   "image_prompt": "Cafe photo of V60 pour-over, single-origin filter coffee, brewed by hand, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "iced-matcha-latte",
+   "category": "matcha",
+   "position": 10,
+   "name": {
+    "en": "Iced matcha latte",
+    "ar": "لاتيه ماتشا مثلج"
+   },
+   "description": {
+    "en": "Ceremonial-grade matcha whisked to order, over ice.",
+    "ar": "ماتشا فاخرة تُخفق عند الطلب فوق الثلج."
+   },
+   "price": "17.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 140,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [
+    "new",
+    "popular"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_matcha"
+   ],
+   "image_prompt": "Cafe photo of Iced matcha latte, ceremonial-grade matcha whisked to order, over ice, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "hot-matcha-latte",
+   "category": "matcha",
+   "position": 11,
+   "name": {
+    "en": "Hot matcha latte",
+    "ar": "لاتيه ماتشا ساخن"
+   },
+   "description": {
+    "en": "Whisked matcha with silky steamed milk.",
+    "ar": "ماتشا مخفوقة مع حليب مبخّر ناعم."
+   },
+   "price": "15.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 130,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_matcha"
+   ],
+   "image_prompt": "Cafe photo of Hot matcha latte, whisked matcha with silky steamed milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "matcha-espresso",
+   "category": "matcha",
+   "position": 12,
+   "name": {
+    "en": "Matcha espresso",
+    "ar": "ماتشا إسبريسو"
+   },
+   "description": {
+    "en": "Matcha and a shot of espresso over milk.",
+    "ar": "ماتشا مع جرعة إسبريسو فوق الحليب."
+   },
+   "price": "19.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 150,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_matcha"
+   ],
+   "image_prompt": "Cafe photo of Matcha espresso, matcha and a shot of espresso over milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "strawberry-matcha",
+   "category": "matcha",
+   "position": 13,
+   "name": {
+    "en": "Strawberry matcha",
+    "ar": "ماتشا بالفراولة"
+   },
+   "description": {
+    "en": "Strawberry purée, milk and matcha.",
+    "ar": "هريس الفراولة والحليب والماتشا."
+   },
+   "price": "20.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 190,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 5,
+   "badges": [
+    "new"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "extras_matcha"
+   ],
+   "image_prompt": "Cafe photo of Strawberry matcha, strawberry puree, milk and matcha, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "coconut-matcha",
+   "category": "matcha",
+   "position": 14,
+   "name": {
+    "en": "Coconut matcha",
+    "ar": "ماتشا بجوز الهند"
+   },
+   "description": {
+    "en": "Matcha over coconut water and milk.",
+    "ar": "ماتشا فوق ماء جوز الهند والحليب."
+   },
+   "price": "19.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 160,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 5,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "sweetness",
+    "extras_matcha"
+   ],
+   "image_prompt": "Cafe photo of Coconut matcha, matcha over coconut water and milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "hojicha-latte",
+   "category": "matcha",
+   "position": 15,
+   "name": {
+    "en": "Hojicha latte",
+    "ar": "لاتيه هوجيتشا"
+   },
+   "description": {
+    "en": "Roasted green tea, nutty and low in caffeine.",
+    "ar": "شاي أخضر محمّص بنكهة المكسرات وكافيين أقل."
+   },
+   "price": "16.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 140,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness"
+   ],
+   "image_prompt": "Cafe photo of Hojicha latte, roasted green tea, nutty and low in caffeine, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "iced-latte",
+   "category": "cold",
+   "position": 16,
+   "name": {
+    "en": "Iced latte",
+    "ar": "لاتيه مثلج"
+   },
+   "description": {
+    "en": "Chilled espresso and milk over ice.",
+    "ar": "إسبريسو وحليب بارد فوق الثلج."
+   },
+   "price": "16.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 130,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Iced latte, chilled espresso and milk over ice, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "cold-brew",
+   "category": "cold",
+   "position": 17,
+   "name": {
+    "en": "Cold brew",
+    "ar": "كولد برو"
+   },
+   "description": {
+    "en": "Steeped 18 hours for a smooth finish.",
+    "ar": "منقوع 18 ساعة لمذاق ناعم."
+   },
+   "price": "15.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 10,
+   "allergens": [],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Cold brew, steeped 18 hours for a smooth finish, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "iced-spanish-latte",
+   "category": "cold",
+   "position": 18,
+   "name": {
+    "en": "Iced Spanish latte",
+    "ar": "سبانش لاتيه مثلج"
+   },
+   "description": {
+    "en": "Sweet, creamy and cold.",
+    "ar": "حلو وكريمي وبارد."
+   },
+   "price": "18.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 260,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "size",
+    "milk",
+    "sweetness",
+    "extras_coffee"
+   ],
+   "image_prompt": "Cafe photo of Iced Spanish latte, sweet, creamy and cold, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "lemon-mint",
+   "category": "cold",
+   "position": 19,
+   "name": {
+    "en": "Lemon mint",
+    "ar": "ليمون بالنعناع"
+   },
+   "description": {
+    "en": "Fresh lemon, mint and crushed ice.",
+    "ar": "ليمون طازج ونعناع وثلج مجروش."
+   },
+   "price": "12.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 110,
+   "allergens": [],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "size"
+   ],
+   "image_prompt": "Cafe photo of Lemon mint, fresh lemon, mint and crushed ice, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "peach-iced-tea",
+   "category": "cold",
+   "position": 20,
+   "name": {
+    "en": "Peach iced tea",
+    "ar": "شاي مثلج بالخوخ"
+   },
+   "description": {
+    "en": "Black tea, peach and a squeeze of lemon.",
+    "ar": "شاي أسود وخوخ وعصرة ليمون."
+   },
+   "price": "11.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 90,
+   "allergens": [],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "size"
+   ],
+   "image_prompt": "Cafe photo of Peach iced tea, black tea, peach and a squeeze of lemon, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "mango-smoothie",
+   "category": "cold",
+   "position": 21,
+   "name": {
+    "en": "Mango smoothie",
+    "ar": "سموذي المانجو"
+   },
+   "description": {
+    "en": "Mango, yoghurt and a little honey.",
+    "ar": "مانجو وزبادي وقليل من العسل."
+   },
+   "price": "18.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 210,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [
+    "size"
+   ],
+   "image_prompt": "Cafe photo of Mango smoothie, mango, yoghurt and a little honey, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "sparkling-water",
+   "category": "cold",
+   "position": 22,
+   "name": {
+    "en": "Sparkling water",
+    "ar": "مياه فوّارة"
+   },
+   "description": {
+    "en": "330 ml bottle, served cold.",
+    "ar": "عبوة 330 مل مقدّمة باردة."
+   },
+   "price": "6.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 0,
+   "allergens": [],
+   "prep_minutes": 1,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Cafe photo of Sparkling water, 330 ml bottle, served cold, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "moroccan-mint-tea",
+   "category": "tea",
+   "position": 23,
+   "name": {
+    "en": "Moroccan mint tea",
+    "ar": "شاي مغربي بالنعناع"
+   },
+   "description": {
+    "en": "Gunpowder green tea with fresh mint, in a pot.",
+    "ar": "شاي أخضر بالنعناع الطازج يُقدَّم في إبريق."
+   },
+   "price": "14.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 30,
+   "allergens": [],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Cafe photo of Moroccan mint tea, gunpowder green tea with fresh mint, in a pot, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "karak",
+   "category": "tea",
+   "position": 24,
+   "name": {
+    "en": "Karak",
+    "ar": "شاي كرك"
+   },
+   "description": {
+    "en": "Strong tea, cardamom and evaporated milk.",
+    "ar": "شاي قوي بالهيل والحليب المبخّر."
+   },
+   "price": "10.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 130,
+   "allergens": [
+    "dairy"
+   ],
+   "prep_minutes": 4,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "size"
+   ],
+   "image_prompt": "Cafe photo of Karak, strong tea, cardamom and evaporated milk, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "chamomile",
+   "category": "tea",
+   "position": 25,
+   "name": {
+    "en": "Chamomile",
+    "ar": "بابونج"
+   },
+   "description": {
+    "en": "Calming dried flowers, caffeine-free.",
+    "ar": "أزهار مجففة مهدّئة بدون كافيين."
+   },
+   "price": "12.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 0,
+   "allergens": [],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Cafe photo of Chamomile, calming dried flowers, caffeine-free, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "earl-grey",
+   "category": "tea",
+   "position": 26,
+   "name": {
+    "en": "Earl grey",
+    "ar": "إيرل جراي"
+   },
+   "description": {
+    "en": "Black tea scented with bergamot.",
+    "ar": "شاي أسود معطّر بالبرغموت."
+   },
+   "price": "12.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 0,
+   "allergens": [],
+   "prep_minutes": 4,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Cafe photo of Earl grey, black tea scented with bergamot, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "butter-croissant",
+   "category": "bakery",
+   "position": 27,
+   "name": {
+    "en": "Butter croissant",
+    "ar": "كرواسون بالزبدة"
+   },
+   "description": {
+    "en": "Flaky layers, baked this morning.",
+    "ar": "طبقات هشة مخبوزة هذا الصباح."
+   },
+   "price": "9.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 270,
+   "allergens": [
+    "gluten",
+    "dairy"
+   ],
+   "prep_minutes": 2,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Butter croissant, flaky layers, baked this morning, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "almond-croissant",
+   "category": "bakery",
+   "position": 28,
+   "name": {
+    "en": "Almond croissant",
+    "ar": "كرواسون باللوز"
+   },
+   "description": {
+    "en": "Filled with almond cream, dusted with sugar.",
+    "ar": "محشو بكريمة اللوز ومرشوش بالسكر."
+   },
+   "price": "14.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 380,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "nuts",
+    "eggs"
+   ],
+   "prep_minutes": 2,
+   "badges": [
+    "new",
+    "popular"
+   ],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Almond croissant, filled with almond cream, dusted with sugar, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "pain-au-chocolat",
+   "category": "bakery",
+   "position": 29,
+   "name": {
+    "en": "Pain au chocolat",
+    "ar": "كرواسون بالشوكولاتة"
+   },
+   "description": {
+    "en": "Two batons of dark chocolate in laminated dough.",
+    "ar": "قطعتا شوكولاتة داكنة داخل عجينة هشة."
+   },
+   "price": "12.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 330,
+   "allergens": [
+    "gluten",
+    "dairy"
+   ],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Pain au chocolat, two batons of dark chocolate in laminated dough, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "cinnamon-roll",
+   "category": "bakery",
+   "position": 30,
+   "name": {
+    "en": "Cinnamon roll",
+    "ar": "سينابون"
+   },
+   "description": {
+    "en": "Soft roll, cinnamon sugar and cream cheese glaze.",
+    "ar": "لفة طرية بالقرفة والسكر وكريمة الجبن."
+   },
+   "price": "15.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 420,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Cinnamon roll, soft roll, cinnamon sugar and cream cheese glaze, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "zaatar-manakish",
+   "category": "bakery",
+   "position": 31,
+   "name": {
+    "en": "Zaatar manakish",
+    "ar": "مناقيش زعتر"
+   },
+   "description": {
+    "en": "Flatbread with zaatar and olive oil.",
+    "ar": "خبز مسطح بالزعتر وزيت الزيتون."
+   },
+   "price": "11.00",
+   "type": "veg",
+   "is_vegan": true,
+   "is_halal": true,
+   "calories": 290,
+   "allergens": [
+    "gluten",
+    "sesame"
+   ],
+   "prep_minutes": 3,
+   "badges": [],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Zaatar manakish, flatbread with zaatar and olive oil, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "cheese-and-thyme-croissant",
+   "category": "bakery",
+   "position": 32,
+   "name": {
+    "en": "Cheese and thyme croissant",
+    "ar": "كرواسون بالجبنة والزعتر"
+   },
+   "description": {
+    "en": "Savoury croissant with melted cheese.",
+    "ar": "كرواسون مالح بالجبنة الذائبة والزعتر."
+   },
+   "price": "13.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 340,
+   "allergens": [
+    "gluten",
+    "dairy"
+   ],
+   "prep_minutes": 2,
+   "badges": [],
+   "modifier_groups": [
+    "serving"
+   ],
+   "image_prompt": "Bakery photo of Cheese and thyme croissant, savoury croissant with melted cheese, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "matcha-cookie",
+   "category": "desserts",
+   "position": 33,
+   "name": {
+    "en": "Matcha cookie",
+    "ar": "كوكيز الماتشا"
+   },
+   "description": {
+    "en": "Chewy white chocolate and matcha cookie.",
+    "ar": "كوكيز طري بالشوكولاتة البيضاء والماتشا."
+   },
+   "price": "11.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 310,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [
+    "new",
+    "sold_out"
+   ],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Matcha cookie, chewy white chocolate and matcha cookie, bright natural window light, pale stone counter, minimal styling, no text",
+   "track_inventory": true,
+   "stock_qty": 0
+  },
+  {
+   "slug": "basque-cheesecake",
+   "category": "desserts",
+   "position": 34,
+   "name": {
+    "en": "Basque cheesecake",
+    "ar": "تشيز كيك باسك"
+   },
+   "description": {
+    "en": "Burnt top, creamy centre.",
+    "ar": "وجه محروق وقلب كريمي."
+   },
+   "price": "24.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 430,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [
+    "popular"
+   ],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Basque cheesecake, burnt top, creamy centre, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "tiramisu-cup",
+   "category": "desserts",
+   "position": 35,
+   "name": {
+    "en": "Tiramisu cup",
+    "ar": "كوب تيراميسو"
+   },
+   "description": {
+    "en": "Mascarpone, espresso and cocoa.",
+    "ar": "ماسكاربوني وإسبريسو وكاكاو."
+   },
+   "price": "22.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 390,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Tiramisu cup, mascarpone, espresso and cocoa, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "date-and-tahini-cookie",
+   "category": "desserts",
+   "position": 36,
+   "name": {
+    "en": "Date and tahini cookie",
+    "ar": "كوكيز التمر والطحينة"
+   },
+   "description": {
+    "en": "Soft cookie with Sukkari dates and tahini.",
+    "ar": "كوكيز طري بتمر السكري والطحينة."
+   },
+   "price": "10.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 280,
+   "allergens": [
+    "gluten",
+    "sesame",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [
+    "low_stock"
+   ],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Date and tahini cookie, soft cookie with Sukkari dates and tahini, bright natural window light, pale stone counter, minimal styling, no text",
+   "track_inventory": true,
+   "stock_qty": 3,
+   "low_stock_threshold": 5
+  },
+  {
+   "slug": "pistachio-brownie",
+   "category": "desserts",
+   "position": 37,
+   "name": {
+    "en": "Pistachio brownie",
+    "ar": "براوني الفستق"
+   },
+   "description": {
+    "en": "Fudgy brownie with roasted pistachio.",
+    "ar": "براوني كثيف بالفستق المحمص."
+   },
+   "price": "16.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 370,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "nuts",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Pistachio brownie, fudgy brownie with roasted pistachio, bright natural window light, pale stone counter, minimal styling, no text"
+  },
+  {
+   "slug": "lotus-cake-slice",
+   "category": "desserts",
+   "position": 38,
+   "name": {
+    "en": "Lotus cake slice",
+    "ar": "شريحة كيك اللوتس"
+   },
+   "description": {
+    "en": "Biscuit spread layers and caramel crumbs.",
+    "ar": "طبقات كريمة اللوتس وفتات الكراميل."
+   },
+   "price": "22.00",
+   "type": "veg",
+   "is_vegan": false,
+   "is_halal": true,
+   "calories": 450,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "prep_minutes": 1,
+   "badges": [],
+   "modifier_groups": [],
+   "image_prompt": "Dessert photo of Lotus cake slice, biscuit spread layers and caramel crumbs, bright natural window light, pale stone counter, minimal styling, no text"
+  }
+ ]
+}

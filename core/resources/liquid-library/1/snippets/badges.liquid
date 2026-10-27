@@ -1,0 +1,31 @@
+{%- comment -%}
+  Item badges (library v1): offer %, "available from" (items scheduled later
+  today), popular, today's special and dietary tags. Renders nothing when the
+  item has none. Params: item (ItemDrop), offer (bool: include the discount
+  badge).
+{%- endcomment -%}
+{%- liquid
+  assign has_any = false
+  if item.is_popular or item.is_daily_special or item.is_vegan or item.is_halal or item.is_gluten_free
+    assign has_any = true
+  endif
+  if offer and item.discount_percent
+    assign has_any = true
+  endif
+  assign later = false
+  if item.available_now == false and item.available_from_label
+    assign later = true
+    assign has_any = true
+  endif
+-%}
+{%- if has_any -%}
+<ul class="mbs-badges" role="list">
+  {%- if offer and item.discount_percent -%}<li class="mbs-badges__b is-offer"><bdi>{{ '{n}% off' | t | replace: '{n}', item.discount_percent }}</bdi></li>{%- endif -%}
+  {%- if later -%}<li class="mbs-badges__b is-later">{{ item.available_from_label | escape }}</li>{%- endif -%}
+  {%- if item.is_popular -%}<li class="mbs-badges__b is-hot">{{ 'Popular' | t }}</li>{%- endif -%}
+  {%- if item.is_daily_special -%}<li class="mbs-badges__b is-special">{{ 'Special' | t }}</li>{%- endif -%}
+  {%- if item.is_vegan -%}<li class="mbs-badges__b">{{ 'Vegan' | t }}</li>{%- endif -%}
+  {%- if item.is_halal -%}<li class="mbs-badges__b">{{ 'Halal' | t }}</li>{%- endif -%}
+  {%- if item.is_gluten_free -%}<li class="mbs-badges__b">{{ 'Gluten free' | t }}</li>{%- endif -%}
+</ul>
+{%- endif -%}

@@ -1,0 +1,47 @@
+{
+    "status": 200,
+    "body": {
+        "default_store_id": "int",
+        "more": {
+            "list_of": {
+                "icon": "string",
+                "key": "string",
+                "label": "string",
+                "path": "string"
+            }
+        },
+        "onboarding_path": "null",
+        "store": {
+            "id": "int",
+            "push_enabled": "bool"
+        },
+        "stores": {
+            "list_of": {
+                "currency": "string",
+                "group": "string",
+                "id": "int",
+                "logo_url": "string",
+                "slug": "string",
+                "store_type": "string",
+                "title": "string"
+            }
+        },
+        "tabs": {
+            "list_of": {
+                "icon": "string",
+                "key": "string",
+                "label": "string",
+                "path": "string"
+            }
+        },
+        "token_expires_at": "string",
+        "user": {
+            "dir": "string",
+            "email": "string",
+            "id": "int",
+            "locale": "string",
+            "name": "string",
+            "username": "string"
+        }
+    }
+}

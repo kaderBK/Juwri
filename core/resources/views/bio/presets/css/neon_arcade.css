@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--neon_arcade{background-image:radial-gradient(280px 200px at 20% 0%,rgba(33,230,240,.14),transparent 65%),radial-gradient(280px 220px at 90% 24%,rgba(255,45,149,.14),transparent 65%)}
+.bio--neon_arcade .bio-name{text-shadow:0 0 18px rgba(33,230,240,.8),0 0 40px rgba(33,230,240,.4)}
+.bio--neon_arcade .bio-link{position:relative;overflow:hidden}
+.bio--neon_arcade .bio-link::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;background:#21e6f0;box-shadow:0 0 10px #21e6f0}
+.bio--neon_arcade .bio-link:hover{border-color:#21e6f0;box-shadow:0 0 20px rgba(33,230,240,.25)}
+.bio--neon_arcade .bio-link__icon{background:none}
+.bio--neon_arcade .bio-link__label{text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.bio--neon_arcade .bio-socials a{border:1px solid rgba(33,230,240,.4);color:#21e6f0;background:rgba(33,230,240,.04)}

@@ -1,0 +1,151 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "plate",
+      "label": "Plate",
+      "thumb": "assets/store_templates/plate/presets/plate.png",
+      "values": {
+        "colors.primary": "#141414",
+        "colors.background": "#ECEDEF",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#141414",
+        "colors.accent": "#E9B949",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "linen",
+      "label": "Linen",
+      "thumb": "assets/store_templates/plate/presets/linen.png",
+      "values": {
+        "colors.primary": "#3a3a3a",
+        "colors.background": "#f5f2ec",
+        "colors.surface": "#ffffff",
+        "colors.text": "#1a1a1a",
+        "colors.accent": "#b5651d",
+        "layout.radius": "soft"
+      }
+    },
+    {
+      "id": "noir",
+      "label": "Noir",
+      "thumb": "assets/store_templates/plate/presets/noir.png",
+      "values": {
+        "colors.primary": "#e8e8ea",
+        "colors.background": "#0e0e0f",
+        "colors.surface": "#1a1a1c",
+        "colors.text": "#f5f5f6",
+        "colors.accent": "#c9a227",
+        "layout.radius": "none"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#141414"
+        },
+        "colors.background": {
+          "default": "#ECEDEF"
+        },
+        "colors.surface": {
+          "default": "#FFFFFF"
+        },
+        "colors.text": {
+          "default": "#141414"
+        },
+        "colors.accent": {
+          "default": "#E9B949"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Daily special · today"
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "A menu, beautifully set",
+          "label": "Splash title"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category pills",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "New Menu rail + featured blob",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "All Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

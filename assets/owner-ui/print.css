@@ -1,0 +1,106 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * juwri owner-ui — print sheets (<x-ui.print>).
+ * Standalone: printed pages load only this file. Colours follow the kit
+ * tokens (paper white, ink #17171C, hairlines #ECE9E2) but are written out,
+ * because a print page does not load tokens.css.
+ */
+*, *::before, *::after { box-sizing: border-box; }
+
+.ui-print {
+  margin: 0;
+  background: #F4F2ED;
+  color: #17171C;
+  font: 400 13px/1.5 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Toolbar (screen only) */
+.ui-print__bar {
+  position: sticky; top: 0; z-index: 1;
+  display: flex; justify-content: center; gap: 8px;
+  padding: 10px 16px;
+  background: rgba(244, 242, 237, .92);
+  border-bottom: 1px solid #ECE9E2;
+}
+.ui-print__btn {
+  appearance: none; border: 0; border-radius: 10px;
+  padding: 9px 18px; font: 600 14px/1 inherit; font-family: inherit;
+  background: #17171C; color: #FFFFFF; cursor: pointer;
+}
+.ui-print__btn:focus-visible { outline: 3px solid #4F46E5; outline-offset: 2px; }
+
+/* The sheet */
+.ui-print__sheet {
+  margin: 20px auto; padding: 28px 32px;
+  max-width: 210mm; background: #FFFFFF;
+  border: 1px solid #ECE9E2; border-radius: 12px;
+}
+.ui-print--receipt .ui-print__sheet {
+  max-width: 80mm; padding: 8px 10px;
+  font: 400 12px/1.4 ui-monospace, 'SF Mono', Menlo, 'Courier New', monospace;
+  color: #000;
+}
+
+/* Blocks */
+.ui-print__title { margin: 0 0 4px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.ui-print__sub { margin: 0 0 16px; font-size: 13px; color: #5B5B66; }
+.ui-print__meta { color: #5B5B66; font-size: 12px; }
+.ui-print__block { margin: 12px 0; }
+.ui-print__center { text-align: center; }
+.ui-print__strong { font-weight: 700; }
+.ui-print__big { font-size: 1.25em; }
+.ui-print__huge { font-size: 22px; font-weight: 800; }
+.ui-print__rule { border: 0; border-top: 1px solid #ECE9E2; margin: 12px 0; }
+.ui-print--receipt .ui-print__rule { border-top: 1px dashed #000; margin: 6px 0; }
+.ui-print__indent { padding-inline-start: 12px; }
+.ui-print__ltr { direction: ltr; unicode-bidi: isolate; }
+
+/* Tables */
+.ui-print__table { width: 100%; border-collapse: collapse; margin: 12px 0; font-variant-numeric: tabular-nums; }
+.ui-print__table th, .ui-print__table td { padding: 7px 8px; text-align: start; vertical-align: top; border-bottom: 1px solid #ECE9E2; }
+.ui-print__table th { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #5B5B66; }
+.ui-print__table .is-num { text-align: end; white-space: nowrap; }
+.ui-print__table tfoot th, .ui-print__table tfoot td { border-bottom: 0; color: #17171C; font-size: 13px; text-transform: none; letter-spacing: 0; }
+.ui-print__table .is-total th, .ui-print__table .is-total td { border-top: 2px solid #17171C; font-weight: 700; font-size: 15px; }
+.ui-print--receipt .ui-print__table { margin: 0; }
+.ui-print--receipt .ui-print__table th, .ui-print--receipt .ui-print__table td { padding: 1px 0; border: 0; font-size: 12px; }
+.ui-print--receipt .ui-print__table .is-total td { border: 0; font-size: 15px; }
+
+/* Card grids (tent cards, QR sheets, labels) */
+.ui-print__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ui-print__grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ui-print__cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  padding: 14px; text-align: center;
+  border: 1px solid #ECE9E2; border-radius: 12px;
+  break-inside: avoid; page-break-inside: avoid;
+}
+.ui-print__cell img { width: 100%; max-width: 180px; height: auto; }
+.ui-print__cell--cut { border-style: dashed; border-color: #CFCBC2; min-height: 105mm; }
+.ui-print__label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #5B5B66; }
+.ui-print__code { font-size: 34px; font-weight: 800; letter-spacing: .3em; font-variant-numeric: tabular-nums; }
+.ui-print__note { font-size: 11px; color: #5B5B66; max-width: 80%; line-height: 1.4; }
+
+.ui-print__only { display: none; }
+
+@media (max-width: 640px) {
+  .ui-print__sheet { margin: 0; border: 0; border-radius: 0; padding: 20px 16px; }
+  .ui-print__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media print {
+  .ui-print { background: #FFFFFF; }
+  .ui-print__bar, .ui-print__screen { display: none !important; }
+  .ui-print__only { display: block; }
+  .ui-print__sheet { margin: 0; padding: 0; max-width: none; border: 0; border-radius: 0; }
+  .ui-print--receipt .ui-print__sheet { width: 72mm; padding: 2mm 0; }
+  .ui-print__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ui-print__grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ui-print__cell--cut { border-style: solid; border-color: #ECE9E2; border-radius: 0; }
+  .ui-print__grid:has(.ui-print__cell--cut) { gap: 0; }
+  a { color: inherit; text-decoration: none; }
+}

@@ -1,0 +1,45 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* card-service snippet (B1c) */
+.mbs-card-service {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-3, 16px);
+  padding: var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .08);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-background, #fff);
+  color: var(--tc-text, #111);
+}
+.mbs-card-service[hidden] { display: none; }
+.mbs-card-service__img { flex: none; inline-size: 72px; block-size: 72px; border-radius: var(--tr-control, 12px); object-fit: cover; }
+.mbs-card-service__body { display: grid; flex: 1; gap: 4px; min-inline-size: 0; }
+.mbs-card-service__name { margin: 0; font-size: 1rem; font-weight: 600; }
+.mbs-card-service__link { color: inherit; text-decoration: none; }
+.mbs-card-service__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.mbs-card-service__link:focus-visible { outline: none; }
+.mbs-card-service:has(.mbs-card-service__link:focus-visible) { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+.mbs-card-service__desc { margin: 0; color: var(--tc-text-muted, #6b7280); font-size: .85rem; line-height: 1.45; }
+.mbs-card-service__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--ts-gap-3, 16px); margin: 2px 0 0; font-size: .85rem; }
+.mbs-card-service__eta { display: inline-flex; align-items: center; gap: 4px; color: var(--tc-text-muted, #6b7280); }
+.mbs-card-service__price { font-weight: 700; }
+.mbs-card-service__from,
+.mbs-card-service__unit { font-weight: 500; color: var(--tc-text-muted, #6b7280); }
+.mbs-card-service__book {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 0;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mbs-card-service__book:disabled { background: var(--tc-surface, #f4f4f5); color: var(--tc-text-muted, #6b7280); cursor: not-allowed; }
+.mbs-card-service__book:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }

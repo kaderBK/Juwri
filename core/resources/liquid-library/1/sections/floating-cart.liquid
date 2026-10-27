@@ -1,0 +1,36 @@
+{%- comment -%}
+  Floating cart (library v1): a bar or pill pinned to the bottom that opens
+  the cart. Only for stores that take orders. It stays hidden while the cart
+  is empty (the runtime un-hides the count probe once something is added).
+  The cart view itself is hosted by the header section.
+{%- endcomment -%}
+{%- if flags.allow_order -%}
+<div class="mbs-floating-cart mbs-floating-cart--{{ section.settings.style | escape }}{% if section.settings.hide_when_empty %} is-autohide{% endif %}{% if section.settings.above_tabbar %} is-raised{% endif %}">
+  <span class="mbs-floating-cart__probe" data-mb-cart-count data-mb-hide-empty hidden>0</span>
+  <button type="button" class="mbs-floating-cart__btn" data-mb-open-cart>
+    <span class="mbs-floating-cart__icon">{%- render 'icon', name: 'cart', size: 20 -%}<span class="mbs-floating-cart__count" data-mb-cart-count>0</span></span>
+    <span class="mbs-floating-cart__label">{%- if section.settings.label != '' -%}{{ section.settings.label | escape }}{%- else -%}{{ 'View Cart' | t }}{%- endif -%}</span>
+    {%- if section.settings.show_total -%}<span class="mbs-floating-cart__total" data-mb-cart-total></span>{%- endif -%}
+  </button>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Floating cart",
+  "group": "chrome",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "style", "type": "select", "label": "Style", "options": [
+      { "value": "bar", "label": "Full-width bar" },
+      { "value": "pill", "label": "Pill" }
+    ], "default": "bar" },
+    { "id": "label", "type": "text", "label": "Label (blank = View cart)", "default": "" },
+    { "id": "show_total", "type": "checkbox", "label": "Show cart total", "default": true },
+    { "id": "hide_when_empty", "type": "checkbox", "label": "Hide while the cart is empty", "default": true },
+    { "id": "above_tabbar", "type": "checkbox", "label": "Sit above a bottom tab bar", "default": false }
+  ],
+  "presets": [{ "name": "Floating cart" }]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* card-magazine snippet; shared parts live in card-photo.css */
+.mbs-card-magazine { position: relative; display: flex; flex-direction: column; border-radius: var(--tr-card, 16px); background: var(--tc-surface, #fff); box-shadow: 0 0 0 1px rgba(var(--tc-text-rgb, 17, 17, 17), .07); overflow: clip; }
+.mbs-card-magazine[hidden] { display: none; }
+.mbs-card-magazine__media { aspect-ratio: 16 / 10; background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+.mbs-card-magazine__body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: var(--ts-gap-3, 16px) var(--ts-gap-4, 24px) var(--ts-gap-4, 24px); }
+.mbs-card-magazine__top, .mbs-card-magazine__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.mbs-card-magazine__foot { margin-block-start: auto; }
+.mbs-card-magazine__name { flex: 1; margin: 0; font-family: var(--tf-heading); font-size: 1.2rem; line-height: 1.25; }
+.mbs-card-magazine .mbs-card-photo__fav { background: none; }
+.mbs-card-magazine__desc { margin: 0; color: var(--tc-text-muted, #6b7280); font-size: .9rem; line-height: 1.5; }
+.mbs-card-magazine__add { position: relative; z-index: 1; min-block-size: 44px; padding-inline: 20px; border: 0; border-radius: var(--tr-pill, 999px); background: var(--tc-primary, #3fd463); color: var(--tc-on-primary, #fff); font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }
+.mbs-card-magazine__sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

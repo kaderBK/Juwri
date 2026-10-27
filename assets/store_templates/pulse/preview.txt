@@ -1,0 +1,17 @@
+PULSE Template Preview
+======================
+
+This is a placeholder for the template preview image.
+
+To generate the actual preview screenshot:
+
+1. Serve the Pulse template in a browser
+2. Take a screenshot at 1200×800px viewport
+3. Save as preview.png in this directory
+
+The preview should show:
+- Light theme with coral-to-magenta accent gradient
+- Hero section with restaurant name and stats
+- Category filter pills
+- A grid of dish cards with images
+- Clean, modern typography (DM Sans + Space Grotesk)

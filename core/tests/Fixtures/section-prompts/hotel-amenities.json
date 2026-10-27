@@ -1,0 +1,6 @@
+{
+  "id": "hotel-amenities",
+  "request": "Hotel amenities strip: owner blocks for amenities (pool, breakfast, parking, Wi-Fi) with a one-line description each, followed by the featured rooms.",
+  "verticals": ["hotel"],
+  "type": "amenities-strip"
+}

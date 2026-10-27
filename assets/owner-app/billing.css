@@ -1,0 +1,113 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner app — in-app purchase billing page (server item P5-22).
+ * Logical properties only (margin-inline / padding-inline / text-align: start),
+ * so the same rules serve LTR and RTL. Built from the owner-ui tokens.
+ */
+.owner-billing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-5);
+    text-align: start;
+}
+
+.owner-billing__status-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-space-2) var(--ui-space-3);
+}
+
+.owner-billing__plan-name {
+    margin: 0;
+    font-size: var(--ui-fs-section);
+    font-weight: 600;
+    color: var(--ui-ink);
+}
+
+.owner-billing__sentence {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: var(--ui-fs-body);
+    color: var(--ui-ink-2);
+}
+
+.owner-billing__plans {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+}
+
+.owner-billing__heading {
+    margin: 0;
+    font-size: var(--ui-fs-section);
+    font-weight: 600;
+    color: var(--ui-ink);
+}
+
+.owner-billing__plans-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--ui-space-3);
+}
+
+.owner-billing__plan {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-3);
+    padding: var(--ui-space-4);
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-radius-lg, 14px);
+    background: var(--ui-surface);
+}
+
+.owner-billing__plan-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--ui-space-2);
+}
+
+.owner-billing__plan-name {
+    font-size: var(--ui-fs-lead);
+    font-weight: 600;
+}
+
+.owner-billing__plan-interval {
+    font-size: var(--ui-fs-caption);
+    color: var(--ui-ink-3);
+}
+
+.owner-billing__plan-price {
+    font-family: var(--ui-font-display);
+    font-size: var(--ui-fs-title);
+    font-weight: 600;
+    color: var(--ui-ink);
+}
+
+.owner-billing__subscribe {
+    margin-block-start: auto;
+}
+
+.owner-billing__footer {
+    margin: 0;
+    font-size: var(--ui-fs-caption);
+    color: var(--ui-ink-3);
+}
+
+.owner-billing__unavailable {
+    padding-block: var(--ui-space-6);
+    color: var(--ui-ink-2);
+}
+
+.owner-billing[data-billing-busy="1"] {
+    cursor: progress;
+}
+
+@media (max-width: 400px) {
+    .owner-billing__plans-list {
+        grid-template-columns: 1fr;
+    }
+}

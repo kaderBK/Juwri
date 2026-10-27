@@ -1,0 +1,15 @@
+{
+  "name": "juwri-make-app",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "description": "juwri Make (Integromat) custom app — JSON blocks for base, connection, webhooks, modules and the Universal call, reusing the juwri owner API (api/v1).",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build:samples": "node scripts/build-samples.js",
+    "validate": "node scripts/build-samples.js && node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

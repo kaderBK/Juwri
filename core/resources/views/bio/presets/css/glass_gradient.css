@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--glass_gradient .bio-link{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.bio--glass_gradient .bio-link:hover{background:rgba(255,255,255,.24)}
+.bio--glass_gradient .bio-block:first-child .bio-link{background:#ffffff;color:#5b21b6;font-weight:700}
+.bio--glass_gradient .bio-avatar{border:2px solid rgba(255,255,255,.55)}
+.bio--glass_gradient .bio-socials a{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}

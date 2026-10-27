@@ -1,0 +1,23 @@
+{
+  "slug": "type_lite",
+  "starter": "minimal",
+  "name": "Type Lite",
+  "family": "type_lite",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600]}
+  ],
+  "tokens": {
+    "--bg": "#fcfcfc",
+    "--ink": "#191919",
+    "--muted": "#8c8c8c",
+    "--card": "transparent",
+    "--accent": "#0a66ff",
+    "--accent-ink": "#ffffff",
+    "--radius": "0px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

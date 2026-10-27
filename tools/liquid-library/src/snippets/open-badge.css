@@ -1,0 +1,20 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* open-badge snippet */
+.mbs-open-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-danger-rgb, 180, 35, 24), .1);
+  color: var(--tc-danger, #b42318);
+  font-size: .8rem;
+  font-weight: 600;
+}
+.mbs-open-badge.is-open { background: rgba(var(--tc-success-rgb, 22, 163, 74), .12); color: var(--tc-success-700, #15803d); }
+.mbs-open-badge__dot { inline-size: 8px; block-size: 8px; border-radius: 50%; background: currentColor; }
+.mbs-open-badge__meta { font-weight: 400; opacity: .85; }
+.mbs-open-badge__meta::before { content: "\00B7"; margin-inline-end: 6px; }

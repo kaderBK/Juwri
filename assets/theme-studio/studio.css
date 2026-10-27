@@ -1,0 +1,399 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Theme Studio — owner editor (owner/design/studio.blade.php, behaviour in
+ * studio.js). Composed from the owner UI kit (assets/owner-ui/components.css):
+ * cards, buttons, icon buttons, pills, tags, chips, segmented controls, fields,
+ * checks, lists/rows, banners, empty states and sheets come from the kit. This
+ * file only lays them out and styles what the kit has no piece for (the section
+ * tree, the canvas, the picker tiles). Kit tokens (--ui-*) only, logical
+ * properties only, so the editor mirrors in Arabic and follows dark mode.
+ */
+
+.ts-app {
+  --ts-left: 300px;
+  --ts-right: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  /* Fills the viewport under the dashboard top bar + page header. */
+  block-size: calc(100dvh - 232px);
+  min-block-size: 600px;
+  color: var(--ui-ink);
+}
+.ts-app[data-mode="picker"] { block-size: auto; min-block-size: 0; gap: var(--ui-space-4); }
+.ts-app .ui-icon-btn:disabled { opacity: 0.4; cursor: default; }
+.ts-app .ui-icon-btn:disabled:active { transform: none; }
+.ts-icon { flex-shrink: 0; }
+
+/* ── Toolbar ─────────────────────────────────────────────────────── */
+.ts-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2) var(--ui-space-3);
+  padding: var(--ui-space-2) var(--ui-space-3);
+}
+.ts-top__start, .ts-top__end, .ts-top__undo, .ts-top__actions { display: flex; align-items: center; gap: var(--ui-space-2); }
+.ts-top__start { flex: 1 1 auto; min-inline-size: 0; }
+.ts-top__end { flex-wrap: wrap; justify-content: flex-end; margin-inline-start: auto; }
+.ts-top__undo { gap: 2px; }
+.ts-top__undo .ui-icon-btn { inline-size: 40px; block-size: 40px; }
+.ts-top__store { flex: 0 1 240px; min-inline-size: 0; min-block-size: 40px; padding-inline: 10px 12px; }
+.ts-top__store select { padding-block: 6px; font-size: var(--ui-fs-label); font-weight: 600; }
+.ts-top__store-icon { flex-shrink: 0; color: var(--ui-ink-3); }
+.ts-top__store--one { display: inline-flex; align-items: center; gap: var(--ui-space-2); flex: 0 1 auto; padding: 0; border: 0; font-weight: 700; }
+.ts-top__store--one > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ts-top__theme { flex-shrink: 0; }
+.ts-save { flex-shrink: 0; }
+
+/* ── Workspace ───────────────────────────────────────────────────── */
+.ts-work {
+  display: grid;
+  grid-template-columns: var(--ts-left) minmax(0, 1fr) var(--ts-right);
+  gap: var(--ui-space-3);
+  flex: 1 1 auto;
+  min-block-size: 0;
+}
+.ts-panel { min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+.ts-panel__body { padding: var(--ui-space-3) var(--ui-space-4) var(--ui-space-4); }
+.ts-panel__head { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ui-space-2); margin-block-end: var(--ui-space-3); }
+.ts-panel__body > * + *, .ts-pane > * + * { margin-block-start: var(--ui-space-3); }
+
+/* Sections / Theme switch — a WAI-ARIA tablist drawn like the kit's segmented control. */
+.ts-tabs {
+  display: flex;
+  gap: var(--ui-space-1);
+  padding: var(--ui-space-1);
+  border-radius: var(--ui-r-button);
+  background: var(--ui-seg-bg);
+}
+.ts-tab {
+  flex: 1 1 0;
+  min-block-size: 40px;
+  padding-inline: var(--ui-space-3);
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ui-ink-2);
+  font: inherit;
+  font-size: var(--ui-fs-label);
+  font-weight: 600;
+  cursor: pointer;
+}
+.ts-tab[aria-selected="true"] { background: var(--ui-seg-on); color: var(--ui-ink); box-shadow: var(--ui-seg-shadow); }
+
+/* ── Canvas ──────────────────────────────────────────────────────── */
+.ts-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-3);
+  min-block-size: 0;
+  padding: var(--ui-space-3);
+  border-radius: var(--ui-r-card);
+  background: var(--ui-inset);
+  overflow: auto;
+}
+.ts-canvas__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--ui-space-2) var(--ui-space-3); }
+.ts-canvas__group { display: flex; align-items: center; gap: var(--ui-space-2); min-inline-size: 0; }
+.ts-canvas__group .ui-seg { background: var(--ui-surface); box-shadow: inset 0 0 0 1px var(--ui-line); }
+.ts-canvas__group .ui-seg__input:checked + .ui-seg__label { background: var(--ui-selected-bg); color: var(--ui-selected-fg); box-shadow: none; }
+.ts-canvas__group .ui-seg__label { min-block-size: 36px; white-space: nowrap; }
+.ts-canvas__stage {
+  flex: 1 1 auto;
+  margin-inline: auto;
+  inline-size: 100%;
+  min-block-size: 0;
+  border-radius: var(--ui-r-tile);
+  overflow: hidden;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-raised);
+  transition: max-inline-size var(--ui-motion-base) var(--ui-ease-standard);
+}
+.ts-canvas__stage[data-device="phone"] { max-inline-size: 390px; }
+.ts-canvas__stage[data-device="tablet"] { max-inline-size: 820px; }
+.ts-canvas__stage[data-device="desktop"] { max-inline-size: 100%; }
+.ts-canvas__frame { display: block; inline-size: 100%; block-size: 100%; min-block-size: 420px; border: 0; background: var(--ui-surface); }
+
+/* ── Section / block tree ────────────────────────────────────────── */
+.ts-tree { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.ts-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-block-size: 48px;
+  padding-inline: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-input);
+}
+.ts-row:hover, .ts-row.is-hover { background: var(--ui-inset); }
+.ts-row.is-selected { border-color: var(--ui-accent); background: var(--ui-accent-soft); }
+.ts-row.is-hidden .ts-row__name { color: var(--ui-ink-3); text-decoration: line-through; }
+.ts-row.is-dragging { opacity: 0.45; }
+.ts-row.is-drop-before { box-shadow: 0 -2px 0 0 var(--ui-accent); }
+.ts-row.is-drop-after { box-shadow: 0 2px 0 0 var(--ui-accent); }
+.ts-row__grip { display: inline-flex; color: var(--ui-ink-3); cursor: grab; }
+.ts-row__main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--ui-fs-label);
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+}
+.ts-row__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ts-row__main .ui-tag { flex-shrink: 0; padding: 3px 7px; }
+.ts-row__tools { display: inline-flex; flex-shrink: 0; opacity: 0.6; transition: opacity var(--ui-motion-fast) ease; }
+.ts-row:hover .ts-row__tools, .ts-row:focus-within .ts-row__tools, .ts-row.is-selected .ts-row__tools { opacity: 1; }
+
+/* Dense ghost icon buttons (tree tools, rich-text bar): the kit's 36px editor
+   size (as in the theme customizer), full 44px targets on touch screens. */
+.ts-mini.ui-icon-btn { inline-size: 34px; block-size: 34px; color: var(--ui-ink-2); }
+.ts-mini.ui-icon-btn:hover:not(:disabled) { background: var(--ui-inset); color: var(--ui-ink); }
+.ts-mini.ui-icon-btn svg { inline-size: 17px; block-size: 17px; }
+.ts-mini[aria-pressed="true"] { color: var(--ui-accent-text); }
+@media (hover: none), (pointer: coarse) {
+  .ts-row__tools { opacity: 1; }
+  .ts-mini.ui-icon-btn { inline-size: var(--ui-target); block-size: var(--ui-target); }
+}
+
+.ts-note { margin: 0; color: var(--ui-ink-2); font-size: var(--ui-fs-label); line-height: 1.5; }
+.ts-empty { padding-block: var(--ui-space-8); }
+.ts-back { align-self: flex-start; gap: 4px; padding-inline: 0; }
+
+.ts-blocks, .ts-restyle { padding-block-start: var(--ui-space-4); border-block-start: 1px solid var(--ui-line); }
+.ts-blocks > * + *, .ts-restyle > * + * { margin-block-start: var(--ui-space-2); }
+.ts-blocks__title { display: flex; align-items: center; gap: 6px; margin: 0; }
+.ts-blocks__add { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); }
+.ts-remove-block { margin-block-start: var(--ui-space-3); }
+
+/* ── Fields (kit .ui-field, built by studio.js) ──────────────────── */
+.ts-field { gap: 6px; }
+.ts-field .ui-field__control { position: relative; min-block-size: 44px; }
+.ts-field .ui-field__control input,
+.ts-field .ui-field__control select { padding-block: 10px; }
+.ts-field .ui-field__control > input[type="range"] { accent-color: var(--ui-accent); padding-block: 0; }
+.ts-range-out { min-inline-size: 3.5em; text-align: end; font-variant-numeric: tabular-nums; color: var(--ui-ink-2); }
+.ts-unit { color: var(--ui-ink-3); }
+.ts-field .ui-field__control > input.ts-color { flex: 0 0 auto; inline-size: 30px; block-size: 30px; padding: 0; border: 0; border-radius: 8px; background: none; cursor: pointer; }
+/* The control draws the focus ring (kit field); no second outline on the input inside it. */
+.ts-app .ui-field__control :focus-visible { outline: 0; }
+.ts-color::-webkit-color-swatch-wrapper { padding: 0; }
+.ts-color::-webkit-color-swatch { border: 1px solid var(--ui-line); border-radius: 8px; }
+.ts-color::-moz-color-swatch { border: 1px solid var(--ui-line); border-radius: 8px; }
+.ts-hex { font-family: var(--ui-font-mono); direction: ltr; }
+.ts-field-header { margin: var(--ui-space-2) 0 0; }
+.ts-field-note { margin: 0; color: var(--ui-ink-2); font-size: var(--ui-fs-label); }
+.ts-field-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ui-space-2); }
+.ts-count { color: var(--ui-ink-3); font-size: var(--ui-fs-caption); font-variant-numeric: tabular-nums; }
+
+/* Colour-token picker: kit chips with a colour dot, one selected (radio). */
+.ts-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.ts-swatch.ui-chip { min-block-size: 36px; padding-inline: 6px 12px; }
+.ts-swatch.ui-chip[aria-checked="true"] { border-color: var(--ui-selected-bg); background: var(--ui-selected-bg); color: var(--ui-selected-fg); }
+.ts-swatch__dot { inline-size: 20px; block-size: 20px; flex-shrink: 0; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px var(--ui-line); }
+
+.ts-rich__bar { display: flex; gap: 2px; }
+.ts-rich {
+  min-block-size: 96px;
+  max-block-size: 260px;
+  overflow: auto;
+  padding: 10px 14px;
+  border: 1px solid var(--ui-control-line);
+  border-radius: var(--ui-r-input);
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  font-size: var(--ui-fs-body);
+  line-height: 1.5;
+}
+.ts-rich:focus { outline: 0; border-color: var(--ui-accent); box-shadow: 0 0 0 4px var(--ui-accent-ring); }
+.ts-rich:empty::before { content: attr(data-placeholder); color: var(--ui-ink-3); }
+.ts-field.ui-field--error .ts-rich { border-color: var(--ui-danger); }
+
+.ts-img { display: flex; align-items: center; gap: var(--ui-space-3); }
+.ts-img__thumb { inline-size: 96px; block-size: 64px; flex-shrink: 0; border-radius: var(--ui-r-input); object-fit: cover; background: var(--ui-inset); }
+.ts-img__thumb--blank { display: inline-flex; align-items: center; justify-content: center; color: var(--ui-ink-3); }
+.ts-img__meta { display: flex; flex-direction: column; gap: 6px; min-inline-size: 0; }
+.ts-img__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--ui-fs-caption); color: var(--ui-ink-2); }
+.ts-img__btns { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.ts-searchbox { min-block-size: 44px; }
+.ts-searchbox input { padding-block: 10px; }
+.ts-searchbox .ts-icon { color: var(--ui-ink-3); }
+.ts-checklist { list-style: none; margin: 0; padding: 0 var(--ui-space-3); max-block-size: 240px; overflow: auto; border: 1px solid var(--ui-line); border-radius: var(--ui-r-input); }
+.ts-checklist li + li { border-block-start: 1px solid var(--ui-hair); }
+.ts-checklist .ui-check { display: flex; min-block-size: 44px; }
+
+/* ── Theme tab ───────────────────────────────────────────────────── */
+.ts-tgroup > * + * { margin-block-start: var(--ui-space-3); }
+.ts-contrast { margin: 4px 0 0; padding-inline-start: 18px; }
+.ts-notices { margin: 4px 0 0; padding-inline-start: 18px; }
+.ts-presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--ui-space-2); }
+.ts-preset {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-block-size: 44px;
+  padding: 10px;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-tile);
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  font: inherit;
+  font-size: var(--ui-fs-label);
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+}
+.ts-preset:hover { border-color: var(--ui-accent); }
+.ts-preset__dots { display: flex; gap: 3px; }
+
+/* ── Sheets ──────────────────────────────────────────────────────── */
+.ts-sheet--panel { max-block-size: 88dvh; }
+.ts-sheet--panel .ts-panel__body { padding: 0; }
+@media (min-width: 900px) {
+  .ts-sheet--wide { inline-size: min(920px, calc(100vw - 32px)); max-block-size: calc(100dvh - 48px); }
+}
+
+/* ── Gallery ─────────────────────────────────────────────────────── */
+.ts-gallery__tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ui-space-2) var(--ui-space-4); margin-block-end: var(--ui-space-3); }
+.ts-gallery__tools .ts-searchbox { flex: 1 1 240px; }
+.ts-chips { margin-block-end: var(--ui-space-4); }
+.ts-gallery__h { margin: 0 0 var(--ui-space-2); }
+.ts-gallery {
+  list-style: none;
+  margin: 0 0 var(--ui-space-4);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--ui-space-3);
+}
+.ts-gallery--rec { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.ts-gcard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 6px 6px 10px;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-tile);
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.ts-gcard:hover:not(:disabled), .ts-gcard:focus-visible { border-color: var(--ui-accent); box-shadow: 0 0 0 3px var(--ui-accent-ring); }
+.ts-gcard:disabled { cursor: not-allowed; opacity: 0.55; }
+.ts-gcard__thumb { display: block; inline-size: 100%; aspect-ratio: 16 / 10; block-size: auto; margin-block-end: 4px; border-radius: var(--ui-r-input); object-fit: cover; background: var(--ui-inset); }
+.ts-gcard__thumb--blank { display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: var(--ui-ink-3); }
+.ts-gcard__name, .ts-gcard__group, .ts-gcard__why { padding-inline: 4px; }
+.ts-gcard__name { font-weight: 700; font-size: var(--ui-fs-label); }
+.ts-gcard__group { color: var(--ui-ink-3); font-size: var(--ui-fs-caption); }
+.ts-gcard__why { color: var(--ui-warning); font-size: var(--ui-fs-caption); line-height: 1.35; }
+
+/* ── History (kit list + rows) ───────────────────────────────────── */
+.ts-versions { list-style: none; margin: 0; padding: 0; }
+.ts-version.ui-row { min-block-size: 60px; }
+
+/* ── Theme picker (store not on a Studio theme) ─────────────────── */
+.ts-picker { display: flex; flex-direction: column; gap: var(--ui-space-5); }
+.ts-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--ui-space-3); }
+.ts-cards--compact { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.ts-card__btn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-space-2);
+  inline-size: 100%;
+  block-size: 100%;
+  padding: var(--ui-space-2) var(--ui-space-2) var(--ui-space-3);
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-card);
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.ts-cards--compact .ts-card__btn { padding: var(--ui-space-3) var(--ui-space-4); }
+.ts-card__btn:hover, .ts-card__btn:focus-visible { border-color: var(--ui-accent); box-shadow: 0 0 0 3px var(--ui-accent-ring); }
+.ts-card__btn[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+.ts-card__thumb { display: block; inline-size: 100%; aspect-ratio: 16 / 10; block-size: auto; border-radius: var(--ui-r-tile); object-fit: cover; background: var(--ui-inset); }
+.ts-card__thumb--blank { display: flex; align-items: center; justify-content: center; font-family: var(--ui-font-display); font-size: 36px; font-weight: 700; color: var(--ui-ink-3); }
+.ts-card__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px var(--ui-space-2); padding-inline: 6px; }
+.ts-cards--compact .ts-card__head { padding-inline: 0; }
+.ts-card__name { font-size: var(--ui-fs-body); font-weight: 700; }
+.ts-card__cta { display: inline-flex; align-items: center; gap: 2px; margin-block-start: auto; padding-inline: 6px; color: var(--ui-accent-text); font-size: var(--ui-fs-label); font-weight: 700; }
+.ts-cards--compact .ts-card__cta { padding-inline: 0; }
+
+/* ── Mobile bar (phones) ─────────────────────────────────────────── */
+.ts-mobilebar { display: none; }
+
+@media (max-width: 1279.98px) {
+  .ts-app { --ts-left: 264px; --ts-right: 300px; }
+  .ts-top__label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .ts-top__actions .ui-btn:not([data-ts-publish]) { padding-inline: 10px; }
+}
+
+@media (max-width: 899.98px) {
+  .ts-app { block-size: auto; min-block-size: 0; }
+  /* Two rows: store + save state, then undo/redo + actions. */
+  .ts-top { padding: var(--ui-space-2); }
+  .ts-top::after { content: ''; order: 3; flex: 1 0 100%; block-size: 0; }
+  .ts-top__end { display: contents; }
+  .ts-top__start { order: 1; flex: 1 1 0; }
+  .ts-save { order: 2; }
+  .ts-top__undo { order: 4; }
+  .ts-top__actions { order: 5; margin-inline-start: auto; }
+  .ts-top__actions .ui-btn { min-block-size: 40px; }
+  .ts-top__actions .ui-btn:not([data-ts-publish]) { min-inline-size: 40px; padding-inline: 8px; }
+  .ts-work { grid-template-columns: minmax(0, 1fr); }
+  .ts-panel { display: none; }
+  .ts-canvas { padding: var(--ui-space-2); block-size: calc(100dvh - 300px); min-block-size: 440px; }
+  .ts-canvas__stage { border-radius: var(--ui-r-input); }
+  .ts-mobilebar {
+    position: sticky;
+    inset-block-end: var(--ui-space-2);
+    z-index: 5;
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid var(--ui-line);
+    border-radius: var(--ui-r-card);
+    background: var(--ui-surface);
+    box-shadow: var(--ui-shadow-float);
+  }
+  .ts-mobilebar__btn { flex: 1 1 0; min-inline-size: 0; padding-inline: var(--ui-space-2); gap: 6px; }
+  .ts-mobilebar__label { overflow: hidden; text-overflow: ellipsis; }
+  /* The dashboard's own phone tab bar is fixed to the bottom edge. */
+  body.ui-has-tabbar .ts-mobilebar { inset-block-end: calc(84px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 599.98px) {
+  /* A phone already previews at phone width: only the language switch stays. */
+  .ts-canvas__group--device { display: none; }
+  .ts-canvas__bar--solo { display: none; }
+  .ts-canvas__bar { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .ts-top__theme { display: none; }
+  .ts-top__store { flex: 1 1 auto; }
+}
+
+/* E2 — Restyle this section with AI */
+.ts-restyle__actions { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-canvas__stage, .ts-row__tools { transition: none; }
+}

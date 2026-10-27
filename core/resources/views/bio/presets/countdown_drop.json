@@ -1,0 +1,29 @@
+{
+  "slug": "countdown_drop",
+  "starter": "delivery_late_night",
+  "name": "Countdown Drop",
+  "family": "countdown",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#12101c",
+    "--ink": "#f0edfa",
+    "--muted": "#a49cc0",
+    "--card": "#1a1628",
+    "--btn-bg": "#1a1628",
+    "--btn-fg": "#f0edfa",
+    "--btn-border": "#35304e",
+    "--accent": "#9f7aff",
+    "--accent-ink": "#12101c",
+    "--avatar-bg": "#1e1a30",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

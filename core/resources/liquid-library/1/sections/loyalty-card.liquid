@@ -1,0 +1,36 @@
+{%- comment -%}
+  Loyalty card (library v1): heading + text around the platform loyalty
+  widget (program, the diner's balance, redeem). The widget gates itself on
+  features.loyalty and an active program; the section is only written when
+  it rendered.
+{%- endcomment -%}
+{%- capture program -%}{%- if features.loyalty -%}{%- widget 'loyalty' -%}{%- endif -%}{%- endcapture -%}
+{%- liquid
+  assign program = program | strip
+  assign heading = section.settings.heading | strip
+  assign text = section.settings.text | strip
+-%}
+{%- if program != '' -%}
+<section class="mbs-loyalty-card" aria-labelledby="mbs-loyalty-card-{{ section.id | escape }}">
+  <div class="mbs-loyalty-card__card">
+    {%- render 'icon', name: 'heart', size: 28 -%}
+    <h2 class="mbs-loyalty-card__title" id="mbs-loyalty-card-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- else -%}{{ 'Earn rewards' | t }}{%- endif -%}</h2>
+    {%- if text != '' -%}<p class="mbs-loyalty-card__text">{{ text | escape | newline_to_br }}</p>{%- endif -%}
+    <div class="mbs-loyalty-card__actions">{{ program }}</div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Loyalty card",
+  "group": "action",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Earn rewards)", "default": "" },
+    { "id": "text", "type": "textarea", "label": "Text", "default": "" }
+  ],
+  "presets": [{ "name": "Loyalty card" }]
+}
+{% endschema %}

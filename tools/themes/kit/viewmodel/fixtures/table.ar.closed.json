@@ -1,0 +1,1534 @@
+{
+ "store": {
+  "public_id": "st_saffron_house",
+  "slug": "saffron-house-demo",
+  "name": "بيت الزعفران",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "بيت الزعفران"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "بيت الزعفران"
+  },
+  "tagline": "مشاوي الفحم والمقبلات منذ 1998",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/saffron-house-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/saffron-house-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "food",
+  "store_type": "restaurant",
+  "status": {
+   "open": false,
+   "label": "مغلق · يفتح 1 م",
+   "next_change_at": "2026-10-02T13:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0101",
+   "whatsapp": "+966 55 010 0101",
+   "address": "العليا، طريق الملك فهد، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/saffron-house"
+   }
+  ],
+  "rating": {
+   "avg": 4.7,
+   "count": 1280
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/saffron-house-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/saffron-house-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "شركة مطاعم بيت الزعفران",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-1101",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-1101",
+    "label": "الرقم الضريبي"
+   },
+   "address": "طريق الملك فهد، العليا، الرياض 12212"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "الفرع الرئيسي",
+   "address": "العليا، طريق الملك فهد، الرياض"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "delivery",
+    "label": "توصيل",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "takeaway",
+    "label": "سفري",
+    "needs_address": false,
+    "needs_slot": false
+   },
+   {
+    "key": "dine_in",
+    "label": "في المطعم",
+    "needs_address": false,
+    "needs_slot": false
+   }
+  ],
+  "selected_order_type": "delivery",
+  "schedule_ahead": false,
+  "table": null,
+  "min_order": {
+   "minor": 5000,
+   "currency": "SAR",
+   "formatted": "50.00 ر.س"
+  }
+ },
+ "theme": {
+  "slug": "table",
+  "preset": "classic",
+  "settings": {
+   "colors.primary": "#B4331A",
+   "colors.background": "#FAF6F0",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#1F1A17",
+   "colors.accent": "#E8A33D",
+   "layout.radius": "round",
+   "layout.density": "cozy",
+   "fonts.pair": "fraunces-jakarta",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#F07A52",
+   "colors_dark.background": "#141210",
+   "colors_dark.surface": "#1E1B18",
+   "colors_dark.text": "#F6F1EA",
+   "colors_dark.accent": "#F2B65A",
+   "layout.card": "list",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "cover",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": true,
+   "menu.show_allergens": true,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "hero",
+   "offers",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "reservations",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "featured_title": "أطباق اليوم",
+   "search_placeholder": "ابحث في القائمة"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "mezze",
+    "name": "المقبلات",
+    "item_ids": [
+     "hummus",
+     "moutabal",
+     "labneh-with-olive-oil",
+     "stuffed-vine-leaves",
+     "falafel-8-pcs",
+     "kibbeh-4-pcs",
+     "cheese-sambousek-6-pcs",
+     "muhammara",
+     "mixed-mezze-platter"
+    ],
+    "count": 9
+   },
+   {
+    "id": "salads-soups",
+    "name": "السلطات والشوربات",
+    "item_ids": [
+     "fattoush-bowl",
+     "tabbouleh",
+     "rocket-and-halloumi-salad",
+     "arabic-salad",
+     "lentil-soup",
+     "chicken-freekeh-soup"
+    ],
+    "count": 6
+   },
+   {
+    "id": "grills",
+    "name": "المشاوي",
+    "item_ids": [
+     "mixed-grill-platter",
+     "chicken-shish-tawook",
+     "kofta-kebab",
+     "lamb-chops",
+     "lamb-tikka",
+     "half-charcoal-chicken",
+     "grilled-hammour",
+     "grilled-prawns",
+     "beef-fillet-skewers"
+    ],
+    "count": 9
+   },
+   {
+    "id": "rice-mains",
+    "name": "الأرز والأطباق الرئيسية",
+    "item_ids": [
+     "lamb-ouzi",
+     "chicken-kabsa",
+     "lamb-kabsa",
+     "chicken-mandi",
+     "lamb-mandi",
+     "maqluba",
+     "fish-sayadieh"
+    ],
+    "count": 7
+   },
+   {
+    "id": "wraps",
+    "name": "اللفائف والساندويتشات",
+    "item_ids": [
+     "chicken-shawarma-wrap",
+     "beef-shawarma-wrap",
+     "falafel-wrap",
+     "kofta-saj-wrap",
+     "halloumi-saj",
+     "shish-tawook-sandwich"
+    ],
+    "count": 6
+   },
+   {
+    "id": "desserts",
+    "name": "الحلويات",
+    "item_ids": [
+     "kunafa",
+     "umm-ali",
+     "assorted-baklava",
+     "basbousa",
+     "muhallabia",
+     "luqaimat"
+    ],
+    "count": 6
+   },
+   {
+    "id": "drinks",
+    "name": "المشروبات",
+    "item_ids": [
+     "mint-lemonade",
+     "fresh-orange-juice",
+     "pomegranate-juice",
+     "jallab",
+     "laban-ayran",
+     "karak-tea",
+     "arabic-coffee-pot",
+     "sparkling-water",
+     "still-water"
+    ],
+    "count": 9
+   }
+  ],
+  "items": {
+   "hummus": {
+    "id": "hummus",
+    "name": "حمص",
+    "url": "/saffron-house-demo/item/hummus",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "حمص"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "حمص بالطحينة مع زيت الزيتون والبابريكا.",
+    "calories": 310,
+    "allergens": [
+     "السمسم"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "moutabal": {
+    "id": "moutabal",
+    "name": "متبّل",
+    "url": "/saffron-house-demo/item/moutabal",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "متبّل"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "باذنجان مشوي بالطحينة والليمون.",
+    "calories": 260,
+    "allergens": [
+     "السمسم"
+    ],
+    "from_price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "labneh-with-olive-oil": {
+    "id": "labneh-with-olive-oil",
+    "name": "لبنة بزيت الزيتون",
+    "url": "/saffron-house-demo/item/labneh-with-olive-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لبنة بزيت الزيتون"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لبنة مصفّاة مع النعناع وزيت زيتون بكر.",
+    "calories": 220,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "stuffed-vine-leaves": {
+    "id": "stuffed-vine-leaves",
+    "name": "ورق عنب",
+    "url": "/saffron-house-demo/item/stuffed-vine-leaves",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ورق عنب"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أرز وأعشاب وليمون، ملفوفة يدوياً.",
+    "calories": 280,
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "falafel-8-pcs": {
+    "id": "falafel-8-pcs",
+    "name": "فلافل (8 قطع)",
+    "url": "/saffron-house-demo/item/falafel-8-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "فلافل (8 قطع)"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مقرمشة من الخارج وخضراء من الداخل مع صلصة الطحينة.",
+    "calories": 420,
+    "allergens": [
+     "السمسم"
+    ],
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "kibbeh-4-pcs": {
+    "id": "kibbeh-4-pcs",
+    "name": "كبّة (4 قطع)",
+    "url": "/saffron-house-demo/item/kibbeh-4-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كبّة (4 قطع)"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "قشرة برغل مقلية محشوة بلحم غنم متبّل.",
+    "calories": 480,
+    "allergens": [
+     "الغلوتين",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "28.00 ر.س"
+    }
+   },
+   "cheese-sambousek-6-pcs": {
+    "id": "cheese-sambousek-6-pcs",
+    "name": "سمبوسة جبنة (6 قطع)",
+    "url": "/saffron-house-demo/item/cheese-sambousek-6-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سمبوسة جبنة (6 قطع)"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عجينة ذهبية محشوة بالجبنة الذائبة.",
+    "calories": 450,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   },
+   "muhammara": {
+    "id": "muhammara",
+    "name": "محمّرة",
+    "url": "/saffron-house-demo/item/muhammara",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "محمّرة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "فلفل أحمر مشوي وجوز ودبس الرمان.",
+    "calories": 290,
+    "allergens": [
+     "المكسرات",
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "mixed-mezze-platter": {
+    "id": "mixed-mezze-platter",
+    "name": "طبق مقبلات مشكّل",
+    "url": "/saffron-house-demo/item/mixed-mezze-platter",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "طبق مقبلات مشكّل"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حمص ومتبّل وتبولة وفلافل وكبّة.",
+    "calories": 980,
+    "allergens": [
+     "السمسم",
+     "الغلوتين",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "58.00 ر.س"
+    }
+   },
+   "fattoush-bowl": {
+    "id": "fattoush-bowl",
+    "name": "سلطة فتوش",
+    "url": "/saffron-house-demo/item/fattoush-bowl",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سلطة فتوش"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "سماق وخبز مقرمش وفجل ورمان.",
+    "calories": 240,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 3200,
+     "currency": "SAR",
+     "formatted": "32.00 ر.س"
+    }
+   },
+   "tabbouleh": {
+    "id": "tabbouleh",
+    "name": "تبّولة",
+    "url": "/saffron-house-demo/item/tabbouleh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تبّولة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "بقدونس وطماطم وبرغل وليمون.",
+    "calories": 190,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "28.00 ر.س"
+    }
+   },
+   "rocket-and-halloumi-salad": {
+    "id": "rocket-and-halloumi-salad",
+    "name": "سلطة جرجير وحلوم",
+    "url": "/saffron-house-demo/item/rocket-and-halloumi-salad",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سلطة جرجير وحلوم"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حلوم مشوي وجرجير وطماطم كرزية وخل بلسميك.",
+    "calories": 380,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 3400,
+     "currency": "SAR",
+     "formatted": "34.00 ر.س"
+    }
+   },
+   "arabic-salad": {
+    "id": "arabic-salad",
+    "name": "سلطة عربية",
+    "url": "/saffron-house-demo/item/arabic-salad",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سلطة عربية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "خيار وطماطم وبصل ونعناع.",
+    "calories": 90,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "lentil-soup": {
+    "id": "lentil-soup",
+    "name": "شوربة عدس",
+    "url": "/saffron-house-demo/item/lentil-soup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شوربة عدس"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عدس أحمر وكمّون وليمون مع خبز محمّص.",
+    "calories": 210,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "chicken-freekeh-soup": {
+    "id": "chicken-freekeh-soup",
+    "name": "شوربة فريكة بالدجاج",
+    "url": "/saffron-house-demo/item/chicken-freekeh-soup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شوربة فريكة بالدجاج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "فريكة مدخنة ودجاج وأعشاب.",
+    "calories": 260,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "mixed-grill-platter": {
+    "id": "mixed-grill-platter",
+    "name": "مشاوي مشكّلة",
+    "url": "/saffron-house-demo/item/mixed-grill-platter",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مشاوي مشكّلة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "شيش طاووق وكفتة وتكا لحم مع صلصة الثوم وخبز صاج.",
+    "calories": 920,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 6800,
+     "currency": "SAR",
+     "formatted": "68.00 ر.س"
+    }
+   },
+   "chicken-shish-tawook": {
+    "id": "chicken-shish-tawook",
+    "name": "شيش طاووق دجاج",
+    "url": "/saffron-house-demo/item/chicken-shish-tawook",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شيش طاووق دجاج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "متبّل بالزبادي والليمون ومشوي على الفحم.",
+    "calories": 640,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 4200,
+     "currency": "SAR",
+     "formatted": "42.00 ر.س"
+    }
+   },
+   "kofta-kebab": {
+    "id": "kofta-kebab",
+    "name": "كباب كفتة",
+    "url": "/saffron-house-demo/item/kofta-kebab",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كباب كفتة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "لحم غنم مفروم مع البقدونس والبصل وطحينة جانبية.",
+    "calories": 710,
+    "allergens": [
+     "السمسم"
+    ],
+    "from_price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "46.00 ر.س"
+    }
+   },
+   "lamb-chops": {
+    "id": "lamb-chops",
+    "name": "ريش غنم",
+    "url": "/saffron-house-demo/item/lamb-chops",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ريش غنم"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "نفدت الكمية"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": false,
+    "short": "أربع ريش بملح الروزماري مع طماطم مشوية.",
+    "calories": 820,
+    "price": {
+     "minor": 9500,
+     "currency": "SAR",
+     "formatted": "95.00 ر.س"
+    }
+   },
+   "lamb-tikka": {
+    "id": "lamb-tikka",
+    "name": "تكا لحم",
+    "url": "/saffron-house-demo/item/lamb-tikka",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تكا لحم"
+    },
+    "badges": [
+     {
+      "kind": "spicy",
+      "label": "حار"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مكعبات لحم غنم بتتبيلة مدخنة.",
+    "calories": 690,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "58.00 ر.س"
+    }
+   },
+   "half-charcoal-chicken": {
+    "id": "half-charcoal-chicken",
+    "name": "نصف دجاجة على الفحم",
+    "url": "/saffron-house-demo/item/half-charcoal-chicken",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "نصف دجاجة على الفحم"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "متبّلة بالثوم والليمون مع بطاطس ومخلل.",
+    "calories": 780,
+    "price": {
+     "minor": 4400,
+     "currency": "SAR",
+     "formatted": "44.00 ر.س"
+    }
+   },
+   "grilled-hammour": {
+    "id": "grilled-hammour",
+    "name": "هامور مشوي",
+    "url": "/saffron-house-demo/item/grilled-hammour",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "هامور مشوي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "هامور محلي بتتبيلة الشرمولة والليمون.",
+    "calories": 520,
+    "allergens": [
+     "الأسماك"
+    ],
+    "from_price": {
+     "minor": 7200,
+     "currency": "SAR",
+     "formatted": "72.00 ر.س"
+    }
+   },
+   "grilled-prawns": {
+    "id": "grilled-prawns",
+    "name": "روبيان مشوي",
+    "url": "/saffron-house-demo/item/grilled-prawns",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "روبيان مشوي"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "روبيان كبير بزبدة الثوم والأعشاب.",
+    "calories": 430,
+    "allergens": [
+     "القشريات",
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 7800,
+     "currency": "SAR",
+     "formatted": "78.00 ر.س"
+    }
+   },
+   "beef-fillet-skewers": {
+    "id": "beef-fillet-skewers",
+    "name": "أسياخ فيليه لحم",
+    "url": "/saffron-house-demo/item/beef-fillet-skewers",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أسياخ فيليه لحم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مكعبات لحم بقري طرية مع الفلفل والبصل على السيخ.",
+    "calories": 610,
+    "from_price": {
+     "minor": 6400,
+     "currency": "SAR",
+     "formatted": "64.00 ر.س"
+    }
+   },
+   "lamb-ouzi": {
+    "id": "lamb-ouzi",
+    "name": "أوزي لحم",
+    "url": "/saffron-house-demo/item/lamb-ouzi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أوزي لحم"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مطهو ببطء لست ساعات مع أرز متبّل وعجينة.",
+    "calories": 1080,
+    "allergens": [
+     "الغلوتين",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "89.00 ر.س"
+    }
+   },
+   "chicken-kabsa": {
+    "id": "chicken-kabsa",
+    "name": "كبسة دجاج",
+    "url": "/saffron-house-demo/item/chicken-kabsa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كبسة دجاج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أرز متبّل مع صلصة طماطم ودجاج محمّر وزبيب.",
+    "calories": 860,
+    "allergens": [
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "46.00 ر.س"
+    }
+   },
+   "lamb-kabsa": {
+    "id": "lamb-kabsa",
+    "name": "كبسة لحم",
+    "url": "/saffron-house-demo/item/lamb-kabsa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كبسة لحم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لحم غنم طري على أرز بالبهارات مع الدقوس.",
+    "calories": 990,
+    "allergens": [
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 6200,
+     "currency": "SAR",
+     "formatted": "62.00 ر.س"
+    }
+   },
+   "chicken-mandi": {
+    "id": "chicken-mandi",
+    "name": "مندي دجاج",
+    "url": "/saffron-house-demo/item/chicken-mandi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مندي دجاج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مدخّن في الحفرة ومقدّم على أرز عطري.",
+    "calories": 830,
+    "price": {
+     "minor": 4800,
+     "currency": "SAR",
+     "formatted": "48.00 ر.س"
+    }
+   },
+   "lamb-mandi": {
+    "id": "lamb-mandi",
+    "name": "مندي لحم",
+    "url": "/saffron-house-demo/item/lamb-mandi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مندي لحم"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لحم غنم يتفكك بسهولة على أرز بسمتي.",
+    "calories": 1020,
+    "price": {
+     "minor": 6600,
+     "currency": "SAR",
+     "formatted": "66.00 ر.س"
+    }
+   },
+   "maqluba": {
+    "id": "maqluba",
+    "name": "مقلوبة",
+    "url": "/saffron-house-demo/item/maqluba",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مقلوبة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أرز مقلوب مع الباذنجان والقرنبيط والدجاج.",
+    "calories": 790,
+    "allergens": [
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 5200,
+     "currency": "SAR",
+     "formatted": "52.00 ر.س"
+    }
+   },
+   "fish-sayadieh": {
+    "id": "fish-sayadieh",
+    "name": "صيادية سمك",
+    "url": "/saffron-house-demo/item/fish-sayadieh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "صيادية سمك"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "سمك مقلي على أرز بالبصل المكرمل مع صلصة الطحينة.",
+    "calories": 740,
+    "allergens": [
+     "الأسماك",
+     "السمسم"
+    ],
+    "price": {
+     "minor": 5600,
+     "currency": "SAR",
+     "formatted": "56.00 ر.س"
+    }
+   },
+   "chicken-shawarma-wrap": {
+    "id": "chicken-shawarma-wrap",
+    "name": "لفّة شاورما دجاج",
+    "url": "/saffron-house-demo/item/chicken-shawarma-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لفّة شاورما دجاج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مع صلصة الثوم والمخلل والبطاطس.",
+    "calories": 540,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   },
+   "beef-shawarma-wrap": {
+    "id": "beef-shawarma-wrap",
+    "name": "لفّة شاورما لحم",
+    "url": "/saffron-house-demo/item/beef-shawarma-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لفّة شاورما لحم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "طحينة وطماطم وبقدونس على صاج رقيق.",
+    "calories": 590,
+    "allergens": [
+     "الغلوتين",
+     "السمسم"
+    ],
+    "price": {
+     "minor": 2600,
+     "currency": "SAR",
+     "formatted": "26.00 ر.س"
+    }
+   },
+   "falafel-wrap": {
+    "id": "falafel-wrap",
+    "name": "لفّة فلافل",
+    "url": "/saffron-house-demo/item/falafel-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لفّة فلافل"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "فلافل مع لفت مخلل وطحينة.",
+    "calories": 470,
+    "allergens": [
+     "الغلوتين",
+     "السمسم"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "kofta-saj-wrap": {
+    "id": "kofta-saj-wrap",
+    "name": "لفّة صاج بالكفتة",
+    "url": "/saffron-house-demo/item/kofta-saj-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لفّة صاج بالكفتة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "كفتة مشوية وبصل وسماق على صاج ساخن.",
+    "calories": 620,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "halloumi-saj": {
+    "id": "halloumi-saj",
+    "name": "صاج حلوم",
+    "url": "/saffron-house-demo/item/halloumi-saj",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "صاج حلوم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حلوم مشوي وطماطم ونعناع.",
+    "calories": 480,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "shish-tawook-sandwich": {
+    "id": "shish-tawook-sandwich",
+    "name": "ساندويتش شيش طاووق",
+    "url": "/saffron-house-demo/item/shish-tawook-sandwich",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ساندويتش شيش طاووق"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "دجاج مشوي على الفحم مع صلصة الثوم والمخلل.",
+    "calories": 560,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "kunafa": {
+    "id": "kunafa",
+    "name": "كنافة",
+    "url": "/saffron-house-demo/item/kunafa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كنافة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كنافة بالجبن ساخنة مع قطر ماء الزهر والفستق.",
+    "calories": 520,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   },
+   "umm-ali": {
+    "id": "umm-ali",
+    "name": "أم علي",
+    "url": "/saffron-house-demo/item/umm-ali",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أم علي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عجين مخبوز مع الحليب والمكسرات والزبيب.",
+    "calories": 490,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "assorted-baklava": {
+    "id": "assorted-baklava",
+    "name": "بقلاوة مشكّلة",
+    "url": "/saffron-house-demo/item/assorted-baklava",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بقلاوة مشكّلة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "ست قطع: فستق وجوز وكاجو.",
+    "calories": 560,
+    "allergens": [
+     "الغلوتين",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "28.00 ر.س"
+    }
+   },
+   "basbousa": {
+    "id": "basbousa",
+    "name": "بسبوسة",
+    "url": "/saffron-house-demo/item/basbousa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بسبوسة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كيك السميد المنقوع بقطر ماء الورد.",
+    "calories": 380,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "muhallabia": {
+    "id": "muhallabia",
+    "name": "مهلبية",
+    "url": "/saffron-house-demo/item/muhallabia",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مهلبية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مهلبية بماء الورد والفستق المطحون.",
+    "calories": 300,
+    "allergens": [
+     "الحليب ومشتقاته",
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "luqaimat": {
+    "id": "luqaimat",
+    "name": "لقيمات",
+    "url": "/saffron-house-demo/item/luqaimat",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لقيمات"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كرات عجين مقلية مع دبس التمر.",
+    "calories": 430,
+    "allergens": [
+     "الغلوتين"
+    ],
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "mint-lemonade": {
+    "id": "mint-lemonade",
+    "name": "ليمون بالنعناع",
+    "url": "/saffron-house-demo/item/mint-lemonade",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ليمون بالنعناع"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ليمون طازج ونعناع وثلج مجروش.",
+    "calories": 120,
+    "from_price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "fresh-orange-juice": {
+    "id": "fresh-orange-juice",
+    "name": "عصير برتقال طازج",
+    "url": "/saffron-house-demo/item/fresh-orange-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عصير برتقال طازج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "معصور عند الطلب بدون سكر مضاف.",
+    "calories": 150,
+    "from_price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "pomegranate-juice": {
+    "id": "pomegranate-juice",
+    "name": "عصير رمان",
+    "url": "/saffron-house-demo/item/pomegranate-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عصير رمان"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "رمان معصور على البارد.",
+    "calories": 160,
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "jallab": {
+    "id": "jallab",
+    "name": "جلّاب",
+    "url": "/saffron-house-demo/item/jallab",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "جلّاب"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تمر ودبس عنب وماء ورد مع الصنوبر.",
+    "calories": 170,
+    "allergens": [
+     "المكسرات"
+    ],
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "laban-ayran": {
+    "id": "laban-ayran",
+    "name": "عيران لبن",
+    "url": "/saffron-house-demo/item/laban-ayran",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "عيران لبن"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "مشروب لبن مملّح بارد.",
+    "calories": 90,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "8.00 ر.س"
+    }
+   },
+   "karak-tea": {
+    "id": "karak-tea",
+    "name": "شاي كرك",
+    "url": "/saffron-house-demo/item/karak-tea",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شاي كرك"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "شاي قوي بالهيل والحليب المبخّر.",
+    "calories": 130,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "8.00 ر.س"
+    }
+   },
+   "arabic-coffee-pot": {
+    "id": "arabic-coffee-pot",
+    "name": "دلّة قهوة عربية",
+    "url": "/saffron-house-demo/item/arabic-coffee-pot",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "دلّة قهوة عربية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "تحميص خفيف بالهيل والزعفران تكفي ثلاثة.",
+    "calories": 15,
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "sparkling-water": {
+    "id": "sparkling-water",
+    "name": "مياه غازية",
+    "url": "/saffron-house-demo/item/sparkling-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مياه غازية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عبوة 330 مل.",
+    "calories": 0,
+    "price": {
+     "minor": 600,
+     "currency": "SAR",
+     "formatted": "6.00 ر.س"
+    }
+   },
+   "still-water": {
+    "id": "still-water",
+    "name": "مياه معدنية",
+    "url": "/saffron-house-demo/item/still-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مياه معدنية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عبوة 500 مل.",
+    "calories": 0,
+    "price": {
+     "minor": 300,
+     "currency": "SAR",
+     "formatted": "3.00 ر.س"
+    }
+   }
+  }
+ },
+ "features": {
+  "offers": [
+   {
+    "id": "off_sweet",
+    "title": "مع كل طلب فوق 150 ر.س حلى مجاناً",
+    "code": "SWEET"
+   },
+   {
+    "id": "off_family",
+    "title": "وجبة العائلة بسعر خاص"
+   }
+  ],
+  "featured": [
+   "hummus",
+   "falafel-8-pcs",
+   "mixed-mezze-platter",
+   "fattoush-bowl",
+   "mixed-grill-platter",
+   "chicken-shish-tawook"
+  ],
+  "reservations": {
+   "table": true,
+   "waitlist": false
+  }
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/saffron-house-demo/cart",
+  "quote": "/saffron-house-demo/quote",
+  "place": "/saffron-house-demo/order",
+  "track": "/saffron-house-demo/track",
+  "coupon": "/saffron-house-demo/coupon",
+  "otp": "/saffron-house-demo/otp",
+  "account": "/saffron-house-demo/account",
+  "search": "/saffron-house-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "exclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {}
+}

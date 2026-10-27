@@ -1,0 +1,144 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "bakehouse",
+      "label": "Bakehouse",
+      "thumb": "assets/store_templates/crumb/presets/bakehouse.png",
+      "values": {
+        "colors.primary": "#8B5A2B",
+        "colors.background": "#FCFAF7",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#241A10",
+        "colors.accent": "#F5A623",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "rye",
+      "label": "Rye",
+      "thumb": "assets/store_templates/crumb/presets/rye.png",
+      "values": {
+        "colors.primary": "#6b4f2a",
+        "colors.background": "#f4efe6",
+        "colors.surface": "#fffdf8",
+        "colors.text": "#241a10",
+        "colors.accent": "#a8843c",
+        "layout.radius": "soft"
+      }
+    },
+    {
+      "id": "cocoa",
+      "label": "Cocoa",
+      "thumb": "assets/store_templates/crumb/presets/cocoa.png",
+      "values": {
+        "colors.primary": "#a5673a",
+        "colors.background": "#17110c",
+        "colors.surface": "#231a12",
+        "colors.text": "#f3e8dc",
+        "colors.accent": "#e0a44a",
+        "layout.radius": "round"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#8B5A2B"
+        },
+        "colors.background": {
+          "default": "#FCFAF7"
+        },
+        "colors.surface": {
+          "default": "#FFFFFF"
+        },
+        "colors.text": {
+          "default": "#241A10"
+        },
+        "colors.accent": {
+          "default": "#F5A623"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Featured Products"
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Freshly baked, delivered warm",
+          "label": "Splash tagline"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category tiles",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

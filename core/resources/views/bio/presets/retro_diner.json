@@ -1,0 +1,29 @@
+{
+  "slug": "retro_diner",
+  "starter": "delivery_late_night",
+  "name": "Retro Diner",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Archivo", "weights": [500, 600, 800, 900]},
+    {"family": "Bungee", "weights": [400]}
+  ],
+  "tokens": {
+    "--bg": "#f5e9d0",
+    "--ink": "#1e1a16",
+    "--muted": "#5c554c",
+    "--card": "#fffdf6",
+    "--btn-fg": "#1e1a16",
+    "--btn-border": "#1e1a16",
+    "--btn-border-width": "2.5px",
+    "--accent": "#d92b2b",
+    "--accent-ink": "#fffdf6",
+    "--icon-bg": "#ffd23e",
+    "--icon-fg": "#1e1a16",
+    "--radius": "16px",
+    "--shadow": "4px 4px 0 #1e1a16",
+    "--font-body": "'Archivo',sans-serif",
+    "--font-display": "'Bungee',sans-serif"
+  }
+}

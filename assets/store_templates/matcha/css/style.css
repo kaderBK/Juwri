@@ -1,0 +1,2030 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   matcha — light green-wave menu template · theme stylesheet
+   White/mint surfaces · deep green organic wave header ·
+   squircle cards · black pill CTAs · playful rounded type.
+   ═══════════════════════════════════════════════════════════ */
+
+.matcha{
+  /* surfaces (LIGHT) — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php). The literal after each comma is matcha's own value,
+     kept as the var() fallback, so a store that customized nothing — or a render
+     with no token include — is byte-identical to today (WI-T5). */
+  --bg:var(--tc-background, #f7faf8);
+  --bg-deep:#eef3ef;                 /* darker chrome; derived bg-700 differs, keep literal */
+  --card:var(--tc-surface, #ffffff);
+  --mint:#e9f3ec;
+  --mint-2:#dcebe1;
+  --stroke:rgba(10,40,25,.08);
+  --stroke-2:rgba(10,40,25,.14);
+  /* ink */
+  --ink:var(--tc-text, #152b1f);
+  --ink-2:#4c6355;
+  /* caption ink — must clear 4.5:1 on --card (#fff) AND --mint (#e9f3ec),
+     the two surfaces captions actually sit on. #7b8f83 measured 3.03:1. */
+  --ink-3:#586e63;
+  /* brand — matcha's design accent is the green (the customizer PRIMARY role).
+     --tc-primary wins when the owner recolours in v2; else the legacy --matcha-brand
+     hook is preserved, else matcha's literal — so parity holds for both eras. */
+  --green:var(--tc-primary, var(--matcha-brand,#067655));
+  --green-hi:#0b9a6d;                /* hand-tuned highlight; derived primary-300 differs, keep */
+  --green-soft:#cfe8da;              /* hand-tuned soft tint; keep literal */
+  --green-deep:#045a41;              /* hand-tuned deep; derived primary-600 differs, keep */
+  --green-ink:#ffffff;
+  /* semantic status colours — discount/off badges, spice, ratings (NOT the
+     customizer accent) vs. errors; intentionally literal, like crave's --orange */
+  --gold:#f2a93b;
+  --red:#e8564a;
+  /* cta */
+  --black:#131313;
+  --black-ink:#ffffff;
+  /* shadows */
+  --shadow-card:0 10px 26px -12px rgba(16,60,38,.18);
+  --shadow-pop:0 18px 38px -14px rgba(10,30,20,.28);
+  /* radius — matcha's layout.radius default is `pill`, whose scale is
+     [card 26px · control 999px · pill 999px]. --r-card (26px) and --r-pill (999px)
+     match that row exactly, so they wire to the tokens. --r-img (20px) and
+     --r-sheet (30px) match no step (control-radius at pill would circle images /
+     reshape sheets), so they stay literal — the same test crave applied. */
+  --r-card:var(--tr-card, 26px);
+  --r-img:20px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:30px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:360ms;
+  /* z */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* fonts — follow the self-hosted pair (WI-T2); pair "none" (matcha's default)
+     emits no --tf-*, so these degrade to matcha's own stacks. Both --tf-* stacks
+     end in the pair's Arabic face, so RTL (--font-ar) can share --tf-body safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Plus Jakarta Sans",system-ui,sans-serif);
+  --font-display:var(--tf-heading, 'Saudi Riyal', "Baloo 2",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+/* ── page chrome ─────────────────────────────────────────── */
+html:has(.matcha), body:has(.matcha){height:100%;background:#eef3ef}
+body:has(.matcha){margin:0;overflow:hidden}
+body:has(.matcha) #whatsapp-chat-widget{display:none}
+.matcha, .matcha *{margin:0;padding:0;box-sizing:border-box}
+.matcha{
+  font-family:var(--font-ui);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  isolation:isolate;overflow:clip;
+  margin-inline:auto;width:100%;
+}
+[dir="rtl"] .matcha, [dir="rtl"] .matcha input, [dir="rtl"] .matcha button, [dir="rtl"] .matcha textarea{font-family:var(--font-ar)}
+/* ── desktop surround ────────────────────────────────────────
+   The app is a phone-shaped ordering surface; on a laptop it used to float
+   in a bare peach gradient with no branding, leaving ~66% of the screen dead
+   and clashing with the matcha green. The frame stays (it is the design), but
+   the ground is now matcha-family and the empty side carries the restaurant's
+   own identity card (.matcha-desk, rendered by index.blade.php). */
+@media (min-width:861px){
+  body:has(.matcha){
+    background:
+      radial-gradient(44rem 32rem at 78% 8%,rgba(6,118,85,.16),transparent 62%),
+      radial-gradient(38rem 28rem at 12% 88%,rgba(11,154,109,.13),transparent 64%),
+      #e4ece7;
+  }
+  .matcha{
+    max-width:430px;top:2dvh;bottom:2dvh;left:0;right:0;
+    border-radius:34px;border:1px solid rgba(10,40,25,.10);
+    box-shadow:0 50px 100px -30px rgba(10,40,25,.4);
+  }
+}
+.matcha-desk{display:none}
+@media (min-width:1024px){
+  .matcha-desk{
+    position:fixed;top:0;bottom:0;z-index:0;
+    inset-inline-end:calc(50% + 244px);inset-inline-start:auto;
+    width:min(360px,calc(50vw - 268px));
+    display:flex;flex-direction:column;justify-content:center;gap:12px;
+    padding-block:6dvh;pointer-events:none;
+    font-family:var(--font-ui);color:#1a3227;
+  }
+  [dir="rtl"] .matcha-desk{font-family:var(--font-ar)}
+  .md-logo{
+    width:74px;height:74px;border-radius:24px;overflow:hidden;flex:none;
+    background:#fff;display:grid;place-items:center;position:relative;
+    box-shadow:0 18px 36px -18px rgba(10,40,25,.5);
+  }
+  .md-logo img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+  .md-logo::before{
+    content:attr(data-initial);position:absolute;inset:0;display:grid;place-items:center;
+    font-family:var(--font-display);font-size:32px;font-weight:700;color:#067655;
+  }
+  .md-title{font-family:var(--font-display);font-size:34px;font-weight:700;line-height:1.12;letter-spacing:-.015em}
+  .md-sub{font-size:14.5px;line-height:1.6;color:#40584a;max-width:32ch}
+  .md-facts{list-style:none;display:grid;gap:9px;margin-top:4px}
+  .md-facts li{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:#3a5245}
+  .md-facts .ic{width:17px;height:17px;color:#067655;flex:none}
+  .md-facts .md-open{display:inline-flex;align-items:center;gap:7px;font-weight:800;color:#0a6a4c}
+  .md-facts .md-open i{width:8px;height:8px;border-radius:50%;background:#0b9a6d;flex:none}
+  .md-facts .md-open.closed i{background:#e8564a}
+  .md-hint{
+    margin-top:10px;padding:12px 15px;border-radius:20px;font-size:12.5px;line-height:1.55;font-weight:600;
+    background:rgba(255,255,255,.6);border:1px solid rgba(10,40,25,.09);color:#40584a;max-width:34ch;
+  }
+}
+:where(.matcha) img{display:block;max-width:100%}
+:where(.matcha) button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:where(.matcha) a{color:inherit}
+.matcha input,.matcha textarea,.matcha select{
+  /* explicit 16px, not `font:inherit` alone — the host layout's body size is not
+     ours to trust and anything under 16px force-zooms Safari iOS on focus */
+  font:inherit;font-size:16px;color:var(--ink);background:var(--card);
+  border:1px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease);
+}
+.matcha input::placeholder,.matcha textarea::placeholder{color:var(--ink-3)}
+.matcha input:focus,.matcha textarea:focus,.matcha select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(6,118,85,.12)}
+.matcha ::-webkit-scrollbar{display:none}
+.matcha [hidden]{display:none !important}
+.matcha .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* icons */
+.matcha .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.matcha .ic-xs{width:15px;height:15px}
+
+/* ── app / views ─────────────────────────────────────────── */
+.cv-views{position:relative;flex:1;min-height:0}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.6;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.view-sub .view-scroll{padding:60px 20px 0}
+.tail-space{height:60px}
+.tail-space.tall{height:40px}
+.page-head{display:flex;align-items:center;gap:14px;padding:14px 2px 16px}
+.page-head h1{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.01em}
+.spacer{flex:1}
+
+/* ── splash: solid green ─────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:
+    radial-gradient(26rem 20rem at 85% -6%,rgba(255,255,255,.14),transparent 60%),
+    var(--green);
+  display:flex;flex-direction:column;align-items:center;
+  padding:74px 34px 34px;overflow:hidden;color:#fff;
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+/* NOTE: no `pointer-events:none` here. The layer fades over 500ms and only then
+   flips to visibility:hidden — dropping pointer events at frame 1 let a tap aimed
+   at "Get started" fall through onto a category chip behind it and silently
+   filter the menu. The splash now swallows taps for the whole fade. */
+.splash.is-done{opacity:0;visibility:hidden}
+.splash{cursor:pointer}
+.brand-badge{
+  position:relative;
+  width:72px;height:72px;border-radius:50%;overflow:hidden;flex:none;
+  background:#fff;padding:4px;box-shadow:0 12px 30px rgba(0,0,0,.25);
+  animation:sp-in .7s var(--ease) both;
+}
+.brand-badge img{width:100%;height:100%;object-fit:cover;border-radius:50%;position:relative;z-index:1}
+/* monogram sits UNDER the logo: a 404 logo paints nothing (alt=""), so the
+   initial shows through instead of an empty white disc. */
+.brand-badge::before{
+  content:attr(data-initial);position:absolute;inset:4px;border-radius:50%;
+  display:grid;place-items:center;background:#fff;color:var(--green);
+  font-family:var(--font-display);font-size:30px;font-weight:700;
+}
+/* splash art — shown when the store has no dish photos yet, so the panel is
+   never an empty green rectangle on a brand-new store's first paint. */
+.sp-art{
+  position:absolute;inset:0;margin:auto;width:min(64%,210px);height:auto;
+  color:rgba(255,255,255,.92);
+  animation:sp-in .8s var(--ease) .16s both,float-a 6s ease-in-out 1.4s infinite alternate;
+}
+.sp-art .sa-fill{fill:rgba(255,255,255,.16)}
+.sp-art .sa-line{fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.sp-art .sa-leaf{fill:rgba(255,255,255,.9)}
+@keyframes sp-in{from{opacity:0;transform:translateY(20px)}}
+.splash-panel{
+  position:relative;width:100%;flex:1;min-height:0;margin-top:26px;
+  background:rgba(255,255,255,.10);border-radius:38px;
+  animation:sp-in .7s var(--ease) .08s both;
+}
+.sp-cup{
+  position:absolute;object-fit:cover;border-radius:24px;
+  box-shadow:0 26px 50px -16px rgba(0,0,0,.45);
+}
+.sp-green{width:46%;aspect-ratio:.78;inset-inline-start:9%;bottom:12%;rotate:-7deg;animation:cup-l 1s var(--ease-pop) .3s both,float-a 5.5s ease-in-out 1.6s infinite alternate}
+.sp-pink{width:52%;aspect-ratio:.76;inset-inline-end:7%;top:9%;rotate:6deg;animation:cup-r 1s var(--ease-pop) .42s both,float-a 6.2s ease-in-out 1.9s infinite alternate-reverse}
+@keyframes cup-l{from{opacity:0;transform:translateY(70px) rotate(-16deg)}}
+@keyframes cup-r{from{opacity:0;transform:translateY(-60px) rotate(14deg)}}
+@keyframes float-a{to{translate:0 -12px}}
+.ice{
+  position:absolute;width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,255,255,.45));
+  box-shadow:inset 0 0 8px rgba(255,255,255,.8),0 10px 18px rgba(0,0,0,.2);
+  animation:float-a 4.6s ease-in-out infinite alternate;
+}
+.i1{bottom:8%;inset-inline-end:16%;rotate:14deg}
+.i2{bottom:16%;inset-inline-end:26%;rotate:-12deg;width:20px;height:20px;animation-delay:.5s}
+.i3{top:52%;inset-inline-start:4%;rotate:22deg;width:18px;height:18px;animation-delay:.9s}
+.splash-title{margin-top:26px;
+  font-family:var(--font-display);font-size:33px;font-weight:700;line-height:1.18;
+  text-align:center;letter-spacing:-.01em;
+  animation:sp-in .7s var(--ease) .18s both;
+}
+[dir="rtl"] .splash-title{font-family:var(--font-ar);font-weight:700}
+/* store subtitle under the splash title (on the green ground → light text). */
+.splash-sub{
+  margin-top:12px;max-width:28ch;text-align:center;
+  font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.85);line-height:1.7;font-weight:600;
+  animation:sp-in .7s var(--ease) .24s both;
+}
+[dir="rtl"] .splash-sub{letter-spacing:normal;text-transform:none}
+.pill-black{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  min-height:54px;padding:0 34px;border-radius:var(--r-pill);
+  background:var(--black);color:var(--black-ink);
+  font-size:15px;font-weight:700;letter-spacing:.01em;
+  box-shadow:0 16px 34px -12px rgba(0,0,0,.45);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.pill-black:active{transform:scale(.96)}
+.pill-black:disabled{opacity:.5}
+.pill-black b{font-weight:800;opacity:.65}
+.pill-black.grow{flex:1;width:100%}
+.splash .pill-black{margin-top:18px;width:min(100%,300px);animation:sp-in .7s var(--ease) .28s both}
+.pill-black .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+
+/* ── wave header ─────────────────────────────────────────── */
+.wave{position:relative;height:150px;flex:none;color:#fff}
+.wave-bg{position:absolute;inset:0;width:100%;height:100%;fill:var(--green);filter:drop-shadow(0 14px 22px rgba(6,118,85,.25))}
+/* the wave's dip is drawn on the start side — mirror it with everything else in
+   RTL so the avatar keeps sitting in the dip instead of on the high shoulder */
+[dir="rtl"] .wave-bg{transform:scaleX(-1)}
+/* cover-photo header (crave-parity fold-in): the store cover fills the wave, the
+   green wave becomes a translucent tint over it, and a bottom fade blends the
+   below-curve area into the page bg (a rectangular photo would otherwise show
+   past the wave's curve). The chrome (avatar/loc/actions) stays z:2 above it. */
+.wave--cover{overflow:hidden}
+.wave--cover .wave-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.wave--cover .wave-bg{opacity:.6;z-index:1}
+.wave--cover::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0) 54%, var(--bg) 100%);
+}
+
+/* cover-backed splash (Concept 3): blurred cover under a translucent green tint. */
+.cv-splash-cover{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:blur(9px) brightness(.6) saturate(1.1);transform:scale(1.12);
+  z-index:0;pointer-events:none;
+}
+.splash--cover::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg, rgba(6,118,85,.72), rgba(6,118,85,.86));
+}
+.splash--cover > *:not(.cv-splash-cover){position:relative;z-index:2}
+
+/* collapsing header — a green brand bar that overlays the top of the home view
+   (absolute in .view, never scrolls) and slides in once the wave leaves. */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:#fff;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;
+  background:var(--green);box-shadow:0 6px 18px rgba(6,118,85,.28);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .28s var(--ease);
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{
+  position:relative;width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;
+  background:#fff;display:grid;place-items:center;
+}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-logo::before{content:attr(data-initial);position:absolute;inset:0;display:grid;place-items:center;color:var(--green);font-weight:800;font-size:15px}
+.cv-condensed-name{flex:1;min-width:0;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.wave-avatar{
+  position:absolute;inset-inline-start:18px;top:calc(env(safe-area-inset-top) + 16px);
+  width:56px;height:56px;border-radius:50%;overflow:hidden;
+  border:3px solid #fff;box-shadow:var(--shadow-pop);
+  background:var(--mint);z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.wave-avatar:active{transform:scale(.9)}
+.wave-avatar img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+/* monogram under the logo — a 404 logo used to leave an empty white disc */
+.wave-avatar{display:grid;place-items:center}
+.wave-avatar::before{
+  content:attr(data-initial);position:absolute;inset:0;display:grid;place-items:center;
+  background:var(--green);color:#fff;
+  font-family:var(--font-display);font-size:24px;font-weight:700;
+}
+/* guest profile glyph (crave parity) sits above the empty monogram disc */
+.wave-avatar .ic{position:relative;z-index:2;width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+/* branch selector pill in the wave, below the avatar (crave .loc parity) */
+.wave-loc{
+  position:absolute;inset-inline-start:18px;top:calc(env(safe-area-inset-top) + 82px);z-index:2;
+  display:inline-flex;align-items:center;gap:5px;max-width:calc(100% - 120px);
+  padding:6px 12px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.2);
+  -webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+  color:#fff;font-size:13px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.wave-loc:active{transform:scale(.96)}
+.wave-loc .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;flex:none}
+.wave-loc b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;min-width:0}
+.wave-loc .chev{width:13px;height:13px;opacity:.85}
+/* filters live in the action cluster with the other header controls — floating
+   dead-centre in the wave read as a stray blob, not a control */
+.wave-menu .dot{position:absolute;top:5px;inset-inline-end:6px;width:8px;height:8px;border-radius:50%;background:var(--gold);outline:2px solid var(--green)}
+/* header controls pinned to the top of the wave (centre-aligned with the 56px
+   avatar), not floating halfway down it */
+.wave-actions{position:absolute;inset-inline-end:14px;top:calc(env(safe-area-inset-top) + 24px);display:flex;gap:7px;z-index:2}
+/* header controls read as frosted chips on the wave — bare white icons at 2px gaps
+   looked like stray marks rather than tappable buttons. */
+.wave-ic{
+  position:relative;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.wave-ic .ic{width:21px;height:21px}
+.wave-ic:hover{background:rgba(255,255,255,.28)}
+.wave-ic:active{transform:scale(.86)}
+.wave-ic.solid{background:var(--mint);color:var(--green);border-color:transparent;box-shadow:var(--shadow-card)}
+.wave-ic.wa{background:var(--green);color:#fff;border-color:transparent}
+.badge{
+  position:absolute;top:2px;inset-inline-end:2px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--gold);color:#3a2200;
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--green);
+  transition:transform .25s var(--ease-pop);
+}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+
+.home-pad{padding:0 20px}
+
+/* search */
+.search{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:0 18px;height:52px;color:var(--green);
+  box-shadow:var(--shadow-card);margin-top:8px;
+}
+/* 16px floor on every focusable input — Safari iOS force-zooms the viewport on
+   focus below 16px and never zooms back (ALL-F1). */
+.search input{background:none;border:0;padding:0;height:100%;font-size:16px;box-shadow:none}
+.search input:focus{box-shadow:none}
+/* search + filter docked directly above the grid: the search pill flexes, the
+   filter is a matching square that used to be a header icon. */
+.searchrow{display:flex;align-items:stretch;gap:10px;margin-top:8px}
+.searchrow .search{flex:1;margin-top:0}
+.filterbtn{flex:0 0 auto;width:52px;display:flex;align-items:center;justify-content:center;
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;color:var(--green);
+  box-shadow:var(--shadow-card);position:relative;cursor:pointer}
+.filterbtn .ic{width:22px;height:22px}
+.filterbtn:active{transform:scale(.94)}
+.filterbtn .dot{position:absolute;top:10px;inset-inline-end:11px;width:8px;height:8px;border-radius:50%;background:var(--gold);outline:2px solid var(--card)}
+/* Reserve-a-Table button — sits beside the search pill on the search row. */
+.reserve-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:0 16px;
+  border-radius:var(--r-pill);border:0;background:var(--green);color:var(--green-ink,#fff);
+  font-weight:700;font-size:13.5px;box-shadow:var(--shadow-card);white-space:nowrap;cursor:pointer;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.reserve-btn .ic{width:20px;height:20px;fill:none;stroke:currentColor}
+.reserve-btn:active{transform:scale(.96)}
+@media (max-width:360px){.reserve-btn{padding:0 15px}.reserve-btn-label{display:none}}
+
+.status-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 2px 0;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.open-chip{display:inline-flex;align-items:center;gap:7px;font-weight:700;color:var(--ink-2)}
+.open-chip i{width:8px;height:8px;border-radius:50%;background:var(--green-hi);box-shadow:0 0 0 0 rgba(6,118,85,.4);animation:pulse 2.2s infinite}
+.open-chip.closed i{background:var(--red);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 7px transparent}}
+.viewers{display:inline-flex;align-items:center;gap:5px}
+.viewers b{color:var(--ink-2)}
+
+/* category chips (light) */
+.cats{display:flex;gap:9px;overflow-x:auto;padding:16px 2px 4px}
+.cat{
+  flex:none;display:flex;align-items:center;gap:8px;
+  padding:8px 16px 8px 9px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  box-shadow:var(--shadow-card);
+  transition:all var(--t-fast) var(--ease-pop);white-space:nowrap;
+}
+[dir="rtl"] .cat{padding:8px 9px 8px 16px}
+.cat:active{transform:scale(.94)}
+.cat-ring{width:30px;height:30px;border-radius:50%;overflow:hidden;flex:none;background:var(--mint);display:grid;place-items:center}
+.cat-ring img{width:100%;height:100%;object-fit:cover}
+.cat-ring .emoji{font-size:15px;color:var(--green);line-height:1}
+.cat{min-height:46px}
+.cat.is-on{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 12px 26px -10px rgba(6,118,85,.55)}
+
+/* secondary sub-category chips (revealed under the active parent) */
+.subcats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 4px}
+.subgroup{display:flex;gap:8px}
+.subchip{
+  flex:none;display:inline-flex;align-items:center;gap:6px;
+  padding:6px 13px;border-radius:var(--r-pill);
+  background:var(--mint);border:1px solid var(--stroke);
+  font-size:12px;font-weight:700;color:var(--ink-2);white-space:nowrap;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.subchip:active{transform:scale(.94)}
+.subchip-img{width:18px;height:18px;border-radius:50%;object-fit:cover;flex:none}
+.subchip.is-on{background:var(--green);border-color:var(--green);color:#fff}
+
+/* banners */
+.banners{position:relative;margin-top:16px}
+.banner-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px}
+.banner{
+  position:relative;flex:0 0 88%;scroll-snap-align:start;
+  border-radius:24px;overflow:hidden;height:124px;
+  display:flex;align-items:center;color:#fff;text-align:start;
+  background:var(--green);box-shadow:var(--shadow-card);text-decoration:none;
+}
+.banner.alt{background:var(--gold);color:#3a2200}
+/* image failed to load and was dropped — let the copy use the full banner */
+.banner.no-img .banner-copy{max-width:none;padding-inline-end:20px}
+.banner-bg{position:absolute;inset:0;background:radial-gradient(20rem 12rem at 90% -20%,rgba(255,255,255,.25),transparent 60%)}
+.banner-copy{position:relative;z-index:2;padding-inline-start:20px;max-width:56%}
+.banner-kicker{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.8;display:block}
+.banner-title{font-family:var(--font-display);font-size:18px;font-weight:700;line-height:1.16;margin:4px 0 10px;display:block;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.banner-btn{display:inline-block;padding:8px 16px;border-radius:var(--r-pill);background:var(--black);color:var(--black-ink);font-size:12px;font-weight:700}
+.banner-img{
+  position:absolute;inset-inline-end:-24px;top:50%;translate:0 -50%;
+  width:140px;height:140px;object-fit:cover;border-radius:50%;
+  box-shadow:0 18px 40px rgba(0,0,0,.3);
+  transition:transform .6s var(--ease);
+}
+.banner:hover .banner-img{transform:rotate(6deg) scale(1.05)}
+.banner-dots{display:flex;justify-content:center;gap:6px;padding-top:12px}
+.banner-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--mint-2);transition:all .3s var(--ease)}
+.banner-dots i.is-on{width:20px;background:var(--green)}
+
+/* section heads */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 22px) 2px 13px}
+.section-head h2{font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.01em}
+.viewall{font-size:12.5px;font-weight:700;color:var(--green);padding:10px 4px;margin:-10px -4px}
+.viewall.light{color:#d9efe3}
+
+/* rails: squircle cards */
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 18px}
+.rail-card{
+  flex:0 0 158px;width:158px;min-width:0;scroll-snap-align:start;
+  background:var(--mint);border-radius:30px;
+  padding:14px 14px 22px;position:relative;text-align:center;
+  box-shadow:var(--shadow-card);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.rail-card:active{transform:scale(.96)}
+.rail-card img{width:78%;aspect-ratio:.85;object-fit:cover;border-radius:18px;margin:0 auto;box-shadow:0 14px 22px -10px rgba(16,60,38,.35)}
+.rail-card b{display:block;font-size:13px;font-weight:700;margin:10px 2px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .price{font-size:14px;color:var(--green);font-weight:800}
+.rail-card .off{position:absolute;top:12px;inset-inline-start:12px;background:var(--gold);color:#3a2200;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+.rail-add{
+  position:absolute;bottom:-13px;left:50%;translate:-50% 0;
+  width:42px;height:30px;border-radius:11px;
+  background:var(--black);color:var(--black-ink);display:grid;place-items:center;
+  box-shadow:0 10px 18px -6px rgba(0,0,0,.4);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.rail-add:active{transform:translateX(-50%) scale(.85)}
+.rail-add .ic{width:15px;height:15px;stroke-width:2.6}
+.rail-add::after{content:"";position:absolute;inset:-8px -3px;border-radius:18px}
+.rail-fav{
+  position:absolute;top:12px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;
+  background:#fff;display:grid;place-items:center;color:var(--ink-3);
+  box-shadow:var(--shadow-card);z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.rail-fav:active{transform:scale(.82)}
+.rail-fav .ic{width:15px;height:15px}
+.rail-fav::after{content:"";position:absolute;inset:-8px;border-radius:50%}
+.rail-fav.is-on{color:var(--red)}
+.rail-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+
+/* featured blob */
+.blob{
+  margin:8px 12px 6px;padding:20px 20px 24px;
+  background:var(--green);border-radius:40px;color:#fff;
+  position:relative;overflow:hidden;
+  box-shadow:0 26px 50px -20px rgba(6,90,60,.55);
+}
+.blob::before{content:"";position:absolute;inset:0;background:radial-gradient(22rem 14rem at 100% 0%,rgba(255,255,255,.16),transparent 55%)}
+.blob-head{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.blob-head h2{font-family:var(--font-display);font-size:19px;font-weight:700}
+.blob-body{display:flex;gap:14px;align-items:center;padding:16px 0 6px;position:relative;z-index:1}
+.blob-thumbs{display:grid;gap:9px;flex:none}
+.blob-thumbs button{
+  width:46px;height:46px;border-radius:14px;overflow:hidden;
+  border:2px solid rgba(255,255,255,.35);opacity:.75;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.blob-thumbs button.is-on{opacity:1;border-color:#fff;transform:scale(1.06);box-shadow:0 10px 20px rgba(0,0,0,.25)}
+.blob-thumbs img{width:100%;height:100%;object-fit:cover}
+.blob-main{flex:1;display:flex;gap:12px;align-items:center;min-width:0}
+.blob-img{
+  width:112px;aspect-ratio:.8;object-fit:cover;border-radius:20px;flex:none;
+  box-shadow:0 22px 40px -12px rgba(0,0,0,.45);
+  rotate:4deg;
+  transition:all .35s var(--ease-pop);
+}
+.blob-info{min-width:0}
+.blob-info b{font-family:var(--font-display);font-size:16.5px;font-weight:700;display:block;line-height:1.2}
+.blob-price{font-size:18px;font-weight:800;color:#dff5e8;display:block;margin-top:6px}
+.blob-actions{display:flex;gap:12px;align-items:center;position:relative;z-index:1;padding-top:10px}
+.blob-actions .pill-black{flex:1;min-height:50px}
+
+/* qty */
+.qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:5px;box-shadow:var(--shadow-card);
+}
+.qty.light{background:#fff;border:0}
+.qty-btn{position:relative;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--green);transition:all var(--t-fast) var(--ease-pop)}
+.qty-btn:active{transform:scale(.82);background:var(--mint)}
+.qty output{min-width:28px;text-align:center;font-weight:800;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* product grid — squircle light cards */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;padding-top:8px}
+.grid.is-list{grid-template-columns:1fr}
+.card{
+  position:relative;min-width:0;border-radius:30px;padding:12px 12px 24px;text-align:center;
+  background:var(--mint);
+  box-shadow:var(--shadow-card);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow .3s var(--ease),opacity .3s;
+  animation:card-in .5s var(--ease) backwards;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.card:active{transform:scale(.965)}
+.card.is-unavailable{opacity:.45;pointer-events:none}
+.card-imgwrap{display:block;position:relative;border-radius:20px;overflow:hidden;aspect-ratio:.92;width:82%;margin:0 auto;box-shadow:0 16px 26px -12px rgba(16,60,38,.35)}
+.grid.is-list .card{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;text-align:start;padding:12px}
+.grid.is-list .card-imgwrap{width:96px;aspect-ratio:1}
+/* compact thumbnail can't fit corner badges + heart without overlap (esp. RTL) — drop badges, keep the heart */
+.grid.is-list .card-badges{display:none}
+.card-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-imgwrap img{transform:scale(1.07)}
+.card-fav{
+  position:absolute;top:10px;inset-inline-end:10px;width:30px;height:30px;border-radius:50%;
+  background:#fff;display:grid;place-items:center;color:var(--ink-3);
+  box-shadow:var(--shadow-card);z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.card-fav:active{transform:scale(.82)}
+.card-fav .ic{width:16px;height:16px}
+.card-fav::after{content:"";position:absolute;inset:-8px;border-radius:50%}
+.card-fav.is-on{color:var(--red)}
+.card-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.card-badges{position:absolute;top:10px;inset-inline-start:10px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;z-index:2}
+.badge-pop{background:var(--gold);color:#3a2200;font-size:10px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill)}
+.badge-veg{width:17px;height:17px;border-radius:6px;background:#fff;display:grid;place-items:center;box-shadow:var(--shadow-card)}
+.badge-veg i{width:8px;height:8px;border-radius:50%;background:var(--green-hi)}
+.badge-veg.nv i{background:var(--red)}
+.card-soldout{
+  position:absolute;inset:0;background:rgba(21,43,31,.55);backdrop-filter:blur(2px) grayscale(1);
+  display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;z-index:3;
+}
+.avail-badge{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(21,43,31,.8);color:var(--gold);font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+.card-name{display:block;font-size:14px;font-weight:800;margin:11px 2px 1px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-sub{display:block;font-size:12px;line-height:1.45;color:var(--ink-3);margin:1px 4px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{display:flex;align-items:center;justify-content:center;gap:6px;padding:0 2px 4px}
+.pill-rate{display:inline-flex;align-items:center;gap:4px;color:var(--gold);font-size:11.5px;font-weight:800}
+.pill-rate .ic{width:12px;height:12px;fill:currentColor;stroke:none}
+.pill-rev{color:var(--ink-3);font-size:11.5px;line-height:1.4;font-weight:600}
+.card-price{font-size:16px;line-height:1.4;font-weight:800;color:var(--green)}
+/* Happy-hour ribbon bonded to the thumbnail bottom (imgwrap clips it to the
+   rounded corners) — moved off the price row where it crowded the price. */
+.card-imgwrap .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* always rendered (empty on items without modifiers) so prices in one row sit
+   on the same baseline instead of stepping up and down card to card */
+.card-from{font-size:11px;line-height:1.4;min-height:1.4em;color:var(--ink-3);font-weight:700;display:block;letter-spacing:.02em}
+.card-add{
+  position:absolute;bottom:-12px;left:50%;translate:-50% 0;
+  width:46px;height:32px;border-radius:12px;
+  background:var(--black);color:var(--black-ink);display:grid;place-items:center;
+  box-shadow:0 12px 20px -6px rgba(0,0,0,.45);
+  transition:transform var(--t-fast) var(--ease-pop);z-index:2;
+}
+.card-add:active{transform:translateX(-50%) scale(.85)}
+.card-add .ic{width:16px;height:16px;stroke-width:2.6}
+/* 50x48 hit box around the 46x32 pill — the primary add affordance was 40x28 */
+.card-add::after{content:"";position:absolute;inset:-8px -2px;border-radius:18px}
+.grid.is-list .card-add{position:static;translate:none;border-radius:12px;width:38px;height:34px}
+
+/* skeletons */
+.sk .card-imgwrap,.sk-line{position:relative;overflow:hidden;background:var(--mint-2)}
+.sk-line{height:13px;border-radius:7px;margin:11px auto 6px;width:70%}
+.sk-line.short{width:40%;margin-top:2px}
+.sk .card-imgwrap::after,.sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+  animation:shimmer 1.3s infinite;
+}
+@keyframes shimmer{to{translate:100% 0}}
+
+/* empty states */
+.grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.7}
+
+/* ── product view ────────────────────────────────────────── */
+.view[data-view="product"] .view-scroll{padding:0}
+/* Product hero: image covers the ENTIRE hero area — full-bleed at the top and sides
+   (no corner gaps), taller so the whole dish shows, with a rounded bottom that keeps
+   the theme's curve into the body. */
+.p-hero{position:relative;background:var(--mint);border-radius:0 0 44px 44px;padding-bottom:0;overflow:hidden}
+/* soft top scrim so the white back/fav buttons and the arrows keep contrast on a
+   bright photo; bottom scrim so the dots always read */
+.p-hero::before{content:"";position:absolute;inset:0 0 auto;height:104px;z-index:3;pointer-events:none;
+  background:linear-gradient(rgba(4,30,21,.30),transparent)}
+.p-hero::after{content:"";position:absolute;inset:auto 0 0;height:70px;z-index:3;pointer-events:none;
+  background:linear-gradient(transparent,rgba(4,30,21,.22))}
+/* full WIDTH with a clamped height — aspect-ratio + max-height fought each other and
+   shrank the width to keep the ratio, leaving a gap on the trailing edge. */
+.p-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;width:100%;height:clamp(260px,44dvh,400px)}
+.p-gallery img{flex:0 0 100%;scroll-snap-align:start;object-fit:cover;width:100%;height:100%}
+.p-gallery-dots{position:absolute;bottom:20px;left:50%;translate:-50% 0;display:flex;gap:5px;z-index:4}
+.p-gallery-dots :is(i,button){width:6px;height:6px;padding:0;border:0;border-radius:var(--r-pill);background:rgba(255,255,255,.6);box-shadow:0 1px 3px rgba(0,0,0,.35);transition:all .3s var(--ease);cursor:pointer}
+.p-gallery-dots :is(i,button).is-on{width:18px;background:#fff}
+/* prev/next arrows — for pointer users who can't swipe the gallery; shown only on
+   hover-capable pointers (touch keeps the swipe). */
+.gal-nav{position:absolute;top:calc(50% - 20px);z-index:4;width:40px;height:40px;border-radius:50%;display:none;place-items:center;
+  background:rgba(21,43,31,.5);color:#fff;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:transform var(--t-fast) var(--ease),background var(--t-fast)}
+.gal-nav .ic{width:20px;height:20px}
+.gal-nav.prev{inset-inline-start:12px}
+.gal-nav.next{inset-inline-end:12px}
+.gal-nav:hover{background:rgba(21,43,31,.72)}
+.gal-nav:active{transform:scale(.9)}
+[dir="rtl"] .gal-nav .ic{transform:scaleX(-1)}
+@media (hover:hover) and (pointer:fine){.gal-nav:not([hidden]){display:grid}}
+.fab{
+  position:absolute;top:calc(env(safe-area-inset-top) + 14px);width:42px;height:42px;border-radius:50%;z-index:4;
+  background:var(--card);color:var(--ink);
+  display:grid;place-items:center;box-shadow:var(--shadow-pop);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+.fab.back{inset-inline-start:16px}
+[dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+.fab.fav{inset-inline-end:16px}
+.fab.fav.is-on{color:var(--red)}
+.fab.fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.fab.inline{position:static;flex:none;box-shadow:var(--shadow-card)}
+.p-stock{
+  position:absolute;bottom:22px;inset-inline-start:16px;z-index:3;
+  background:var(--gold);color:#3a2200;font-size:11px;font-weight:800;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.p-body{padding:18px 20px 0;position:relative;z-index:2}
+.p-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.p-title{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.p-price{text-align:end}
+.p-price b{font-size:21px;font-weight:800;color:var(--green)}
+.p-price s{display:block;font-size:12.5px;color:var(--ink-3)}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px;padding:13px 0 4px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--ink-2);
+  background:var(--card);border:1px solid var(--stroke);
+  padding:7px 12px;border-radius:var(--r-pill);box-shadow:var(--shadow-card);
+}
+.meta-chip .ic{width:14px;height:14px}
+.meta-chip.star{color:var(--gold)}
+.meta-chip.star .ic{fill:currentColor}
+.meta-chip.kcal{color:var(--green)}
+.p-desc{padding:12px 0 2px;font-size:14px;line-height:1.65;color:var(--ink-2);max-width:62ch}
+.p-desc b{color:var(--ink);font-weight:800;display:block;margin-bottom:4px;font-size:14.5px}
+.p-allergens{display:flex;flex-wrap:wrap;gap:7px;padding:10px 0 2px}
+.allergen{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#9a6a12;
+  background:#fdf3e2;border:1px solid #f3ddb5;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.allergen img{width:14px;height:14px;border-radius:3px;object-fit:cover}
+.p-groups{display:grid;gap:16px;padding:18px 0 2px}
+.opt-group{background:var(--card);border:1px solid var(--stroke);border-radius:24px;padding:15px;box-shadow:var(--shadow-card)}
+.opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;gap:8px}
+.opt-head b{font-size:14.5px;font-weight:800}
+.opt-req{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--green);background:var(--mint);padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap}
+.opt-req.optional{color:var(--ink-3);background:var(--bg-deep)}
+/* a required group the guest still owes when they hit Add to Cart: ring + shake +
+   flip its badge red so it's obvious WHERE to choose (was a fleeting toast only). */
+.opt-group.needs-pick{border-color:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 24%,transparent);animation:needs-pick-shake .5s var(--ease)}
+.opt-group.needs-pick .opt-req{color:#fff;background:var(--red)}
+@keyframes needs-pick-shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.opt-list{display:grid;gap:4px}
+.opt{display:flex;align-items:center;gap:11px;padding:9px 6px;border-radius:14px;transition:background var(--t-fast);cursor:pointer}
+.opt:active{background:var(--mint)}
+.opt-thumb{width:36px;height:36px;border-radius:9px;object-fit:cover;flex:none;background:var(--card)}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:2px solid var(--stroke-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.opt-ctl.box{border-radius:8px}
+.opt.is-on .opt-ctl{border-color:var(--green);background:var(--green)}
+.opt-ctl svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-name{flex:1;font-size:14px;font-weight:600;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink);font-weight:700}
+.opt-price{font-size:13px;font-weight:800;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--green)}
+
+/* rate stars */
+.rate-row{display:flex;align-items:center;gap:8px;padding:16px 0 0;flex-wrap:wrap}
+.rate-row>span:first-child{font-size:13px;font-weight:700;color:var(--ink-2)}
+.rate-stars{display:flex;gap:4px}
+.rate-stars button{width:34px;height:34px;display:grid;place-items:center;color:var(--ink-3);transition:transform var(--t-fast) var(--ease-pop)}
+.rate-stars button:active{transform:scale(.8)}
+.rate-stars button .ic{width:20px;height:20px}
+.rate-stars button.is-on{color:var(--gold)}
+.rate-stars button.is-on .ic{fill:currentColor}
+.rate-thanks{font-size:12.5px;color:var(--green);font-weight:800}
+
+/* bottom cta */
+.p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--bg) 40%);
+  position:relative;z-index:6;
+}
+/* product-page "View cart" shortcut beside Add to Cart (revealed once bag > 0) */
+.cta-view-cart{flex:none;position:relative;width:54px;height:54px;border-radius:50%;
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);display:grid;place-items:center;
+  box-shadow:var(--shadow-card);transition:transform var(--t-fast) var(--ease)}
+.cta-view-cart[hidden]{display:none}
+.cta-view-cart:active{transform:scale(.9)}
+.cta-view-cart .ic{width:23px;height:23px}
+.pvc-badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--green);color:#fff;font-size:11px;font-weight:800;font-style:normal;display:grid;place-items:center;outline:2px solid var(--bg)}
+
+/* ── cart ────────────────────────────────────────────────── */
+.cart-list{display:grid;gap:12px}
+.cart-item{
+  display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;
+  background:var(--card);border-radius:24px;
+  padding:10px;overflow:hidden;box-shadow:var(--shadow-card);
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94);height:0;padding-block:0;margin-bottom:-12px}
+.cart-item img{width:76px;height:76px;object-fit:cover;border-radius:18px;background:var(--mint)}
+/* image + name are tappable (reopen the product) — reset the button chrome */
+.ci-im{position:relative;width:76px;height:76px;border-radius:18px;overflow:hidden;background:var(--mint);padding:0;border:0;cursor:pointer;align-self:start}
+.ci-im img{width:100%;height:100%;display:block}
+.ci-hh{position:absolute;inset-inline:0;bottom:0;font-size:8.5px;font-weight:800;text-align:center;padding:2px 3px;background:var(--green);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-name{display:block;background:none;border:0;padding:0;text-align:start;cursor:pointer;color:inherit;font-family:inherit;font-size:14px;font-weight:800;line-height:1.25}
+.ci-opts{font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.45}
+.ci-price{font-size:14px;font-weight:800;color:var(--green);margin-top:5px}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3)}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3)}
+/* Side column: remove tucked top-right, a HORIZONTAL stepper at the bottom —
+   the old vertical +/qty/−/trash stack left the card tall with dead space. */
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;align-self:stretch}
+.ci-side .qty{flex-direction:row;padding:3px}
+.ci-side .qty-btn{width:32px;height:32px}
+.ci-side .qty-btn::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+.ci-side .qty output{font-size:13px;min-width:0;padding:2px 0}
+.ci-remove{position:relative;color:var(--ink-3);width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
+.ci-remove::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+.ci-remove:active{color:var(--red)}
+
+.cart-tools{display:grid;gap:16px;padding-top:18px}
+.cart-tools h3,.contact h3,.addr h3,.paymethods h3,.tips h3,.pref h3,.orders-block h3{font-family:var(--font-display);font-size:15.5px;font-weight:700;margin-bottom:11px}
+
+.seg{display:flex;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px;box-shadow:var(--shadow-card)}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:16px;height:16px}
+.seg button.is-on{background:var(--green);color:#fff;box-shadow:0 8px 18px -8px rgba(6,118,85,.6)}
+.seg.mini{padding:3px}
+.seg.mini button{padding:7px 13px;flex:none}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--green)}
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.when-time{width:auto;flex:1;min-width:0;padding:11px 14px;border-radius:var(--r-pill);font-size:16px}
+.matcha input[type="datetime-local"],.matcha input[type="date"],.matcha input[type="time"]{min-height:48px}
+.matcha input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.matcha input[type="date"]::-webkit-calendar-picker-indicator,
+.matcha input[type="time"]::-webkit-calendar-picker-indicator{
+  opacity:.8;cursor:pointer;width:20px;height:20px;padding:3px;margin-inline-start:4px;border-radius:6px;
+}
+.matcha input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+.matcha input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.matcha input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--card);border:1.5px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px;padding-inline-start:15px}
+.coupon-field .ic{color:var(--green);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:16px;box-shadow:none}
+.coupon-field input:focus{box-shadow:none}
+.coupon-field.is-applied{border-color:var(--green);border-style:solid}
+.minibtn{
+  position:relative;flex:none;padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--green);color:#fff;font-size:12.5px;font-weight:700;
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+.coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--green);font-weight:700}
+.coupon-msg.err{color:var(--red)}
+
+.ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.ordernote textarea{resize:none;font-size:16px}
+
+/* ── checkout order summary ── */
+.ck-items{background:var(--card);border-radius:24px;padding:14px;display:grid;gap:11px;box-shadow:var(--shadow-card)}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ck-edit{padding:0}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:12px;background:var(--mint)}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--green);text-align:end}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+.totals{background:var(--card);border-radius:24px;padding:16px;display:grid;gap:9px;box-shadow:var(--shadow-card)}
+.tr{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr b{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tr.disc{color:var(--green)}
+.tr.disc b{color:var(--green)}
+.tr.grand{border-top:1.5px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px;font-weight:800}
+.tr.grand b{font-weight:800;font-size:17px;color:var(--green)}
+.minorder{font-size:12.5px;color:#9a6a12;display:flex;gap:7px;align-items:center;padding:0 4px;font-weight:700}
+.err-box{font-size:13px;color:var(--red);background:#fdecea;border:1px solid #f6c9c4;border-radius:14px;padding:10px 14px;font-weight:600}
+
+.waiter-row{display:flex;gap:10px}
+.waiter-row .ghostbtn{flex:1;justify-content:center}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  box-shadow:var(--shadow-card);
+  transition:all var(--t-fast) var(--ease-pop);text-decoration:none;
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.sm{padding:10px 15px;font-size:12.5px}
+.ghostbtn.is-armed{border-color:var(--red);color:var(--red);background:#fdecea}
+.linkbtn{font-size:13px;font-weight:700;color:var(--green);padding:10px 2px 0;text-align:start}
+
+/* checkout */
+.contact,.addr,.paymethods,.tips{padding-top:16px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.map{
+  position:relative;height:120px;border-radius:24px;overflow:hidden;
+  background:#dcebe1;margin-bottom:9px;box-shadow:inset 0 0 0 1px var(--stroke);
+}
+.map-art{width:100%;height:100%}
+.map-art .mr{stroke:#c3dccd;stroke-width:7;fill:none}
+.map-art .mr.thin{stroke-width:3;stroke:#cde3d6}
+.map-art .mb{fill:#cfe4d8}
+.pin{position:absolute;left:50%;top:50%;translate:-50% -78%}
+.pin svg{width:34px;height:34px;fill:var(--green);stroke:var(--green-deep);stroke-width:1;filter:drop-shadow(0 8px 10px rgba(6,90,60,.4));animation:pin-drop .6s var(--ease-pop)}
+@keyframes pin-drop{from{translate:0 -26px;opacity:0}}
+.pin-pulse{position:absolute;left:50%;bottom:-4px;translate:-50% 0;width:26px;height:8px;border-radius:50%;background:rgba(6,118,85,.3);animation:pulse 2.2s infinite}
+
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1.5px solid var(--stroke);border-radius:20px;
+  padding:13px 15px;box-shadow:var(--shadow-card);
+  transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.pm.is-on{border-color:var(--green);background:#f2faf5}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--mint);display:grid;place-items:center;color:var(--green)}
+.pm.is-on .pm-ic{background:var(--green);color:#fff}
+.pm b{flex:1;font-size:14px;font-weight:800}
+.pm small{display:block;font-weight:600;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast);flex:none}
+.pm.is-on .pm-radio{border-color:var(--green)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
+.pm-logos{display:flex;gap:4px}
+.pm-logos span{font-size:8.5px;font-weight:800;background:var(--mint);border-radius:4px;padding:3px 5px;color:var(--ink-2)}
+.cardform{display:grid;gap:9px;padding-top:10px;animation:card-in .35s var(--ease)}
+
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:16px;
+  background:var(--card);border:1.5px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  box-shadow:var(--shadow-card);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--green);color:var(--green);background:#f2faf5}
+
+.terms{display:flex;gap:10px;align-items:flex-start;padding:16px 2px 0;font-size:12.5px;color:var(--ink-3);cursor:pointer;font-weight:600}
+.terms input{width:17px;height:17px;accent-color:var(--green);margin-top:1px;flex:none}
+#checkoutTotals{margin-top:18px}
+
+/* confirmed */
+.view-center{justify-content:center}
+.confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:6px}
+.cup-art{position:relative;width:230px;height:200px;margin-bottom:6px}
+.cup{position:absolute;inset:0;margin:auto;width:190px;height:180px;overflow:visible;animation:box-pop .7s var(--ease-pop) .1s backwards}
+@keyframes box-pop{0%{transform:scale(.3) rotate(-8deg);opacity:0}}
+.cup-body{fill:var(--green)}
+.cup-band{fill:var(--green-deep)}
+.cup-lid{fill:#8fd6b8}
+.cup-cap{fill:#3aa981}
+.check-badge circle{fill:var(--gold);stroke:var(--bg);stroke-width:6}
+.check-badge{animation:box-pop .6s var(--ease-pop) .45s backwards}
+.check{stroke:#3a2200;stroke-width:6;fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .75s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.box-doodles{position:absolute;inset:-12px;color:var(--green);opacity:.6;animation:dd-breathe 3.4s ease-in-out infinite alternate}
+.box-doodles .bd{stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
+.bd-star{fill:var(--gold);stroke:none}
+@keyframes dd-breathe{to{transform:scale(1.05) rotate(2deg)}}
+.confirm-title{font-family:var(--font-display);font-size:28px;font-weight:700}
+.confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65;font-weight:600}
+.confirm-eta{color:var(--ink-2);font-weight:800}
+.confirm-code{
+  font-size:12.5px;font-weight:800;color:var(--green);
+  background:var(--mint);border:1.5px dashed var(--green-soft);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .pill-black{max-width:280px}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a full-width primary read as an afterthought. */
+.confirm-actions .ghostbtn{width:100%}
+.confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.confirm-actions .ghostbtn:hover{background:var(--mint)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#067655);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* track */
+.track-card{background:var(--card);border-radius:26px;padding:17px;display:grid;gap:16px;box-shadow:var(--shadow-card)}
+.track-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tk-label{font-size:12px;line-height:1.45;color:var(--ink-3);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--green)}
+.courier{display:flex;align-items:center;gap:11px;background:var(--mint);border-radius:18px;padding:10px}
+.courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.courier>div{flex:1}
+.courier b{font-size:14px;font-weight:800}
+.timeline{list-style:none;display:grid;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--card);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--mint-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--green);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--green);background:var(--green)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{box-shadow:0 0 0 0 rgba(6,118,85,.4);animation:pulse 2s infinite}
+.tl-copy b{font-size:14px;font-weight:800;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--ink-3)}
+.nps{margin-top:16px;background:var(--card);border-radius:26px;padding:16px;text-align:center;font-size:13.5px;color:var(--ink-2);box-shadow:var(--shadow-card);font-weight:600}
+/* 11 buttons (0–10) at 44px overflowed a phone row and clipped the high scores;
+   wrap them and let them flex-shrink so the whole 0–10 scale always fits. */
+.nps-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding-top:12px}
+.nps-row button{font-size:18px;flex:0 1 40px;width:40px;height:40px;min-width:34px;border-radius:50%;background:var(--mint);transition:transform var(--t-fast) var(--ease-pop)}
+.nps-row button:active{transform:scale(.85)}
+@media (max-width:400px){.nps-row{gap:6px}.nps-row button{width:36px;height:36px;font-size:16px}}
+.nps-row button.is-on{background:var(--green-soft);transform:scale(1.08)}
+.nps-thanks{padding-top:10px;color:var(--green);font-weight:800}
+
+/* profile */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--card);border-radius:26px;padding:14px;box-shadow:var(--shadow-card)}
+.me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.me-card>div{flex:1}
+.me-card b{font-size:16px;font-weight:800}
+.wallet-card{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:16px 18px;border-radius:26px;
+  background:var(--green);color:#fff;box-shadow:0 20px 40px -16px rgba(6,90,60,.5);
+}
+.wallet-card .tk-label{color:rgba(255,255,255,.7)}
+.wallet-amt{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums}
+.wallet-card .ic{width:26px;height:26px;stroke-width:1.9}
+.pref{padding-top:22px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;gap:10px;flex-wrap:wrap}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.orders-block{padding-top:22px}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border-radius:20px;padding:12px 14px;
+  box-shadow:var(--shadow-card);
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;text-decoration:none;
+}
+.order-row .ic{color:var(--green)}
+.order-row>div{flex:1;min-width:0}
+.order-row b{font-size:13.5px;font-weight:800;display:block}
+.order-row small{font-size:11.5px;color:var(--ink-3)}
+.order-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:var(--mint);color:var(--green);white-space:nowrap}
+.orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px;font-weight:600}
+.wa-line{
+  display:flex;align-items:center;gap:11px;margin-top:22px;
+  background:var(--card);border-radius:20px;box-shadow:var(--shadow-card);
+  padding:14px 15px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:800;
+}
+.wa-line .ic:first-child{color:var(--green)}
+.wa-line span{flex:1}
+.wa-line .arr{color:var(--ink-3)}
+[dir="rtl"] .wa-line .arr{transform:scaleX(-1)}
+.demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.8;font-weight:600}
+
+/* sheets / scrim / toast */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(16,40,28,.4);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--bg);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:0 -20px 50px rgba(10,40,25,.25);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--mint-2);margin:6px auto 16px}
+/* Explicit close button (top corner), restyled off the grab-bar it borrows for
+   its close wiring. Generic so any sheet can carry one. */
+.sheet .sheet-x{
+  position:absolute;inset-block-start:12px;inset-inline-end:14px;
+  width:34px;height:34px;margin:0;border-radius:50%;border:0;
+  background:var(--mint-2);color:var(--ink-2);display:grid;place-items:center;
+  cursor:pointer;z-index:2;
+}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+.sheet h2{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:14px}
+.sheet h4{font-size:12px;font-weight:800;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase;margin:16px 0 10px}
+.sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:14px;font-weight:600}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--card);border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  box-shadow:var(--shadow-card);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--green);color:#fff;background:var(--green)}
+.spice-scale{display:flex;gap:8px}
+.spice-scale button{
+  flex:1;padding:10px 4px;border-radius:16px;font-size:13px;font-weight:700;
+  background:var(--card);border:1.5px solid var(--stroke);color:var(--ink-2);
+  transition:all var(--t-fast);
+}
+.spice-scale button.is-on{border-color:var(--gold);color:#9a6a12;background:#fdf3e2}
+.sheet-actions{display:flex;gap:10px;padding-top:22px}
+.branch-list{display:grid;gap:8px}
+.branch-row{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--card);border:1.5px solid var(--stroke);border-radius:18px;padding:13px 15px;
+  box-shadow:var(--shadow-card);
+  transition:all var(--t-fast);text-decoration:none;width:100%;
+}
+.branch-row.is-on{border-color:var(--green)}
+.branch-row .ic{color:var(--green)}
+.branch-row b{flex:1;font-size:14px;font-weight:800}
+.branch-row b small{display:block;font-weight:600;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.branch-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.branch-row.is-on .branch-check{border-color:var(--green);background:var(--green)}
+.otp-step{display:grid;gap:12px;padding-bottom:8px}
+.otp-boxes{display:flex;gap:10px;justify-content:center}
+.otp-boxes input{width:56px;height:60px;text-align:center;font-size:23px;font-weight:800;border-radius:18px}
+
+.toast{
+  position:absolute;bottom:40px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--card);font-size:13px;font-weight:700;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(10,40,25,.35);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:#8fd6b8}
+
+/* fly-to-cart */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(10,40,25,.35);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* LTR numerics inside RTL */
+[dir="rtl"] :is(.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate;text-align:right}
+[dir="rtl"] :is(.opt-price,.meta-chip,.card-price,.ci-price,.ci-was,.ci-unit,.p-price b,.p-price s,.card-meta,.tr b,.wallet-amt,.confirm-code,#trackCode,#trackEta,.pill-black b,.rail-card .off,.rail-card .price,.banner-title b,.blob-price){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .matcha :is(.ci-price,.p-price s,.blob-price){text-align:right}
+
+/* ── google-review prompt (confirmed) ────────────────────── */
+.greview{
+  display:flex;align-items:center;gap:12px;width:100%;max-width:320px;margin:18px auto 0;
+  padding:13px 15px;border-radius:var(--r-card);text-decoration:none;
+  background:rgba(242,169,59,.12);border:1px solid rgba(242,169,59,.36);color:var(--ink);
+}
+.greview-star{font-size:22px;line-height:1}
+.greview-copy{flex:1;min-width:0;text-align:start}
+.greview-copy b{display:block;font-size:14px;font-weight:800}
+.greview-copy small{font-size:11.5px;color:var(--ink-2)}
+.greview .arr{color:var(--gold)}
+[dir="rtl"] .greview .arr{transform:scaleX(-1)}
+
+/* ── loyalty card (profile) ──────────────────────────────── */
+.loyalty{
+  margin-top:16px;padding:18px 16px;border-radius:var(--r-card);
+  background:var(--card);border:1px solid var(--stroke);text-align:center;
+}
+.loyalty-head{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:800}
+.loyalty-head .ic{width:18px;height:18px;color:var(--green);fill:none;stroke:var(--green)}
+.loyalty-num{font-family:var(--font-display);font-size:34px;font-weight:700;color:var(--green);line-height:1.05;margin:6px 0 2px}
+.loyalty-sub{font-size:11.5px;color:var(--ink-3);margin-bottom:12px}
+.stamp-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:14px}
+.stamp-dot{
+  width:30px;height:30px;border-radius:50%;border:2px solid var(--stroke-2);
+  display:flex;align-items:center;justify-content:center;transition:all var(--t-fast) var(--ease);
+}
+.stamp-dot .ic{width:14px;height:14px;fill:none;stroke:var(--ink-3)}
+.stamp-dot.is-on{border-color:var(--green);background:var(--green)}
+.stamp-dot.is-on .ic{fill:var(--green-ink);stroke:var(--green-ink)}
+.loyalty-bar{height:8px;border-radius:var(--r-pill);background:var(--green-soft);overflow:hidden;margin-bottom:14px}
+.loyalty-bar i{display:block;height:100%;width:0;background:var(--green);border-radius:var(--r-pill);transition:width .6s var(--ease)}
+.loyalty-ok{color:var(--green);font-weight:700;font-size:13px;margin-top:6px}
+.row-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap;flex:none}
+.row-status.ok{background:var(--green-soft);color:var(--green-deep)}
+
+/* ── reservation / waitlist sheets ───────────────────────── */
+.sheet-form input,.sheet-form textarea{
+  width:100%;background:var(--bg);border:1px solid var(--stroke-2);border-radius:var(--r-img);
+  color:var(--ink);font:inherit;font-size:16px;padding:12px 13px;margin-bottom:2px;
+}
+.sheet-form textarea{resize:vertical;min-height:52px}
+.sheet-form input:focus,.sheet-form textarea:focus{outline:none;border-color:var(--green)}
+.sheet-done{text-align:center;padding:18px 0 8px}
+.sheet-done-emoji{font-size:44px;line-height:1;display:block;margin-bottom:8px}
+.sheet-done b{font-size:17px;font-weight:800;display:block;margin-bottom:4px}
+.sheet-done p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.sheet-done p.muted{color:var(--ink-3);font-size:12px}
+
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .confetti{display:none}
+}
+
+/* direction:ltr (number guard) flips the badge's own logical inset — pin it physically in RTL */
+[dir="rtl"] .rail-card .off{left:auto;right:12px}
+
+/* blade scaffold uses .cta — style it as the matcha black pill */
+.cta{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:10px;
+  min-height:54px;padding:0 24px;border-radius:var(--r-pill);
+  background:var(--black);color:var(--black-ink);
+  font-size:15px;font-weight:700;letter-spacing:.01em;
+  box-shadow:0 16px 34px -12px rgba(0,0,0,.45);
+  transition:transform var(--t-fast) var(--ease-pop);
+  text-decoration:none;
+}
+.cta:active{transform:scale(.96)}
+.cta:disabled{opacity:.5}
+.cta b{font-weight:800;opacity:.65}
+.cta.wide{width:100%}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+
+/* crave-scaffold components (matcha light skin) */
+.cv-block{padding-top:16px}
+.cv-h3{font-family:var(--font-display);font-size:15.5px;font-weight:700;margin-bottom:11px;display:block}
+.field-label{display:block;font-size:12px;font-weight:800;color:var(--ink-3);margin:10px 0 7px;letter-spacing:.02em}
+.tr-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr-row b{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tr-row.disc{color:var(--green)}
+.tr-row.disc b{color:var(--green)}
+.tr-row.grand{border-top:1.5px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px;font-weight:800}
+.tr-row.grand b{font-weight:800;font-size:17px;color:var(--green)}
+.me-avatar{width:52px;height:52px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:19px;flex:none}
+.biz-card{margin-top:14px;background:var(--card);border-radius:24px;box-shadow:var(--shadow-card);padding:15px;display:grid;gap:9px;font-size:13.5px;color:var(--ink-2);font-weight:600}
+.biz-card span{display:flex;align-items:center;gap:9px}
+.biz-card .ic{width:16px;height:16px;color:var(--green)}
+.order-lines{display:grid;gap:8px}
+.order-line{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--ink-2);font-weight:600}
+.order-line b{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.order-line small{display:block;color:var(--ink-3);font-size:11.5px}
+.auth-tabs{display:flex;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:6px;box-shadow:var(--shadow-card)}
+.auth-tabs button{flex:1;padding:9px;border-radius:var(--r-pill);font-size:13px;font-weight:700;color:var(--ink-3)}
+.auth-tabs button.is-on{background:var(--green);color:#fff}
+.auth-form{display:grid;gap:11px;padding-bottom:8px}
+.gt-brand{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46%}
+[dir="rtl"] .matcha :is(.tr-row b,.order-line b){direction:ltr;unicode-bidi:isolate}
+
+/* ═══════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7) · matcha palette
+   ═══════════════════════════════════════════════════════════ */
+
+/* F2 · brand / follow row */
+.brand-row{display:flex;align-items:center;gap:12px;padding:2px 0 12px}
+.brand-logo{position:relative;width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1.5px solid var(--stroke-2)}
+.brand-logo img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+/* monogram under the logo — a 404 logo used to leave an empty white square */
+.brand-logo::before{content:attr(data-initial);position:absolute;inset:0;display:grid;place-items:center;background:var(--mint);color:var(--green);font-family:var(--font-display);font-size:19px;font-weight:700}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.brand-followers{display:block;font-size:12px;line-height:1.45;color:var(--ink-3);margin-top:2px}
+/* verified = an actual badge: a filled brand seal with a white check, inline
+   after the store name (title/aria-label carry the accessible name). */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--green)}
+.verified-badge .vb-seal-check{fill:#fff}
+.followbtn{display:inline-flex;align-items:center;gap:6px;padding:12px 17px;border-radius:var(--r-pill);background:var(--black);color:var(--black-ink);font-size:13px;font-weight:700;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.followbtn:active{transform:scale(.94)}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--card);color:var(--ink-2);border:1.5px solid var(--stroke-2)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+
+/* B1/B2 · shared follower-count partial classes (proof line under the name) */
+.brand-followers--cta{color:var(--green);font-weight:700}
+.brand-dot{color:var(--ink-3)}
+.brand-viewers b{color:var(--ink-2);font-weight:800}
+
+
+/* B5 · scale-pop beat on a successful follow */
+@keyframes followPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.followbtn--pop{animation:followPop .25s var(--ease-pop)}
+@media (prefers-reduced-motion:reduce){.followbtn--pop{animation:none}}
+
+/* B7 · story ring on the brand logo when stories are live */
+.brand-logo--live{border:0;padding:2.5px;background:linear-gradient(135deg,var(--green),var(--gold));cursor:pointer}
+.brand-logo--live img{border:2px solid var(--bg);border-radius:11px}
+
+/* B6 · Following sheet + B8 About sheet */
+.follow-sheet-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--stroke);font-size:15px;color:var(--ink)}
+.follow-sheet-row input[type="checkbox"]{width:44px;height:26px;appearance:none;-webkit-appearance:none;background:var(--stroke);border:1px solid var(--stroke-2);border-radius:var(--r-pill);position:relative;cursor:pointer;transition:background .2s;flex:none}
+.follow-sheet-row input[type="checkbox"]::after{content:"";position:absolute;inset-block-start:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:inset-inline-start .2s}
+.follow-sheet-row input[type="checkbox"]:checked{background:var(--green)}
+.follow-sheet-row input[type="checkbox"]:checked::after{inset-inline-start:20px}
+.cta.danger{background:rgba(232,86,74,.14);color:var(--red);box-shadow:none}
+.cta.ghost{background:var(--bg-deep);color:var(--ink-2);box-shadow:none}
+.about-rating{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:var(--ink);margin:2px 0 14px}
+.about-star{color:var(--gold)}
+.about-rating small{color:var(--ink-3);font-weight:500}
+.about-list{display:flex;flex-direction:column}
+.about-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--stroke);color:var(--ink);font-size:14px;text-decoration:none}
+.about-row .ic{width:19px;height:19px;flex:none;color:var(--green)}
+.about-row span{min-width:0;word-break:break-word}
+.about-reviews{margin-top:18px;display:flex;flex-direction:column;gap:14px}
+.about-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.about-review p{color:var(--ink-3);font-size:13px;margin-top:4px;line-height:1.5}
+
+/* F3 · stories rail + viewer */
+.stories-rail{display:flex;gap:14px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none}
+.stories-rail::-webkit-scrollbar{display:none}
+.story-bubble{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px}
+.sb-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--green),var(--gold));display:grid;place-items:center}
+.sb-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.story-bubble small{font-size:11px;color:var(--ink-2);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-viewer{position:absolute;inset:0;z-index:90;background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.story-viewer.is-open{opacity:1}
+.sv-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.sv-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.sv-close .ic{width:20px;height:20px}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-nav.prev{inset-inline-start:0}
+.sv-nav.next{inset-inline-end:0}
+.sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.sv-caption{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.sv-cta{height:50px}
+
+/* F1 · meal-plan CTA + sheet */
+.mealplan-cta{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--mint);border:1.5px solid var(--green-soft);border-radius:16px;padding:13px 15px;transition:transform var(--t-fast) var(--ease-pop)}
+.mealplan-cta:active{transform:scale(.98)}
+.mealplan-cta .mp-ic{width:38px;height:38px;border-radius:11px;background:var(--card);display:grid;place-items:center;color:var(--green);flex:none}
+.mealplan-cta .mp-copy{flex:1}
+.mealplan-cta .mp-copy b{display:block;font-size:14px;font-weight:700}
+.mealplan-cta .mp-copy small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.mealplan-cta .arr{color:var(--ink-3)}
+#cvMpCadence button.is-on{background:var(--green);color:var(--green-ink)}
+#cvMealPlanSheet input[type="date"]{width:100%}
+
+/* F4 · branch map */
+.sheet-tall{max-height:88%}
+.branchmap{width:100%;height:240px;border-radius:16px;overflow:hidden;background:var(--card);margin-bottom:8px}
+.branchmap .leaflet-container{height:100%;background:var(--card);font:inherit}
+.branch-dist{font-size:12px;font-weight:700;color:var(--green);flex:none}
+.nearest-branch-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:10px 15px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke-2);font-size:13px;font-weight:700;color:var(--ink-2)}
+.nearest-branch-btn .ic{color:var(--green)}
+.geo-attrib{font-size:10.5px;color:var(--ink-3);margin:6px 2px 0}
+
+/* F5 · address autocomplete */
+.addr-field{position:relative}
+.addr-field input{padding-inline-end:46px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--green)}
+.uselocbtn.is-loading{opacity:.5;animation:cv-spin 1s linear infinite}
+@keyframes cv-spin{to{transform:rotate(360deg)}}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--card);border:1px solid var(--stroke-2);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-pop);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--stroke)}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--mint)}
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1.5px solid var(--stroke-2);border-radius:16px;background:var(--card);color:var(--ink);cursor:pointer}
+.saved-addr .ic{flex:none;color:var(--ink-3)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.saved-addr.is-on .ic{color:var(--green)}
+
+/* F6 · rich reviews */
+.p-reviews{padding:6px 20px 0}
+.rv-head{display:flex;gap:18px;background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:16px;margin-bottom:12px}
+.rv-avg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;min-width:78px}
+.rv-avg b{font-size:32px;font-weight:800;line-height:1}
+.rv-avg small{font-size:11px;color:var(--ink-3);margin-top:4px}
+.stars-mini{color:var(--gold);font-size:13px;letter-spacing:1px}
+.stars-mini .s-dim{color:var(--stroke-2)}
+.rv-dist{flex:1;display:flex;flex-direction:column;gap:5px;justify-content:center}
+.rv-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.rv-bar em{font-style:normal;width:10px;text-align:end}
+.rv-bar i{flex:1;height:6px;border-radius:3px;background:var(--mint);overflow:hidden}
+.rv-bar i s{display:block;height:100%;background:var(--gold);border-radius:3px}
+.rv-bar b{width:20px;text-align:end;font-weight:700}
+.rv-filters{display:flex;gap:8px;margin-bottom:12px}
+.rv-filters button{padding:7px 14px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke);font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rv-filters button.is-on{border-color:var(--green);color:var(--green);background:var(--mint)}
+.rv-list{display:grid;gap:12px}
+.rv-item{background:var(--card);border:1px solid var(--stroke);border-radius:14px;padding:13px 15px}
+.rv-item-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rv-item-top b{font-size:13.5px;font-weight:700}
+.rv-verified{font-size:10.5px;font-weight:800;color:var(--green);background:var(--mint);padding:2px 8px;border-radius:var(--r-pill)}
+.rv-item p{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:6px}
+.rv-photos{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.rv-photos img{width:66px;height:66px;border-radius:11px;object-fit:cover;border:1px solid var(--stroke)}
+.rv-empty{font-size:13px;color:var(--ink-3);text-align:center;padding:22px 0}
+.rv-stars{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.rv-stars button{color:var(--stroke-2);transition:transform var(--t-fast) var(--ease-pop)}
+.rv-stars button .ic{width:34px;height:34px}
+.rv-stars button:active{transform:scale(1.2)}
+.rv-stars button.is-on{color:var(--gold)}
+#cvReviewSheet textarea{width:100%;margin-top:12px}
+
+/* F7 · OTP checkout gate */
+.otp-boxes.otp-6{gap:8px}
+.otp-boxes.otp-6 input{width:46px;height:56px;font-size:21px}
+#cvCheckoutOtpSheet .cta{margin-top:16px}
+
+/* misc */
+.cv-noscroll{overflow:hidden}
+
+/* ── agent-chat FAB: two states, two hooks ─────────────────────────────────
+   Matcha has no persistent bottom bar, so it takes no static offset. It has two
+   transient states instead, and they want opposite treatments.
+
+   1. The item detail is a *sub-view*, not a scrim'd overlay: .p-cta is an
+      in-flow footer (82px, flush to the shell bottom — measured clearance 83px)
+      carrying the add-to-cart CTA. The shared FAB is z-index:9999 against this
+      theme's --z-sheet:50, so it floated straight over that CTA — the overlap
+      the audit originally reported. The view stays interactive, so lift the FAB
+      rather than hide it. .p-cta's own padding includes env(safe-area-inset-
+      bottom), so its height grows with the safe area and the offset tracks it.
+
+   2. The sheets (cart/auth/reservation) genuinely own the screen behind a
+      scrim, so there suppress the FAB outright rather than perch it on top.
+
+   Both hang off state this theme's JS already sets — no theme JS change. */
+:root:has(.view-sub.is-active .p-cta) { --agent-fab-offset: calc(75px + env(safe-area-inset-bottom, 0px)); }
+:root:has(.scrim.is-open)             { --agent-fab-visibility: hidden; }
+
+/* ── F14 · compact reviews (zero-review state) ────────────────
+   A store with no reviews used to get a full viewport of empty furniture:
+   "0.0", five zeroed histogram bars and three filter chips. At count === 0 the
+   block collapses to a single invitation line. */
+.rv-compact{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:18px;
+  padding:14px 16px;
+}
+.rv-compact .ic{width:20px;height:20px;color:var(--gold);fill:currentColor;stroke:none;flex:none}
+.rv-compact span{flex:1;font-size:13.5px;line-height:1.45;color:var(--ink-2);font-weight:600}
+
+/* ── F30 · dietary dot legend (filter sheet) ──────────────────
+   The 8px dot on every card was unexplained; the sheet now names it. */
+.diet-legend{display:flex;gap:16px;flex-wrap:wrap;padding:2px 2px 0;font-size:12.5px;color:var(--ink-2);font-weight:600}
+.diet-legend span{display:inline-flex;align-items:center;gap:7px}
+.diet-legend i{width:9px;height:9px;border-radius:50%;background:var(--green-hi);flex:none}
+.diet-legend i.nv{background:var(--red)}
+
+/* ── track: delivery address block (F21) ────────────────────── */
+.track-addr{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.55;color:var(--ink-2);font-weight:600}
+.track-addr .ic{width:16px;height:16px;color:var(--green);flex:none;margin-top:2px}
+
+/* ── dark mode ───────────────────────────────────────────────
+   matcha shipped 0 dark rules in 63KB: a phone in dark mode got the full-white
+   storefront. The palette is variable-driven, so dark is a re-tint of the same
+   design, not an inversion. The black CTA pill inverts to a light pill so the
+   theme's signature high-contrast CTA survives on a dark ground. */
+@media (prefers-color-scheme:dark){
+  html:has(.matcha:not([data-theme="light"])), body:has(.matcha:not([data-theme="light"])){background:#0a110e}
+  .matcha:not([data-theme="light"]){
+    --bg:#0f1714;
+    --bg-deep:#0a110e;
+    --card:#18231e;
+    --mint:#1d2b25;
+    --mint-2:#26362e;
+    --stroke:rgba(255,255,255,.09);
+    --stroke-2:rgba(255,255,255,.17);
+    --ink:#e8f2ec;
+    --ink-2:#b3c6bb;
+    --ink-3:#9ab3a4;
+    --green:#2fbc8b;
+    --green:color-mix(in srgb,var(--tc-primary, var(--matcha-brand,#067655)) 55%,#a8f0d2);
+    --green-hi:#3ddc97;
+    --green-soft:#1f4a37;
+    --green-deep:#0a6a4c;
+    --gold:#f5b955;
+    --red:#ff6f63;
+    --black:#e9f3ec;
+    --black-ink:#0f1714;
+    --shadow-card:0 10px 26px -12px rgba(0,0,0,.65);
+    --shadow-pop:0 18px 38px -14px rgba(0,0,0,.75);
+  }
+  /* the wave / splash keep the brand green itself, not the lightened text green;
+     --tc-primary threads through so a v2 recolour reaches them, else legacy hook */
+  .matcha:not([data-theme="light"]) .wave-bg{fill:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha:not([data-theme="light"]) .splash{background:radial-gradient(26rem 20rem at 85% -6%,rgba(255,255,255,.12),transparent 60%),var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha:not([data-theme="light"]) .wave-avatar::before{background:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha:not([data-theme="light"]) .badge{outline-color:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha:not([data-theme="light"]) .wave-menu .dot{outline-color:var(--tc-primary, var(--matcha-brand,#067655))}
+  /* Accent buttons keep a LIGHT mint-green in dark mode, so white labels on them
+     drop below WCAG (≈2.7:1). Flip those labels to dark ink — a mint chip with a
+     dark label reads cleanly and passes contrast. */
+  .matcha:not([data-theme="light"]) :is(.cat.is-on,.subchip.is-on,.seg button.is-on,.minibtn,.pm.is-on .pm-ic){color:#0b1a13}
+  /* hardcoded light surfaces → themed surfaces */
+  .matcha:not([data-theme="light"]) :is(.qty.light,.card-fav,.rail-fav,.badge-veg,.fab){background:var(--card)}
+  .matcha:not([data-theme="light"]) :is(.pm.is-on,.tip-row button.is-on){background:rgba(47,188,139,.12)}
+  .matcha:not([data-theme="light"]) .spice-scale button.is-on{background:rgba(245,185,85,.14);color:var(--gold)}
+  .matcha:not([data-theme="light"]) .minorder{color:var(--gold)}
+  .matcha:not([data-theme="light"]) .err-box{background:rgba(255,111,99,.12);border-color:rgba(255,111,99,.34)}
+  .matcha:not([data-theme="light"]) .ghostbtn.is-armed{background:rgba(255,111,99,.14)}
+  .matcha:not([data-theme="light"]) .toast{background:var(--card);color:var(--ink);border:1px solid var(--stroke-2)}
+  .matcha:not([data-theme="light"]) .sk .card-imgwrap::after, .matcha:not([data-theme="light"]) .sk-line::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
+  .matcha:not([data-theme="light"]) .check-badge circle{stroke:var(--bg)}
+  .matcha:not([data-theme="light"]) .cup-lid{fill:#4fbe95}
+  .matcha:not([data-theme="light"]) .cup-cap{fill:#2b8b69}
+  .matcha:not([data-theme="light"]) .md-hint{background:rgba(255,255,255,.06)}
+  .matcha:not([data-theme="light"]) .greview{background:rgba(245,185,85,.12);border-color:rgba(245,185,85,.32)}
+  /* leaflet tiles stay light — dim them so the map doesn't glare */
+  .matcha:not([data-theme="light"]) .branchmap .leaflet-tile{filter:brightness(.78) contrast(1.05)}
+  @media (min-width:861px){
+    body:has(.matcha:not([data-theme="light"])){
+      background:
+        radial-gradient(44rem 32rem at 78% 8%,rgba(6,118,85,.30),transparent 62%),
+        radial-gradient(38rem 28rem at 12% 88%,rgba(11,154,109,.20),transparent 64%),
+        #08100d;
+    }
+    .matcha:not([data-theme="light"]){border-color:rgba(255,255,255,.10);box-shadow:0 50px 100px -30px rgba(0,0,0,.75)}
+  }
+  @media (min-width:1024px){
+    body:has(.matcha:not([data-theme="light"])) .matcha-desk{color:#dfeee6}
+    body:has(.matcha:not([data-theme="light"])) .md-logo{background:#18231e}
+    body:has(.matcha:not([data-theme="light"])) .md-logo::before{color:#3ddc97}
+    body:has(.matcha:not([data-theme="light"])) .md-sub, body:has(.matcha:not([data-theme="light"])) .md-hint{color:#a9c1b5}
+    body:has(.matcha:not([data-theme="light"])) .md-facts li{color:#b6cbc0}
+    body:has(.matcha:not([data-theme="light"])) .md-facts .ic{color:#3ddc97}
+    body:has(.matcha:not([data-theme="light"])) .md-facts .md-open{color:#5fe3ab}
+    body:has(.matcha:not([data-theme="light"])) .md-hint{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.10)}
+  }
+}
+
+/* ── layout utilities (replace inline style= attributes) ─────
+   Every inline `style="…"` in the blade tripped a CSP `style-src-attr`
+   report-only violation; ~20 report POSTs fired per page load and were
+   429-throttled. These classes carry the same rules from the stylesheet. */
+.matcha .is-off{display:none}
+.matcha .mt-sm{margin-top:9px}
+.matcha .mt-md{margin-top:12px}
+.matcha .mt-lg{margin-top:16px}
+.matcha .capture-email{padding-top:9px}
+.matcha .checkout-totals{margin-top:16px}
+.matcha .checkout-err{margin-top:12px}
+.matcha .p-related{padding:0 20px}
+.matcha .lookup-results{padding-top:10px}
+.matcha .lookup-field{border-style:solid}
+.matcha .plain-link{text-decoration:none}
+.matcha .curbside-field{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.matcha .curbside-field input{width:17px;height:17px;accent-color:var(--green);flex:none}
+.matcha .curbside-fields{display:grid;gap:9px;margin-top:9px}
+.matcha .track-total{border-top:1px dashed var(--stroke-2);padding-top:10px}
+.matcha .track-total span{color:var(--ink);font-weight:700}
+.matcha .track-total b{font-size:16px}
+
+/* F7 · the guest lookup row now reads as the link it always was */
+.order-track{font-size:12px;font-weight:800;color:var(--green);white-space:nowrap}
+.order-row .arr{color:var(--ink-3);flex:none}
+[dir="rtl"] .order-row .arr{transform:scaleX(-1)}
+.matcha .track-foot{display:grid;place-items:center;padding-top:18px}
+.matcha .order-card{margin-bottom:12px}
+.matcha .order-card-total{margin-top:5px;text-align:end}
+/* emoji/monogram sits UNDER any real image in the chip ring */
+.matcha .cat-ring{position:relative}
+.matcha .cat-ring img{position:relative;z-index:1}
+.matcha .cat-ring .emoji{position:absolute;inset:0;display:grid;place-items:center}
+/* a logo that 404s at runtime is hidden by the boot sweep in script.js so the
+   monogram/emoji underneath shows instead of a broken-image glyph */
+.matcha img[data-mono][hidden]{display:none !important}
+
+/* Chrome paints autofilled inputs with its own light lavender background and
+   near-black text — unreadable on the dark palette and off-brand on the light
+   one. Repaint them with the theme's own surface/ink. */
+.matcha input:-webkit-autofill,
+.matcha input:-webkit-autofill:hover,
+.matcha input:-webkit-autofill:focus,
+.matcha textarea:-webkit-autofill{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--card) inset;
+  box-shadow:0 0 0 1000px var(--card) inset;
+  caret-color:var(--ink);
+  transition:background-color 5000s ease-in-out 0s;
+}
+.matcha .search input:-webkit-autofill,
+.matcha .coupon-field input:-webkit-autofill{
+  -webkit-box-shadow:0 0 0 1000px var(--card) inset;
+  box-shadow:0 0 0 1000px var(--card) inset;
+}
+
+/* Keyboard focus rings (a11y). The theme only styled input :focus — every
+   button, link, icon button, category, menu card, banner and bottom-nav tab
+   was invisible to keyboard users. One brand-green ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.matcha a:focus-visible,
+.matcha button:focus-visible,
+.matcha [tabindex]:focus-visible,
+.matcha .card:focus-visible,
+.matcha .cat:focus-visible,
+.matcha .banner:focus-visible,
+.matcha .tab:focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+/* inputs already tint on focus above; keep them outline-free to avoid a double
+   indicator. */
+.matcha input:focus-visible,
+.matcha textarea:focus-visible,
+.matcha select:focus-visible { outline:none; }
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--mint);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ci-side .qty-btn::after{inset:-6px -5px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.minibtn,.followbtn,.viewall,.ghostbtn.sm{min-height:44px}
+.fab.back,.fab.fav{inline-size:44px;block-size:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, matcha skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Mint tea chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--mint);border:1px solid var(--mint-2);color:var(--green);font-weight:600;
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--green)}
+
+/* ── notification-center panel — matcha skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--card,#ffffff);--nb-surface-2:var(--mint,#e9f3ec);--nb-line:var(--mint-2,#dcebe1);--nb-ink:var(--ink,#152b1f);--nb-muted:var(--ink-2,#4c6355);--nb-accent:var(--green,#067655)}
+
+
+/* ═══ DARK MODE, explicit (Lane B togglify) — diner chose dark via the
+   shared toggle (_shared/js/mb-theme.js sets data-theme on .matcha);
+   wins regardless of the OS preference. KEEP IN SYNC with the
+   @media (prefers-color-scheme:dark) block(s) above — same rules,
+   selectors keyed on [data-theme="dark"] instead of the media query.
+   Token blocks also match html[data-mb-theme="dark"] (pre-init first
+   paint, FOUC snippet in layout.blade.php). ═══ */
+  html:has(.matcha[data-theme="dark"]), body:has(.matcha[data-theme="dark"]){background:#0a110e}
+  .matcha[data-theme="dark"], html[data-mb-theme="dark"] .matcha{
+    --bg:#0f1714;
+    --bg-deep:#0a110e;
+    --card:#18231e;
+    --mint:#1d2b25;
+    --mint-2:#26362e;
+    --stroke:rgba(255,255,255,.09);
+    --stroke-2:rgba(255,255,255,.17);
+    --ink:#e8f2ec;
+    --ink-2:#b3c6bb;
+    --ink-3:#9ab3a4;
+    --green:#2fbc8b;
+    --green:color-mix(in srgb,var(--tc-primary, var(--matcha-brand,#067655)) 55%,#a8f0d2);
+    --green-hi:#3ddc97;
+    --green-soft:#1f4a37;
+    --green-deep:#0a6a4c;
+    --gold:#f5b955;
+    --red:#ff6f63;
+    --black:#e9f3ec;
+    --black-ink:#0f1714;
+    --shadow-card:0 10px 26px -12px rgba(0,0,0,.65);
+    --shadow-pop:0 18px 38px -14px rgba(0,0,0,.75);
+  }
+  /* the wave / splash keep the brand green itself, not the lightened text green;
+     --tc-primary threads through so a v2 recolour reaches them, else legacy hook */
+  .matcha[data-theme="dark"] .wave-bg{fill:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha[data-theme="dark"] .splash{background:radial-gradient(26rem 20rem at 85% -6%,rgba(255,255,255,.12),transparent 60%),var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha[data-theme="dark"] .wave-avatar::before{background:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha[data-theme="dark"] .badge{outline-color:var(--tc-primary, var(--matcha-brand,#067655))}
+  .matcha[data-theme="dark"] .wave-menu .dot{outline-color:var(--tc-primary, var(--matcha-brand,#067655))}
+  /* accent buttons: dark label on the light mint-green (see the media block note) */
+  .matcha[data-theme="dark"] :is(.cat.is-on,.subchip.is-on,.seg button.is-on,.minibtn,.pm.is-on .pm-ic),
+  html[data-mb-theme="dark"] .matcha :is(.cat.is-on,.subchip.is-on,.seg button.is-on,.minibtn,.pm.is-on .pm-ic){color:#0b1a13}
+  /* hardcoded light surfaces → themed surfaces */
+  .matcha[data-theme="dark"] :is(.qty.light,.card-fav,.rail-fav,.badge-veg,.fab){background:var(--card)}
+  .matcha[data-theme="dark"] :is(.pm.is-on,.tip-row button.is-on){background:rgba(47,188,139,.12)}
+  .matcha[data-theme="dark"] .spice-scale button.is-on{background:rgba(245,185,85,.14);color:var(--gold)}
+  .matcha[data-theme="dark"] .minorder{color:var(--gold)}
+  .matcha[data-theme="dark"] .err-box{background:rgba(255,111,99,.12);border-color:rgba(255,111,99,.34)}
+  .matcha[data-theme="dark"] .ghostbtn.is-armed{background:rgba(255,111,99,.14)}
+  .matcha[data-theme="dark"] .toast{background:var(--card);color:var(--ink);border:1px solid var(--stroke-2)}
+  .matcha[data-theme="dark"] .sk .card-imgwrap::after, .matcha[data-theme="dark"] .sk-line::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)}
+  .matcha[data-theme="dark"] .check-badge circle{stroke:var(--bg)}
+  .matcha[data-theme="dark"] .cup-lid{fill:#4fbe95}
+  .matcha[data-theme="dark"] .cup-cap{fill:#2b8b69}
+  .matcha[data-theme="dark"] .md-hint{background:rgba(255,255,255,.06)}
+  .matcha[data-theme="dark"] .greview{background:rgba(245,185,85,.12);border-color:rgba(245,185,85,.32)}
+  /* leaflet tiles stay light — dim them so the map doesn't glare */
+  .matcha[data-theme="dark"] .branchmap .leaflet-tile{filter:brightness(.78) contrast(1.05)}
+  @media (min-width:861px){
+    body:has(.matcha[data-theme="dark"]){
+      background:
+        radial-gradient(44rem 32rem at 78% 8%,rgba(6,118,85,.30),transparent 62%),
+        radial-gradient(38rem 28rem at 12% 88%,rgba(11,154,109,.20),transparent 64%),
+        #08100d;
+    }
+    .matcha[data-theme="dark"]{border-color:rgba(255,255,255,.10);box-shadow:0 50px 100px -30px rgba(0,0,0,.75)}
+  }
+  @media (min-width:1024px){
+    body:has(.matcha[data-theme="dark"]) .matcha-desk{color:#dfeee6}
+    body:has(.matcha[data-theme="dark"]) .md-logo{background:#18231e}
+    body:has(.matcha[data-theme="dark"]) .md-logo::before{color:#3ddc97}
+    body:has(.matcha[data-theme="dark"]) .md-sub, body:has(.matcha[data-theme="dark"]) .md-hint{color:#a9c1b5}
+    body:has(.matcha[data-theme="dark"]) .md-facts li{color:#b6cbc0}
+    body:has(.matcha[data-theme="dark"]) .md-facts .ic{color:#3ddc97}
+    body:has(.matcha[data-theme="dark"]) .md-facts .md-open{color:#5fe3ab}
+    body:has(.matcha[data-theme="dark"]) .md-hint{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.10)}
+  }
+
+/* toggle button icons — light shows the moon (action = go dark), dark shows the sun */
+.matcha .mb-th-sun{display:none}
+@media (prefers-color-scheme: dark){
+  .matcha:not([data-theme="light"]) .mb-th-sun{display:block}
+  .matcha:not([data-theme="light"]) .mb-th-moon{display:none}
+}
+.matcha[data-theme="dark"] .mb-th-sun,
+html[data-mb-theme="dark"] .matcha .mb-th-sun{display:block}
+.matcha[data-theme="dark"] .mb-th-moon,
+html[data-mb-theme="dark"] .matcha .mb-th-moon{display:none}
+
+/* ── floating dock ─────────────────────────────────────────────
+   Standardized bottom navbar (home · menu · search · cart · favs · profile).
+   Lives outside .cv-views and floats over the home scroll; hidden on sub-views.
+   Styled off role tokens (--card/--ink/--green/--stroke) so it flips in dark. */
+.matcha .view[data-view="home"] .view-scroll{padding-bottom:78px}
+.mc-dock{
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:calc(12px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;gap:2px;
+  width:calc(100% - 24px);max-width:440px;
+  padding:6px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);
+  box-shadow:var(--shadow-pop);
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+/* translateX(-50%) centres in both directions (it is a physical offset, not a
+   directional scroll) — do NOT flip its sign for RTL, that shoves it off-frame. */
+.mc-dock.is-hidden{
+  transform:translateX(-50%) translateY(140%);opacity:0;pointer-events:none;
+}
+.mc-dock-btn{
+  position:relative;flex:1 1 0;min-width:0;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 2px 6px;border:0;border-radius:16px;
+  background:none;color:var(--ink-3);cursor:pointer;
+  font-family:inherit;
+  transition:color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.mc-dock-btn .ic{width:22px;height:22px}
+.mc-dock-btn span{
+  font-size:10px;font-weight:600;line-height:1;letter-spacing:.01em;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mc-dock-btn:active{transform:scale(.9)}
+.mc-dock-btn.is-on{color:var(--green)}
+.mc-dock-btn.is-on .ic{stroke-width:2}
+.mc-dock-badge{
+  position:absolute;top:2px;inset-inline-end:calc(50% - 20px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:var(--r-pill);
+  background:var(--gold);color:#3a2200;
+  font-size:10px;font-weight:800;font-style:normal;line-height:16px;text-align:center;
+  box-shadow:0 0 0 2px var(--card);
+}
+.mc-dock-badge[hidden]{display:none}
+
+/* store subtitle in the brand band (2-line clamp, muted) — parity with the splash tagline + crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — matcha skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#cvBrandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#cvFollowBtn. This block maps
+   the shared --mbh-* token contract onto matcha's own scheme-aware tokens
+   (so re-ink holds on the light/dark flip), then gives each relocated layer
+   surface matcha's native look. Scoped under .matcha so its tokens resolve
+   once the layer elements are relocated into the theme root. Only the hub
+   paints an opaque surface (a modal legitimately does); the chip and the
+   checkout controls stay translucent / borderless so they never fight the theme.
+   ═══════════════════════════════════════════════════════════ */
+.matcha #mbHotelChip,
+.matcha #mbHotelOrderCtrls,
+.matcha #mbHotelBook,
+.matcha #mbHotelHub{
+  --mbh-surface:var(--card);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--green);
+  --mbh-on-accent:var(--green-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill sitting with the follow button in the brand row ── */
+.matcha #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.matcha #mbHotelChip:active{transform:scale(.95)}
+.matcha #mbHotelChip .mb-hotel-roomchip__ic{color:var(--green)}
+.matcha #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: matcha's own bottom sheet (card surface, r-sheet corners, grab + x) ── */
+.matcha #mbHotelHubScrim{background:rgba(6,10,8,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.matcha #mbHotelHub{
+  background:var(--card);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.matcha #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.matcha #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.matcha #mbHotelHub .mb-hotel-hub__x{
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink-2);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.matcha #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.matcha #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.matcha #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.matcha #mbHotelHub .mb-hotel-card summary,
+.matcha #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.matcha #mbHotelHub .mb-hotel-info-link{color:var(--green)}
+/* service form controls → matcha inputs / green CTA */
+.matcha #mbHotelHub .mb-hotel-field{
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);border-radius:12px;
+}
+.matcha #mbHotelHub .mb-hotel-btn{
+  background:var(--green);color:var(--green-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → matcha tender rows ── */
+.matcha #mbHotelOrderCtrls{margin:0}
+.matcha #mbHotelSched,
+.matcha #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.matcha #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.matcha #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.matcha #mbHotelSched input[type="radio"]{accent-color:var(--green)}
+.matcha #mbHotelSched .mb-hotel-field{
+  background:var(--card);border:1.5px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.matcha #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.matcha #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.matcha #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.matcha #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.matcha #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.matcha #mbHotelCharge input[type="checkbox"]{accent-color:var(--green)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for matcha. Surface,
+   ink, border and radius come from matcha tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.matcha .mb-paypending{
+  --pp-surface:var(--card,#ffffff);
+  --pp-ink:var(--ink,#152b1f);
+  --pp-muted:var(--ink-2,#4c6355);
+  --pp-border:var(--stroke-2,rgba(10,40,25,.14));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,26px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.matcha .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.matcha .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.matcha .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.matcha .mb-paypending-txn:empty{display:none}
+.matcha .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.matcha .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.matcha .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.matcha .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.matcha .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing .wa-line — reset the UA button box to match the anchor rows. */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* ── Address map picker + device-data (shared engines, matcha-skinned) ───── */
+.cv-mapbtn{margin-top:8px}
+.map-sheet h2{margin-bottom:12px}
+.map-sheet .map-canvas{position:relative;height:min(52vh,360px);margin-bottom:0;border:1px solid var(--stroke)}
+.map-sheet .map-preview{margin:12px 4px 0;font-size:13px;line-height:1.4;color:var(--ink-2);min-height:18px;text-align:center}
+.map-sheet .sheet-actions{padding-top:16px}
+/* centre pin (engine injects .mb-map-pin) — matcha green teardrop */
+.mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--green);border:2px solid #fff}
+.mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#fff}
+/* clear-saved-data row (profile surface) — muted ghost link */
+.device-data{margin:18px 4px 4px;text-align:center}
+.device-data .cv-cleardata{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:auto;min-height:0;padding:8px 6px;background:none;border:0;border-radius:var(--r-pill);color:var(--ink-3);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.device-data .cv-cleardata .ic{width:15px;height:15px;color:inherit}
+.device-data .cv-cleardata:active{color:var(--red);transform:scale(.97)}
+.device-data-hint{margin:6px auto 0;max-width:34ch;font-size:11px;line-height:1.45;color:var(--ink-3)}

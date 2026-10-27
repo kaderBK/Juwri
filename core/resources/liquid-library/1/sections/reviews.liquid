@@ -1,0 +1,65 @@
+{%- comment -%}
+  Reviews (library v1): the store's approved reviews through the platform
+  store-reviews widget (its own trigger + dialog), an
+  optional rating summary averaged from the store's item ratings, and a
+  "review us on Google" link when the store set one. Everything sits behind
+  features.store_reviews, and the section renders nothing unless at least
+  one of the three has something to show.
+{%- endcomment -%}
+{%- if features.store_reviews -%}
+{%- capture reviews_widget -%}{%- widget 'store-reviews' -%}{%- endcapture -%}
+{%- liquid
+  assign reviews_widget = reviews_widget | strip
+  assign r_total = 0.0
+  assign r_count = 0
+  if section.settings.show_rating
+    for it in menu.items
+      if it.rating_count > 0
+        assign weighted = it.rating | times: it.rating_count
+        assign r_total = r_total | plus: weighted
+        assign r_count = r_count | plus: it.rating_count
+      endif
+    endfor
+  endif
+  assign google = ''
+  if section.settings.show_google and features.google_review and social.google_review_url
+    assign google = social.google_review_url
+  endif
+  assign heading = section.settings.heading | strip
+-%}
+{%- if reviews_widget != '' or r_count > 0 or google != '' -%}
+<section class="mbs-reviews" aria-labelledby="mbs-reviews-{{ section.id | escape }}">
+  <h2 class="mbs-reviews__title" id="mbs-reviews-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- else -%}{{ 'Reviews' | t }}{%- endif -%}</h2>
+  {%- if section.settings.intro != '' -%}<p class="mbs-reviews__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
+  <div class="mbs-reviews__body">
+    {%- if r_count > 0 -%}
+      {%- assign avg = r_total | divided_by: r_count | round: 1 -%}
+      <p class="mbs-reviews__summary" aria-label="{{ 'Rating' | t }}: {{ avg }} / 5">
+        {%- render 'icon', name: 'star', size: 22 -%}<b class="mbs-reviews__avg">{{ avg }}</b><span class="mbs-reviews__of">/ 5</span>
+        <span class="mbs-reviews__count"><bdi>{{ r_count }}</bdi> {{ 'ratings' | t }}</span>
+      </p>
+    {%- endif -%}
+    {%- if reviews_widget != '' -%}<div class="mbs-reviews__widget">{{ reviews_widget }}</div>{%- endif -%}
+    {%- if google != '' -%}
+      <a class="mbs-reviews__google" href="{{ google | escape }}" rel="noopener" target="_blank">{%- render 'icon', name: 'review', size: 18 -%}<span>{{ 'Review us on Google' | t }}</span></a>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Reviews",
+  "group": "trust",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Reviews)", "default": "" },
+    { "id": "intro", "type": "textarea", "label": "Intro text", "default": "" },
+    { "id": "show_rating", "type": "checkbox", "label": "Show average rating (when rated)", "default": true },
+    { "id": "show_google", "type": "checkbox", "label": "Show the Google review link (when set)", "default": true }
+  ],
+  "presets": [{ "name": "Reviews" }]
+}
+{% endschema %}

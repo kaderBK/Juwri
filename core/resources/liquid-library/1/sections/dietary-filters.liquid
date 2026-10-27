@@ -1,0 +1,62 @@
+{%- comment -%}
+  Dietary filter chips (library v1): All / Favorites / Today's specials /
+  Vegan / Halal / Gluten free, bound to the commerce runtime
+  (data-mb-filter; the runtime marks the active chip with .is-on and hides
+  catalogue cards + empty categories that don't match). Only shown when the
+  store has dietary filters switched on (features.dietary_filters) and has
+  items. "Only tags on the menu" drops chips no item carries.
+{%- endcomment -%}
+{%- if features.dietary_filters and menu.is_empty == false -%}
+{%- liquid
+  assign has_special = false
+  assign has_vegan = false
+  assign has_halal = false
+  assign has_gf = false
+  for it in menu.items
+    if it.is_daily_special
+      assign has_special = true
+    endif
+    if it.is_vegan
+      assign has_vegan = true
+    endif
+    if it.is_halal
+      assign has_halal = true
+    endif
+    if it.is_gluten_free
+      assign has_gf = true
+    endif
+  endfor
+  unless section.settings.only_used
+    assign has_special = true
+    assign has_vegan = true
+    assign has_halal = true
+    assign has_gf = true
+  endunless
+-%}
+<div class="mbs-dietary-filters{% if section.settings.sticky %} is-sticky{% endif %}" role="group" aria-label="{{ 'Dietary filters' | t }}">
+  <ul class="mbs-dietary-filters__list" role="list">
+    <li><button type="button" class="mbs-dietary-filters__chip is-on" data-mb-filter="all">{{ 'All' | t }}</button></li>
+    {%- if section.settings.show_favorites -%}<li><button type="button" class="mbs-dietary-filters__chip" data-mb-filter="fav">{%- render 'icon', name: 'heart', size: 16 -%}{{ 'Favorites' | t }} <bdi class="mbs-dietary-filters__n" data-mb-fav-count>0</bdi></button></li>{%- endif -%}
+    {%- if section.settings.show_specials and has_special -%}<li><button type="button" class="mbs-dietary-filters__chip" data-mb-filter="special">{{ "Today's specials" | t }}</button></li>{%- endif -%}
+    {%- if has_vegan -%}<li><button type="button" class="mbs-dietary-filters__chip" data-mb-filter="vegan">{{ 'Vegan' | t }}</button></li>{%- endif -%}
+    {%- if has_halal -%}<li><button type="button" class="mbs-dietary-filters__chip" data-mb-filter="halal">{{ 'Halal' | t }}</button></li>{%- endif -%}
+    {%- if has_gf -%}<li><button type="button" class="mbs-dietary-filters__chip" data-mb-filter="gluten_free">{{ 'Gluten free' | t }}</button></li>{%- endif -%}
+  </ul>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Dietary filters",
+  "group": "discover",
+  "verticals": ["food"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "show_favorites", "type": "checkbox", "label": "Favorites chip", "default": true },
+    { "id": "show_specials", "type": "checkbox", "label": "Today's specials chip", "default": true },
+    { "id": "only_used", "type": "checkbox", "label": "Only tags used on the menu", "default": true },
+    { "id": "sticky", "type": "checkbox", "label": "Stick to the top while scrolling", "default": false }
+  ],
+  "presets": [{ "name": "Dietary filters" }]
+}
+{% endschema %}

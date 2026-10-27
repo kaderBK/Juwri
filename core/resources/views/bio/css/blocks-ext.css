@@ -1,0 +1,114 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ============================================================
+   Bio pages — NEW block types (bio-t15 Lane A) + pin/highlight.
+   Loaded after base.css, before family/preset. APPEND-ONLY: each
+   Lane A block WI adds its own `.bio-<type>` rules here. Use the
+   shared tokens (--card-radius, --accent, --ink, --card, --muted)
+   and honor dir="rtl" + prefers-reduced-motion. No @import, no
+   external url() — this text is inlined into the ONE nonced style.
+   ============================================================ */
+
+/* ---- A1 hours: open-now pill sits above the week table (reuses .bio-status/.bio-card) ---- */
+.bio-hours-card .bio-status{margin-bottom:12px}
+.bio-status--hours.is-closed{color:var(--muted,#8a8a8a);
+  border-color:color-mix(in srgb,var(--muted,#8a8a8a) 40%,transparent)}
+.bio-status--hours.is-closed i{background:var(--muted,#8a8a8a)}
+
+/* ---- A2 call: tel/WhatsApp/SMS button row ---- */
+.bio-call-btns{display:flex;gap:8px;flex-wrap:wrap}
+.bio-call-btn{flex:1 1 30%;display:flex;flex-direction:column;align-items:center;gap:6px;
+  text-align:center;font-size:11.5px;font-weight:700;padding:13px 8px;
+  border-radius:var(--card-radius);background:var(--card,#fff);color:var(--ink,#111);
+  border:1px solid color-mix(in srgb,var(--ink,#111) 14%,transparent);
+  transition:transform .16s ease}
+.bio-call-btn:hover{transform:translateY(-2px)}
+.bio-call-btn svg{width:20px;height:20px;fill:var(--accent,#0f7d5a)}
+
+/* ---- A4 reviews: leave-a-review CTA under the rating summary ---- */
+.bio-reviews__cta{display:inline-block;margin-top:10px;font-size:12px;font-weight:800;
+  color:var(--accent,#0f7d5a)}
+
+/* ---- A5 delivery: grouped ordering/aggregator buttons (list or grid) ---- */
+.bio-delivery__items{display:flex;flex-direction:column;gap:8px}
+.bio-delivery--grid .bio-delivery__items{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bio-delivery__item{display:flex;align-items:center;gap:11px;padding:12px 14px;
+  border-radius:var(--card-radius);background:var(--card,#fff);color:var(--ink,#111);
+  border:1px solid color-mix(in srgb,var(--ink,#111) 14%,transparent);
+  font-size:12.5px;font-weight:700;transition:transform .16s ease}
+.bio-delivery--grid .bio-delivery__item{flex-direction:column;text-align:center;padding:14px 8px}
+.bio-delivery__item:hover{transform:translateY(-2px)}
+.bio-delivery__glyph{width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:13px;
+  background:color-mix(in srgb,var(--accent,#0f7d5a) 80%,#000)}
+.bio-delivery__glyph svg{width:16px;height:16px;fill:currentColor}
+.bio-delivery__name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---- A8 gallery: CSS scroll-snap carousel or a 2-col grid, no JS ---- */
+.bio-gallery__item{margin:0;border-radius:var(--card-radius);overflow:hidden;position:relative;
+  background:color-mix(in srgb,var(--ink,#111) 8%,var(--bg,#111));flex:none}
+.bio-gallery__item img{width:100%;height:100%;object-fit:cover;display:block}
+.bio-gallery--r1-1 .bio-gallery__item{aspect-ratio:1/1}
+.bio-gallery--r4-3 .bio-gallery__item{aspect-ratio:4/3}
+.bio-gallery--r16-9 .bio-gallery__item{aspect-ratio:16/9}
+.bio-gallery__item figcaption{position:absolute;inset-inline:0;inset-block-end:0;padding:8px 10px;
+  font-size:10.5px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));text-align:start;
+  /* gap-fix: clamp a long caption to two lines with an ellipsis instead of letting it
+     creep up over the photo and clip mid-word. */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+/* carousel: horizontal scroll-snap, native momentum scrolling, RTL-safe (logical
+   scroll-snap-align + the browser's own writing-direction handles the axis) */
+.bio-gallery--carousel{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
+.bio-gallery--carousel::-webkit-scrollbar{display:none}
+.bio-gallery--carousel .bio-gallery__item{width:72%;scroll-snap-align:start}
+/* grid: 2-col, wraps naturally under dir="rtl" (no manual left/right) */
+.bio-gallery--grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ---- A9 faq: native <details> accordion, no JS ---- */
+.bio-faq__item{background:var(--card,#fff);border-radius:var(--card-radius);
+  border:1px solid color-mix(in srgb,var(--ink,#111) 12%,transparent);
+  padding:2px 16px;margin-bottom:8px;text-align:start}
+.bio-faq__item summary{padding:13px 0;font-size:13.5px;font-weight:700;color:var(--ink,#111);
+  cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.bio-faq__item summary::-webkit-details-marker{display:none}
+.bio-faq__item summary::after{content:"+";flex:none;font-size:16px;font-weight:400;
+  color:var(--accent,#0f7d5a);transition:transform .16s ease}
+.bio-faq__item[open] summary::after{transform:rotate(45deg)}
+.bio-faq__a{font-size:12.5px;line-height:1.6;color:var(--muted,#8a8a8a);padding:0 0 14px;white-space:pre-line;
+  overflow-wrap:anywhere}/* gap-fix: a long unbroken URL in an answer must wrap, not clip at the page edge */
+
+/* ---- A10 event: SSR countdown digits + RSVP (self-contained — the .fam-countdown
+   family CSS is scoped to that ONE layout, not reusable from an ordinary block) ---- */
+.bio-event__when{font-weight:700;color:var(--accent,#0f7d5a)}
+.bio-event__digits{display:flex;gap:8px;margin:10px 0}
+.bio-event__digits div{flex:1;background:color-mix(in srgb,var(--ink,#111) 5%,var(--bg,#111));
+  border:1px solid color-mix(in srgb,var(--ink,#111) 12%,transparent);border-radius:12px;
+  padding:9px 0;text-align:center}
+.bio-event__digits b{display:block;font-size:19px;font-variant-numeric:tabular-nums;color:var(--accent,#0f7d5a)}
+.bio-event__digits span{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted,#8a8a8a);font-weight:600}
+.bio-event__cta{margin-top:6px}
+
+/* ---- A11 tipjar (PRO) ---- */
+.bio-tipjar__amounts{display:flex;gap:8px;flex-wrap:wrap}
+.bio-tipjar__amt{flex:1 1 22%;text-align:center;font-weight:800;font-size:13px;padding:12px 6px;
+  border-radius:var(--radius,16px);background:var(--btn-bg,var(--card,#fff));color:var(--btn-fg,var(--ink,#111));
+  border:var(--btn-border-width,1px) solid var(--btn-border,color-mix(in srgb,var(--ink,#111) 12%,transparent))}
+
+/* ---- A13 pinned/spotlight: highlight animation classes, ANY block type.
+   base.css's blanket `prefers-reduced-motion:reduce` rule (`.bio *{animation-
+   duration:.01ms!important}`) already flattens these — no extra media query
+   needed here. Token-driven (--accent), so it follows the page's own skin. ---- */
+.bio-block--pinned{position:relative}
+.bio-highlight-pulse{animation:bio-pulse 2.1s ease-in-out infinite}
+.bio-highlight-glow{animation:bio-glow 2.4s ease-in-out infinite}
+@keyframes bio-pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.015)}
+}
+@keyframes bio-glow{
+  0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent,#0f7d5a) 45%,transparent)}
+  50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--accent,#0f7d5a) 0%,transparent)}
+}

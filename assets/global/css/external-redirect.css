@@ -1,0 +1,112 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* External Redirect interstitial — the owner-selectable "menu moved" page.
+   Standalone (rendered outside any theme layout). CSP-safe: this file is the
+   ONLY styling — the blade carries no <style>/<script>. Light + dark via
+   prefers-color-scheme; RTL comes from the <html dir> attribute. */
+
+:root {
+    --er-bg: #f5f6f8;
+    --er-card: #ffffff;
+    --er-fg: #1f2430;
+    --er-muted: #6b7280;
+    --er-btn: #111827;
+    --er-btn-fg: #ffffff;
+    --er-border: #e6e8ec;
+    --er-shadow: rgba(17, 24, 39, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --er-bg: #0f1115;
+        --er-card: #171a21;
+        --er-fg: #f3f4f6;
+        --er-muted: #9aa3b2;
+        --er-btn: #f3f4f6;
+        --er-btn-fg: #111827;
+        --er-border: #262b36;
+        --er-shadow: rgba(0, 0, 0, 0.4);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 24px;
+    line-height: 1.5;
+    background: var(--er-bg);
+    color: var(--er-fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Tajawal", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.er-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px;
+    text-align: center;
+    background: var(--er-card);
+    border: 1px solid var(--er-border);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px var(--er-shadow);
+}
+
+.er-logo {
+    display: block;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.er-name {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--er-muted);
+}
+
+.er-title {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.er-text {
+    margin: 0 0 24px;
+    font-size: 15px;
+    color: var(--er-muted);
+}
+
+.er-btn {
+    display: inline-block;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--er-btn-fg);
+    background: var(--er-btn);
+    border-radius: 10px;
+}
+
+.er-btn:hover {
+    opacity: 0.92;
+}
+
+.er-hint {
+    margin: 18px 0 0;
+    font-size: 12px;
+    color: var(--er-muted);
+}
