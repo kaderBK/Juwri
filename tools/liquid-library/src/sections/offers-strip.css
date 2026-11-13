@@ -1,0 +1,14 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* offers-strip */
+.mbs-offers-strip { max-inline-size: 1200px; margin: 8px auto; padding-block: var(--ts-gap-3, 16px); background: rgba(var(--tc-accent-rgb, 245, 158, 11), .12); color: var(--tc-text, #111); }
+.mbs-offers-strip__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-block-end: 12px; padding-inline: var(--ts-gap-3, 16px); }
+.mbs-offers-strip__title { margin: 0; font-family: var(--tf-heading); font-size: 1.2rem; }
+.mbs-offers-strip__label { padding: 2px 10px; border-radius: var(--tr-pill, 999px); background: var(--tc-accent, #f59e0b); color: var(--tc-on-accent, #111); font-size: .75rem; font-weight: 700; }
+.mbs-offers-strip__track { display: flex; gap: 12px; margin: 0; padding: 2px var(--ts-gap-3, 16px) 4px; list-style: none; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+.mbs-offers-strip__slot { display: flex; flex: 0 0 150px; scroll-snap-align: start; }
+.mbs-offers-strip__slot > * { flex: 1; }
+@media (min-width: 1232px) {
+  .mbs-offers-strip { border-radius: var(--tr-card, 16px); }
+}

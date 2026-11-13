@@ -1,0 +1,175 @@
+name: Release artifacts
+
+# On a version tag: build the source archive, one CycloneDX SBOM per ecosystem (composer, npm), checksums, and sign
+# everything with Sigstore (keyless, through the workflow's OIDC identity) before attaching it to the release.
+# Three jobs, each with only the permissions it needs:
+#   build    contents: read                     runs third-party code (composer, npm); holds NO OIDC token, no write
+#   sign     id-token + attestations: write     runs only pinned cosign / attest actions on the built files
+#   publish  contents: write                    attaches the signed files to the release; no OIDC token
+#
+# DRY RUN (the default for a manual run, and the only mode that works without a published release): the same steps run,
+# but cosign signs with a throw-away key pair created inside the job, verifies the signature, and nothing is published.
+# No repository secret is used in either mode.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: sign with a throw-away key, publish nothing"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+
+jobs:
+  build:
+    name: Archive, SBOMs, checksums
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    outputs:
+      release: ${{ steps.name.outputs.release }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # 2.31.1
+        with:
+          php-version: "8.4"
+          tools: composer:v2
+          coverage: none
+
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: "20"
+
+      - name: Name the release
+        id: name
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then tag="dry-run-$(git rev-parse --short HEAD)"; fi
+          printf '%s' "$tag" | grep -Eq '^[A-Za-z0-9._-]+$' || { echo "bad release name"; exit 1; }
+          echo "RELEASE=${tag}" >> "$GITHUB_ENV"
+          echo "release=${tag}" >> "$GITHUB_OUTPUT"
+          mkdir -p dist
+
+      - name: Source archive
+        run: git archive --format=tar.gz --prefix="juwri-${RELEASE}/" -o "dist/juwri-${RELEASE}.tar.gz" HEAD
+
+      - name: SBOM (composer, CycloneDX)
+        run: |
+          set -euo pipefail
+          composer global config --no-plugins allow-plugins.cyclonedx/cyclonedx-php-composer true
+          composer global require --no-interaction cyclonedx/cyclonedx-php-composer:^5.2
+          cd core
+          composer CycloneDX:make-sbom --no-interaction --output-format=JSON --output-file="../dist/juwri-${RELEASE}-composer.cdx.json" --omit=dev
+
+      - name: SBOM (npm, CycloneDX)
+        run: |
+          set -euo pipefail
+          cd core
+          npm ci --ignore-scripts --omit=dev
+          npx --yes @cyclonedx/cyclonedx-npm@1.19.3 --omit dev --ignore-npm-errors --output-format JSON --output-file "../dist/juwri-${RELEASE}-npm.cdx.json"
+
+      - name: Checksums
+        run: cd dist && sha256sum * > SHA256SUMS
+
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: unsigned-${{ steps.name.outputs.release }}
+          path: dist/
+          retention-days: 7
+
+  sign:
+    name: Sign + SLSA provenance
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    env:
+      RELEASE: ${{ needs.build.outputs.release }}
+    steps:
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: unsigned-${{ needs.build.outputs.release }}
+          path: dist
+
+      - name: Checksums still match
+        run: cd dist && sha256sum -c SHA256SUMS
+
+      - uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
+
+      - name: "Sign (dry run: throw-away key, verified here, nothing published)"
+        if: env.DRY_RUN == 'true'
+        env:
+          COSIGN_PASSWORD: ""
+        run: |
+          set -euo pipefail
+          cd dist
+          cosign generate-key-pair --output-key-prefix ../dryrun
+          for f in SHA256SUMS; do
+            cosign sign-blob --yes --key ../dryrun.key --output-signature "$f.sig" "$f"
+            cosign verify-blob --key ../dryrun.pub --signature "$f.sig" "$f"
+          done
+          rm -f ../dryrun.key ../dryrun.pub
+
+      - name: Sign (keyless Sigstore, through this workflow's identity)
+        if: env.DRY_RUN != 'true'
+        run: |
+          set -euo pipefail
+          cd dist
+          cosign sign-blob --yes --bundle SHA256SUMS.sigstore.json \
+            --output-signature SHA256SUMS.sig --output-certificate SHA256SUMS.pem SHA256SUMS
+          cosign verify-blob --bundle SHA256SUMS.sigstore.json \
+            --certificate-identity-regexp "^https://github.com/${GITHUB_REPOSITORY}/\.github/workflows/release\.yml@refs/tags/v" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com SHA256SUMS
+
+      # SLSA build provenance (in-toto, Sigstore-signed) for every file, stored in the repository's attestations.
+      # Verify: gh attestation verify <file> --repo <owner>/<repo>
+      - uses: actions/attest-build-provenance@1c608d11d69870c2092266b3f9a6f3abbf17002c # v1.4.3
+        if: env.DRY_RUN != 'true'
+        with:
+          subject-path: "dist/juwri-*"
+
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: release-${{ needs.build.outputs.release }}
+          path: dist/
+          retention-days: 30
+
+  publish:
+    name: Attach to the release
+    needs: [build, sign]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: release-${{ needs.build.outputs.release }}
+          path: dist
+
+      - name: Attach (only outside the dry run)
+        if: env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE: ${{ needs.build.outputs.release }}
+        run: gh release upload "${RELEASE}" dist/* --clobber --repo "${GITHUB_REPOSITORY}"

@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm test
+      # Runs on Node 22 in CI (the local dev box may be older and can't build the
+      # scanner's native deps). Keeps the package continuously verification-ready.
+      - name: n8n community security scan
+        run: npx --yes @n8n/scan-community-package .

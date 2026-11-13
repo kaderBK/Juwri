@@ -1,0 +1,9 @@
+App\Console\Commands\StudioSectionPr	to have suffix 'Command'.
+App\Console\Commands\StudioLibraryCheck	to have suffix 'Command'.
+App\Console\Commands\StudioEvalAi	to have suffix 'Command'.
+App\Console\Commands\StudioEvalSections	to have suffix 'Command'.
+App\Console\Commands\PlatformLoadTest	to have suffix 'Command'.
+App\Http\Requests\StoreSettingsRules	to extend 'Illuminate\Foundation\Http\FormRequest'.
+App\Models\StoreOption	to extend 'Illuminate\Database\Eloquent\Model'.
+App\Console\Commands\SecretsEncrypt	to have suffix 'Command'.
+App\Console\Commands\PlatformDbRestoreCheck	to have suffix 'Command'.

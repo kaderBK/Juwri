@@ -1,0 +1,174 @@
+{%- comment -%}
+  Header (library v1): logo + name, language/currency sheet trigger, account
+  and cart. Variants: centered / split / minimal.
+
+  It is also the page's COMMERCE RUNTIME HOST ("Host cart, account and
+  language sheets", on by default): it emits {% commerce %} once plus the
+  router overlays the runtime drives — product view (every store), cart,
+  favourites, account and order confirmation views, the option sheet and
+  the language/currency sheet. The runtime's own .mb-* markup inside them is
+  skinned by the library's runtime skin (tools/liquid-library/src/runtime).
+  Each section renders in its own Liquid context, so exactly ONE section per
+  page may host the runtime; library sections that need it (bottom-tabbar,
+  floating-cart) rely on the header being present.
+{%- endcomment -%}
+{%- liquid
+  assign variant = section.settings.variant
+  assign lang_count = localization.languages | size
+  assign cur_count = localization.currencies | size
+  assign has_switcher = false
+  if lang_count > 1 or cur_count > 1
+    assign has_switcher = true
+  endif
+  assign show_switcher = false
+  if section.settings.show_language and has_switcher
+    assign show_switcher = true
+  endif
+  assign logo_px = section.settings.logo_size | default: 44
+-%}
+<header class="mbs-header mbs-header--{{ variant | escape }}{% if section.settings.sticky %} is-sticky{% endif %}" style="--mbs-logo: {{ logo_px | escape }}px">
+  <a class="mbs-header__skip" href="#mbs-content-{{ section.id | escape }}">{{ 'Skip to content' | t }}</a>
+  <div class="mbs-header__bar">
+    <a class="mbs-header__brand" href="#">
+      {%- if section.settings.show_logo and restaurant.logo -%}
+        {%- assign logo_url = restaurant.logo | media_url: 'logo' -%}
+        {%- render 'media', src: logo_url, alt: '', width: 96, height: 96, class: 'mbs-header__logo', priority: false, sizes: '' -%}
+      {%- endif -%}
+      <span class="mbs-header__id">
+        <span class="mbs-header__title">{{ restaurant.title | escape }}</span>
+        {%- if section.settings.show_tagline and variant != 'minimal' and restaurant.sub_title -%}
+          <span class="mbs-header__tagline">{{ restaurant.sub_title | escape }}</span>
+        {%- endif -%}
+      </span>
+    </a>
+    <div class="mbs-header__actions">
+      {%- if show_switcher -%}
+        <button type="button" class="mbs-header__btn" data-mb-lang-open aria-haspopup="dialog" aria-label="{{ 'Language' | t }}">
+          {%- render 'icon', name: 'globe', size: 20 -%}
+          {%- if localization.current -%}<span class="mbs-header__code">{{ localization.current.code | upcase | escape }}</span>{%- endif -%}
+        </button>
+      {%- endif -%}
+      {%- if section.settings.show_account -%}
+        <button type="button" class="mbs-header__btn" data-mb-account aria-label="{{ 'Account' | t }}">{%- render 'icon', name: 'user', size: 20 -%}</button>
+      {%- endif -%}
+      {%- if section.settings.show_cart and flags.allow_order -%}
+        <button type="button" class="mbs-header__btn mbs-header__cart" data-mb-open-cart aria-label="{{ 'Cart' | t }}">
+          {%- render 'icon', name: 'cart', size: 20 -%}
+          <span class="mbs-header__badge" data-mb-cart-count data-mb-hide-empty hidden>0</span>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+<span class="mbs-header__anchor" id="mbs-content-{{ section.id | escape }}" tabindex="-1"></span>
+
+{%- if section.settings.host_runtime -%}
+<div class="mbs-header__host">
+  <div class="mbs-header__view mbs-header__view--home is-active" data-mb-view="home"></div>
+
+  {%- comment -%} Product view: every store, ordering or not — the runtime only adds the qty / add bar when ordering is allowed. {%- endcomment -%}
+  <section class="mbs-header__view mbs-header__view--product" data-mb-view="product" aria-label="{{ vocab.item | escape }}">
+    <div class="mbs-header__panel">
+      <div class="mbs-header__panel-head mbs-header__panel-head--float">
+        <button type="button" class="mbs-header__btn mbs-header__back" data-mb-back aria-label="{{ 'Back' | t }}">{%- render 'icon', name: 'chevron', size: 20 -%}</button>
+      </div>
+      <div class="mbs-header__panel-body" data-mb-view-scroll><div data-mb-product-mount></div></div>
+    </div>
+  </section>
+
+  {%- if flags.allow_order -%}
+  <section class="mbs-header__view" data-mb-view="cart" aria-labelledby="mbs-cart-title-{{ section.id | escape }}">
+    <div class="mbs-header__panel">
+      <div class="mbs-header__panel-head">
+        <button type="button" class="mbs-header__btn mbs-header__back" data-mb-back aria-label="{{ 'Back' | t }}">{%- render 'icon', name: 'chevron', size: 20 -%}</button>
+        <h2 class="mbs-header__panel-title" id="mbs-cart-title-{{ section.id | escape }}">{{ 'Cart' | t }}</h2>
+      </div>
+      <div class="mbs-header__panel-body" data-mb-view-scroll><div data-mb-cart-mount></div></div>
+    </div>
+  </section>
+  <section class="mbs-header__view" data-mb-view="confirmed" aria-label="{{ vocab.order | escape }}">
+    <div class="mbs-header__panel">
+      <div class="mbs-header__panel-body" data-mb-view-scroll><div data-mb-confirmed-mount></div></div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class="mbs-header__view" data-mb-view="favs" aria-labelledby="mbs-favs-title-{{ section.id | escape }}">
+    <div class="mbs-header__panel">
+      <div class="mbs-header__panel-head">
+        <button type="button" class="mbs-header__btn mbs-header__back" data-mb-back aria-label="{{ 'Back' | t }}">{%- render 'icon', name: 'chevron', size: 20 -%}</button>
+        <h2 class="mbs-header__panel-title" id="mbs-favs-title-{{ section.id | escape }}">{{ 'Favorites' | t }}</h2>
+      </div>
+      <div class="mbs-header__panel-body" data-mb-view-scroll><div data-mb-favs-mount></div></div>
+    </div>
+  </section>
+
+  <section class="mbs-header__view" data-mb-view="profile" aria-labelledby="mbs-acct-title-{{ section.id | escape }}">
+    <div class="mbs-header__panel">
+      <div class="mbs-header__panel-head">
+        <button type="button" class="mbs-header__btn mbs-header__back" data-mb-back aria-label="{{ 'Back' | t }}">{%- render 'icon', name: 'chevron', size: 20 -%}</button>
+        <h2 class="mbs-header__panel-title" id="mbs-acct-title-{{ section.id | escape }}">{{ 'Account' | t }}</h2>
+      </div>
+      <div class="mbs-header__panel-body" data-mb-view-scroll><div data-mb-account-mount></div></div>
+    </div>
+  </section>
+
+  <div class="mbs-header__sheet" data-mb-item-sheet-mount hidden></div>
+
+  {%- if has_switcher -%}
+  <div class="mbs-header__lang" data-mb-lang-sheet hidden>
+    <div class="mbs-header__scrim" data-mb-lang-close></div>
+    <div class="mbs-header__lang-panel" role="dialog" aria-modal="true" aria-labelledby="mbs-lang-title-{{ section.id | escape }}">
+      <div class="mbs-header__panel-head">
+        <h2 class="mbs-header__panel-title" id="mbs-lang-title-{{ section.id | escape }}">{{ 'Language' | t }}</h2>
+        <button type="button" class="mbs-header__btn" data-mb-lang-close aria-label="{{ 'Close' | t }}">{%- render 'icon', name: 'close', size: 18 -%}</button>
+      </div>
+      {%- if lang_count > 1 -%}
+      <div class="mbs-header__opts" role="group" aria-label="{{ 'Language' | t }}">
+        {%- for language in localization.languages -%}
+          {%- assign is_current = false -%}
+          {%- if localization.current and language.code == localization.current.code -%}{%- assign is_current = true -%}{%- endif -%}
+          <button type="button" class="mbs-header__opt{% if is_current %} is-on{% endif %}" data-mb-set-lang="{{ language.code | escape }}" lang="{{ language.code | escape }}"{% if is_current %} aria-current="true"{% endif %}>{{ language.name | escape }}<span class="mbs-header__code">{{ language.code | upcase | escape }}</span></button>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+      {%- if cur_count > 1 -%}
+      <h3 class="mbs-header__opts-title">{{ 'Currency' | t }}</h3>
+      <div class="mbs-header__opts" role="group" aria-label="{{ 'Currency' | t }}">
+        {%- for c in localization.currencies -%}
+          <button type="button" class="mbs-header__opt{% if forloop.first %} is-on{% endif %}" data-mb-currency="{{ c.code | escape }}">{{ c.code | escape }}</button>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {% commerce %}
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "group": "chrome",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "variant", "type": "select", "label": "Layout", "options": [
+      { "value": "split", "label": "Logo start, actions end" },
+      { "value": "centered", "label": "Centered logo" },
+      { "value": "minimal", "label": "Minimal" }
+    ], "default": "split" },
+    { "id": "show_logo", "type": "checkbox", "label": "Show logo", "default": true },
+    { "id": "logo_size", "type": "range", "label": "Logo size", "min": 28, "max": 80, "step": 4, "unit": "px", "default": 44 },
+    { "id": "show_tagline", "type": "checkbox", "label": "Show tagline", "default": true },
+    { "id": "show_language", "type": "checkbox", "label": "Language / currency switcher", "default": true },
+    { "id": "show_account", "type": "checkbox", "label": "Account button", "default": true },
+    { "id": "show_cart", "type": "checkbox", "label": "Cart button", "default": true },
+    { "id": "sticky", "type": "checkbox", "label": "Stick to the top while scrolling", "default": true },
+    { "id": "host_runtime", "type": "checkbox", "label": "Host cart, account and language sheets (keep on)", "default": true }
+  ],
+  "presets": [{ "name": "Header" }]
+}
+{% endschema %}

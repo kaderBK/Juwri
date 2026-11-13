@@ -1,0 +1,28 @@
+{
+  "slug": "hairline_luxe",
+  "starter": "fine_dining",
+  "name": "Hairline Luxe",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Cormorant Garamond", "weights": [300, 400, 500]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#161311",
+    "--ink": "#e9e2d6",
+    "--muted": "#a89c8a",
+    "--card": "transparent",
+    "--btn-bg": "transparent",
+    "--btn-fg": "#e9e2d6",
+    "--btn-border": "rgba(196,164,105,.22)",
+    "--accent": "#c4a469",
+    "--accent-ink": "#161311",
+    "--radius": "0px",
+    "--shadow": "none",
+    "--font-body": "'Cormorant Garamond',Georgia,serif",
+    "--font-display": "'Cormorant Garamond',Georgia,serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

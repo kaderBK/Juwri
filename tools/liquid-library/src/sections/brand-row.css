@@ -1,0 +1,50 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* brand-row */
+.mbs-brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ts-gap-3, 16px);
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding: var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-brand-row__logo {
+  inline-size: 64px;
+  block-size: 64px;
+  flex: none;
+  border-radius: var(--tr-card, 16px);
+  object-fit: cover;
+  background: var(--tc-surface, #f4f4f5);
+}
+.mbs-brand-row__id { flex: 1; min-inline-size: 180px; display: grid; gap: 4px; }
+.mbs-brand-row__name { margin: 0; font-family: var(--tf-heading, var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif)); font-size: 1.25rem; }
+.mbs-brand-row__tagline { margin: 0; color: var(--tc-text-muted, #6b7280); font-size: .9rem; }
+.mbs-brand-row__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ts-gap-2, 10px); }
+.mbs-brand-row__rating { display: inline-flex; align-items: center; gap: 4px; font-size: .85rem; }
+.mbs-brand-row__rating .mbs-icon { color: var(--tc-accent, #f59e0b); fill: currentColor; }
+.mbs-brand-row__count { color: var(--tc-text-muted, #6b7280); }
+.mbs-brand-row__links { display: flex; flex-wrap: wrap; gap: var(--ts-gap-1, 6px); margin: 0; padding: 0; list-style: none; }
+.mbs-brand-row__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .06);
+  color: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.mbs-brand-row__link:hover { background: rgba(var(--tc-text-rgb, 17, 17, 17), .1); }
+.mbs-brand-row__link:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+.mbs-brand-row__share { border: 0; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
+.mbs-brand-row__share[hidden] { display: none; }
+.mbs-brand-row__share-icon { flex: none; }

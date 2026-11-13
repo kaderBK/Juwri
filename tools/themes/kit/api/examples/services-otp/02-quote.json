@@ -1,0 +1,160 @@
+{
+  "operationId": "quoteCart",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/quote",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "order_type": "appointment",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+          "option_ids": [
+            "019f9e03-278b-717b-b9e2-b16615441e71",
+            "019f9b12-2514-7941-a496-bb4c8e05f95a"
+          ],
+          "qty": 1
+        }
+      ],
+      "slot_id": "bks_539da553bf12",
+      "hold_id": "01a0fc6d-8251-7613-b304-563005c4dbd9",
+      "payment_method_id": "deposit",
+      "payment_mode": "hosted"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:00:40 GMT"
+    },
+    "body": {
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "name": "Haircut & blow-dry",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Haircut & blow-dry"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 14000,
+              "currency": "SAR",
+              "formatted": "SAR 140.00"
+            },
+            "choices_label": "Medium"
+          },
+          {
+            "id": "ln_2",
+            "name": "Deep conditioning",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Deep conditioning"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 4000,
+              "currency": "SAR",
+              "formatted": "SAR 40.00"
+            }
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Total",
+            "amount": {
+              "minor": 18000,
+              "currency": "SAR",
+              "formatted": "SAR 180.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "deposit",
+            "label": "Due now (deposit)",
+            "amount": {
+              "minor": 5000,
+              "currency": "SAR",
+              "formatted": "SAR 50.00"
+            },
+            "kind": "deposit",
+            "muted": true,
+            "informational": true
+          },
+          {
+            "key": "due_later",
+            "label": "Due at the salon",
+            "amount": {
+              "minor": 13000,
+              "currency": "SAR",
+              "formatted": "SAR 130.00"
+            },
+            "kind": "due_later",
+            "muted": true,
+            "informational": true
+          }
+        ],
+        "total": {
+          "minor": 18000,
+          "currency": "SAR",
+          "formatted": "SAR 180.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Prices include VAT 15% (SAR 23.48)."
+      },
+      "quote_hash": "qh_9b292e29eaaac45f91ab53aab85cee67",
+      "expires_at": "2026-10-02T10:05:40+03:00",
+      "payment_methods": [
+        {
+          "id": "deposit",
+          "label": "Pay a deposit now",
+          "sub": "SAR 130.00 at the salon",
+          "amount": {
+            "minor": 5000,
+            "currency": "SAR",
+            "formatted": "SAR 50.00"
+          },
+          "selected": true,
+          "kind": "deposit"
+        },
+        {
+          "id": "full",
+          "label": "Pay in full now",
+          "sub": "Card, Apple Pay, mada",
+          "amount": {
+            "minor": 18000,
+            "currency": "SAR",
+            "formatted": "SAR 180.00"
+          },
+          "kind": "full"
+        },
+        {
+          "id": "venue",
+          "label": "Pay at the salon",
+          "sub": "Cash or card on the day",
+          "kind": "venue"
+        }
+      ],
+      "warnings": [],
+      "requires": [
+        "verified_phone",
+        "return_url"
+      ],
+      "payment_modes": [
+        "pay_later",
+        "hosted"
+      ]
+    }
+  }
+}

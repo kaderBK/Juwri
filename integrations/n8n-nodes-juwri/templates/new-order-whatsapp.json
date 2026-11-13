@@ -1,0 +1,55 @@
+{
+  "name": "juwri: New order → WhatsApp message",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## New order → WhatsApp\n\n1. Connect your **juwri API** credential (Settings → API token with `webhooks:write`).\n2. Connect a **WhatsApp Business Cloud** credential and set the recipient number.\n3. Activate the workflow — it subscribes to `order.created` automatically.",
+        "height": 220,
+        "width": 320
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [340, 120]
+    },
+    {
+      "parameters": {
+        "events": ["order.created"]
+      },
+      "id": "trigger-1",
+      "name": "On new order",
+      "type": "n8n-nodes-juwri.juwriTrigger",
+      "typeVersion": 1,
+      "position": [720, 300],
+      "webhookId": "juwri-new-order-whatsapp",
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "textBody": "=New order #{{ $json.data.order_id }} ({{ $json.data.type }}) — {{ $json.data.total }} {{ $json.data.currency }}. Status: {{ $json.data.status }}."
+      },
+      "id": "whatsapp-1",
+      "name": "Send WhatsApp message",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [980, 300],
+      "credentials": {
+        "whatsAppApi": { "id": "2", "name": "WhatsApp account" }
+      }
+    }
+  ],
+  "connections": {
+    "On new order": {
+      "main": [[{ "node": "Send WhatsApp message", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-new-order-whatsapp" },
+  "tags": [{ "name": "juwri" }]
+}

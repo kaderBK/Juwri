@@ -1,0 +1,75 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Chalkboard — dark slate, chalk text, hand-drawn accents. Logical properties
+   only (RTL). System font stacks: standalone, print-faithful. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --chalk: 'Chalkboard SE', 'Comic Sans MS', 'Segoe Print', 'Geeza Pro', cursive;
+}
+
+html, body { background: #555; }
+
+.sheet {
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, .045), transparent 55%),
+                      radial-gradient(ellipse at 85% 90%, rgba(255, 255, 255, .035), transparent 50%);
+    color: var(--text);
+    font-family: var(--chalk);
+    width: var(--page-w);
+    min-height: var(--page-h);
+    margin-inline: auto;
+    padding: 12mm;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, .45);
+}
+
+.board { border: 2.5px solid rgba(244, 241, 234, .55); border-radius: 3mm; padding: 10mm; min-height: calc(var(--page-h) - 24mm); }
+
+/* ---- header ---- */
+.menu-header { text-align: center; margin-block-end: 8mm; }
+.restaurant-name { font-size: 24pt; color: var(--accent); text-shadow: 0 0 1px rgba(242, 201, 76, .4); }
+.tagline { font-size: 10pt; opacity: .8; margin-block-start: 2mm; }
+.menu-header .rule { inline-size: 40mm; block-size: 0; border-block-end: 2px dashed rgba(244, 241, 234, .5); margin: 4mm auto 0; }
+
+/* ---- category grid ---- */
+.menu-body { column-count: 2; column-gap: 9mm; }
+.category { break-inside: avoid; margin-block-end: 7mm; }
+.category-name {
+    font-size: 13pt; color: var(--accent);
+    border-block-end: 2px dashed rgba(242, 201, 76, .55);
+    padding-block-end: 1.5mm; margin-block-end: 3mm;
+}
+
+/* ---- items ---- */
+.item { break-inside: avoid; margin-block-end: 3.4mm; }
+.item-line { display: flex; align-items: baseline; gap: 2mm; }
+.item-name { font-size: 10.5pt; }
+.item-dots { flex: 1; border-block-end: 1px dotted rgba(244, 241, 234, .4); min-width: 4mm; }
+.item-price { font-size: 10.5pt; color: var(--accent); white-space: nowrap; }
+.item-desc { font-size: 8.5pt; opacity: .72; margin-block-start: .8mm; line-height: 1.4; }
+.item-tags { margin-block-start: .8mm; }
+.tag {
+    display: inline-block; font-size: 6.5pt; letter-spacing: .06em; text-transform: uppercase;
+    border: 1px dashed rgba(242, 201, 76, .6); color: var(--accent);
+    border-radius: 2mm; padding: .3mm 1.8mm; margin-inline-end: 1.2mm;
+}
+.item-variants, .item-extras { font-size: 8.5pt; opacity: .8; margin-block-start: .8mm; }
+
+/* ---- footer ---- */
+.menu-footer { text-align: center; font-size: 8.5pt; opacity: .7; border-block-start: 2px dashed rgba(244, 241, 234, .35); padding-block-start: 3mm; margin-block-start: 6mm; }
+
+/* ---- aspects ---- */
+.aspect-a4     { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+.aspect-story  { --page-w: 180mm; --page-h: 320mm; }
+.aspect-story .menu-body { column-count: 1; }
+
+/* ---- print ---- */
+@media print {
+    html, body { background: none; }
+    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .category, .item { break-inside: avoid; }
+}
+@page { margin: 0; }

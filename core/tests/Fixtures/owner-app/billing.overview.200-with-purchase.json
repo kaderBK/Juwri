@@ -1,0 +1,27 @@
+{
+    "status": 200,
+    "body": {
+        "plans": {
+            "list_of": {
+                "currency": "string",
+                "interval": "string",
+                "name": "string",
+                "plan_id": "int",
+                "price": "string",
+                "product_id": "string",
+                "store": "string"
+            }
+        },
+        "status": {
+            "expires_at": "string",
+            "plan_id": "int",
+            "plan_name": "string",
+            "state": "string",
+            "store": "string"
+        },
+        "stores": {
+            "apple": "bool",
+            "google": "bool"
+        }
+    }
+}

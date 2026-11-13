@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المعاينة · مخصص المظهر</title>
+<link rel="stylesheet" href="../customizer.css">
+</head>
+<body>
+<a class="skip" href="#main">تخطي إلى المحتوى</a>
+<div class="page">
+  <section class="card hero" aria-label="واجهة المتجر">
+    <div>
+      <span class="overline">واجهة المتجر</span>
+      <h1>اجعلها بطابعك</h1>
+      <span class="muted">تعديل القالب: <bdi class="ltr">table</bdi></span>
+    </div>
+    <div class="hero__tools">
+      <p class="langswitch"><a href="../index.html">كل الصفحات</a> <a href="../en/preview.html" hreflang="en" lang="en">English</a></p>
+      <label class="sr-only" for="store">اختر متجرًا</label>
+      <select class="input" id="store"><option>Saffron House</option></select>
+      <a class="btn btn--secondary" href="#">عرض مباشر</a>
+    </div>
+  </section>
+  <div class="shell">
+    <nav class="rail" aria-label="مجموعات الإعدادات"><a href="appearance.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span>المظهر</span></a><a href="presets.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><span>القوالب</span></a><a href="layout.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/></svg><span>التخطيط</span></a><a href="sections.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>الأقسام</span></a><a href="preview.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>المعاينة</span></a><a href="contrast.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.01"/></svg><span>التباين</span></a></nav>
+    <main class="panel" id="main">
+<section class="card group" aria-labelledby="h-pv">
+  <div class="group__head"><h2 id="h-pv">أدوات المعاينة</h2></div>
+  <p class="muted">يغيّر مفتاح فاتح / داكن المعاينة فقط. لا يُحفظ ولا يغيّر ما يراه العملاء.</p>
+  <p class="help">مع «يتبع الجهاز» يتوفر الخياران. ومع فاتح أو داكن يظهر الخيار الآخر معطّلًا.</p>
+</section>
+<section class="card group">
+  <h2 class="field__label">النمط فاتح (الخيار الآخر معطّل)</h2>
+  <fieldset><legend class="sr-only">نمط ألوان المعاينة</legend><div class="seg"><label><input type="radio" name="pv-locked" value="light" checked><span>فاتح</span></label><label><input type="radio" name="pv-locked" value="dark" disabled><span>داكن</span></label></div></fieldset>
+  <p class="help">تحتفظ الخيارات المعطّلة بتسميتها ليعرف المالك سبب تعذّر اختيارها.</p>
+</section>
+    </main>
+    <div class="aside"><section class="card" aria-label="المعاينة، الإنجليزية، فاتح">
+  <h2 class="field__label">الحالة أ: هاتف، فاتح، إنجليزي</h2>
+  <div class="pv-bar">
+  <span class="overline">المعاينة</span>
+  <fieldset><legend class="sr-only">نمط ألوان المعاينة</legend><div class="seg"><label><input type="radio" name="pv-scheme-lightphone" value="light" checked><span>فاتح</span></label><label><input type="radio" name="pv-scheme-lightphone" value="dark"><span>داكن</span></label></div></fieldset>
+  <fieldset><legend class="sr-only">جهاز المعاينة</legend><div class="seg"><label><input type="radio" name="pv-device-lightphone" value="phone" checked><span>هاتف</span></label><label><input type="radio" name="pv-device-lightphone" value="desktop"><span>حاسوب</span></label></div></fieldset>
+  <label class="check"><input type="checkbox"> معاينة بالعربية</label>
+</div>
+  <div class="frames"><figure class="frame"><figcaption class="frame__cap">هاتف، فاتح، إنجليزي</figcaption><iframe src="../../table/en/home.html?scheme=light&amp;bar=0" title="هاتف، فاتح، إنجليزي" loading="lazy"></iframe></figure></div>
+</section>
+<section class="card" aria-label="المعاينة، العربية، داكن">
+  <h2 class="field__label">الحالة ب: هاتف، داكن، عربي (من اليمين إلى اليسار)</h2>
+  <div class="pv-bar">
+  <span class="overline">المعاينة</span>
+  <fieldset><legend class="sr-only">نمط ألوان المعاينة</legend><div class="seg"><label><input type="radio" name="pv-scheme-darkphone" value="light"><span>فاتح</span></label><label><input type="radio" name="pv-scheme-darkphone" value="dark" checked><span>داكن</span></label></div></fieldset>
+  <fieldset><legend class="sr-only">جهاز المعاينة</legend><div class="seg"><label><input type="radio" name="pv-device-darkphone" value="phone" checked><span>هاتف</span></label><label><input type="radio" name="pv-device-darkphone" value="desktop"><span>حاسوب</span></label></div></fieldset>
+  <label class="check"><input type="checkbox" checked> معاينة بالعربية</label>
+</div>
+  <div class="frames"><figure class="frame"><figcaption class="frame__cap">هاتف، داكن، عربي</figcaption><iframe src="../../table/ar/home.html?scheme=dark&amp;bar=0" title="هاتف، داكن، عربي" loading="lazy"></iframe></figure></div>
+</section></div>
+  </div>
+</div>
+</body>
+</html>

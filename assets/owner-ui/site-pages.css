@@ -1,0 +1,115 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * juwri owner-ui — marketing site (WI-16f-2/16g): inner marketing and landing pages (features, WhatsApp, no-commission, country, compare, guides, industries, themes).
+ * Builds on site.css (shared .mk- vocabulary) and the kit tokens; logical
+ * properties only, so Arabic mirrors.
+ */
+
+/* ── Shared landing helpers (country, compare, guides, industries) ──────── */
+.lp-sec--tight { padding-block: var(--ui-space-6) clamp(40px, 6vw, 72px); }
+.lp-narrow { max-inline-size: 860px; }
+.lp-narrow .mk-lead { max-inline-size: none; }
+.lp-sec--tight > .lp-narrow { text-align: center; }
+.lp-intro { margin-block-end: clamp(28px, 5vw, 48px); text-align: center; }
+.lp-stack { display: grid; gap: var(--ui-space-6); }
+.lp-block .mk-panel__head .mk-h3 { margin: 0; }
+.lp-block > p { margin: 0 var(--ui-space-2); }
+.lp-block .mk-checks { margin: var(--ui-space-2) var(--ui-space-2) var(--ui-space-2); }
+.lp-list { display: grid; gap: var(--ui-space-2); margin: 0 var(--ui-space-2) var(--ui-space-2); padding-inline-start: var(--ui-space-6); color: var(--ui-ink-2); }
+.lp-sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.lp-prose-lead { color: var(--ui-ink-2); font-size: 19px; }
+.mk-chips li a { color: inherit; text-decoration: none; }
+.mk-chips li a:hover { color: var(--ui-accent-text); }
+
+/* Compare table */
+.cmp-table .mk-table { min-inline-size: 520px; }
+.cmp-table .mk-table td, .cmp-table .mk-table thead th:not(:first-child) { text-align: center; }
+.cmp-group th { background: var(--ui-inset); font-weight: 800; }
+.cmp-val { color: var(--ui-ink); }
+
+/* ── Features page ─────────────────────────────────────────────────────── */
+.mk-page-hero .mk-stats { margin-block-start: var(--ui-space-12); }
+.fp-copy { display: grid; gap: var(--ui-space-3); justify-items: start; }
+.fp-copy__title { font-size: clamp(24px, 3.2vw, 34px); }
+.fp-copy p { margin: 0; }
+.fp-copy .mk-checks { margin: 0; }
+.fp-link a { color: var(--ui-accent-text); font-weight: 700; text-decoration: none; }
+.fp-link a:hover { text-decoration: underline; }
+.fp-sub { display: block; color: var(--ui-ink-3); font-size: 13px; font-weight: 500; }
+.fp-panel-chips { margin: var(--ui-space-2) var(--ui-space-2) var(--ui-space-1); }
+.fp-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ui-space-2);
+  block-size: 140px;
+  padding: var(--ui-space-3);
+  border-radius: var(--ui-r-input);
+  background: var(--ui-bg);
+}
+.fp-bar { flex: 1; border-radius: 6px 6px 2px 2px; background: var(--ui-accent-soft); }
+.fp-bar.is-top { background: var(--ui-accent); }
+.fp-bar--34 { block-size: 34%; }
+.fp-bar--41 { block-size: 41%; }
+.fp-bar--47 { block-size: 47%; }
+.fp-bar--52 { block-size: 52%; }
+.fp-bar--60 { block-size: 60%; }
+.fp-bar--73 { block-size: 73%; }
+.fp-bar--92 { block-size: 92%; }
+
+/* ── WhatsApp + no-commission pages ────────────────────────────────────── */
+.wa-lead, .nc-lead { margin-inline: 0; }
+.wa-bubble {
+  justify-self: end;
+  max-inline-size: 80%;
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border-radius: var(--ui-r-input);
+  border-end-end-radius: 4px;
+  background: var(--ui-success-bg, var(--ui-accent-soft));
+  color: var(--ui-ink);
+  font-size: 15px;
+}
+.wa-bubble p { margin: 0; }
+.nc-table { max-inline-size: 760px; margin-inline: auto; }
+.nc-table .mk-table td { text-align: end; white-space: nowrap; }
+.nc-table .mk-small { margin-inline-start: var(--ui-space-1); font-weight: 600; }
+.mk-panel .mk-result { margin-block-end: var(--ui-space-2); }
+
+/* ── Theme gallery ─────────────────────────────────────────────────────── */
+.th-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  gap: var(--ui-space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.th-card { display: grid; gap: var(--ui-space-3); color: var(--ui-ink); text-decoration: none; }
+.th-card__phone {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 480 / 987;
+  max-block-size: 440px;
+  border: 6px solid var(--ui-ink);
+  border-radius: 28px;
+  background: var(--ui-inset);
+  box-shadow: var(--ui-shadow-raised);
+  transition: transform var(--ui-motion-fast) var(--ui-ease-standard);
+}
+.th-card__phone img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: top; }
+.th-card:hover .th-card__phone { transform: translateY(-3px); }
+.th-card__meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ui-space-2); }
+.th-card__name { font-weight: 700; }
+.th-card__demo { display: inline-flex; align-items: center; gap: var(--ui-space-1); color: var(--ui-accent-text); font-size: 14px; font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  .th-card__phone { transition: none; }
+}

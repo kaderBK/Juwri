@@ -1,0 +1,43 @@
+{
+    "label": "Bakery",
+    "categories": [
+        {
+            "name": "Breads",
+            "name_ar": "خبز",
+            "items": [
+                {"name": "Sourdough Loaf", "name_ar": "خبز العجين المخمر", "description": "Naturally leavened, crackly crust.", "description_ar": "مخمر طبيعياً بقشرة مقرمشة.", "price": 5.50, "vegan": true, "popular": true},
+                {"name": "Baguette", "name_ar": "باغيت", "description": "Crisp outside, soft inside.", "description_ar": "مقرمش من الخارج وطري من الداخل.", "price": 3.00, "vegan": true},
+                {"name": "Whole Wheat", "name_ar": "قمح كامل", "description": "Hearty and wholesome.", "description_ar": "مغذٍ وصحي.", "price": 4.00, "vegan": true},
+                {"name": "Focaccia", "name_ar": "فوكاتشيا", "description": "Olive oil and rosemary.", "description_ar": "زيت زيتون وإكليل الجبل.", "price": 4.50, "vegan": true}
+            ]
+        },
+        {
+            "name": "Cakes",
+            "name_ar": "كيك",
+            "items": [
+                {"name": "Carrot Cake", "name_ar": "كيك الجزر", "description": "Spiced sponge with cream cheese.", "description_ar": "كيك متبل مع جبنة كريمية.", "price": 4.50, "popular": true},
+                {"name": "Chocolate Fudge", "name_ar": "كيك الشوكولاتة", "description": "Deep, moist and rich.", "description_ar": "غني وطري وعميق.", "price": 4.75},
+                {"name": "Red Velvet", "name_ar": "ريد فيلفيت", "description": "Classic with cream frosting.", "description_ar": "كلاسيكي مع كريمة.", "price": 4.75},
+                {"name": "Cheesecake Slice", "name_ar": "شريحة تشيز كيك", "description": "Creamy on a biscuit base.", "description_ar": "كريمي على قاعدة البسكويت.", "price": 5.00}
+            ]
+        },
+        {
+            "name": "Cookies",
+            "name_ar": "كوكيز",
+            "items": [
+                {"name": "Chocolate Chip", "name_ar": "رقائق الشوكولاتة", "description": "Chewy centers, crisp edges.", "description_ar": "طري من الوسط ومقرمش من الأطراف.", "price": 2.00, "popular": true},
+                {"name": "Oatmeal Raisin", "name_ar": "شوفان وزبيب", "description": "Warm cinnamon and oats.", "description_ar": "قرفة دافئة وشوفان.", "price": 2.00},
+                {"name": "Double Chocolate", "name_ar": "دبل شوكولاتة", "description": "For serious chocolate fans.", "description_ar": "لعشاق الشوكولاتة.", "price": 2.25}
+            ]
+        },
+        {
+            "name": "Savory",
+            "name_ar": "مالح",
+            "items": [
+                {"name": "Cheese Danish", "name_ar": "دنماركي بالجبن", "description": "Flaky pastry with soft cheese.", "description_ar": "معجنات هشة بجبنة طرية.", "price": 3.25},
+                {"name": "Spinach Roll", "name_ar": "لفة السبانخ", "description": "Spinach and herbs in pastry.", "description_ar": "سبانخ وأعشاب في المعجنات.", "price": 3.50, "vegan": true},
+                {"name": "Cheese Croissant", "name_ar": "كرواسون بالجبن", "description": "Buttery and savory.", "description_ar": "بالزبدة ومالح.", "price": 3.50}
+            ]
+        }
+    ]
+}

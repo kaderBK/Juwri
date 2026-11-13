@@ -1,0 +1,58 @@
+{
+  "name": "juwri: New reservation → Google Calendar",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## New reservation → Google Calendar\n\n1. Connect your **juwri API** credential (needs `feature:reservations`).\n2. Connect **Google Calendar** and choose the calendar.\n3. Each new reservation creates a calendar event. Enrich it via GET /api/v1/stores/{id}/reservations if you need guest details.",
+        "height": 240,
+        "width": 340
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [320, 100]
+    },
+    {
+      "parameters": {
+        "events": ["reservation.created"]
+      },
+      "id": "trigger-1",
+      "name": "On new reservation",
+      "type": "n8n-nodes-juwri.juwriTrigger",
+      "typeVersion": 1,
+      "position": [700, 320],
+      "webhookId": "juwri-reservation-calendar",
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "calendar": { "__rl": true, "mode": "list", "value": "primary" },
+        "additionalFields": {
+          "summary": "=Reservation #{{ $json.data.reservation_id }} ({{ $json.data.status }})"
+        }
+      },
+      "id": "cal-1",
+      "name": "Create calendar event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [960, 320],
+      "credentials": {
+        "googleCalendarOAuth2Api": { "id": "6", "name": "Google Calendar account" }
+      }
+    }
+  ],
+  "connections": {
+    "On new reservation": {
+      "main": [[{ "node": "Create calendar event", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-reservation-calendar" },
+  "tags": [{ "name": "juwri" }]
+}

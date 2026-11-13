@@ -1,0 +1,2097 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   soirée — dark drinks-lounge post_template · production theme
+   Faithful port of rev/soiree/demo.css (scoped under .soiree).
+   palette (exact): #302E3B app · #1E1E2A panels · #44404D cards
+   #48485B chips · #797993 muted · #FFFFFF ink
+   ═══════════════════════════════════════════════════════════ */
+
+.soiree{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is soirée's own
+     reference swatch, kept as the var() fallback so a store that customized
+     nothing — or a render with no token include — is byte-identical to today. */
+  --bg:var(--tc-background, #302E3B);
+  --panel:#1E1E2A;                /* darker chrome band; no surface role, keep literal */
+  --card:var(--tc-surface, #44404D);
+  --chip:#48485B;                 /* neutral chip/badge surface — NOT the brand fill; literal */
+  --muted:#797993;                /* muted text / hairline hue (also the customizer's separate
+                                     "accent" secondary default) — a text hue, not a fill; literal */
+  --ink:var(--tc-text, #FFFFFF);
+  /* derived, stay in family */
+  --tile:#302E3B;                 /* pay tile ON the panel band */
+  --stroke:rgba(121,121,147,.28);
+  --stroke-2:rgba(121,121,147,.45);
+  --glass:rgba(255,255,255,.16);
+  --err:#E36A6A;
+  /* high-emphasis foreground — the colour that used to be a hardcoded #fff on
+     every theme surface. Light mode flips it once instead of 25 times. */
+  --hi:#FFFFFF;
+  /* primary action pair. soirée's --accent IS its brand colour (the customizer's
+     colors.primary role, whose schema default is this same #48485B); mapping it
+     to --tc-primary lets an owner recolour every CTA / active state at once. The
+     dark default fallback equals the old var(--chip) value, so untouched stores
+     are byte-identical. --on-accent binds to --tc-on-primary so the label flips
+     to readable ink when the owner picks a pale brand. (The customizer "accent"
+     role is a SEPARATE secondary — see --muted — deliberately not wired here.) */
+  --accent:var(--tc-primary, #48485B);
+  --on-accent:var(--tc-on-primary, #FFFFFF);
+  --err:#E36A6A;
+  /* radius — --r-pill follows the layout.radius scale (every scale keeps pill at
+     999px; "none" squares it, which is the owner's intent). --r-card stays LITERAL:
+     pill's card step is 26px and soirée's cards are a hand-tuned 24px (24 ≠ 26).
+     --r-lg / --r-md are hand-tuned intermediate radii with no token step, literal. */
+  --r-lg:28px;
+  --r-card:24px;
+  --r-md:20px;
+  --r-pill:var(--tr-pill, 999px);
+  /* shadows — cards float on darker air */
+  --shadow-card:0 22px 40px -18px rgba(20,20,30,.7);
+  --shadow-chip:0 12px 26px -12px rgba(18,18,28,.85);
+  --shadow-band:0 -18px 40px -18px rgba(14,14,22,.8);
+  /* showcase-card depth: a 3-layer stack (contact + mid + ambient) reads far
+     crisper on a compact photo tile than the single heavy --shadow-card. */
+  --feat-shadow:0 1px 2px rgba(8,8,14,.32),0 6px 14px -6px rgba(8,8,14,.48),0 20px 38px -16px rgba(8,8,14,.5);
+  --feat-shadow-lift:0 2px 4px rgba(8,8,14,.34),0 12px 22px -8px rgba(8,8,14,.55),0 30px 54px -18px rgba(8,8,14,.6);
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-search:36; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — soirée is a single-typeface theme (Mulish carries body AND headings),
+     so the one UI stack binds to --tf-body; a selected pair restyles the whole
+     shell in its body face. No separate display var exists to take --tf-heading.
+     Every pair's --tf-body already ends in the Arabic family, so RTL (--font-ar)
+     shares it safely; with no pair both fall back to soirée's own stacks. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Mulish",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+
+  /* full-viewport app root (replaces the demo phone frame).
+     `overflow:clip` — NOT `hidden`. `hidden` makes this a SCROLL CONTAINER: the
+     off-stage `.view` panels are translated 26% aside, which counts as scrollable
+     overflow, so any focus()/scrollIntoView() inside an inactive panel scrolled the
+     whole shell 130px sideways with no scrollbar and no way back (Place-order ended
+     up at x=-112). `clip` clips identically but creates no scroll container at all,
+     so the shell is structurally unscrollable. See also the belt-and-braces
+     scrollLeft guard in script.js for engines without `overflow:clip`. */
+  position:fixed;inset:0;isolation:isolate;
+  overflow:hidden;overflow:clip;
+  display:flex;flex-direction:column;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-ui);
+  -webkit-font-smoothing:antialiased;
+  z-index:1;
+}
+.soiree *{margin:0;padding:0;box-sizing:border-box}
+/* F22: the `*` reset above is scoped to `.soiree`, so the document kept the UA
+   `margin:8px` + content-box. The shell is position:fixed so it never showed, but
+   it left a live 484px-wide <main> in the document behind it. */
+body:has(> .soiree),body:has(.soiree){margin:0}
+[dir="rtl"] .soiree, [dir="rtl"] .soiree input, [dir="rtl"] .soiree button,
+[dir="rtl"] .soiree textarea, [dir="rtl"] .soiree select{font-family:var(--font-ar)}
+.soiree img{display:block;max-width:100%}
+.soiree button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.soiree input,.soiree textarea,.soiree select{
+  font:inherit;color:var(--ink);background:var(--card);
+  border:1px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.soiree input::placeholder,.soiree textarea::placeholder{color:var(--muted)}
+.soiree input:focus,.soiree textarea:focus,.soiree select:focus{border-color:var(--stroke-2);background:var(--panel)}
+.soiree ::-webkit-scrollbar{display:none}
+
+/* icons */
+.soiree .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.soiree .ic-xs{width:15px;height:15px}
+
+/* ── app shell & router ──────────────────────────────── */
+.soiree .views{position:relative;flex:1;min-height:0;overflow:hidden;overflow:clip}
+
+.soiree .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .soiree .view{transform:translateX(-26%)}
+.soiree .view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.soiree .view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .soiree .view.is-under{transform:translateX(9%) scale(.985)}
+
+/* F9: the two floating bars (.pillnav ~78px, .order-band ~110px) sit ON TOP of the
+   scroller, so it must reserve room for them or the last row — the Total line, the
+   last menu item — is permanently hidden underneath. `.tail-space` covered the
+   root views only; scroll-padding keeps focus/scrollIntoView clear of them too. */
+.soiree .view-scroll{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:6px 20px 0;scroll-behavior:smooth;
+  scroll-padding:12px 0 28px;
+}
+/* the floating pill nav overlays the ROOT views; the order band is a flex sibling
+   and takes its own space. Reserve the pill's height plus the iOS home indicator. */
+.soiree .tail-space{height:calc(118px + env(safe-area-inset-bottom))}
+.soiree .tail-space.tall{height:36px}
+
+.soiree .page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.soiree .page-head h1{font-size:26px;font-weight:300;letter-spacing:.01em}
+.soiree .page-head.sub{justify-content:flex-start;gap:14px}
+.soiree .page-head.sub h1{flex:1}
+.soiree .page-head .spacer{flex:1}
+.soiree .ph-actions{display:flex;align-items:center;gap:10px}
+.soiree .avatarbtn{width:46px;height:46px;border-radius:50%;overflow:hidden;border:1.5px solid var(--stroke-2);flex:none;transition:transform var(--t-fast) var(--ease-pop);background:var(--card);display:grid;place-items:center}
+.soiree .avatarbtn:active{transform:scale(.9)}
+.soiree .avatarbtn img{width:100%;height:100%;object-fit:cover}
+/* crave-parity profile avatar (glyph / initial) + branch selector */
+.soiree .avatarbtn .ic{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.soiree .avatarbtn-initial{font-weight:800;font-size:17px;color:var(--ink);line-height:1}
+.soiree .avatarbtn.is-me{background:var(--accent);border-color:transparent}
+.soiree .avatarbtn.is-me .avatarbtn-initial{color:#fff}
+.soiree .loc{display:inline-flex;align-items:center;gap:5px;min-width:0;max-width:150px;padding:8px 12px;border-radius:999px;background:var(--card);border:1.5px solid var(--stroke-2);color:var(--ink);font-size:13px;font-weight:700;cursor:pointer;transition:transform var(--t-fast) var(--ease-pop)}
+.soiree .loc:active{transform:scale(.95)}
+.soiree .loc .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;flex:none}
+.soiree .loc b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-weight:700}
+.soiree .loc .chev{width:13px;height:13px;opacity:.6;flex:none}
+
+/* ── splash ──────────────────────────────────────────── */
+.soiree .splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--panel);
+  display:grid;place-content:center;justify-items:center;gap:8px;
+  overflow:hidden;text-align:center;
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+.soiree .splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.soiree .splash-coupe{width:150px;height:132px;margin-bottom:6px}
+.soiree .sc-line{fill:none;stroke:var(--hi);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;animation:sc-draw 1.1s var(--ease) .15s forwards}
+@keyframes sc-draw{to{stroke-dashoffset:0}}
+.soiree .sc-dot{fill:var(--muted);opacity:0;animation:sc-pop .5s var(--ease-pop) .9s forwards}
+.soiree .sc-dot.d2{animation-delay:1.05s}
+.soiree .sc-dot.d3{animation-delay:1.2s}
+@keyframes sc-pop{from{transform:translateY(10px)}to{opacity:1}}
+.soiree .splash-brand{font-size:52px;font-weight:300;letter-spacing:.02em;opacity:0;animation:sp-in .8s var(--ease) .3s forwards}
+.soiree .splash-brand span{color:var(--muted);font-weight:800}
+.soiree .splash-tag{font-size:13px;color:var(--muted);letter-spacing:.28em;text-transform:uppercase;opacity:0;animation:sp-in .8s var(--ease) .55s forwards}
+@keyframes sp-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.soiree .splash-bubbles{position:absolute;inset:0;pointer-events:none}
+.soiree .splash-bubbles i{
+  position:absolute;bottom:-20px;width:10px;height:10px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.25);
+  animation:bub-rise 5s linear infinite;
+}
+.soiree .splash-bubbles i:nth-child(1){left:16%;animation-delay:.1s}
+.soiree .splash-bubbles i:nth-child(2){left:32%;width:6px;height:6px;animation-delay:1.4s}
+.soiree .splash-bubbles i:nth-child(3){left:52%;animation-delay:.7s}
+.soiree .splash-bubbles i:nth-child(4){left:66%;width:7px;height:7px;animation-delay:2.2s}
+.soiree .splash-bubbles i:nth-child(5){left:80%;animation-delay:1s}
+.soiree .splash-bubbles i:nth-child(6){left:44%;width:5px;height:5px;animation-delay:3s}
+@keyframes bub-rise{to{transform:translateY(-108dvh);opacity:0}}
+.soiree .splash-logo{width:82px;height:82px;border-radius:50%;object-fit:cover;margin-bottom:4px;border:1px solid rgba(255,255,255,.14)}
+.soiree .splash-skip{
+  position:absolute;top:18px;inset-inline-end:22px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.09);backdrop-filter:blur(8px);
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+
+/* ── home top · "Tonight" ────────────────────────────── */
+.soiree .home-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 2px 4px}
+/* the store's own name headlines here now, so the size has to survive a long one */
+.soiree .tonight{min-width:0}
+.soiree .tonight h1{
+  font-size:clamp(24px,8.2vw,42px);font-weight:300;letter-spacing:.01em;line-height:1.06;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;
+}
+.soiree .tonight-date{font-size:13px;color:var(--muted);font-weight:500;margin-top:5px}
+
+/* cart chip — paper plane + badge + stacked total */
+.soiree .cartchip{
+  display:flex;align-items:center;gap:10px;flex:none;
+  background:var(--card);border-radius:22px;
+  padding:10px 14px;box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .cartchip:active{transform:scale(.94)}
+.soiree .cartchip .cc-ic{position:relative;display:grid;place-items:center;width:30px;height:30px}
+.soiree .cartchip .cc-ic .ic{width:22px;height:22px}
+.soiree .cartchip .badge{
+  position:absolute;top:-6px;inset-inline-end:-7px;
+  min-width:18px;height:18px;border-radius:var(--r-pill);
+  background:var(--hi);color:var(--bg);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--card);
+  transition:transform .25s var(--ease-pop);
+}
+.soiree .cartchip .badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+.soiree .cc-col{display:grid;line-height:1.15;text-align:start}
+.soiree .cc-col b{font-size:13.5px;font-weight:800}
+.soiree .cc-col small{font-size:9.5px;color:var(--muted);font-weight:600}
+.soiree .cartchip.sm{padding:8px 12px;border-radius:18px}
+.soiree .cartchip.sm .cc-ic .ic{width:19px;height:19px}
+/* On a narrow phone the chip fought the store name for the row: a 30px icon box,
+   a 13.5px total and a "Total Price" caption is more chip than a 360px screen can
+   spare. Drop the caption (the plane icon already says cart), tighten the box. */
+@media (max-width:430px){
+  .soiree .cartchip{gap:7px;padding:8px 11px;border-radius:18px}
+  .soiree .cartchip .cc-ic{width:24px;height:24px}
+  .soiree .cartchip .cc-ic .ic{width:19px;height:19px}
+  .soiree .cartchip .badge{min-width:16px;height:16px;font-size:9.5px;top:-5px;inset-inline-end:-6px;outline-width:2px}
+  .soiree .cc-col b{font-size:12.5px}
+  .soiree .cc-col small{display:none}
+  .soiree .cartchip.sm{padding:7px 10px;border-radius:16px}
+  .soiree .cartchip.sm .cc-ic .ic{width:17px;height:17px}
+}
+
+/* ── home tabs · elevated pill + plain text ──────────── */
+.soiree .hometabs{display:flex;align-items:center;gap:6px;padding:20px 0 4px}
+.soiree .htab{
+  padding:11px 17px;border-radius:18px;
+  font-size:14px;font-weight:600;color:var(--muted);
+  transition:color var(--t-fast) var(--ease),background var(--t-fast) var(--ease),box-shadow var(--t-fast);
+}
+.soiree .htab:active{transform:scale(.95)}
+.soiree .htab.is-on{background:var(--chip);color:var(--ink);font-weight:700;box-shadow:var(--shadow-chip)}
+
+.soiree .hpanel{display:none;animation:panel-in .4s var(--ease)}
+.soiree .hpanel.is-on{display:block}
+@keyframes panel-in{from{opacity:0;transform:translateY(14px)}}
+
+/* ── hero carousel · big drink cards ─────────────────── */
+.soiree .hero-wrap{margin:16px -20px 0;overflow:hidden}
+.soiree .htrack{
+  display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:6px 20px 24px;
+}
+.soiree .htrack:empty{display:none}
+.soiree .hcard{
+  position:relative;flex:0 0 76%;aspect-ratio:3/3.4;
+  border-radius:var(--r-lg);overflow:hidden;scroll-snap-align:center;
+  border:1px solid var(--stroke);box-shadow:var(--feat-shadow);text-align:start;isolation:isolate;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast) var(--ease);background:var(--panel);
+}
+.soiree .hcard:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){
+  .soiree .hcard:hover{transform:translateY(-3px);box-shadow:var(--feat-shadow-lift)}
+}
+.soiree .hcard img{
+  position:absolute;inset:0 -15%;width:130%;height:100%;object-fit:cover;
+  transform:scale(1.18);will-change:transform;
+}
+.soiree .hcard::after{ /* legibility scrim */
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(200deg,rgba(30,30,42,.05) 40%,rgba(30,30,42,.72) 92%);
+}
+/* F7: without an inset-inline-end the 23px title overflowed the card and
+   `.hcard{overflow:hidden}` guillotined it mid-word ("Quarter B"). Bound the box
+   and clamp to two lines with a real ellipsis. */
+.soiree .hname{position:absolute;bottom:18px;inset-inline-start:20px;inset-inline-end:20px;z-index:2;display:grid;gap:2px;color:#fff}
+.soiree .hname b{
+  font-size:23px;font-weight:700;letter-spacing:.01em;line-height:1.18;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;overflow-wrap:anywhere;
+}
+.soiree .hname small{font-size:12px;color:rgba(255,255,255,.82);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* glassy discount chip (shimmers subtly) */
+/* F8: the badge was 9.5px at 78% white on a translucent chip over a pale photo —
+   nowhere near 4.5:1, and the Arabic label overflowed the pill. Opaque ink base,
+   solid white type, readable size, and a max-width that wraps instead of spilling. */
+.soiree .glass-chip{
+  position:absolute;top:16px;inset-inline-start:16px;z-index:2;
+  display:flex;align-items:center;gap:6px;
+  max-width:calc(100% - 32px);
+  background:rgba(24,24,34,.72);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:16px;padding:7px 12px;overflow:hidden;
+  color:#fff;
+}
+.soiree .glass-chip b{font-size:14px;font-weight:800;line-height:1;flex:none}
+.soiree .glass-chip small{font-size:11.5px;font-weight:700;color:#fff;line-height:1.2;min-width:0;overflow-wrap:anywhere}
+.soiree .glass-chip::after{
+  content:"";position:absolute;inset:-40%;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.30) 50%,transparent 58%);
+  transform:translateX(-120%);animation:chip-shimmer 3.6s var(--ease) 1.2s infinite;
+}
+@keyframes chip-shimmer{18%,100%{transform:translateX(120%)}}
+
+/* ── daily special strip ─────────────────────────────── */
+.soiree .daily-card{
+  width:100%;display:flex;align-items:center;gap:13px;text-align:start;
+  background:var(--card);border-radius:var(--r-card);padding:11px;
+  border:1px solid var(--stroke);box-shadow:var(--feat-shadow);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast) var(--ease);
+}
+.soiree .daily-card:empty{display:none}
+.soiree .daily-card:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){
+  .soiree .daily-card:hover{transform:translateY(-2px);box-shadow:var(--feat-shadow-lift)}
+}
+
+/* soirée cohesion: the shared "On sale now" (mbo) tiles ship flat — give their
+   media the same layered depth + hairline as the theme's own cards. Scoped to
+   .soiree, so the shared strip/markup and other themes are untouched. */
+.soiree .mbo-media{box-shadow:var(--feat-shadow);border:1px solid var(--stroke)}
+.soiree .mbo-card{transition:transform var(--t-fast) var(--ease)}
+.soiree .mbo-card:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){
+  .soiree .mbo-card:hover{transform:translateY(-2px)}
+  .soiree .mbo-card:hover .mbo-media{box-shadow:var(--feat-shadow-lift)}
+}
+.soiree .daily-card img{width:74px;height:74px;object-fit:cover;border-radius:18px;flex:none;background:var(--panel)}
+.soiree .dc-copy{flex:1;min-width:0;display:grid;gap:3px}
+.soiree .dc-tag{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.soiree .dc-copy b{font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .dc-copy small{font-size:11.5px;color:var(--muted)}
+.soiree .dc-price{font-size:15px;font-weight:800;flex:none}
+.soiree .dc-arr{width:34px;height:34px;flex:none;border-radius:12px;background:var(--chip);display:grid;place-items:center;color:var(--ink)}
+.soiree .dc-arr .ic{width:16px;height:16px}
+[dir="rtl"] .soiree .dc-arr .ic{transform:scaleX(-1)}
+
+/* ── section heads / cat chips / menu rows ───────────── */
+.soiree .section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 26px) 2px 12px}
+.soiree .section-head h2{font-size:17px;font-weight:700;letter-spacing:.01em}
+.soiree .see-all{font-size:12.5px;font-weight:600;color:var(--muted)}
+/* below-the-preview "See all" CTA — full-width so the 12-item cut-off reads as a
+   teaser and the full menu is an obvious tap away. */
+.soiree .menu-more{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  margin-top:14px;padding:13px;border-radius:var(--r-pill);
+  background:var(--panel);border:1px solid var(--stroke);color:var(--ink);
+  font-size:13.5px;font-weight:700;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast) var(--ease)}
+.soiree .menu-more .ic{width:16px;height:16px}
+.soiree .menu-more:active{transform:scale(.98)}
+[dir="rtl"] .soiree .menu-more .ic{transform:scaleX(-1)}
+@media (hover:hover) and (pointer:fine){.soiree .menu-more:hover{background:var(--chip)}}
+
+/* AL-10 language-suggest banner — the shared partial ships it fixed to the
+   viewport bottom (covering content) as a flat #111827 bar with an emoji globe.
+   Soirée relocates it in-flow to the top (script.js) and rebuilds it as a first-
+   class card: accent-glow surface, a masked line-icon globe in a badge, a high-
+   contrast CTA, a circular dismiss. Scoped to .soiree; other themes keep the bar. */
+.soiree #qc-lang-suggest{position:static;inset:auto;z-index:auto;
+  margin:16px 0 2px;border-radius:var(--r-card);color:var(--ink);
+  background:radial-gradient(135% 180% at 0% 0%,color-mix(in srgb,var(--accent) 24%,transparent),transparent 55%),var(--card);
+  border:1px solid var(--stroke);box-shadow:var(--feat-shadow);
+  animation:row-in .45s var(--ease) backwards;overflow:hidden}
+.soiree #qc-lang-suggest .qc-ls-inner{display:flex;align-items:center;max-width:none;margin:0;padding:5px 10px;gap:13px}
+/* soirée dresses the shared inline-SVG globe in a soft badge (crisp, CSP-safe) */
+.soiree #qc-lang-suggest .qc-ls-globe{flex:none;width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);
+  background:color-mix(in srgb,var(--ink) 8%,transparent);border:1px solid var(--stroke)}
+.soiree #qc-lang-suggest .qc-ls-globe svg{width:21px;height:21px;stroke-width:1.9}
+.soiree #qc-lang-suggest .qc-ls-text{flex:1;min-width:0;font-weight:700;font-size:14px;line-height:1.35;color:var(--ink);letter-spacing:.005em}
+.soiree #qc-lang-suggest .qc-ls-cta{flex:none;background:var(--ink);color:var(--bg);border:0;
+  border-radius:var(--r-pill);padding:9px 18px;font-weight:800;font-size:12.5px;letter-spacing:.01em;
+  box-shadow:var(--shadow-chip);transition:transform var(--t-fast) var(--ease-pop)}
+.soiree #qc-lang-suggest .qc-ls-cta:active{transform:scale(.94)}
+.soiree #qc-lang-suggest .qc-ls-x{flex:none;margin-inline-start:0;width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;background:transparent;color:var(--muted);font-size:19px;line-height:1;padding:0;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
+@media (hover:hover) and (pointer:fine){
+  .soiree #qc-lang-suggest .qc-ls-cta:hover{transform:translateY(-1px)}
+  .soiree #qc-lang-suggest .qc-ls-x:hover{background:var(--chip);color:var(--ink)}
+}
+
+/* GOL claim toast (#gol-claim-banner) — dressed in soirée's card language and
+   pulled under the theme root by script.js. Scoped to .soiree; other themes keep
+   the shared dark corner toast. */
+.soiree #gol-claim-banner{background:var(--card);color:var(--ink);border:1px solid var(--stroke);
+  border-radius:var(--r-card);box-shadow:var(--feat-shadow);font-family:var(--font-ui);
+  padding:14px 46px 14px 16px;animation:row-in .4s var(--ease) backwards}
+.soiree #gol-claim-banner .gol-msg{font-size:13.5px;font-weight:600;line-height:1.45;color:var(--ink)}
+.soiree #gol-claim-banner .gol-x{inset-block-start:9px;inset-inline-end:9px;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;color:var(--muted);opacity:1;font-size:18px;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
+@media (hover:hover) and (pointer:fine){.soiree #gol-claim-banner .gol-x:hover{background:var(--chip);color:var(--ink)}}
+/* list ⇄ grid layout toggle — a segmented icon pill (home section-head + menu page) */
+.soiree .sh-actions{display:flex;align-items:center;gap:10px}
+.soiree .view-toggle{display:inline-flex;background:var(--panel);border-radius:var(--r-pill);padding:3px;gap:2px;flex:none}
+.soiree .view-toggle button{position:relative;width:32px;height:32px;min-height:0;border-radius:calc(var(--r-pill) - 3px);
+  display:inline-flex;align-items:center;justify-content:center;color:var(--muted);
+  transition:color var(--t-fast) var(--ease),background var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-pop)}
+.soiree .view-toggle button .ic{width:17px;height:17px}
+.soiree .view-toggle button.is-on{background:var(--chip);color:var(--ink);box-shadow:var(--shadow-chip)}
+.soiree .view-toggle button:active{transform:scale(.9)}
+/* keep the drawn control compact but preserve a 44px tap target (m-fav idiom) */
+.soiree .view-toggle button::after{content:"";position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:44px;height:44px}
+/* menu page: filter left, layout toggle pinned right */
+.soiree #browseTools{justify-content:space-between}
+.soiree #browseTools .view-toggle{margin-inline-start:auto}
+.soiree .mini-h{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:24px 2px 10px}
+
+.soiree .catchips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 12px}
+.soiree .catchips button{
+  flex:none;padding:9px 15px;border-radius:16px;
+  font-size:13px;font-weight:600;color:var(--muted);
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.soiree .catchips button:active{transform:scale(.94)}
+.soiree .catchips button.is-on{background:var(--chip);color:var(--ink);font-weight:700;box-shadow:var(--shadow-chip)}
+
+.soiree .mlist{display:grid;gap:10px}
+.soiree .mrow{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--card);border-radius:22px;padding:9px;
+  border:1px solid var(--stroke);box-shadow:var(--feat-shadow);
+  animation:row-in .45s var(--ease) backwards;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+@keyframes row-in{from{opacity:0;transform:translateY(14px)}}
+.soiree .mrow:active{transform:scale(.975)}
+.soiree .mrow img{width:62px;height:62px;object-fit:cover;border-radius:16px;flex:none;background:var(--panel)}
+.soiree .m-copy{flex:1;min-width:0;display:grid;gap:2px}
+.soiree .m-copy b{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .m-copy small{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .m-price{display:grid;justify-items:end;gap:1px;flex:none}
+.soiree .m-price b{font-size:14px;font-weight:800}
+.soiree .m-price s{font-size:10.5px;color:var(--muted);font-weight:600}
+.soiree .m-tag{font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--glass);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:2px 6px;color:var(--hi)}
+.soiree .m-fav{
+  position:relative;width:36px;height:36px;flex:none;border-radius:50%;
+  display:grid;place-items:center;color:var(--muted);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast);
+}
+/* ALL-F2: 44×44 hit area without changing the drawn circle */
+.soiree .m-fav::after,.soiree .m-add::after,
+.soiree .cl-qty button::after,.soiree .cl-tools button::after{
+  content:"";position:absolute;inset:50% auto auto 50%;
+  transform:translate(-50%,-50%);width:44px;height:44px;
+}
+.soiree .m-fav:active{transform:scale(.82)}
+.soiree .m-fav .ic{width:16px;height:16px}
+.soiree .m-fav.is-on{color:var(--hi)}
+.soiree .m-fav.is-on .ic{fill:currentColor}
+.soiree .m-add{
+  position:relative;width:38px;height:38px;flex:none;border-radius:12px;
+  background:var(--chip);display:grid;place-items:center;color:var(--ink);
+  box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .m-add:active{transform:scale(.85)}
+.soiree .m-add .ic{width:16px;height:16px;stroke-width:2.1}
+.soiree .mrow.is-soldout{opacity:.6}
+.soiree .mrow.is-soldout .m-add{display:none}
+.soiree .m-soldout{font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--stroke-2);border-radius:8px;padding:2px 6px;flex:none}
+
+/* ── reserve card ────────────────────────────────────── */
+.soiree .reserve-card{
+  display:flex;align-items:center;gap:13px;margin-top:26px;
+  background:var(--panel);border-radius:var(--r-card);padding:16px;
+  box-shadow:var(--shadow-card);
+}
+.soiree .rc-art{width:44px;height:44px;flex:none;border-radius:14px;background:var(--card);display:grid;place-items:center;color:var(--ink)}
+.soiree .rc-art .ic{width:22px;height:22px}
+.soiree .rc-copy{flex:1;display:grid;gap:2px}
+.soiree .rc-copy b{font-size:14.5px;font-weight:700}
+.soiree .rc-copy small{font-size:11.5px;color:var(--muted)}
+.soiree .rc-btn{
+  flex:none;padding:11px 18px;border-radius:16px;
+  background:var(--chip);font-size:13px;font-weight:700;
+  box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .rc-btn:active{transform:scale(.93)}
+.soiree .res-chips{display:grid;gap:8px;padding-top:10px}
+.soiree .res-chips:empty{display:none}
+.soiree .res-chip{
+  display:flex;align-items:center;gap:9px;font-size:12px;color:var(--ink);
+  background:var(--card);border-radius:14px;padding:10px 13px;
+  animation:row-in .4s var(--ease) backwards;
+}
+.soiree .res-chip .ic{width:15px;height:15px;color:var(--muted)}
+.soiree .res-chip b{font-weight:700}
+.soiree .res-chip .wl-tag{margin-inline-start:auto;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--stroke-2);border-radius:8px;padding:2px 7px}
+
+/* ── rewards (Free Drink tab) ────────────────────────── */
+.soiree .pts-hero{display:flex;align-items:baseline;gap:9px;padding:22px 2px 12px}
+.soiree .pts-hero b{font-size:46px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.soiree .pts-hero small{font-size:13px;color:var(--muted);font-weight:600}
+.soiree .pts-bar{height:8px;border-radius:var(--r-pill);background:var(--panel);overflow:hidden}
+.soiree .pts-bar i{display:block;height:100%;width:0;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--muted),var(--hi));transition:width .7s var(--ease)}
+.soiree .pts-next{font-size:12px;color:var(--muted);padding:9px 2px 4px}
+.soiree .rw-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:12px}
+.soiree .rw-card{
+  background:var(--card);border-radius:var(--r-card);padding:9px;text-align:start;
+  box-shadow:0 16px 30px -16px rgba(18,18,28,.7);
+  animation:row-in .45s var(--ease) backwards;
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);
+}
+.soiree .rw-card:active{transform:scale(.96)}
+.soiree .rw-card img{width:100%;aspect-ratio:1.25;object-fit:cover;border-radius:18px;background:var(--panel)}
+.soiree .rw-card b{display:block;font-size:13.5px;font-weight:700;margin:9px 2px 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .rw-foot{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 3px}
+.soiree .rw-pts{font-size:11.5px;color:var(--muted);font-weight:700}
+.soiree .rw-get{font-size:11.5px;font-weight:800;background:var(--chip);border-radius:12px;padding:7px 12px;box-shadow:var(--shadow-chip)}
+.soiree .rw-card.cant{opacity:.55}
+.soiree .rw-card.cant .rw-get{background:transparent;border:1px dashed var(--stroke-2);color:var(--muted);box-shadow:none}
+.soiree .rw-card.shake{animation:rw-shake .4s var(--ease)}
+@keyframes rw-shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.soiree .loyalty-empty{font-size:12.5px;color:var(--muted);padding:16px 2px;line-height:1.6}
+.soiree .redeem-cta{margin-top:14px}
+.soiree .hist{display:grid;gap:7px}
+.soiree .hist-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);background:var(--panel);border-radius:14px;padding:10px 13px}
+.soiree .hist-row b{margin-inline-start:auto;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.soiree .hist-row b.neg{color:var(--muted)}
+
+/* ── happy hour panel ────────────────────────────────── */
+/* compact accent header — self-contained (no photo dependency; the happy panel
+   never renders a background image, so the old 116px photo banner was dead space) */
+.soiree .hh-banner{
+  position:relative;margin-top:18px;border-radius:var(--r-card);overflow:hidden;
+  box-shadow:var(--shadow-card);isolation:isolate;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:15px 18px;background:linear-gradient(120deg,var(--card),var(--panel));
+}
+.soiree .hh-banner::before{content:"★";position:absolute;inset-inline-end:2px;top:-30px;z-index:-1;
+  font-size:120px;line-height:1;color:var(--accent);opacity:.16;pointer-events:none}
+.soiree .hh-copy{display:grid;gap:2px}
+.soiree .hh-copy b{font-size:17px;font-weight:800;color:var(--ink)}
+.soiree .hh-copy small{font-size:11.5px;color:var(--muted)}
+.soiree .hh-chip{
+  position:static;flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:50%;
+  background:var(--accent);color:var(--on-accent);border:none;
+  font-size:17px;font-weight:800;box-shadow:var(--shadow-chip);
+}
+.soiree .hh-sub{font-size:12px;color:var(--muted);padding:12px 2px 14px}
+
+/* Showcase card grid — vertical photo-led cards (see featCardHTML). `.as-cards`
+   (the Featured panel always; menu + home when the grid view is picked) beats the
+   .mlist media-query row grid, so cards never inherit the 2/3-up row squeeze. */
+.soiree .mlist.as-cards{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.soiree .feat-card{position:relative;background:var(--card);border-radius:var(--r-card);overflow:hidden;
+  border:1px solid var(--stroke);box-shadow:var(--feat-shadow);isolation:isolate;
+  animation:row-in .45s var(--ease) backwards;
+  transition:transform var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease)}
+@media (hover:hover) and (pointer:fine){
+  .soiree .feat-card:hover{transform:translateY(-3px);box-shadow:var(--feat-shadow-lift)}
+}
+.soiree .feat-card:active{transform:scale(.985)}
+.soiree .feat-main{display:flex;flex-direction:column;color:inherit;text-decoration:none}
+.soiree .feat-media{position:relative;aspect-ratio:5/4;overflow:hidden;background:var(--panel)}
+.soiree .feat-media img{width:100%;height:100%;object-fit:cover;display:block}
+.soiree .feat-badge{position:absolute;inset-inline-start:10px;top:10px;
+  background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;
+  padding:.32em .7em;border-radius:999px;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
+.soiree .feat-body{padding:11px 13px 13px;display:grid;gap:3px}
+.soiree .feat-body b{font-size:14.5px;font-weight:800;line-height:1.28;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.56em}
+.soiree .feat-body small{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .feat-price{margin-top:4px;font-size:15px;font-weight:800;color:var(--ink)}
+.soiree .feat-price s{font-size:11px;color:var(--muted);font-weight:600;margin-inline-end:.4em}
+.soiree .feat-fav{position:absolute;top:9px;inset-inline-end:9px;width:34px;height:34px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--glass);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:var(--ink)}
+.soiree .feat-fav.is-on{color:var(--hi)}
+.soiree .feat-fav.is-on .ic{fill:currentColor}
+.soiree .feat-fav .ic{width:16px;height:16px}
+.soiree .feat-add{position:absolute;inset-inline-end:11px;bottom:11px;width:38px;height:38px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--accent);color:var(--on-accent);border:none;box-shadow:var(--shadow-chip)}
+.soiree .feat-add .ic{width:17px;height:17px;stroke-width:2.1}
+.soiree .feat-soldout{position:absolute;inset-inline-end:11px;bottom:11px;font-size:11px;font-weight:700;color:var(--muted)}
+.soiree .feat-card.is-soldout{opacity:.62}
+.soiree .feat-add:active,.soiree .feat-fav:active{transform:scale(.85)}
+/* .glass-chip/.hh-chip sit in the RTL direction:ltr isolate list below, and
+   their inset-inline offsets then resolve LTR — un-mirroring them on RTL pages
+   (crumb fcard-rate lesson). Pin the mirrored corners explicitly. */
+[dir="rtl"] .soiree .glass-chip{inset-inline-start:auto;left:auto;right:16px}
+[dir="rtl"] .soiree .hh-chip{inset-inline-end:auto;right:auto;left:12px}
+
+/* ── banners (admin-managed) ─────────────────────────── */
+.soiree .banners{margin:16px 0 4px}
+.soiree .banner-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.soiree .banner{position:relative;flex:0 0 90%;scroll-snap-align:center;height:132px;border-radius:var(--r-card);overflow:hidden;display:flex;align-items:center;padding:16px;background:var(--panel);isolation:isolate;text-decoration:none;color:var(--ink)}
+.soiree .banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.soiree .banner-bg{position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,rgba(30,30,42,.85),rgba(30,30,42,.35))}
+.soiree .banner-copy{display:grid;gap:5px;max-width:70%;color:#fff}
+.soiree .banner-kicker{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.soiree .banner-title{font-size:18px;font-weight:800;line-height:1.15}
+.soiree .banner-btn{justify-self:start;margin-top:6px;font-size:11.5px;font-weight:800;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:var(--r-pill);padding:10px 16px;min-height:44px;display:inline-flex;align-items:center}
+.soiree .banner-dots{display:flex;gap:5px;justify-content:center;padding-top:10px}
+.soiree .banner-dots i{width:6px;height:6px;border-radius:50%;background:var(--stroke-2);transition:all .3s var(--ease)}
+.soiree .banner-dots i.is-on{width:16px;border-radius:3px;background:var(--hi)}
+
+/* ── stories (rail + full-screen viewer) ─────────────── */
+.soiree .storyrail{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px}
+.soiree .storyrail[hidden]{display:none}
+.soiree .story-bub{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px;transition:transform var(--t-fast) var(--ease-pop)}
+.soiree .story-bub:active{transform:scale(.94)}
+.soiree .sb-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#fff,var(--muted) 55%,var(--chip));display:grid;place-items:center}
+.soiree .sb-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.soiree .story-bub small{font-size:11px;color:var(--muted);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.soiree .story-viewer{position:absolute;inset:0;z-index:var(--z-sheet);background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.soiree .story-viewer.is-open{opacity:1}
+.soiree .sv-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.soiree .sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.soiree .sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.soiree .sv-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.soiree .sv-close .ic{width:20px;height:20px}
+.soiree .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.soiree .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.soiree .sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.soiree .sv-nav.prev{inset-inline-start:0}
+.soiree .sv-nav.next{inset-inline-end:0}
+.soiree .sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.soiree .sv-caption{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.soiree .sv-cta{padding:15px;text-decoration:none}
+
+/* ── product page ────────────────────────────────────── */
+.soiree .view[data-view="product"] .view-scroll{padding:0}
+.soiree .p-hero{position:relative;z-index:2}
+/* F10: `aspect-ratio:.9` made the photo 555px tall in a 500px viewport, so the
+   name, price, options and the add control were ALL below the fold on open with no
+   scroll affordance. Cap it at 46% of the viewport (the demo stops at ~65% of a
+   shorter frame) so the title + price always land above the fold. */
+.soiree .p-heroimg{aspect-ratio:1.06;max-height:46svh;overflow:hidden;border-radius:0 0 34px 34px;background:var(--panel)}
+@supports not (height:1svh){.soiree .p-heroimg{max-height:46vh}}
+.soiree .p-heroimg img{width:100%;height:116%;object-fit:cover;will-change:transform}
+.soiree .p-heroimg::after{content:"";position:absolute;inset:0;border-radius:0 0 34px 34px;background:linear-gradient(180deg,rgba(30,30,42,.22),transparent 26%)}
+.soiree .fab{
+  position:absolute;top:14px;width:44px;height:44px;border-radius:50%;z-index:4;
+  background:rgba(30,30,42,.5);backdrop-filter:blur(8px);color:#fff;
+  display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .fab:active{transform:scale(.88)}
+.soiree .fab.back{inset-inline-start:16px}
+[dir="rtl"] .soiree .fab.back .ic{transform:scaleX(-1)}
+.soiree .fab.fav{inset-inline-end:16px}
+.soiree .fab.fav.is-on .ic{fill:#fff;stroke:#fff}
+.soiree .fab.inline{position:static;background:var(--card);border:0;color:var(--ink);flex:none;box-shadow:var(--shadow-chip)}
+.soiree .p-off{top:70px;inset-inline-start:16px} /* sits under the back circle */
+.soiree .p-off b{font-size:17px}
+
+/* vertical qty column straddling the photo edge — soiree signature */
+.soiree .qty-col{
+  position:absolute;bottom:-52px;inset-inline-end:20px;z-index:5;
+  width:54px;display:grid;justify-items:center;gap:2px;
+  background:var(--panel);border-radius:20px;padding:7px 0;
+  box-shadow:var(--shadow-card);
+}
+.soiree .qty-col button{
+  width:44px;height:42px;border-radius:14px;display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.soiree .qty-col button:active{transform:scale(.82);background:var(--chip)}
+.soiree .qty-col button .ic{width:17px;height:17px;stroke-width:2}
+.soiree .qty-col output{
+  height:30px;display:grid;place-items:center;overflow:hidden;
+  font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;
+}
+.soiree .qty-col output span{display:block}
+.soiree .qty-col output.up span{animation:q-up .28s var(--ease)}
+.soiree .qty-col output.down span{animation:q-down .28s var(--ease)}
+@keyframes q-up{from{transform:translateY(120%);opacity:0}}
+@keyframes q-down{from{transform:translateY(-120%);opacity:0}}
+
+.soiree .p-body{padding:22px 20px 0}
+.soiree .p-title{font-size:27px;font-weight:600;letter-spacing:.01em;line-height:1.1;max-width:75%}
+.soiree .p-sub{font-size:13px;color:var(--muted);font-weight:500;margin-top:4px}
+.soiree .p-metaline{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);font-weight:600;padding:12px 0 2px;flex-wrap:wrap}
+.soiree .p-metaline .star{color:var(--hi);display:inline-flex;align-items:center;gap:4px}
+.soiree .p-metaline .star .ic{width:12px;height:12px;fill:currentColor}
+.soiree .p-metaline span{display:inline-flex;align-items:center;gap:4px}
+.soiree .p-metaline .ic{width:13px;height:13px}
+.soiree .p-metaline .diet{color:var(--hi)}
+.soiree .p-stock{position:absolute;top:70px;inset-inline-end:16px;z-index:4;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--err);border-radius:10px;padding:5px 10px}
+
+/* spec chips — small squares, muted borders, stagger in */
+.soiree .specs{display:flex;gap:10px;padding:14px 0 4px;flex-wrap:wrap}
+.soiree .specs:empty{display:none}
+.soiree .spec{
+  min-width:80px;display:grid;gap:2px;justify-items:start;
+  border:1px solid var(--stroke-2);border-radius:18px;
+  padding:12px 13px;background:transparent;
+  opacity:0;transform:translateY(14px);
+  animation:spec-in .5s var(--ease) calc(var(--i,0)*80ms + 60ms) forwards;
+}
+@keyframes spec-in{to{opacity:1;transform:none}}
+.soiree .spec b{font-size:15px;font-weight:800;line-height:1}
+.soiree .spec small{font-size:9.5px;font-weight:600;color:var(--muted)}
+
+.soiree .p-desc{font-size:13px;line-height:1.65;color:var(--muted);padding:12px 0 2px;max-width:60ch}
+.soiree .p-allergens{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 2px}
+.soiree .allergen{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--muted);background:var(--card);border-radius:12px;padding:6px 11px}
+.soiree .allergen img{width:15px;height:15px;object-fit:contain}
+
+.soiree .p-groups{display:grid;gap:16px;padding:16px 0 4px}
+/* add-ons / extras — headings promoted to primary ink (were 11px muted uppercase
+   and easy to skip), the extras group wrapped in a callout, and every chip filled
+   with a +/✓ affordance and an accent price pill so a diner clearly sees what can
+   be added. */
+.soiree .opt-group h4{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:.01em;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.soiree .opt-req{font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--stroke-2);border-radius:8px;padding:3px 8px;color:var(--muted)}
+/* extras (and any optional add-on group) get a soft callout so the section reads
+   as an invitation, not a footnote */
+.soiree .opt-group[data-kind="extras"]{background:var(--panel);border:1px solid var(--stroke);border-radius:var(--r-md);padding:14px 14px 15px}
+.soiree .optchips{display:flex;flex-wrap:wrap;gap:9px}
+.soiree .optchip{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:14px;
+  background:var(--tile);border:1.5px solid var(--stroke-2);color:var(--ink);
+  font-size:13px;font-weight:700;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.soiree .optchip:active{transform:scale(.94)}
+.soiree .optchip.is-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-chip)}
+/* additive chips (extras + option groups) advertise the tap with a + / ✓ */
+.soiree .opt-group[data-kind="extras"] .optchip:not(.is-on)::before,
+.soiree .opt-group[data-group] .optchip:not(.is-on)::before{content:"+";font-weight:800;font-size:15px;line-height:1;color:var(--muted)}
+.soiree .opt-group[data-kind="extras"] .optchip.is-on::before,
+.soiree .opt-group[data-group] .optchip.is-on::before{content:"✓";font-weight:800;font-size:13px;line-height:1;color:var(--on-accent)}
+.soiree .optchip small{font-size:11px;font-weight:800;opacity:1;color:var(--ink);background:var(--chip);border-radius:8px;padding:2px 8px}
+.soiree .optchip.is-on small{color:var(--on-accent);background:rgba(255,255,255,.22)}
+.soiree .optchip img{width:26px;height:26px;border-radius:8px;object-fit:cover}
+/* Add-blocked-by-required: flash the group Add jumped to so the nudge is visual,
+   not just a fleeting toast. Ends transparent, so nothing lingers. */
+.soiree .opt-group.needs-pick{border-radius:var(--r-md);animation:so-needs-pick 1.5s var(--ease)}
+@keyframes so-needs-pick{
+  0%{box-shadow:0 0 0 0 rgba(227,106,106,0)}
+  18%,60%{box-shadow:0 0 0 2.5px var(--err)}
+  100%{box-shadow:0 0 0 0 rgba(227,106,106,0)}
+}
+@media (prefers-reduced-motion:reduce){.soiree .opt-group.needs-pick{animation:none}}
+
+/* price chips row — ghost unit + elevated total (= add) */
+/* F11: add-to-cart used to be a tap on a price readout — two identical tiles, no
+   button affordance, and a hint telling you which one was live. The right tile is
+   now unmistakably a button: a + glyph, the verb, and the line total. */
+.soiree .price-row{display:flex;gap:12px;padding-top:20px;align-items:stretch}
+.soiree .price-ghost,.soiree .price-add{
+  flex:1;border-radius:20px;padding:13px 17px;text-align:start;min-height:56px;
+}
+.soiree .price-ghost{border:1.5px solid var(--stroke-2);display:grid;gap:2px;justify-items:start;align-content:center}
+.soiree .price-add{
+  display:flex;align-items:center;gap:11px;
+  background:var(--accent);color:var(--on-accent);
+  box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.soiree .price-add .pa-ic{
+  width:32px;height:32px;flex:none;border-radius:11px;display:grid;place-items:center;
+  background:rgba(255,255,255,.16);
+}
+.soiree .price-add .pa-ic .ic{width:17px;height:17px;stroke-width:2.3}
+.soiree .price-add .pa-col{display:grid;gap:2px;min-width:0}
+.soiree .price-add:active{transform:scale(.95);box-shadow:0 6px 14px -8px rgba(18,18,28,.8)}
+.soiree .price-add:disabled{opacity:.5}
+.soiree .price-row b{font-size:19px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.soiree .price-ghost b{color:var(--ink)}
+.soiree .price-row small{font-size:10.5px;font-weight:700;color:var(--muted)}
+.soiree .price-add small{color:var(--on-accent);opacity:.78;font-size:11.5px}
+
+/* product: a slim, passive unit-price readout — the ADD action lives in the sticky
+   bar below so a diner can never scroll past it (was buried inline mid-page). */
+.soiree .p-unitline{display:flex;align-items:baseline;gap:8px;padding-top:16px}
+.soiree .p-unitline b{font-size:16px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.soiree .p-unitline small{font-size:11px;font-weight:700;color:var(--muted)}
+/* product sticky bar: compact cart shortcut (running count) + full-width "Add to order" */
+.soiree .order-band.pbar .ob-row{gap:10px;align-items:stretch}
+.soiree .ob-mini{position:relative;flex:none;width:58px;border-radius:18px;background:var(--tile);
+  border:1.5px solid var(--stroke-2);display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop)}
+.soiree .ob-mini:active{transform:scale(.94)}
+.soiree .ob-mini .ic{width:23px;height:23px}
+.soiree .ob-mini .cc-badge{position:absolute;top:4px;inset-inline-end:4px;min-width:18px;height:18px;padding:0 4px;
+  border-radius:9px;background:var(--accent);color:var(--on-accent);font-size:10.5px;font-weight:800;
+  display:grid;place-items:center;line-height:1}
+.soiree .ob-mini .cc-badge[hidden]{display:none}
+.soiree .price-add.pab{flex:1;justify-content:center;gap:12px;min-height:58px}
+.soiree .price-add.pab .pa-col{display:flex;align-items:baseline;gap:8px}
+.soiree .price-add.pab .pa-col small{font-size:12.5px;opacity:.9}
+.soiree .price-add.pab .pa-col b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* ── total-order band + pay tile ─────────────────────── */
+.soiree .order-band{
+  flex:none;position:relative;z-index:6;
+  background:var(--panel);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:14px 18px calc(16px + env(safe-area-inset-bottom));
+  box-shadow:var(--shadow-band);
+}
+.soiree .ob-label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:2px 2px 10px}
+.soiree .ob-row{display:flex;align-items:stretch;gap:12px}
+/* B3 mitigation: the globally-injected WhatsApp float is pinned flush to x:0 at a
+   z-index this theme cannot outrank, and it sat exactly on top of the cart cell.
+   Inset the band's content past it. */
+.soiree .ob-cells{flex:1;display:flex;align-items:center;gap:18px;text-align:start;padding-inline-start:6px}
+.soiree .ob-cell{display:flex;align-items:center;gap:9px}
+.soiree .ob-art{width:26px;height:26px;display:grid;place-items:center;color:var(--muted);flex:none}
+.soiree .ob-art .ic{width:22px;height:22px}
+.soiree .ob-col{display:grid;gap:1px}
+.soiree .ob-col b{font-size:16.5px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.soiree .ob-col small{font-size:10.5px;font-weight:600;color:var(--muted)}
+.soiree .ob-col b.bump{animation:badge-bump .45s var(--ease-pop)}
+
+.soiree .paytile{
+  flex:none;width:88px;display:grid;place-items:center;gap:5px;
+  background:var(--tile);border-radius:20px;padding:11px 10px;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 14px 26px -12px rgba(14,14,22,.9);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.soiree .paytile:disabled{opacity:.45}
+.soiree .paytile:active{transform:scale(.92) translateY(1px);box-shadow:0 4px 10px -6px rgba(14,14,22,.9)}
+.soiree .paytile .mc{display:flex}
+.soiree .paytile .mc i{width:19px;height:19px;border-radius:50%;background:#EB001B;opacity:.9}
+.soiree .paytile .mc i+i{background:#F79E1B;margin-inline-start:-8px;mix-blend-mode:screen}
+.soiree .paytile .pt-arr{width:19px;height:19px;stroke-width:2}
+[dir="rtl"] .soiree .paytile .pt-arr{transform:scaleX(-1)}
+.soiree .pt-label{font-size:12.5px;font-weight:800}
+.soiree .order-band.slim{padding-top:16px}
+
+.soiree .cta-band{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--accent);color:var(--on-accent);border-radius:20px;padding:16px;
+  font-size:15px;font-weight:800;box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);
+  position:relative;overflow:hidden;text-decoration:none;
+}
+.soiree .cta-band:active{transform:scale(.97)}
+.soiree .cta-band:disabled{opacity:.5}
+.soiree .cta-band b{font-weight:800;opacity:.6}
+.soiree .cta-band .spinner{
+  width:19px;height:19px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+.soiree .cta{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--accent);border-radius:20px;padding:16px;
+  font-size:15px;font-weight:800;box-shadow:var(--shadow-chip);color:var(--on-accent);
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);position:relative;overflow:hidden;
+}
+.soiree .cta:active{transform:scale(.97)}
+.soiree .cta:disabled{opacity:.5}
+.soiree .cta b{font-weight:800;opacity:.75}
+.soiree .cta .spinner{width:19px;height:19px;border-radius:50%;border:2.5px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin .7s linear infinite}
+
+/* ── cart ────────────────────────────────────────────── */
+.soiree .cart-list{display:grid;gap:10px}
+.soiree .cline{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border-radius:22px;padding:10px;
+  animation:row-in .4s var(--ease) backwards;overflow:hidden;
+}
+.soiree .cline.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.soiree .cline img{width:60px;height:60px;object-fit:cover;border-radius:16px;flex:none;background:var(--panel)}
+.soiree .cl-copy{flex:1;min-width:0;display:grid;gap:2px}
+.soiree .cl-copy b{font-size:13.5px;font-weight:700}
+.soiree .cl-opts{font-size:10.5px;color:var(--muted);line-height:1.4}
+.soiree .cl-note{font-size:10.5px;color:var(--muted);font-style:italic;display:flex;align-items:center;gap:4px}
+.soiree .cl-note .ic{width:11px;height:11px}
+.soiree .cl-im{flex:none;padding:0;background:none;border:0}
+.soiree .cl-name{padding:0;background:none;border:0;text-align:start;color:var(--ink)}
+.soiree .cl-priceline{display:flex;align-items:baseline;gap:7px;margin-top:2px;flex-wrap:wrap}
+.soiree .cl-price{font-size:13px;font-weight:800}
+.soiree .cl-was{font-size:11px;color:var(--muted);text-decoration:line-through}
+.soiree .cl-unit{font-size:10.5px;color:var(--muted);font-weight:700}
+.soiree .cl-price .free{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border:1px dashed var(--stroke-2);border-radius:8px;padding:1px 7px}
+.soiree .cl-side{display:grid;justify-items:center;gap:5px;flex:none}
+.soiree .cl-qty{display:flex;align-items:center;gap:2px;background:var(--chip);border-radius:14px;padding:3px;box-shadow:var(--shadow-chip)}
+.soiree .cl-qty button{position:relative;width:30px;height:30px;border-radius:11px;display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop)}
+.soiree .cl-qty button:active{transform:scale(.8)}
+.soiree .cl-qty button .ic{width:13px;height:13px;stroke-width:2.2}
+.soiree .cl-qty output{min-width:22px;text-align:center;font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.soiree .cl-tools{display:flex;gap:2px}
+.soiree .cl-tools button{position:relative;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;color:var(--muted);transition:color var(--t-fast)}
+.soiree .cl-tools button:active{color:var(--ink)}
+.soiree .cl-tools .ic{width:14px;height:14px}
+/* Phone cart rows. At 360px the stacked side block (36px qty pill ON TOP of a
+   30px tool row) made every row 91–104px tall and left the name only 124px, so
+   a four-line order buried the order-type picker below the fold and long names
+   wrapped three deep. `display:contents` promotes the qty pill and the tools to
+   columns of .cline's own grid: the tools stack vertically beside the pill, the
+   row height falls back to the thumbnail, and the copy gets the width back. */
+@media (max-width:430px){
+  .soiree .cline{
+    display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;
+    gap:8px;padding:8px;border-radius:20px;
+  }
+  .soiree .cline img{width:48px;height:48px;border-radius:14px}
+  .soiree .cl-copy b{font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+  /* One line each: a long modifier string or a two-sentence note used to wrap
+     three deep and re-inflate the row it just shrank. Both stay fully readable
+     in the item sheet and the note editor. */
+  .soiree .cl-opts,.soiree .cl-note{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .soiree .cl-note .ic{flex:none}
+  .soiree .cl-side{display:contents}
+  .soiree .cl-qty{gap:0;padding:2px;border-radius:12px}
+  .soiree .cl-qty button{width:26px;height:26px;border-radius:9px}
+  .soiree .cl-qty output{min-width:16px;font-size:12px}
+  .soiree .cl-tools{flex-direction:column;gap:2px}
+  .soiree .cl-tools button{width:28px;height:28px}
+  .soiree .cl-tools button::after{inset:-1px -7px}
+}
+
+.soiree .cart-tools{display:grid;gap:16px;padding-top:18px}
+.soiree .cart-tools h3,.soiree .contact h3,.soiree .addr h3,.soiree .paymethods h3,.soiree .tips h3{font-size:13.5px;font-weight:800;margin-bottom:11px;letter-spacing:.01em}
+
+.soiree .seg{display:flex;background:var(--panel);border-radius:var(--r-pill);padding:4px;gap:3px}
+.soiree .seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--muted);
+  transition:all var(--t-fast) var(--ease);
+}
+.soiree .seg button .ic{width:16px;height:16px}
+.soiree .seg button.is-on{background:var(--chip);color:var(--ink);box-shadow:var(--shadow-chip)}
+.soiree .seg.mini{padding:3px;flex-wrap:wrap}
+.soiree .seg.mini button{padding:7px 13px;flex:none}
+.soiree #browseSeg{margin-bottom:14px}
+
+/* order-type picker (shared #mbOrderType) rebuilt as a 1:1 copy of soirée's own
+   .seg control (Menu/Favorites): full-width --panel track, equal-flex chips, a
+   neutral --chip active pill. Scoped to .soiree so the shared partial + every other
+   theme are untouched, and the re-ink chip machinery is simply bypassed. */
+.soiree .mbt-bar{padding:14px 2px 6px}
+.soiree .mbt-seg{display:flex;width:100%;background:var(--panel);border-radius:var(--r-pill);padding:4px;gap:3px}
+.soiree #mbOrderType .mbt-chip{flex:1;display:flex;align-items:center;justify-content:center;
+  padding:10px 6px;border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  opacity:1;color:var(--muted);transition:all var(--t-fast) var(--ease)}
+.soiree #mbOrderType .mbt-chip[aria-pressed="true"]{background:var(--chip);color:var(--ink);box-shadow:var(--shadow-chip)}
+@media (hover:hover) and (pointer:fine){
+  .soiree #mbOrderType .mbt-chip:not([aria-pressed="true"]):hover{color:var(--ink)}
+}
+.soiree .home-top .ph-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:8px}
+/* Globe fallback: one control regardless of how many languages the store runs. */
+.soiree .langbtn-top{
+  display:flex;align-items:center;gap:6px;flex:none;
+  background:var(--panel);border-radius:var(--r-pill);
+  padding:9px 13px;color:var(--muted);
+  transition:all var(--t-fast) var(--ease);
+}
+.soiree .langbtn-top .ic{width:16px;height:16px}
+.soiree .langbtn-top b{font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--ink)}
+.soiree .langbtn-top:active{transform:scale(.94)}
+.soiree #langSheet .lang-code{
+  min-width:34px;text-align:center;flex:none;
+  font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);
+  background:var(--panel);border-radius:var(--r-pill);padding:5px 7px;
+}
+
+.soiree .ot-fields{display:grid;gap:9px;padding-top:10px}
+.soiree .ot-fields:empty{display:none}
+.soiree .ot-hint{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.soiree .ot-hint .ic{width:14px;height:14px;color:var(--hi)}
+.soiree .waiter-row{display:flex;gap:10px;padding-top:10px}
+.soiree .waiter-row .ghostbtn{flex:1;justify-content:center}
+.soiree .schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.soiree .sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+.soiree .when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:16px;min-height:44px}
+
+.soiree .coupon-field{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .soiree .coupon-field{padding:5px 15px 5px 6px}
+.soiree .coupon-field .ic{color:var(--muted);flex:none}
+.soiree .coupon-field input{background:none;border:0;padding:11px 0;font-size:16px;min-height:44px}
+.soiree .coupon-field input:focus{background:none}
+.soiree .coupon-field.is-applied{border-color:var(--hi);border-style:solid}
+.soiree .minibtn{
+  flex:none;padding:9px 16px;min-height:44px;border-radius:var(--r-pill);
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--chip);font-size:12.5px;font-weight:700;box-shadow:var(--shadow-chip);color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .minibtn:active{transform:scale(.94)}
+.soiree .coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--hi)}
+.soiree .coupon-msg.err{color:var(--err)}
+.soiree .minorder{font-size:12px;color:var(--err);padding:6px 4px 0}
+.soiree .ordernote label{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:800;margin-bottom:11px}
+.soiree .ordernote textarea{background:var(--card);resize:none}
+
+.soiree .totals{background:var(--panel);border-radius:22px;padding:15px;display:grid;gap:9px}
+.soiree .totals:empty{display:none}
+.soiree .tr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.soiree .tr b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.soiree .tr.disc b{color:var(--hi)}
+.soiree .tr.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:14.5px;font-weight:700}
+.soiree .tr.grand b{font-weight:800;font-size:17px}
+
+.soiree .ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 18px;border-radius:16px;
+  background:var(--card);font-size:13px;font-weight:700;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .ghostbtn:active{transform:scale(.96)}
+.soiree .ghostbtn.sm{padding:8px 14px;min-height:44px;font-size:12px;color:var(--muted)}
+
+.soiree .wa-line{
+  display:flex;align-items:center;gap:11px;width:100%;
+  background:var(--card);border-radius:18px;
+  padding:14px 15px;color:var(--ink);font-size:13.5px;font-weight:700;text-align:start;text-decoration:none;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .wa-line:active{transform:scale(.97)}
+.soiree .wa-line .ic:first-child{color:var(--hi)}
+.soiree .wa-line span{flex:1}
+.soiree .wa-line .arr{color:var(--muted)}
+[dir="rtl"] .soiree .wa-line .arr{transform:scaleX(-1)}
+
+/* ── checkout ────────────────────────────────────────── */
+.soiree .contact,.soiree .addr,.soiree .paymethods,.soiree .tips,.soiree .cv-block{padding-top:16px;display:grid;gap:9px}
+.soiree .cv-h3{font-size:13.5px;font-weight:800;letter-spacing:.01em}
+.soiree .field-label{font-size:11px;font-weight:600;color:var(--muted);padding:2px 2px 0}
+.soiree .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.soiree .linkbtn{background:none;color:var(--muted);font-size:12.5px;font-weight:700;text-align:start;padding:2px}
+
+/* checkout order summary — one row per cart line, Edit → cart */
+/* This list is the last thing a diner reads before paying, so it gets the same
+   panel treatment as the totals card directly under it — previously it floated
+   on the page background with nothing marking where the summary ended and the
+   totals began, and the rows ran together at 11px apart with no rule. */
+.soiree .ck-items{background:var(--panel);border-radius:22px;padding:6px 14px 8px;display:grid;gap:0}
+.soiree .ck-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0 2px}
+.soiree .ck-head h3{margin:0;font-size:14px;font-weight:800}
+.soiree .ck-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:9px 0}
+.soiree .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.soiree .ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.soiree .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px;background:var(--card)}
+.soiree .ck-mid{min-width:0}
+.soiree .ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.soiree .ck-mid small{display:block;font-size:10.5px;color:var(--muted);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ×1 / ×3 sat as loose text, so the quantity column jittered line to line and
+   the eye could not scan it. Fixed-width tabular chip keeps the column straight. */
+.soiree .ck-qty{
+  min-width:30px;text-align:center;font-variant-numeric:tabular-nums;
+  font-size:11.5px;font-weight:800;color:var(--muted);
+  background:var(--chip);border-radius:9px;padding:3px 6px;
+}
+.soiree .ck-price{font-size:12.5px;font-weight:800;color:var(--ink);text-align:end;font-variant-numeric:tabular-nums;line-height:1.25}
+.soiree .ck-price del{display:block;font-size:10.5px;color:var(--muted);font-weight:600}
+/* Edit is the escape hatch out of a wrong order; at 27×20 it was the smallest
+   target on the checkout. Padding grows the hit area, the negative inline pull
+   keeps the label optically flush with the panel edge. */
+.soiree .ck-head .linkbtn{min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none;color:var(--hi)}
+/* ── tap targets (cart + checkout) ────────────────────
+   Everything a thumb has to hit on the way to paying was measured on a 360px
+   phone: qty ±, the note/trash tools, the item name, "Edit", "Have an account?",
+   the order-type segments and the schedule selects all came in at 20–38px
+   against the 44px guideline. Where the control's SIZE is the design (the qty
+   pill would swallow the row at 44px), a transparent ::after grows only the hit
+   area — the pixels stay put, the finger gets the margin. */
+.soiree .cl-qty button::after{content:"";position:absolute;inset:-7px}
+/* The tools sit 2px apart, so the growth axis has to be the one they are NOT
+   stacked along — otherwise note and trash overlap by 12px and a mis-tap
+   deletes the line instead of annotating it. Row layout here, column on phones. */
+.soiree .cl-tools button::after{content:"";position:absolute;inset:-7px -1px}
+.soiree .cl-name{position:relative;min-height:24px}
+.soiree .cl-name::after{content:"";position:absolute;inset:-6px -4px}
+.soiree .linkbtn{min-height:44px;display:inline-flex;align-items:center;padding:2px 6px;margin-inline-start:-6px}
+.soiree .seg button{min-height:44px}
+.soiree .schedule-row select,.soiree .ot-fields select{min-height:44px}
+.soiree .terms{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.soiree .terms input{width:22px;height:22px;flex:none;margin-top:0;accent-color:var(--accent)}
+.soiree .terms{min-height:44px;align-items:center}
+.soiree .tips h3,.soiree .tip{}
+.soiree .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.soiree .tip-row button{
+  flex:1;padding:11px 4px;border-radius:16px;min-width:56px;
+  background:transparent;border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:700;color:var(--muted);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.soiree .tip-row button:active{transform:scale(.93)}
+.soiree .tip-row button.is-on{background:var(--chip);border-color:var(--chip);color:var(--ink);box-shadow:var(--shadow-chip)}
+
+.soiree .pm-list{display:grid;gap:9px}
+.soiree .pm{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--tile);border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;padding:14px 15px;
+  box-shadow:0 14px 26px -14px rgba(14,14,22,.85);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),border-color var(--t-fast);
+}
+.soiree .pm:active{transform:scale(.98)}
+.soiree .pm.is-on{background:var(--chip);border-color:rgba(255,255,255,.22)}
+.soiree .pm-ic{width:36px;height:36px;border-radius:12px;background:var(--panel);display:grid;place-items:center;flex:none}
+.soiree .pm.is-on .pm-ic{background:var(--tile)}
+.soiree .pm-ic .ic{width:20px;height:20px;color:var(--ink)}
+.soiree .pm-ic .mc{display:flex}
+.soiree .pm-ic .mc i{width:17px;height:17px;border-radius:50%;background:#EB001B;opacity:.9}
+.soiree .pm-ic .mc i+i{background:#F79E1B;margin-inline-start:-7px;mix-blend-mode:screen}
+.soiree .pm b{flex:1;font-size:13.5px;font-weight:700;display:grid;gap:2px}
+.soiree .pm b small{font-size:10px;color:var(--muted);font-weight:600}
+.soiree .pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none;transition:all var(--t-fast)}
+.soiree .pm.is-on .pm-radio{border-color:var(--hi);background:radial-gradient(circle,var(--hi) 40%,transparent 46%)}
+
+/* ── confirmed ───────────────────────────────────────── */
+.soiree .view-center{justify-content:center}
+.soiree .confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:6px}
+.soiree .cup-art{position:relative;width:190px;height:190px;display:grid;place-items:center;margin-bottom:4px}
+.soiree .cup{width:150px;height:145px;overflow:visible;animation:box-pop .7s var(--ease-pop) .1s backwards}
+.soiree .cup-lid,.soiree .cup-cap,.soiree .cup-body,.soiree .cup-band{fill:none;stroke:var(--hi);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.soiree .cup-band{stroke:var(--muted)}
+.soiree .cup-halo{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 68%)}
+.soiree .box-doodles{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.soiree .bd{fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+.soiree .bd-star{fill:var(--muted);stroke:none}
+@keyframes box-pop{0%{transform:scale(.4) rotate(-8deg);opacity:0}}
+.soiree .check-badge circle{fill:var(--chip);stroke:var(--bg);stroke-width:6}
+.soiree .check-badge{animation:box-pop .6s var(--ease-pop) .45s backwards}
+.soiree .check{stroke:var(--hi);stroke-width:5;fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .75s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.soiree .confirm-title{font-size:27px;font-weight:300;letter-spacing:.01em}
+.soiree .confirm-sub{font-size:13px;color:var(--muted);line-height:1.65}
+.soiree .confirm-eta{color:var(--ink);font-weight:700}
+.soiree .confirm-code{
+  font-size:12.5px;font-weight:800;color:var(--hi);
+  background:var(--panel);border:1px dashed var(--stroke-2);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.soiree .confirm-pts{font-size:12px;color:var(--muted);font-weight:700;padding-top:6px}
+.soiree .confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.soiree .confirm-actions .cta,.soiree .confirm-actions .cta-band{max-width:280px}
+/* Match the Track Order band's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.soiree .confirm-actions .ghostbtn{width:100%;max-width:280px;justify-content:center}
+.soiree .confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.soiree .confirm-actions .ghostbtn:hover{background:var(--chip)}
+.soiree .confetti,.soiree .bubbles{position:absolute;inset:-30px 0 auto;height:360px;pointer-events:none;overflow:visible}
+.soiree .confetti i,.soiree .bubbles i{
+  position:absolute;top:55%;left:50%;width:9px;height:9px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.5);opacity:0;
+  animation:pop-rise 1.4s var(--ease) var(--d,0s) forwards;
+}
+.soiree .confetti i{border:0;background:var(--c,#fff);border-radius:2px}
+.soiree .confetti i.round,.soiree .bubbles i.fill{border-radius:50%}
+.soiree .bubbles i.fill{background:rgba(255,255,255,.35);border:0;width:6px;height:6px}
+@keyframes pop-rise{
+  0%{opacity:0;translate:0 0;scale:.4}
+  14%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-190px);scale:1;rotate:var(--spin,0deg)}
+}
+.soiree .greview{display:flex;align-items:center;gap:12px;width:100%;max-width:300px;margin-top:16px;background:var(--panel);border-radius:18px;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.soiree .greview-star{font-size:22px}
+.soiree .greview-copy{flex:1;display:grid;gap:2px;text-align:start}
+.soiree .greview-copy b{font-size:13.5px;font-weight:700}
+.soiree .greview-copy small{font-size:11px;color:var(--muted)}
+.soiree .greview .arr{color:var(--muted)}
+[dir="rtl"] .soiree .greview .arr{transform:scaleX(-1)}
+.soiree .nps{margin-top:22px;width:100%;max-width:320px;display:grid;gap:10px;justify-items:center}
+.soiree .nps>p{font-size:12.5px;color:var(--muted)}
+.soiree .nps-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.soiree .nps-row button{min-width:44px;height:44px;border-radius:9px;background:var(--card);color:var(--muted);font-size:12px;font-weight:700;transition:all var(--t-fast) var(--ease-pop)}
+.soiree .nps-row button.is-on{background:var(--accent);color:var(--on-accent)}
+.soiree .nps-thanks{font-size:12px;color:var(--muted);font-weight:700}
+
+/* ── track ───────────────────────────────────────────── */
+.soiree .track-card{background:var(--panel);border-radius:var(--r-card);padding:17px;display:grid;gap:16px;box-shadow:var(--shadow-card)}
+.soiree .track-top{display:flex;justify-content:space-between;align-items:center}
+.soiree .tk-label{font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.02em;margin-bottom:2px}
+.soiree .track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.soiree .tk-eta{text-align:end}
+.soiree .courier{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:16px;padding:10px}
+.soiree .courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.soiree .courier>div{flex:1}
+.soiree .courier b{font-size:14px}
+.soiree .iconbtn{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--ink)}
+.soiree .iconbtn.solid{background:var(--chip)}
+
+.soiree .timeline{list-style:none;display:grid;padding:2px 4px}
+.soiree .tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.soiree .tl:last-child{padding-bottom:0}
+.soiree .tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--panel);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.soiree .tl-node svg{width:11px;height:11px;stroke:var(--panel);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.soiree .tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke)}
+[dir="rtl"] .soiree .tl-line{inset-inline-start:auto;inset-inline-end:10px}
+.soiree .tl-line::after{content:"";position:absolute;inset:0;background:var(--hi);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.soiree .tl.done .tl-node,.soiree .tl.now .tl-node{border-color:var(--hi);background:var(--hi)}
+.soiree .tl.done .tl-node svg{opacity:1;transform:none}
+.soiree .tl.done .tl-line::after{transform:none}
+.soiree .tl.now .tl-node{box-shadow:0 0 0 0 rgba(255,255,255,.4);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}}
+.soiree .tl-copy b{font-size:13.5px;font-weight:700;display:block;color:var(--muted);transition:color .3s}
+.soiree .tl.done .tl-copy b,.soiree .tl.now .tl-copy b{color:var(--ink)}
+.soiree .tl-copy small{font-size:11px;color:var(--muted)}
+
+.soiree .review-card{margin-top:16px;background:var(--panel);border-radius:var(--r-card);padding:18px;text-align:center;display:grid;gap:12px;justify-items:center;box-shadow:var(--shadow-card)}
+.soiree .rev-q{font-size:13.5px;color:var(--ink);font-weight:700}
+.soiree .stars-row{display:flex;gap:8px}
+.soiree .stars-row button{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  background:var(--card);color:var(--muted);
+  transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast),background var(--t-fast);
+}
+.soiree .stars-row button:active{transform:scale(.85)}
+.soiree .stars-row button .ic{width:19px;height:19px}
+.soiree .stars-row button.lit{color:var(--on-accent);background:var(--accent)}
+.soiree .stars-row button.lit .ic{fill:currentColor}
+.soiree .cta-band.google,.soiree .cta.google{max-width:280px;background:var(--hi);color:var(--bg)}
+.soiree .g-badge{width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--hi);font-size:12px;font-weight:800;display:grid;place-items:center}
+.soiree .rev-thanks{font-size:12.5px;color:var(--muted);font-weight:700}
+
+/* ── loyalty (profile) ───────────────────────────────── */
+.soiree .loyalty{margin-top:16px;background:var(--panel);border-radius:var(--r-card);padding:18px;display:grid;gap:12px;box-shadow:var(--shadow-card)}
+.soiree .loyalty-head{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:800}
+.soiree .loyalty-num{font-size:40px;font-weight:300;font-variant-numeric:tabular-nums;line-height:1}
+.soiree .loyalty-sub{font-size:12px;color:var(--muted);line-height:1.5}
+.soiree .loyalty-bar{height:8px;border-radius:var(--r-pill);background:var(--card);overflow:hidden}
+.soiree .loyalty-bar i{display:block;height:100%;width:0;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--muted),var(--hi));transition:width .7s var(--ease)}
+.soiree .stamp-dots{display:flex;flex-wrap:wrap;gap:8px}
+.soiree .stamp-dot{width:40px;height:40px;border-radius:50%;border:1.5px dashed var(--stroke-2);display:grid;place-items:center;color:var(--muted)}
+.soiree .stamp-dot.is-on{border-style:solid;border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.soiree .loyalty-ok{font-size:12px;color:var(--muted);font-weight:700}
+
+/* ── profile misc ────────────────────────────────────── */
+.soiree .me-card{display:flex;align-items:center;gap:13px;background:var(--card);border-radius:20px;padding:13px;margin-bottom:14px}
+.soiree .me-avatar{width:48px;height:48px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-size:20px;font-weight:800}
+.soiree .me-card>div{flex:1}
+.soiree .me-card b{font-size:15px;font-weight:800}
+.soiree .pts-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--chip);border-radius:var(--r-pill);padding:8px 13px;
+  font-size:12.5px;font-weight:800;box-shadow:var(--shadow-chip);
+}
+.soiree .pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;gap:12px;flex-wrap:wrap}
+.soiree .pref-row>span{display:flex;align-items:center;gap:11px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.soiree .orders-block,.soiree .pref{padding-top:8px}
+.soiree .orders-list,.soiree .res-list{display:grid;gap:8px}
+.soiree .order-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  background:var(--card);border-radius:16px;padding:12px 13px;text-decoration:none;color:var(--ink);
+  animation:row-in .4s var(--ease) backwards;
+}
+.soiree .order-row .ic{color:var(--muted)}
+.soiree .order-row>div{flex:1}
+.soiree .order-row b{font-size:13px;font-weight:700;display:block}
+.soiree .order-row small{font-size:11px;color:var(--muted)}
+.soiree .order-status,.soiree .row-status{font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:var(--r-pill);background:var(--chip);color:var(--ink)}
+.soiree .biz-card{display:grid;gap:8px;margin-top:14px;background:var(--panel);border-radius:18px;padding:15px}
+.soiree .biz-card span{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted)}
+.soiree .biz-card a{color:var(--ink);text-decoration:none}
+.soiree .demo-foot{text-align:center;font-size:11px;color:var(--muted);padding:22px 0 4px;opacity:.7}
+.soiree .orders-empty,.soiree .list-empty{font-size:12.5px;color:var(--muted);padding:4px 2px 8px}
+
+/* ── pill nav — home chip + two icon slots ───────────── */
+.soiree .pillnav{
+  position:absolute;inset-inline:0;bottom:calc(16px + env(safe-area-inset-bottom));
+  margin-inline:auto;width:fit-content;
+  z-index:var(--z-nav);
+  display:flex;align-items:center;gap:6px;
+  background:rgba(30,30,42,.92);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.07);border-radius:var(--r-pill);
+  padding:8px;
+  box-shadow:0 20px 44px -14px rgba(12,12,20,.9);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.soiree .pillnav.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.soiree .pn-slot{color:var(--muted);transition:color var(--t-fast)}
+.soiree .pn-chip{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  height:46px;min-width:46px;padding:0 13px;border-radius:var(--r-pill);
+  transition:background var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-pop);
+}
+.soiree .pn-slot:active .pn-chip{transform:scale(.9)}
+.soiree .pn-label{display:none;font-size:12.5px;font-weight:700}
+.soiree .pn-slot.is-on{color:var(--ink)}
+.soiree .pn-slot.is-on .pn-chip{background:var(--chip);box-shadow:var(--shadow-chip);padding:0 17px}
+.soiree .pn-slot.is-on .pn-label{display:inline}
+/* F12: the cart used to be reachable only from a small unlabelled readout in the
+   order band (which the WhatsApp float sat on top of). It is a first-class nav
+   destination now, with the live line count. */
+.soiree .pn-slot .pn-chip{position:relative}
+.soiree .pn-chip .badge{
+  position:absolute;top:2px;inset-inline-end:2px;
+  min-width:18px;height:18px;border-radius:var(--r-pill);
+  background:var(--hi);color:var(--bg);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--panel);
+}
+.soiree .pn-chip .badge.bump{animation:badge-bump .45s var(--ease-pop)}
+
+/* ── search overlay ──────────────────────────────────── */
+.soiree .search-ov{
+  position:absolute;inset:0;z-index:var(--z-search);
+  background:var(--bg);display:flex;flex-direction:column;
+  padding:14px 20px 0;
+  opacity:0;transform:translateY(4%);
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.soiree .search-ov.is-open{opacity:1;transform:none}
+.soiree .so-bar{display:flex;align-items:center;gap:11px;flex:none}
+.soiree .so-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--card);border-radius:var(--r-pill);
+  padding:0 18px;height:50px;color:var(--muted);
+  box-shadow:var(--shadow-chip);
+}
+.soiree .so-field input{background:none;border:0;padding:0;height:100%;font-size:16px}
+.soiree .so-field input:focus{background:none}
+.soiree .so-cancel{font-size:13.5px;font-weight:700;color:var(--muted);flex:none;min-height:44px;padding:0 6px}
+.soiree .so-suggest p{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:20px 2px 10px}
+.soiree .chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.soiree .chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:16px;
+  background:var(--card);font-size:13px;font-weight:600;color:var(--muted);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.soiree .chiprow button:active{transform:scale(.93)}
+.soiree .chiprow button.is-on{background:var(--chip);color:var(--ink);font-weight:700;box-shadow:var(--shadow-chip)}
+.soiree .so-results{flex:1;min-height:0;overflow-y:auto;display:grid;gap:10px;align-content:start;padding:18px 0 24px}
+
+/* ── empty states ────────────────────────────────────── */
+.soiree .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--muted);font-size:13.5px}
+.soiree .empty-emoji{font-size:40px;opacity:.9}
+.soiree .empty-art{width:56px;height:56px;fill:none;stroke:var(--stroke-2);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── sheets / scrim / toast ──────────────────────────── */
+.soiree .scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(14,14,22,.62);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+  pointer-events:none; /* a closing (transparent) scrim must never eat taps */
+}
+.soiree .scrim.is-open{opacity:1;pointer-events:auto}
+.soiree .sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--panel);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.soiree .sheet.is-open{transform:none}
+.soiree .sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px;cursor:grab}
+.soiree .sheet h2{font-size:19px;font-weight:300;letter-spacing:.01em;margin-bottom:14px}
+.soiree .sheet h4{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin:18px 0 10px}
+.soiree .sheet .cta,.soiree .sheet .cta-band{margin-top:20px}
+.soiree .sheet textarea{background:var(--card);resize:none;font-size:16px}
+.soiree .sheet-form{display:grid;gap:7px}
+.soiree .sheet-form .field-label{padding-top:8px}
+.soiree .sheet-sub{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.soiree .sheet-actions{display:flex;gap:10px;margin-top:20px}
+.soiree .sheet-actions .cta{flex:1}
+.soiree .sheet-done{text-align:center;display:grid;gap:8px;justify-items:center;padding:14px 0}
+.soiree .sheet-done-emoji{font-size:38px}
+.soiree .sheet-done b{font-size:16px}
+.soiree .sheet-done p{font-size:12.5px;color:var(--muted)}
+.soiree .sheet-done .muted{opacity:.8}
+.soiree .branch-list{display:grid;gap:8px}
+.soiree .branch-row{display:flex;align-items:center;gap:11px;width:100%;text-align:start;background:var(--card);border-radius:16px;padding:13px 14px;text-decoration:none;color:var(--ink)}
+.soiree .branch-row b{flex:1;font-size:13.5px;font-weight:700}
+.soiree .branch-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.soiree .branch-row.is-on .branch-check{border-color:var(--hi);background:radial-gradient(circle,var(--hi) 40%,transparent 46%)}
+.soiree .auth-tabs{display:flex;background:var(--card);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:12px}
+.soiree .auth-tabs button{flex:1;padding:9px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--muted)}
+.soiree .auth-tabs button.is-on{background:var(--accent);color:var(--on-accent)}
+.soiree .auth-form{display:grid;gap:9px}
+.soiree .otp-boxes{display:flex;gap:8px}
+.soiree .otp-boxes input{text-align:center;font-size:20px;font-weight:800;padding:12px 0}
+.soiree .err-box{font-size:12.5px;color:var(--err);background:rgba(227,106,106,.12);border-radius:12px;padding:10px 13px}
+.soiree .party{display:flex;align-items:center;gap:16px;justify-content:center;padding:4px 0}
+.soiree .party-btn{
+  width:44px;height:44px;border-radius:16px;background:var(--card);
+  display:grid;place-items:center;box-shadow:var(--shadow-chip);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree .party-btn:active{transform:scale(.85)}
+.soiree .party output{font-size:22px;font-weight:800;min-width:40px;text-align:center;font-variant-numeric:tabular-nums}
+.soiree .wl-box{
+  margin-top:16px;background:var(--card);border:1px dashed var(--stroke-2);
+  border-radius:18px;padding:14px;display:grid;gap:10px;justify-items:start;
+  font-size:12.5px;color:var(--muted);line-height:1.5;
+  animation:row-in .35s var(--ease);
+}
+.soiree .wl-box b{color:var(--ink)}
+
+.soiree .toast{
+  position:fixed;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--chip);border:1px solid rgba(255,255,255,.1);
+  color:var(--ink);font-size:13px;font-weight:600;
+  padding:11px 18px;border-radius:18px;
+  box-shadow:0 14px 34px rgba(12,12,20,.6);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  max-width:min(88vw,420px);text-align:center;line-height:1.35;
+}
+.soiree .toast.is-on{opacity:1;translate:-50% 0}
+.soiree .toast .ic{width:16px;height:16px;color:var(--hi)}
+
+/* fly-to-cart-chip */
+.soiree .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.soiree .fly-img{
+  position:absolute;width:56px;height:56px;border-radius:18px;object-fit:cover;
+  box-shadow:0 10px 26px rgba(12,12,20,.6);
+  transition:all .7s cubic-bezier(.4,.1,.3,1);
+}
+
+/* status strip */
+.soiree .status-strip{display:flex;align-items:center;gap:8px;padding:4px 2px;flex-wrap:wrap}
+/* branch selector shares the strip with the open/closed chip — widen so the name breathes */
+.soiree .status-strip .loc{max-width:210px}
+.soiree .open-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.01em;color:var(--ink);background:color-mix(in srgb,#22c55e 12%,var(--card));border:1.5px solid color-mix(in srgb,#22c55e 30%,transparent)}
+.soiree .open-chip.closed{background:color-mix(in srgb,var(--err) 12%,var(--card));border-color:color-mix(in srgb,var(--err) 30%,transparent)}
+.soiree .open-chip i{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:so-openpulse 2.2s ease-out infinite}
+.soiree .open-chip.closed i{background:var(--err);animation:none;box-shadow:none}
+@keyframes so-openpulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.45)}70%{box-shadow:0 0 0 6px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@media (prefers-reduced-motion:reduce){.soiree .open-chip i{animation:none}}
+.soiree .viewers{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted)}
+.soiree .viewers b{color:var(--ink);font-weight:800}
+
+/* brand / follow row (crave F2 port): store mark, name + verified badge,
+   follower proof line, and a follow button. Accent-tinted verified badge
+   reuses soiree's own --accent instead of crave's literal green. */
+.soiree .brand-row{display:flex;align-items:center;gap:12px;padding:10px 2px 4px}
+.soiree .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1.5px solid var(--stroke-2)}
+.soiree .brand-logo img{width:100%;height:100%;object-fit:cover}
+.soiree .brand-info{flex:1;min-width:0}
+.soiree .brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.soiree .brand-followers{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.soiree .brand-followers--cta{color:var(--muted)}
+.soiree .brand-viewers b{color:var(--ink);font-weight:800}
+/* verified = a filled accent seal + white check. */
+.soiree .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.soiree .verified-badge .vb-seal{width:17px;height:17px;display:block}
+.soiree .verified-badge .vb-seal-fill{fill:var(--accent)}
+.soiree .verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner), off the grab bar it borrows for close wiring. */
+.soiree .sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 14%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.soiree .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.soiree .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── moody cover fading into the plum ground ── */
+/* padding-block-end reserves a cover-art band BELOW the status-strip (the cover's
+   last child). Without it, min-block-size left ~0 slack under the strip on stores
+   whose branch + open-now + scans chips fill the cover, so the hero brand-row's
+   -22px pull-up (meant to straddle the cover art) collided with those chips. The
+   bottom padding also blocks the strip's margin from collapsing through. */
+.soiree .soiree-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px 28px;min-block-size:186px}
+.soiree .soiree-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--accent)}
+.soiree .soiree-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.soiree .soiree-cover-scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(18,16,26,.34), rgba(18,16,26,.04) 32%, var(--bg) 97%)}
+.soiree .soiree-cover .home-top,.soiree .soiree-cover .status-strip,.soiree .soiree-cover .qc-cen-slot{position:relative;z-index:2}
+.soiree .soiree-cover .home-top{text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.soiree .brand-row--hero{margin-block-start:-22px;position:relative;z-index:3}
+.soiree .brand-row--hero .brand-logo{border:3px solid var(--bg);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+
+/* ── collapsing header ── */
+.soiree .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--bg);box-shadow:0 6px 18px rgba(0,0,0,.34);
+  border-block-end:1px solid color-mix(in srgb,var(--ink) 14%,transparent);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.soiree .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.soiree .cv-condensed-logo{width:32px;height:32px;border-radius:11px;overflow:hidden;flex:none;background:color-mix(in srgb,var(--ink) 12%,transparent);display:grid;place-items:center}
+.soiree .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.soiree .cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .cv-condensed-actions{display:flex;gap:7px;flex:none}
+.soiree .cv-condensed-actions .cv-cbtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--ink) 12%,transparent);color:var(--ink);border:0;cursor:pointer}
+.soiree .cv-condensed-actions .cv-cbtn .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+@media (prefers-reduced-motion:reduce){.soiree .cv-condensed{transition:none}}
+.soiree .followbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:9px 16px;border-radius:var(--r-pill);background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:700;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.soiree .followbtn:active{transform:scale(.94)}
+.soiree .followbtn .following-label{display:none}
+.soiree .followbtn.is-on{background:var(--card);color:var(--ink);border:1.5px solid var(--stroke-2)}
+.soiree .followbtn.is-on .follow-label,.soiree .followbtn.is-on .ic{display:none}
+.soiree .followbtn.is-on .following-label{display:inline}
+
+.soiree .search{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:var(--r-pill);padding:0 16px;height:46px;color:var(--muted);margin:12px 0 8px;box-shadow:var(--shadow-chip)}
+.soiree .search input{background:none;border:0;padding:0;height:100%;font-size:16px}
+.soiree .search input:focus{background:none}
+
+/* hidden attribute must win over component display rules */
+.soiree [hidden]{display:none!important}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .soiree :is(.cc-col b,.ob-col b,.m-price,.dc-price,.spec b,.price-row b,.tr b,.cl-price,
+.confirm-code,#trackCode,#trackEta,.cta-band b,.cta b,.pts-hero b,.rw-pts,.hist-row b,.hh-chip,
+.glass-chip b,.optchip small,#resParty,.pts-pill,.loyalty-num,.cl-was,.cl-unit,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+/* grid/block members: isolation alone leaves them flush-left in RTL */
+[dir="rtl"] .soiree :is(.cl-price,.cl-was,.cl-unit,.cc-col b,.ob-col b,.ck-price,.ck-qty){text-align:right}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  /* animation-delay must be reset too: the reveals below are opacity:0 + forwards,
+     so killing only the duration still holds them invisible for the delay
+     (splash-tag .55s, sc-dot .9s) before they snap in. */
+  .soiree *,.soiree *::before,.soiree *::after{animation-duration:.01ms!important;animation-delay:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .soiree .bubbles,.soiree .confetti,.soiree .splash-bubbles{display:none}
+  .soiree .glass-chip::after{display:none}
+  .soiree .spec{opacity:1;transform:none}
+  .soiree .hpanel{animation:none}
+}
+
+/* ── account & track — customer pages ─────────────────── */
+.soiree .block-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin:18px 0 10px}
+.soiree .order-lines{display:grid;gap:9px}
+.soiree .order-lines .tr{align-items:flex-start;gap:10px}
+.soiree .order-lines .tr span small{display:block;font-size:11px;color:var(--muted)}
+.soiree .tk-eta .tk-amount{margin-top:5px;text-align:end}
+.soiree .track-card.stacked,.soiree .wa-line.stacked{margin-top:14px}
+.soiree .track-card.stacked-b{margin-bottom:12px}
+.soiree .waiter-row .ghostbtn{text-decoration:none}
+.soiree .imhere-msg{display:none;margin-top:2px;font-size:13px;font-weight:700;color:var(--hi);text-align:center}
+.soiree .foot-center{display:grid;place-items:center;padding:18px 0 6px}
+.soiree .foot-center .ghostbtn,.soiree .grid-empty .ghostbtn{text-decoration:none}
+.soiree .tl.cancelled .tl-node{border-color:var(--err);background:var(--err)}
+.soiree .tl.cancelled .tl-copy b{color:var(--err)}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .soiree .pillnav (bottom 16px + 62px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(72px + env(safe-area-inset-bottom, 0px)); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   F5 · RESPONSIVE — soirée shipped with exactly ONE media query
+   (prefers-reduced-motion) and no width breakpoints at all, so a 1280px desktop
+   got the 390px phone layout stretched edge to edge: a single ~950×1300px hero
+   card, one-per-row menu rows across a metre of screen, a pill nav floating in
+   the middle of nowhere. The shell stays a single-column app (that IS soirée),
+   but it now grows up: a bounded stage on tablet, and a real two-column
+   browse/menu grid plus a wider reading measure on desktop.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* the stage: every full-bleed layer of the shell shares one bounded, centred
+   column so the app never stretches past a comfortable reading measure. */
+@media (min-width:600px){
+  .soiree{
+    align-items:center;
+    background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--panel) 62%,var(--bg)) 0%,var(--bg) 60%);
+  }
+  .soiree .views,.soiree .splash,.soiree .search-ov,.soiree .scrim,
+  .soiree .story-viewer,.soiree .fly-layer{
+    width:100%;max-width:var(--stage,720px);margin-inline:auto;inset-inline:0;
+  }
+  .soiree .views{box-shadow:0 0 90px -34px rgba(10,10,18,.5)}
+  .soiree .sheet{max-width:min(600px,var(--stage,720px));margin-inline:auto;inset-inline:0}
+  .soiree .view-scroll{padding-inline:28px}
+  .soiree .hero-wrap{margin-inline:-28px}
+  .soiree .htrack{padding-inline:28px}
+  .soiree .hcard{flex:0 0 54%;aspect-ratio:3/3.4}
+  .soiree .order-band{padding-inline:26px}
+}
+
+/* ── ≥900px: two-column menus, a two-up product page, real desktop rhythm ─ */
+@media (min-width:900px){
+  .soiree{--stage:980px}
+  .soiree .view-scroll{padding-inline:38px}
+  .soiree .hero-wrap{margin-inline:-38px}
+  .soiree .htrack{padding-inline:38px}
+  .soiree .hcard{flex:0 0 38%;aspect-ratio:3/3.2}
+  /* Desktop density now lives in the GRID view (.as-cards, its own auto-fill grid).
+     LIST rows stay a single full-width column at every width: a horizontal row does
+     not survive a 2/3-up cell (name collapses once it carries a tag + happy-hour
+     badge), so it gets the whole width and reads cleanly. Search + cart keep 2-up. */
+  .soiree .so-results,.soiree .cart-list{grid-template-columns:1fr 1fr;gap:12px}
+  .soiree .mlist.as-cards{gap:14px}
+  .soiree .grid-empty,.soiree .mlist .grid-empty{grid-column:1/-1}
+  .soiree .mrow img{width:74px;height:74px}
+  .soiree .m-copy b{font-size:15.5px}
+  /* product: photo beside the detail column instead of a full-viewport photo */
+  .soiree .view[data-view="product"] .view-scroll{
+    display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);
+    align-items:start;column-gap:34px;padding-block:0;padding-inline:0 38px;
+  }
+  .soiree .p-heroimg{aspect-ratio:.86;max-height:none;border-start-end-radius:34px;border-end-end-radius:34px;border-end-start-radius:0}
+  .soiree .p-heroimg::after{border-radius:inherit}
+  .soiree .p-body{padding-top:34px}
+  .soiree .qty-col{bottom:26px}
+  .soiree .price-row{max-width:520px}
+  /* cart / checkout forms read better two-up at this width */
+  .soiree .cart-tools{grid-template-columns:1fr 1fr;align-items:start}
+  .soiree .cart-tools > .ordertype,.soiree .cart-tools > .totals{grid-column:1/-1}
+  .soiree .contact,.soiree .addr,.soiree .tips,.soiree .paymethods,.soiree .cv-block{max-width:560px}
+  .soiree .order-band{padding-inline:38px}
+  .soiree .cta-band{max-width:520px;margin-inline:auto}
+}
+
+/* ── ≥1280px: the stage is already the right size ──────────────────────── */
+@media (min-width:1280px){
+  .soiree{--stage:1080px}
+  .soiree .so-results{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .soiree .hcard{flex:0 0 31%}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   F6 · LIGHT MODE — soirée had zero `prefers-color-scheme` rules and no
+   appearance control, so a diner on a bright patio got the dark lounge with no
+   recourse. This is NOT an inversion: it is soirée's own palette read in
+   daylight — the same violet-grey hue family, paper-white cards on a soft
+   lilac page, and an INKED primary action so a CTA still carries the weight it
+   has at night. `--hi` / `--accent` / `--on-accent` do the heavy lifting; the
+   rest are the handful of surfaces that were literally dark-only.
+   DARK REMAINS THE DEFAULT for every store — soirée is a dark-lounge theme and
+   flipping thousands of live storefronts to a light face because the diner's OS
+   asked would change the product the owner chose. The daytime face is opt-in:
+   `data-appearance="light"` pins it, `data-appearance="auto"` follows the OS.
+   Both are set from the Appearance control in the profile sheet (script.js).
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme:light){
+  .soiree[data-appearance="auto"]{
+    --bg:#F3F0F7;
+    --panel:#FFFFFF;
+    --card:#FFFFFF;
+    --chip:#E7E1EF;
+    --muted:#605B70;
+    --ink:#211E2B;
+    --hi:#211E2B;
+    --accent:#2C2836;
+    --on-accent:#FFFFFF;
+    --tile:#FFFFFF;
+    --stroke:rgba(33,30,43,.14);
+    --stroke-2:rgba(33,30,43,.26);
+    --glass:rgba(33,30,43,.06);
+    --err:#C0392B;
+    --shadow-card:0 20px 38px -22px rgba(58,52,80,.42);
+    --shadow-chip:0 12px 24px -16px rgba(58,52,80,.5);
+    --shadow-band:0 -14px 34px -22px rgba(58,52,80,.3);
+    --feat-shadow:0 1px 2px rgba(58,52,80,.10),0 6px 14px -6px rgba(58,52,80,.16),0 18px 34px -18px rgba(58,52,80,.20);
+    --feat-shadow-lift:0 2px 5px rgba(58,52,80,.14),0 12px 24px -8px rgba(58,52,80,.22),0 26px 46px -20px rgba(58,52,80,.26);
+  }
+}
+.soiree[data-appearance="light"]{
+  --bg:#F3F0F7;
+  --panel:#FFFFFF;
+  --card:#FFFFFF;
+  --chip:#E7E1EF;
+  --muted:#605B70;
+  --ink:#211E2B;
+  --hi:#211E2B;
+  --accent:#2C2836;
+  --on-accent:#FFFFFF;
+  --tile:#FFFFFF;
+  --stroke:rgba(33,30,43,.14);
+  --stroke-2:rgba(33,30,43,.26);
+  --glass:rgba(33,30,43,.06);
+  --err:#C0392B;
+  --shadow-card:0 20px 38px -22px rgba(58,52,80,.42);
+  --shadow-chip:0 12px 24px -16px rgba(58,52,80,.5);
+  --shadow-band:0 -14px 34px -22px rgba(58,52,80,.3);
+  --feat-shadow:0 1px 2px rgba(58,52,80,.10),0 6px 14px -6px rgba(58,52,80,.16),0 18px 34px -18px rgba(58,52,80,.20);
+  --feat-shadow-lift:0 2px 5px rgba(58,52,80,.14),0 12px 24px -8px rgba(58,52,80,.22),0 26px 46px -20px rgba(58,52,80,.26);
+}
+
+/* surfaces that were hard-coded dark, restated for the daytime face */
+@media (prefers-color-scheme:light){
+  .soiree[data-appearance="auto"] .pillnav{background:rgba(255,255,255,.94);border-color:var(--stroke)}
+  .soiree[data-appearance="auto"] .paytile,
+  .soiree[data-appearance="auto"] .pm{border-color:var(--stroke)}
+  .soiree[data-appearance="auto"] .pm.is-on{border-color:var(--stroke-2)}
+  .soiree[data-appearance="auto"] .sheet{border-top-color:var(--stroke)}
+  .soiree[data-appearance="auto"] .toast{background:var(--accent);color:var(--on-accent);border-color:transparent}
+  .soiree[data-appearance="auto"] .toast .ic{color:var(--on-accent)}
+  .soiree[data-appearance="auto"] .price-add .pa-ic{background:rgba(255,255,255,.18)}
+  .soiree[data-appearance="auto"] .m-tag{border-color:var(--stroke-2)}
+  .soiree[data-appearance="auto"] .scrim{background:rgba(46,42,60,.42)}
+  .soiree[data-appearance="auto"] .splash{background:var(--bg)}
+  .soiree[data-appearance="auto"] .splash-bubbles i{border-color:var(--stroke-2)}
+  .soiree[data-appearance="auto"] .bubbles i{border-color:var(--stroke-2)}
+  .soiree[data-appearance="auto"] .bubbles i.fill{background:var(--stroke-2)}
+  .soiree[data-appearance="auto"] .check-badge circle{fill:var(--chip);stroke:var(--bg)}
+  .soiree[data-appearance="auto"] .hcard,
+  .soiree[data-appearance="auto"] .daily-card img{filter:none}
+}
+.soiree[data-appearance="light"] .pillnav{background:rgba(255,255,255,.94);border-color:var(--stroke)}
+.soiree[data-appearance="light"] .paytile,
+.soiree[data-appearance="light"] .pm{border-color:var(--stroke)}
+.soiree[data-appearance="light"] .pm.is-on{border-color:var(--stroke-2)}
+.soiree[data-appearance="light"] .sheet{border-top-color:var(--stroke)}
+.soiree[data-appearance="light"] .toast{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.soiree[data-appearance="light"] .toast .ic{color:var(--on-accent)}
+.soiree[data-appearance="light"] .price-add .pa-ic{background:rgba(255,255,255,.18)}
+.soiree[data-appearance="light"] .m-tag{border-color:var(--stroke-2)}
+.soiree[data-appearance="light"] .scrim{background:rgba(46,42,60,.42)}
+.soiree[data-appearance="light"] .splash{background:var(--bg)}
+.soiree[data-appearance="light"] .splash-bubbles i{border-color:var(--stroke-2)}
+.soiree[data-appearance="light"] .bubbles i{border-color:var(--stroke-2)}
+.soiree[data-appearance="light"] .bubbles i.fill{background:var(--stroke-2)}
+.soiree[data-appearance="light"] .check-badge circle{fill:var(--chip);stroke:var(--bg)}
+
+/* the coupon chip (F19) and the checkout error box (F2) */
+.soiree .coupon-applied{
+  display:flex;align-items:center;gap:9px;
+  background:var(--card);border:1px solid var(--stroke-2);border-radius:var(--r-pill);
+  padding:9px 9px 9px 16px;margin-top:9px;
+}
+[dir="rtl"] .soiree .coupon-applied{padding:9px 16px 9px 9px}
+.soiree .coupon-applied b{flex:1;font-size:13px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.soiree .coupon-applied small{font-size:11.5px;color:var(--muted);font-weight:600;flex:none}
+.soiree .coupon-clear{
+  width:44px;height:44px;flex:none;border-radius:50%;
+  display:grid;place-items:center;color:var(--muted);
+  transition:color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.soiree .coupon-clear:active{transform:scale(.86);color:var(--ink)}
+.soiree .coupon-clear .ic{width:16px;height:16px}
+
+/* ── F24 · utilities that replace the 15 inline style="…" attributes ──────
+   Every inline style attribute in index.blade.php generated a CSP report-only
+   violation on each page load (the style-src nonce cannot cover attributes), so
+   if CSP is ever ENFORCED this theme silently loses those declarations. Same
+   values, now in the stylesheet where the nonce does apply. */
+.soiree .stack-sm{margin-top:9px}
+.soiree .stack-md{margin-top:11px}
+.soiree .stack-lg{margin-top:16px}
+.soiree .ghostbtn.block{width:100%;justify-content:center;margin-bottom:10px}
+.soiree #browseTools{padding:0 0 12px}
+.soiree .coupon-field.is-solid{border-style:solid}
+.soiree #branchMap{height:300px;border-radius:14px;overflow:hidden;margin:6px 0}
+.soiree #branchMapAttrib{font-size:11px;opacity:.55;margin:6px 2px}
+.soiree #tableField.is-hidden{display:none}
+/* F2: a checkout error that renders below the fold with no scroll-into-view reads
+   as a dead button. It is pinned to the top of the checkout scroller instead. */
+.soiree .err-box{margin-top:12px;scroll-margin-block:80px}
+.soiree .order-band.slim .err-box{margin:0 0 11px;display:flex;align-items:center;gap:8px}
+.soiree .order-band.slim .err-box[hidden]{display:none}
+
+/* ── F23 · the menu row is a container of real buttons, not one button with
+   `role="button"` spans nested inside it (invalid, and unreachable by keyboard) */
+.soiree .m-main{flex:1;min-width:0;display:flex;align-items:center;gap:12px;text-align:start}
+.soiree .mrow:has(.m-main:active){transform:scale(.975)}
+/* a visible keyboard focus ring — the theme had none anywhere.
+   No `border-radius` here: it overrode the focused element's own radius, so
+   round controls (icon buttons, fav/qty circles) snapped to an 8px rounded-
+   square ring on focus. The outline follows each control's native radius. */
+.soiree :focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+.soiree .mrow:focus-within{box-shadow:0 0 0 1.5px var(--stroke-2),0 14px 26px -16px rgba(18,18,28,.65)}
+/* the NPS block moved from the (auto-redirecting) confirmation to the track page */
+.soiree .review-card .nps{margin-top:18px;max-width:none;justify-items:start;border-top:1px dashed var(--stroke-2);padding-top:16px}
+.soiree .review-card .nps[hidden]{display:none}
+.soiree .review-card .nps-row{flex-wrap:wrap}
+
+/* delivery address: saved chips + autocomplete + use-my-location (geo suite) */
+.soiree .saved-addrs{display:grid;gap:8px;margin-bottom:2px}
+.soiree .saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:11px 13px;border:1.5px solid var(--stroke);border-radius:16px;background:var(--card);color:var(--ink)}
+.soiree .saved-addr:active{transform:scale(.99)}
+.soiree .saved-addr .ic{flex:none;color:var(--muted)}
+.soiree .saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.soiree .saved-addr .sa-text b{font-size:13px;font-weight:700}
+.soiree .saved-addr .sa-text small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.soiree .saved-addr.is-on{border-color:var(--hi);box-shadow:0 0 0 1px var(--hi)}
+.soiree .saved-addr.is-on .ic{color:var(--hi)}
+.soiree .addr-field{position:relative}
+.soiree .addr-field input#custAddr,.soiree .addr-field input#cartAddr{padding-inline-end:46px}
+/* product reviews */
+.soiree .product-reviews:empty{display:none}
+.soiree .product-reviews{margin-top:18px}
+.soiree .product-reviews h4{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:10px}
+.soiree .review-card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-md);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-chip)}
+.soiree .review-card b{display:block;font-size:12.5px;font-weight:800}
+.soiree .review-stars{display:inline-block;font-size:12px;color:var(--hi);letter-spacing:2px;margin:2px 0}
+.soiree .review-stars-dim{color:var(--muted);opacity:.45}
+.soiree .review-card p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:2px 0 0}
+.soiree .reviews-empty{font-size:12.5px;color:var(--muted)}
+/* inline product quick-rate stars */
+.soiree .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:6px 0 14px;font-size:13px;font-weight:800}
+.soiree .rate-row .rate-label{flex:1 1 auto;min-width:0}
+.soiree .rate-stars{display:flex;gap:0;flex:none;color:var(--hi)}
+.soiree .rate-stars button{padding:7px;background:none;border:0;cursor:pointer;line-height:0}
+.soiree .rate-stars button .ic{width:22px;height:22px;fill:none;stroke:currentColor;opacity:.4;transition:opacity .15s,fill .15s}
+.soiree .rate-stars button.is-on .ic{fill:currentColor;stroke:currentColor;opacity:1}
+.soiree .uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--hi);background:none;border:0}
+.soiree .uselocbtn:active{transform:scale(.9)}
+.soiree .uselocbtn.is-loading{opacity:.5;animation:soi-loc-spin 1s linear infinite}
+.soiree .addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--card);border:1px solid var(--stroke-2);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-card);max-height:230px;overflow-y:auto}
+.soiree .addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--stroke)}
+.soiree .addr-opt:last-child{border-bottom:0}
+.soiree .addr-opt:active,.soiree .addr-opt:hover{background:var(--panel)}
+.soiree .geo-attrib{font-size:10px;color:var(--muted);margin-top:5px;text-align:center}
+@keyframes soi-loc-spin{to{transform:rotate(360deg)}}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+.soiree input[type=checkbox],.soiree input[type=radio]{inline-size:22px;block-size:22px}
+.soiree .splash-skip,.soiree .langbtn-top,.soiree .htab,.soiree .see-all,.soiree .ghostbtn{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.catchips button,.chiprow button,.qty-col button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, soiree skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Plum chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--chip);border:1px solid var(--stroke);color:var(--ink);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--muted)}
+
+/* ── notification-center panel — soiree skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--card,#44404D);--nb-surface-2:var(--tile,#302E3B);--nb-line:var(--stroke,rgba(121,121,147,.28));--nb-ink:var(--ink,#FFFFFF);--nb-muted:var(--muted,#797993);--nb-accent:var(--hi,#FFFFFF)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.soiree .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--muted);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — soirée skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#soBrandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#soFollowBtn. Maps the shared
+   --mbh-* token contract onto soirée's own scheme-aware tokens (card/ink/accent/
+   stroke/r-card/r-pill/r-lg) so re-ink holds on the dark/light flip (soirée ships
+   both --accent and --on-accent, and every surface/ink token flips under
+   data-appearance=light + the prefers-color-scheme:light auto media). No --r-sheet
+   token here, so the hub adopts --r-lg (28px) for its sheet corners. Only the hub
+   paints an opaque surface (a modal legitimately does); the chip + checkout
+   controls stay translucent / borderless so they never fight the theme. Scoped
+   under .soiree (the .soiree#app root the hub relocates into). Logical props for RTL.
+   ═══════════════════════════════════════════════════════════ */
+.soiree #mbHotelChip,
+.soiree #mbHotelOrderCtrls,
+.soiree #mbHotelBook,
+.soiree #mbHotelHub{
+  --mbh-surface:var(--card);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--muted);
+  --mbh-accent:var(--accent);
+  --mbh-on-accent:var(--on-accent);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill sitting with the follow button in the brand row ── */
+.soiree #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--chip);border:1px solid var(--stroke);color:var(--ink);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.soiree #mbHotelChip:active{transform:scale(.95)}
+/* Same reason as the info-link rows: --accent is a surface slate, invisible as an icon
+   colour on the chip's own --chip surface. */
+.soiree #mbHotelChip .mb-hotel-roomchip__ic{color:var(--hi)}
+.soiree #mbHotelChip .mb-hotel-roomchip__guest{color:var(--muted)}
+
+/* ── Hub: soirée's own bottom sheet (card surface, r-lg corners, grab + x) ── */
+.soiree #mbHotelHubScrim{background:rgba(14,14,22,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.soiree #mbHotelHub{
+  background:var(--card);color:var(--ink);
+  border-start-start-radius:var(--r-lg);border-start-end-radius:var(--r-lg);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.soiree #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.soiree #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.soiree #mbHotelHub .mb-hotel-hub__x{
+  background:var(--chip);color:var(--ink);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.soiree #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.soiree #mbHotelHub .mb-hotel-hub__greet{color:var(--muted)}
+.soiree #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.soiree #mbHotelHub .mb-hotel-card summary,
+.soiree #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+/* Info-link rows: soirée's --accent is a dark SURFACE slate (#48485B), all but identical
+   to the sheet's --card (#44404D) — using it as a text colour rendered the two rows as
+   blank bars. --hi is the theme's high-emphasis foreground and flips with the scheme, so
+   the rows stay readable in both. The chevron keeps the muted hue. */
+.soiree #mbHotelHub .mb-hotel-info-link{color:var(--hi)}
+.soiree #mbHotelHub .mb-hotel-info-link__ic{color:var(--hi)}
+.soiree #mbHotelHub .mb-hotel-info-link__go{color:var(--muted)}
+/* service form controls → soirée inputs / accent CTA */
+.soiree #mbHotelHub .mb-hotel-field{
+  background:var(--chip);border:1px solid var(--stroke);color:var(--ink);border-radius:var(--r-md);
+}
+.soiree #mbHotelHub .mb-hotel-btn{
+  /* --accent sits within a few percent of the sheet's --card, so the fill alone leaves
+     the button reading as a floating label. A hairline edge gives it a shape without
+     departing from soirée's deliberately low-contrast palette. */
+  background:var(--accent);color:var(--on-accent);border:1px solid var(--stroke-2);
+  border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → soirée tender rows ── */
+.soiree #mbHotelOrderCtrls{margin:0}
+.soiree #mbHotelSched,
+.soiree #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.soiree #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.soiree #mbHotelSched .mb-hotel-modes label{color:var(--muted);font-weight:600}
+.soiree #mbHotelSched input[type="radio"]{accent-color:var(--accent)}
+.soiree #mbHotelSched .mb-hotel-field{
+  background:var(--chip);border:1.5px solid var(--stroke);color:var(--ink);border-radius:var(--r-md);
+}
+.soiree #mbHotelSched .mb-hotel-note{color:var(--muted)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.soiree #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.soiree #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.soiree #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.soiree #mbHotelCharge .mb-hotel-greet__welcome{color:var(--muted)}
+.soiree #mbHotelCharge input[type="checkbox"]{accent-color:var(--accent)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .soiree, RTL-safe (logical props), scheme-flip via tokens. Reuses
+   --card/--stroke/--muted; the star is a scheme-aware champagne-gold TOKEN
+   (soiree's accent is its muted brand colour, wrong for a star). Dark is the
+   default face — #E4C580 champagne on the dark lounge; the daytime face
+   (auto/light) deepens it to #BF9B33 so the star reads on paper-white. */
+.soiree{--review-star:#E4C580}
+@media (prefers-color-scheme:light){.soiree[data-appearance="auto"]{--review-star:#BF9B33}}
+.soiree[data-appearance="light"]{--review-star:#BF9B33}
+.soiree .so-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.soiree .so-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--card);border:1px solid var(--stroke-2);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.soiree .so-rating-star{color:var(--review-star)}
+.soiree .so-rating small{color:var(--muted);font-weight:600}
+.soiree .so-review-list{display:flex;flex-direction:column;gap:8px}
+.soiree .so-review{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.soiree .so-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.soiree .so-review-star{color:var(--review-star);font-weight:800;white-space:nowrap}
+.soiree .so-review p{margin-block:5px 0;color:var(--muted);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.soiree .so-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for soiree. Surface,
+   ink, border and radius come from soiree tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.soiree .mb-paypending{
+  --pp-surface:var(--card,#44404D);
+  --pp-ink:var(--ink,#FFFFFF);
+  --pp-muted:var(--muted,#797993);
+  --pp-border:var(--stroke-2,rgba(121,121,147,.45));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,24px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.soiree .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.soiree .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.soiree .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.soiree .mb-paypending-txn:empty{display:none}
+.soiree .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.soiree .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.soiree .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.soiree .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.soiree .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing .wa-line — reset the UA button box to match the anchor rows. */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* ── Address map picker + clear-device-data (shared engines, soirée-skinned) ──
+   Map lives in soirée's own bottom sheet (.sheet) + a dedicated .so-map-scrim.
+   The sheet toggles a private .so-open state (never .is-open) so the theme's
+   global sheet() close wiring never touches it. Controls mirror the theme's
+   ghost pill (.ghostbtn) and muted rows. */
+.soiree .so-map-trigger{margin-top:12px}
+.soiree .so-map-trigger .ic{color:var(--muted)}
+/* dedicated scrim + sheet — same look as soirée's native ones, own open state */
+.soiree .so-map-scrim{opacity:0;pointer-events:none}
+.soiree .so-map-scrim.so-open{opacity:1;pointer-events:auto}
+.soiree .so-map-sheet{transform:translateY(105%);display:flex;flex-direction:column;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.soiree .so-map-sheet.so-open{transform:none}
+.soiree .so-map-sheet:not(.so-open){pointer-events:none}
+/* native drag handle + round close (mirrors .sheet-grab / .sheet-x, own classes
+   so soirée's global .sheet-grab close handler never fires on this sheet) */
+.soiree .so-map-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.soiree .so-map-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 14%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.soiree .so-map-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.soiree .so-map-x:active{transform:scale(.9)}
+/* map area — soirée card surround, responsive height */
+.soiree .so-map-canvas{position:relative;height:min(52vh,360px);border-radius:16px;overflow:hidden;margin:4px 0 2px;background:var(--tile);border:1px solid var(--stroke)}
+.soiree .so-map-canvas .leaflet-container{width:100%;height:100%;font:inherit;background:var(--tile)}
+.soiree .so-map-preview{margin:10px 2px 2px;font-size:12.5px;line-height:1.45;color:var(--muted);min-height:18px;text-align:center}
+/* centre pin the engine injects (.mb-map-pin) — soirée accent teardrop */
+.soiree .mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(10,10,18,.6))}
+.soiree .mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--accent);border:2px solid var(--hi)}
+.soiree .mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--hi)}
+/* clear-saved-data row in the profile sheet */
+.soiree .so-device-data{margin-top:16px;padding-top:14px;border-top:1px solid var(--stroke);text-align:center}
+.soiree .so-cleardata{color:var(--muted)}
+.soiree .so-cleardata .ic{width:16px;height:16px;fill:none;stroke:currentColor}
+.soiree .so-cleardata:active{transform:scale(.96)}
+.soiree .so-device-data-hint{margin:8px auto 0;max-width:38ch;font-size:11px;line-height:1.5;color:var(--muted);opacity:.8}

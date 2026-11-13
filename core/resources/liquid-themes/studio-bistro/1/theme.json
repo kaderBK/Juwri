@@ -1,0 +1,24 @@
+{
+    "name": "Studio Bistro",
+    "slug": "studio-bistro",
+    "version": "1",
+    "author": "juwri",
+    "description": "A warm, photo-led restaurant storefront built from the Theme Studio section library: cover hero, stories, dietary filters, sticky categories and a full photo menu, with reviews, hours and map. Rearrange every section in Theme Studio.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "fine_dining",
+    "vertical": "food",
+    "recipe": "restaurant/classic",
+    "tokens": {
+        "colors.primary": "#b3401f",
+        "colors.background": "#fbf7f2",
+        "colors.surface": "#ffffff",
+        "colors.text": "#231a15",
+        "colors.accent": "#8a5a00",
+        "layout.radius": "round",
+        "layout.density": "cozy",
+        "fonts.pair": "jakarta"
+    }
+}

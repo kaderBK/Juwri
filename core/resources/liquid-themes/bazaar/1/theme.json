@@ -1,0 +1,9 @@
+{
+  "name": "Bazaar (Liquid)",
+  "slug": "bazaar",
+  "version": "1",
+  "author": "juwri",
+  "description": "Clean, white-card storefront for goods and services stores — built for the multi-vertical platform. Every noun is read from the {{ vocab }} global, so the same package sells \"Products\" for a shop, \"Services\" for a business or \"Rooms\" for a stay. Search, category chips, one-tap add-to-cart, cart + checkout via the commerce runtime, a product deep-link view, dark mode and RTL/Arabic are all included. Zero custom JS.",
+  "min_platform_version": "2.0",
+  "source": "liquid"
+}

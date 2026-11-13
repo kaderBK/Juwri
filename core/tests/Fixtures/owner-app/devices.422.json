@@ -1,0 +1,18 @@
+{
+    "status": 422,
+    "body": {
+        "code": "string",
+        "errors": {
+            "platform": {
+                "list_of": "string"
+            },
+            "store_id": {
+                "list_of": "string"
+            },
+            "token": {
+                "list_of": "string"
+            }
+        },
+        "message": "string"
+    }
+}

@@ -1,0 +1,4774 @@
+{
+ "store": {
+  "slug": "fresh-mart-demo",
+  "name": {
+   "en": "Fresh Mart",
+   "ar": "فريش مارت"
+  },
+  "tagline": {
+   "en": "Groceries delivered in 25 minutes",
+   "ar": "بقالتك تصلك خلال 25 دقيقة"
+  },
+  "store_type": "grocery",
+  "theme": "basket",
+  "preset": "fresh",
+  "currency": "SAR",
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15
+  },
+  "order_types": [
+   "delivery",
+   "pickup_slot"
+  ],
+  "delivery": {
+   "fee": "9.00",
+   "express_fee": "5.00",
+   "min_order": "80.00",
+   "free_over": "90.00",
+   "radius_km": 8,
+   "eta_minutes": 25,
+   "slot_hours": [
+    [
+     "09:00",
+     "11:00"
+    ],
+    [
+     "11:00",
+     "13:00"
+    ],
+    [
+     "13:00",
+     "15:00"
+    ],
+    [
+     "15:00",
+     "17:00"
+    ],
+    [
+     "17:00",
+     "19:00"
+    ],
+    [
+     "19:00",
+     "21:00"
+    ],
+    [
+     "21:00",
+     "23:00"
+    ]
+   ]
+  },
+  "weighed_items": {
+   "cap_percent": 10
+  },
+  "hours": {
+   "timezone": "Asia/Riyadh",
+   "weekly": {
+    "sun": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "mon": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "tue": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "wed": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "thu": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "fri": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ],
+    "sat": [
+     [
+      "08:00",
+      "00:00"
+     ]
+    ]
+   }
+  },
+  "address": {
+   "en": "Al Olaya, Riyadh",
+   "ar": "العليا، الرياض"
+  },
+  "phone": "+966 55 010 0103",
+  "phone_is_demo": true,
+  "identity": {
+   "legal_name": {
+    "en": "Fresh Mart Markets Co.",
+    "ar": "شركة فريش مارت للأسواق"
+   },
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-3303",
+    "label": {
+     "en": "Commercial registration (CR)",
+     "ar": "السجل التجاري"
+    }
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-3303",
+    "label": {
+     "en": "VAT number",
+     "ar": "الرقم الضريبي"
+    }
+   },
+   "address": {
+    "en": "Al Olaya, Riyadh 12214",
+    "ar": "العليا، الرياض 12214"
+   }
+  },
+  "identity_is_demo": true,
+  "description": {
+   "en": "Neighbourhood supermarket with fresh produce, a butcher counter and daily bakes, delivered to your door in about 25 minutes.",
+   "ar": "سوبرماركت الحي بخضار وفواكه طازجة وقسم لحوم ومخبوزات يومية، يصلك إلى بابك خلال 25 دقيقة تقريباً."
+  }
+ },
+ "allergen_catalog": [
+  {
+   "key": "gluten",
+   "title": {
+    "en": "Gluten",
+    "ar": "الغلوتين"
+   }
+  },
+  {
+   "key": "dairy",
+   "title": {
+    "en": "Dairy",
+    "ar": "الحليب ومشتقاته"
+   }
+  },
+  {
+   "key": "nuts",
+   "title": {
+    "en": "Tree nuts",
+    "ar": "المكسرات"
+   }
+  },
+  {
+   "key": "sesame",
+   "title": {
+    "en": "Sesame",
+    "ar": "السمسم"
+   }
+  },
+  {
+   "key": "eggs",
+   "title": {
+    "en": "Eggs",
+    "ar": "البيض"
+   }
+  },
+  {
+   "key": "fish",
+   "title": {
+    "en": "Fish",
+    "ar": "الأسماك"
+   }
+  },
+  {
+   "key": "shellfish",
+   "title": {
+    "en": "Shellfish",
+    "ar": "القشريات"
+   }
+  },
+  {
+   "key": "soy",
+   "title": {
+    "en": "Soy",
+    "ar": "الصويا"
+   }
+  },
+  {
+   "key": "peanuts",
+   "title": {
+    "en": "Peanuts",
+    "ar": "الفول السوداني"
+   }
+  }
+ ],
+ "categories": [
+  {
+   "slug": "fruits-veg",
+   "position": 0,
+   "name": {
+    "en": "Fruits & vegetables",
+    "ar": "الفواكه والخضار"
+   },
+   "description": {
+    "en": "Picked fresh, delivered daily",
+    "ar": "مقطوفة طازجة وتصلك يومياً"
+   }
+  },
+  {
+   "slug": "dairy-eggs",
+   "position": 1,
+   "name": {
+    "en": "Dairy & eggs",
+    "ar": "الألبان والبيض"
+   },
+   "description": {
+    "en": "Milk, labneh, cheese and eggs",
+    "ar": "حليب ولبنة وأجبان وبيض"
+   }
+  },
+  {
+   "slug": "bakery",
+   "position": 2,
+   "name": {
+    "en": "Bakery",
+    "ar": "المخبوزات"
+   },
+   "description": {
+    "en": "Bread and pastries baked daily",
+    "ar": "خبز ومعجنات تُخبز يومياً"
+   }
+  },
+  {
+   "slug": "meat-fish",
+   "position": 3,
+   "name": {
+    "en": "Meat & fish",
+    "ar": "اللحوم والأسماك"
+   },
+   "description": {
+    "en": "Fresh cuts, cleaned and packed",
+    "ar": "قطع طازجة منظّفة ومعبأة"
+   }
+  },
+  {
+   "slug": "drinks",
+   "position": 4,
+   "name": {
+    "en": "Drinks",
+    "ar": "المشروبات"
+   },
+   "description": {
+    "en": "Water, juice, coffee and tea",
+    "ar": "مياه وعصائر وقهوة وشاي"
+   }
+  },
+  {
+   "slug": "snacks",
+   "position": 5,
+   "name": {
+    "en": "Snacks",
+    "ar": "الوجبات الخفيفة"
+   },
+   "description": {
+    "en": "Chocolate, nuts and crisps",
+    "ar": "شوكولاتة ومكسرات ورقائق"
+   }
+  },
+  {
+   "slug": "pantry",
+   "position": 6,
+   "name": {
+    "en": "Pantry",
+    "ar": "المواد الغذائية"
+   },
+   "description": {
+    "en": "Rice, oil, spices and tins",
+    "ar": "أرز وزيوت وبهارات ومعلبات"
+   }
+  },
+  {
+   "slug": "household",
+   "position": 7,
+   "name": {
+    "en": "Household",
+    "ar": "المنزل"
+   },
+   "description": {
+    "en": "Cleaning and paper goods",
+    "ar": "منظفات ومنتجات ورقية"
+   }
+  },
+  {
+   "slug": "baby",
+   "position": 8,
+   "name": {
+    "en": "Baby",
+    "ar": "الطفل"
+   },
+   "description": {
+    "en": "Nappies, wipes and baby food",
+    "ar": "حفاضات ومناديل وغذاء الأطفال"
+   }
+  }
+ ],
+ "items": [
+  {
+   "slug": "bananas",
+   "sku": "FM-00001",
+   "barcode": "6280001000009",
+   "category": "fruits-veg",
+   "position": 0,
+   "name": {
+    "en": "Bananas",
+    "ar": "موز"
+   },
+   "description": {
+    "en": "Sweet and ripe, sold loose by weight.",
+    "ar": "حلو وناضج يُباع بالوزن."
+   },
+   "price": "6.50",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Ecuador",
+    "ar": "الإكوادور"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Bananas, sweet and ripe, sold loose by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 89,
+    "protein": 1.1,
+    "carbs": 23.0,
+    "fat": 0.3
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "tomatoes-on-the-vine",
+   "sku": "FM-00002",
+   "barcode": "6280001000016",
+   "category": "fruits-veg",
+   "position": 1,
+   "name": {
+    "en": "Tomatoes on the vine",
+    "ar": "طماطم عنقودية"
+   },
+   "description": {
+    "en": "Juicy vine tomatoes with a deep flavour.",
+    "ar": "طماطم عنقودية عصيرية بنكهة غنية."
+   },
+   "price": "11.80",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Tomatoes on the vine, juicy vine tomatoes with a deep flavour, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 18,
+    "protein": 0.9,
+    "carbs": 3.9,
+    "fat": 0.2
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "avocado-hass-ready-to-eat",
+   "sku": "FM-00003",
+   "barcode": "6280001000023",
+   "category": "fruits-veg",
+   "position": 2,
+   "name": {
+    "en": "Avocado Hass, ready to eat",
+    "ar": "أفوكادو هاس جاهز للأكل"
+   },
+   "description": {
+    "en": "Creamy flesh, ripe today.",
+    "ar": "لب كريمي ناضج وجاهز اليوم."
+   },
+   "price": "9.95",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Kenya",
+    "ar": "كينيا"
+   },
+   "pack_size": 2,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Avocado Hass, ready to eat, creamy flesh, ripe today, plain white background, centred, soft shadow, no text, no logos",
+   "compare_at_price": "12.50",
+   "nutrition_per_100g": {
+    "calories": 160,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "strawberries",
+   "sku": "FM-00004",
+   "barcode": "6280001000030",
+   "category": "fruits-veg",
+   "position": 3,
+   "name": {
+    "en": "Strawberries",
+    "ar": "فراولة"
+   },
+   "description": {
+    "en": "Sweet red berries, hand-picked.",
+    "ar": "حبات حمراء حلوة مقطوفة يدوياً."
+   },
+   "price": "14.95",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Egypt",
+    "ar": "مصر"
+   },
+   "pack_size": 250,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Strawberries, sweet red berries, hand-picked, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 32,
+    "protein": 0.7,
+    "carbs": 7.7,
+    "fat": 0.3
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "raspberries",
+   "sku": "FM-00005",
+   "barcode": "6280001000047",
+   "category": "fruits-veg",
+   "position": 4,
+   "name": {
+    "en": "Raspberries",
+    "ar": "توت العليق"
+   },
+   "description": {
+    "en": "Tart and juicy, great with yoghurt.",
+    "ar": "حامض ومنعش ومناسب مع الزبادي."
+   },
+   "price": "12.50",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Spain",
+    "ar": "إسبانيا"
+   },
+   "pack_size": 125,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Raspberries, tart and juicy, great with yoghurt, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 52,
+    "protein": 1.2,
+    "carbs": 12.0,
+    "fat": 0.7
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "cucumbers",
+   "sku": "FM-00006",
+   "barcode": "6280001000054",
+   "category": "fruits-veg",
+   "position": 5,
+   "name": {
+    "en": "Cucumbers",
+    "ar": "خيار"
+   },
+   "description": {
+    "en": "Crisp and cool, sold by weight.",
+    "ar": "مقرمش ومنعش يُباع بالوزن."
+   },
+   "price": "4.90",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Cucumbers, crisp and cool, sold by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 15,
+    "protein": 0.7,
+    "carbs": 3.6,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "red-apples",
+   "sku": "FM-00007",
+   "barcode": "6280001000061",
+   "category": "fruits-veg",
+   "position": 6,
+   "name": {
+    "en": "Red apples",
+    "ar": "تفاح أحمر"
+   },
+   "description": {
+    "en": "Crunchy and sweet, sold by weight.",
+    "ar": "مقرمش وحلو يُباع بالوزن."
+   },
+   "price": "9.50",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Red apples, crunchy and sweet, sold by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 52,
+    "protein": 0.3,
+    "carbs": 14.0,
+    "fat": 0.2
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "oranges",
+   "sku": "FM-00008",
+   "barcode": "6280001000078",
+   "category": "fruits-veg",
+   "position": 7,
+   "name": {
+    "en": "Oranges",
+    "ar": "برتقال"
+   },
+   "description": {
+    "en": "Juicy navel oranges, sold by weight.",
+    "ar": "برتقال عصيري يُباع بالوزن."
+   },
+   "price": "7.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Egypt",
+    "ar": "مصر"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Oranges, juicy navel oranges, sold by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "compare_at_price": "9.00",
+   "nutrition_per_100g": {
+    "calories": 47,
+    "protein": 0.9,
+    "carbs": 12.0,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "mango",
+   "sku": "FM-00009",
+   "barcode": "6280001000085",
+   "category": "fruits-veg",
+   "position": 8,
+   "name": {
+    "en": "Mango",
+    "ar": "مانجو"
+   },
+   "description": {
+    "en": "Sweet, fragrant, sold by weight.",
+    "ar": "حلو برائحة زكية يُباع بالوزن."
+   },
+   "price": "18.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Pakistan",
+    "ar": "باكستان"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Mango, sweet, fragrant, sold by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 60,
+    "protein": 0.8,
+    "carbs": 15.0,
+    "fat": 0.4
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "khalas-dates",
+   "sku": "FM-00010",
+   "barcode": "6280001000092",
+   "category": "fruits-veg",
+   "position": 9,
+   "name": {
+    "en": "Khalas dates",
+    "ar": "تمر خلاص"
+   },
+   "description": {
+    "en": "Soft, caramel-like dates from Al Ahsa.",
+    "ar": "تمر طري بطعم الكراميل من الأحساء."
+   },
+   "price": "24.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Khalas dates, soft, caramel-like dates from Al Ahsa, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 277,
+    "protein": 1.8,
+    "carbs": 75.0,
+    "fat": 0.2
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "lemons",
+   "sku": "FM-00011",
+   "barcode": "6280001000108",
+   "category": "fruits-veg",
+   "position": 10,
+   "name": {
+    "en": "Lemons",
+    "ar": "ليمون"
+   },
+   "description": {
+    "en": "Thin-skinned and very juicy.",
+    "ar": "قشرة رقيقة وعصير وفير."
+   },
+   "price": "5.50",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Lemons, thin-skinned and very juicy, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 29,
+    "protein": 1.1,
+    "carbs": 9.0,
+    "fat": 0.3
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "potatoes",
+   "sku": "FM-00012",
+   "barcode": "6280001000115",
+   "category": "fruits-veg",
+   "position": 11,
+   "name": {
+    "en": "Potatoes",
+    "ar": "بطاطس"
+   },
+   "description": {
+    "en": "All-round potatoes for frying or baking.",
+    "ar": "بطاطس متعددة الاستخدامات للقلي أو الخبز."
+   },
+   "price": "7.90",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Egypt",
+    "ar": "مصر"
+   },
+   "pack_size": 2,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Potatoes, all-round potatoes for frying or baking, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 77,
+    "protein": 2.0,
+    "carbs": 17.0,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "onions",
+   "sku": "FM-00013",
+   "barcode": "6280001000122",
+   "category": "fruits-veg",
+   "position": 12,
+   "name": {
+    "en": "Onions",
+    "ar": "بصل"
+   },
+   "description": {
+    "en": "Yellow cooking onions.",
+    "ar": "بصل أصفر للطبخ."
+   },
+   "price": "5.90",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "India",
+    "ar": "الهند"
+   },
+   "pack_size": 2,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "low_stock"
+   ],
+   "track_inventory": true,
+   "stock_qty": 4,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Onions, yellow cooking onions, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 40,
+    "protein": 1.1,
+    "carbs": 9.3,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "baby-spinach",
+   "sku": "FM-00014",
+   "barcode": "6280001000139",
+   "category": "fruits-veg",
+   "position": 13,
+   "name": {
+    "en": "Baby spinach",
+    "ar": "سبانخ صغيرة"
+   },
+   "description": {
+    "en": "Washed and ready to eat.",
+    "ar": "مغسولة وجاهزة للأكل."
+   },
+   "price": "6.50",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Baby spinach, washed and ready to eat, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 23,
+    "protein": 2.9,
+    "carbs": 3.6,
+    "fat": 0.4
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "fresh-mint",
+   "sku": "FM-00015",
+   "barcode": "6280001000146",
+   "category": "fruits-veg",
+   "position": 14,
+   "name": {
+    "en": "Fresh mint",
+    "ar": "نعناع طازج"
+   },
+   "description": {
+    "en": "One generous bunch.",
+    "ar": "حزمة كبيرة."
+   },
+   "price": "2.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Fresh mint, one generous bunch, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 44,
+    "protein": 3.3,
+    "carbs": 8.0,
+    "fat": 0.7
+   },
+   "storage": {
+    "en": "Keep in the fridge. Wash before eating.",
+    "ar": "يُحفظ في الثلاجة. يُغسل قبل الأكل."
+   }
+  },
+  {
+   "slug": "full-fat-milk",
+   "sku": "FM-00016",
+   "barcode": "6280001000153",
+   "category": "dairy-eggs",
+   "position": 15,
+   "name": {
+    "en": "Full-fat milk",
+    "ar": "حليب كامل الدسم"
+   },
+   "description": {
+    "en": "Fresh, pasteurised and homogenised.",
+    "ar": "حليب طازج مبستر ومتجانس."
+   },
+   "price": "19.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 2,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Full-fat milk, fresh, pasteurised and homogenised, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 61,
+    "protein": 3.2,
+    "carbs": 4.8,
+    "fat": 3.3
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "low-fat-milk",
+   "sku": "FM-00017",
+   "barcode": "6280001000160",
+   "category": "dairy-eggs",
+   "position": 16,
+   "name": {
+    "en": "Low-fat milk",
+    "ar": "حليب قليل الدسم"
+   },
+   "description": {
+    "en": "Light milk with 1% fat.",
+    "ar": "حليب خفيف بنسبة دسم 1٪."
+   },
+   "price": "8.50",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Low-fat milk, light milk with 1% fat, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 42,
+    "protein": 3.4,
+    "carbs": 5.0,
+    "fat": 1.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "laban",
+   "sku": "FM-00018",
+   "barcode": "6280001000177",
+   "category": "dairy-eggs",
+   "position": 17,
+   "name": {
+    "en": "Laban",
+    "ar": "لبن"
+   },
+   "description": {
+    "en": "Cultured buttermilk, cold and tangy.",
+    "ar": "لبن رائب بارد ومنعش."
+   },
+   "price": "6.50",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Laban, cultured buttermilk, cold and tangy, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 40,
+    "protein": 3.3,
+    "carbs": 4.7,
+    "fat": 1.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "greek-yoghurt",
+   "sku": "FM-00019",
+   "barcode": "6280001000184",
+   "category": "dairy-eggs",
+   "position": 18,
+   "name": {
+    "en": "Greek yoghurt",
+    "ar": "زبادي يوناني"
+   },
+   "description": {
+    "en": "Thick, creamy and high in protein.",
+    "ar": "كثيف وكريمي وغني بالبروتين."
+   },
+   "price": "12.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 450,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Greek yoghurt, thick, creamy and high in protein, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 97,
+    "protein": 9.0,
+    "carbs": 4.0,
+    "fat": 5.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "plain-yoghurt",
+   "sku": "FM-00020",
+   "barcode": "6280001000191",
+   "category": "dairy-eggs",
+   "position": 19,
+   "name": {
+    "en": "Plain yoghurt",
+    "ar": "زبادي سادة"
+   },
+   "description": {
+    "en": "Mild everyday yoghurt.",
+    "ar": "زبادي سادة للاستخدام اليومي."
+   },
+   "price": "11.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Plain yoghurt, mild everyday yoghurt, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 61,
+    "protein": 3.5,
+    "carbs": 4.7,
+    "fat": 3.3
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "labneh",
+   "sku": "FM-00021",
+   "barcode": "6280001000207",
+   "category": "dairy-eggs",
+   "position": 20,
+   "name": {
+    "en": "Labneh",
+    "ar": "لبنة"
+   },
+   "description": {
+    "en": "Strained yoghurt, spreadable.",
+    "ar": "زبادي مصفّى سهل الدهن."
+   },
+   "price": "14.50",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Labneh, strained yoghurt, spreadable, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 170,
+    "protein": 6.0,
+    "carbs": 4.0,
+    "fat": 14.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "halloumi",
+   "sku": "FM-00022",
+   "barcode": "6280001000214",
+   "category": "dairy-eggs",
+   "position": 21,
+   "name": {
+    "en": "Halloumi",
+    "ar": "جبنة حلوم"
+   },
+   "description": {
+    "en": "Squeaky cheese made for grilling.",
+    "ar": "جبنة مثالية للشوي."
+   },
+   "price": "16.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Jordan",
+    "ar": "الأردن"
+   },
+   "pack_size": 250,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Halloumi, squeaky cheese made for grilling, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 321,
+    "protein": 21.0,
+    "carbs": 2.0,
+    "fat": 25.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "cheddar-slices",
+   "sku": "FM-00023",
+   "barcode": "6280001000221",
+   "category": "dairy-eggs",
+   "position": 22,
+   "name": {
+    "en": "Cheddar slices",
+    "ar": "شرائح جبنة شيدر"
+   },
+   "description": {
+    "en": "Ten slices, individually wrapped.",
+    "ar": "عشر شرائح مغلفة بشكل فردي."
+   },
+   "price": "12.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Netherlands",
+    "ar": "هولندا"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Cheddar slices, ten slices, individually wrapped, plain white background, centred, soft shadow, no text, no logos",
+   "compare_at_price": "14.50",
+   "nutrition_per_100g": {
+    "calories": 403,
+    "protein": 23.0,
+    "carbs": 1.3,
+    "fat": 33.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "cream-cheese",
+   "sku": "FM-00024",
+   "barcode": "6280001000238",
+   "category": "dairy-eggs",
+   "position": 23,
+   "name": {
+    "en": "Cream cheese",
+    "ar": "جبنة كريمية"
+   },
+   "description": {
+    "en": "Smooth and spreadable.",
+    "ar": "ناعمة وسهلة الدهن."
+   },
+   "price": "9.50",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Cream cheese, smooth and spreadable, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 342,
+    "protein": 6.0,
+    "carbs": 4.0,
+    "fat": 34.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "salted-butter",
+   "sku": "FM-00025",
+   "barcode": "6280001000245",
+   "category": "dairy-eggs",
+   "position": 24,
+   "name": {
+    "en": "Salted butter",
+    "ar": "زبدة مملحة"
+   },
+   "description": {
+    "en": "Churned from fresh cream.",
+    "ar": "مخفوقة من القشطة الطازجة."
+   },
+   "price": "13.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "New Zealand",
+    "ar": "نيوزيلندا"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Salted butter, churned from fresh cream, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 717,
+    "protein": 0.9,
+    "carbs": 0.1,
+    "fat": 81.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "eggs",
+   "sku": "FM-00026",
+   "barcode": "6280001000252",
+   "category": "dairy-eggs",
+   "position": 25,
+   "name": {
+    "en": "Eggs",
+    "ar": "بيض"
+   },
+   "description": {
+    "en": "Large white eggs, tray of 30.",
+    "ar": "بيض أبيض كبير، طبق 30 حبة."
+   },
+   "price": "29.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 30,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "eggs"
+   ],
+   "image_prompt": "Product photo on white of Eggs, large white eggs, tray of 30, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 143,
+    "protein": 12.6,
+    "carbs": 0.7,
+    "fat": 9.5
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "whipping-cream",
+   "sku": "FM-00027",
+   "barcode": "6280001000269",
+   "category": "dairy-eggs",
+   "position": 26,
+   "name": {
+    "en": "Whipping cream",
+    "ar": "قشطة للخفق"
+   },
+   "description": {
+    "en": "35% fat, for desserts and sauces.",
+    "ar": "دسم 35٪ للحلويات والصلصات."
+   },
+   "price": "8.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 250,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Whipping cream, 35% fat, for desserts and sauces, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 340,
+    "protein": 2.0,
+    "carbs": 3.0,
+    "fat": 36.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 1–4 °C.",
+    "ar": "يُحفظ مبرداً بين 1 و4 درجات مئوية."
+   }
+  },
+  {
+   "slug": "sourdough-loaf",
+   "sku": "FM-00028",
+   "barcode": "6280001000276",
+   "category": "bakery",
+   "position": 27,
+   "name": {
+    "en": "Sourdough loaf",
+    "ar": "خبز العجين المخمّر"
+   },
+   "description": {
+    "en": "Slow-fermented, crisp crust.",
+    "ar": "مخمّر ببطء بقشرة مقرمشة."
+   },
+   "price": "14.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 800,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Sourdough loaf, slow-fermented, crisp crust, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 250,
+    "protein": 9.0,
+    "carbs": 49.0,
+    "fat": 1.5
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "arabic-flatbread",
+   "sku": "FM-00029",
+   "barcode": "6280001000283",
+   "category": "bakery",
+   "position": 28,
+   "name": {
+    "en": "Arabic flatbread",
+    "ar": "خبز عربي"
+   },
+   "description": {
+    "en": "Soft white pita, pack of 7.",
+    "ar": "خبز أبيض طري، 7 أرغفة."
+   },
+   "price": "3.50",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 7,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Arabic flatbread, soft white pita, pack of 7, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 275,
+    "protein": 9.0,
+    "carbs": 56.0,
+    "fat": 1.2
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "wholemeal-toast",
+   "sku": "FM-00030",
+   "barcode": "6280001000290",
+   "category": "bakery",
+   "position": 29,
+   "name": {
+    "en": "Wholemeal toast",
+    "ar": "توست بر"
+   },
+   "description": {
+    "en": "Sliced, 600 g loaf.",
+    "ar": "شرائح، رغيف 600 جرام."
+   },
+   "price": "5.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 600,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Wholemeal toast, sliced, 600 g loaf, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 247,
+    "protein": 10.0,
+    "carbs": 41.0,
+    "fat": 3.4
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "butter-croissants",
+   "sku": "FM-00031",
+   "barcode": "6280001000306",
+   "category": "bakery",
+   "position": 30,
+   "name": {
+    "en": "Butter croissants",
+    "ar": "كرواسون بالزبدة"
+   },
+   "description": {
+    "en": "Four flaky croissants.",
+    "ar": "أربع حبات كرواسون هشة."
+   },
+   "price": "12.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": 4,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "image_prompt": "Product photo on white of Butter croissants, four flaky croissants, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 406,
+    "protein": 8.0,
+    "carbs": 45.0,
+    "fat": 21.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "wholemeal-pita",
+   "sku": "FM-00032",
+   "barcode": "6280001000313",
+   "category": "bakery",
+   "position": 31,
+   "name": {
+    "en": "Wholemeal pita",
+    "ar": "خبز بيتا بر"
+   },
+   "description": {
+    "en": "Six high-fibre pockets.",
+    "ar": "ست أرغفة غنية بالألياف."
+   },
+   "price": "4.50",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Wholemeal pita, six high-fibre pockets, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 250,
+    "protein": 10.0,
+    "carbs": 46.0,
+    "fat": 2.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "burger-buns",
+   "sku": "FM-00033",
+   "barcode": "6280001000320",
+   "category": "bakery",
+   "position": 32,
+   "name": {
+    "en": "Burger buns",
+    "ar": "خبز برجر"
+   },
+   "description": {
+    "en": "Soft sesame buns, pack of 6.",
+    "ar": "خبز طري بالسمسم، 6 حبات."
+   },
+   "price": "7.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "sesame"
+   ],
+   "image_prompt": "Product photo on white of Burger buns, soft sesame buns, pack of 6, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 270,
+    "protein": 9.0,
+    "carbs": 50.0,
+    "fat": 4.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "tortilla-wraps",
+   "sku": "FM-00034",
+   "barcode": "6280001000337",
+   "category": "bakery",
+   "position": 33,
+   "name": {
+    "en": "Tortilla wraps",
+    "ar": "خبز تورتيلا"
+   },
+   "description": {
+    "en": "Eight 25 cm wraps.",
+    "ar": "8 أرغفة بقطر 25 سم."
+   },
+   "price": "9.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 8,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Tortilla wraps, eight 25 cm wraps, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 310,
+    "protein": 8.0,
+    "carbs": 52.0,
+    "fat": 7.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "zaatar-manakish",
+   "sku": "FM-00035",
+   "barcode": "6280001000344",
+   "category": "bakery",
+   "position": 34,
+   "name": {
+    "en": "Zaatar manakish",
+    "ar": "مناقيش زعتر"
+   },
+   "description": {
+    "en": "Four baked flatbreads with zaatar.",
+    "ar": "أربع أقراص مخبوزة بالزعتر."
+   },
+   "price": "14.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 4,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "sesame"
+   ],
+   "image_prompt": "Product photo on white of Zaatar manakish, four baked flatbreads with zaatar, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 290,
+    "protein": 8.0,
+    "carbs": 42.0,
+    "fat": 10.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "cinnamon-rolls",
+   "sku": "FM-00036",
+   "barcode": "6280001000351",
+   "category": "bakery",
+   "position": 35,
+   "name": {
+    "en": "Cinnamon rolls",
+    "ar": "لفائف القرفة"
+   },
+   "description": {
+    "en": "Four rolls with sweet glaze.",
+    "ar": "أربع لفائف بطبقة حلوة."
+   },
+   "price": "15.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 4,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "dairy",
+    "eggs"
+   ],
+   "image_prompt": "Product photo on white of Cinnamon rolls, four rolls with sweet glaze, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 380,
+    "protein": 6.0,
+    "carbs": 55.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "date-bars",
+   "sku": "FM-00037",
+   "barcode": "6280001000368",
+   "category": "bakery",
+   "position": 36,
+   "name": {
+    "en": "Date bars",
+    "ar": "ألواح التمر"
+   },
+   "description": {
+    "en": "Soft oat bars with Sukkari dates.",
+    "ar": "ألواح شوفان طرية بتمر السكري."
+   },
+   "price": "11.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "nuts"
+   ],
+   "image_prompt": "Product photo on white of Date bars, soft oat bars with Sukkari dates, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 360,
+    "protein": 5.0,
+    "carbs": 58.0,
+    "fat": 12.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Best within 3 days.",
+    "ar": "يُحفظ في مكان بارد وجاف. الأفضل خلال 3 أيام."
+   }
+  },
+  {
+   "slug": "chicken-breast-fillet",
+   "sku": "FM-00038",
+   "barcode": "6280001000375",
+   "category": "meat-fish",
+   "position": 37,
+   "name": {
+    "en": "Chicken breast fillet",
+    "ar": "صدر دجاج"
+   },
+   "description": {
+    "en": "Skinless and boneless, cut to order.",
+    "ar": "بدون جلد وعظم، يُقطع عند الطلب."
+   },
+   "price": "28.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Chicken breast fillet, skinless and boneless, cut to order, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 165,
+    "protein": 31.0,
+    "carbs": 0.0,
+    "fat": 3.6
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "whole-chicken",
+   "sku": "FM-00039",
+   "barcode": "6280001000382",
+   "category": "meat-fish",
+   "position": 38,
+   "name": {
+    "en": "Whole chicken",
+    "ar": "دجاجة كاملة"
+   },
+   "description": {
+    "en": "Fresh whole chicken, about 1.2 kg.",
+    "ar": "دجاجة كاملة طازجة بوزن 1٫2 كجم تقريباً."
+   },
+   "price": "25.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1.2,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Whole chicken, fresh whole chicken, about 1.2 kg, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 215,
+    "protein": 18.0,
+    "carbs": 0.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "minced-beef",
+   "sku": "FM-00040",
+   "barcode": "6280001000399",
+   "category": "meat-fish",
+   "position": 39,
+   "name": {
+    "en": "Minced beef",
+    "ar": "لحم بقري مفروم"
+   },
+   "description": {
+    "en": "Lean, ground daily.",
+    "ar": "قليل الدسم ويُفرم يومياً."
+   },
+   "price": "29.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Australia",
+    "ar": "أستراليا"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Minced beef, lean, ground daily, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 215,
+    "protein": 19.0,
+    "carbs": 0.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "lamb-shoulder",
+   "sku": "FM-00041",
+   "barcode": "6280001000405",
+   "category": "meat-fish",
+   "position": 40,
+   "name": {
+    "en": "Lamb shoulder",
+    "ar": "كتف غنم"
+   },
+   "description": {
+    "en": "Bone-in, great for slow roasting.",
+    "ar": "بالعظم ومناسب للتحمير البطيء."
+   },
+   "price": "69.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Australia",
+    "ar": "أستراليا"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Lamb shoulder, bone-in, great for slow roasting, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 282,
+    "protein": 17.0,
+    "carbs": 0.0,
+    "fat": 23.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "lamb-chops",
+   "sku": "FM-00042",
+   "barcode": "6280001000412",
+   "category": "meat-fish",
+   "position": 41,
+   "name": {
+    "en": "Lamb chops",
+    "ar": "ريش غنم"
+   },
+   "description": {
+    "en": "Cut from the rack, sold by weight.",
+    "ar": "مقطعة من القطعية وتُباع بالوزن."
+   },
+   "price": "89.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "New Zealand",
+    "ar": "نيوزيلندا"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Lamb chops, cut from the rack, sold by weight, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "compare_at_price": "99.00",
+   "nutrition_per_100g": {
+    "calories": 294,
+    "protein": 25.0,
+    "carbs": 0.0,
+    "fat": 21.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "beef-ribeye",
+   "sku": "FM-00043",
+   "barcode": "6280001000429",
+   "category": "meat-fish",
+   "position": 42,
+   "name": {
+    "en": "Beef ribeye",
+    "ar": "ريب آي بقري"
+   },
+   "description": {
+    "en": "Well marbled, steak cut.",
+    "ar": "مرمّر جيداً بقطعة ستيك."
+   },
+   "price": "99.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Brazil",
+    "ar": "البرازيل"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [
+    "low_stock"
+   ],
+   "track_inventory": true,
+   "stock_qty": 4,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Beef ribeye, well marbled, steak cut, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 291,
+    "protein": 24.0,
+    "carbs": 0.0,
+    "fat": 21.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "chicken-drumsticks",
+   "sku": "FM-00044",
+   "barcode": "6280001000436",
+   "category": "meat-fish",
+   "position": 43,
+   "name": {
+    "en": "Chicken drumsticks",
+    "ar": "أفخاذ دجاج"
+   },
+   "description": {
+    "en": "Skin on, tray of about 900 g.",
+    "ar": "بالجلد، عبوة 900 جرام تقريباً."
+   },
+   "price": "19.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 900,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Chicken drumsticks, skin on, tray of about 900 g, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 172,
+    "protein": 16.0,
+    "carbs": 0.0,
+    "fat": 12.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "hammour-fillet",
+   "sku": "FM-00045",
+   "barcode": "6280001000443",
+   "category": "meat-fish",
+   "position": 44,
+   "name": {
+    "en": "Hammour fillet",
+    "ar": "فيليه هامور"
+   },
+   "description": {
+    "en": "Local hammour, skinless.",
+    "ar": "هامور محلي بدون جلد."
+   },
+   "price": "62.00",
+   "brand": "Red Sea Fisheries",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "fish"
+   ],
+   "image_prompt": "Product photo on white of Hammour fillet, local hammour, skinless, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 118,
+    "protein": 24.0,
+    "carbs": 0.0,
+    "fat": 1.5
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "peeled-shrimp",
+   "sku": "FM-00046",
+   "barcode": "6280001000450",
+   "category": "meat-fish",
+   "position": 45,
+   "name": {
+    "en": "Peeled shrimp",
+    "ar": "روبيان مقشر"
+   },
+   "description": {
+    "en": "Cleaned, ready to cook.",
+    "ar": "منظّف وجاهز للطبخ."
+   },
+   "price": "39.00",
+   "brand": "Red Sea Fisheries",
+   "origin": {
+    "en": "India",
+    "ar": "الهند"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "shellfish"
+   ],
+   "image_prompt": "Product photo on white of Peeled shrimp, cleaned, ready to cook, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 85,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fat": 0.5
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "salmon-fillet",
+   "sku": "FM-00047",
+   "barcode": "6280001000467",
+   "category": "meat-fish",
+   "position": 46,
+   "name": {
+    "en": "Salmon fillet",
+    "ar": "فيليه سلمون"
+   },
+   "description": {
+    "en": "Norwegian salmon, skin on.",
+    "ar": "سلمون نرويجي بالجلد."
+   },
+   "price": "85.00",
+   "brand": "Red Sea Fisheries",
+   "origin": {
+    "en": "Norway",
+    "ar": "النرويج"
+   },
+   "pack_size": null,
+   "pack_unit": "kg",
+   "sold_by_weight": true,
+   "pricing_unit": "kg",
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "fish"
+   ],
+   "image_prompt": "Product photo on white of Salmon fillet, norwegian salmon, skin on, plain white background, centred, soft shadow, no text, no logos",
+   "weight_steps_g": [
+    250,
+    500,
+    1000,
+    2000
+   ],
+   "nutrition_per_100g": {
+    "calories": 208,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fat": 13.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "beef-kofta",
+   "sku": "FM-00048",
+   "barcode": "6280001000474",
+   "category": "meat-fish",
+   "position": 47,
+   "name": {
+    "en": "Beef kofta",
+    "ar": "كفتة لحم"
+   },
+   "description": {
+    "en": "Spiced mince, ready for the grill.",
+    "ar": "لحم مفروم متبّل جاهز للشوي."
+   },
+   "price": "22.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Beef kofta, spiced mince, ready for the grill, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 250,
+    "protein": 17.0,
+    "carbs": 3.0,
+    "fat": 19.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "marinated-chicken-shawarma",
+   "sku": "FM-00049",
+   "barcode": "6280001000481",
+   "category": "meat-fish",
+   "position": 48,
+   "name": {
+    "en": "Marinated chicken shawarma",
+    "ar": "شاورما دجاج متبلة"
+   },
+   "description": {
+    "en": "Garlic and lemon marinade.",
+    "ar": "متبلة بالثوم والليمون."
+   },
+   "price": "21.00",
+   "brand": "Fresh Mart",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Marinated chicken shawarma, garlic and lemon marinade, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 180,
+    "protein": 20.0,
+    "carbs": 3.0,
+    "fat": 9.0
+   },
+   "storage": {
+    "en": "Keep refrigerated at 0–4 °C. Freeze on the day of purchase.",
+    "ar": "يُحفظ مبرداً بين 0 و4 درجات. يُجمّد في يوم الشراء."
+   }
+  },
+  {
+   "slug": "mineral-water",
+   "sku": "FM-00050",
+   "barcode": "6280001000498",
+   "category": "drinks",
+   "position": 49,
+   "name": {
+    "en": "Mineral water",
+    "ar": "مياه معدنية"
+   },
+   "description": {
+    "en": "12 bottles of 500 ml.",
+    "ar": "12 عبوة سعة 500 مل."
+   },
+   "price": "9.00",
+   "brand": "Oasis",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 12,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Mineral water, 12 bottles of 500 ml, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "sparkling-water",
+   "sku": "FM-00051",
+   "barcode": "6280001000504",
+   "category": "drinks",
+   "position": 50,
+   "name": {
+    "en": "Sparkling water",
+    "ar": "مياه فوّارة"
+   },
+   "description": {
+    "en": "Natural mineral, 1 L.",
+    "ar": "معدنية طبيعية، 1 لتر."
+   },
+   "price": "4.50",
+   "brand": "Oasis",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Sparkling water, natural mineral, 1 L, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "orange-juice",
+   "sku": "FM-00052",
+   "barcode": "6280001000511",
+   "category": "drinks",
+   "position": 51,
+   "name": {
+    "en": "Orange juice",
+    "ar": "عصير برتقال"
+   },
+   "description": {
+    "en": "100% juice, not from concentrate.",
+    "ar": "عصير 100٪ غير مركّز."
+   },
+   "price": "9.50",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Egypt",
+    "ar": "مصر"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Orange juice, 100% juice, not from concentrate, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 45,
+    "protein": 0.7,
+    "carbs": 10.0,
+    "fat": 0.2
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "apple-juice",
+   "sku": "FM-00053",
+   "barcode": "6280001000528",
+   "category": "drinks",
+   "position": 52,
+   "name": {
+    "en": "Apple juice",
+    "ar": "عصير تفاح"
+   },
+   "description": {
+    "en": "No added sugar.",
+    "ar": "بدون سكر مضاف."
+   },
+   "price": "9.50",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Apple juice, no added sugar, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 46,
+    "protein": 0.1,
+    "carbs": 11.0,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "cola-cans",
+   "sku": "FM-00054",
+   "barcode": "6280001000535",
+   "category": "drinks",
+   "position": 53,
+   "name": {
+    "en": "Cola cans",
+    "ar": "مشروب كولا"
+   },
+   "description": {
+    "en": "Six 330 ml cans.",
+    "ar": "6 علب سعة 330 مل."
+   },
+   "price": "11.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Cola cans, six 330 ml cans, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 42,
+    "protein": 0.0,
+    "carbs": 10.6,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "peach-iced-tea",
+   "sku": "FM-00055",
+   "barcode": "6280001000542",
+   "category": "drinks",
+   "position": 54,
+   "name": {
+    "en": "Peach iced tea",
+    "ar": "شاي مثلج بالخوخ"
+   },
+   "description": {
+    "en": "Ready to drink, 1.5 L.",
+    "ar": "جاهز للشرب، 1٫5 لتر."
+   },
+   "price": "7.50",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1.5,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Peach iced tea, ready to drink, 1.5 L, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 30,
+    "protein": 0.0,
+    "carbs": 7.4,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "arabic-coffee-with-cardamom",
+   "sku": "FM-00056",
+   "barcode": "6280001000559",
+   "category": "drinks",
+   "position": 55,
+   "name": {
+    "en": "Arabic coffee with cardamom",
+    "ar": "قهوة عربية بالهيل"
+   },
+   "description": {
+    "en": "Light roast, ground with cardamom.",
+    "ar": "تحميص خفيف مطحونة مع الهيل."
+   },
+   "price": "21.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 250,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Arabic coffee with cardamom, light roast, ground with cardamom, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 2,
+    "protein": 0.1,
+    "carbs": 0.0,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "black-tea-bags",
+   "sku": "FM-00057",
+   "barcode": "6280001000566",
+   "category": "drinks",
+   "position": 56,
+   "name": {
+    "en": "Black tea bags",
+    "ar": "أكياس شاي أسود"
+   },
+   "description": {
+    "en": "100 bags, strong and bright.",
+    "ar": "100 كيس بنكهة قوية."
+   },
+   "price": "13.00",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Sri Lanka",
+    "ar": "سريلانكا"
+   },
+   "pack_size": 100,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Black tea bags, 100 bags, strong and bright, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 1,
+    "protein": 0.0,
+    "carbs": 0.3,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "karak-tea-mix",
+   "sku": "FM-00058",
+   "barcode": "6280001000573",
+   "category": "drinks",
+   "position": 57,
+   "name": {
+    "en": "Karak tea mix",
+    "ar": "مزيج شاي كرك"
+   },
+   "description": {
+    "en": "20 sachets with milk and cardamom.",
+    "ar": "20 كيساً بالحليب والهيل."
+   },
+   "price": "18.00",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 20,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Karak tea mix, 20 sachets with milk and cardamom, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 410,
+    "protein": 6.0,
+    "carbs": 70.0,
+    "fat": 12.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "instant-coffee",
+   "sku": "FM-00059",
+   "barcode": "6280001000580",
+   "category": "drinks",
+   "position": 58,
+   "name": {
+    "en": "Instant coffee",
+    "ar": "قهوة سريعة التحضير"
+   },
+   "description": {
+    "en": "Freeze-dried, rich and smooth.",
+    "ar": "مجففة بالتجميد غنية وناعمة."
+   },
+   "price": "29.00",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Brazil",
+    "ar": "البرازيل"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Instant coffee, freeze-dried, rich and smooth, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 2,
+    "protein": 0.1,
+    "carbs": 0.3,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "ayran",
+   "sku": "FM-00060",
+   "barcode": "6280001000597",
+   "category": "drinks",
+   "position": 59,
+   "name": {
+    "en": "Ayran",
+    "ar": "عيران"
+   },
+   "description": {
+    "en": "Six 250 ml cups of salted yoghurt drink.",
+    "ar": "6 أكواب سعة 250 مل من مشروب اللبن المملّح."
+   },
+   "price": "12.00",
+   "brand": "Najd Dairy",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Ayran, six 250 ml cups of salted yoghurt drink, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 35,
+    "protein": 2.0,
+    "carbs": 3.0,
+    "fat": 1.5
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "pomegranate-juice",
+   "sku": "FM-00061",
+   "barcode": "6280001000603",
+   "category": "drinks",
+   "position": 60,
+   "name": {
+    "en": "Pomegranate juice",
+    "ar": "عصير رمان"
+   },
+   "description": {
+    "en": "Cold-pressed, 750 ml.",
+    "ar": "معصور على البارد، 750 مل."
+   },
+   "price": "16.00",
+   "brand": "Sunrise",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 750,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "sold_out"
+   ],
+   "track_inventory": true,
+   "stock_qty": 0,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Pomegranate juice, cold-pressed, 750 ml, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 54,
+    "protein": 0.2,
+    "carbs": 13.0,
+    "fat": 0.3
+   },
+   "storage": {
+    "en": "Store in a cool place. Chill before serving.",
+    "ar": "يُحفظ في مكان بارد. يُبرّد قبل التقديم."
+   }
+  },
+  {
+   "slug": "potato-chips",
+   "sku": "FM-00062",
+   "barcode": "6280001000610",
+   "category": "snacks",
+   "position": 61,
+   "name": {
+    "en": "Potato chips",
+    "ar": "رقائق البطاطس"
+   },
+   "description": {
+    "en": "Lightly salted, 150 g bag.",
+    "ar": "مملحة بخفة، كيس 150 جرام."
+   },
+   "price": "6.50",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 150,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Potato chips, lightly salted, 150 g bag, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 536,
+    "protein": 6.5,
+    "carbs": 53.0,
+    "fat": 33.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "dark-chocolate-70",
+   "sku": "FM-00063",
+   "barcode": "6280001000627",
+   "category": "snacks",
+   "position": 62,
+   "name": {
+    "en": "Dark chocolate 70%",
+    "ar": "شوكولاتة داكنة 70٪"
+   },
+   "description": {
+    "en": "Smooth bar with deep cocoa.",
+    "ar": "لوح ناعم بنكهة كاكاو عميقة."
+   },
+   "price": "12.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": 100,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy",
+    "soy"
+   ],
+   "image_prompt": "Product photo on white of Dark chocolate 70%, smooth bar with deep cocoa, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 598,
+    "protein": 8.0,
+    "carbs": 46.0,
+    "fat": 43.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "milk-chocolate",
+   "sku": "FM-00064",
+   "barcode": "6280001000634",
+   "category": "snacks",
+   "position": 63,
+   "name": {
+    "en": "Milk chocolate",
+    "ar": "شوكولاتة بالحليب"
+   },
+   "description": {
+    "en": "Creamy bar for sharing.",
+    "ar": "لوح كريمي للمشاركة."
+   },
+   "price": "9.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": 100,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy",
+    "soy",
+    "nuts"
+   ],
+   "image_prompt": "Product photo on white of Milk chocolate, creamy bar for sharing, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 535,
+    "protein": 7.0,
+    "carbs": 58.0,
+    "fat": 30.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "date-biscuits",
+   "sku": "FM-00065",
+   "barcode": "6280001000641",
+   "category": "snacks",
+   "position": 64,
+   "name": {
+    "en": "Date biscuits",
+    "ar": "بسكويت التمر"
+   },
+   "description": {
+    "en": "Soft biscuits filled with date paste.",
+    "ar": "بسكويت طري محشو بعجينة التمر."
+   },
+   "price": "10.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 300,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Date biscuits, soft biscuits filled with date paste, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 410,
+    "protein": 5.0,
+    "carbs": 68.0,
+    "fat": 13.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "mixed-nuts",
+   "sku": "FM-00066",
+   "barcode": "6280001000658",
+   "category": "snacks",
+   "position": 65,
+   "name": {
+    "en": "Mixed nuts",
+    "ar": "مكسرات مشكّلة"
+   },
+   "description": {
+    "en": "Roasted, lightly salted.",
+    "ar": "محمّصة ومملحة بخفة."
+   },
+   "price": "39.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "United States",
+    "ar": "الولايات المتحدة"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "nuts",
+    "peanuts"
+   ],
+   "image_prompt": "Product photo on white of Mixed nuts, roasted, lightly salted, plain white background, centred, soft shadow, no text, no logos",
+   "compare_at_price": "45.00",
+   "nutrition_per_100g": {
+    "calories": 610,
+    "protein": 20.0,
+    "carbs": 16.0,
+    "fat": 52.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "pistachios",
+   "sku": "FM-00067",
+   "barcode": "6280001000665",
+   "category": "snacks",
+   "position": 66,
+   "name": {
+    "en": "Pistachios",
+    "ar": "فستق حلبي"
+   },
+   "description": {
+    "en": "Roasted in the shell.",
+    "ar": "محمّص بقشره."
+   },
+   "price": "34.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 250,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "nuts"
+   ],
+   "image_prompt": "Product photo on white of Pistachios, roasted in the shell, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 560,
+    "protein": 20.0,
+    "carbs": 28.0,
+    "fat": 45.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "salted-popcorn",
+   "sku": "FM-00068",
+   "barcode": "6280001000672",
+   "category": "snacks",
+   "position": 67,
+   "name": {
+    "en": "Salted popcorn",
+    "ar": "فشار مملّح"
+   },
+   "description": {
+    "en": "Ready to eat, 100 g.",
+    "ar": "جاهز للأكل، 100 جرام."
+   },
+   "price": "5.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 100,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Salted popcorn, ready to eat, 100 g, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 500,
+    "protein": 9.0,
+    "carbs": 55.0,
+    "fat": 28.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "granola-bars",
+   "sku": "FM-00069",
+   "barcode": "6280001000689",
+   "category": "snacks",
+   "position": 68,
+   "name": {
+    "en": "Granola bars",
+    "ar": "ألواح الجرانولا"
+   },
+   "description": {
+    "en": "Six oat bars with honey.",
+    "ar": "6 ألواح شوفان بالعسل."
+   },
+   "price": "16.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "nuts"
+   ],
+   "image_prompt": "Product photo on white of Granola bars, six oat bars with honey, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 420,
+    "protein": 7.0,
+    "carbs": 65.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "dried-apricots",
+   "sku": "FM-00070",
+   "barcode": "6280001000696",
+   "category": "snacks",
+   "position": 69,
+   "name": {
+    "en": "Dried apricots",
+    "ar": "مشمش مجفف"
+   },
+   "description": {
+    "en": "Soft, unsulphured.",
+    "ar": "طري وخالٍ من الكبريت."
+   },
+   "price": "14.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 250,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Dried apricots, soft, unsulphured, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 241,
+    "protein": 3.4,
+    "carbs": 63.0,
+    "fat": 0.5
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "fruit-gummies",
+   "sku": "FM-00071",
+   "barcode": "6280001000702",
+   "category": "snacks",
+   "position": 70,
+   "name": {
+    "en": "Fruit gummies",
+    "ar": "حلوى الفاكهة المطاطية"
+   },
+   "description": {
+    "en": "Fruit-flavoured gummies, 140 g.",
+    "ar": "حلوى مطاطية بنكهات الفاكهة، 140 جرام."
+   },
+   "price": "7.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 140,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "low_stock"
+   ],
+   "track_inventory": true,
+   "stock_qty": 4,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Fruit gummies, fruit-flavoured gummies, 140 g, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 340,
+    "protein": 6.0,
+    "carbs": 77.0,
+    "fat": 0.1
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "rice-cakes",
+   "sku": "FM-00072",
+   "barcode": "6280001000719",
+   "category": "snacks",
+   "position": 71,
+   "name": {
+    "en": "Rice cakes",
+    "ar": "كعكات الأرز"
+   },
+   "description": {
+    "en": "Light and crunchy, 12 cakes.",
+    "ar": "خفيفة ومقرمشة، 12 قطعة."
+   },
+   "price": "8.50",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 12,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Rice cakes, light and crunchy, 12 cakes, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 380,
+    "protein": 8.0,
+    "carbs": 80.0,
+    "fat": 3.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "basmati-rice",
+   "sku": "FM-00073",
+   "barcode": "6280001000726",
+   "category": "pantry",
+   "position": 72,
+   "name": {
+    "en": "Basmati rice",
+    "ar": "أرز بسمتي"
+   },
+   "description": {
+    "en": "Aged long-grain rice.",
+    "ar": "أرز طويل الحبة معتّق."
+   },
+   "price": "42.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "India",
+    "ar": "الهند"
+   },
+   "pack_size": 5,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Basmati rice, aged long-grain rice, plain white background, centred, soft shadow, no text, no logos",
+   "compare_at_price": "49.00",
+   "nutrition_per_100g": {
+    "calories": 350,
+    "protein": 7.0,
+    "carbs": 78.0,
+    "fat": 0.6
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "spaghetti",
+   "sku": "FM-00074",
+   "barcode": "6280001000733",
+   "category": "pantry",
+   "position": 73,
+   "name": {
+    "en": "Spaghetti",
+    "ar": "معكرونة سباغيتي"
+   },
+   "description": {
+    "en": "Durum wheat pasta.",
+    "ar": "معكرونة من القمح القاسي."
+   },
+   "price": "4.50",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Italy",
+    "ar": "إيطاليا"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Spaghetti, durum wheat pasta, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 350,
+    "protein": 12.0,
+    "carbs": 72.0,
+    "fat": 1.5
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "extra-virgin-olive-oil",
+   "sku": "FM-00075",
+   "barcode": "6280001000740",
+   "category": "pantry",
+   "position": 74,
+   "name": {
+    "en": "Extra virgin olive oil",
+    "ar": "زيت زيتون بكر ممتاز"
+   },
+   "description": {
+    "en": "Cold-pressed, first harvest.",
+    "ar": "معصور على البارد من أول حصاد."
+   },
+   "price": "38.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Spain",
+    "ar": "إسبانيا"
+   },
+   "pack_size": 750,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Extra virgin olive oil, cold-pressed, first harvest, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 884,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 100.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "sunflower-oil",
+   "sku": "FM-00076",
+   "barcode": "6280001000757",
+   "category": "pantry",
+   "position": 75,
+   "name": {
+    "en": "Sunflower oil",
+    "ar": "زيت دوار الشمس"
+   },
+   "description": {
+    "en": "Light oil for frying.",
+    "ar": "زيت خفيف للقلي."
+   },
+   "price": "19.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1.5,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Sunflower oil, light oil for frying, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 884,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 100.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "white-sugar",
+   "sku": "FM-00077",
+   "barcode": "6280001000764",
+   "category": "pantry",
+   "position": 76,
+   "name": {
+    "en": "White sugar",
+    "ar": "سكر أبيض"
+   },
+   "description": {
+    "en": "Fine granulated sugar.",
+    "ar": "سكر ناعم محبّب."
+   },
+   "price": "9.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 2,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of White sugar, fine granulated sugar, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 400,
+    "protein": 0.0,
+    "carbs": 100.0,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "plain-flour",
+   "sku": "FM-00078",
+   "barcode": "6280001000771",
+   "category": "pantry",
+   "position": 77,
+   "name": {
+    "en": "Plain flour",
+    "ar": "طحين أبيض"
+   },
+   "description": {
+    "en": "All-purpose, 2 kg.",
+    "ar": "متعدد الاستخدامات، 2 كجم."
+   },
+   "price": "7.50",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 2,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten"
+   ],
+   "image_prompt": "Product photo on white of Plain flour, all-purpose, 2 kg, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 364,
+    "protein": 10.0,
+    "carbs": 76.0,
+    "fat": 1.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "tomato-paste",
+   "sku": "FM-00079",
+   "barcode": "6280001000788",
+   "category": "pantry",
+   "position": 78,
+   "name": {
+    "en": "Tomato paste",
+    "ar": "معجون طماطم"
+   },
+   "description": {
+    "en": "Double concentrate.",
+    "ar": "مركّز مضاعف."
+   },
+   "price": "5.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Tomato paste, double concentrate, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 82,
+    "protein": 4.0,
+    "carbs": 19.0,
+    "fat": 0.5
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "chickpeas",
+   "sku": "FM-00080",
+   "barcode": "6280001000795",
+   "category": "pantry",
+   "position": 79,
+   "name": {
+    "en": "Chickpeas",
+    "ar": "حمص معلّب"
+   },
+   "description": {
+    "en": "Cooked and ready, 400 g tin.",
+    "ar": "مطبوخ وجاهز، علبة 400 جرام."
+   },
+   "price": "3.50",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Chickpeas, cooked and ready, 400 g tin, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 139,
+    "protein": 7.0,
+    "carbs": 22.0,
+    "fat": 2.6
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "fava-beans",
+   "sku": "FM-00081",
+   "barcode": "6280001000801",
+   "category": "pantry",
+   "position": 80,
+   "name": {
+    "en": "Fava beans",
+    "ar": "فول مدمّس"
+   },
+   "description": {
+    "en": "Seasoned, 400 g tin.",
+    "ar": "متبّل، علبة 400 جرام."
+   },
+   "price": "3.50",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Egypt",
+    "ar": "مصر"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Fava beans, seasoned, 400 g tin, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 110,
+    "protein": 7.6,
+    "carbs": 19.0,
+    "fat": 0.4
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "tahini",
+   "sku": "FM-00082",
+   "barcode": "6280001000818",
+   "category": "pantry",
+   "position": 81,
+   "name": {
+    "en": "Tahini",
+    "ar": "طحينة"
+   },
+   "description": {
+    "en": "Stone-ground sesame paste.",
+    "ar": "معجون سمسم مطحون بالحجر."
+   },
+   "price": "17.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 450,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "sesame"
+   ],
+   "image_prompt": "Product photo on white of Tahini, stone-ground sesame paste, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 595,
+    "protein": 17.0,
+    "carbs": 21.0,
+    "fat": 54.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "sidr-honey",
+   "sku": "FM-00083",
+   "barcode": "6280001000825",
+   "category": "pantry",
+   "position": 82,
+   "name": {
+    "en": "Sidr honey",
+    "ar": "عسل السدر"
+   },
+   "description": {
+    "en": "Raw honey from Saudi highlands.",
+    "ar": "عسل خام من مرتفعات المملكة."
+   },
+   "price": "45.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 500,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Sidr honey, raw honey from Saudi highlands, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 304,
+    "protein": 0.3,
+    "carbs": 82.0,
+    "fat": 0.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "zaatar-mix",
+   "sku": "FM-00084",
+   "barcode": "6280001000832",
+   "category": "pantry",
+   "position": 83,
+   "name": {
+    "en": "Zaatar mix",
+    "ar": "خلطة زعتر"
+   },
+   "description": {
+    "en": "Thyme, sesame and sumac.",
+    "ar": "زعتر وسمسم وسماق."
+   },
+   "price": "9.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Jordan",
+    "ar": "الأردن"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "sesame"
+   ],
+   "image_prompt": "Product photo on white of Zaatar mix, thyme, sesame and sumac, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 330,
+    "protein": 12.0,
+    "carbs": 38.0,
+    "fat": 15.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "kabsa-spice-mix",
+   "sku": "FM-00085",
+   "barcode": "6280001000849",
+   "category": "pantry",
+   "position": 84,
+   "name": {
+    "en": "Kabsa spice mix",
+    "ar": "بهارات الكبسة"
+   },
+   "description": {
+    "en": "Blend for chicken and lamb rice.",
+    "ar": "خلطة لأرز الدجاج واللحم."
+   },
+   "price": "8.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 100,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Kabsa spice mix, blend for chicken and lamb rice, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 290,
+    "protein": 11.0,
+    "carbs": 50.0,
+    "fat": 8.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "red-lentils",
+   "sku": "FM-00086",
+   "barcode": "6280001000856",
+   "category": "pantry",
+   "position": 85,
+   "name": {
+    "en": "Red lentils",
+    "ar": "عدس أحمر"
+   },
+   "description": {
+    "en": "Split red lentils, cook in 15 minutes.",
+    "ar": "عدس أحمر مجروش ينضج خلال 15 دقيقة."
+   },
+   "price": "9.00",
+   "brand": "Golden Wheat",
+   "origin": {
+    "en": "India",
+    "ar": "الهند"
+   },
+   "pack_size": 1,
+   "pack_unit": "kg",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Red lentils, split red lentils, cook in 15 minutes, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 352,
+    "protein": 24.0,
+    "carbs": 60.0,
+    "fat": 1.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "tuna-chunks",
+   "sku": "FM-00087",
+   "barcode": "6280001000863",
+   "category": "pantry",
+   "position": 86,
+   "name": {
+    "en": "Tuna chunks",
+    "ar": "تونة قطع"
+   },
+   "description": {
+    "en": "In olive oil, 160 g tin.",
+    "ar": "بزيت الزيتون، علبة 160 جرام."
+   },
+   "price": "7.50",
+   "brand": "Red Sea Fisheries",
+   "origin": {
+    "en": "Oman",
+    "ar": "عُمان"
+   },
+   "pack_size": 160,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "fish"
+   ],
+   "image_prompt": "Product photo on white of Tuna chunks, in olive oil, 160 g tin, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 180,
+    "protein": 25.0,
+    "carbs": 0.0,
+    "fat": 9.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "tahini-halva",
+   "sku": "FM-00088",
+   "barcode": "6280001000870",
+   "category": "pantry",
+   "position": 87,
+   "name": {
+    "en": "Tahini halva",
+    "ar": "حلاوة طحينية"
+   },
+   "description": {
+    "en": "Plain tahini halva block.",
+    "ar": "قالب حلاوة طحينية سادة."
+   },
+   "price": "15.00",
+   "brand": "Green Valley",
+   "origin": {
+    "en": "Turkey",
+    "ar": "تركيا"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 73,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "sesame",
+    "nuts"
+   ],
+   "image_prompt": "Product photo on white of Tahini halva, plain tahini halva block, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 520,
+    "protein": 12.0,
+    "carbs": 50.0,
+    "fat": 30.0
+   },
+   "storage": {
+    "en": "Store in a cool, dry place. Close tightly after opening.",
+    "ar": "يُحفظ في مكان بارد وجاف. يُغلق جيداً بعد الفتح."
+   }
+  },
+  {
+   "slug": "dishwashing-liquid",
+   "sku": "FM-00089",
+   "barcode": "6280001000887",
+   "category": "household",
+   "position": 88,
+   "name": {
+    "en": "Dishwashing liquid",
+    "ar": "سائل غسل الصحون"
+   },
+   "description": {
+    "en": "Cuts grease, lemon scent.",
+    "ar": "يزيل الدهون برائحة الليمون."
+   },
+   "price": "11.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 750,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Dishwashing liquid, cuts grease, lemon scent, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "laundry-detergent",
+   "sku": "FM-00090",
+   "barcode": "6280001000894",
+   "category": "household",
+   "position": 89,
+   "name": {
+    "en": "Laundry detergent",
+    "ar": "منظف غسيل"
+   },
+   "description": {
+    "en": "Concentrated liquid, 3 L.",
+    "ar": "سائل مركّز، 3 لتر."
+   },
+   "price": "38.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 3,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Laundry detergent, concentrated liquid, 3 L, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "fabric-softener",
+   "sku": "FM-00091",
+   "barcode": "6280001000900",
+   "category": "household",
+   "position": 90,
+   "name": {
+    "en": "Fabric softener",
+    "ar": "معطّر ملابس"
+   },
+   "description": {
+    "en": "Long-lasting oud scent.",
+    "ar": "برائحة العود تدوم طويلاً."
+   },
+   "price": "19.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 2,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Fabric softener, long-lasting oud scent, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "paper-towels",
+   "sku": "FM-00092",
+   "barcode": "6280001000917",
+   "category": "household",
+   "position": 91,
+   "name": {
+    "en": "Paper towels",
+    "ar": "مناديل مطبخ"
+   },
+   "description": {
+    "en": "Six absorbent rolls.",
+    "ar": "6 رولات ماصّة."
+   },
+   "price": "22.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Paper towels, six absorbent rolls, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "toilet-tissue",
+   "sku": "FM-00093",
+   "barcode": "6280001000924",
+   "category": "household",
+   "position": 92,
+   "name": {
+    "en": "Toilet tissue",
+    "ar": "مناديل حمام"
+   },
+   "description": {
+    "en": "24 soft 2-ply rolls.",
+    "ar": "24 رولاً ناعماً بطبقتين."
+   },
+   "price": "34.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 24,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Toilet tissue, 24 soft 2-ply rolls, plain white background, centred, soft shadow, no text, no logos",
+   "compare_at_price": "39.00"
+  },
+  {
+   "slug": "facial-tissues",
+   "sku": "FM-00094",
+   "barcode": "6280001000931",
+   "category": "household",
+   "position": 93,
+   "name": {
+    "en": "Facial tissues",
+    "ar": "مناديل وجه"
+   },
+   "description": {
+    "en": "Five boxes of 150 sheets.",
+    "ar": "5 علب، كل علبة 150 منديلاً."
+   },
+   "price": "17.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 5,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Facial tissues, five boxes of 150 sheets, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "bin-bags",
+   "sku": "FM-00095",
+   "barcode": "6280001000948",
+   "category": "household",
+   "position": 94,
+   "name": {
+    "en": "Bin bags",
+    "ar": "أكياس قمامة"
+   },
+   "description": {
+    "en": "30 large bags with drawstring.",
+    "ar": "30 كيساً كبيراً بشريط شد."
+   },
+   "price": "9.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 30,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Bin bags, 30 large bags with drawstring, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "surface-cleaner",
+   "sku": "FM-00096",
+   "barcode": "6280001000955",
+   "category": "household",
+   "position": 95,
+   "name": {
+    "en": "Surface cleaner",
+    "ar": "منظف الأسطح"
+   },
+   "description": {
+    "en": "Multi-surface spray, 1 L.",
+    "ar": "بخاخ لجميع الأسطح، 1 لتر."
+   },
+   "price": "12.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 1,
+   "pack_unit": "L",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Surface cleaner, multi-surface spray, 1 L, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "kitchen-sponges",
+   "sku": "FM-00097",
+   "barcode": "6280001000962",
+   "category": "household",
+   "position": 96,
+   "name": {
+    "en": "Kitchen sponges",
+    "ar": "إسفنج المطبخ"
+   },
+   "description": {
+    "en": "Six scourer sponges.",
+    "ar": "6 إسفنجات للتنظيف."
+   },
+   "price": "8.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 6,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 66,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Kitchen sponges, six scourer sponges, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "aluminium-foil",
+   "sku": "FM-00098",
+   "barcode": "6280001000979",
+   "category": "household",
+   "position": 97,
+   "name": {
+    "en": "Aluminium foil",
+    "ar": "ورق ألمنيوم"
+   },
+   "description": {
+    "en": "30 m roll, 30 cm wide.",
+    "ar": "رول 30 متراً بعرض 30 سم."
+   },
+   "price": "14.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 30,
+   "pack_unit": "m",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "low_stock"
+   ],
+   "track_inventory": true,
+   "stock_qty": 4,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Aluminium foil, 30 m roll, 30 cm wide, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "hand-soap",
+   "sku": "FM-00099",
+   "barcode": "6280001000986",
+   "category": "household",
+   "position": 98,
+   "name": {
+    "en": "Hand soap",
+    "ar": "صابون سائل لليدين"
+   },
+   "description": {
+    "en": "Gentle, 500 ml pump.",
+    "ar": "لطيف، عبوة 500 مل."
+   },
+   "price": "10.00",
+   "brand": "Sparkle",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 500,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 80,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Hand soap, gentle, 500 ml pump, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "nappies-size-4",
+   "sku": "FM-00100",
+   "barcode": "6280001000993",
+   "category": "baby",
+   "position": 99,
+   "name": {
+    "en": "Nappies size 4",
+    "ar": "حفاضات مقاس 4"
+   },
+   "description": {
+    "en": "Dry-lock, 44 nappies, 9–14 kg.",
+    "ar": "ماصة للرطوبة، 44 حفاضة، 9–14 كجم."
+   },
+   "price": "79.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 44,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "popular"
+   ],
+   "track_inventory": true,
+   "stock_qty": 87,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Nappies size 4, dry-lock, 44 nappies, 9-14 kg, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "baby-wipes",
+   "sku": "FM-00101",
+   "barcode": "6280001001006",
+   "category": "baby",
+   "position": 100,
+   "name": {
+    "en": "Baby wipes",
+    "ar": "مناديل الأطفال"
+   },
+   "description": {
+    "en": "Fragrance-free, 80 wipes.",
+    "ar": "خالية من العطور، 80 منديلاً."
+   },
+   "price": "14.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 80,
+   "pack_unit": "pc",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 24,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Baby wipes, fragrance-free, 80 wipes, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "infant-formula-stage-1",
+   "sku": "FM-00102",
+   "barcode": "6280001001013",
+   "category": "baby",
+   "position": 101,
+   "name": {
+    "en": "Infant formula stage 1",
+    "ar": "حليب أطفال المرحلة 1"
+   },
+   "description": {
+    "en": "From birth to 6 months, 400 g.",
+    "ar": "من الولادة حتى 6 أشهر، 400 جرام."
+   },
+   "price": "54.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Netherlands",
+    "ar": "هولندا"
+   },
+   "pack_size": 400,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 31,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "dairy",
+    "soy"
+   ],
+   "image_prompt": "Product photo on white of Infant formula stage 1, from birth to 6 months, 400 g, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "baby-cereal",
+   "sku": "FM-00103",
+   "barcode": "6280001001020",
+   "category": "baby",
+   "position": 102,
+   "name": {
+    "en": "Baby cereal",
+    "ar": "حبوب الأطفال"
+   },
+   "description": {
+    "en": "Rice cereal with banana, 200 g.",
+    "ar": "حبوب أرز بالموز، 200 جرام."
+   },
+   "price": "17.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Netherlands",
+    "ar": "هولندا"
+   },
+   "pack_size": 200,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 38,
+   "low_stock_threshold": 5,
+   "allergens": [
+    "gluten",
+    "dairy"
+   ],
+   "image_prompt": "Product photo on white of Baby cereal, rice cereal with banana, 200 g, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 375,
+    "protein": 7.0,
+    "carbs": 80.0,
+    "fat": 2.0
+   }
+  },
+  {
+   "slug": "baby-shampoo",
+   "sku": "FM-00104",
+   "barcode": "6280001001037",
+   "category": "baby",
+   "position": 103,
+   "name": {
+    "en": "Baby shampoo",
+    "ar": "شامبو الأطفال"
+   },
+   "description": {
+    "en": "Tear-free, 200 ml.",
+    "ar": "بدون دموع، 200 مل."
+   },
+   "price": "18.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 200,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "new"
+   ],
+   "track_inventory": true,
+   "stock_qty": 45,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Baby shampoo, tear-free, 200 ml, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "apple-pur-e-pouch",
+   "sku": "FM-00105",
+   "barcode": "6280001001044",
+   "category": "baby",
+   "position": 104,
+   "name": {
+    "en": "Apple purée pouch",
+    "ar": "هريس التفاح للأطفال"
+   },
+   "description": {
+    "en": "From 6 months, 120 g.",
+    "ar": "من عمر 6 أشهر، 120 جرام."
+   },
+   "price": "5.50",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "France",
+    "ar": "فرنسا"
+   },
+   "pack_size": 120,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 52,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Apple puree pouch, from 6 months, 120 g, plain white background, centred, soft shadow, no text, no logos",
+   "nutrition_per_100g": {
+    "calories": 52,
+    "protein": 0.3,
+    "carbs": 12.0,
+    "fat": 0.2
+   }
+  },
+  {
+   "slug": "baby-lotion",
+   "sku": "FM-00106",
+   "barcode": "6280001001051",
+   "category": "baby",
+   "position": 105,
+   "name": {
+    "en": "Baby lotion",
+    "ar": "لوشن الأطفال"
+   },
+   "description": {
+    "en": "Moisturising, 200 ml.",
+    "ar": "مرطّب، 200 مل."
+   },
+   "price": "21.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 200,
+   "pack_unit": "ml",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [],
+   "track_inventory": true,
+   "stock_qty": 59,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Baby lotion, moisturising, 200 ml, plain white background, centred, soft shadow, no text, no logos"
+  },
+  {
+   "slug": "nappy-rash-cream",
+   "sku": "FM-00107",
+   "barcode": "6280001001068",
+   "category": "baby",
+   "position": 106,
+   "name": {
+    "en": "Nappy rash cream",
+    "ar": "كريم التهاب الحفاضات"
+   },
+   "description": {
+    "en": "Zinc oxide barrier cream, 100 g.",
+    "ar": "كريم واقٍ بأكسيد الزنك، 100 جرام."
+   },
+   "price": "19.00",
+   "brand": "Little Sprout",
+   "origin": {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية"
+   },
+   "pack_size": 100,
+   "pack_unit": "g",
+   "sold_by_weight": false,
+   "pricing_unit": null,
+   "badges": [
+    "low_stock"
+   ],
+   "track_inventory": true,
+   "stock_qty": 4,
+   "low_stock_threshold": 5,
+   "allergens": [],
+   "image_prompt": "Product photo on white of Nappy rash cream, zinc oxide barrier cream, 100 g, plain white background, centred, soft shadow, no text, no logos"
+  }
+ ]
+}

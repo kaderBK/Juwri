@@ -1,0 +1,217 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "matcha",
+      "label": "Matcha",
+      "thumb": "assets/store_templates/matcha/presets/matcha.png",
+      "values": {
+        "colors.primary": "#067655",
+        "colors.background": "#f7faf8",
+        "colors.surface": "#ffffff",
+        "colors.text": "#152b1f",
+        "colors.accent": "#f2a93b",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "hojicha",
+      "label": "Hojicha",
+      "thumb": "assets/store_templates/matcha/presets/hojicha.png",
+      "values": {
+        "colors.primary": "#8a5a2b",
+        "colors.background": "#f8f4ee",
+        "colors.surface": "#ffffff",
+        "colors.text": "#241a10",
+        "colors.accent": "#c98a3c",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "sencha",
+      "label": "Sencha",
+      "thumb": "assets/store_templates/matcha/presets/sencha.png",
+      "values": {
+        "colors.primary": "#0a9e6f",
+        "colors.background": "#0d1512",
+        "colors.surface": "#16211c",
+        "colors.text": "#eef7f2",
+        "colors.accent": "#f2a93b",
+        "layout.radius": "pill"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#067655"
+        },
+        "colors.background": {
+          "default": "#f7faf8"
+        },
+        "colors.surface": {
+          "default": "#ffffff"
+        },
+        "colors.text": {
+          "default": "#152b1f"
+        },
+        "colors.accent": {
+          "default": "#f2a93b"
+        },
+        "layout.radius": {
+          "default": "pill"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Special for you"
+        },
+        {
+          "id": "texts.menu_title",
+          "type": "text",
+          "label": "Menu section title",
+          "default": "All Menu"
+        },
+        {
+          "id": "texts.order_now",
+          "type": "text",
+          "label": "Order button",
+          "default": "Order now"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": "Add to Cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.view_menu",
+          "type": "text",
+          "label": "View-menu button",
+          "default": "Get started"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery label",
+          "default": "Delivery"
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup label",
+          "default": "Pickup"
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        },
+        {
+          "id": "brand.cover_splash",
+          "type": "toggle",
+          "label": "Cover behind splash",
+          "default": true
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Amazing taste, made fresh",
+          "label": "Splash title"
+        }
+      }
+    },
+    {
+      "include": "search",
+      "fields": {
+        "texts.search_placeholder": {
+          "default": "Search the menu",
+          "label": "Search box placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category pills",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "New Menu rail + featured blob",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "All Menu grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

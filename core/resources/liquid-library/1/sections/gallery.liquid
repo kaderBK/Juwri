@@ -1,0 +1,72 @@
+{%- comment -%}
+  Gallery (library v1): owner photos as a square grid or a masonry-style
+  column flow (CSS columns — no JS, no lightbox). Every image is sized
+  (width/height) and lazy. Blocks without an image are skipped; with no
+  image at all the section renders nothing.
+{%- endcomment -%}
+{%- liquid
+  assign shown = 0
+  for block in section.blocks
+    if block.type == 'image' and block.settings.image != ''
+      assign shown = shown | plus: 1
+    endif
+  endfor
+  assign heading = section.settings.heading | strip
+-%}
+{%- if shown > 0 -%}
+<section class="mbs-gallery mbs-gallery--{{ section.settings.layout | escape }}" style="--mbs-gallery-cols: {{ section.settings.columns | default: 3 | at_least: 2 | at_most: 4 }}"{% if heading != '' %} aria-labelledby="mbs-gallery-{{ section.id | escape }}"{% else %} aria-label="{{ 'Gallery' | t }}"{% endif %}>
+  {%- if heading != '' -%}<h2 class="mbs-gallery__title" id="mbs-gallery-{{ section.id | escape }}">{{ heading | escape }}</h2>{%- endif -%}
+  <ul class="mbs-gallery__list" role="list">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'image' and block.settings.image != '' -%}
+        {%- assign src = block.settings.image | media_url -%}
+        {%- assign caption = block.settings.caption | strip -%}
+        {%- assign h = 800 -%}
+        {%- if section.settings.layout == 'masonry' and block.settings.shape == 'tall' -%}{%- assign h = 1067 -%}{%- elsif section.settings.layout == 'masonry' and block.settings.shape == 'wide' -%}{%- assign h = 600 -%}{%- endif -%}
+        <li class="mbs-gallery__item">
+          <figure class="mbs-gallery__figure">
+            {%- render 'media', src: src, alt: caption, width: 800, height: h, class: 'mbs-gallery__img', priority: false, sizes: '(min-width: 768px) 33vw, 50vw' -%}
+            {%- if caption != '' and section.settings.show_captions -%}<figcaption class="mbs-gallery__caption">{{ caption | escape }}</figcaption>{%- endif -%}
+          </figure>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Gallery",
+  "group": "content",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (optional)", "default": "" },
+    { "id": "layout", "type": "select", "label": "Layout", "options": [
+      { "value": "grid", "label": "Square grid" },
+      { "value": "masonry", "label": "Masonry" }
+    ], "default": "grid" },
+    { "id": "columns", "type": "range", "label": "Columns on larger screens", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "id": "show_captions", "type": "checkbox", "label": "Show captions", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 24,
+      "settings": [
+        { "id": "image", "type": "image_picker", "label": "Image", "default": "" },
+        { "id": "caption", "type": "text", "label": "Caption (also the image description)", "default": "" },
+        { "id": "shape", "type": "select", "label": "Shape (masonry)", "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "tall", "label": "Tall" },
+          { "value": "wide", "label": "Wide" }
+        ], "default": "square" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Gallery", "blocks": [ { "type": "image" }, { "type": "image" }, { "type": "image" } ] }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,192 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "variant": "split",
+        "sticky": true,
+        "show_tagline": true
+      }
+    },
+    "hero": {
+      "type": "hero-cover",
+      "settings": {
+        "variant": "image",
+        "height": "m",
+        "align": "center",
+        "image_source": "cover",
+        "overlay": 40
+      },
+      "blocks": {
+        "cta-catalog": {
+          "type": "cta",
+          "settings": {
+            "target": "catalog",
+            "anchor": "menu"
+          }
+        },
+        "cta-cart": {
+          "type": "cta",
+          "settings": {
+            "target": "cart"
+          }
+        }
+      },
+      "block_order": [
+        "cta-catalog",
+        "cta-cart"
+      ]
+    },
+    "brand": {
+      "type": "brand-row",
+      "settings": []
+    },
+    "status": {
+      "type": "store-status",
+      "settings": []
+    },
+    "stories": {
+      "type": "stories-rail",
+      "settings": {
+        "ring": "gradient",
+        "size": "m"
+      }
+    },
+    "search": {
+      "type": "search-bar",
+      "settings": []
+    },
+    "dietary": {
+      "type": "dietary-filters",
+      "settings": {
+        "only_used": true
+      }
+    },
+    "catnav": {
+      "type": "category-nav",
+      "settings": {
+        "variant": "chips",
+        "sticky": true
+      }
+    },
+    "featured": {
+      "type": "featured-rail",
+      "settings": {
+        "source": "popular",
+        "card": "photo-card",
+        "limit": 10
+      }
+    },
+    "menu": {
+      "type": "menu-grid",
+      "settings": {
+        "card": "photo-card",
+        "columns_mobile": 2,
+        "columns_desktop": 3
+      }
+    },
+    "offers": {
+      "type": "offers-strip",
+      "settings": []
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": []
+    },
+    "about": {
+      "type": "about",
+      "settings": {
+        "use_description": true,
+        "layout": "image-start"
+      }
+    },
+    "hours": {
+      "type": "hours",
+      "settings": []
+    },
+    "location": {
+      "type": "location",
+      "settings": []
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tone": "surface"
+      }
+    },
+    "cart-bar": {
+      "type": "floating-cart",
+      "settings": {
+        "style": "bar",
+        "above_tabbar": true
+      }
+    },
+    "tabbar": {
+      "type": "bottom-tabbar",
+      "settings": {
+        "style": "bar",
+        "show_labels": true
+      },
+      "blocks": {
+        "tab-home": {
+          "type": "tab",
+          "settings": {
+            "target": "home"
+          }
+        },
+        "tab-catalog": {
+          "type": "tab",
+          "settings": {
+            "target": "catalog",
+            "anchor": "menu"
+          }
+        },
+        "tab-favs": {
+          "type": "tab",
+          "settings": {
+            "target": "favs"
+          }
+        },
+        "tab-cart": {
+          "type": "tab",
+          "settings": {
+            "target": "cart"
+          }
+        },
+        "tab-profile": {
+          "type": "tab",
+          "settings": {
+            "target": "profile"
+          }
+        }
+      },
+      "block_order": [
+        "tab-home",
+        "tab-catalog",
+        "tab-favs",
+        "tab-cart",
+        "tab-profile"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "hero",
+    "brand",
+    "status",
+    "stories",
+    "search",
+    "dietary",
+    "catnav",
+    "featured",
+    "menu",
+    "offers",
+    "reviews",
+    "about",
+    "hours",
+    "location",
+    "footer",
+    "cart-bar",
+    "tabbar"
+  ]
+}

@@ -1,0 +1,103 @@
+# IDE
+/.idea
+/.vscode
+/.fleet
+
+# macOS
+.DS_Store
+
+# Laravel core
+core/.env
+core/.env.*
+!core/.env.example
+core/vendor/
+core/node_modules/
+core/public/build
+core/public/hot
+core/public/storage
+core/storage/*.key
+core/storage/logs/*.log
+core/storage/framework/cache/data
+core/storage/framework/sessions/*
+!core/storage/framework/sessions/.gitignore
+core/storage/framework/views/*
+!core/storage/framework/views/.gitignore
+core/storage/framework/testing
+core/bootstrap/cache/*
+!core/bootstrap/cache/.gitignore
+
+# Testing
+core/.phpunit.cache
+core/.phpunit.result.cache
+
+# Laravel misc
+core/Homestead.json
+core/Homestead.yaml
+core/auth.json
+core/npm-debug.log
+core/yarn-error.log
+
+# Project
+sitemap.xml
+*.zip
+*.sql
+
+# User uploads (large, local dev data)
+/storage/
+/error_log
+/yandex_bbbf63acfdd69210.html
+
+# Backup / scratch files
+*-bku*
+*-after-bio*
+*.bak
+*~
+
+# AI tooling config (personal)
+/.claude/
+/.agents/
+/.forge/
+/.kilocode/
+/.superpowers/
+/.windsurf/
+skills-lock.json
+
+# Dev scratch / debug dumps (repo root)
+/output/
+/*.log
+/*-exit.txt
+/blade_classes.txt
+/css_classes.txt
+/routes_list.txt
+/template_switch.json
+/post_info.json
+/post_options.json
+/rendered_menu.html
+/rendered_vivid.html
+/nebula_css_check.html
+/nebula_debug.html
+/copy_preview.php
+/lint-done.txt
+core/rendered_vivid.html
+
+# WA Lane E: post_options dumps — real customer data, never commit these.
+/backups/
+
+# WorkBuddy session memory — private working notes (merchant data, infra details).
+# Deliberately not part of the repo; lives only on this machine.
+/.workbuddy-ai/
+
+# locked-template converter deps (dev tool)
+tools/locked-templates/**/node_modules/
+
+# P1-13 licences: the dev key pair's private half and signed licences never enter the repository
+*.secret
+juwri.licence
+# Production licences and the issued-licence register (tools/licence/sign.php refuses the repo; belt and braces)
+*.licence
+licence-register.jsonl
+# (the Enterprise package's fixed TEST licence vectors are re-included by the .gitignore inside their own fixture folder)
+
+# P6-151 host check: owner-made token and attempt counter
+/juwri-check.token
+/juwri-check.attempts

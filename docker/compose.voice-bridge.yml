@@ -1,0 +1,68 @@
+# P6-09 V-06 — JUWRI CLOUD ONLY: the voice-bridge role.
+#
+# Community and Enterprise self-host do NOT get the bridge (SPEC §10): it needs always-on WebSocket
+# workers, carrier contracts and per-region media. This file is layered on top of the normal production
+# stack, so the db / migrations / volumes come from docker/compose.prod.yml:
+#
+#   docker compose -f docker/compose.prod.yml -f docker/compose.voice-bridge.yml --env-file docker/.env up -d
+#
+# It adds two services behind the same image:
+#   bridge        — a dedicated Octane (FrankenPHP) worker that serves GET /voice/{provider}/bridge/{line}
+#                   and the GET /healthz/voice-bridge probe. Kept apart from the web nodes so a call that
+#                   lives for minutes never competes with short storefront requests for a worker.
+#   bridge-reverb — the bridge's own Reverb WebSocket, on its own port (never the app's live-updates one).
+#
+# TLS is terminated by the proxy in front (Caddy/ALB): expose VOICE_BRIDGE_PORT and VOICE_BRIDGE_REVERB_PORT
+# as wss and set VOICE_BRIDGE_PUBLIC_URL to that public origin. No secret lives in this file.
+name: juwri
+
+x-bridge: &bridge
+  image: juwri/app:${JUWRI_VERSION:-local}
+  env_file: [.env]
+  restart: unless-stopped
+  volumes:
+    - uploads:/app/storage
+    - framework:/app/core/storage
+
+services:
+  bridge:
+    <<: *bridge
+    depends_on:
+      db: {condition: service_healthy}
+      app: {condition: service_healthy}
+    command: ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+    environment:
+      VOICE_BRIDGE_ENABLED: "1"
+      VOICE_BRIDGE_PUBLIC_URL: ${VOICE_BRIDGE_PUBLIC_URL:?set VOICE_BRIDGE_PUBLIC_URL in docker/.env}
+      FRANKENPHP_WORKERS: ${VOICE_BRIDGE_WORKERS:-8}
+      # The probe dials the sidecar by its compose name, not the published port.
+      VOICE_BRIDGE_REVERB_HOST: bridge-reverb
+      VOICE_BRIDGE_REVERB_PORT: ${VOICE_BRIDGE_REVERB_PORT:-8082}
+    ports:
+      - "${VOICE_BRIDGE_PORT:-8083}:8080"
+    healthcheck:
+      # Fails when Reverb is unreachable (the endpoint returns 503), which is exactly the condition that
+      # should take this replica out of rotation.
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/healthz/voice-bridge >/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      replicas: ${VOICE_BRIDGE_REPLICAS:-1}
+
+  bridge-reverb:
+    <<: *bridge
+    depends_on:
+      db: {condition: service_healthy}
+    command: ["reverb"]
+    environment:
+      REVERB_SERVER_HOST: 0.0.0.0
+      REVERB_SERVER_PORT: ${VOICE_BRIDGE_REVERB_PORT:-8082}
+    ports:
+      - "${VOICE_BRIDGE_REVERB_PORT:-8082}:${VOICE_BRIDGE_REVERB_PORT:-8082}"
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'artisan reverb:start' >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

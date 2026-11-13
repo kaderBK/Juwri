@@ -1,0 +1,31 @@
+{
+    "name": "Chalkboard",
+    "aspects": [
+        "a4",
+        "letter",
+        "story"
+    ],
+    "rtl": true,
+    "colors": {
+        "accent": "#f2c94c",
+        "bg": "#22282a",
+        "text": "#f4f1ea"
+    },
+    "fonts": [
+        {
+            "family": "chalk-stack",
+            "stack": "'Chalkboard SE', 'Comic Sans MS', 'Segoe Print', 'Geeza Pro', cursive"
+        }
+    ],
+    "density": {
+        "items_per_page": 26,
+        "columns": 2,
+        "desc_max_chars": 80
+    },
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ],
+    "art_brief": "faint chalk smudges and hand-drawn swirl flourishes on dark slate, corners only"
+}

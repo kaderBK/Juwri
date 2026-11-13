@@ -1,0 +1,22 @@
+Vendored jQuery and jQuery plugins (assets/global/js). Every file is copied UNMODIFIED from the
+official npm release tarball (`npm pack <pkg>@<version>`); the tarball's sha512 was checked against
+the registry's dist.integrity before copying. Licence texts: LICENSES/.
+
+file               package            version  path in package                 licence       sha256 of the file
+jquery.min.js      jquery             3.7.1    dist/jquery.min.js              MIT           fc9a93dd241f6b045cbff0481cf4e1901becd0e12fb45166a8f17f95823f0b1a
+jquery-ui.min.js   jquery-ui          1.13.3   dist/jquery-ui.min.js           MIT           b30d2234d5e63896d085816e0bd385da43a50f929029ed72e657c19f80bd4a38
+jquery.form.js     jquery-form        4.3.0    dist/jquery.form.min.js         MIT (dual MIT / LGPL-2.1+, MIT chosen)  dd329c644951f3c041200e8279e3c90063ac5b5c8861fe253fca48df7dd8b99c
+jquery.payment.js  jquery.payment     3.0.0    lib/jquery.payment.min.js       MIT           b51437c45c2be6ce00a55faa767e3773c0b93cc04394fb8ffe57ce59e3d8009e
+
+Tarball integrity (npm dist.integrity):
+  jquery@3.7.1          sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
+  jquery-ui@1.13.3      sha512-D2YJfswSJRh/B8M/zCowDpNFfwsDmtfnMPwjJTyvl+CBqzpYwQ+gFYIbUUlzijy/Qvoy30H1YhoSui4MNYpRwA==
+  jquery-form@4.3.0     sha512-q3uaVCEWdLOYUCI6dpNdwf/7cJFOsUgdpq6r0taxtGQ5NJSkOzofyWm4jpOuJ5YxdmL1FI5QR+q+HB63HHLGnQ==
+  jquery.payment@3.0.0  sha512-b02U7bf5HIhmfwsODomtLe119VeZ4c5hBvyKkdV3Ih4tTrD08sEPZuhgrX0Sv9iWIb08vNWn4RpaCyZ48mhOJA==
+
+Two files keep their old names so the views that load them do not change:
+jquery.form.js is the minified dist build, jquery.payment.js is the minified lib build.
+jquery.form.js ends with a sourceMappingURL comment; the map is not shipped (devtools only).
+
+To update: npm pack the new version, check the integrity, copy the same path over, update this file
+and THIRD-PARTY.md.

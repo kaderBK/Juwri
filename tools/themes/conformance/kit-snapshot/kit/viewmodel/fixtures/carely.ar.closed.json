@@ -1,0 +1,1634 @@
+{
+ "store": {
+  "public_id": "st_shifa_pharmacy",
+  "slug": "shifa-pharmacy-demo",
+  "name": "صيدلية شفاء",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "صيدلية شفاء"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "صيدلية شفاء"
+  },
+  "tagline": "صيدليتك القريبة، عبر الإنترنت",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/shifa-pharmacy-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/shifa-pharmacy-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "pharmacy",
+  "status": {
+   "open": false,
+   "label": "مغلق · يفتح 2 م",
+   "next_change_at": "2026-10-02T14:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0106",
+   "whatsapp": "+966 55 010 0106",
+   "address": "شارع العليا، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/shifa-pharmacy"
+   }
+  ],
+  "rating": {
+   "avg": 4.8,
+   "count": 962
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/shifa-pharmacy-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/shifa-pharmacy-demo/terms"
+   },
+   {
+    "label": "إشعار خصوصية البيانات الصحية",
+    "url": "/shifa-pharmacy-demo/health-privacy"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "شركة شفاء للتجارة الصيدلية",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-5678",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-6606",
+    "label": "الرقم الضريبي"
+   },
+   "address": "شارع العليا، الرياض 12611"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "الفرع الرئيسي",
+   "address": "شارع العليا، الرياض"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "ship",
+    "label": "شحن",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "pickup_slot",
+    "label": "استلام بموعد",
+    "needs_address": false,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "ship",
+  "schedule_ahead": true,
+  "free_delivery_threshold": {
+   "minor": 10000,
+   "currency": "SAR",
+   "formatted": "100.00 ر.س"
+  },
+  "refunds": {
+   "returns": false
+  }
+ },
+ "theme": {
+  "slug": "carely",
+  "preset": "clinic",
+  "settings": {
+   "colors.primary": "#146C4B",
+   "colors.background": "#FFFFFF",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#10231B",
+   "colors.accent": "#0E5A8A",
+   "layout.radius": "round",
+   "layout.density": "cozy",
+   "fonts.pair": "inter",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#5FD3A0",
+   "colors_dark.background": "#0B1411",
+   "colors_dark.surface": "#121E19",
+   "colors_dark.text": "#E8F1EC",
+   "colors_dark.accent": "#7CC4F2",
+   "layout.card": "grid",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "drawer",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "otc_notice",
+   "age_gate",
+   "order_type",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "licence",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "announcement": "توصيل مجاني فوق 100 ر.س · استلام في اليوم نفسه",
+   "hero_title": "مستلزمات صحية يومية",
+   "featured_title": "مستلزمات يومية",
+   "search_placeholder": "ابحث عن دواء أو علامة أو مادة فعالة"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "pain-relief",
+    "name": "مسكنات الألم",
+    "item_ids": [
+     "paracetamol-500",
+     "ibuprofen-tablets",
+     "paracetamol-kids-suspension",
+     "diclofenac-gel",
+     "aspirin-dispersible",
+     "warming-back-patches"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مسكنات الألم"
+    }
+   },
+   {
+    "id": "cold-flu",
+    "name": "البرد والإنفلونزا والحساسية",
+    "item_ids": [
+     "cold-flu-sachets",
+     "throat-lozenges",
+     "saline-nasal-spray",
+     "cough-syrup-dm",
+     "loratadine-allergy",
+     "vapour-rub"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "البرد والإنفلونزا والحساسية"
+    }
+   },
+   {
+    "id": "vitamins",
+    "name": "الفيتامينات والعافية",
+    "item_ids": [
+     "vitamin-d3",
+     "vitamin-c-effervescent",
+     "multivitamin-adult",
+     "omega-3-softgels",
+     "calcium-d3-chewable",
+     "sleep-aid"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الفيتامينات والعافية"
+    }
+   },
+   {
+    "id": "skin-care",
+    "name": "العناية بالبشرة",
+    "item_ids": [
+     "moisturising-cream",
+     "sunscreen-50",
+     "clotrimazole-cream",
+     "calamine-lotion",
+     "lip-balm"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "العناية بالبشرة"
+    }
+   },
+   {
+    "id": "baby",
+    "name": "الأم والطفل",
+    "item_ids": [
+     "nappy-cream",
+     "baby-wipes",
+     "baby-shampoo",
+     "baby-lotion",
+     "baby-oil"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الأم والطفل"
+    }
+   },
+   {
+    "id": "first-aid",
+    "name": "الإسعافات الأولية",
+    "item_ids": [
+     "plasters-assorted",
+     "povidone-iodine",
+     "gauze-pads",
+     "digital-thermometer",
+     "oral-rehydration-salts"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "الإسعافات الأولية"
+    }
+   },
+   {
+    "id": "oral-care",
+    "name": "العناية بالفم",
+    "item_ids": [
+     "fluoride-toothpaste",
+     "soft-toothbrush",
+     "mouthwash-alcohol-free",
+     "dental-floss"
+    ],
+    "count": 4,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "العناية بالفم"
+    }
+   },
+   {
+    "id": "personal-care",
+    "name": "العناية الشخصية",
+    "item_ids": [
+     "hand-sanitiser",
+     "face-masks",
+     "deodorant-roll-on",
+     "anti-dandruff-shampoo"
+    ],
+    "count": 4,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "العناية الشخصية"
+    }
+   }
+  ],
+  "items": {
+   "paracetamol-500": {
+    "id": "paracetamol-500",
+    "name": "أقراص باراسيتامول 500 mg",
+    "url": "/shifa-pharmacy-demo/p/paracetamol-500",
+    "short": "لتخفيف الألم الخفيف إلى المتوسط وخفض الحرارة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص باراسيتامول 500 mg"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "6.50 ر.س"
+    },
+    "pack_label": "12 قرصًا · 0.54 ر.س / قرص"
+   },
+   "ibuprofen-tablets": {
+    "id": "ibuprofen-tablets",
+    "name": "أقراص إيبوبروفين",
+    "url": "/shifa-pharmacy-demo/p/ibuprofen-tablets",
+    "short": "لتخفيف الألم والالتهاب والحمى على المدى القصير.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص إيبوبروفين"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 750,
+     "currency": "SAR",
+     "formatted": "7.50 ر.س"
+    },
+    "pack_label": "12 قرصًا · 0.63 ر.س / قرص"
+   },
+   "paracetamol-kids-suspension": {
+    "id": "paracetamol-kids-suspension",
+    "name": "معلق باراسيتامول للأطفال 120 mg/5 ml",
+    "url": "/shifa-pharmacy-demo/p/paracetamol-kids-suspension",
+    "short": "معلق بنكهة الفراولة للحمى والألم الخفيف عند الأطفال.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "معلق باراسيتامول للأطفال 120 mg/5 ml"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira Kids",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    },
+    "pack_label": "زجاجة 100 ml · 0.14 ر.س / ml"
+   },
+   "diclofenac-gel": {
+    "id": "diclofenac-gel",
+    "name": "جل ديكلوفيناك 1% لتسكين الألم",
+    "url": "/shifa-pharmacy-demo/p/diclofenac-gel",
+    "short": "جل لآلام العضلات والمفاصل والالتواءات والإجهاد العضلي.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "جل ديكلوفيناك 1% لتسكين الألم"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Voltix",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "21.00 ر.س"
+    },
+    "pack_label": "أنبوب 50 g · 0.42 ر.س / g"
+   },
+   "aspirin-dispersible": {
+    "id": "aspirin-dispersible",
+    "name": "أقراص أسبرين 300 mg قابلة للذوبان",
+    "url": "/shifa-pharmacy-demo/p/aspirin-dispersible",
+    "short": "تُذاب في الماء لتخفيف الألم والحمى.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص أسبرين 300 mg قابلة للذوبان"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "8.00 ر.س"
+    },
+    "pack_label": "16 قرصًا · 0.50 ر.س / قرص"
+   },
+   "warming-back-patches": {
+    "id": "warming-back-patches",
+    "name": "لصقات دافئة للظهر",
+    "url": "/shifa-pharmacy-demo/p/warming-back-patches",
+    "short": "لصقات ذاتية التسخين توفر دفئًا لطيفًا حتى 8 ساعات.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لصقات دافئة للظهر"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Thermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "17.00 ر.س"
+    },
+    "pack_label": "5 لصقات · 3.40 ر.س / لصقة"
+   },
+   "cold-flu-sachets": {
+    "id": "cold-flu-sachets",
+    "name": "أكياس البرد والإنفلونزا بنكهة الليمون الساخن",
+    "url": "/shifa-pharmacy-demo/p/cold-flu-sachets",
+    "short": "مشروب ساخن لتخفيف أعراض البرد والإنفلونزا.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أكياس البرد والإنفلونزا بنكهة الليمون الساخن"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 1000,
+     "currency": "SAR",
+     "formatted": "10.00 ر.س"
+    },
+    "pack_label": "5 أكياس · 2.00 ر.س / كيس"
+   },
+   "throat-lozenges": {
+    "id": "throat-lozenges",
+    "name": "أقراص مص لالتهاب الحلق بالعسل والليمون",
+    "url": "/shifa-pharmacy-demo/p/throat-lozenges",
+    "short": "أقراص مص مطهّرة تهدّئ التهاب الحلق.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص مص لالتهاب الحلق بالعسل والليمون"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Soothex",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    },
+    "pack_label": "24 قرص مص · 0.58 ر.س / قرص"
+   },
+   "saline-nasal-spray": {
+    "id": "saline-nasal-spray",
+    "name": "بخاخ أنف بمحلول ملحي",
+    "url": "/shifa-pharmacy-demo/p/saline-nasal-spray",
+    "short": "بخاخ متوازن التوتر يساعد على تنظيف الأنف المسدود.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بخاخ أنف بمحلول ملحي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Nasalia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    },
+    "pack_label": "بخاخ 20 ml · 0.55 ر.س / ml"
+   },
+   "cough-syrup-dm": {
+    "id": "cough-syrup-dm",
+    "name": "شراب السعال الجاف",
+    "url": "/shifa-pharmacy-demo/p/cough-syrup-dm",
+    "short": "شراب لتهدئة السعال الجاف المتهيّج.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شراب السعال الجاف"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": false,
+    "age_restricted": true,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    },
+    "pack_label": "زجاجة 120 ml · 0.16 ر.س / ml"
+   },
+   "loratadine-allergy": {
+    "id": "loratadine-allergy",
+    "name": "أقراص تخفيف الحساسية 10 mg",
+    "url": "/shifa-pharmacy-demo/p/loratadine-allergy",
+    "short": "أقراص لا تسبب النعاس لحساسية الأنف وأنواع الحساسية الأخرى.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص تخفيف الحساسية 10 mg"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Allerfree",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    },
+    "pack_label": "10 أقراص · 1.20 ر.س / قرص"
+   },
+   "vapour-rub": {
+    "id": "vapour-rub",
+    "name": "مرهم بخاري بالمنثول",
+    "url": "/shifa-pharmacy-demo/p/vapour-rub",
+    "short": "مرهم دافئ للصدر والظهر أثناء نزلات البرد.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مرهم بخاري بالمنثول"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Soothex",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1300,
+     "currency": "SAR",
+     "formatted": "13.00 ر.س"
+    },
+    "pack_label": "علبة 50 g · 0.26 ر.س / g"
+   },
+   "vitamin-d3": {
+    "id": "vitamin-d3",
+    "name": "كبسولات فيتامين D3",
+    "url": "/shifa-pharmacy-demo/p/vitamin-d3",
+    "short": "مكمل يومي من فيتامين D في كبسولة لينة سهلة البلع.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كبسولات فيتامين D3"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    },
+    "pack_label": "30 كبسولة · 0.80 ر.س / كبسولة"
+   },
+   "vitamin-c-effervescent": {
+    "id": "vitamin-c-effervescent",
+    "name": "أقراص فيتامين C 1000 mg فوارة",
+    "url": "/shifa-pharmacy-demo/p/vitamin-c-effervescent",
+    "short": "أقراص فوارة بنكهة البرتقال.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص فيتامين C 1000 mg فوارة"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    },
+    "pack_label": "20 قرصًا · 1.10 ر.س / قرص"
+   },
+   "multivitamin-adult": {
+    "id": "multivitamin-adult",
+    "name": "أقراص الفيتامينات المتعددة والمعادن للبالغين",
+    "url": "/shifa-pharmacy-demo/p/multivitamin-adult",
+    "short": "فيتامينات متعددة يومية مع معادن أساسية.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص الفيتامينات المتعددة والمعادن للبالغين"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −16%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "38.00 ر.س"
+    },
+    "from_price": {
+     "minor": 3200,
+     "currency": "SAR",
+     "formatted": "32.00 ر.س"
+    },
+    "pack_label": "30 قرصًا · 1.07 ر.س / قرص"
+   },
+   "omega-3-softgels": {
+    "id": "omega-3-softgels",
+    "name": "كبسولات زيت السمك أوميغا 3 بقوة 1000 mg",
+    "url": "/shifa-pharmacy-demo/p/omega-3-softgels",
+    "short": "كبسولات زيت السمك بطعم ليمون خفيف.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كبسولات زيت السمك أوميغا 3 بقوة 1000 mg"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Nordica",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 4900,
+     "currency": "SAR",
+     "formatted": "49.00 ر.س"
+    },
+    "pack_label": "60 كبسولة · 0.82 ر.س / كبسولة"
+   },
+   "calcium-d3-chewable": {
+    "id": "calcium-d3-chewable",
+    "name": "أقراص مضغ كالسيوم وفيتامين D3",
+    "url": "/shifa-pharmacy-demo/p/calcium-d3-chewable",
+    "short": "أقراص مضغ بنكهة الفواكه.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص مضغ كالسيوم وفيتامين D3"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "38.00 ر.س"
+    },
+    "pack_label": "60 قرصًا · 0.63 ر.س / قرص"
+   },
+   "sleep-aid": {
+    "id": "sleep-aid",
+    "name": "أقراص مساعدة على النوم الليلي",
+    "url": "/shifa-pharmacy-demo/p/sleep-aid",
+    "short": "للتخفيف قصير المدى من الأرق العارض.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أقراص مساعدة على النوم الليلي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Calmex",
+    "has_required_choices": false,
+    "age_restricted": true,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    },
+    "pack_label": "20 قرصًا · 0.95 ر.س / قرص"
+   },
+   "moisturising-cream": {
+    "id": "moisturising-cream",
+    "name": "كريم ترطيب يومي",
+    "url": "/shifa-pharmacy-demo/p/moisturising-cream",
+    "short": "كريم خفيف للبشرة الجافة في الوجه والجسم.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كريم ترطيب يومي"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    },
+    "pack_label": "علبة 250 g · 0.10 ر.س / g"
+   },
+   "sunscreen-50": {
+    "id": "sunscreen-50",
+    "name": "لوشن واقي من الشمس بعامل حماية 50",
+    "url": "/shifa-pharmacy-demo/p/sunscreen-50",
+    "short": "لوشن مقاوم للماء للوجه والجسم.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لوشن واقي من الشمس بعامل حماية 50"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −21%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Solara",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "58.00 ر.س"
+    },
+    "price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "46.00 ر.س"
+    },
+    "pack_label": "زجاجة 100 ml · 0.46 ر.س / ml"
+   },
+   "clotrimazole-cream": {
+    "id": "clotrimazole-cream",
+    "name": "كريم مضاد للفطريات 1%",
+    "url": "/shifa-pharmacy-demo/p/clotrimazole-cream",
+    "short": "كريم لعلاج الالتهابات الفطرية في الجلد.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كريم مضاد للفطريات 1%"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Mycofree",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "15.00 ر.س"
+    },
+    "pack_label": "أنبوب 20 g · 0.75 ر.س / g"
+   },
+   "calamine-lotion": {
+    "id": "calamine-lotion",
+    "name": "لوشن الكالامين",
+    "url": "/shifa-pharmacy-demo/p/calamine-lotion",
+    "short": "لوشن منعش للبشرة المثارة ولدغات الحشرات.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لوشن الكالامين"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    },
+    "pack_label": "زجاجة 100 ml · 0.09 ر.س / ml"
+   },
+   "lip-balm": {
+    "id": "lip-balm",
+    "name": "بلسم شفاه بعامل حماية 15",
+    "url": "/shifa-pharmacy-demo/p/lip-balm",
+    "short": "بلسم ناعم للشفاه الجافة والمتشققة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بلسم شفاه بعامل حماية 15"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "8.00 ر.س"
+    },
+    "pack_label": "عبوة 4.5 g"
+   },
+   "nappy-cream": {
+    "id": "nappy-cream",
+    "name": "كريم التهاب الحفاض",
+    "url": "/shifa-pharmacy-demo/p/nappy-cream",
+    "short": "كريم واقٍ بالزنك لالتهاب الحفاض.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كريم التهاب الحفاض"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "17.00 ر.س"
+    },
+    "pack_label": "أنبوب 100 g · 0.17 ر.س / g"
+   },
+   "baby-wipes": {
+    "id": "baby-wipes",
+    "name": "مناديل مبللة للأطفال للبشرة الحساسة",
+    "url": "/shifa-pharmacy-demo/p/baby-wipes",
+    "short": "مناديل خالية من العطور للبشرة الرقيقة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناديل مبللة للأطفال للبشرة الحساسة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    },
+    "pack_label": "72 منديلًا · 0.17 ر.س / منديل"
+   },
+   "baby-shampoo": {
+    "id": "baby-shampoo",
+    "name": "شامبو أطفال لا يلسع العينين",
+    "url": "/shifa-pharmacy-demo/p/baby-shampoo",
+    "short": "شامبو لطيف لشعر الطفل وفروة رأسه.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شامبو أطفال لا يلسع العينين"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    },
+    "pack_label": "زجاجة 250 ml · 0.08 ر.س / ml"
+   },
+   "baby-lotion": {
+    "id": "baby-lotion",
+    "name": "لوشن لطيف للأطفال",
+    "url": "/shifa-pharmacy-demo/p/baby-lotion",
+    "short": "لوشن خفيف سريع الامتصاص لبشرة الطفل.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لوشن لطيف للأطفال"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −19%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 2600,
+     "currency": "SAR",
+     "formatted": "26.00 ر.س"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "21.00 ر.س"
+    },
+    "pack_label": "زجاجة 300 ml · 0.07 ر.س / ml"
+   },
+   "baby-oil": {
+    "id": "baby-oil",
+    "name": "زيت تدليك للأطفال",
+    "url": "/shifa-pharmacy-demo/p/baby-oil",
+    "short": "زيت ناعم لتدليك الطفل بعد الاستحمام.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "زيت تدليك للأطفال"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    },
+    "pack_label": "زجاجة 200 ml · 0.08 ر.س / ml"
+   },
+   "plasters-assorted": {
+    "id": "plasters-assorted",
+    "name": "لصقات جروح بمقاسات متنوعة",
+    "url": "/shifa-pharmacy-demo/p/plasters-assorted",
+    "short": "لصقات تسمح بمرور الهواء بمقاسات متنوعة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لصقات جروح بمقاسات متنوعة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    },
+    "pack_label": "40 لصقة · 0.23 ر.س / لصقة"
+   },
+   "povidone-iodine": {
+    "id": "povidone-iodine",
+    "name": "محلول مطهّر بوفيدون اليود 10%",
+    "url": "/shifa-pharmacy-demo/p/povidone-iodine",
+    "short": "محلول مطهّر للجروح والخدوش.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "محلول مطهّر بوفيدون اليود 10%"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    },
+    "pack_label": "زجاجة 100 ml · 0.12 ر.س / ml"
+   },
+   "gauze-pads": {
+    "id": "gauze-pads",
+    "name": "ضمادات شاش معقمة",
+    "url": "/shifa-pharmacy-demo/p/gauze-pads",
+    "short": "ضمادات معقمة مغلفة فرديًا، 10 × 10 سم.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ضمادات شاش معقمة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "7.00 ر.س"
+    },
+    "pack_label": "10 ضمادات · 0.70 ر.س / ضمادة"
+   },
+   "digital-thermometer": {
+    "id": "digital-thermometer",
+    "name": "ميزان حرارة رقمي",
+    "url": "/shifa-pharmacy-demo/p/digital-thermometer",
+    "short": "ميزان حرارة سريع ودقيق برأس مرن.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ميزان حرارة رقمي"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 2500,
+     "currency": "SAR",
+     "formatted": "25.00 ر.س"
+    },
+    "pack_label": "ميزان حرارة واحد"
+   },
+   "oral-rehydration-salts": {
+    "id": "oral-rehydration-salts",
+    "name": "أملاح الإماهة الفموية",
+    "url": "/shifa-pharmacy-demo/p/oral-rehydration-salts",
+    "short": "أكياس تعوّض السوائل والأملاح المفقودة مع الإسهال.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أملاح الإماهة الفموية"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Hydrafix",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    },
+    "pack_label": "10 أكياس · 1.60 ر.س / كيس"
+   },
+   "fluoride-toothpaste": {
+    "id": "fluoride-toothpaste",
+    "name": "معجون أسنان بالفلورايد",
+    "url": "/shifa-pharmacy-demo/p/fluoride-toothpaste",
+    "short": "معجون أسنان يومي للوقاية من التسوس.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "معجون أسنان بالفلورايد"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    },
+    "pack_label": "أنبوب 100 ml · 0.11 ر.س / ml"
+   },
+   "soft-toothbrush": {
+    "id": "soft-toothbrush",
+    "name": "فرشاة أسنان ناعمة",
+    "url": "/shifa-pharmacy-demo/p/soft-toothbrush",
+    "short": "فرشاة بشعيرات ناعمة ومقبض مريح.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "فرشاة أسنان ناعمة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 600,
+     "currency": "SAR",
+     "formatted": "6.00 ر.س"
+    },
+    "pack_label": "فرشاة واحدة"
+   },
+   "mouthwash-alcohol-free": {
+    "id": "mouthwash-alcohol-free",
+    "name": "غسول فم مضاد للبكتيريا خالٍ من الكحول",
+    "url": "/shifa-pharmacy-demo/p/mouthwash-alcohol-free",
+    "short": "غسول بنكهة النعناع ينعش النفَس.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "غسول فم مضاد للبكتيريا خالٍ من الكحول"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −18%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    },
+    "pack_label": "زجاجة 500 ml · 0.04 ر.س / ml"
+   },
+   "dental-floss": {
+    "id": "dental-floss",
+    "name": "خيط أسنان مشمّع",
+    "url": "/shifa-pharmacy-demo/p/dental-floss",
+    "short": "خيط مشمّع بنكهة النعناع ينزلق بين الأسنان.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "خيط أسنان مشمّع"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "7.00 ر.س"
+    },
+    "pack_label": "بكرة 50 m · 0.14 ر.س / m"
+   },
+   "hand-sanitiser": {
+    "id": "hand-sanitiser",
+    "name": "جل معقم لليدين بكحول 70%",
+    "url": "/shifa-pharmacy-demo/p/hand-sanitiser",
+    "short": "جل سريع الجفاف ينظف اليدين دون ماء.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "جل معقم لليدين بكحول 70%"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    },
+    "pack_label": "زجاجة 250 ml · 0.05 ر.س / ml"
+   },
+   "face-masks": {
+    "id": "face-masks",
+    "name": "كمامات وجه للاستعمال مرة واحدة",
+    "url": "/shifa-pharmacy-demo/p/face-masks",
+    "short": "كمامات من ثلاث طبقات بأربطة للأذن.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كمامات وجه للاستعمال مرة واحدة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    },
+    "pack_label": "50 كمامة · 0.38 ر.س / كمامة"
+   },
+   "deodorant-roll-on": {
+    "id": "deodorant-roll-on",
+    "name": "مزيل عرق رول خالٍ من العطور",
+    "url": "/shifa-pharmacy-demo/p/deodorant-roll-on",
+    "short": "مزيل عرق لطيف للبشرة الحساسة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مزيل عرق رول خالٍ من العطور"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    },
+    "pack_label": "رول 50 ml · 0.22 ر.س / ml"
+   },
+   "anti-dandruff-shampoo": {
+    "id": "anti-dandruff-shampoo",
+    "name": "شامبو مضاد للقشرة",
+    "url": "/shifa-pharmacy-demo/p/anti-dandruff-shampoo",
+    "short": "شامبو يومي يساعد على السيطرة على القشرة.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شامبو مضاد للقشرة"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −20%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 3000,
+     "currency": "SAR",
+     "formatted": "30.00 ر.س"
+    },
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    },
+    "pack_label": "زجاجة 200 ml · 0.12 ر.س / ml"
+   }
+  },
+  "total": 41,
+  "next_page_url": null,
+  "facets": [
+   {
+    "id": "form",
+    "label": "الشكل",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "قرص",
+      "label": "قرص",
+      "count": 4
+     },
+     {
+      "value": "قرص-مغلف",
+      "label": "قرص مغلف",
+      "count": 1
+     },
+     {
+      "value": "معلق-فموي",
+      "label": "معلق فموي",
+      "count": 1
+     },
+     {
+      "value": "جل",
+      "label": "جل",
+      "count": 2
+     },
+     {
+      "value": "قرص-قابل-للذوبان",
+      "label": "قرص قابل للذوبان",
+      "count": 1
+     },
+     {
+      "value": "لصقة",
+      "label": "لصقة",
+      "count": 2
+     },
+     {
+      "value": "مسحوق-للمحلول-الفموي",
+      "label": "مسحوق للمحلول الفموي",
+      "count": 2
+     },
+     {
+      "value": "قرص-مص",
+      "label": "قرص مص",
+      "count": 1
+     },
+     {
+      "value": "بخاخ-أنفي",
+      "label": "بخاخ أنفي",
+      "count": 1
+     },
+     {
+      "value": "شراب-فموي",
+      "label": "شراب فموي",
+      "count": 1
+     },
+     {
+      "value": "مرهم",
+      "label": "مرهم",
+      "count": 1
+     },
+     {
+      "value": "كبسولة-لينة",
+      "label": "كبسولة لينة",
+      "count": 2
+     },
+     {
+      "value": "قرص-فوار",
+      "label": "قرص فوار",
+      "count": 1
+     },
+     {
+      "value": "قرص-مضغ",
+      "label": "قرص مضغ",
+      "count": 1
+     },
+     {
+      "value": "كريم",
+      "label": "كريم",
+      "count": 3
+     },
+     {
+      "value": "لوشن",
+      "label": "لوشن",
+      "count": 3
+     },
+     {
+      "value": "بلسم",
+      "label": "بلسم",
+      "count": 1
+     },
+     {
+      "value": "مناديل",
+      "label": "مناديل",
+      "count": 1
+     },
+     {
+      "value": "شامبو",
+      "label": "شامبو",
+      "count": 2
+     },
+     {
+      "value": "زيت",
+      "label": "زيت",
+      "count": 1
+     },
+     {
+      "value": "محلول-جلدي",
+      "label": "محلول جلدي",
+      "count": 1
+     },
+     {
+      "value": "ضماد",
+      "label": "ضماد",
+      "count": 1
+     },
+     {
+      "value": "جهاز",
+      "label": "جهاز",
+      "count": 1
+     },
+     {
+      "value": "معجون-أسنان",
+      "label": "معجون أسنان",
+      "count": 1
+     },
+     {
+      "value": "فرشاة-أسنان",
+      "label": "فرشاة أسنان",
+      "count": 1
+     },
+     {
+      "value": "غسول-فم",
+      "label": "غسول فم",
+      "count": 1
+     },
+     {
+      "value": "خيط",
+      "label": "خيط",
+      "count": 1
+     },
+     {
+      "value": "كمامة",
+      "label": "كمامة",
+      "count": 1
+     },
+     {
+      "value": "رول",
+      "label": "رول",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "id": "brand",
+    "label": "العلامة",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "Medira",
+      "label": "Medira",
+      "count": 5
+     },
+     {
+      "value": "Medira Kids",
+      "label": "Medira Kids",
+      "count": 1
+     },
+     {
+      "value": "Voltix",
+      "label": "Voltix",
+      "count": 1
+     },
+     {
+      "value": "Thermia",
+      "label": "Thermia",
+      "count": 1
+     },
+     {
+      "value": "Soothex",
+      "label": "Soothex",
+      "count": 2
+     },
+     {
+      "value": "Nasalia",
+      "label": "Nasalia",
+      "count": 1
+     },
+     {
+      "value": "Allerfree",
+      "label": "Allerfree",
+      "count": 1
+     },
+     {
+      "value": "Vitalis",
+      "label": "Vitalis",
+      "count": 4
+     },
+     {
+      "value": "Nordica",
+      "label": "Nordica",
+      "count": 1
+     },
+     {
+      "value": "Calmex",
+      "label": "Calmex",
+      "count": 1
+     },
+     {
+      "value": "Dermia",
+      "label": "Dermia",
+      "count": 5
+     },
+     {
+      "value": "Solara",
+      "label": "Solara",
+      "count": 1
+     },
+     {
+      "value": "Mycofree",
+      "label": "Mycofree",
+      "count": 1
+     },
+     {
+      "value": "Little Leaf",
+      "label": "Little Leaf",
+      "count": 5
+     },
+     {
+      "value": "Safeguard",
+      "label": "Safeguard",
+      "count": 6
+     },
+     {
+      "value": "Hydrafix",
+      "label": "Hydrafix",
+      "count": 1
+     },
+     {
+      "value": "Brightly",
+      "label": "Brightly",
+      "count": 4
+     }
+    ]
+   },
+   {
+    "id": "age_restricted",
+    "label": "للبالغين فقط",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "18+ فقط",
+      "count": 2
+     }
+    ]
+   },
+   {
+    "id": "in_stock",
+    "label": "متوفر فقط",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "متوفر فقط"
+     }
+    ]
+   }
+  ]
+ },
+ "features": {
+  "announcement": {
+   "text": "توصيل مجاني فوق 100 ر.س · استلام في اليوم نفسه",
+   "icon": "truck"
+  },
+  "featured": [
+   "vitamin-d3",
+   "moisturising-cream",
+   "nappy-cream",
+   "plasters-assorted",
+   "fluoride-toothpaste",
+   "hand-sanitiser"
+  ],
+  "pharmacy": {
+   "disclaimer": "نبيع الأدوية التي تُصرف دون وصفة طبية والمنتجات الصحية فقط، ولا نصرف الأدوية التي تتطلب وصفة. اقرأ الملصق والنشرة قبل الاستعمال، واسأل الصيدلي إن لم تكن متأكدًا.",
+   "entry_gate": true,
+   "min_age": 18,
+   "licence": {
+    "legal_name": "شركة شفاء للتجارة الصيدلية",
+    "number": "SAMPLE-0000-1234",
+    "country": "SA",
+    "regulator": "sa_moh",
+    "authority": "وزارة الصحة، المملكة العربية السعودية (نموذج)",
+    "pharmacist_in_charge": {
+     "name": "د. ليلى العامري (نموذج)",
+     "registration_no": "RN-SAMPLE-5521",
+     "registration_label": "رقم التصنيف المهني"
+    },
+    "address": "شارع العليا، الرياض 12611"
+   },
+   "analytics_off": true
+  }
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/shifa-pharmacy-demo/cart",
+  "quote": "/shifa-pharmacy-demo/quote",
+  "place": "/shifa-pharmacy-demo/order",
+  "track": "/shifa-pharmacy-demo/track",
+  "coupon": "/shifa-pharmacy-demo/coupon",
+  "otp": "/shifa-pharmacy-demo/otp",
+  "account": "/shifa-pharmacy-demo/account",
+  "search": "/shifa-pharmacy-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {}
+}

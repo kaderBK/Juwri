@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="juwri-feat-title juwri-feat-desc">
+  <title id="juwri-feat-title">juwri capability map</title>
+  <desc id="juwri-feat-desc">An animated map of eight commerce capabilities connected to one engine: catalog, ordering and POS, fulfilment, payments, inventory, customers and loyalty, automation and agents, and analytics. An MCP agent endpoint connects to the core.</desc>
+  <style>
+    .tile { cursor: pointer; }
+    .tile:hover .tile-bg { stroke: #5AD6AE; stroke-opacity: 1; }
+    .tile:hover .tile-label { fill: #8FE8C9; }
+  </style>
+  <defs>
+    <linearGradient id="jf-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1410"/>
+      <stop offset="1" stop-color="#132B20"/>
+    </linearGradient>
+    <radialGradient id="jf-core" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5AD6AE" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#5AD6AE" stop-opacity="0.04"/>
+    </radialGradient>
+    <clipPath id="jf-card"><rect x="0" y="0" width="1200" height="600" rx="24"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#jf-card)">
+    <rect width="1200" height="600" fill="url(#jf-bg)"/>
+
+    <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+      <text x="48" y="48" font-size="11.5" font-weight="700" letter-spacing="3" fill="#5AD6AE">CAPABILITIES · ONE ENGINE</text>
+      <text x="1152" y="48" text-anchor="end" font-size="11.5" font-weight="600" letter-spacing="1.6" fill="#7E9C8C">AGENTIC COMMERCE</text>
+
+      <!-- connectors -->
+      <g fill="none" stroke="#2A4738" stroke-width="2">
+        <path d="M330 148 C 420 148, 450 240, 508 292"/>
+        <path d="M330 252 C 420 252, 450 270, 508 296"/>
+        <path d="M330 356 C 420 356, 450 330, 508 304"/>
+        <path d="M330 460 C 420 460, 450 360, 508 308"/>
+        <path d="M870 148 C 780 148, 750 240, 692 292"/>
+        <path d="M870 252 C 780 252, 750 270, 692 296"/>
+        <path d="M870 356 C 780 356, 750 330, 692 304"/>
+        <path d="M870 460 C 780 460, 750 360, 692 308"/>
+        <path d="M600 392 V 500"/>
+      </g>
+      <g fill="none" stroke="#5AD6AE" stroke-width="2" stroke-dasharray="5 11" stroke-opacity="0.55">
+        <path d="M330 148 C 420 148, 450 240, 508 292">
+          <animate attributeName="stroke-dashoffset" values="0;-64" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M870 460 C 780 460, 750 360, 692 308">
+          <animate attributeName="stroke-dashoffset" values="0;-64" dur="3s" repeatCount="indefinite"/>
+        </path>
+      </g>
+
+      <!-- travelling markers -->
+      <circle r="4.5" fill="#8FE8C9">
+        <animateMotion path="M330 148 C 420 148, 450 240, 508 292" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <circle r="4.5" fill="#8FE8C9">
+        <animateMotion path="M870 460 C 780 460, 750 360, 692 308" dur="6s" begin="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" dur="6s" begin="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- left tiles -->
+      <g class="tile">
+        <title>Catalog and items — variants, bundles, expiry tracking</title>
+        <rect class="tile-bg" x="60" y="110" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="0s" repeatCount="indefinite"/>
+        </rect>
+        <text x="80" y="140" font-size="11" font-weight="700" fill="#5AD6AE">01</text>
+        <text class="tile-label" x="80" y="162" font-size="15" font-weight="700" fill="#E8F3ED">Catalog and items</text>
+        <text x="80" y="179" font-size="11" fill="#7E9C8C">variants, bundles, expiry</text>
+      </g>
+      <g class="tile">
+        <title>Ordering and POS — web, till and kiosk</title>
+        <rect class="tile-bg" x="60" y="214" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="1s" repeatCount="indefinite"/>
+        </rect>
+        <text x="80" y="244" font-size="11" font-weight="700" fill="#5AD6AE">02</text>
+        <text class="tile-label" x="80" y="266" font-size="15" font-weight="700" fill="#E8F3ED">Ordering and POS</text>
+        <text x="80" y="283" font-size="11" fill="#7E9C8C">web, till, kiosk</text>
+      </g>
+      <g class="tile">
+        <title>Fulfilment — delivery, pickup, shipping and room service</title>
+        <rect class="tile-bg" x="60" y="318" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="80" y="348" font-size="11" font-weight="700" fill="#5AD6AE">03</text>
+        <text class="tile-label" x="80" y="370" font-size="15" font-weight="700" fill="#E8F3ED">Fulfilment</text>
+        <text x="80" y="387" font-size="11" fill="#7E9C8C">delivery, pickup, shipping</text>
+      </g>
+      <g class="tile">
+        <title>Payments — gateways, refunds and receipts</title>
+        <rect class="tile-bg" x="60" y="422" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="3s" repeatCount="indefinite"/>
+        </rect>
+        <text x="80" y="452" font-size="11" font-weight="700" fill="#5AD6AE">04</text>
+        <text class="tile-label" x="80" y="474" font-size="15" font-weight="700" fill="#E8F3ED">Payments</text>
+        <text x="80" y="491" font-size="11" fill="#7E9C8C">gateways, refunds, receipts</text>
+      </g>
+
+      <!-- right tiles -->
+      <g class="tile">
+        <title>Inventory and stock — branches and purchase orders</title>
+        <rect class="tile-bg" x="870" y="110" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="4s" repeatCount="indefinite"/>
+        </rect>
+        <text x="890" y="140" font-size="11" font-weight="700" fill="#5AD6AE">05</text>
+        <text class="tile-label" x="890" y="162" font-size="15" font-weight="700" fill="#E8F3ED">Inventory and stock</text>
+        <text x="890" y="179" font-size="11" fill="#7E9C8C">branches, purchase orders</text>
+      </g>
+      <g class="tile">
+        <title>Customers and loyalty — CRM, points and gift cards</title>
+        <rect class="tile-bg" x="870" y="214" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="5s" repeatCount="indefinite"/>
+        </rect>
+        <text x="890" y="244" font-size="11" font-weight="700" fill="#5AD6AE">06</text>
+        <text class="tile-label" x="890" y="266" font-size="15" font-weight="700" fill="#E8F3ED">Customers and loyalty</text>
+        <text x="890" y="283" font-size="11" fill="#7E9C8C">CRM, points, gift cards</text>
+      </g>
+      <g class="tile">
+        <title>Automation and agents — MCP, webhooks and scheduled jobs</title>
+        <rect class="tile-bg" x="870" y="318" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="890" y="348" font-size="11" font-weight="700" fill="#5AD6AE">07</text>
+        <text class="tile-label" x="890" y="370" font-size="15" font-weight="700" fill="#E8F3ED">Automation and agents</text>
+        <text x="890" y="387" font-size="11" fill="#7E9C8C">MCP, webhooks, jobs</text>
+      </g>
+      <g class="tile">
+        <title>Analytics and reports — sales, staff and channels</title>
+        <rect class="tile-bg" x="870" y="422" width="270" height="76" rx="14" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.22" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.22;1;0.22;0.22" keyTimes="0;0.06;0.14;1" dur="8s" begin="7s" repeatCount="indefinite"/>
+        </rect>
+        <text x="890" y="452" font-size="11" font-weight="700" fill="#5AD6AE">08</text>
+        <text class="tile-label" x="890" y="474" font-size="15" font-weight="700" fill="#E8F3ED">Analytics and reports</text>
+        <text x="890" y="491" font-size="11" fill="#7E9C8C">sales, staff, channels</text>
+      </g>
+
+      <!-- central engine -->
+      <circle cx="600" cy="300" r="120" fill="url(#jf-core)"/>
+      <circle cx="600" cy="300" r="92" fill="#162C21" stroke="#5AD6AE" stroke-opacity="0.6" stroke-width="2">
+        <animate attributeName="r" values="88;96;88" dur="5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="600" y="288" text-anchor="middle" font-size="26" font-weight="700" fill="#F7FAF8">juwri</text>
+      <text x="600" y="314" text-anchor="middle" font-size="12" font-weight="600" letter-spacing="1" fill="#8FE8C9">COMMERCE ENGINE</text>
+      <text x="600" y="338" text-anchor="middle" font-size="11" fill="#7E9C8C">one install · one database</text>
+
+      <!-- MCP agent endpoint -->
+      <rect x="460" y="500" width="280" height="44" rx="22" fill="#162C21" stroke="#5AD6AE" stroke-opacity="0.55" stroke-width="2"/>
+      <circle cx="486" cy="522" r="5" fill="#5AD6AE">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+      <text x="502" y="527" font-size="13" font-weight="700" fill="#E8F3ED">MCP / agent endpoint</text>
+      <text x="600" y="574" text-anchor="middle" font-size="12" fill="#9DB3A9">Agents and integrations talk to the same commerce core through documented extension points.</text>
+    </g>
+  </g>
+</svg>

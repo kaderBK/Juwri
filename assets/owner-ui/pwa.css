@@ -1,0 +1,104 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner dashboard PWA (rev/mobile-app/PWA-SPEC.md) — rules that belong to the
+ * installed app, on top of the owner UI kit (assets/owner-ui/*, not edited here).
+ * Loaded only on signed-in dashboard pages outside the native app.
+ * Tokens only; logical properties.
+ */
+
+/* ── Install / order-alerts card ──────────────────────────────────────── */
+.opwa-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-3) var(--ui-space-4);
+  margin-block-end: var(--ui-space-5);
+}
+
+/* Kit buttons set their own display, which would beat the [hidden] attribute. */
+.opwa-card[hidden],
+.opwa-card [hidden] { display: none !important; }
+
+.opwa-card__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--ui-r-input);
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent-text);
+}
+
+.opwa-card__body {
+  flex: 1 1 180px;
+  min-inline-size: 0;
+}
+
+.ui-scope .opwa-card__title,
+.opwa-card__title {
+  margin: 0;
+  color: var(--ui-ink);
+  font-family: var(--ui-font);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.opwa-card__text {
+  margin: 2px 0 0;
+  color: var(--ui-ink-2);
+  font-size: var(--ui-fs-small, 13px);
+  line-height: 1.45;
+}
+
+.opwa-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-space-2);
+}
+
+/* Phones: text beside the icon, actions on their own row at full width. */
+@media (max-width: 575.98px) {
+  .opwa-card { align-items: flex-start; }
+  .opwa-card__actions { flex: 1 1 100%; }
+  .opwa-card__actions > .ui-btn:not(.ui-btn--ghost) { flex: 1; }
+}
+
+/* ── Installed app (standalone window) ────────────────────────────────── */
+@media (display-mode: standalone) {
+  /* Overscroll shows the page ground, not a white strip. */
+  html { background: var(--ui-bg); }
+
+  /* The layout switches to viewport-fit=cover in the installed app, so the
+     notch / home-indicator insets are real. The kit's tab bar already pads the
+     bottom inset (shell.css), so nothing here adds bottom padding under it; at
+     tablet width (no tab bar) the page's own 30px bottom padding already clears
+     the home indicator. */
+
+  /* An app, not a page: no long-press callouts on chrome. */
+  .ui-tabbar,
+  .app-header { -webkit-touch-callout: none; }
+}
+
+/* A phone on its side: the notch takes one edge. Only there (the insets are 0
+   everywhere else), so desktop and tablet layouts keep their own paddings. */
+@media (display-mode: standalone) and (orientation: landscape) and (max-height: 500px) {
+  .ui-tabbar {
+    padding-inline: max(6px, env(safe-area-inset-left)) max(6px, env(safe-area-inset-right));
+  }
+
+  /* The fixed top bar has no side padding of its own; the page keeps its 15px. */
+  .app-header {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .app-wrapper {
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+  }
+}

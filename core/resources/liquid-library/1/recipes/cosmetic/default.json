@@ -1,0 +1,131 @@
+{
+    "name": "Beauty",
+    "description": "Soft and polished: a split hero, story rings, bestsellers and a portrait product grid with descriptions, shade swatches and wishlist.",
+    "vertical": "cosmetic",
+    "priority": "browse",
+    "tokens": {
+        "colors.primary": "#9e3d5c",
+        "colors.background": "#fdf6f4",
+        "colors.surface": "#ffffff",
+        "colors.text": "#2e1f24",
+        "colors.accent": "#7a4f44",
+        "layout.radius": "pill",
+        "layout.density": "comfortable"
+    },
+    "font_pair": "jakarta",
+    "translations": {
+        "ar": {
+            "name": "تجميل",
+            "description": "ناعم ومصقول: غلاف مقسوم، حلقات قصص، الأكثر مبيعًا وشبكة منتجات طولية بأوصاف وعيّنات ألوان وقائمة أمنيات."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "centered",
+                    "sticky": true
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "split",
+                    "height": "m",
+                    "align": "start",
+                    "image_source": "cover"
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "products"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog"
+                ]
+            },
+            "brand": {
+                "type": "brand-row",
+                "settings": []
+            },
+            "stories": {
+                "type": "stories-rail",
+                "settings": {
+                    "ring": "gradient",
+                    "size": "l"
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "chips",
+                    "sticky": true
+                }
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "popular",
+                    "card": "photo-card",
+                    "show_rating": true
+                }
+            },
+            "products": {
+                "type": "product-grid",
+                "settings": {
+                    "image_ratio": "portrait",
+                    "columns_desktop": 4,
+                    "show_description": true,
+                    "show_variants": true,
+                    "show_wishlist": true
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "pill"
+                }
+            }
+        },
+        "order": [
+            "header",
+            "hero",
+            "brand",
+            "stories",
+            "catnav",
+            "featured",
+            "products",
+            "offers",
+            "reviews",
+            "location",
+            "footer",
+            "cart-bar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

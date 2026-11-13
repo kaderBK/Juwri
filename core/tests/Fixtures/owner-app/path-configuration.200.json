@@ -1,0 +1,20 @@
+{
+    "status": 200,
+    "body": {
+        "rules": {
+            "list_of": {
+                "patterns": {
+                    "list_of": "string"
+                },
+                "properties": {
+                    "context": "string",
+                    "pull_to_refresh_enabled": "bool"
+                }
+            }
+        },
+        "settings": {
+            "account_deletion_path": "string",
+            "version": "int"
+        }
+    }
+}

@@ -1,0 +1,191 @@
+{
+    "initialize": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "f9de71e551b4af29af07f8673395625dc6ec78c137838e0e9845e15d6d4949e1",
+        "length": 174,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-customer-mcp\",\"versi"
+    },
+    "initialize_old": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "30dc2c076b29199e4b9eb615ca2b8d5b79d2b2f1db47ae5f55df4a28df7a6907",
+        "length": 174,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-customer-mcp\",\"versi"
+    },
+    "initialize_unknown": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "f9de71e551b4af29af07f8673395625dc6ec78c137838e0e9845e15d6d4949e1",
+        "length": 174,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-customer-mcp\",\"versi"
+    },
+    "ping": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "fcd8c77a7e0a0e2c93bf89cbf8b02c66255a80aca8114b348de69523a4f6d640",
+        "length": 36,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}"
+    },
+    "tools_list": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "1067ac3608a5c6f6ee789fd2ea93e59173d682b6a7da6664f5a2c633b4c52161",
+        "length": 3857,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"my_orders\",\"description\":\"Your recent orders (most recent first) at the restaurant you are signed in to. Ret"
+    },
+    "unknown_method": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cce6f1d9c45011667ea0af8b964b8389b7825f0ab29e5e78daa883af3375e1a1",
+        "length": 89,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\\/nope\"}}"
+    },
+    "unknown_tool": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "706201aeaca0b54baadfaa3116a8a294601bb2b48d739010eb70bc3716f4f9e9",
+        "length": 79,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown tool: nope\"}}"
+    },
+    "notification": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "39e0590e02bf4db8393d6cbb8845d0a276eed5fdc2f2aacb6c550aef2edfa152",
+        "length": 122,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{}},{\"jsonrpc\":\"2.0\",\"id\":8,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\"}}]"
+    },
+    "notifications_only_batch": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "scalar_batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cc5c2698b3663df631503fd9e0f1bd81c09b4383421dfacad55427964840e89b",
+        "length": 84,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}]"
+    },
+    "invalid_json": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "f96339765a17ec91f2352be0cf7ba8ca2350bf9b4b2d23ef160863314520f5c7",
+        "length": 82,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}"
+    },
+    "bad_protocol_header": {
+        "status": 400,
+        "type": "application/json",
+        "sha256": "93b8efaf44dd464afb46247f2a4fcf0d03d79f140ab7c890f28902f236e702f2",
+        "length": 155,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Unsupported MCP-Protocol-Version: 1999-01-01. Supported: 2024-11-05, 2025-03-26, 2025-06-18\"}}"
+    },
+    "foreign_origin": {
+        "status": 403,
+        "type": "application/json",
+        "sha256": "9619ea80721b75cf311e51ccf964ee969fad22b71fb969b78e27661d1c8adff3",
+        "length": 108,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Origin is not allowed for this MCP endpoint.\"}}"
+    },
+    "call:my_orders": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "0472a1b98d5e70cb8c191a461b9688e18cadf48626c29bc71ee3e2d625ef25f8",
+        "length": 295,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[{\\\"id\\\":1,\\\"status\\\":\\\"pending\\\",\\\"type\\\":\\\"takeaway\\\",\\\"delivery_status\\\":null,\\\"table_num"
+    },
+    "call:my_orders#limit": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "0472a1b98d5e70cb8c191a461b9688e18cadf48626c29bc71ee3e2d625ef25f8",
+        "length": 295,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[{\\\"id\\\":1,\\\"status\\\":\\\"pending\\\",\\\"type\\\":\\\"takeaway\\\",\\\"delivery_status\\\":null,\\\"table_num"
+    },
+    "call:order_detail": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "358e641e639013d7e5419664e017bb2bf0e9eb7844063a7ae051fcda639682b4",
+        "length": 870,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"id\\\":1,\\\"status\\\":\\\"pending\\\",\\\"type\\\":\\\"takeaway\\\",\\\"delivery_status\\\":null,\\\"table_numb"
+    },
+    "call:order_detail#foreign": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "5379b46d4685df71fcd75aa41cfd9db6d71647756b94b7e146dae62fdfda64db",
+        "length": 77,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32004,\"message\":\"Order not found.\"}}"
+    },
+    "call:order_detail#elsewhere": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "5379b46d4685df71fcd75aa41cfd9db6d71647756b94b7e146dae62fdfda64db",
+        "length": 77,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32004,\"message\":\"Order not found.\"}}"
+    },
+    "call:track_order": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "18e4d32092c43d71b6a58f76c5bdd56b543575e20a2b41017033dffa8416120c",
+        "length": 242,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"id\\\":1,\\\"status\\\":\\\"pending\\\",\\\"delivery_status\\\":null,\\\"type\\\":\\\"takeaway\\\",\\\"created_at"
+    },
+    "call:track_order#token": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "18e4d32092c43d71b6a58f76c5bdd56b543575e20a2b41017033dffa8416120c",
+        "length": 242,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"id\\\":1,\\\"status\\\":\\\"pending\\\",\\\"delivery_status\\\":null,\\\"type\\\":\\\"takeaway\\\",\\\"created_at"
+    },
+    "call:track_order#noargs": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "de3f541ef5a62169b655e490d1a8fd47514599d54477e8c1c4948c77f8c14e3f",
+        "length": 93,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Provide order_id or track_token.\"}}"
+    },
+    "call:reorder": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "774d52c30dd1a283eebb3d7f8ec7181bed160aea5ac378ffd326725478be2d13",
+        "length": 134,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"from_order\\\":1,\\\"items\\\":[{\\\"item_id\\\":1,\\\"quantity\\\":2}]}\"}]}}"
+    },
+    "call:reorder#foreign": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "5379b46d4685df71fcd75aa41cfd9db6d71647756b94b7e146dae62fdfda64db",
+        "length": 77,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32004,\"message\":\"Order not found.\"}}"
+    },
+    "call:my_profile": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "2ca91ab09b32a96a728b8b0273a911d3f41b8b60715166aa5b33137bb6f23873",
+        "length": 135,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"name\\\":\\\"Dana\\\",\\\"phone\\\":\\\"550000001\\\",\\\"orders_count\\\":0}\"}]}}"
+    },
+    "call:my_bookings": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "c53c7b2624bee8c745faedf54534915f132a7b69336a22246122b04a713c4956",
+        "length": 75,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[]\"}]}}"
+    },
+    "call:my_gift_cards": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "04c5f41800c38be7a707cff4d9df8c744c131837d4dc696eb00f6f78405e94ea",
+        "length": 242,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"[{\\\"code\\\":\\\"GC-DANA\\\",\\\"balance\\\":0,\\\"formatted\\\":\\\"$ 0.00\\\",\\\"status\\\":\\\"active\\\",\\\"expire"
+    }
+}

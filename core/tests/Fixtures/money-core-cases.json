@@ -1,0 +1,402 @@
+[
+    {
+        "subtotal": 4.1,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.1
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.36
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.83
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.01
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.01
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.55
+    },
+    {
+        "subtotal": 100,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.5
+    },
+    {
+        "subtotal": 0,
+        "rate": 2.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 4.1,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.21
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.73
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 1.67
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 4.02
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.02
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 1.1
+    },
+    {
+        "subtotal": 100,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 5
+    },
+    {
+        "subtotal": 0,
+        "rate": 5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 4.1,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.31
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 1.09
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.5
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 6.02
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.03
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 1.65
+    },
+    {
+        "subtotal": 100,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 7.5
+    },
+    {
+        "subtotal": 0,
+        "rate": 7.5,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 4.1,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.41
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 1.45
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 3.33
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 8.03
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.04
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.2
+    },
+    {
+        "subtotal": 100,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 10
+    },
+    {
+        "subtotal": 0,
+        "rate": 10,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 4.1,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.62
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.18
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 5
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 12.05
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.05
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 3.29
+    },
+    {
+        "subtotal": 100,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 15
+    },
+    {
+        "subtotal": 0,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 4.1,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.82
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 2.9
+    },
+    {
+        "subtotal": 33.3,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 6.66
+    },
+    {
+        "subtotal": 80.3,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 16.06
+    },
+    {
+        "subtotal": 0.35,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0.07
+    },
+    {
+        "subtotal": 21.95,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 4.39
+    },
+    {
+        "subtotal": 100,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 20
+    },
+    {
+        "subtotal": 0,
+        "rate": 20,
+        "type": "percentage",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 0
+    },
+    {
+        "subtotal": 40,
+        "rate": 5,
+        "type": "fixed",
+        "decimals": 2,
+        "currency_code": null,
+        "expected": 5
+    },
+    {
+        "subtotal": 14.5,
+        "rate": 15,
+        "type": "percentage",
+        "decimals": 3,
+        "currency_code": "BHD",
+        "expected": 2.175
+    }
+]

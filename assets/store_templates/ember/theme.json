@@ -1,0 +1,220 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "forge",
+      "label": "Forge",
+      "values": {
+        "colors.primary": "#F97316",
+        "colors.background": "#0b0705",
+        "colors.surface": "#140d08",
+        "colors.text": "#ffffff",
+        "colors.accent": "#F59E0B",
+        "layout.radius": "round"
+      },
+      "thumb": "assets/store_templates/ember/presets/forge.png"
+    },
+    {
+      "id": "charcoal",
+      "label": "Charcoal",
+      "values": {
+        "colors.primary": "#ff5a3c",
+        "colors.background": "#0d0d0f",
+        "colors.surface": "#18181c",
+        "colors.text": "#f4f4f6",
+        "colors.accent": "#ffb02e",
+        "layout.radius": "soft"
+      },
+      "thumb": "assets/store_templates/ember/presets/charcoal.png"
+    },
+    {
+      "id": "crimson",
+      "label": "Crimson",
+      "values": {
+        "colors.primary": "#e03131",
+        "colors.background": "#12080a",
+        "colors.surface": "#1e0f12",
+        "colors.text": "#f7e9ea",
+        "colors.accent": "#f08c00",
+        "layout.radius": "pill"
+      },
+      "thumb": "assets/store_templates/ember/presets/crimson.png"
+    },
+    {
+      "id": "copper",
+      "label": "Copper",
+      "values": {
+        "colors.primary": "#d98a4e",
+        "colors.background": "#faf4ee",
+        "colors.surface": "#ffffff",
+        "colors.text": "#241812",
+        "colors.accent": "#b5651d",
+        "layout.radius": "round"
+      },
+      "thumb": "assets/store_templates/ember/presets/copper.png"
+    },
+    {
+      "id": "ash",
+      "label": "Ash",
+      "values": {
+        "colors.primary": "#c9a227",
+        "colors.background": "#0f0f10",
+        "colors.surface": "#1b1b1d",
+        "colors.text": "#f2f0ea",
+        "colors.accent": "#8a8a8f",
+        "layout.radius": "none"
+      },
+      "thumb": "assets/store_templates/ember/presets/ash.png"
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#F97316"
+        },
+        "colors.background": {
+          "default": "#0b0705"
+        },
+        "colors.surface": {
+          "default": "#140d08"
+        },
+        "colors.text": {
+          "default": "#ffffff"
+        },
+        "colors.accent": {
+          "default": "#F59E0B"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Home hero line",
+          "help": "Plain text. A line break and the highlight style from the default wording are kept; any other HTML is shown as text, not applied.",
+          "default": "Good Food<br><span class=\"hot\">Good Mood!</span>"
+        },
+        {
+          "id": "texts.popular_title",
+          "type": "text",
+          "label": "Popular rail title",
+          "default": "Popular Now"
+        },
+        {
+          "id": "texts.order_now",
+          "type": "text",
+          "label": "Promo button",
+          "default": "Order Now"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": "Add to Cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery",
+          "default": ""
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "Good Food, Good Mood",
+          "label": "Splash tagline"
+        }
+      }
+    },
+    {
+      "include": "search",
+      "fields": {
+        "texts.search_placeholder": {
+          "default": "Search your favorite food",
+          "label": "Search placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Category glass tiles",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "Popular rail + promo",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Menu list",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-labelledby="juwri-hero-title juwri-hero-desc">
+  <title id="juwri-hero-title">juwri — an agentic commerce platform for every kind of store</title>
+  <desc id="juwri-hero-desc">Animated hero: nine store verticals light up in a wave on one shared commerce engine, from restaurants and cafes to retail, grocery, pharmacy, laundry, appointments and hotels.</desc>
+  <defs>
+    <linearGradient id="jh-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1410"/>
+      <stop offset="0.55" stop-color="#0F2018"/>
+      <stop offset="1" stop-color="#132B20"/>
+    </linearGradient>
+    <radialGradient id="jh-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5AD6AE" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#5AD6AE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="jh-sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5AD6AE" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#8FE8C9" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#5AD6AE" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="jh-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <clipPath id="jh-card">
+      <rect x="0" y="0" width="1200" height="460" rx="26"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#jh-card)">
+    <rect width="1200" height="460" fill="url(#jh-bg)"/>
+    <rect width="1200" height="460" fill="url(#jh-grid)"/>
+    <ellipse cx="950" cy="110" rx="330" ry="230" fill="url(#jh-glow)">
+      <animate attributeName="rx" values="300;360;300" dur="7s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="220" cy="450" rx="300" ry="170" fill="url(#jh-glow)" opacity="0.22"/>
+    <rect x="-420" y="0" width="420" height="460" fill="url(#jh-sweep)">
+      <animateTransform attributeName="transform" type="translate" values="0 0;1640 0" dur="12s" repeatCount="indefinite"/>
+    </rect>
+
+    <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+      <!-- brand motif drawn from the real logo: mint V, star and sweep -->
+      <rect x="56" y="50" width="48" height="48" rx="13" fill="#111111" stroke="#5AD6AE" stroke-opacity="0.55"/>
+      <path d="M63 64 L75 92 L87 64" fill="none" stroke="#5AD6AE" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M92 50 L94 56 L100 56 L95 60 L97 66 L92 62 L87 66 L89 60 L84 56 L90 56 Z" fill="#5AD6AE"/>
+      <text x="116" y="84" font-size="30" font-weight="700" letter-spacing="-1" fill="#F7FAF8">juwri</text>
+
+      <text x="56" y="164" font-size="11.5" font-weight="700" letter-spacing="3.2" fill="#5AD6AE">AGENTIC COMMERCE · SELF-HOSTED</text>
+      <text x="56" y="222" font-size="43" font-weight="700" fill="#F7FAF8">One engine.</text>
+      <text x="56" y="274" font-size="43" font-weight="700" fill="#F7FAF8">Every kind of</text>
+      <text x="56" y="326" font-size="43" font-weight="700" fill="#5AD6AE">store.</text>
+      <text x="56" y="368" font-size="15" fill="#9DB3A9">Restaurants are one vertical. Retail, grocery, pharmacy,</text>
+      <text x="56" y="392" font-size="15" fill="#9DB3A9">clothing, laundry, appointments and hotels share the same app.</text>
+
+      <g font-size="11.5" font-weight="600">
+        <rect x="56" y="412" width="118" height="28" rx="14" fill="#5AD6AE" fill-opacity="0.12" stroke="#5AD6AE" stroke-opacity="0.4"/>
+        <text x="115" y="430" text-anchor="middle" fill="#8FE8C9">11 verticals</text>
+        <rect x="184" y="412" width="112" height="28" rx="14" fill="#5AD6AE" fill-opacity="0.12" stroke="#5AD6AE" stroke-opacity="0.4"/>
+        <text x="240" y="430" text-anchor="middle" fill="#8FE8C9">MCP agents</text>
+        <rect x="306" y="412" width="136" height="28" rx="14" fill="#5AD6AE" fill-opacity="0.12" stroke="#5AD6AE" stroke-opacity="0.4"/>
+        <text x="374" y="430" text-anchor="middle" fill="#8FE8C9">AGPL-3.0-only</text>
+      </g>
+    </g>
+
+    <!-- right: one engine, nine verticals -->
+    <rect x="586" y="66" width="566" height="330" rx="22" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600">
+
+      <g>
+        <rect x="606" y="96" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="0s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="626" cy="128" r="5" fill="#5AD6AE"/>
+        <text x="640" y="133" fill="#E8F3ED">Restaurant</text>
+      </g>
+      <g>
+        <rect x="786" y="96" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="1s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="806" cy="128" r="5" fill="#5AD6AE"/>
+        <text x="820" y="133" fill="#E8F3ED">Café</text>
+      </g>
+      <g>
+        <rect x="966" y="96" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="2s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="986" cy="128" r="5" fill="#5AD6AE"/>
+        <text x="1000" y="133" fill="#E8F3ED">Retail</text>
+      </g>
+
+      <g>
+        <rect x="606" y="190" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="3s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="626" cy="222" r="5" fill="#5AD6AE"/>
+        <text x="640" y="227" fill="#E8F3ED">Grocery</text>
+      </g>
+      <g>
+        <rect x="786" y="190" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="4s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="806" cy="222" r="5" fill="#5AD6AE"/>
+        <text x="820" y="227" fill="#E8F3ED">Clothing</text>
+      </g>
+      <g>
+        <rect x="966" y="190" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="5s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="986" cy="222" r="5" fill="#5AD6AE"/>
+        <text x="1000" y="227" fill="#E8F3ED">Pharmacy</text>
+      </g>
+
+      <g>
+        <rect x="606" y="284" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="6s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="626" cy="316" r="5" fill="#5AD6AE"/>
+        <text x="640" y="321" fill="#E8F3ED">Laundry</text>
+      </g>
+      <g>
+        <rect x="786" y="284" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="7s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="806" cy="316" r="5" fill="#5AD6AE"/>
+        <text x="820" y="321" fill="#E8F3ED">Appointments</text>
+      </g>
+      <g>
+        <rect x="966" y="284" width="160" height="64" rx="13" fill="#16281F" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+          <animate attributeName="stroke-opacity" values="0.2;1;0.2;0.2" keyTimes="0;0.06;0.14;1" dur="9s" begin="8s" repeatCount="indefinite"/>
+        </rect>
+        <circle cx="986" cy="316" r="5" fill="#5AD6AE"/>
+        <text x="1000" y="321" fill="#E8F3ED">Hotel</text>
+      </g>
+
+      <text x="608" y="378" font-size="11" font-weight="700" letter-spacing="2.4" fill="#7E9C8C">ONE COMMERCE ENGINE · MANY VERTICALS</text>
+      <circle cx="1108" cy="374" r="4" fill="#5AD6AE">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+</svg>

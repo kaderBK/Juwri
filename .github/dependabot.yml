@@ -1,0 +1,28 @@
+# Dependabot: security updates only. Version updates are done by Renovate (renovate.json), so
+# open-pull-requests-limit is 0 for every ecosystem here; Dependabot security alerts and security updates
+# are enabled in the repository settings and are not limited by this value.
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /core
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+    labels: ["dependencies", "security"]
+
+  - package-ecosystem: npm
+    directory: /core
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+    labels: ["dependencies", "security"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 0
+    labels: ["dependencies", "security"]

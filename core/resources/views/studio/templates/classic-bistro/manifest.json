@@ -1,0 +1,30 @@
+{
+    "name": "Classic Bistro",
+    "aspects": [
+        "a4",
+        "letter"
+    ],
+    "rtl": true,
+    "colors": {
+        "accent": "#8b2635",
+        "bg": "#f6f1e7",
+        "text": "#2b2118"
+    },
+    "fonts": [
+        {
+            "family": "serif-stack",
+            "stack": "'Playfair Display', Georgia, 'Times New Roman', 'Amiri', 'Geeza Pro', serif"
+        }
+    ],
+    "density": {
+        "items_per_page": 28,
+        "columns": 2,
+        "desc_max_chars": 90
+    },
+    "slots": [
+        "store_name",
+        "tagline",
+        "footer_note"
+    ],
+    "art_brief": "subtle vintage bistro paper texture with faint botanical line illustrations in the margins, aged cream tones"
+}

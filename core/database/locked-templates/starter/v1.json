@@ -1,0 +1,568 @@
+{
+  "schema": 1,
+  "meta": {
+    "key": "starter",
+    "version": 1,
+    "name": "Starter",
+    "description": "Open sample template built on the owner-ui kit: header with menu, hero, feature cards, steps, a quote, a contact form and a footer with a QR code to your site.",
+    "category": "Sample",
+    "assets_base": "assets/locked-templates/starter/v1"
+  },
+  "name": "Starter",
+  "source": "juwri sample template (own markup and CSS on the owner-ui kit tokens)",
+  "styles": [
+    "/assets/owner-ui/tokens.css",
+    "style.css"
+  ],
+  "head_scripts": [],
+  "scripts": [
+    "/assets/locked-templates/_runtime/html/html-kit.js"
+  ],
+  "html_class": "",
+  "body_class": "",
+  "main_class": "",
+  "settings": {
+    "theme": {
+      "default": "light"
+    }
+  },
+  "palette": [
+    {
+      "key": "primary",
+      "label": "Brand colour",
+      "default": "#4f46e5",
+      "vars": {
+        "--theme-color": "{c}"
+      }
+    }
+  ],
+  "sections": [
+    {
+      "key": "header",
+      "label": "Header & menu",
+      "required": true,
+      "region": "before",
+      "html": "<header class=\"st-header\" data-lt-section=\"header\">\n  <div class=\"st-wrap st-header-in\">\n    <a class=\"st-brand\" href=\"{{slot:header.home}}\" data-lt-a=\"header.home\"><span class=\"st-brand-mark\">{{slot:header.mark}}</span><span data-lt-t=\"header.brand\">{{slot:header.brand}}</span></a>\n    <nav class=\"st-nav\">{{repeat:header.menu:0}}</nav>\n    <a class=\"st-btn st-btn-primary\" href=\"{{slot:header.cta_link}}\" data-lt-a=\"header.cta_link\" data-lt-t=\"header.cta\">{{slot:header.cta}}</a>\n  </div>\n</header>",
+      "slots": [
+        {
+          "key": "header.home",
+          "type": "link",
+          "label": "Link: Home",
+          "default": "#top"
+        },
+        {
+          "key": "header.mark",
+          "type": "icon",
+          "label": "Icon: Brand mark",
+          "default": "",
+          "default_html": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"4\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"></rect><rect x=\"14\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"></rect><rect x=\"4\" y=\"14\" width=\"6\" height=\"6\" rx=\"1\"></rect><path d=\"M14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2\"></path></svg>",
+          "icon_class": "",
+          "icon_width": "",
+          "icon_height": ""
+        },
+        {
+          "key": "header.brand",
+          "type": "text",
+          "label": "Text: Brand name",
+          "default": "{{store.name}}",
+          "max": 60
+        },
+        {
+          "key": "header.nav1_link",
+          "type": "link",
+          "label": "Link: Features",
+          "default": "#features"
+        },
+        {
+          "key": "header.nav1",
+          "type": "text",
+          "label": "Button text: Features",
+          "default": "Features",
+          "max": 40
+        },
+        {
+          "key": "header.nav2_link",
+          "type": "link",
+          "label": "Link: How it works",
+          "default": "#steps"
+        },
+        {
+          "key": "header.nav2",
+          "type": "text",
+          "label": "Button text: How it works",
+          "default": "How it works",
+          "max": 40
+        },
+        {
+          "key": "header.nav3_link",
+          "type": "link",
+          "label": "Link: Contact",
+          "default": "#contact"
+        },
+        {
+          "key": "header.nav3",
+          "type": "text",
+          "label": "Button text: Contact",
+          "default": "Contact",
+          "max": 40
+        },
+        {
+          "key": "header.cta_link",
+          "type": "link",
+          "label": "Link: Get started",
+          "default": "#contact"
+        },
+        {
+          "key": "header.cta",
+          "type": "text",
+          "label": "Button text: Get started",
+          "default": "Get started",
+          "max": 40
+        }
+      ],
+      "repeaters": [
+        {
+          "key": "header.menu",
+          "label": "Menu links",
+          "min": 0,
+          "max": 8,
+          "items": [
+            {
+              "slots": [
+                "header.nav1_link",
+                "header.nav1"
+              ],
+              "html": [
+                "<a href=\"{{slot:header.nav1_link}}\" data-lt-a=\"header.nav1_link\" data-lt-t=\"header.nav1\">{{slot:header.nav1}}</a>"
+              ]
+            },
+            {
+              "slots": [
+                "header.nav2_link",
+                "header.nav2"
+              ],
+              "html": [
+                "<a href=\"{{slot:header.nav2_link}}\" data-lt-a=\"header.nav2_link\" data-lt-t=\"header.nav2\">{{slot:header.nav2}}</a>"
+              ]
+            },
+            {
+              "slots": [
+                "header.nav3_link",
+                "header.nav3"
+              ],
+              "html": [
+                "<a href=\"{{slot:header.nav3_link}}\" data-lt-a=\"header.nav3_link\" data-lt-t=\"header.nav3\">{{slot:header.nav3}}</a>"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hero",
+      "label": "Hero",
+      "region": "main",
+      "html": "<section class=\"st-section\" id=\"top\" data-lt-section=\"hero\">\n  <div class=\"st-wrap st-hero-grid\">\n    <div>\n      <p class=\"st-eyebrow\" data-lt-t=\"hero.eyebrow\">{{slot:hero.eyebrow}}</p>\n      <h1 class=\"st-h1\" data-lt-t=\"hero.title\">{{slot:hero.title}}</h1>\n      <p class=\"st-lead\" data-lt-t=\"hero.text\">{{slot:hero.text}}</p>\n      <div class=\"st-actions\">\n        <a class=\"st-btn st-btn-primary\" href=\"{{slot:hero.primary_link}}\" data-lt-a=\"hero.primary_link\" data-lt-t=\"hero.primary\">{{slot:hero.primary}}</a>\n        <a class=\"st-btn st-btn-ghost\" href=\"{{slot:hero.secondary_link}}\" data-lt-a=\"hero.secondary_link\" data-lt-t=\"hero.secondary\">{{slot:hero.secondary}}</a>\n      </div>\n    </div>\n    <div class=\"st-hero-art\"><img src=\"{{slot:hero.image}}\" data-lt-img=\"hero.image\" alt=\"\" width=\"480\" height=\"400\"></div>\n  </div>\n</section>",
+      "slots": [
+        {
+          "key": "hero.eyebrow",
+          "type": "text",
+          "label": "Text: Eyebrow",
+          "default": "Ordering made simple",
+          "max": 60
+        },
+        {
+          "key": "hero.title",
+          "type": "text",
+          "label": "Heading: Hero title",
+          "default": "Your menu, your orders, one simple page",
+          "max": 120
+        },
+        {
+          "key": "hero.text",
+          "type": "text",
+          "label": "Paragraph: Hero text",
+          "default": "Show what you offer, take orders and bookings, and keep your guests coming back. Everything on this page can be edited in a few clicks.",
+          "max": 300,
+          "multiline": true
+        },
+        {
+          "key": "hero.primary_link",
+          "type": "link",
+          "label": "Link: Get started",
+          "default": "#contact"
+        },
+        {
+          "key": "hero.primary",
+          "type": "text",
+          "label": "Button text: Get started",
+          "default": "Get started",
+          "max": 40
+        },
+        {
+          "key": "hero.secondary_link",
+          "type": "link",
+          "label": "Link: See features",
+          "default": "#features"
+        },
+        {
+          "key": "hero.secondary",
+          "type": "text",
+          "label": "Button text: See features",
+          "default": "See features",
+          "max": 40
+        },
+        {
+          "key": "hero.image",
+          "type": "image",
+          "label": "Image: Hero illustration",
+          "default": "{{asset}}/media/hero.svg"
+        }
+      ]
+    },
+    {
+      "key": "features",
+      "label": "Features",
+      "region": "main",
+      "html": "<section class=\"st-section\" id=\"features\" data-lt-section=\"features\">\n  <div class=\"st-wrap\">\n    <div class=\"st-head\">\n      <h2 class=\"st-h2\" data-lt-t=\"features.heading\">{{slot:features.heading}}</h2>\n      <p class=\"st-lead\" data-lt-t=\"features.intro\">{{slot:features.intro}}</p>\n    </div>\n    <div class=\"st-grid\">{{repeat:features.cards:0}}</div>\n  </div>\n</section>",
+      "slots": [
+        {
+          "key": "features.heading",
+          "type": "text",
+          "label": "Heading: Features",
+          "default": "Why guests like it",
+          "max": 100
+        },
+        {
+          "key": "features.intro",
+          "type": "text",
+          "label": "Paragraph: Features intro",
+          "default": "A short list of what makes ordering from you easy.",
+          "max": 240,
+          "multiline": true
+        },
+        {
+          "key": "features.icon1",
+          "type": "icon",
+          "label": "Icon: Fast to order",
+          "default": "",
+          "default_html": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M13 3 5 14h6l-1 7 8-11h-6z\"></path></svg>",
+          "icon_class": "",
+          "icon_width": "",
+          "icon_height": ""
+        },
+        {
+          "key": "features.title1",
+          "type": "text",
+          "label": "Heading: Fast to order",
+          "default": "Fast to order",
+          "max": 80
+        },
+        {
+          "key": "features.text1",
+          "type": "text",
+          "label": "Paragraph: Fast to order",
+          "default": "Guests scan, choose and pay from their own phone. No app to install.",
+          "max": 240,
+          "multiline": true
+        },
+        {
+          "key": "features.icon2",
+          "type": "icon",
+          "label": "Icon: Works in any language",
+          "default": "",
+          "default_html": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle><path d=\"M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z\"></path></svg>",
+          "icon_class": "",
+          "icon_width": "",
+          "icon_height": ""
+        },
+        {
+          "key": "features.title2",
+          "type": "text",
+          "label": "Heading: Works in any language",
+          "default": "Works in any language",
+          "max": 80
+        },
+        {
+          "key": "features.text2",
+          "type": "text",
+          "label": "Paragraph: Works in any language",
+          "default": "Your page follows the guest's language and reads right to left when needed.",
+          "max": 240,
+          "multiline": true
+        },
+        {
+          "key": "features.icon3",
+          "type": "icon",
+          "label": "Icon: Clear numbers",
+          "default": "",
+          "default_html": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"></path></svg>",
+          "icon_class": "",
+          "icon_width": "",
+          "icon_height": ""
+        },
+        {
+          "key": "features.title3",
+          "type": "text",
+          "label": "Heading: Clear numbers",
+          "default": "Clear numbers",
+          "max": 80
+        },
+        {
+          "key": "features.text3",
+          "type": "text",
+          "label": "Paragraph: Clear numbers",
+          "default": "See what sells and when, so you can plan stock and staff.",
+          "max": 240,
+          "multiline": true
+        }
+      ],
+      "repeaters": [
+        {
+          "key": "features.cards",
+          "label": "Feature cards",
+          "min": 1,
+          "max": 12,
+          "items": [
+            {
+              "slots": [
+                "features.icon1",
+                "features.title1",
+                "features.text1"
+              ],
+              "html": [
+                "<article class=\"st-card\"><span class=\"st-card-icon\">{{slot:features.icon1}}</span><h3 class=\"st-h3\" data-lt-t=\"features.title1\">{{slot:features.title1}}</h3><p data-lt-t=\"features.text1\">{{slot:features.text1}}</p></article>"
+              ]
+            },
+            {
+              "slots": [
+                "features.icon2",
+                "features.title2",
+                "features.text2"
+              ],
+              "html": [
+                "<article class=\"st-card\"><span class=\"st-card-icon\">{{slot:features.icon2}}</span><h3 class=\"st-h3\" data-lt-t=\"features.title2\">{{slot:features.title2}}</h3><p data-lt-t=\"features.text2\">{{slot:features.text2}}</p></article>"
+              ]
+            },
+            {
+              "slots": [
+                "features.icon3",
+                "features.title3",
+                "features.text3"
+              ],
+              "html": [
+                "<article class=\"st-card\"><span class=\"st-card-icon\">{{slot:features.icon3}}</span><h3 class=\"st-h3\" data-lt-t=\"features.title3\">{{slot:features.title3}}</h3><p data-lt-t=\"features.text3\">{{slot:features.text3}}</p></article>"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "steps",
+      "label": "How it works",
+      "region": "main",
+      "html": "<section class=\"st-section\" id=\"steps\" data-lt-section=\"steps\">\n  <div class=\"st-wrap\">\n    <div class=\"st-head\"><h2 class=\"st-h2\" data-lt-t=\"steps.heading\">{{slot:steps.heading}}</h2></div>\n    <ol class=\"st-steps\">{{repeat:steps.list:0}}</ol>\n  </div>\n</section>",
+      "slots": [
+        {
+          "key": "steps.heading",
+          "type": "text",
+          "label": "Heading: How it works",
+          "default": "How it works",
+          "max": 100
+        },
+        {
+          "key": "steps.title1",
+          "type": "text",
+          "label": "Heading: Scan the code",
+          "default": "Scan the code",
+          "max": 80
+        },
+        {
+          "key": "steps.text1",
+          "type": "text",
+          "label": "Paragraph: Scan the code",
+          "default": "Every table or counter gets its own QR code.",
+          "max": 200,
+          "multiline": true
+        },
+        {
+          "key": "steps.title2",
+          "type": "text",
+          "label": "Heading: Pick and pay",
+          "default": "Pick and pay",
+          "max": 80
+        },
+        {
+          "key": "steps.text2",
+          "type": "text",
+          "label": "Paragraph: Pick and pay",
+          "default": "Guests browse the menu and pay the way they like.",
+          "max": 200,
+          "multiline": true
+        },
+        {
+          "key": "steps.title3",
+          "type": "text",
+          "label": "Heading: Serve",
+          "default": "Serve",
+          "max": 80
+        },
+        {
+          "key": "steps.text3",
+          "type": "text",
+          "label": "Paragraph: Serve",
+          "default": "Orders reach the kitchen right away.",
+          "max": 200,
+          "multiline": true
+        }
+      ],
+      "repeaters": [
+        {
+          "key": "steps.list",
+          "label": "Steps",
+          "min": 1,
+          "max": 8,
+          "items": [
+            {
+              "slots": [
+                "steps.title1",
+                "steps.text1"
+              ],
+              "html": [
+                "<li class=\"st-step\"><h3 class=\"st-h3\" data-lt-t=\"steps.title1\">{{slot:steps.title1}}</h3><p data-lt-t=\"steps.text1\">{{slot:steps.text1}}</p></li>"
+              ]
+            },
+            {
+              "slots": [
+                "steps.title2",
+                "steps.text2"
+              ],
+              "html": [
+                "<li class=\"st-step\"><h3 class=\"st-h3\" data-lt-t=\"steps.title2\">{{slot:steps.title2}}</h3><p data-lt-t=\"steps.text2\">{{slot:steps.text2}}</p></li>"
+              ]
+            },
+            {
+              "slots": [
+                "steps.title3",
+                "steps.text3"
+              ],
+              "html": [
+                "<li class=\"st-step\"><h3 class=\"st-h3\" data-lt-t=\"steps.title3\">{{slot:steps.title3}}</h3><p data-lt-t=\"steps.text3\">{{slot:steps.text3}}</p></li>"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "quote",
+      "label": "Quote",
+      "region": "main",
+      "html": "<section class=\"st-section\" data-lt-section=\"quote\">\n  <div class=\"st-wrap\">\n    <figure class=\"st-quote\">\n      <blockquote data-lt-t=\"quote.text\">{{slot:quote.text}}</blockquote>\n      <figcaption data-lt-t=\"quote.author\">{{slot:quote.author}}</figcaption>\n    </figure>\n  </div>\n</section>",
+      "slots": [
+        {
+          "key": "quote.text",
+          "type": "text",
+          "label": "Paragraph: Quote",
+          "default": "\"We switched in an afternoon. Guests order faster and we spend less time at the till.\"",
+          "max": 300,
+          "multiline": true
+        },
+        {
+          "key": "quote.author",
+          "type": "text",
+          "label": "Text: Quote author",
+          "default": "Sample customer, café owner",
+          "max": 80
+        }
+      ]
+    },
+    {
+      "key": "contact",
+      "label": "Contact form",
+      "region": "main",
+      "html": "<section class=\"st-section\" id=\"contact\" data-lt-section=\"contact\">\n  <div class=\"st-wrap st-contact\">\n    <div>\n      <h2 class=\"st-h2\" data-lt-t=\"contact.heading\">{{slot:contact.heading}}</h2>\n      <p class=\"st-lead\" data-lt-t=\"contact.text\">{{slot:contact.text}}</p>\n    </div>\n    <form class=\"st-form\" action=\"{{form:action}}\" method=\"post\" data-lt-form>{{form:fields}}\n      <input type=\"text\" name=\"name\" required placeholder=\"{{slot:contact.ph_name}}\" aria-label=\"{{slot:contact.ph_name}}\">\n      <input type=\"email\" name=\"email\" required placeholder=\"{{slot:contact.ph_email}}\" aria-label=\"{{slot:contact.ph_email}}\">\n      <textarea name=\"message\" placeholder=\"{{slot:contact.ph_message}}\" aria-label=\"{{slot:contact.ph_message}}\"></textarea>\n      <button class=\"st-btn st-btn-primary\" type=\"submit\" data-lt-t=\"contact.submit\">{{slot:contact.submit}}</button>\n    </form>\n  </div>\n</section>",
+      "slots": [
+        {
+          "key": "contact.heading",
+          "type": "text",
+          "label": "Heading: Contact",
+          "default": "Get in touch",
+          "max": 100
+        },
+        {
+          "key": "contact.text",
+          "type": "text",
+          "label": "Paragraph: Contact text",
+          "default": "Leave your details and we will reply within one working day.",
+          "max": 240,
+          "multiline": true
+        },
+        {
+          "key": "contact.ph_name",
+          "type": "text",
+          "label": "Placeholder: Name",
+          "default": "Your name",
+          "max": 40
+        },
+        {
+          "key": "contact.ph_email",
+          "type": "text",
+          "label": "Placeholder: Email",
+          "default": "Your email",
+          "max": 40
+        },
+        {
+          "key": "contact.ph_message",
+          "type": "text",
+          "label": "Placeholder: Message",
+          "default": "How can we help?",
+          "max": 60
+        },
+        {
+          "key": "contact.submit",
+          "type": "text",
+          "label": "Button text: Send",
+          "default": "Send",
+          "max": 40
+        }
+      ]
+    },
+    {
+      "key": "footer",
+      "label": "Footer",
+      "required": true,
+      "region": "after",
+      "html": "<footer class=\"st-footer\" data-lt-section=\"footer\">\n  <div class=\"st-wrap st-footer-in\">\n    <div>\n      <p data-lt-t=\"footer.text\">{{slot:footer.text}}</p>\n      <p><a href=\"{{slot:footer.link}}\" data-lt-a=\"footer.link\" data-lt-t=\"footer.link_text\">{{slot:footer.link_text}}</a></p>\n    </div>\n    <img class=\"st-qr\" src=\"{{slot:footer.qr}}\" data-lt-img=\"footer.qr\" alt=\"QR code\" width=\"84\" height=\"84\">\n  </div>\n</footer>",
+      "slots": [
+        {
+          "key": "footer.text",
+          "type": "text",
+          "label": "Text: Footer",
+          "default": "© {{store.name}}",
+          "max": 120
+        },
+        {
+          "key": "footer.link",
+          "type": "link",
+          "label": "Link: Back to top",
+          "default": "#top"
+        },
+        {
+          "key": "footer.link_text",
+          "type": "text",
+          "label": "Button text: Back to top",
+          "default": "Back to top",
+          "max": 40
+        },
+        {
+          "key": "footer.qr",
+          "type": "image",
+          "label": "Image: QR code (links to your site)",
+          "default": "{{qr:site}}"
+        }
+      ]
+    }
+  ]
+}

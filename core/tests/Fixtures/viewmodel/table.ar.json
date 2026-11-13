@@ -1,0 +1,3255 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "crave-demo",
+            "name": "Crave House",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Crave House"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:2}",
+                "alt": "Crave House"
+            },
+            "tagline": "American grill · smash burgers · late-night cravings",
+            "locale": "ar",
+            "dir": "rtl",
+            "locales": [
+                {
+                    "code": "ar",
+                    "name": "ar",
+                    "url": "/crave-demo?lang=ar"
+                },
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/crave-demo?lang=en"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "food",
+            "store_type": "restaurant",
+            "status": {
+                "open": true,
+                "next_change_at": null,
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966500000000",
+                "whatsapp": "966500000000",
+                "address": "King Fahd Rd, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=King%20Fahd%20Rd%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": true
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Crave House — Main",
+                "address": "King Fahd Rd, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "dine_in",
+                    "label": "تناول بالمطعم",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "takeaway",
+                    "label": "سفري",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "delivery",
+                    "label": "التسليم",
+                    "needs_address": true,
+                    "needs_slot": false
+                }
+            ],
+            "selected_order_type": "dine_in",
+            "table": null,
+            "room": null,
+            "schedule_ahead": false,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": true,
+                "order_types": [
+                    "dine_in",
+                    "takeaway"
+                ],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "table",
+            "settings": {
+                "colors.primary": "#B4331A",
+                "colors.background": "#FAF6F0",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#1F1A17",
+                "colors.accent": "#E8A33D",
+                "layout.radius": "round",
+                "layout.density": "cozy",
+                "fonts.pair": "fraunces-jakarta",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#F07A52",
+                "colors_dark.background": "#141210",
+                "colors_dark.surface": "#1E1B18",
+                "colors_dark.text": "#F6F1EA",
+                "colors_dark.accent": "#F2B65A",
+                "layout.card": "list",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "cover",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": true,
+                "menu.show_allergens": true,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "hero",
+                "offers",
+                "search",
+                "category_nav",
+                "featured",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "featured_title": "Today's specials",
+                "search_placeholder": "Search the menu"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "المقبلات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:3}",
+                        "alt": "المقبلات"
+                    },
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:10}",
+                    "name": "برجر لحم",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "برجر لحم"
+                    },
+                    "item_ids": [
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}",
+                        "{id:14}",
+                        "{id:15}",
+                        "{id:16}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:17}",
+                    "name": "دجاج وساندويتشات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:4}",
+                        "alt": "دجاج وساندويتشات"
+                    },
+                    "item_ids": [
+                        "{id:18}",
+                        "{id:19}",
+                        "{id:20}",
+                        "{id:21}",
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}"
+                    ],
+                    "count": 7
+                },
+                {
+                    "id": "{id:25}",
+                    "name": "كلاسيك",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:5}",
+                        "alt": "كلاسيك"
+                    },
+                    "item_ids": [
+                        "{id:26}",
+                        "{id:27}",
+                        "{id:28}",
+                        "{id:29}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:30}",
+                    "name": "التوقيعات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:6}",
+                        "alt": "التوقيعات"
+                    },
+                    "item_ids": [
+                        "{id:31}",
+                        "{id:32}",
+                        "{id:33}",
+                        "{id:34}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:35}",
+                    "name": "مقليات وأجنحة",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:7}",
+                        "alt": "مقليات وأجنحة"
+                    },
+                    "item_ids": [
+                        "{id:36}",
+                        "{id:37}",
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}",
+                        "{id:41}",
+                        "{id:42}",
+                        "{id:43}"
+                    ],
+                    "count": 8
+                },
+                {
+                    "id": "{id:44}",
+                    "name": "من المشواة",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:8}",
+                        "alt": "من المشواة"
+                    },
+                    "item_ids": [
+                        "{id:45}",
+                        "{id:46}",
+                        "{id:47}",
+                        "{id:48}",
+                        "{id:49}",
+                        "{id:50}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:51}",
+                    "name": "باستا وأطباق",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:9}",
+                        "alt": "باستا وأطباق"
+                    },
+                    "item_ids": [
+                        "{id:52}",
+                        "{id:53}",
+                        "{id:54}",
+                        "{id:55}",
+                        "{id:56}",
+                        "{id:57}",
+                        "{id:58}",
+                        "{id:59}",
+                        "{id:60}"
+                    ],
+                    "count": 9
+                },
+                {
+                    "id": "{id:61}",
+                    "name": "سلطات وشوربات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:10}",
+                        "alt": "سلطات وشوربات"
+                    },
+                    "item_ids": [
+                        "{id:62}",
+                        "{id:63}",
+                        "{id:64}",
+                        "{id:65}",
+                        "{id:66}",
+                        "{id:67}",
+                        "{id:68}",
+                        "{id:69}"
+                    ],
+                    "count": 8
+                },
+                {
+                    "id": "{id:70}",
+                    "name": "فطور طوال اليوم",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:11}",
+                        "alt": "فطور طوال اليوم"
+                    },
+                    "item_ids": [
+                        "{id:71}",
+                        "{id:72}",
+                        "{id:73}",
+                        "{id:74}",
+                        "{id:75}",
+                        "{id:76}",
+                        "{id:77}",
+                        "{id:78}",
+                        "{id:79}",
+                        "{id:80}"
+                    ],
+                    "count": 10
+                },
+                {
+                    "id": "{id:81}",
+                    "name": "كيك ومخبوزات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:12}",
+                        "alt": "كيك ومخبوزات"
+                    },
+                    "item_ids": [
+                        "{id:82}",
+                        "{id:83}",
+                        "{id:84}",
+                        "{id:85}",
+                        "{id:86}",
+                        "{id:87}",
+                        "{id:88}"
+                    ],
+                    "count": 7
+                },
+                {
+                    "id": "{id:89}",
+                    "name": "مثلجات وسكريات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:13}",
+                        "alt": "مثلجات وسكريات"
+                    },
+                    "item_ids": [
+                        "{id:90}",
+                        "{id:91}",
+                        "{id:92}",
+                        "{id:93}",
+                        "{id:94}",
+                        "{id:95}",
+                        "{id:96}",
+                        "{id:97}",
+                        "{id:98}"
+                    ],
+                    "count": 9
+                },
+                {
+                    "id": "{id:99}",
+                    "name": "ركن القهوة",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:14}",
+                        "alt": "ركن القهوة"
+                    },
+                    "item_ids": [
+                        "{id:100}",
+                        "{id:101}",
+                        "{id:102}",
+                        "{id:103}",
+                        "{id:104}",
+                        "{id:105}",
+                        "{id:106}"
+                    ],
+                    "count": 7
+                },
+                {
+                    "id": "{id:107}",
+                    "name": "ميلك شيك ومبردات",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:15}",
+                        "alt": "ميلك شيك ومبردات"
+                    },
+                    "item_ids": [
+                        "{id:108}",
+                        "{id:109}",
+                        "{id:110}",
+                        "{id:111}",
+                        "{id:112}",
+                        "{id:113}",
+                        "{id:114}",
+                        "{id:115}",
+                        "{id:116}",
+                        "{id:117}",
+                        "{id:118}",
+                        "{id:119}",
+                        "{id:120}"
+                    ],
+                    "count": 13
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "ناتشوز غراندي",
+                    "url": "/crave-demo#item-{id:4}",
+                    "short": "رقائق تورتيا مع صوص الجبن والبيكو دي جالو والهالبينو.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:3}",
+                        "alt": "ناتشوز غراندي"
+                    },
+                    "price": {
+                        "minor": 2080,
+                        "currency": "USD",
+                        "formatted": "⁦20.80⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "كلاسيك ديلوكس",
+                    "url": "/crave-demo#item-{id:11}",
+                    "short": "لحم مشوي على الفحم مع خس وطماطم ومخلل ومايونيز البيت.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "كلاسيك ديلوكس"
+                    },
+                    "from_price": {
+                        "minor": 2240,
+                        "currency": "USD",
+                        "formatted": "⁦22.40⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 540
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "برجر دجاج مقرمش",
+                    "url": "/crave-demo#item-{id:18}",
+                    "short": "دجاج مقرمش مع سلطة الملفوف وصوص المخلل في خبز بريوش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:4}",
+                        "alt": "برجر دجاج مقرمش"
+                    },
+                    "from_price": {
+                        "minor": 2080,
+                        "currency": "USD",
+                        "formatted": "⁦20.80⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        },
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 610
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "مارغريتا",
+                    "url": "/crave-demo#item-{id:26}",
+                    "short": "طماطم سان مارزانو وموزاريلا وريحان وزيت زيتون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:5}",
+                        "alt": "مارغريتا"
+                    },
+                    "from_price": {
+                        "minor": 3200,
+                        "currency": "USD",
+                        "formatted": "⁦32.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 820
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "دجاج باربكيو رانش",
+                    "url": "/crave-demo#item-{id:31}",
+                    "short": "صوص باربكيو مدخن مع دجاج مشوي ورانش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:6}",
+                        "alt": "دجاج باربكيو رانش"
+                    },
+                    "from_price": {
+                        "minor": 4400,
+                        "currency": "USD",
+                        "formatted": "⁦44.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 880
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "أجنحة كورية",
+                    "url": "/crave-demo#item-{id:36}",
+                    "short": "أجنحة مقلية مرتين بصوص الغوتشوجانغ والسمسم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:7}",
+                        "alt": "أجنحة كورية"
+                    },
+                    "price": {
+                        "minor": 3200,
+                        "currency": "USD",
+                        "formatted": "⁦32.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:45}": {
+                    "id": "{id:45}",
+                    "name": "ريب آي مع بطاطس",
+                    "url": "/crave-demo#item-{id:45}",
+                    "short": "ريب آي ٣٠٠غ مع زبدة الأعشاب والبطاطس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:16}",
+                        "alt": "ريب آي مع بطاطس"
+                    },
+                    "price": {
+                        "minor": 9500,
+                        "currency": "USD",
+                        "formatted": "⁦95.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 980
+                },
+                "{id:52}": {
+                    "id": "{id:52}",
+                    "name": "كاربونارا",
+                    "url": "/crave-demo#item-{id:52}",
+                    "short": "صوص صفار البيض الحريري مع شرائح الديك الرومي وجبن البيكورينو.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:9}",
+                        "alt": "كاربونارا"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 680
+                },
+                "{id:62}": {
+                    "id": "{id:62}",
+                    "name": "سيزر بالدجاج",
+                    "url": "/crave-demo#item-{id:62}",
+                    "short": "خس صغير مع دجاج مشوي وبارميزان وخبز محمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:10}",
+                        "alt": "سيزر بالدجاج"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 480
+                },
+                "{id:71}": {
+                    "id": "{id:71}",
+                    "name": "بان كيك",
+                    "url": "/crave-demo#item-{id:71}",
+                    "short": "طبقات البان كيك مع شراب القيقب والتوت والموز.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:11}",
+                        "alt": "بان كيك"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 620
+                },
+                "{id:82}": {
+                    "id": "{id:82}",
+                    "name": "كيك الشوكولاتة",
+                    "url": "/crave-demo#item-{id:82}",
+                    "short": "أربع طبقات شوكولاتة داكنة مع الغاناش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:12}",
+                        "alt": "كيك الشوكولاتة"
+                    },
+                    "price": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 540
+                },
+                "{id:90}": {
+                    "id": "{id:90}",
+                    "name": "صنداي الكراميل",
+                    "url": "/crave-demo#item-{id:90}",
+                    "short": "آيس كريم مع كراميل مملح وجوز البقان المحمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:17}",
+                        "alt": "صنداي الكراميل"
+                    },
+                    "price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 430
+                },
+                "{id:100}": {
+                    "id": "{id:100}",
+                    "name": "فلات وايت",
+                    "url": "/crave-demo#item-{id:100}",
+                    "short": "ريستريتو مزدوج مع رغوة حريرية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:14}",
+                        "alt": "فلات وايت"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "USD",
+                        "formatted": "⁦16.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 120
+                },
+                "{id:108}": {
+                    "id": "{id:108}",
+                    "name": "فريك شيك",
+                    "url": "/crave-demo#item-{id:108}",
+                    "short": "ميلك شيك شوكولاتة ضخم مع برج الكريمة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:15}",
+                        "alt": "فريك شيك"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "حلقات البصل المقرمشة",
+                    "url": "/crave-demo#item-{id:5}",
+                    "short": "حلقات بصل مقرمشة مع ملح البابريكا وصوص الرانش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:18}",
+                        "alt": "حلقات البصل المقرمشة"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 430
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "سماش مدخن",
+                    "url": "/crave-demo#item-{id:12}",
+                    "short": "قطعتا سماش مع بصل مكرمل وشيدر مدخن ومايو الزبدة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:19}",
+                        "alt": "سماش مدخن"
+                    },
+                    "from_price": {
+                        "minor": 2720,
+                        "currency": "USD",
+                        "formatted": "⁦27.20⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        },
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 680
+                },
+                "{id:19}": {
+                    "id": "{id:19}",
+                    "name": "ميلت الجبن",
+                    "url": "/crave-demo#item-{id:19}",
+                    "short": "لحم مشوي مع ثلاثة أجبان في خبز السمسم المحمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:20}",
+                        "alt": "ميلت الجبن"
+                    },
+                    "from_price": {
+                        "minor": 3000,
+                        "currency": "USD",
+                        "formatted": "⁦30.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 700
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "دبل ببروني",
+                    "url": "/crave-demo#item-{id:27}",
+                    "short": "ببروني بقري وموزاريلا مع رشة عسل حار.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:21}",
+                        "alt": "دبل ببروني"
+                    },
+                    "from_price": {
+                        "minor": 4200,
+                        "currency": "USD",
+                        "formatted": "⁦42.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 940
+                },
+                "{id:32}": {
+                    "id": "{id:32}",
+                    "name": "جرجير وبارميزان",
+                    "url": "/crave-demo#item-{id:32}",
+                    "short": "جرجير طازج مع بارميزان مبشور وخل بلسمي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:22}",
+                        "alt": "جرجير وبارميزان"
+                    },
+                    "from_price": {
+                        "minor": 4000,
+                        "currency": "USD",
+                        "formatted": "⁦40.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 740
+                },
+                "{id:37}": {
+                    "id": "{id:37}",
+                    "name": "أجنحة مدخنة بالعسل",
+                    "url": "/crave-demo#item-{id:37}",
+                    "short": "أجنحة مدخنة بالعسل مع بصل مخلل وصوص أبيض.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:23}",
+                        "alt": "أجنحة مدخنة بالعسل"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 680
+                },
+                "{id:46}": {
+                    "id": "{id:46}",
+                    "name": "سيرلوين مقطع",
+                    "url": "/crave-demo#item-{id:46}",
+                    "short": "سيرلوين مشوي مع الهليون والجزر المحمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:24}",
+                        "alt": "سيرلوين مقطع"
+                    },
+                    "price": {
+                        "minor": 8200,
+                        "currency": "USD",
+                        "formatted": "⁦82.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 760
+                },
+                "{id:53}": {
+                    "id": "{id:53}",
+                    "name": "بيني أرابياتا",
+                    "url": "/crave-demo#item-{id:53}",
+                    "short": "صوص طماطم حار مع الثوم والريحان.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:25}",
+                        "alt": "بيني أرابياتا"
+                    },
+                    "price": {
+                        "minor": 3200,
+                        "currency": "USD",
+                        "formatted": "⁦32.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        },
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:63}": {
+                    "id": "{id:63}",
+                    "name": "سلطة الحديقة",
+                    "url": "/crave-demo#item-{id:63}",
+                    "short": "خضار ملونة مع أفوكادو وبذور وصوص الحمضيات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:26}",
+                        "alt": "سلطة الحديقة"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 240
+                },
+                "{id:72}": {
+                    "id": "{id:72}",
+                    "name": "وافل ذهبي",
+                    "url": "/crave-demo#item-{id:72}",
+                    "short": "وافل بلجيكي مقرمش مع كومبوت التوت والزبدة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:27}",
+                        "alt": "وافل ذهبي"
+                    },
+                    "price": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:83}": {
+                    "id": "{id:83}",
+                    "name": "رد فلفت",
+                    "url": "/crave-demo#item-{id:83}",
+                    "short": "كيك أحمر مع كريمة الجبن والفراولة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:28}",
+                        "alt": "رد فلفت"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 480
+                },
+                "{id:91}": {
+                    "id": "{id:91}",
+                    "name": "آيس كريم بالرشات",
+                    "url": "/crave-demo#item-{id:91}",
+                    "short": "ثلاث كرات في وعاء الوافل المزين بالرشات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:13}",
+                        "alt": "آيس كريم بالرشات"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 480
+                },
+                "{id:101}": {
+                    "id": "{id:101}",
+                    "name": "كابتشينو",
+                    "url": "/crave-demo#item-{id:101}",
+                    "short": "إسبريسو مع حليب مبخر ورغوة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:29}",
+                        "alt": "كابتشينو"
+                    },
+                    "from_price": {
+                        "minor": 1500,
+                        "currency": "USD",
+                        "formatted": "⁦15.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130
+                },
+                "{id:109}": {
+                    "id": "{id:109}",
+                    "name": "شيك الكوكيز",
+                    "url": "/crave-demo#item-{id:109}",
+                    "short": "كوكيز مطحون مخفوق مع الكريمة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:30}",
+                        "alt": "شيك الكوكيز"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 640
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "بطاطس محملة",
+                    "url": "/crave-demo#item-{id:6}",
+                    "short": "بطاطس بقشرتها مع صوص الجبن وقطع اللحم المقدد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:31}",
+                        "alt": "بطاطس محملة"
+                    },
+                    "price": {
+                        "minor": 1760,
+                        "currency": "USD",
+                        "formatted": "⁦17.60⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 610
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "دبل ترابل",
+                    "url": "/crave-demo#item-{id:13}",
+                    "short": "لحم دبل وجبن دبل مع الصوص السري وخبز بريوش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:32}",
+                        "alt": "دبل ترابل"
+                    },
+                    "from_price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 820
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "كومبو روت ٦٦",
+                    "url": "/crave-demo#item-{id:20}",
+                    "short": "تشيز برجر على طريقة المطاعم الأمريكية مع بطاطس مموجة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:33}",
+                        "alt": "كومبو روت ٦٦"
+                    },
+                    "price": {
+                        "minor": 3600,
+                        "currency": "USD",
+                        "formatted": "⁦36.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 920
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "نابولي على الحطب",
+                    "url": "/crave-demo#item-{id:28}",
+                    "short": "عجينة نابولية مع موزاريلا الجاموس والريحان.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:34}",
+                        "alt": "نابولي على الحطب"
+                    },
+                    "from_price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 780
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "فيتا يونانية",
+                    "url": "/crave-demo#item-{id:33}",
+                    "short": "جبنة فيتا وزيتون كالاماتا وبصل أحمر وأوريغانو.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:35}",
+                        "alt": "فيتا يونانية"
+                    },
+                    "from_price": {
+                        "minor": 4200,
+                        "currency": "USD",
+                        "formatted": "⁦42.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 800
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "أصابع الدجاج",
+                    "url": "/crave-demo#item-{id:38}",
+                    "short": "أصابع دجاج مقرمشة مع صوص العسل والخردل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:36}",
+                        "alt": "أصابع الدجاج"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:47}": {
+                    "id": "{id:47}",
+                    "name": "أضلاع باربكيو",
+                    "url": "/crave-demo#item-{id:47}",
+                    "short": "أضلاع مدخنة ٨ ساعات مع صوص باربكيو وسلطة ملفوف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:37}",
+                        "alt": "أضلاع باربكيو"
+                    },
+                    "price": {
+                        "minor": 7800,
+                        "currency": "USD",
+                        "formatted": "⁦78.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 920
+                },
+                "{id:54}": {
+                    "id": "{id:54}",
+                    "name": "فيتوتشيني ألفريدو",
+                    "url": "/crave-demo#item-{id:54}",
+                    "short": "صوص البارميزان الكريمي مع الفلفل الأسود.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:38}",
+                        "alt": "فيتوتشيني ألفريدو"
+                    },
+                    "price": {
+                        "minor": 3600,
+                        "currency": "USD",
+                        "formatted": "⁦36.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:64}": {
+                    "id": "{id:64}",
+                    "name": "كيل وحمص",
+                    "url": "/crave-demo#item-{id:64}",
+                    "short": "كرنب أخضر مع حمص مقرمش وطحينة الليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:39}",
+                        "alt": "كيل وحمص"
+                    },
+                    "price": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 300
+                },
+                "{id:73}": {
+                    "id": "{id:73}",
+                    "name": "توست الأفوكادو",
+                    "url": "/crave-demo#item-{id:73}",
+                    "short": "خبز محمص مع أفوكادو مهروس وبيض والدقة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:40}",
+                        "alt": "توست الأفوكادو"
+                    },
+                    "price": {
+                        "minor": 3000,
+                        "currency": "USD",
+                        "formatted": "⁦30.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:84}": {
+                    "id": "{id:84}",
+                    "name": "تشيز كيك التوت",
+                    "url": "/crave-demo#item-{id:84}",
+                    "short": "تشيز كيك نيويورك مع كومبوت التوت الأزرق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:41}",
+                        "alt": "تشيز كيك التوت"
+                    },
+                    "price": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 520
+                },
+                "{id:92}": {
+                    "id": "{id:92}",
+                    "name": "كون كلاسيك",
+                    "url": "/crave-demo#item-{id:92}",
+                    "short": "كون وافل ملفوف يدوياً مع نكهة اليوم.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:42}",
+                        "alt": "كون كلاسيك"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "USD",
+                        "formatted": "⁦12.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 260
+                },
+                "{id:102}": {
+                    "id": "{id:102}",
+                    "name": "إسبريسو",
+                    "url": "/crave-demo#item-{id:102}",
+                    "short": "جرعة مزدوجة من بن أحادي المصدر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:43}",
+                        "alt": "إسبريسو"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "USD",
+                        "formatted": "⁦12.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 10
+                },
+                "{id:110}": {
+                    "id": "{id:110}",
+                    "name": "شيك الفانيليا",
+                    "url": "/crave-demo#item-{id:110}",
+                    "short": "فانيليا كلاسيكية مع صوص الشوكولاتة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:44}",
+                        "alt": "شيك الفانيليا"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "بطاطس الترافل بالبارميزان",
+                    "url": "/crave-demo#item-{id:7}",
+                    "short": "زيت الترافل وجبن البارميزان — الأكثر طلباً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:45}",
+                        "alt": "بطاطس الترافل بالبارميزان"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 480
+                },
+                "{id:14}": {
+                    "id": "{id:14}",
+                    "name": "ستاك اللحم المقدد",
+                    "url": "/crave-demo#item-{id:14}",
+                    "short": "لحم مقدد بقري مع بصل مقرمش وشيدر وصوص باربكيو، تقدم مع البطاطس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:46}",
+                        "alt": "ستاك اللحم المقدد"
+                    },
+                    "from_price": {
+                        "minor": 4200,
+                        "currency": "USD",
+                        "formatted": "⁦42.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 890
+                },
+                "{id:21}": {
+                    "id": "{id:21}",
+                    "name": "ساندويتش السلو المقرمش",
+                    "url": "/crave-demo#item-{id:21}",
+                    "short": "دجاج مقلي مع سلطة الملفوف البنفسجي ومايو الشيبوتلي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:47}",
+                        "alt": "ساندويتش السلو المقرمش"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 640
+                },
+                "{id:29}": {
+                    "id": "{id:29}",
+                    "name": "بيتزا الخضار",
+                    "url": "/crave-demo#item-{id:29}",
+                    "short": "فطر وطماطم كرزية وزيتون وإكليل الجبل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:48}",
+                        "alt": "بيتزا الخضار"
+                    },
+                    "from_price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 720
+                },
+                "{id:34}": {
+                    "id": "{id:34}",
+                    "name": "سوبريم الحديقة",
+                    "url": "/crave-demo#item-{id:34}",
+                    "short": "خضار مشوية وفطر وريكوتا ورقائق الفلفل الحار.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:49}",
+                        "alt": "سوبريم الحديقة"
+                    },
+                    "from_price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 700
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "دجاج مقلي جنوبي",
+                    "url": "/crave-demo#item-{id:39}",
+                    "short": "دجاج منقوع ٢٤ ساعة ومقلي بخلطة ١١ بهار سرية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:50}",
+                        "alt": "دجاج مقلي جنوبي"
+                    },
+                    "price": {
+                        "minor": 3600,
+                        "currency": "USD",
+                        "formatted": "⁦36.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 780
+                },
+                "{id:48}": {
+                    "id": "{id:48}",
+                    "name": "صحن البريسكت",
+                    "url": "/crave-demo#item-{id:48}",
+                    "short": "بريسكت مدخن ١٢ ساعة مع الأطراف المحروقة والمخلل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:51}",
+                        "alt": "صحن البريسكت"
+                    },
+                    "price": {
+                        "minor": 7200,
+                        "currency": "USD",
+                        "formatted": "⁦72.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "الكمية محدودة"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 840
+                },
+                "{id:55}": {
+                    "id": "{id:55}",
+                    "name": "باستا الروبيان",
+                    "url": "/crave-demo#item-{id:55}",
+                    "short": "روبيان بزبدة الثوم مع الطماطم الكرزية واللينغويني.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:52}",
+                        "alt": "باستا الروبيان"
+                    },
+                    "price": {
+                        "minor": 4800,
+                        "currency": "USD",
+                        "formatted": "⁦48.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 640
+                },
+                "{id:65}": {
+                    "id": "{id:65}",
+                    "name": "شوربة الطماطم",
+                    "url": "/crave-demo#item-{id:65}",
+                    "short": "طماطم مشوية مع زيت الريحان وخبز محمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:53}",
+                        "alt": "شوربة الطماطم"
+                    },
+                    "price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 260
+                },
+                "{id:74}": {
+                    "id": "{id:74}",
+                    "name": "بيض بينديكت",
+                    "url": "/crave-demo#item-{id:74}",
+                    "short": "بيض مسلوق مع سلمون مدخن وصوص الهولنديز.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:54}",
+                        "alt": "بيض بينديكت"
+                    },
+                    "price": {
+                        "minor": 3600,
+                        "currency": "USD",
+                        "formatted": "⁦36.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 540
+                },
+                "{id:85}": {
+                    "id": "{id:85}",
+                    "name": "كيك اللافا",
+                    "url": "/crave-demo#item-{id:85}",
+                    "short": "قلب شوكولاتة سائل، يخبز عند الطلب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:55}",
+                        "alt": "كيك اللافا"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 460
+                },
+                "{id:93}": {
+                    "id": "{id:93}",
+                    "name": "دونات مزجج",
+                    "url": "/crave-demo#item-{id:93}",
+                    "short": "دونات مع الشوكولاتة والرشات الملونة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:56}",
+                        "alt": "دونات مزجج"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "USD",
+                        "formatted": "⁦16.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:103}": {
+                    "id": "{id:103}",
+                    "name": "لاتيه إسباني مثلج",
+                    "url": "/crave-demo#item-{id:103}",
+                    "short": "إسبريسو مزدوج مع حليب مكثف وثلج.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:57}",
+                        "alt": "لاتيه إسباني مثلج"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 190
+                },
+                "{id:111}": {
+                    "id": "{id:111}",
+                    "name": "ثلاثية الموكتيل",
+                    "url": "/crave-demo#item-{id:111}",
+                    "short": "ثلاثة موكتيلات: توت وحمضيات وباشن فروت.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:58}",
+                        "alt": "ثلاثية الموكتيل"
+                    },
+                    "price": {
+                        "minor": 3000,
+                        "currency": "USD",
+                        "formatted": "⁦30.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 240
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "ماك آند تشيز",
+                    "url": "/crave-demo#item-{id:8}",
+                    "short": "معكرونة بثلاثة أنواع جبن مع فتات محمص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:59}",
+                        "alt": "ماك آند تشيز"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 640
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "ترافل غورميه",
+                    "url": "/crave-demo#item-{id:15}",
+                    "short": "لحم واغيو مع أيولي الترافل والجرجير والشيدر المعتق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:60}",
+                        "alt": "ترافل غورميه"
+                    },
+                    "price": {
+                        "minor": 5200,
+                        "currency": "USD",
+                        "formatted": "⁦52.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "هوت دوغ نيويورك",
+                    "url": "/crave-demo#item-{id:22}",
+                    "short": "نقانق بقري مع بصل مقرمش وخردل وكاتشب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:61}",
+                        "alt": "هوت دوغ نيويورك"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "سلة المقرمشات",
+                    "url": "/crave-demo#item-{id:40}",
+                    "short": "قطع دجاج مقرمشة مع رقائق الوافل وصوص الغريفي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:62}",
+                        "alt": "سلة المقرمشات"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 860
+                },
+                "{id:49}": {
+                    "id": "{id:49}",
+                    "name": "صحن دجاج مشوي",
+                    "url": "/crave-demo#item-{id:49}",
+                    "short": "صدر دجاج متبل مع ذرة بالزبدة وبطاطس مهروسة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:63}",
+                        "alt": "صحن دجاج مشوي"
+                    },
+                    "price": {
+                        "minor": 4200,
+                        "currency": "USD",
+                        "formatted": "⁦42.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 560
+                },
+                "{id:56}": {
+                    "id": "{id:56}",
+                    "name": "سباغيتي الترافل",
+                    "url": "/crave-demo#item-{id:56}",
+                    "short": "مستحلب الفلفل الأسود مع زيت الترافل والبارميزان.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:64}",
+                        "alt": "سباغيتي الترافل"
+                    },
+                    "price": {
+                        "minor": 4400,
+                        "currency": "USD",
+                        "formatted": "⁦44.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 620
+                },
+                "{id:66}": {
+                    "id": "{id:66}",
+                    "name": "شوربة الخضار",
+                    "url": "/crave-demo#item-{id:66}",
+                    "short": "خضار موسمية مع مرق الأعشاب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:65}",
+                        "alt": "شوربة الخضار"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 200
+                },
+                "{id:75}": {
+                    "id": "{id:75}",
+                    "name": "توست البيض",
+                    "url": "/crave-demo#item-{id:75}",
+                    "short": "بيض داخل خبز البريوش مع طماطم مشوية.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:66}",
+                        "alt": "توست البيض"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380
+                },
+                "{id:86}": {
+                    "id": "{id:86}",
+                    "name": "تيراميسو",
+                    "url": "/crave-demo#item-{id:86}",
+                    "short": "طبقات الإسبريسو والماسكاربوني.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:67}",
+                        "alt": "تيراميسو"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 440
+                },
+                "{id:94}": {
+                    "id": "{id:94}",
+                    "name": "كوكيز (٣)",
+                    "url": "/crave-demo#item-{id:94}",
+                    "short": "كوكيز طرية بقطع الشوكولاتة الداكنة وملح البحر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:68}",
+                        "alt": "كوكيز (٣)"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "USD",
+                        "formatted": "⁦14.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380
+                },
+                "{id:104}": {
+                    "id": "{id:104}",
+                    "name": "لاتيه آرت",
+                    "url": "/crave-demo#item-{id:104}",
+                    "short": "لاتيه بفن الرسم على بن مختص.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:69}",
+                        "alt": "لاتيه آرت"
+                    },
+                    "price": {
+                        "minor": 1700,
+                        "currency": "USD",
+                        "formatted": "⁦17.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 150
+                },
+                "{id:112}": {
+                    "id": "{id:112}",
+                    "name": "فوار التوت الداكن",
+                    "url": "/crave-demo#item-{id:112}",
+                    "short": "توت أسود مع الليمون والصودا وشريحة البرتقال.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:70}",
+                        "alt": "فوار التوت الداكن"
+                    },
+                    "price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 140
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "ذرة مشوية",
+                    "url": "/crave-demo#item-{id:9}",
+                    "short": "ذرة مشوية مع زبدة الليمون الحار والجبن.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:71}",
+                        "alt": "ذرة مشوية"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "USD",
+                        "formatted": "⁦14.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 260
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "كومبو اللهب",
+                    "url": "/crave-demo#item-{id:16}",
+                    "short": "برجر مشوي على اللهب مع بطاطس متبلة ومشروب بارد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:72}",
+                        "alt": "كومبو اللهب"
+                    },
+                    "from_price": {
+                        "minor": 3900,
+                        "currency": "USD",
+                        "formatted": "⁦39.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 980
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "كلوب هاوس",
+                    "url": "/crave-demo#item-{id:23}",
+                    "short": "كلوب ساندويتش ثلاثي الطبقات مع دجاج وبيض وبطاطس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:73}",
+                        "alt": "كلوب هاوس"
+                    },
+                    "price": {
+                        "minor": 3200,
+                        "currency": "USD",
+                        "formatted": "⁦32.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 760
+                },
+                "{id:41}": {
+                    "id": "{id:41}",
+                    "name": "صحن بروست",
+                    "url": "/crave-demo#item-{id:41}",
+                    "short": "بروست ذهبي مع الثوم والمخلل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:74}",
+                        "alt": "صحن بروست"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 800
+                },
+                "{id:50}": {
+                    "id": "{id:50}",
+                    "name": "كباب مع بطاطس",
+                    "url": "/crave-demo#item-{id:50}",
+                    "short": "أسياخ لحم مشوية على الفحم مع طماطم وبطاطس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:75}",
+                        "alt": "كباب مع بطاطس"
+                    },
+                    "price": {
+                        "minor": 4800,
+                        "currency": "USD",
+                        "formatted": "⁦48.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:57}": {
+                    "id": "{id:57}",
+                    "name": "بوكي السلمون",
+                    "url": "/crave-demo#item-{id:57}",
+                    "short": "أرز سوشي مع مكعبات السلمون والإدامامي والأفوكادو.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:76}",
+                        "alt": "بوكي السلمون"
+                    },
+                    "price": {
+                        "minor": 4600,
+                        "currency": "USD",
+                        "formatted": "⁦46.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 520
+                },
+                "{id:67}": {
+                    "id": "{id:67}",
+                    "name": "شوربة اليقطين",
+                    "url": "/crave-demo#item-{id:67}",
+                    "short": "يقطين محمص مع بذور محمصة ونقاط زيت الفلفل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:77}",
+                        "alt": "شوربة اليقطين"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 240
+                },
+                "{id:76}": {
+                    "id": "{id:76}",
+                    "name": "شكشوكة",
+                    "url": "/crave-demo#item-{id:76}",
+                    "short": "صوص الطماطم والفلفل مع بيض مخبوز وخبز.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:78}",
+                        "alt": "شكشوكة"
+                    },
+                    "price": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:87}": {
+                    "id": "{id:87}",
+                    "name": "براوني",
+                    "url": "/crave-demo#item-{id:87}",
+                    "short": "براوني كثيف مع أنهار الشوكولاتة الذائبة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:79}",
+                        "alt": "براوني"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:95}": {
+                    "id": "{id:95}",
+                    "name": "تشوروز",
+                    "url": "/crave-demo#item-{id:95}",
+                    "short": "تشوروز مقرمشة مع سكر القرفة وصوص الشوكولاتة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:80}",
+                        "alt": "تشوروز"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 440
+                },
+                "{id:105}": {
+                    "id": "{id:105}",
+                    "name": "فرنش برس",
+                    "url": "/crave-demo#item-{id:105}",
+                    "short": "إبريق قهوة منقوعة ببطء لشخصين.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:81}",
+                        "alt": "فرنش برس"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 15
+                },
+                "{id:113}": {
+                    "id": "{id:113}",
+                    "name": "موهيتو",
+                    "url": "/crave-demo#item-{id:113}",
+                    "short": "نعناع مهروس مع الليمون والصودا.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:82}",
+                        "alt": "موهيتو"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 120
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "توست الجبن",
+                    "url": "/crave-demo#item-{id:24}",
+                    "short": "خبز محمص مع جبن ذائب وثلاثة صوصات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:83}",
+                        "alt": "توست الجبن"
+                    },
+                    "price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 520
+                },
+                "{id:42}": {
+                    "id": "{id:42}",
+                    "name": "سمك وبطاطس",
+                    "url": "/crave-demo#item-{id:42}",
+                    "short": "فيليه سمك مقرمش مع بطاطس وصوص التارتار.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:84}",
+                        "alt": "سمك وبطاطس"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 720
+                },
+                "{id:58}": {
+                    "id": "{id:58}",
+                    "name": "طبق الحبوب",
+                    "url": "/crave-demo#item-{id:58}",
+                    "short": "كينوا مع خضار محمصة وبذور وطحينة الحمضيات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:85}",
+                        "alt": "طبق الحبوب"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 440
+                },
+                "{id:68}": {
+                    "id": "{id:68}",
+                    "name": "شوربة الديتوكس",
+                    "url": "/crave-demo#item-{id:68}",
+                    "short": "بروكلي وسبانخ مع كريمة جوز الهند والكزبرة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:86}",
+                        "alt": "شوربة الديتوكس"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 220
+                },
+                "{id:77}": {
+                    "id": "{id:77}",
+                    "name": "فريتاتا",
+                    "url": "/crave-demo#item-{id:77}",
+                    "short": "أومليت مفتوح مع الجبن الذائب والأعشاب.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:87}",
+                        "alt": "فريتاتا"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 400
+                },
+                "{id:88}": {
+                    "id": "{id:88}",
+                    "name": "فطيرة التوت",
+                    "url": "/crave-demo#item-{id:88}",
+                    "short": "عجينة الزبدة المشبكة مع حشوة التوت المشكل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:88}",
+                        "alt": "فطيرة التوت"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 400
+                },
+                "{id:96}": {
+                    "id": "{id:96}",
+                    "name": "مافن التوت",
+                    "url": "/crave-demo#item-{id:96}",
+                    "short": "مافن بحشوة التوت الأزرق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:89}",
+                        "alt": "مافن التوت"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "USD",
+                        "formatted": "⁦12.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 340
+                },
+                "{id:106}": {
+                    "id": "{id:106}",
+                    "name": "ماتشا لاتيه",
+                    "url": "/crave-demo#item-{id:106}",
+                    "short": "ماتشا فاخرة مع حليب مبخر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:90}",
+                        "alt": "ماتشا لاتيه"
+                    },
+                    "from_price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 160
+                },
+                "{id:114}": {
+                    "id": "{id:114}",
+                    "name": "ليمون بالنعناع",
+                    "url": "/crave-demo#item-{id:114}",
+                    "short": "ليمون مع نعناع مثلج.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:91}",
+                        "alt": "ليمون بالنعناع"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "USD",
+                        "formatted": "⁦16.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 130
+                },
+                "{id:43}": {
+                    "id": "{id:43}",
+                    "name": "ماندو مومو (٦ قطع)",
+                    "url": "/crave-demo#item-{id:43}",
+                    "short": "زلابية دجاج على البخار مع صوص الصويا الحار.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:92}",
+                        "alt": "ماندو مومو (٦ قطع)"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "USD",
+                        "formatted": "⁦22.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380
+                },
+                "{id:59}": {
+                    "id": "{id:59}",
+                    "name": "أرز مقلي",
+                    "url": "/crave-demo#item-{id:59}",
+                    "short": "أرز مقلي على النار العالية مع البيض والبصل الأخضر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:93}",
+                        "alt": "أرز مقلي"
+                    },
+                    "price": {
+                        "minor": 2800,
+                        "currency": "USD",
+                        "formatted": "⁦28.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 520
+                },
+                "{id:69}": {
+                    "id": "{id:69}",
+                    "name": "شوربة النودلز",
+                    "url": "/crave-demo#item-{id:69}",
+                    "short": "نودلز مع مرق الخضار وزيت الفلفل المقرمش.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:94}",
+                        "alt": "شوربة النودلز"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "USD",
+                        "formatted": "⁦24.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380
+                },
+                "{id:78}": {
+                    "id": "{id:78}",
+                    "name": "لوح البرانش",
+                    "url": "/crave-demo#item-{id:78}",
+                    "short": "ثلاثية التوست: أفوكادو، موز وطحينة، طماطم وفيتا.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:95}",
+                        "alt": "لوح البرانش"
+                    },
+                    "price": {
+                        "minor": 3400,
+                        "currency": "USD",
+                        "formatted": "⁦34.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 520
+                },
+                "{id:97}": {
+                    "id": "{id:97}",
+                    "name": "كريب الموز",
+                    "url": "/crave-demo#item-{id:97}",
+                    "short": "كريب رقيق مع الموز وصوص الشوكولاتة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:96}",
+                        "alt": "كريب الموز"
+                    },
+                    "price": {
+                        "minor": 2000,
+                        "currency": "USD",
+                        "formatted": "⁦20.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:115}": {
+                    "id": "{id:115}",
+                    "name": "مبرد البطيخ",
+                    "url": "/crave-demo#item-{id:115}",
+                    "short": "بطيخ طازج مع الليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:97}",
+                        "alt": "مبرد البطيخ"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 110
+                },
+                "{id:60}": {
+                    "id": "{id:60}",
+                    "name": "بيبيمباب",
+                    "url": "/crave-demo#item-{id:60}",
+                    "short": "أرز بالخضار المتبلة والبيض المقلي وصوص الغوتشوجانغ.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:98}",
+                        "alt": "بيبيمباب"
+                    },
+                    "price": {
+                        "minor": 3800,
+                        "currency": "USD",
+                        "formatted": "⁦38.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "spicy",
+                            "label": "حار"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 580
+                },
+                "{id:79}": {
+                    "id": "{id:79}",
+                    "name": "كرواسون بالزبدة",
+                    "url": "/crave-demo#item-{id:79}",
+                    "short": "كرواسون هش بالزبدة يخبز طوال الصباح.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:99}",
+                        "alt": "كرواسون بالزبدة"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "USD",
+                        "formatted": "⁦12.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 280
+                },
+                "{id:98}": {
+                    "id": "{id:98}",
+                    "name": "بانا كوتا",
+                    "url": "/crave-demo#item-{id:98}",
+                    "short": "كريمة الفانيليا مع الفراولة المنقوعة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:100}",
+                        "alt": "بانا كوتا"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 320
+                },
+                "{id:116}": {
+                    "id": "{id:116}",
+                    "name": "عصير برتقال طازج",
+                    "url": "/crave-demo#item-{id:116}",
+                    "short": "يعصر عند الطلب بدون سكر مضاف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:101}",
+                        "alt": "عصير برتقال طازج"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "USD",
+                        "formatted": "⁦14.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 120
+                },
+                "{id:80}": {
+                    "id": "{id:80}",
+                    "name": "رول القرفة",
+                    "url": "/crave-demo#item-{id:80}",
+                    "short": "رول القرفة مع صوص الجبن الكريمي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:102}",
+                        "alt": "رول القرفة"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "USD",
+                        "formatted": "⁦16.00⁨$⁩⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420
+                },
+                "{id:117}": {
+                    "id": "{id:117}",
+                    "name": "العصير الأخضر",
+                    "url": "/crave-demo#item-{id:117}",
+                    "short": "كيوي وتفاح وسبانخ مع الزنجبيل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:103}",
+                        "alt": "العصير الأخضر"
+                    },
+                    "price": {
+                        "minor": 1800,
+                        "currency": "USD",
+                        "formatted": "⁦18.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 140
+                },
+                "{id:118}": {
+                    "id": "{id:118}",
+                    "name": "شاي مثلج",
+                    "url": "/crave-demo#item-{id:118}",
+                    "short": "شاي أسود منقوع بارد مع الليمون.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:104}",
+                        "alt": "شاي مثلج"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "USD",
+                        "formatted": "⁦12.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 60
+                },
+                "{id:119}": {
+                    "id": "{id:119}",
+                    "name": "كولا",
+                    "url": "/crave-demo#item-{id:119}",
+                    "short": "كولا باردة في زجاجة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:105}",
+                        "alt": "كولا"
+                    },
+                    "price": {
+                        "minor": 800,
+                        "currency": "USD",
+                        "formatted": "⁦8.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 140
+                },
+                "{id:120}": {
+                    "id": "{id:120}",
+                    "name": "مياه غازية",
+                    "url": "/crave-demo#item-{id:120}",
+                    "short": "مياه غازية باردة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:106}",
+                        "alt": "مياه غازية"
+                    },
+                    "price": {
+                        "minor": 600,
+                        "currency": "USD",
+                        "formatted": "⁦6.00⁨$⁩⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "نباتي صرف"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                }
+            },
+            "total": 104
+        },
+        "features": {
+            "featured": [
+                "{id:4}",
+                "{id:11}",
+                "{id:18}",
+                "{id:26}",
+                "{id:31}",
+                "{id:36}",
+                "{id:45}",
+                "{id:52}"
+            ]
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/crave-demo",
+            "cart": "/crave-demo#cart",
+            "quote": "/crave-demo/quote",
+            "track": "/crave-demo#track",
+            "place": "/{store}/send-order",
+            "coupon": "/{store}/coupon",
+            "slots": "/{store}/schedule-slots",
+            "order_lookup": "/{store}/order-lookup"
+        },
+        "money": {
+            "currency": {
+                "code": "USD",
+                "symbol": "$",
+                "exponent": 2,
+                "symbol_position_effective": "after"
+            }
+        },
+        "i18n": {
+            "add_more": "أضف المزيد",
+            "nothing_in_your_order_yet": "لا شيء في طلبك بعد",
+            "total_to_pay": "المبلغ المستحق",
+            "store_closed": "المتجر مغلق",
+            "ordering_is_paused": "الطلب متوقف مؤقتًا",
+            "waiting_for_connection": "في انتظار الاتصال",
+            "youre_offline": "أنت غير متصل بالإنترنت",
+            "prices_changed_while_you_were_offline": "تغيّرت الأسعار أثناء عدم اتصالك بالإنترنت.",
+            "please_confirm_your_order_again": "يرجى تأكيد طلبك مرة أخرى",
+            "couldnt_update_total_retry": "تعذّر تحديث الإجمالي — أعد المحاولة",
+            "sold_out": "نفد من المخزون",
+            "free": "مجاني",
+            "added_to_your_order": "تمت الإضافة إلى طلبك",
+            "removed_from_your_order": "تمت إزالته من طلبك",
+            "sending_your_order": "جارٍ إرسال طلبك",
+            "needs_your_confirmation": "يحتاج إلى تأكيدك",
+            "order_placed": "تم تقديم الطلب",
+            "order_expired": "انتهت صلاحية الطلب",
+            "could_not_place_the_order": "تعذّر إرسال الطلب",
+            "connect_to_place_this_order": "اتصل بالإنترنت لإتمام الطلب",
+            "offline_prices_may_change": "بدون اتصال: قد تتغيّر الأسعار",
+            "some_items_are_no_longer_available": "بعض العناصر لم تعد متوفرة",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "تمت إزالة الطلبات المنتظرة لأن الطلب دون اتصال تم إيقافه.",
+            "still_there_starting_over_in_n_seconds": "هل ما زلت هنا؟ سنبدأ من جديد خلال :n ثانية",
+            "incorrect_pin": "رمز PIN غير صحيح",
+            "too_many_attempts_wait_a_moment": "محاولات كثيرة. انتظر قليلاً.",
+            "device_setup_pin": "رمز إعداد الجهاز PIN",
+            "enter_the_staff_pin": "أدخل رمز الموظفين",
+            "count_of_total_digits_entered": "تم إدخال :count من :total أرقام",
+            "starting_over_in_seconds_s": "إعادة البدء خلال :seconds ث",
+            "continue": "متابعة",
+            "exit_kiosk": "إنهاء وضع الطلب الذاتي",
+            "connection_lost_pay_at_the_counter_to_order_now": "انقطع الاتصال — ادفع عند الكاونتر لتطلب الآن",
+            "ordering_is_paused_until_the_connection_returns": "الطلب متوقف حتى يعود الاتصال"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "ناتشوز غراندي",
+                    "description": "رقائق تورتيا مع صوص الجبن والبيكو دي جالو والهالبينو.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:3}",
+                            "alt": "ناتشوز غراندي"
+                        }
+                    ],
+                    "price": {
+                        "minor": 2080,
+                        "currency": "USD",
+                        "formatted": "⁦20.80⁨$⁩⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2600,
+                        "currency": "USD",
+                        "formatted": "⁦26.00⁨$⁩⁩"
+                    },
+                    "saving_label": "وفّر ⁦5.20⁨$⁩⁩",
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "offer",
+                            "label": "ساعة السعادة"
+                        }
+                    ],
+                    "option_groups": [
+                        {
+                            "id": "{id:121}",
+                            "label": "الصوصات",
+                            "kind": "checkbox",
+                            "required": false,
+                            "min": 0,
+                            "max": 4,
+                            "rule_label": "اختياري · اختر حتى 4",
+                            "options": [
+                                {
+                                    "id": "{id:122}",
+                                    "label": "ثوم",
+                                    "price_delta": {
+                                        "minor": 200,
+                                        "currency": "USD",
+                                        "formatted": "⁦2.00⁨$⁩⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:123}",
+                                    "label": "باربكيو",
+                                    "price_delta": {
+                                        "minor": 200,
+                                        "currency": "USD",
+                                        "formatted": "⁦2.00⁨$⁩⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:124}",
+                                    "label": "رانش",
+                                    "price_delta": {
+                                        "minor": 200,
+                                        "currency": "USD",
+                                        "formatted": "⁦2.00⁨$⁩⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:125}",
+                                    "label": "عسل حار",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "USD",
+                                        "formatted": "⁦3.00⁨$⁩⁩"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "{id:126}",
+                            "label": "Add-ons library",
+                            "kind": "checkbox",
+                            "required": false,
+                            "min": 0,
+                            "rule_label": "اختياري",
+                            "options": [
+                                {
+                                    "id": "{id:127}",
+                                    "label": "هالبينو",
+                                    "price_delta": {
+                                        "minor": 200,
+                                        "currency": "USD",
+                                        "formatted": "⁦2.00⁨$⁩⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:128}",
+                                    "label": "شريحة جبن",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "USD",
+                                        "formatted": "⁦3.00⁨$⁩⁩"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "nutrition": [
+                        {
+                            "label": "السعرات الحرارية",
+                            "value": "560 سعرة"
+                        }
+                    ],
+                    "add_label": "إضافة · ⁦20.80⁨$⁩⁩"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "ناتشوز غراندي",
+                            "qty": 2,
+                            "line_total": {
+                                "minor": 4560,
+                                "currency": "USD",
+                                "formatted": "⁦45.60⁨$⁩⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:3}",
+                                "alt": "ناتشوز غراندي"
+                            },
+                            "choices_label": "ثوم"
+                        },
+                        {
+                            "id": "ln_2",
+                            "item_id": "{id:52}",
+                            "name": "كاربونارا",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 3800,
+                                "currency": "USD",
+                                "formatted": "⁦38.00⁨$⁩⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:9}",
+                                "alt": "كاربونارا"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "المجموع الفرعي",
+                            "amount": {
+                                "minor": 8360,
+                                "currency": "USD",
+                                "formatted": "⁦83.60⁨$⁩⁩"
+                            },
+                            "kind": "subtotal"
+                        }
+                    ],
+                    "total": {
+                        "minor": 8360,
+                        "currency": "USD",
+                        "formatted": "⁦83.60⁨$⁩⁩"
+                    },
+                    "total_label": "الإجمالي",
+                    "cta_label": "الانتقال إلى الدفع · ⁦83.60⁨$⁩⁩"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الكاونتر",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "ناتشوز غراندي",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 4560,
+                                    "currency": "USD",
+                                    "formatted": "⁦45.60⁨$⁩⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:3}",
+                                    "alt": "ناتشوز غراندي"
+                                },
+                                "choices_label": "ثوم"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:52}",
+                                "name": "كاربونارا",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 3800,
+                                    "currency": "USD",
+                                    "formatted": "⁦38.00⁨$⁩⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:9}",
+                                    "alt": "كاربونارا"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 8360,
+                                    "currency": "USD",
+                                    "formatted": "⁦83.60⁨$⁩⁩"
+                                },
+                                "kind": "subtotal"
+                            }
+                        ],
+                        "total": {
+                            "minor": 8360,
+                            "currency": "USD",
+                            "formatted": "⁦83.60⁨$⁩⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · ⁦83.60⁨$⁩⁩"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/crave-demo",
+                "cart": "/crave-demo#cart",
+                "quote": "/crave-demo/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "تم تقديم الطلب",
+                    "heading": "الطلب رقم {order_no}",
+                    "steps": [
+                        {
+                            "label": "تم تقديم الطلب",
+                            "sub": "12:00 م",
+                            "state": "current"
+                        },
+                        {
+                            "label": "جار التحضير",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "جاهز",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "مكتملة",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "ناتشوز غراندي",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 4560,
+                                    "currency": "USD",
+                                    "formatted": "⁦45.60⁨$⁩⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:3}",
+                                    "alt": "ناتشوز غراندي"
+                                },
+                                "choices_label": "Garlic"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:52}",
+                                "name": "كاربونارا",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 3800,
+                                    "currency": "USD",
+                                    "formatted": "⁦38.00⁨$⁩⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:9}",
+                                    "alt": "كاربونارا"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 8360,
+                                    "currency": "USD",
+                                    "formatted": "⁦83.60⁨$⁩⁩"
+                                },
+                                "kind": "subtotal"
+                            }
+                        ],
+                        "total": {
+                            "minor": 8360,
+                            "currency": "USD",
+                            "formatted": "⁦83.60⁨$⁩⁩"
+                        },
+                        "total_label": "الإجمالي · الدفع عند الكاونتر"
+                    },
+                    "paid_label": "الدفع عند الكاونتر",
+                    "actions": [
+                        {
+                            "label": "اتصل بالمتجر",
+                            "url": "tel:966500000000",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "واتساب",
+                            "url": "https://wa.me/966500000000",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ]
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "dine_in",
+                        "label": "تناول بالمطعم",
+                        "needs_address": false,
+                        "needs_slot": false
+                    },
+                    {
+                        "key": "takeaway",
+                        "label": "سفري",
+                        "needs_address": false,
+                        "needs_slot": false
+                    }
+                ],
+                "selected_order_type": "dine_in",
+                "table": null,
+                "room": null,
+                "schedule_ahead": false,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": true,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/crave-demo",
+                "cart": "/crave-demo#cart",
+                "quote": "/crave-demo/quote",
+                "track": "/crave-demo#track",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/crave-demo/kiosk/reset",
+                "kiosk_start": "/crave-demo/kiosk",
+                "kiosk_exit": "/crave-demo/kiosk/exit",
+                "kiosk_setup": "/crave-demo/kiosk/setup"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "crave-demo",
+                "name": "Crave House",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Crave House"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:2}",
+                    "alt": "Crave House"
+                },
+                "tagline": "American grill · smash burgers · late-night cravings",
+                "locale": "ar",
+                "dir": "rtl",
+                "locales": [
+                    {
+                        "code": "ar",
+                        "name": "ar",
+                        "url": "/crave-demo?lang=ar"
+                    },
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/crave-demo?lang=en"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "food",
+                "store_type": "restaurant",
+                "status": {
+                    "open": false,
+                    "label": "الطلب متوقف مؤقتًا",
+                    "next_change_at": null,
+                    "paused_reason": "الطلب متوقف مؤقتًا"
+                },
+                "contact": {
+                    "phone": "966500000000",
+                    "whatsapp": "966500000000",
+                    "address": "King Fahd Rd, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=King%20Fahd%20Rd%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": true
+            }
+        }
+    }
+}

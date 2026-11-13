@@ -1,0 +1,30 @@
+{%- comment -%}
+  Custom block (library v1): hosts one of the store's owner-authored Builder.js
+  blocks (dashboard → Custom blocks), chosen by the `block` setting. The block
+  is rendered by trusted server code ({% custom_block %}): sanitized, scoped to
+  this store, published only, in its language. With no block chosen (or the
+  plan without custom sections) the section renders nothing. The editor only
+  offers the section when the store's `custom_block` cap is on.
+{%- endcomment -%}
+{%- assign block_id = section.settings.block | strip -%}
+{%- capture block_html -%}{%- if block_id != '' -%}{%- custom_block block_id -%}{%- endif -%}{%- endcapture -%}
+{%- if block_html != '' -%}
+<section class="mbs-custom-block mbs-custom-block--{{ section.settings.width | escape }}">{{ block_html }}</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Custom block",
+  "group": "custom",
+  "verticals": ["all"],
+  "hidden_from_gallery": false,
+  "settings": [
+    { "id": "block", "type": "custom_block", "label": "Custom block", "default": "" },
+    { "id": "width", "type": "select", "label": "Width", "options": [
+      { "value": "contained", "label": "Contained" },
+      { "value": "full", "label": "Full width" }
+    ], "default": "contained" }
+  ],
+  "presets": [{ "name": "Custom block" }]
+}
+{% endschema %}

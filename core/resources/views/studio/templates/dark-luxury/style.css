@@ -1,0 +1,39 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Dark Luxury — charcoal, gold hairlines, serif. Logical props (RTL). */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --serif: Didot, 'Playfair Display', Georgia, 'Amiri', 'Geeza Pro', serif; }
+html, body { background: #444; }
+.sheet {
+    background: var(--bg); color: var(--text); font-family: var(--serif);
+    width: var(--page-w); min-height: var(--page-h); margin-inline: auto;
+    padding: 14mm; box-shadow: 0 2px 28px rgba(0,0,0,.55);
+}
+.menu-header { text-align: center; padding-block-end: 6mm; margin-block-end: 8mm; border-block-end: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+.menu-header .rule { inline-size: 18mm; block-size: 1px; background: var(--accent); margin: 3mm auto; }
+.restaurant-name { font-size: 23pt; font-weight: 400; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+.tagline { font-size: 9.5pt; font-style: italic; opacity: .7; margin-block-start: 2mm; letter-spacing: .1em; }
+.menu-body { column-count: 2; column-gap: 11mm; }
+.category { break-inside: avoid; margin-block-end: 8mm; }
+.category-name {
+    font-size: 11pt; letter-spacing: .34em; text-transform: uppercase; color: var(--accent);
+    border-block-end: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    padding-block-end: 1.6mm; margin-block-end: 3.4mm;
+}
+.item { break-inside: avoid; margin-block-end: 4mm; }
+.item-line { display: flex; align-items: baseline; gap: 2.4mm; }
+.item-name { font-size: 10.5pt; letter-spacing: .03em; }
+.item-dots { flex: 1; border-block-end: 1px dotted color-mix(in srgb, var(--accent) 35%, transparent); min-width: 4mm; }
+.item-price { font-size: 10.5pt; color: var(--accent); white-space: nowrap; letter-spacing: .06em; }
+.item-desc { font-size: 8.5pt; font-style: italic; opacity: .65; margin-block-start: .9mm; line-height: 1.5; }
+.item-tags { margin-block-start: .9mm; }
+.tag { display: inline-block; font-size: 6.5pt; font-style: normal; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent); border-radius: 1mm; padding: .3mm 1.8mm; margin-inline-end: 1.2mm; }
+.item-variants, .item-extras { font-size: 8.5pt; opacity: .75; margin-block-start: .8mm; }
+.menu-footer { text-align: center; font-size: 8.5pt; font-style: italic; opacity: .65; border-block-start: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); padding-block-start: 3mm; margin-block-start: 7mm; }
+.aspect-a4 { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+.aspect-story { --page-w: 180mm; --page-h: 320mm; }
+.aspect-story .menu-body { column-count: 1; }
+@media print { html, body { background: none; } .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .category, .item { break-inside: avoid; } }
+@page { margin: 0; }

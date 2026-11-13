@@ -1,0 +1,26 @@
+{
+  "operationId": "releaseHold",
+  "request": {
+    "method": "DELETE",
+    "path": "/api/v1/storefront/holds/01a0fb52-e930-7298-8470-68f8094faf7d",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Origin": "https://sidra-salon.example",
+      "X-Hold-Token": "hld_3efe2bcb93ea366959660537656cd561"
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:38:40 GMT"
+    },
+    "body": {
+      "message": "This time is held for a booking that is waiting for its deposit. Finish or cancel the payment first.",
+      "code": "hold_in_use"
+    }
+  }
+}

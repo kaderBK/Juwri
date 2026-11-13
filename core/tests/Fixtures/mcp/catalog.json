@@ -1,0 +1,170 @@
+{
+    "initialize": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "708d22f941adc89caa84741ccfc1a989a83d788e80c2ace791933ebc756bddd4",
+        "length": 173,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-catalog-mcp\",\"versio"
+    },
+    "initialize_old": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "ff816a80844304944a1f6dbb6fcf95d5594e6aec75d7ce9ed9f3ccab9f777c51",
+        "length": 173,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-catalog-mcp\",\"versio"
+    },
+    "initialize_unknown": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "708d22f941adc89caa84741ccfc1a989a83d788e80c2ace791933ebc756bddd4",
+        "length": 173,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{\"listChanged\":false}},\"serverInfo\":{\"name\":\"juwri-catalog-mcp\",\"versio"
+    },
+    "ping": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "fcd8c77a7e0a0e2c93bf89cbf8b02c66255a80aca8114b348de69523a4f6d640",
+        "length": 36,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}"
+    },
+    "tools_list": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "d42283d00e8d4e20a515039e316389396fd5d7ae4ceec21bdc0e6f995e648654",
+        "length": 3507,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"tools\":[{\"name\":\"search_stores\",\"description\":\"Find stores across the whole platform by keyword and\\/or city \\u2014 restauran"
+    },
+    "unknown_method": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cce6f1d9c45011667ea0af8b964b8389b7825f0ab29e5e78daa883af3375e1a1",
+        "length": 89,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\\/nope\"}}"
+    },
+    "unknown_tool": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "706201aeaca0b54baadfaa3116a8a294601bb2b48d739010eb70bc3716f4f9e9",
+        "length": 79,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Unknown tool: nope\"}}"
+    },
+    "notification": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "39e0590e02bf4db8393d6cbb8845d0a276eed5fdc2f2aacb6c550aef2edfa152",
+        "length": 122,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{}},{\"jsonrpc\":\"2.0\",\"id\":8,\"error\":{\"code\":-32601,\"message\":\"Method not found: nope\"}}]"
+    },
+    "notifications_only_batch": {
+        "status": 202,
+        "type": "application/json",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "length": 0,
+        "head": ""
+    },
+    "scalar_batch": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "cc5c2698b3663df631503fd9e0f1bd81c09b4383421dfacad55427964840e89b",
+        "length": 84,
+        "head": "[{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}]"
+    },
+    "invalid_json": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "f96339765a17ec91f2352be0cf7ba8ca2350bf9b4b2d23ef160863314520f5c7",
+        "length": 82,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32601,\"message\":\"Method not found: \"}}"
+    },
+    "bad_protocol_header": {
+        "status": 400,
+        "type": "application/json",
+        "sha256": "93b8efaf44dd464afb46247f2a4fcf0d03d79f140ab7c890f28902f236e702f2",
+        "length": 155,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Unsupported MCP-Protocol-Version: 1999-01-01. Supported: 2024-11-05, 2025-03-26, 2025-06-18\"}}"
+    },
+    "foreign_origin": {
+        "status": 403,
+        "type": "application/json",
+        "sha256": "9619ea80721b75cf311e51ccf964ee969fad22b71fb969b78e27661d1c8adff3",
+        "length": 108,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Origin is not allowed for this MCP endpoint.\"}}"
+    },
+    "call:search_stores": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "9ed80931a27babbee93e148ea10c741a03edd9f048b4f82ad1225abdf75490e2",
+        "length": 995,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"count\\\":2,\\\"stores\\\":[{\\\"name\\\":\\\"Pizza Place\\\",\\\"slug\\\":\\\"pizza-place\\\",\\\"tagline\\\":\\\"Ta"
+    },
+    "call:search_stores#query": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "460282ec7d638c891b60c150a637bd55dd9fdab1b5e07827c576e46b342c5391",
+        "length": 551,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"count\\\":1,\\\"stores\\\":[{\\\"name\\\":\\\"Shawarma House\\\",\\\"slug\\\":\\\"shawarma-house\\\",\\\"tagline\\"
+    },
+    "call:search_stores#city": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "a60a6abce0b778905e91558c362204c13466237655ba7a8ce07e3ffbd4a360ac",
+        "length": 543,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"count\\\":1,\\\"stores\\\":[{\\\"name\\\":\\\"Pizza Place\\\",\\\"slug\\\":\\\"pizza-place\\\",\\\"tagline\\\":\\\"Ta"
+    },
+    "call:search_items": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "c04ffd5745a8ef4452fb496913773a16aa202cd7a13e18c5112b06ff8448c844",
+        "length": 372,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"item_count\\\":2,\\\"stores\\\":[{\\\"store\\\":\\\"Pizza Place\\\",\\\"slug\\\":\\\"pizza-place\\\",\\\"store_ty"
+    },
+    "call:search_items#dietary": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "85ba8dd69d1be41013d798217da4bf47d37349fb7d3a7dc8e01302bb7d4a182a",
+        "length": 328,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"item_count\\\":1,\\\"stores\\\":[{\\\"store\\\":\\\"Shawarma House\\\",\\\"slug\\\":\\\"shawarma-house\\\",\\\"st"
+    },
+    "call:get_store": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "26863b68fc528ff80bf77da4128b9ad5583c2df7b0ddb12434f6509e7d612a8d",
+        "length": 763,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"name\\\":\\\"Shawarma House\\\",\\\"slug\\\":\\\"shawarma-house\\\",\\\"tagline\\\":\\\"Tasty\\\",\\\"address\\\":\\"
+    },
+    "call:get_store#id": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "26863b68fc528ff80bf77da4128b9ad5583c2df7b0ddb12434f6509e7d612a8d",
+        "length": 763,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"name\\\":\\\"Shawarma House\\\",\\\"slug\\\":\\\"shawarma-house\\\",\\\"tagline\\\":\\\"Tasty\\\",\\\"address\\\":\\"
+    },
+    "call:get_store#missing": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "72e78275eaf36bee216d98d39211200562d8fd3b8caf0d27dd428e94a88aedfe",
+        "length": 100,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32004,\"message\":\"Store not found or not publicly listed.\"}}"
+    },
+    "call:get_store#noargs": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "517a3c998b8f34182698a4855f2991e048ee0ec05bcc0b560fefa094dec24142",
+        "length": 80,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"error\":{\"code\":-32602,\"message\":\"Provide slug or id.\"}}"
+    },
+    "call:list_starter_menus": {
+        "status": 200,
+        "type": "application/json",
+        "sha256": "48a5752e0f354909d3efb62a4cee7c40f615cf00485c15897c1c40a62a685cc7",
+        "length": 1128,
+        "head": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"{\\\"count\\\":5,\\\"presets\\\":[{\\\"key\\\":\\\"cafe\\\",\\\"label\\\":\\\"Cafe\\\",\\\"categories\\\":[{\\\"name\\\":\\\"H"
+    }
+}

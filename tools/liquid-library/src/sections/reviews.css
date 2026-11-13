@@ -1,0 +1,34 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* reviews */
+.mbs-reviews {
+  max-inline-size: 960px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-reviews__title { margin: 0 0 var(--ts-gap-2, 10px); font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.3rem; }
+.mbs-reviews__intro { margin: 0 0 var(--ts-gap-3, 16px); color: var(--tc-text-muted, #6b7280); }
+.mbs-reviews__body { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ts-gap-3, 16px); }
+.mbs-reviews__summary { display: flex; align-items: baseline; gap: 6px; margin: 0; }
+.mbs-reviews__summary .mbs-icon { align-self: center; color: var(--tc-accent, #f59e0b); fill: currentColor; }
+.mbs-reviews__avg { font-size: 1.8rem; line-height: 1; }
+.mbs-reviews__of,
+.mbs-reviews__count { color: var(--tc-text-muted, #6b7280); font-size: .9rem; }
+.mbs-reviews__count { margin-inline-start: 6px; }
+.mbs-reviews__google {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .15);
+  border-radius: var(--tr-control, 12px);
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+.mbs-reviews__google:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }

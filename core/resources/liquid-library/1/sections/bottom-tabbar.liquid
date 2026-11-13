@@ -1,0 +1,72 @@
+{%- comment -%}
+  Bottom tab bar (library v1). Tabs are blocks; without blocks it shows
+  Home / Favourites / Cart / Account. Home, cart, favourites and account are
+  commerce-runtime router tabs (data-mb-tab) whose views the header section
+  hosts; the runtime marks the active tab and hides the bar on sub-views.
+  The cart tab only appears when the store takes orders.
+{%- endcomment -%}
+{%- assign tab_count = section.blocks | size -%}
+<div class="mbs-bottom-tabbar mbs-bottom-tabbar--{{ section.settings.style | escape }}{% if section.settings.show_labels == false %} is-icons{% endif %}">
+  <nav class="mbs-bottom-tabbar__nav" data-mb-tabbar aria-label="{{ 'Main Menu' | t }}">
+    <ul class="mbs-bottom-tabbar__list" role="list">
+      {%- if tab_count > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tab' -%}
+            {%- render 'tabbar-tab', target: block.settings.target, label: block.settings.label, anchor: block.settings.anchor, view: block.settings.view, vocab: vocab, allow_order: flags.allow_order -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign defaults = 'home,favs,cart,profile' | split: ',' -%}
+        {%- for target in defaults -%}
+          {%- render 'tabbar-tab', target: target, label: '', anchor: '', view: '', vocab: vocab, allow_order: flags.allow_order -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </nav>
+  <div class="mbs-bottom-tabbar__spacer" aria-hidden="true"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Bottom tab bar",
+  "group": "chrome",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "style", "type": "select", "label": "Style", "options": [
+      { "value": "bar", "label": "Full-width bar" },
+      { "value": "pill", "label": "Floating pill" }
+    ], "default": "bar" },
+    { "id": "show_labels", "type": "checkbox", "label": "Show labels", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "limit": 5,
+      "settings": [
+        { "id": "target", "type": "select", "label": "Opens", "options": [
+          { "value": "home", "label": "Home" },
+          { "value": "catalog", "label": "Catalog section" },
+          { "value": "search", "label": "Search section" },
+          { "value": "cart", "label": "Cart" },
+          { "value": "favs", "label": "Favourites" },
+          { "value": "profile", "label": "Account" },
+          { "value": "view", "label": "Custom view" }
+        ], "default": "home" },
+        { "id": "label", "type": "text", "label": "Label (blank = automatic)", "default": "" },
+        { "id": "anchor", "type": "text", "label": "Section id (catalog / search)", "default": "" },
+        { "id": "view", "type": "text", "label": "View name (custom view)", "default": "" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Bottom tab bar", "blocks": [
+      { "type": "tab", "settings": { "target": "home" } },
+      { "type": "tab", "settings": { "target": "catalog", "anchor": "menu" } },
+      { "type": "tab", "settings": { "target": "cart" } },
+      { "type": "tab", "settings": { "target": "profile" } }
+    ] }
+  ]
+}
+{% endschema %}

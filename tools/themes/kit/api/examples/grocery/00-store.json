@@ -1,0 +1,206 @@
+{
+  "operationId": "getStore",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/store",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=120",
+      "Date": "Fri, 02 Oct 2026 07:43:30 GMT",
+      "ETag": "W/\"fm-store-en-5b21\""
+    },
+    "body": {
+      "store": {
+        "public_id": "019f2a6e-4c00-7b81-9e3d-1c5a7f2b8e90",
+        "slug": "fresh-mart-demo",
+        "name": "Fresh Mart",
+        "logo": {
+          "src": "https://media.example/img/placeholder-1x1.svg",
+          "alt": "Fresh Mart"
+        },
+        "cover": {
+          "src": "https://media.example/img/placeholder-16x9.svg",
+          "alt": "Fresh Mart"
+        },
+        "tagline": "Groceries delivered in 25 minutes",
+        "locale": "en",
+        "dir": "ltr",
+        "locales": [
+          {
+            "code": "en",
+            "name": "English",
+            "url": "/fresh-mart-demo?lang=en"
+          },
+          {
+            "code": "ar",
+            "name": "العربية",
+            "url": "/fresh-mart-demo?lang=ar"
+          }
+        ],
+        "timezone": "Asia/Riyadh",
+        "vertical_set": "retail",
+        "store_type": "grocery",
+        "status": {
+          "open": true,
+          "label": "Open · closes 12 am",
+          "next_change_at": "2026-10-03T00:00:00+03:00",
+          "paused_reason": null
+        },
+        "contact": {
+          "phone": "+966 55 010 0103",
+          "whatsapp": "+966 55 010 0103",
+          "address": "Al Olaya, Riyadh"
+        },
+        "social": [
+          {
+            "network": "instagram",
+            "url": "https://instagram.com/fresh-mart"
+          }
+        ],
+        "rating": {
+          "avg": 4.6,
+          "count": 2310
+        },
+        "legal_links": [
+          {
+            "label": "Privacy",
+            "url": "/fresh-mart-demo/privacy"
+          },
+          {
+            "label": "Terms",
+            "url": "/fresh-mart-demo/terms"
+          }
+        ],
+        "powered_by": true
+      },
+      "branch": {
+        "current": {
+          "public_id": "019f2a6e-4c00-7c92-8f4e-2d6b8a3c9fa1",
+          "name": "Main branch",
+          "address": "Al Olaya, Riyadh"
+        }
+      },
+      "context": {
+        "order_types": [
+          {
+            "key": "delivery",
+            "label": "Delivery",
+            "needs_address": true,
+            "needs_slot": false
+          },
+          {
+            "key": "pickup_slot",
+            "label": "Pickup slot",
+            "needs_address": false,
+            "needs_slot": true
+          }
+        ],
+        "selected_order_type": "delivery",
+        "schedule_ahead": true,
+        "min_order": {
+          "minor": 8000,
+          "currency": "SAR",
+          "formatted": "SAR 80.00"
+        },
+        "free_delivery_threshold": {
+          "minor": 9000,
+          "currency": "SAR",
+          "formatted": "SAR 90.00"
+        },
+        "delivery_address": {
+          "label": "Al Olaya, Riyadh",
+          "in_zone": true
+        },
+        "refunds": {
+          "weighed_difference": true,
+          "deposits": false,
+          "returns": false
+        }
+      },
+      "money": {
+        "currency": {
+          "code": "SAR",
+          "symbol": "SAR",
+          "exponent": 2,
+          "symbol_position_effective": "before"
+        },
+        "tax": {
+          "mode": "inclusive",
+          "rate": 15,
+          "label": "VAT"
+        }
+      },
+      "features": {
+        "offers": [
+          {
+            "id": "off_weekly",
+            "title": "Weekly deals on fruit and veg"
+          },
+          {
+            "id": "off_free",
+            "title": "Free delivery over SAR 90",
+            "code": "FRESH"
+          }
+        ],
+        "barcode_scan": true
+      },
+      "booking": null,
+      "substitution": {
+        "group": {
+          "id": "019f4455-1a00-7d42-8a6e-0c3b9f1e2d22",
+          "label": "If it's out of stock",
+          "kind": "radio",
+          "required": true,
+          "min": 1,
+          "max": 1,
+          "selected_label": "Replace with similar",
+          "options": [
+            {
+              "id": "019f4455-1a00-7e15-a4c7-6d8e2b0f3a31",
+              "label": "Replace with similar",
+              "sub_label": "Same price or cheaper",
+              "selected": true
+            },
+            {
+              "id": "019f4455-1a00-7f28-b5d8-7e9f3c1a4b42",
+              "label": "Call me",
+              "sub_label": "We'll ask before replacing"
+            },
+            {
+              "id": "019f4455-1a00-7039-86e9-8fa04d2b5c53",
+              "label": "Remove it",
+              "sub_label": "You get a refund for it"
+            }
+          ]
+        },
+        "default_option_id": "019f4455-1a00-7e15-a4c7-6d8e2b0f3a31",
+        "picker_actions": [
+          {
+            "option_id": "019f4455-1a00-7e15-a4c7-6d8e2b0f3a31",
+            "action": "offer_replacement"
+          },
+          {
+            "option_id": "019f4455-1a00-7f28-b5d8-7e9f3c1a4b42",
+            "action": "call_customer",
+            "fallback": "remove_item"
+          },
+          {
+            "option_id": "019f4455-1a00-7039-86e9-8fa04d2b5c53",
+            "action": "remove_item"
+          }
+        ]
+      },
+      "holds": {
+        "release_during_payment": false
+      }
+    }
+  }
+}

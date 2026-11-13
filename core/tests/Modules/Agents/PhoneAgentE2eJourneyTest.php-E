@@ -1,0 +1,434 @@
+<?php
+
+namespace Tests\Modules\Agents;
+
+use App\Models\MenuCategory;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Juwri\Core\Models\Store;
+use Juwri\Core\Models\User;
+use Juwri\Modules\Agents\Models\AgentConversation;
+use Juwri\Modules\Agents\Models\CallLog;
+use Juwri\Modules\Agents\Models\PhoneLine;
+use Juwri\Modules\Agents\Services\Telephony\Bridge\TwilioRelayCodec;
+use Juwri\Modules\Agents\Services\Telephony\VoiceConsent;
+use Juwri\Modules\Agents\Services\Telephony\VoicePayLink;
+use Juwri\Modules\Ai\Services\AiService;
+use Juwri\Modules\Menu\Models\Menu;
+use Juwri\Modules\Messaging\Contracts\Sms;
+use Juwri\Modules\Ordering\Contracts\HostedPayments;
+use Juwri\Modules\Ordering\Http\Controllers\User\PaymentController;
+use Juwri\Modules\Ordering\Services\Payments\HostedOrderPayments;
+use Juwri\Modules\Payments\Models\Transaction;
+use Tests\Support\TestPlans;
+use Tests\TestCase;
+
+/**
+ * P6-09 V-21 — the whole phone-agent journey, end to end and from the money side.
+ *
+ * The call is driven through the REAL relay path: a Twilio ConversationRelay `setup`
+ * frame, then `prompt` frames whose decoded replies come back from VoiceSession::turn.
+ * A scripted AiService stands in for the model; Sms records what would be texted and a
+ * HostedPayments wrapper keeps the real `open()` but lets a test switch the store's
+ * gateway off. `PaymentController::paySuccess($transaction)` is the "payment webhook"
+ * every gateway funnels into — never a network call.
+ *
+ * Journey 1 (happy path): AI disclosure + recording consent -> read-back then "yes" ->
+ *   one signed pay-link SMS to the caller -> the unpaid order is hidden from the staff
+ *   KDS -> paySuccess settles it (paid, on the rail as "Phone · paid") -> a duplicate
+ *   webhook is a no-op. Also pins the call log outcome and the conversation's call meta.
+ * Journey 2 (unpaid expiry): the window lapses, `orders:expire-hosted-payments` cancels
+ *   the order, it never reaches the KDS, and a late paySuccess records the money but
+ *   leaves the order cancelled.
+ * Journey 3 (cross-store isolation): store A's transaction and call SID can neither
+ *   settle nor text store B's order, and A's KDS poll never lists B's order.
+ */
+class PhoneAgentE2eJourneyTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** The HostedPayments binding under test: real open(), configurable storeCanTake(). */
+    private object $hosted;
+
+    /** The Sms binding under test: records every send, returns a configurable result. */
+    private object $sms;
+
+    /** A process-wide sequence so two lines in one test never share a number. */
+    private static int $lineSeq = 0;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // The V-15/V-21 flow under test only runs when phone orders are pay-link orders.
+        config(['voice.require_pay_link' => true]);
+        // The owner KDS route is behind feature/permission middleware; this flow is not that gate.
+        $this->withoutMiddleware();
+
+        $this->hosted = new class(app(HostedOrderPayments::class)) implements HostedPayments
+        {
+            public bool $canTake = true;
+
+            public function __construct(private HostedOrderPayments $real) {}
+
+            public function storeCanTake(Store $store, float $total): bool
+            {
+                return $this->canTake;
+            }
+
+            public function storeCanHold(Store $store, float $amount): bool
+            {
+                return $this->real->storeCanHold($store, $amount);
+            }
+
+            public function open(Store $store, Order $order, ?string $returnUrl, ?string $ip, ?int $holdMinor = null): Transaction
+            {
+                return $this->real->open($store, $order, $returnUrl, $ip, $holdMinor);
+            }
+
+            public function transactionFor(Order $order): ?Transaction
+            {
+                return $this->real->transactionFor($order);
+            }
+
+            public function isOpen(Order $order): bool
+            {
+                return $this->real->isOpen($order);
+            }
+
+            public function expire(Order $order): bool
+            {
+                return $this->real->expire($order);
+            }
+        };
+        app()->instance(HostedPayments::class, $this->hosted);
+
+        $this->sms = new class implements Sms
+        {
+            /** @var list<array{to: string, message: string, store: int|null, feature: string}> */
+            public array $sent = [];
+
+            public bool $result = true;
+
+            public function send(string $to, string $message, ?int $restaurantId = null, string $feature = 'general', bool $marketing = false): bool
+            {
+                $this->sent[] = ['to' => $to, 'message' => $message, 'store' => $restaurantId, 'feature' => $feature];
+
+                return $this->result;
+            }
+
+            public function normalizePhone(string $phone): string
+            {
+                return (string) preg_replace('/\D+/', '', $phone);
+            }
+        };
+        app()->instance(Sms::class, $this->sms);
+    }
+
+    private function fakeAi(array $script): void
+    {
+        $fake = new class extends AiService
+        {
+            public array $script = [];
+
+            public int $idx = 0;
+
+            public function __construct() {}
+
+            public function json(array $messages, array $options = [], ?callable $validator = null, ?int $userId = null, ?int $restaurantId = null, string $feature = 'general'): array
+            {
+                return $this->script[$this->idx++] ?? ['reply' => 'done'];
+            }
+        };
+        $fake->script = $script;
+        app()->instance(AiService::class, $fake);
+    }
+
+    /**
+     * An owner on an ordering-enabled plan, a store, one menu item and an active line.
+     *
+     * @param  array<string, mixed>  $lineAttrs
+     * @return array{0: Store, 1: Menu, 2: PhoneLine, 3: User}
+     */
+    private function line(bool $orders = true, array $lineAttrs = []): array
+    {
+        $plan = TestPlans::create([
+            'name' => 'P'.Str::random(5), 'description' => 'T', 'monthly_price' => 1, 'annual_price' => 1,
+            'lifetime_price' => 1, 'status' => 1,
+            'settings' => ['restaurant_limit' => 999, 'menu_limit' => 999, 'allow_ordering' => '1', 'ai_chatbot' => '1'],
+        ]);
+        $owner = User::factory()->create(['group_id' => (string) $plan->id, 'status' => 1, 'email_verified_at' => now()]);
+        $r = Store::create([
+            'user_id' => $owner->id, 'slug' => 'r-'.Str::lower(Str::random(6)), 'color' => '#111',
+            'title' => 'R', 'sub_title' => 'T', 'description' => 'T', 'main_image' => 'd.png',
+            'cover_image' => 'd.png', 'address' => '1', 'phone' => '1', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+        $cat = MenuCategory::create(['store_id' => $r->id, 'name' => 'Mains', 'active' => 1]);
+        $item = Menu::create(['store_id' => $r->id, 'category_id' => $cat->id, 'name' => 'Pizza', 'price' => 12, 'active' => 1]);
+        $line = PhoneLine::create(array_merge([
+            'store_id' => $r->id, 'provider' => 'twilio', 'number' => '+1555'.str_pad((string) ++self::$lineSeq, 7, '0', STR_PAD_LEFT),
+            'active' => true, 'orders_enabled' => $orders, 'greeting' => 'Welcome to R',
+        ], $lineAttrs));
+
+        return [$r, $item, $line, $owner];
+    }
+
+    /** Drive a call: the ConversationRelay setup frame stores the call identity. */
+    private function codec(PhoneLine $line, string $callSid, string $from): TwilioRelayCodec
+    {
+        $codec = new TwilioRelayCodec($line);
+        $this->assertNull($codec->decode((string) json_encode([
+            'type' => 'setup', 'sessionId' => 'VX1', 'accountSid' => 'AC1',
+            'callSid' => $callSid, 'from' => $from, 'to' => $line->number,
+            'callType' => 'PSTN', 'direction' => 'inbound', 'callStatus' => 'RINGING',
+        ])), 'the setup frame is silent');
+
+        return $codec;
+    }
+
+    /** Send one final caller utterance and return the agent's spoken reply from the text frame. */
+    private function say(TwilioRelayCodec $codec, string $utterance): string
+    {
+        $frame = $codec->decode((string) json_encode([
+            'type' => 'prompt', 'voicePrompt' => $utterance, 'lang' => 'en-US', 'last' => true,
+        ]));
+        $this->assertNotNull($frame, "the relay answered the caller's \"{$utterance}\"");
+
+        return (string) (json_decode($frame, true)['token'] ?? '');
+    }
+
+    /** One create_order tool call for the single Pizza line. */
+    private function orderStep(Menu $item): array
+    {
+        return ['tool' => 'create_order', 'args' => ['items' => [['item_id' => $item->id, 'quantity' => 1]], 'type' => 'takeaway', 'customer_name' => 'Caller']];
+    }
+
+    /** V-08: an order takes two turns — read-back (gated create_order), then "yes" (placed). */
+    private function confirmed(Menu $item, string $placed): array
+    {
+        return [$this->orderStep($item), ['reply' => 'Shall I place it?'], $this->orderStep($item), ['reply' => $placed]];
+    }
+
+    /** Order ids currently on the owner's KDS rail for a store. */
+    private function kdsIds(User $owner, Store $store): array
+    {
+        return collect($this->actingAs($owner)->getJson(route('kds.poll', ['store_id' => $store->id]))->assertOk()->json())
+            ->pluck('id')->all();
+    }
+
+    /** The KDS ticket for one order, or null when it is not on the rail. */
+    private function kdsTicket(User $owner, Store $store, int $orderId): ?array
+    {
+        return collect($this->actingAs($owner)->getJson(route('kds.poll', ['store_id' => $store->id]))->assertOk()->json())
+            ->firstWhere('id', $orderId);
+    }
+
+    /** Settle a transaction exactly as a gateway webhook does, swallowing its echo. */
+    private function pay(Transaction $transaction): void
+    {
+        ob_start();
+        PaymentController::paySuccess($transaction);
+        ob_get_clean();
+    }
+
+    /** An in-progress call record on a line (as VoiceSession::open would create it). */
+    private function openCall(Store $store, PhoneLine $line, string $callSid, string $from): CallLog
+    {
+        return CallLog::create([
+            'store_id' => $store->id, 'phone_line_id' => $line->id, 'provider' => $line->provider,
+            'call_sid' => $callSid, 'from_number' => $from, 'outcome' => 'in_progress', 'transcript' => [],
+        ]);
+    }
+
+    /**
+     * A hosted, unpaid phone order with one queued line and its pay Transaction.
+     *
+     * @return array{0: Order, 1: Transaction}
+     */
+    private function phoneOrder(Store $store, Menu $item, string $from): array
+    {
+        $order = Order::create([
+            'store_id' => $store->id, 'source' => 'phone', 'payment_mode' => 'hosted',
+            'status' => 'unpaid', 'is_paid' => 0, 'type' => 'takeaway', 'currency_code' => 'USD',
+            'phone_number' => $from, 'track_token' => Str::random(12),
+            'payment_expires_at' => now()->addMinutes(30),
+        ]);
+        OrderItem::create([
+            'order_id' => $order->id, 'item_id' => $item->id, 'quantity' => 1, 'variation' => 0, 'status' => 'queued',
+        ]);
+        $tx = app(HostedPayments::class)->open($store, $order, null, null);
+
+        return [$order, $tx];
+    }
+
+    // ---- Journey 1: consent -> order -> signed pay link -> paid -> KDS -----------------
+
+    public function test_happy_path_consent_order_signed_pay_link_and_kds_settlement(): void
+    {
+        [$r, $item, $line, $owner] = $this->line(lineAttrs: [
+            'recording_enabled' => true,
+            'recording_region' => 'ksa',
+        ]);
+        $this->fakeAi($this->confirmed($item, 'placed'));
+        $codec = $this->codec($line, 'CA-E2E-1', '+15551110000');
+
+        // V-10: the greeting discloses the AI and asks the recording question (owner armed it).
+        $this->assertStringContainsString(
+            __('This call is handled by an AI assistant and may be recorded. Say yes if you agree to recording.'),
+            VoiceConsent::greeting($line)
+        );
+
+        // Turn 1: the caller agrees — only a yes arms recording; the caller is not sent to the agent yet.
+        $this->assertSame(__('Thank you. What would you like to order?'), $this->say($codec, 'yes'));
+        $log = CallLog::where('call_sid', 'CA-E2E-1')->firstOrFail();
+        $this->assertSame('yes', $log->consent);
+        $this->assertTrue((bool) $log->recording);
+
+        // Turns 2-3: read-back (gated create_order), then the explicit yes places it.
+        $this->assertSame('Shall I place it?', $this->say($codec, 'one pizza'));
+        $this->assertSame('placed', $this->say($codec, 'yes please'));
+
+        // The order exists as an unpaid hosted phone order, kept out of the kitchen.
+        $orders = Order::where('store_id', $r->id)->get();
+        $this->assertCount(1, $orders, 'exactly one order');
+        $order = $orders->first();
+        $this->assertSame('phone', $order->source);
+        $this->assertSame('unpaid', $order->status);
+        $this->assertSame('hosted', $order->payment_mode);
+        $this->assertSame(0, (int) $order->is_paid);
+        $this->assertNotNull($order->payment_expires_at);
+        $this->assertTrue($order->payment_expires_at->isFuture());
+        $this->assertTrue($order->payment_expires_at->lessThanOrEqualTo(now()->addMinutes(31)), 'window is ~30 minutes');
+
+        // The call is linked to its own order, and the conversation carries the call SID (V-02).
+        $log->refresh();
+        $this->assertSame('order', $log->outcome);
+        $this->assertSame($order->id, (int) $log->order_id);
+        $conversation = AgentConversation::where('store_id', $r->id)->where('channel', 'voice')->firstOrFail();
+        $this->assertSame('CA-E2E-1', ((array) $conversation->meta)['call_sid']);
+        $this->assertSame(substr(sha1('CA-E2E-1'), 0, 40), $conversation->session_key);
+
+        // One hosted Transaction backs the pay link, and exactly one SMS goes to the caller.
+        $tx = Transaction::where('transaction_method', 'order')->where('product_id', $order->id)->firstOrFail();
+        $this->assertSame((int) $r->id, (int) $tx->store_id);
+        $this->assertCount(1, $this->sms->sent, 'exactly one SMS');
+        $this->assertSame('+15551110000', $this->sms->sent[0]['to']);
+        $message = $this->sms->sent[0]['message'];
+        $this->assertStringContainsString('Pay for your', $message);
+        $this->assertStringContainsString('/payment/phone/'.$tx->id, $message, 'not the bare sequential-id route');
+
+        // The link is a temporary SIGNED URL (expires with the payment hold), not a guessable id route.
+        $this->assertSame(1, preg_match('~https?://\S+~', $message, $m));
+        $url = $m[0];
+        $this->assertStringContainsString('/payment/phone/'.$tx->id, $url);
+        $this->assertStringContainsString('signature=', $url);
+        $this->assertStringContainsString('expires=', $url);
+
+        // While the hold is open the signed URL opens the pay page; the bare/unsigned routes are refused
+        // (real middleware here, then back to the stripped stack for the KDS polls below).
+        $this->withMiddleware()->withoutMiddleware([\App\Http\Middleware\Installed::class, \App\Http\Middleware\PreventRequestForgery::class]);
+        $this->get($url)->assertOk();
+        $this->get(route('payment.phone', $tx->id))->assertForbidden();
+        $this->get(preg_replace('~signature=[0-9a-f]+~', 'signature=deadbeef', $url))->assertForbidden();
+        $this->get(route('payment.index', $tx->id))->assertForbidden();
+        $this->withoutMiddleware();
+
+        // Unpaid: the order is not on the staff rail.
+        $this->assertNotContains($order->id, $this->kdsIds($owner, $r), 'an unpaid phone order never reaches the kitchen');
+
+        // The payment webhook every gateway funnels into.
+        $this->pay($tx->fresh());
+
+        $order->refresh();
+        $this->assertSame(1, (int) $order->is_paid);
+        $this->assertNotSame('unpaid', $order->status, 'the paid order leaves the unpaid hold');
+        // paySuccess sets 'pending', then KdsService derives the ticket status from the queued items.
+        $this->assertTrue(in_array($order->status, ['pending', 'new'], true), 'the paid phone order reaches the kitchen flow: '.$order->status);
+        $this->assertSame(Transaction::STATUS_CONSUMED, $tx->fresh()->status);
+
+        $ticket = $this->kdsTicket($owner, $r, $order->id);
+        $this->assertNotNull($ticket, 'the paid phone order appears on the rail');
+        $this->assertTrue($ticket['phone_paid'], 'the KDS badge reads "Phone · paid"');
+
+        // The badge string is localised (AR differs from EN), so the UI label is not hard-coded English.
+        $this->assertSame('Phone · paid', trans('lang.phone_paid', [], 'en'));
+        $this->assertNotSame('Phone · paid', trans('lang.phone_paid', [], 'ar'));
+
+        // A duplicate gateway delivery is a no-op: still exactly one ticket.
+        $this->pay($tx->fresh());
+        $this->assertSame(1, Order::where('store_id', $r->id)->count());
+        $this->assertSame(1, (int) $order->fresh()->is_paid);
+        $this->assertSame(1, count($this->kdsIds($owner, $r)), 'a duplicate webhook adds no ticket');
+    }
+
+    // ---- Journey 2: the unpaid window lapses; a late webhook stays out of the kitchen --
+
+    public function test_unpaid_phone_order_expires_and_a_late_webhook_never_reaches_the_kds(): void
+    {
+        [$r, $item, $line, $owner] = $this->line();
+        $this->fakeAi($this->confirmed($item, 'placed'));
+        $codec = $this->codec($line, 'CA-E2E-2', '+15552220000');
+
+        $this->assertSame('Shall I place it?', $this->say($codec, 'one pizza'));
+        $this->assertSame('placed', $this->say($codec, 'yes please'));
+
+        $order = Order::where('store_id', $r->id)->firstOrFail();
+        $tx = Transaction::where('transaction_method', 'order')->where('product_id', $order->id)->firstOrFail();
+        $this->assertSame('unpaid', $order->status);
+        $this->assertCount(1, $this->sms->sent);
+        $this->assertNotContains($order->id, $this->kdsIds($owner, $r), 'an unpaid order is never on the KDS');
+
+        // Travel past the hold window and run the platform sweep.
+        $this->travel(31)->minutes();
+        $this->artisan('orders:expire-hosted-payments')->assertExitCode(0);
+
+        $order->refresh();
+        $this->assertSame('cancelled', $order->status);
+        $this->assertNotNull($order->cancelled_at);
+        $this->assertSame(0, (int) $order->is_paid);
+        $this->assertNotContains($order->id, $this->kdsIds($owner, $r), 'a cancelled order never reaches the KDS');
+
+        // A late gateway webhook records the money but cannot revive the order.
+        $this->pay($tx->fresh());
+
+        $order->refresh();
+        $this->assertSame('cancelled', $order->status, 'a late payment never revives the order');
+        $this->assertSame(0, (int) $order->is_paid);
+        $this->assertSame('received_late', $order->late_payment_status);
+        $this->assertNotNull($order->late_payment_at);
+        $this->assertNotContains($order->id, $this->kdsIds($owner, $r), 'a late-paid cancelled order stays out of the kitchen');
+    }
+
+    // ---- Journey 3: one store cannot settle, text or show another store's order -------
+
+    public function test_cross_store_isolation_of_calls_payments_and_the_kds(): void
+    {
+        [$storeA, $itemA, $lineA, $ownerA] = $this->line();
+        [$storeB, $itemB, $lineB] = $this->line();
+        $this->fakeAi([]);
+
+        $logA = $this->openCall($storeA, $lineA, 'CA-STORE-A', '+15550001111');
+        $logB = $this->openCall($storeB, $lineB, 'CA-STORE-B', '+15550002222');
+        [$orderA, $txA] = $this->phoneOrder($storeA, $itemA, '+15550001111');
+        [$orderB] = $this->phoneOrder($storeB, $itemB, '+15550002222');
+
+        // Store A's own transaction settles A's order ... and only A's.
+        $this->pay($txA->fresh());
+        $this->assertSame(1, (int) $orderA->fresh()->is_paid);
+        $this->assertSame(0, (int) $orderB->fresh()->is_paid, "store A's payment must not touch store B's order");
+        $this->assertSame('unpaid', $orderB->fresh()->status);
+
+        // ... and A can neither use B's call log nor send B's order a pay link.
+        $this->assertFalse(VoicePayLink::send($storeA, $logB, (int) $orderB->id)['sent'], "store A cannot use B's call log");
+        $crossStore = VoicePayLink::send($storeA, $logA, (int) $orderB->id);
+        $this->assertFalse($crossStore['sent'], "store A cannot send B's order a pay link");
+        $this->assertSame('not_payable', $crossStore['reason']);
+        $this->assertCount(0, $this->sms->sent, 'no cross-store SMS');
+
+        // A's KDS poll lists A's ticket and never B's.
+        $ids = $this->kdsIds($ownerA, $storeA);
+        $this->assertContains($orderA->id, $ids);
+        $this->assertNotContains($orderB->id, $ids, "store A's KDS never lists store B's order");
+    }
+}

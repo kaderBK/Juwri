@@ -1,0 +1,173 @@
+{
+  "operationId": "getBookingSlots",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/booking/slots",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "X-Manage-Token": "mgt_fa27a0ac471f03dcaad42a6f2d39"
+    },
+    "query": {
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ],
+      "option_ids": [
+        "019f9e03-278b-717b-b9e2-b16615441e71",
+        "019f9b12-2514-7941-a496-bb4c8e05f95a"
+      ],
+      "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+      "date": "2026-10-05"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:18:40 GMT"
+    },
+    "body": {
+      "date": "2026-10-05",
+      "timezone": "Asia/Riyadh",
+      "reschedule_of": "01a0fb55-94c8-73d0-ab48-248ce0421be0",
+      "total_duration_min": 75,
+      "slots": [
+        {
+          "id": "bks_9b4de15795a0",
+          "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "starts_at": "2026-10-05T13:00:00+03:00",
+          "ends_at": "2026-10-05T14:15:00+03:00",
+          "state": "available",
+          "display": {
+            "id": "bks_9b4de15795a0",
+            "label": "1:00 pm",
+            "state": "available"
+          }
+        },
+        {
+          "id": "bks_ca800b744839",
+          "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "starts_at": "2026-10-05T14:00:00+03:00",
+          "ends_at": "2026-10-05T15:15:00+03:00",
+          "state": "available",
+          "display": {
+            "id": "bks_ca800b744839",
+            "label": "2:00 pm",
+            "state": "available"
+          }
+        },
+        {
+          "id": "bks_40fb72626c42",
+          "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "starts_at": "2026-10-05T15:15:00+03:00",
+          "ends_at": "2026-10-05T16:30:00+03:00",
+          "state": "available",
+          "display": {
+            "id": "bks_40fb72626c42",
+            "label": "3:15 pm",
+            "state": "available"
+          }
+        },
+        {
+          "id": "bks_c762dc58fc21",
+          "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "starts_at": "2026-10-05T16:30:00+03:00",
+          "ends_at": "2026-10-05T17:45:00+03:00",
+          "state": "available",
+          "display": {
+            "id": "bks_c762dc58fc21",
+            "label": "4:30 pm",
+            "state": "available"
+          }
+        },
+        {
+          "id": "bks_7c27cbf40bc7",
+          "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "starts_at": "2026-10-05T18:15:00+03:00",
+          "ends_at": "2026-10-05T19:30:00+03:00",
+          "state": "available",
+          "display": {
+            "id": "bks_7c27cbf40bc7",
+            "label": "6:15 pm",
+            "state": "available"
+          }
+        }
+      ],
+      "picker": {
+        "title": "October 2026",
+        "days": [
+          {
+            "id": "d_fri",
+            "label": "Fri",
+            "sub": "2",
+            "state": "available"
+          },
+          {
+            "id": "d_sat",
+            "label": "Sat",
+            "sub": "3",
+            "state": "closed"
+          },
+          {
+            "id": "d_sun",
+            "label": "Sun",
+            "sub": "4",
+            "state": "available"
+          },
+          {
+            "id": "d_mon",
+            "label": "Mon",
+            "sub": "5",
+            "state": "available"
+          },
+          {
+            "id": "d_tue",
+            "label": "Tue",
+            "sub": "6",
+            "state": "available"
+          }
+        ],
+        "groups": [
+          {
+            "label": "Afternoon",
+            "slots": [
+              {
+                "id": "bks_9b4de15795a0",
+                "label": "1:00 pm",
+                "state": "available"
+              },
+              {
+                "id": "bks_ca800b744839",
+                "label": "2:00 pm",
+                "state": "available"
+              },
+              {
+                "id": "bks_40fb72626c42",
+                "label": "3:15 pm",
+                "state": "selected"
+              },
+              {
+                "id": "bks_c762dc58fc21",
+                "label": "4:30 pm",
+                "state": "available"
+              }
+            ]
+          },
+          {
+            "label": "Evening",
+            "slots": [
+              {
+                "id": "bks_7c27cbf40bc7",
+                "label": "6:15 pm",
+                "state": "available"
+              }
+            ]
+          }
+        ],
+        "timezone_note": "Times are in Riyadh time (GMT+3)"
+      }
+    }
+  }
+}

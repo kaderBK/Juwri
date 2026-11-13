@@ -1,0 +1,313 @@
+{
+ "_comment": "prototype icon name (Lucide-style) -> <x-ui.icon name> in Juwri (owner kit icon if it exists, else Tabler outline). flip: mirror in RTL with :flip=\"true\" (contract \u00a76).",
+ "icons": {
+  "alert-circle": {
+   "tabler": "alert-circle",
+   "flip": false
+  },
+  "alert-triangle": {
+   "tabler": "alert-triangle",
+   "flip": false
+  },
+  "apple": {
+   "tabler": "brand-apple",
+   "flip": false
+  },
+  "armchair": {
+   "tabler": "armchair",
+   "flip": false
+  },
+  "arrow-left": {
+   "tabler": "arrow-left",
+   "flip": true
+  },
+  "arrow-right": {
+   "tabler": "arrow-right",
+   "flip": true
+  },
+  "ban": {
+   "tabler": "ban",
+   "flip": false
+  },
+  "delete": {
+   "tabler": "backspace",
+   "flip": false
+  },
+  "banknote": {
+   "tabler": "cash",
+   "flip": false
+  },
+  "bell": {
+   "tabler": "bell",
+   "flip": false
+  },
+  "bell-ring": {
+   "tabler": "bell-ringing",
+   "flip": false
+  },
+  "bike": {
+   "tabler": "bike",
+   "flip": true
+  },
+  "calendar": {
+   "tabler": "calendar",
+   "flip": false
+  },
+  "calendar-clock": {
+   "tabler": "calendar-time",
+   "flip": false
+  },
+  "calendar-plus": {
+   "tabler": "calendar-plus",
+   "flip": false
+  },
+  "calendar-x": {
+   "tabler": "calendar-x",
+   "flip": false
+  },
+  "check": {
+   "tabler": "check",
+   "flip": false
+  },
+  "chevron-down": {
+   "tabler": "chevron-down",
+   "flip": false
+  },
+  "chevron-left": {
+   "tabler": "chevron-left",
+   "flip": true
+  },
+  "chevron-right": {
+   "tabler": "chevron-right",
+   "flip": true
+  },
+  "chevron-up": {
+   "tabler": "chevron-up",
+   "flip": false
+  },
+  "circle-check": {
+   "tabler": "circle-check",
+   "flip": false
+  },
+  "clock": {
+   "tabler": "clock",
+   "flip": false
+  },
+  "coffee": {
+   "tabler": "coffee",
+   "flip": false
+  },
+  "credit-card": {
+   "tabler": "credit-card",
+   "flip": false
+  },
+  "external-link": {
+   "tabler": "external-link",
+   "flip": true
+  },
+  "flame": {
+   "tabler": "flame",
+   "flip": false
+  },
+  "globe": {
+   "tabler": "world",
+   "flip": false
+  },
+  "heart": {
+   "tabler": "heart",
+   "flip": false
+  },
+  "help-circle": {
+   "tabler": "help-circle",
+   "flip": false
+  },
+  "home": {
+   "tabler": "home",
+   "flip": false
+  },
+  "hourglass": {
+   "tabler": "hourglass",
+   "flip": false
+  },
+  "house": {
+   "tabler": "home",
+   "flip": false
+  },
+  "info": {
+   "tabler": "info-circle",
+   "flip": false
+  },
+  "instagram": {
+   "tabler": "brand-instagram",
+   "flip": false
+  },
+  "layout-grid": {
+   "tabler": "layout-grid",
+   "flip": false
+  },
+  "lock": {
+   "tabler": "lock",
+   "flip": false
+  },
+  "map-pin": {
+   "tabler": "map-pin",
+   "flip": false
+  },
+  "map-pin-off": {
+   "tabler": "map-pin-off",
+   "flip": false
+  },
+  "message-circle": {
+   "tabler": "message-circle",
+   "flip": false
+  },
+  "minus": {
+   "tabler": "minus",
+   "flip": false
+  },
+  "moon": {
+   "tabler": "moon",
+   "flip": false
+  },
+  "navigation": {
+   "tabler": "navigation",
+   "flip": true
+  },
+  "package": {
+   "tabler": "package",
+   "flip": false
+  },
+  "person-standing": {
+   "tabler": "accessible",
+   "flip": false
+  },
+  "phone": {
+   "tabler": "phone",
+   "flip": false
+  },
+  "plus": {
+   "tabler": "plus",
+   "flip": false
+  },
+  "receipt": {
+   "tabler": "receipt",
+   "flip": false
+  },
+  "refresh-cw": {
+   "tabler": "refresh",
+   "flip": false
+  },
+  "repeat": {
+   "tabler": "repeat",
+   "flip": false
+  },
+  "rotate-ccw": {
+   "tabler": "arrow-back-up",
+   "flip": false
+  },
+  "ruler": {
+   "tabler": "ruler",
+   "flip": false
+  },
+  "scale": {
+   "tabler": "scale",
+   "flip": false
+  },
+  "scan-barcode": {
+   "tabler": "barcode",
+   "flip": false
+  },
+  "scissors": {
+   "tabler": "scissors",
+   "flip": false
+  },
+  "search": {
+   "tabler": "search",
+   "flip": false
+  },
+  "search-x": {
+   "tabler": "search-off",
+   "flip": false
+  },
+  "share-2": {
+   "tabler": "share",
+   "flip": false
+  },
+  "shopping-bag": {
+   "tabler": "shopping-bag",
+   "flip": false
+  },
+  "shopping-basket": {
+   "tabler": "basket",
+   "flip": false
+  },
+  "shopping-cart": {
+   "tabler": "shopping-cart",
+   "flip": false
+  },
+  "sliders": {
+   "tabler": "adjustments-horizontal",
+   "flip": false
+  },
+  "smartphone": {
+   "tabler": "device-mobile",
+   "flip": false
+  },
+  "sparkles": {
+   "tabler": "sparkles",
+   "flip": false
+  },
+  "star": {
+   "tabler": "star",
+   "flip": false
+  },
+  "store": {
+   "tabler": "building-store",
+   "flip": false
+  },
+  "tag": {
+   "tabler": "tag",
+   "flip": false
+  },
+  "ticket": {
+   "tabler": "ticket",
+   "flip": false
+  },
+  "timer": {
+   "tabler": "stopwatch",
+   "flip": false
+  },
+  "trash-2": {
+   "tabler": "trash",
+   "flip": false
+  },
+  "truck": {
+   "tabler": "truck-delivery",
+   "flip": true
+  },
+  "user": {
+   "tabler": "user",
+   "flip": false
+  },
+  "users": {
+   "tabler": "users",
+   "flip": false
+  },
+  "utensils": {
+   "tabler": "tools-kitchen-2",
+   "flip": false
+  },
+  "wifi-off": {
+   "tabler": "wifi-off",
+   "flip": false
+  },
+  "x": {
+   "tabler": "x",
+   "flip": false
+  },
+  "zap": {
+   "tabler": "bolt",
+   "flip": false
+  }
+ }
+}

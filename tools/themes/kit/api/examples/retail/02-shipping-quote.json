@@ -1,0 +1,126 @@
+{
+  "operationId": "quoteShipping",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/shipping/quote",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_dune_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA"
+      },
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+          "variant_id": "019fa718-1080-763e-a69c-9f701d44ac3b",
+          "qty": 1
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+          "variant_id": "019ea63e-e400-7902-af49-16aadc649da7",
+          "qty": 1
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:45:41 GMT"
+    },
+    "body": {
+      "methods": [
+        {
+          "id": "01a01863-f880-702d-b8e8-df65791001f2",
+          "kind": "standard",
+          "carrier": "SMSA",
+          "fee": {
+            "minor": 0,
+            "currency": "SAR",
+            "formatted": "SAR 0.00"
+          },
+          "earliest_date": "2026-10-04",
+          "latest_date": "2026-10-06",
+          "cutoff_at": null,
+          "display": {
+            "id": "standard",
+            "label": "Standard",
+            "sub": "2–4 days · by Tue 6 Oct",
+            "amount": {
+              "minor": 0,
+              "currency": "SAR",
+              "formatted": "SAR 0.00"
+            },
+            "amount_label": "Free",
+            "selected": true,
+            "icon": "truck"
+          }
+        },
+        {
+          "id": "019fc334-1c00-716c-b0f2-579cde858c7a",
+          "kind": "express",
+          "carrier": "SMSA",
+          "fee": {
+            "minor": 2500,
+            "currency": "SAR",
+            "formatted": "SAR 25.00"
+          },
+          "earliest_date": "2026-10-03",
+          "latest_date": "2026-10-03",
+          "cutoff_at": "2026-10-02T21:00:00+03:00",
+          "display": {
+            "id": "express",
+            "label": "Express",
+            "sub": "Tomorrow by 9 pm",
+            "amount": {
+              "minor": 2500,
+              "currency": "SAR",
+              "formatted": "SAR 25.00"
+            },
+            "amount_label": "SAR 25.00",
+            "icon": "zap"
+          }
+        },
+        {
+          "id": "019ffcb5-ca00-7dcb-9be9-4fafaa945299",
+          "kind": "pickup_in_store",
+          "carrier": null,
+          "fee": {
+            "minor": 0,
+            "currency": "SAR",
+            "formatted": "SAR 0.00"
+          },
+          "earliest_date": "2026-10-03",
+          "latest_date": "2026-10-03",
+          "cutoff_at": null,
+          "pickup_branch_id": "019f3b29-7300-7551-972b-24389fcc4b17",
+          "display": {
+            "id": "pickup",
+            "label": "Pick up in store",
+            "sub": "Olaya Mall · ready tomorrow",
+            "amount": {
+              "minor": 0,
+              "currency": "SAR",
+              "formatted": "SAR 0.00"
+            },
+            "amount_label": "Free",
+            "icon": "store"
+          }
+        }
+      ],
+      "zone": "riyadh-north",
+      "ships_to_address": true
+    }
+  }
+}

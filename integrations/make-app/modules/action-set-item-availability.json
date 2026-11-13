@@ -1,0 +1,23 @@
+{
+  "name": "setItemAvailability",
+  "label": "Set Item Availability",
+  "description": "Marks a menu item sold out or available.",
+  "type": "action",
+  "connection": "juwri",
+  "parameters": [
+    { "name": "restaurant_id", "type": "integer", "label": "Restaurant ID", "required": true },
+    { "name": "item_id", "type": "integer", "label": "Menu Item ID", "required": true },
+    { "name": "is_sold_out", "type": "boolean", "label": "Sold out", "help": "Leave blank to flip the current state." }
+  ],
+  "communication": {
+    "url": "{{baseUrl}}/api/v1/stores/{{parameters.restaurant_id}}/menu/items/{{parameters.item_id}}/sold-out",
+    "method": "PATCH",
+    "body": { "is_sold_out": "{{parameters.is_sold_out}}" },
+    "response": { "output": "{{body}}" }
+  },
+  "interface": [
+    { "name": "id", "type": "number", "label": "Item ID" },
+    { "name": "is_sold_out", "type": "boolean", "label": "Sold out" }
+  ],
+  "samples": { "id": 991, "is_sold_out": true }
+}

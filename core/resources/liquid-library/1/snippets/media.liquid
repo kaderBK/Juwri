@@ -1,0 +1,9 @@
+{%- comment -%}
+  Responsive image tag (library v1). Always carries width + height (no layout
+  shift). `priority: true` is for the first above-the-fold image only
+  (eager + fetchpriority=high); everything else lazy-loads.
+  Params: src (url), alt, width, height, class, priority (bool), sizes.
+{%- endcomment -%}
+{%- if src and src != '' -%}
+<img class="{{ class }}" src="{{ src | escape }}" alt="{{ alt | escape }}" width="{{ width | default: 800 }}" height="{{ height | default: 600 }}" decoding="async"{% if priority %} loading="eager" fetchpriority="high"{% else %} loading="lazy"{% endif %}{% if sizes and sizes != "" %} sizes="{{ sizes }}"{% endif %}>
+{%- endif -%}

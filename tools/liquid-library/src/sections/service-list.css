@@ -1,0 +1,23 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* service-list (B1c) */
+.mbs-service-list {
+  max-inline-size: 960px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  color: var(--tc-text, #111);
+}
+.mbs-service-list__head { display: grid; gap: var(--ts-gap-1, 6px); margin-block-end: var(--ts-gap-3, 16px); }
+.mbs-service-list__title { margin: 0; font-family: var(--tf-heading, inherit); font-size: 1.35rem; }
+.mbs-service-list__note { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--tc-text-muted, #6b7280); font-size: .85rem; }
+.mbs-service-list__group + .mbs-service-list__group { margin-block-start: var(--ts-gap-4, 24px); }
+.mbs-service-list__group[hidden] { display: none; }
+.mbs-service-list__group-title { margin: 0 0 var(--ts-gap-2, 10px); font-size: 1.05rem; }
+.mbs-service-list__items { display: grid; gap: var(--ts-gap-2, 10px); }
+.mbs-service-list__empty { margin: 0; padding: var(--ts-gap-4, 24px); border-radius: var(--tr-card, 16px); background: var(--tc-surface, #f4f4f5); color: var(--tc-text-muted, #6b7280); text-align: center; }
+.mbs-service-list__empty[hidden] { display: none; }
+@media (min-width: 768px) {
+  .mbs-service-list--grid { max-inline-size: 1200px; }
+  .mbs-service-list--grid .mbs-service-list__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

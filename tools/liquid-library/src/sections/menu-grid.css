@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* menu-grid — the food catalogue */
+.mbs-menu-grid { box-sizing: border-box; max-inline-size: 1200px; margin-inline: auto; padding: var(--ts-gap-3, 16px); color: var(--tc-text, #111); }
+.mbs-menu-grid__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ts-gap-2, 10px); margin-block-end: var(--ts-gap-3, 16px); }
+.mbs-menu-grid__title { margin: 0; font-family: var(--tf-heading); font-size: 1.4rem; }
+.mbs-menu-grid__tools { display: flex; gap: 6px; }
+.mbs-menu-grid__select, .mbs-menu-grid__toggle { min-block-size: 44px; border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .15); border-radius: var(--tr-control, 12px); background: var(--tc-background, #fff); color: inherit; font: inherit; font-size: .85rem; }
+.mbs-menu-grid__select { padding-inline: 12px; }
+.mbs-menu-grid__toggle { display: inline-grid; place-items: center; inline-size: 44px; cursor: pointer; }
+.mbs-menu-grid__toggle.is-on { border-color: var(--tc-primary, #3fd463); background: var(--tc-primary, #3fd463); color: var(--tc-on-primary, #fff); }
+.mbs-menu-grid__cat { margin-block-end: var(--ts-gap-4, 24px); scroll-margin-block-start: var(--mbs-sticky-offset, 120px); }
+.mbs-menu-grid__cat-title { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-family: var(--tf-heading); font-size: 1.1rem; }
+.mbs-menu-grid__cat-img { inline-size: 40px; block-size: 40px; border-radius: var(--tr-pill, 999px); object-fit: cover; }
+.mbs-menu-grid__list { display: grid; grid-template-columns: repeat(var(--mbs-cols-m, 2), minmax(0, 1fr)); gap: 12px; }
+.mbs-menu-grid--list-row .mbs-menu-grid__list, .mbs-menu-grid--text-only .mbs-menu-grid__list { gap: 0 var(--ts-gap-4, 24px); }
+.mbs-menu-grid__catalog.is-list .mbs-menu-grid__list { grid-template-columns: minmax(0, 1fr); }
+.mbs-menu-grid__catalog.is-list .mbs-card-photo { flex-direction: row; }
+.mbs-menu-grid__catalog.is-list .mbs-card-photo__media { flex: none; inline-size: 128px; aspect-ratio: 1; }
+.mbs-menu-grid__empty, .mbs-menu-grid__none { padding: 32px var(--ts-gap-3, 16px); color: var(--tc-text-muted, #6b7280); text-align: center; }
+.mbs-menu-grid__sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (min-width: 768px) {
+  .mbs-menu-grid__list { grid-template-columns: repeat(var(--mbs-cols-d, 3), minmax(0, 1fr)); gap: var(--ts-gap-3, 16px); }
+}

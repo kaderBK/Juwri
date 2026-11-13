@@ -1,0 +1,150 @@
+{
+    "complete_default": {
+        "text": "hello",
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "mimo",
+                "model": "mimo-v2.5-pro",
+                "feature": "unit",
+                "prompt_tokens": 11,
+                "completion_tokens": 7,
+                "fell_back": false,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 1,
+        "http": 1
+    },
+    "complete_fallback": {
+        "text": "from kimi",
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "kimi",
+                "model": "kimi-k2.5",
+                "feature": "unit",
+                "prompt_tokens": 11,
+                "completion_tokens": 7,
+                "fell_back": true,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 1,
+        "http": 2
+    },
+    "complete_to_anthropic": {
+        "text": "claude",
+        "order": [
+            "api.xiaomimimo.com",
+            "api.moonshot.ai",
+            "api.anthropic.com"
+        ],
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "anthropic",
+                "model": "claude-sonnet-4-6",
+                "feature": "unit",
+                "prompt_tokens": 13,
+                "completion_tokens": 5,
+                "fell_back": true,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 1,
+        "http": 3
+    },
+    "json_retry": {
+        "decoded": {
+            "ok": true
+        },
+        "messages_sent": [
+            [
+                "give json"
+            ],
+            [
+                "give json",
+                "Your previous reply was not valid JSON for this task (Malformed JSON from mimo). Reply with ONLY a single valid JSON object."
+            ]
+        ],
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "mimo",
+                "model": "mimo-v2.5-pro",
+                "feature": "unit",
+                "prompt_tokens": 11,
+                "completion_tokens": 7,
+                "fell_back": false,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 1,
+        "http": 2
+    },
+    "json_validator_fallback": {
+        "decoded": {
+            "categories": []
+        },
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "kimi",
+                "model": "kimi-k2.5",
+                "feature": "unit",
+                "prompt_tokens": 11,
+                "completion_tokens": 7,
+                "fell_back": true,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 1,
+        "http": 3
+    },
+    "all_fail": {
+        "thrown": {
+            "message": "Provider [anthropic] HTTP 500: down",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "usage": [],
+        "credits": 0,
+        "http": 3
+    },
+    "monthly_limit": {
+        "refused": true,
+        "usage": [
+            {
+                "user": "owner",
+                "provider": "mimo",
+                "model": "m",
+                "feature": "seed",
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "fell_back": false,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 0,
+        "http": 0
+    },
+    "no_user": {
+        "text": "sys",
+        "usage": [
+            {
+                "user": null,
+                "provider": "mimo",
+                "model": "mimo-v2.5-pro",
+                "feature": "system",
+                "prompt_tokens": 11,
+                "completion_tokens": 7,
+                "fell_back": false,
+                "audio_seconds": null
+            }
+        ],
+        "credits": 0,
+        "http": 1,
+        "rows_without_user": 1
+    }
+}

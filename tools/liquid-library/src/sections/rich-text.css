@@ -1,0 +1,32 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* rich-text */
+.mbs-rich-text {
+  display: grid;
+  gap: var(--ts-gap-3, 16px);
+  justify-items: start;
+  max-inline-size: 720px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-rich-text--wide { max-inline-size: 1100px; }
+.mbs-rich-text--center { justify-items: center; text-align: center; }
+.mbs-rich-text__title { margin: 0; font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.5rem; }
+.mbs-rich-text__body { line-height: 1.65; overflow-wrap: anywhere; }
+.mbs-rich-text__body a { color: var(--tc-primary-700, #1f8a3b); }
+.mbs-rich-text__cta {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-4, 24px);
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font-weight: 700;
+  text-decoration: none;
+}
+.mbs-rich-text__cta:focus-visible { outline: 3px solid var(--tc-accent, #f59e0b); outline-offset: 2px; }

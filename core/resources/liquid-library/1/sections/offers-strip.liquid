@@ -1,0 +1,43 @@
+{%- comment -%}
+  Offers strip (library v1): items currently on offer (`offers` — a
+  schedule / happy-hour price below the regular price, not sold out) on a
+  tinted band, each with its discount %, the struck-through regular price
+  and an add button when the store takes orders. Hidden when nothing is on
+  offer.
+{%- endcomment -%}
+{%- assign offer_count = offers | size -%}
+{%- if offer_count > 0 -%}
+{%- assign heading = section.settings.heading | strip -%}
+{%- if heading == '' -%}{%- assign heading = 'Offers' | t -%}{%- endif -%}
+<section class="mbs-offers-strip" aria-labelledby="mbs-offers-{{ section.id | escape }}">
+  <div class="mbs-offers-strip__head">
+    <h2 class="mbs-offers-strip__title" id="mbs-offers-{{ section.id | escape }}">{{ heading | escape }}</h2>
+    {%- if section.settings.show_label -%}
+      {%- assign first_offer = offers | first -%}
+      {%- if first_offer.schedule_label -%}<span class="mbs-offers-strip__label">{{ first_offer.schedule_label | escape }}</span>{%- endif -%}
+    {%- endif -%}
+  </div>
+  <ul class="mbs-offers-strip__track" role="list">
+    {%- for item in offers -%}
+      <li class="mbs-offers-strip__slot">
+        {%- render 'card-compact', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: false, show_badges: true, show_image: section.settings.show_images, show_fav: false, catalog: false, eager: false -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Offers strip",
+  "group": "engage",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Offers)", "default": "" },
+    { "id": "show_label", "type": "checkbox", "label": "Show the offer name (e.g. Happy hour)", "default": true },
+    { "id": "show_images", "type": "checkbox", "label": "Show item photos", "default": true }
+  ],
+  "presets": [{ "name": "Offers strip" }]
+}
+{% endschema %}

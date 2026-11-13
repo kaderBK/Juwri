@@ -1,0 +1,346 @@
+{
+  "$schema_note": "Juwri theme tokens v1. Customizer roles (primary, background, surface, text, accent) map 1:1 to colors.* in theme.json; the other colour keys are theme tokens (--x-*) derived in theme.css. Checked by tools/contrast.py (contract §8).",
+  "theme": "aisle",
+  "vertical_set": "retail (retail, clothing, cosmetic, carparts)",
+  "default_preset": "clean",
+  "scheme_default": "auto",
+  "customizer_roles": [
+    "primary",
+    "background",
+    "surface",
+    "text",
+    "accent"
+  ],
+  "presets": {
+    "clean": {
+      "label": {
+        "en": "Clean",
+        "ar": "بسيط"
+      },
+      "source": "shelf",
+      "default_scheme": "light",
+      "layout_overrides": {},
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#111111",
+        "background": "#FFFFFF",
+        "surface": "#FFFFFF",
+        "surface_2": "#F4F4F5",
+        "text": "#111111",
+        "muted": "#5E5E66",
+        "border": "#E6E6E9",
+        "border_strong": "#85858C",
+        "accent": "#C8281B"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#F5F5F5",
+        "background": "#0C0C0D",
+        "surface": "#161618",
+        "surface_2": "#202023",
+        "text": "#F5F5F5",
+        "muted": "#A6A6AD",
+        "border": "#2C2C30",
+        "border_strong": "#76767E",
+        "accent": "#FF6B5E"
+      }
+    },
+    "editorial": {
+      "label": {
+        "en": "Editorial",
+        "ar": "تحريري"
+      },
+      "source": "maison",
+      "default_scheme": "light",
+      "layout_overrides": {
+        "fonts.pair": "fraunces-jakarta",
+        "layout.radius": "none",
+        "layout.image_ratio": "3:4"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#2B2622",
+        "background": "#F7F3EE",
+        "surface": "#FFFFFF",
+        "surface_2": "#EEE7DE",
+        "text": "#2B2622",
+        "muted": "#6B6259",
+        "border": "#E4DACE",
+        "border_strong": "#8E8478",
+        "accent": "#9C6B3C"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#EDE3D6",
+        "background": "#141210",
+        "surface": "#1E1B18",
+        "surface_2": "#282420",
+        "text": "#EDE3D6",
+        "muted": "#B3A797",
+        "border": "#36302A",
+        "border_strong": "#807567",
+        "accent": "#D4A373"
+      }
+    },
+    "beauty": {
+      "label": {
+        "en": "Beauty",
+        "ar": "تجميل"
+      },
+      "source": "lumiere",
+      "default_scheme": "light",
+      "layout_overrides": {
+        "layout.radius": "round"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#8A3F5C",
+        "background": "#FBF7F6",
+        "surface": "#FFFFFF",
+        "surface_2": "#F4ECEA",
+        "text": "#2A1D22",
+        "muted": "#6E5D63",
+        "border": "#EEE2E0",
+        "border_strong": "#92838A",
+        "accent": "#E7B8A8"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#F0A6C2",
+        "background": "#151013",
+        "surface": "#1F181C",
+        "surface_2": "#2A2126",
+        "text": "#F7EEF1",
+        "muted": "#B8A7AE",
+        "border": "#382D33",
+        "border_strong": "#82737A",
+        "accent": "#E7B8A8"
+      }
+    },
+    "garage": {
+      "label": {
+        "en": "Garage",
+        "ar": "قطع غيار"
+      },
+      "source": "torque",
+      "default_scheme": "dark",
+      "layout_overrides": {
+        "fonts.pair": "geist-inter",
+        "layout.radius": "soft",
+        "layout.card": "list"
+      },
+      "light": {
+        "danger": "#B42318",
+        "success": "#1A6B3C",
+        "warning": "#8A5A00",
+        "primary": "#C2410C",
+        "background": "#F4F5F6",
+        "surface": "#FFFFFF",
+        "surface_2": "#E8EAED",
+        "text": "#111418",
+        "muted": "#575D66",
+        "border": "#DADDE2",
+        "border_strong": "#80868F",
+        "accent": "#0F766E"
+      },
+      "dark": {
+        "danger": "#FF8A7A",
+        "success": "#5FCB8C",
+        "warning": "#F2C14E",
+        "primary": "#FF8A3D",
+        "background": "#0E1013",
+        "surface": "#171A1F",
+        "surface_2": "#21252B",
+        "text": "#EEF1F4",
+        "muted": "#A3AAB3",
+        "border": "#2C3138",
+        "border_strong": "#727A84",
+        "accent": "#2DD4BF"
+      }
+    }
+  },
+  "color_usage": {
+    "primary": "CTA fill (add, cart bar, place order), active category chip, focus ring, links",
+    "accent": "Sale badge FILL only (label in on-accent). Sale price text stays `text` (beauty accent #E7B8A8 would fail as text); the regular price is struck through in `muted` and the badge says \"Sale\" or \"−30%\", never colour only",
+    "surface_2": "input fill, skeletons, segmented control track, quantity stepper track",
+    "muted": "descriptions, meta (calories, prep time), placeholder — passes 4.5:1, replaces 55% mix for body-size text",
+    "border": "card hairline, dividers (decorative, no contrast requirement)",
+    "border_strong": "input + toggle outlines (3:1 non-text)",
+    "danger/success/warning": "status text + icons; fills use 12% tint of the same colour with the text colour on top"
+  },
+  "typography": {
+    "font_pair": "inter",
+    "heading": "Inter 600/800 (Latin) → IBM Plex Sans Arabic 700",
+    "body": "Inter (Latin) → IBM Plex Sans Arabic",
+    "weights": {
+      "body": 400,
+      "strong": 600,
+      "heading": 800
+    },
+    "scale_px": {
+      "xs": 12,
+      "sm": 14,
+      "base": 16,
+      "lg": 18,
+      "xl": 20,
+      "2xl": 24,
+      "3xl": 30,
+      "4xl": 38,
+      "5xl": 48
+    },
+    "roles": {
+      "store_name": {
+        "phone": "3xl/heading/700",
+        "desktop": "5xl/heading/700"
+      },
+      "category_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "item_name": {
+        "phone": "lg/body/600",
+        "desktop": "lg/body/600"
+      },
+      "item_desc": {
+        "phone": "sm/body/400 muted, 2-line clamp",
+        "desktop": "sm/body/400 muted, 2-line clamp"
+      },
+      "price": {
+        "phone": "base/body/600 tabular-nums",
+        "desktop": "base/body/600 tabular-nums"
+      },
+      "sheet_title": {
+        "phone": "2xl/heading/700",
+        "desktop": "3xl/heading/700"
+      },
+      "total": {
+        "phone": "xl/body/700 tabular-nums",
+        "desktop": "xl/body/700 tabular-nums"
+      },
+      "label": {
+        "phone": "sm/body/600",
+        "desktop": "sm/body/600"
+      },
+      "meta": {
+        "phone": "xs/body/400 muted (min 12px, never smaller)",
+        "desktop": "xs/body/400 muted"
+      }
+    },
+    "line_height": {
+      "latin": {
+        "tight": 1.15,
+        "base": 1.5
+      },
+      "arabic": {
+        "tight": 1.4,
+        "base": 1.7
+      }
+    },
+    "rules": [
+      "no letter-spacing on Arabic",
+      "no uppercase transforms (brand line may use small caps only in Latin)",
+      "price + sale price + savings always together",
+      "min body 16px on inputs (iOS zoom)"
+    ]
+  },
+  "radius": {
+    "customizer": "layout.radius",
+    "default": "soft",
+    "values_px": {
+      "card": 10,
+      "control": 8,
+      "chip": 999,
+      "sheet_top": 20,
+      "image": 6
+    }
+  },
+  "spacing": {
+    "customizer": "layout.density",
+    "default": "cozy",
+    "grid_px": 4,
+    "scale_px": {
+      "1": 4,
+      "2": 8,
+      "3": 12,
+      "4": 16,
+      "5": 20,
+      "6": 24,
+      "8": 32,
+      "10": 40,
+      "12": 48,
+      "16": 64
+    },
+    "gutter": {
+      "phone": 16,
+      "desktop": 32
+    },
+    "max_content_px": 1200,
+    "section_gap": {
+      "phone": 32,
+      "desktop": 56
+    }
+  },
+  "sizes": {
+    "target_primary": 44,
+    "target_chip": 32,
+    "header_phone": 56,
+    "category_bar": 52,
+    "cart_bar": 64,
+    "item_thumb_list": 96,
+    "item_thumb_desktop": 120,
+    "icon": 20,
+    "icon_small": 16,
+    "scroll_padding_note": "scroll-padding-top = header + category_bar; scroll-padding-bottom = cart_bar + 16 (WCAG 2.4.11)",
+    "swatch": 32,
+    "size_pill_min": 44
+  },
+  "elevation": {
+    "card": "0 1px 2px rgb(0 0 0 / .06)",
+    "raised": "0 6px 20px rgb(0 0 0 / .10)",
+    "sheet": "0 -8px 32px rgb(0 0 0 / .18)",
+    "dark_note": "dark scheme uses surface steps (surface → surface_2) instead of shadows"
+  },
+  "motion": {
+    "fast_ms": 120,
+    "base_ms": 200,
+    "slow_ms": 320,
+    "ease": "cubic-bezier(.2,.8,.2,1)",
+    "ease_exit": "cubic-bezier(.4,0,1,1)",
+    "patterns": {
+      "sheet_open": "translateY(100%)→0, slow, ease",
+      "add_to_cart": "button label → check, fast; cart bar count bump scale 1→1.08→1, base",
+      "chip_active": "background colour, fast",
+      "skeleton": "opacity pulse 1.2s"
+    },
+    "reduced_motion": "all transforms off; opacity fades ≤ fast only"
+  },
+  "breakpoints_px": {
+    "phone": 0,
+    "tablet": 768,
+    "desktop": 1080,
+    "wide": 1440
+  },
+  "layout": {
+    "card_default": "grid",
+    "image_ratio_default": "4:5",
+    "category_nav_default": "chips",
+    "header_default": "compact",
+    "desktop_cart_default": "drawer",
+    "order_type_default": "ship",
+    "grid": "phone 2 col, desktop 4 col; product image 4:5 (clothing), 1:1 when layout.image_ratio=1:1",
+    "desktop": "filters sidebar 260 (facets) | product grid 4 col; cart is a drawer from the inline end",
+    "retail_flow": "variant matrix (colour swatches × size pills) with per-variant stock; size guide; wishlist; shipping estimate + returns policy on the product page; fitment (VIN / year-make-model) optional section for car parts"
+  }
+}

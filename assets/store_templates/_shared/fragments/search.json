@@ -1,0 +1,8 @@
+{
+  "group": "Search",
+  "icon": "search",
+  "fields": [
+    { "id": "search.enabled", "type": "toggle", "label": "Show search bar", "default": true },
+    { "id": "texts.search_placeholder", "type": "text", "label": "Search box placeholder", "default": "Search the menu", "visible_if": { "search.enabled": true } }
+  ]
+}

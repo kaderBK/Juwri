@@ -1,0 +1,138 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "variant": "split",
+        "sticky": true
+      }
+    },
+    "hero": {
+      "type": "hero-cover",
+      "settings": {
+        "variant": "split",
+        "height": "m",
+        "align": "start",
+        "image_source": "cover"
+      },
+      "blocks": {
+        "cta-catalog": {
+          "type": "cta",
+          "settings": {
+            "target": "catalog",
+            "anchor": "services"
+          }
+        },
+        "cta-cart": {
+          "type": "cta",
+          "settings": {
+            "target": "cart"
+          }
+        }
+      },
+      "block_order": [
+        "cta-catalog",
+        "cta-cart"
+      ]
+    },
+    "status": {
+      "type": "store-status",
+      "settings": []
+    },
+    "services": {
+      "type": "service-list",
+      "settings": {
+        "layout": "list",
+        "show_category_titles": true,
+        "show_booking_note": true
+      }
+    },
+    "offers": {
+      "type": "offers-strip",
+      "settings": []
+    },
+    "loyalty": {
+      "type": "loyalty-card",
+      "settings": []
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": []
+    },
+    "hours": {
+      "type": "hours",
+      "settings": []
+    },
+    "location": {
+      "type": "location",
+      "settings": []
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tone": "surface"
+      }
+    },
+    "cart-bar": {
+      "type": "floating-cart",
+      "settings": {
+        "style": "bar",
+        "above_tabbar": true
+      }
+    },
+    "tabbar": {
+      "type": "bottom-tabbar",
+      "settings": {
+        "style": "bar",
+        "show_labels": true
+      },
+      "blocks": {
+        "tab-home": {
+          "type": "tab",
+          "settings": {
+            "target": "home"
+          }
+        },
+        "tab-catalog": {
+          "type": "tab",
+          "settings": {
+            "target": "catalog",
+            "anchor": "services"
+          }
+        },
+        "tab-cart": {
+          "type": "tab",
+          "settings": {
+            "target": "cart"
+          }
+        },
+        "tab-profile": {
+          "type": "tab",
+          "settings": {
+            "target": "profile"
+          }
+        }
+      },
+      "block_order": [
+        "tab-home",
+        "tab-catalog",
+        "tab-cart",
+        "tab-profile"
+      ]
+    }
+  },
+  "order": [
+    "header",
+    "hero",
+    "status",
+    "services",
+    "offers",
+    "loyalty",
+    "reviews",
+    "hours",
+    "location",
+    "footer",
+    "cart-bar",
+    "tabbar"
+  ]
+}

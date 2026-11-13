@@ -1,0 +1,188 @@
+{
+  "operationId": "getOrder",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/orders/trk_682069a2b5ccb983f5a78b32",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 18:58:20 GMT"
+    },
+    "body": {
+      "order": {
+        "public_id": "01a0fdeb-89b8-7152-9cea-54435269c624",
+        "number": "A7-2041",
+        "status": "on_the_way",
+        "track_token": "trk_682069a2b5ccb983f5a78b32",
+        "track_url": "https://saffron-house.example/saffron-house-demo/track/trk_682069a2b5ccb983f5a78b32"
+      },
+      "view": {
+        "number": "A7-2041",
+        "status": "on_the_way",
+        "status_label": "On the way",
+        "eta_label": "Arriving 10:12 – 10:18 pm",
+        "heading": "Order #A7-2041",
+        "steps": [
+          {
+            "label": "Order placed",
+            "sub": "9:41 pm",
+            "state": "done"
+          },
+          {
+            "label": "Accepted by Saffron House",
+            "sub": "9:42 pm",
+            "state": "done"
+          },
+          {
+            "label": "Preparing",
+            "sub": "9:44 pm",
+            "state": "done"
+          },
+          {
+            "label": "On the way",
+            "sub": "9:58 pm · Faisal, white Camry",
+            "state": "current"
+          },
+          {
+            "label": "Delivered",
+            "state": "todo"
+          }
+        ],
+        "quote": {
+          "lines": [
+            {
+              "id": "ln_1",
+              "item_id": "019fd1cb-7600-7197-8e48-219b57ed96e0",
+              "name": "Mixed grill platter",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Mixed grill platter"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 8000,
+                "currency": "SAR",
+                "formatted": "SAR 80.00"
+              },
+              "choices_label": "For one · Garlic sauce · Hummus"
+            },
+            {
+              "id": "ln_2",
+              "item_id": "019eff4b-8580-729b-bbcf-1d93b83ec998",
+              "name": "Chicken shish tawook",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Chicken shish tawook"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 4200,
+                "currency": "SAR",
+                "formatted": "SAR 42.00"
+              },
+              "choices_label": "White rice"
+            }
+          ],
+          "rows": [
+            {
+              "key": "subtotal",
+              "label": "Subtotal · 2 items",
+              "amount": {
+                "minor": 12200,
+                "currency": "SAR",
+                "formatted": "SAR 122.00"
+              },
+              "kind": "subtotal"
+            },
+            {
+              "key": "delivery",
+              "label": "Delivery",
+              "amount": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "kind": "delivery"
+            },
+            {
+              "key": "vat",
+              "label": "VAT 15%",
+              "amount": {
+                "minor": 1647,
+                "currency": "SAR",
+                "formatted": "SAR 16.47"
+              },
+              "kind": "tax"
+            },
+            {
+              "key": "tip",
+              "label": "Tip",
+              "amount": {
+                "minor": 500,
+                "currency": "SAR",
+                "formatted": "SAR 5.00"
+              },
+              "kind": "tip"
+            },
+            {
+              "key": "discount",
+              "label": "Discount · WELCOME10",
+              "amount": {
+                "minor": -1220,
+                "currency": "SAR",
+                "formatted": "−SAR 12.20"
+              },
+              "kind": "discount"
+            }
+          ],
+          "total": {
+            "minor": 14027,
+            "currency": "SAR",
+            "formatted": "SAR 140.27"
+          },
+          "total_label": "Total to pay",
+          "coupon": {
+            "code": "WELCOME10",
+            "applied": true,
+            "message": "10% off your food"
+          }
+        },
+        "paid_label": "Cash on delivery",
+        "actions": [
+          {
+            "label": "Call store",
+            "url": "tel:+966550100101",
+            "kind": "secondary",
+            "icon": "phone"
+          },
+          {
+            "label": "WhatsApp",
+            "url": "https://wa.me/966550100101",
+            "kind": "secondary",
+            "icon": "message-circle"
+          },
+          {
+            "label": "Receipt",
+            "url": "/saffron-house-demo/receipt/A7-2041",
+            "kind": "link",
+            "icon": "receipt"
+          }
+        ]
+      },
+      "updated_at": "2026-10-02T21:58:02+03:00",
+      "payment": {
+        "mode": "pay_later",
+        "status": "pay_later",
+        "next_action": null
+      }
+    }
+  }
+}

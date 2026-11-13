@@ -1,0 +1,1532 @@
+{
+ "store": {
+  "slug": "sidra-salon-demo",
+  "name": {
+   "en": "Sidra Salon",
+   "ar": "صالون سدرة"
+  },
+  "tagline": {
+   "en": "Hair, nails and spa in Al Malqa",
+   "ar": "شعر وأظافر وسبا في حي الملقا"
+  },
+  "store_type": "services",
+  "theme": "book",
+  "preset": "calm",
+  "currency": "SAR",
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15
+  },
+  "order_types": [
+   "appointment",
+   "at_home"
+  ],
+  "booking": {
+   "cancel_window_hours": 24,
+   "arrive_early_min": 5,
+   "slot_step_min": 15,
+   "hold_minutes": 10,
+   "reminder_hours": 24,
+   "at_home_radius_km": 15,
+   "travel_buffer_min": 30,
+   "deposit_refundable": false,
+   "no_show_fee": false,
+   "staff_choice": true
+  },
+  "hours": {
+   "timezone": "Asia/Riyadh",
+   "weekly": {
+    "sun": [
+     [
+      "10:00",
+      "21:00"
+     ]
+    ],
+    "mon": [
+     [
+      "10:00",
+      "21:00"
+     ]
+    ],
+    "tue": [
+     [
+      "10:00",
+      "21:00"
+     ]
+    ],
+    "wed": [
+     [
+      "10:00",
+      "21:00"
+     ]
+    ],
+    "thu": [
+     [
+      "10:00",
+      "21:00"
+     ]
+    ],
+    "fri": [
+     [
+      "14:00",
+      "22:00"
+     ]
+    ],
+    "sat": []
+   }
+  },
+  "address": {
+   "en": "Anas Ibn Malik Rd, Al Malqa, Riyadh",
+   "ar": "طريق أنس بن مالك، حي الملقا، الرياض"
+  },
+  "phone": "+966 55 010 0105",
+  "phone_is_demo": true,
+  "identity": {
+   "legal_name": {
+    "en": "Sidra Beauty Salon Est.",
+    "ar": "مؤسسة صالون سدرة للتجميل"
+   },
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-5505",
+    "label": {
+     "en": "Commercial registration (CR)",
+     "ar": "السجل التجاري"
+    }
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-5505",
+    "label": {
+     "en": "VAT number",
+     "ar": "الرقم الضريبي"
+    }
+   },
+   "address": {
+    "en": "Anas Ibn Malik Road, Al Malqa, Riyadh 13521",
+    "ar": "طريق أنس بن مالك، حي الملقا، الرياض 13521"
+   }
+  },
+  "identity_is_demo": true,
+  "description": {
+   "en": "A women-only salon in Al Malqa for hair, nails, facials and massage. Book in the salon or at home.",
+   "ar": "صالون نسائي في حي الملقا للشعر والأظافر والعناية بالبشرة والمساج. احجزي في الصالون أو في منزلك."
+  }
+ },
+ "categories": [
+  {
+   "slug": "hair",
+   "position": 0,
+   "name": {
+    "en": "Hair",
+    "ar": "الشعر"
+   },
+   "description": {
+    "en": "Cuts, blow-dries and treatments",
+    "ar": "قص وسشوار وعلاجات"
+   }
+  },
+  {
+   "slug": "colour",
+   "position": 1,
+   "name": {
+    "en": "Colour",
+    "ar": "الصبغات"
+   },
+   "description": {
+    "en": "Root touch-ups, full colour and balayage",
+    "ar": "صبغ الجذور وصبغة كاملة وبالياج"
+   }
+  },
+  {
+   "slug": "nails",
+   "position": 2,
+   "name": {
+    "en": "Nails",
+    "ar": "الأظافر"
+   },
+   "description": {
+    "en": "Manicure and pedicure",
+    "ar": "مانيكير وباديكير"
+   }
+  },
+  {
+   "slug": "face",
+   "position": 3,
+   "name": {
+    "en": "Face",
+    "ar": "العناية بالوجه"
+   },
+   "description": {
+    "en": "Facials and brows",
+    "ar": "تنظيف بشرة وعناية بالحواجب"
+   }
+  },
+  {
+   "slug": "massage",
+   "position": 4,
+   "name": {
+    "en": "Massage",
+    "ar": "المساج"
+   },
+   "description": {
+    "en": "Relaxing body treatments",
+    "ar": "جلسات استرخاء للجسم"
+   }
+  },
+  {
+   "slug": "makeup",
+   "position": 5,
+   "name": {
+    "en": "Makeup",
+    "ar": "المكياج"
+   },
+   "description": {
+    "en": "Evening and bridal makeup",
+    "ar": "مكياج سهرة وعروس"
+   }
+  },
+  {
+   "slug": "packages",
+   "position": 6,
+   "name": {
+    "en": "Packages",
+    "ar": "الباقات"
+   },
+   "description": {
+    "en": "Save when you book together",
+    "ar": "وفّري عند الحجز معاً"
+   }
+  }
+ ],
+ "staff": [
+  {
+   "slug": "maha",
+   "position": 0,
+   "name": {
+    "en": "Maha",
+    "ar": "مها"
+   },
+   "role": {
+    "en": "Senior stylist",
+    "ar": "مصففة شعر أولى"
+   },
+   "service_categories": [
+    "hair",
+    "colour",
+    "packages"
+   ],
+   "days_off": [],
+   "image_prompt": "Friendly headshot of a salon senior stylist, neutral background, soft light, no text"
+  },
+  {
+   "slug": "lina",
+   "position": 1,
+   "name": {
+    "en": "Lina",
+    "ar": "لينا"
+   },
+   "role": {
+    "en": "Stylist",
+    "ar": "مصففة شعر"
+   },
+   "service_categories": [
+    "hair",
+    "makeup",
+    "packages"
+   ],
+   "days_off": [],
+   "image_prompt": "Friendly headshot of a salon stylist, neutral background, soft light, no text"
+  },
+  {
+   "slug": "sara",
+   "position": 2,
+   "name": {
+    "en": "Sara",
+    "ar": "سارة"
+   },
+   "role": {
+    "en": "Colourist",
+    "ar": "خبيرة صبغات"
+   },
+   "service_categories": [
+    "colour",
+    "hair",
+    "packages"
+   ],
+   "days_off": [],
+   "image_prompt": "Friendly headshot of a salon colourist, neutral background, soft light, no text"
+  },
+  {
+   "slug": "reem",
+   "position": 3,
+   "name": {
+    "en": "Reem",
+    "ar": "ريم"
+   },
+   "role": {
+    "en": "Nail technician",
+    "ar": "فنية أظافر"
+   },
+   "service_categories": [
+    "nails",
+    "packages"
+   ],
+   "days_off": [
+    "fri"
+   ],
+   "image_prompt": "Friendly headshot of a salon nail technician, neutral background, soft light, no text"
+  },
+  {
+   "slug": "dana",
+   "position": 4,
+   "name": {
+    "en": "Dana",
+    "ar": "دانة"
+   },
+   "role": {
+    "en": "Beauty therapist",
+    "ar": "أخصائية تجميل"
+   },
+   "service_categories": [
+    "face",
+    "massage",
+    "makeup",
+    "nails",
+    "packages"
+   ],
+   "days_off": [],
+   "image_prompt": "Friendly headshot of a salon beauty therapist, neutral background, soft light, no text"
+  }
+ ],
+ "option_library": [
+  {
+   "key": "hair_length",
+   "title": {
+    "en": "Hair length",
+    "ar": "طول الشعر"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "Short",
+      "ar": "قصير"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "description": {
+      "en": "Above the shoulders",
+      "ar": "فوق الكتفين"
+     }
+    },
+    {
+     "title": {
+      "en": "Medium",
+      "ar": "متوسط"
+     },
+     "price": "20.00",
+     "duration_add_min": 15,
+     "description": {
+      "en": "To the shoulders",
+      "ar": "حتى الكتفين"
+     },
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Long",
+      "ar": "طويل"
+     },
+     "price": "40.00",
+     "duration_add_min": 30,
+     "description": {
+      "en": "Past the shoulder blades",
+      "ar": "أسفل لوحَي الكتف"
+     }
+    }
+   ]
+  },
+  {
+   "key": "blowdry_length",
+   "title": {
+    "en": "Hair length",
+    "ar": "طول الشعر"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "Short",
+      "ar": "قصير"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "description": {
+      "en": "Above the shoulders",
+      "ar": "فوق الكتفين"
+     }
+    },
+    {
+     "title": {
+      "en": "Medium",
+      "ar": "متوسط"
+     },
+     "price": "15.00",
+     "duration_add_min": 10,
+     "description": {
+      "en": "To the shoulders",
+      "ar": "حتى الكتفين"
+     },
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Long",
+      "ar": "طويل"
+     },
+     "price": "30.00",
+     "duration_add_min": 15,
+     "description": {
+      "en": "Past the shoulder blades",
+      "ar": "أسفل لوحَي الكتف"
+     }
+    }
+   ]
+  },
+  {
+   "key": "treatment_length",
+   "title": {
+    "en": "Hair length",
+    "ar": "طول الشعر"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "Short",
+      "ar": "قصير"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "description": {
+      "en": "Above the shoulders",
+      "ar": "فوق الكتفين"
+     }
+    },
+    {
+     "title": {
+      "en": "Medium",
+      "ar": "متوسط"
+     },
+     "price": "100.00",
+     "duration_add_min": 30,
+     "description": {
+      "en": "To the shoulders",
+      "ar": "حتى الكتفين"
+     },
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Long",
+      "ar": "طويل"
+     },
+     "price": "200.00",
+     "duration_add_min": 60,
+     "description": {
+      "en": "Past the shoulder blades",
+      "ar": "أسفل لوحَي الكتف"
+     }
+    }
+   ]
+  },
+  {
+   "key": "colour_length",
+   "title": {
+    "en": "Hair length",
+    "ar": "طول الشعر"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "Short",
+      "ar": "قصير"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "description": {
+      "en": "Above the shoulders",
+      "ar": "فوق الكتفين"
+     }
+    },
+    {
+     "title": {
+      "en": "Medium",
+      "ar": "متوسط"
+     },
+     "price": "60.00",
+     "duration_add_min": 15,
+     "description": {
+      "en": "To the shoulders",
+      "ar": "حتى الكتفين"
+     },
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Long",
+      "ar": "طويل"
+     },
+     "price": "120.00",
+     "duration_add_min": 30,
+     "description": {
+      "en": "Past the shoulder blades",
+      "ar": "أسفل لوحَي الكتف"
+     }
+    }
+   ]
+  },
+  {
+   "key": "hair_addons",
+   "title": {
+    "en": "Add-ons",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "options": [
+    {
+     "title": {
+      "en": "Deep conditioning",
+      "ar": "ترطيب عميق"
+     },
+     "price": "40.00",
+     "duration_add_min": 15
+    },
+    {
+     "title": {
+      "en": "Scalp massage",
+      "ar": "مساج فروة الرأس"
+     },
+     "price": "30.00",
+     "duration_add_min": 10
+    }
+   ]
+  },
+  {
+   "key": "nail_removal",
+   "title": {
+    "en": "Removal",
+    "ar": "الإزالة"
+   },
+   "kind": "variant",
+   "required": false,
+   "min_select": 0,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "No removal",
+      "ar": "بدون إزالة"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "default": true
+    },
+    {
+     "title": {
+      "en": "Remove old gel",
+      "ar": "إزالة الجل القديم"
+     },
+     "price": "20.00",
+     "duration_add_min": 10
+    }
+   ]
+  },
+  {
+   "key": "nail_addons",
+   "title": {
+    "en": "Nail art",
+    "ar": "رسم على الأظافر"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "options": [
+    {
+     "title": {
+      "en": "French tips",
+      "ar": "فرنش"
+     },
+     "price": "25.00",
+     "duration_add_min": 10
+    },
+    {
+     "title": {
+      "en": "Chrome finish",
+      "ar": "لمسة كروم"
+     },
+     "price": "20.00",
+     "duration_add_min": 10
+    },
+    {
+     "title": {
+      "en": "Hand-painted art",
+      "ar": "رسم يدوي"
+     },
+     "price": "30.00",
+     "duration_add_min": 15
+    }
+   ]
+  },
+  {
+   "key": "facial_addons",
+   "title": {
+    "en": "Add-ons",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "options": [
+    {
+     "title": {
+      "en": "LED light therapy",
+      "ar": "العلاج بالضوء"
+     },
+     "price": "50.00",
+     "duration_add_min": 15
+    },
+    {
+     "title": {
+      "en": "Eye mask",
+      "ar": "قناع للعينين"
+     },
+     "price": "30.00",
+     "duration_add_min": 10
+    }
+   ]
+  },
+  {
+   "key": "massage_duration",
+   "title": {
+    "en": "Duration",
+    "ar": "المدة"
+   },
+   "kind": "variant",
+   "required": true,
+   "min_select": 1,
+   "max_select": 1,
+   "options": [
+    {
+     "title": {
+      "en": "60 minutes",
+      "ar": "60 دقيقة"
+     },
+     "price": "0.00",
+     "duration_add_min": 0,
+     "default": true
+    },
+    {
+     "title": {
+      "en": "90 minutes",
+      "ar": "90 دقيقة"
+     },
+     "price": "100.00",
+     "duration_add_min": 30
+    }
+   ]
+  },
+  {
+   "key": "massage_addons",
+   "title": {
+    "en": "Add-ons",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "options": [
+    {
+     "title": {
+      "en": "Aromatherapy oils",
+      "ar": "زيوت العلاج بالروائح"
+     },
+     "price": "20.00",
+     "duration_add_min": 0
+    },
+    {
+     "title": {
+      "en": "Foot scrub",
+      "ar": "مقشر للقدمين"
+     },
+     "price": "30.00",
+     "duration_add_min": 10
+    }
+   ]
+  },
+  {
+   "key": "makeup_addons",
+   "title": {
+    "en": "Add-ons",
+    "ar": "إضافات"
+   },
+   "kind": "addon",
+   "required": false,
+   "min_select": 0,
+   "max_select": 2,
+   "options": [
+    {
+     "title": {
+      "en": "False lashes",
+      "ar": "رموش صناعية"
+     },
+     "price": "40.00",
+     "duration_add_min": 10
+    },
+    {
+     "title": {
+      "en": "Hair styling combo",
+      "ar": "تصفيف الشعر مع المكياج"
+     },
+     "price": "120.00",
+     "duration_add_min": 30
+    }
+   ]
+  }
+ ],
+ "items": [
+  {
+   "slug": "haircut-and-blow-dry",
+   "category": "hair",
+   "position": 0,
+   "name": {
+    "en": "Haircut & blow-dry",
+    "ar": "قص وسشوار"
+   },
+   "description": {
+    "en": "A consultation, cut and finished blow-dry.",
+    "ar": "استشارة وقص وسشوار نهائي."
+   },
+   "price": "120.00",
+   "duration_min": 45,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "50.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "lina",
+    "sara"
+   ],
+   "option_groups": [
+    "hair_length",
+    "hair_addons"
+   ],
+   "badges": [
+    "popular"
+   ],
+   "image_prompt": "Salon interior photo of Haircut & blow-dry, a consultation, cut and finished blow-dry, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "blow-dry",
+   "category": "hair",
+   "position": 1,
+   "name": {
+    "en": "Blow-dry",
+    "ar": "سشوار"
+   },
+   "description": {
+    "en": "Wash, blow-dry and style.",
+    "ar": "غسيل وسشوار وتصفيف."
+   },
+   "price": "70.00",
+   "duration_min": 30,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "percent",
+    "value": "30"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "maha",
+    "lina",
+    "sara"
+   ],
+   "option_groups": [
+    "blowdry_length"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Blow-dry, wash, blow-dry and style, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "keratin-smoothing-treatment",
+   "category": "hair",
+   "position": 2,
+   "name": {
+    "en": "Keratin smoothing treatment",
+    "ar": "علاج تنعيم بالكيراتين"
+   },
+   "description": {
+    "en": "Frizz-free, glossy hair for up to three months.",
+    "ar": "شعر لامع وخالٍ من التجعد حتى ثلاثة أشهر."
+   },
+   "price": "450.00",
+   "duration_min": 150,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "150.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "lina",
+    "sara"
+   ],
+   "option_groups": [
+    "treatment_length"
+   ],
+   "badges": [
+    "new"
+   ],
+   "image_prompt": "Salon interior photo of Keratin smoothing treatment, frizz-free, glossy hair for up to three months, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "event-hairstyling",
+   "category": "hair",
+   "position": 3,
+   "name": {
+    "en": "Event hairstyling",
+    "ar": "تسريحة مناسبات"
+   },
+   "description": {
+    "en": "Updo, curls or waves for your occasion.",
+    "ar": "تسريحة مرفوعة أو تموجات لمناسبتك."
+   },
+   "price": "200.00",
+   "duration_min": 60,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "100.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "maha",
+    "lina",
+    "sara"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Event hairstyling, updo, curls or waves for your occasion, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "kids-haircut",
+   "category": "hair",
+   "position": 4,
+   "name": {
+    "en": "Kids haircut",
+    "ar": "قص شعر للأطفال"
+   },
+   "description": {
+    "en": "For children under 12, with a wash.",
+    "ar": "للأطفال دون 12 سنة مع غسيل."
+   },
+   "price": "60.00",
+   "duration_min": 30,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "lina",
+    "sara"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Kids haircut, for children under 12, with a wash, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "root-colour-touch-up",
+   "category": "colour",
+   "position": 5,
+   "name": {
+    "en": "Root colour touch-up",
+    "ar": "صبغ الجذور"
+   },
+   "description": {
+    "en": "Cover regrowth with a matched shade.",
+    "ar": "تغطية الجذور بدرجة مطابقة."
+   },
+   "price": "220.00",
+   "duration_min": 90,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "80.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "sara"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Root colour touch-up, cover regrowth with a matched shade, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "full-hair-colour",
+   "category": "colour",
+   "position": 6,
+   "name": {
+    "en": "Full hair colour",
+    "ar": "صبغة شعر كاملة"
+   },
+   "description": {
+    "en": "All-over colour with gloss finish.",
+    "ar": "صبغة كاملة بلمسة لمعان."
+   },
+   "price": "380.00",
+   "duration_min": 150,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "150.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "sara"
+   ],
+   "option_groups": [
+    "colour_length"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Full hair colour, all-over colour with gloss finish, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "balayage",
+   "category": "colour",
+   "position": 7,
+   "name": {
+    "en": "Balayage",
+    "ar": "بالياج"
+   },
+   "description": {
+    "en": "Hand-painted highlights for a sun-kissed look.",
+    "ar": "هايلايت مرسوم يدوياً بإطلالة مشمسة."
+   },
+   "price": "650.00",
+   "duration_min": 210,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "250.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "sara"
+   ],
+   "option_groups": [
+    "colour_length"
+   ],
+   "badges": [
+    "new",
+    "popular"
+   ],
+   "image_prompt": "Salon interior photo of Balayage, hand-painted highlights for a sun-kissed look, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "classic-manicure",
+   "category": "nails",
+   "position": 8,
+   "name": {
+    "en": "Classic manicure",
+    "ar": "مانيكير كلاسيك"
+   },
+   "description": {
+    "en": "Shape, cuticle care and polish.",
+    "ar": "تشكيل وعناية بالجلد وطلاء."
+   },
+   "price": "70.00",
+   "duration_min": 40,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "reem",
+    "dana"
+   ],
+   "option_groups": [
+    "nail_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Classic manicure, shape, cuticle care and polish, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "gel-manicure",
+   "category": "nails",
+   "position": 9,
+   "name": {
+    "en": "Gel manicure",
+    "ar": "مانيكير جل"
+   },
+   "description": {
+    "en": "Long-wear gel colour with a high shine.",
+    "ar": "لون جل يدوم طويلاً بلمعان عالٍ."
+   },
+   "price": "110.00",
+   "duration_min": 55,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "reem",
+    "dana"
+   ],
+   "option_groups": [
+    "nail_removal",
+    "nail_addons"
+   ],
+   "badges": [
+    "popular"
+   ],
+   "image_prompt": "Salon interior photo of Gel manicure, long-wear gel colour with a high shine, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "classic-pedicure",
+   "category": "nails",
+   "position": 10,
+   "name": {
+    "en": "Classic pedicure",
+    "ar": "باديكير كلاسيك"
+   },
+   "description": {
+    "en": "Soak, scrub, shape and polish.",
+    "ar": "نقع وتقشير وتشكيل وطلاء."
+   },
+   "price": "90.00",
+   "duration_min": 50,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "reem",
+    "dana"
+   ],
+   "option_groups": [
+    "nail_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Classic pedicure, soak, scrub, shape and polish, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "gel-pedicure",
+   "category": "nails",
+   "position": 11,
+   "name": {
+    "en": "Gel pedicure",
+    "ar": "باديكير جل"
+   },
+   "description": {
+    "en": "Pedicure with long-wear gel colour.",
+    "ar": "باديكير مع لون جل يدوم طويلاً."
+   },
+   "price": "130.00",
+   "duration_min": 65,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "reem",
+    "dana"
+   ],
+   "option_groups": [
+    "nail_removal",
+    "nail_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Gel pedicure, pedicure with long-wear gel colour, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "classic-facial",
+   "category": "face",
+   "position": 12,
+   "name": {
+    "en": "Classic facial",
+    "ar": "تنظيف بشرة كلاسيكي"
+   },
+   "description": {
+    "en": "Cleanse, exfoliate, extract and mask.",
+    "ar": "تنظيف وتقشير واستخراج الشوائب وقناع."
+   },
+   "price": "220.00",
+   "duration_min": 60,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "50.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [
+    "facial_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Classic facial, cleanse, exfoliate, extract and mask, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "hydrating-glow-facial",
+   "category": "face",
+   "position": 13,
+   "name": {
+    "en": "Hydrating glow facial",
+    "ar": "جلسة نضارة وترطيب"
+   },
+   "description": {
+    "en": "Deep hydration for dull, tired skin.",
+    "ar": "ترطيب عميق للبشرة الباهتة والمرهقة."
+   },
+   "price": "260.00",
+   "duration_min": 60,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "50.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [
+    "facial_addons"
+   ],
+   "badges": [
+    "new"
+   ],
+   "image_prompt": "Salon interior photo of Hydrating glow facial, deep hydration for dull, tired skin, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "eyebrow-threading",
+   "category": "face",
+   "position": 14,
+   "name": {
+    "en": "Eyebrow threading",
+    "ar": "تنظيف الحواجب بالخيط"
+   },
+   "description": {
+    "en": "Clean, defined brows in minutes.",
+    "ar": "حواجب مرتبة ومحددة خلال دقائق."
+   },
+   "price": "30.00",
+   "duration_min": 15,
+   "buffer_min": 0,
+   "deposit": {
+    "type": "none"
+   },
+   "pay_options": [
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Eyebrow threading, clean, defined brows in minutes, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "relaxing-massage",
+   "category": "massage",
+   "position": 15,
+   "name": {
+    "en": "Relaxing massage",
+    "ar": "مساج استرخاء"
+   },
+   "description": {
+    "en": "Full-body massage with warm oils.",
+    "ar": "مساج للجسم كاملاً بزيوت دافئة."
+   },
+   "price": "250.00",
+   "duration_min": 60,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "100.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [
+    "massage_duration",
+    "massage_addons"
+   ],
+   "badges": [
+    "popular"
+   ],
+   "image_prompt": "Salon interior photo of Relaxing massage, full-body massage with warm oils, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "hot-stone-massage",
+   "category": "massage",
+   "position": 16,
+   "name": {
+    "en": "Hot stone massage",
+    "ar": "مساج بالأحجار الساخنة"
+   },
+   "description": {
+    "en": "Heated stones ease deep muscle tension.",
+    "ar": "أحجار دافئة تخفف توتر العضلات العميق."
+   },
+   "price": "280.00",
+   "duration_min": 75,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "100.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [
+    "massage_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Hot stone massage, heated stones ease deep muscle tension, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "back-and-shoulders-massage",
+   "category": "massage",
+   "position": 17,
+   "name": {
+    "en": "Back & shoulders massage",
+    "ar": "مساج الظهر والكتفين"
+   },
+   "description": {
+    "en": "A focused session for desk-tired muscles.",
+    "ar": "جلسة مركّزة لعضلات أرهقها الجلوس."
+   },
+   "price": "140.00",
+   "duration_min": 30,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "50.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Back & shoulders massage, a focused session for desk-tired muscles, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "evening-makeup",
+   "category": "makeup",
+   "position": 18,
+   "name": {
+    "en": "Evening makeup",
+    "ar": "مكياج سهرة"
+   },
+   "description": {
+    "en": "Long-wear makeup for dinners and events.",
+    "ar": "مكياج يدوم طويلاً للعشاء والمناسبات."
+   },
+   "price": "280.00",
+   "duration_min": 60,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "100.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "lina",
+    "dana"
+   ],
+   "option_groups": [
+    "makeup_addons"
+   ],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Evening makeup, long-wear makeup for dinners and events, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "bridal-makeup-trial",
+   "category": "makeup",
+   "position": 19,
+   "name": {
+    "en": "Bridal makeup trial",
+    "ar": "تجربة مكياج العروس"
+   },
+   "description": {
+    "en": "Test your look before the big day.",
+    "ar": "جرّبي إطلالتك قبل يوم الزفاف."
+   },
+   "price": "450.00",
+   "duration_min": 90,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "fixed",
+    "value": "200.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "lina",
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [],
+   "image_prompt": "Salon interior photo of Bridal makeup trial, test your look before the big day, soft warm lighting, clean modern salon, no faces, no text"
+  },
+  {
+   "slug": "bride-to-be-package",
+   "category": "packages",
+   "position": 20,
+   "name": {
+    "en": "Bride-to-be package",
+    "ar": "باقة العروس"
+   },
+   "description": {
+    "en": "Hair, makeup, manicure and facial for the day before.",
+    "ar": "شعر ومكياج ومانيكير وتنظيف بشرة ليوم الاستعداد."
+   },
+   "price": "1200.00",
+   "duration_min": 240,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "300.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "lina",
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [
+    "popular"
+   ],
+   "image_prompt": "Flat-lay photo of Bride-to-be package, hair, makeup, manicure and facial for the day before, soft warm lighting, clean modern salon, no faces, no text",
+   "includes": [
+    "evening-makeup",
+    "gel-manicure",
+    "classic-facial",
+    "event-hairstyling"
+   ]
+  },
+  {
+   "slug": "glow-day-package",
+   "category": "packages",
+   "position": 21,
+   "name": {
+    "en": "Glow day package",
+    "ar": "باقة اليوم المشرق"
+   },
+   "description": {
+    "en": "Facial, gel manicure and blow-dry.",
+    "ar": "تنظيف بشرة ومانيكير جل وسشوار."
+   },
+   "price": "650.00",
+   "duration_min": 180,
+   "buffer_min": 10,
+   "deposit": {
+    "type": "fixed",
+    "value": "200.00"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": false,
+   "staff": [
+    "maha",
+    "lina",
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [
+    "new"
+   ],
+   "image_prompt": "Flat-lay photo of Glow day package, facial, gel manicure and blow-dry, soft warm lighting, clean modern salon, no faces, no text",
+   "includes": [
+    "classic-facial",
+    "gel-manicure",
+    "blow-dry"
+   ]
+  },
+  {
+   "slug": "mani-pedi-duo",
+   "category": "packages",
+   "position": 22,
+   "name": {
+    "en": "Mani-pedi duo",
+    "ar": "باقة مانيكير وباديكير"
+   },
+   "description": {
+    "en": "Classic manicure and pedicure together.",
+    "ar": "مانيكير وباديكير كلاسيك معاً."
+   },
+   "price": "190.00",
+   "duration_min": 90,
+   "buffer_min": 5,
+   "deposit": {
+    "type": "percent",
+    "value": "30"
+   },
+   "pay_options": [
+    "deposit",
+    "full",
+    "venue"
+   ],
+   "at_home_available": true,
+   "staff": [
+    "maha",
+    "lina",
+    "dana"
+   ],
+   "option_groups": [],
+   "badges": [
+    "popular"
+   ],
+   "image_prompt": "Flat-lay photo of Mani-pedi duo, classic manicure and pedicure together, soft warm lighting, clean modern salon, no faces, no text",
+   "includes": [
+    "classic-manicure",
+    "classic-pedicure"
+   ]
+  }
+ ]
+}

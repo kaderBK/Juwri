@@ -1,0 +1,746 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ==========================================================================
+   POS-V2 — register stylesheet. Token-driven (UI-KIT §1): light is the default
+   on :root, dark overrides under [data-pos-theme="dark"]. Components NEVER
+   hardcode hex — every colour is a var(). <html data-pos-theme> is set before
+   paint by the shell's inline head script (localStorage['pos-theme'] || 'light').
+   Bump the ?v token on every edit (auto via filemtime).
+
+   Note: --pos-accent (the restaurant's brand colour) is injected inline by the
+   Blade head; it is theme-independent by design.
+   ========================================================================== */
+
+/* ── tokens: light (default) ── */
+:root,
+[data-pos-theme="light"] {
+    --pos-bg:            #F6F7F9;
+    --pos-surface:       #FFFFFF;
+    --pos-surface-2:     #F1F3F6;
+    --pos-border:        #E6E8EE;
+    --pos-text:          #1C2430;
+    --pos-text-2:        #6B7280;
+    --pos-cta:           #16A34A;
+    --pos-cta-ink:       #FFFFFF;
+    --pos-danger:        #EF4444;
+    --pos-danger-soft:   #FEECEC;
+    --pos-warn:          #B45309;
+    --pos-info:          #2563EB;
+    --pos-info-ink:      #FFFFFF;
+    --pos-accent-ink:    #06231A;
+    --pos-accent-soft:   color-mix(in srgb, var(--pos-accent) 12%, transparent);
+    --pos-radius:        12px;
+    --pos-radius-lg:     16px;
+    --pos-shadow:        0 1px 2px rgba(16,24,40,.06), 0 4px 12px rgba(16,24,40,.06);
+    --pos-overlay:       rgba(16,24,40,.45);
+    --pos-rail-w:        76px;
+    --pos-cart-w:        400px;
+}
+
+/* ── tokens: dark (ports the original register look) ── */
+[data-pos-theme="dark"] {
+    --pos-bg:            #0F1115;
+    --pos-surface:       #12151B;
+    --pos-surface-2:     #1B1F27;
+    --pos-border:        #232833;
+    --pos-text:          #E7E9EE;
+    --pos-text-2:        #8B93A3;
+    --pos-cta:           #22C55E;
+    --pos-cta-ink:       #06231A;
+    --pos-danger:        #F87171;
+    --pos-danger-soft:   #3B1F1F;
+    --pos-warn:          #FBBF24;
+    --pos-info:          #2563EB;
+    --pos-info-ink:      #FFFFFF;
+    --pos-accent-ink:    #06231A;
+    --pos-accent-soft:   color-mix(in srgb, var(--pos-accent) 16%, transparent);
+    --pos-shadow:        none;
+    --pos-overlay:       rgba(11,13,18,.6);
+}
+
+/* ── base ── */
+* { box-sizing: border-box; }
+[x-cloak] { display: none !important; }
+body { margin: 0; font-family: 'Saudi Riyal', Inter, 'IBM Plex Sans Arabic', system-ui, sans-serif; background: var(--pos-bg); color: var(--pos-text); display: flex; flex-direction: column; height: 100vh; }
+
+/* ── topbar ── */
+.topbar { display: flex; gap: 10px; align-items: center; padding: 8px 16px; background: var(--pos-surface); border-bottom: 1px solid var(--pos-border); flex-wrap: wrap; }
+.topbar select { background: var(--pos-surface-2); color: var(--pos-text); border: 1px solid var(--pos-border); border-radius: 8px; padding: 8px 10px; font-size: 14px; max-width: 260px; cursor: pointer; }
+.topbar .rlabel { font-weight: 700; color: var(--pos-accent); letter-spacing: .5px; }
+.topbar .sp { flex: 1; }
+.topbar a.exit { color: var(--pos-text-2); text-decoration: none; font-size: 13px; }
+/* theme sun/moon toggle */
+.pos-theme-toggle, .pos-help-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 18px; cursor: pointer; line-height: 1; }
+
+/* ── menu ── */
+.pos { display: grid; grid-template-columns: 1fr 380px; flex: 1; min-height: 0; }
+.menu { padding: 16px; overflow-y: auto; }
+.cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.cats button { background: var(--pos-surface-2); color: var(--pos-text); border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.cats button.on { background: var(--pos-accent); color: var(--pos-accent-ink); font-weight: 600; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.item { background: var(--pos-surface); border: 1px solid var(--pos-border); box-shadow: var(--pos-shadow); border-radius: 12px; padding: 12px; text-align: start; cursor: pointer; color: inherit; }
+.item.sold { opacity: .4; pointer-events: none; }
+.item b { display: block; font-size: 14px; }
+.item span { color: var(--pos-text-2); font-size: 13px; }
+
+/* ── cart ── */
+.cart { background: var(--pos-surface); border-inline-start: 1px solid var(--pos-border); display: flex; flex-direction: column; }
+.cart h2 { margin: 0; padding: 16px; font-size: 15px; border-bottom: 1px solid var(--pos-border); }
+.lines { flex: 1; overflow-y: auto; padding: 8px 16px; }
+.line { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--pos-border); }
+.line small { color: var(--pos-text-2); }
+.qty { display: inline-flex; gap: 6px; align-items: center; }
+.qty button { width: 26px; height: 26px; border-radius: 6px; border: 0; background: var(--pos-surface-2); color: var(--pos-text); cursor: pointer; }
+.totals { padding: 12px 16px; border-top: 1px solid var(--pos-border); font-size: 14px; }
+.totals .row { display: flex; justify-content: space-between; margin: 4px 0; }
+.totals .grand { font-size: 18px; font-weight: 700; }
+/* order-type: segmented control (matches .pos-tabs / .pos-seatfilter) */
+.type { display: flex; gap: 3px; margin: 0 16px 10px; padding: 3px; background: var(--pos-surface-2); border-radius: 10px; }
+.type button { flex: 1; padding: 9px 8px; border: 0; background: none; color: var(--pos-text-2); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .12s, color .12s; }
+.type button:hover { color: var(--pos-text); }
+.type button.on { background: var(--pos-surface); color: var(--pos-text); box-shadow: var(--pos-shadow); }
+
+/* actions: one clear primary (Send), neutral outlined pay buttons, ghost Hold */
+.acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px; }
+.acts button { padding: 14px; border: 1px solid transparent; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: filter .12s, background .12s, border-color .12s; }
+/* disabled reads as intentionally muted (neutral), not a washed-out colour fill */
+.acts button:disabled { background: var(--pos-surface-2); color: var(--pos-text-2); border-color: var(--pos-border); cursor: not-allowed; }
+.send { grid-column: 1 / -1; background: var(--pos-cta); color: var(--pos-cta-ink); }
+.send:hover:not(:disabled) { filter: brightness(1.06); }
+.cash, .card { background: var(--pos-surface); color: var(--pos-text); border-color: var(--pos-border); }
+.cash:hover:not(:disabled), .card:hover:not(:disabled) { border-color: var(--pos-cta); color: var(--pos-cta); }
+.hold { grid-column: 1 / -1; background: none; color: var(--pos-text-2); border-color: var(--pos-border); font-weight: 600; }
+.hold:hover:not(:disabled) { color: var(--pos-danger); border-color: var(--pos-danger); }
+.pos-print-row { padding-top: 0; }
+.print { background: var(--pos-surface); color: var(--pos-text); border-color: var(--pos-border); }
+.print:hover:not(:disabled) { border-color: var(--pos-accent); color: var(--pos-accent); }
+
+/* ── cash pad ── */
+.pad { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: center; justify-content: center; }
+.pad .box { background: var(--pos-surface); color: var(--pos-text); padding: 20px; border-radius: 14px; width: 300px; }
+.pad input { width: 100%; font-size: 24px; padding: 10px; border-radius: 8px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); }
+.muted { color: var(--pos-text-2); font-size: 13px; }
+
+/* ── search ── */
+.search { width: 100%; margin-bottom: 12px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); font-size: 14px; }
+.search::placeholder { color: var(--pos-text-2); }
+
+/* ── item cards with image ── */
+.item { display: flex; flex-direction: column; gap: 8px; overflow: hidden; padding: 0; }
+.item .thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--pos-surface-2); display: block; }
+.item .thumb.ph { display: flex; align-items: center; justify-content: center; color: var(--pos-text-2); font-size: 26px; }
+.item .body { padding: 10px 12px; }
+.item b { display: block; font-size: 14px; line-height: 1.25; }
+.item .price { color: var(--pos-accent); font-size: 13px; font-weight: 600; }
+.item .badge-mod { display: inline-block; margin-top: 4px; font-size: 11px; color: var(--pos-text-2); border: 1px solid var(--pos-border); border-radius: 6px; padding: 1px 6px; }
+
+/* ── cart line detail ── */
+.line .opts { display: block; color: var(--pos-text-2); font-size: 12px; margin-top: 2px; }
+.line .note { display: block; color: var(--pos-warn); font-size: 12px; font-style: italic; margin-top: 2px; }
+.line .lt { font-weight: 600; white-space: nowrap; }
+
+/* ── customize modal ── */
+.sheet { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: flex-end; justify-content: center; z-index: 500; }
+.sheet .card2 { background: var(--pos-surface); color: var(--pos-text); width: 100%; max-width: 480px; max-height: 90vh; border-radius: 16px 16px 0 0; display: flex; flex-direction: column; }
+@media (min-width: 640px) { .sheet { align-items: center; } .sheet .card2 { border-radius: 16px; } }
+.sheet header { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--pos-border); }
+.sheet header img { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; }
+.sheet header h3 { margin: 0; font-size: 17px; }
+.sheet .scroll { overflow-y: auto; padding: 12px 16px; }
+.sheet .grp { margin-bottom: 14px; }
+.sheet .grp h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .4px; color: var(--pos-text-2); }
+.opt { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--pos-border); border-radius: 10px; margin-bottom: 6px; cursor: pointer; }
+.opt.on { border-color: var(--pos-accent); background: var(--pos-accent-soft); }
+.opt .lbl { flex: 1; }
+.opt .opt-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex: none; background: var(--pos-surface-2); }
+.opt .op { color: var(--pos-text-2); font-size: 13px; }
+.sheet textarea { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); font-size: 14px; resize: vertical; min-height: 54px; }
+.sheet footer { display: flex; gap: 10px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--pos-border); }
+.sheet .qtybox { display: inline-flex; gap: 8px; align-items: center; }
+.sheet .qtybox button { width: 34px; height: 34px; border-radius: 8px; border: 0; background: var(--pos-surface-2); color: var(--pos-text); font-size: 18px; cursor: pointer; }
+.sheet .addbtn { flex: 1; padding: 13px; border: 0; border-radius: 10px; background: var(--pos-accent); color: var(--pos-accent-ink); font-weight: 700; font-size: 15px; cursor: pointer; }
+.sheet .closebtn { background: none; border: 0; color: var(--pos-text-2); font-size: 22px; cursor: pointer; padding: 0 4px; }
+
+/* ── lock overlay ── */
+.lock-overlay { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.lock-overlay .lock-card { background: var(--pos-surface); border-radius: 16px; padding: 30px; width: 340px; text-align: center; color: var(--pos-text); }
+.lock-overlay .lock-title { margin: 0 0 6px; font-size: 20px; }
+.lock-overlay .lock-hint { color: var(--pos-text-2); margin: 0 0 16px; font-size: 14px; }
+.lock-overlay .lock-err { color: var(--pos-danger); margin: 0 0 10px; font-size: 14px; }
+.lock-overlay input { width: 100%; box-sizing: border-box; padding: 12px; border-radius: 8px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); font-size: 16px; }
+.lock-overlay input.pin { font-size: 22px; letter-spacing: 6px; text-align: center; }
+.lock-overlay .lock-unlock { width: 100%; margin-top: 14px; padding: 12px; border: 0; border-radius: 8px; background: #15803D; color: #FFFFFF; font-weight: 700; font-size: 16px; cursor: pointer; }
+
+/* ── offline banner ── */
+.pos-offline-banner { background: var(--pos-danger-soft); color: var(--pos-danger); padding: 8px 14px; text-align: center; font-size: 14px; }
+/* OP-9: banner states — ready to sell offline (warn) vs cannot sell / needs a manager (bad). Text always says it; colour only helps. */
+.pos-offline-banner.is-warn { background: var(--pos-surface-2); color: var(--pos-warn); border-bottom: 1px solid var(--pos-border); }
+.pos-offline-banner.is-bad { background: var(--pos-danger-soft); color: var(--pos-danger); font-weight: 600; }
+
+/* OP-9: the offline receipt (printed from local data). On screen it is a dialog; while printing only the card shows. */
+.pos-offline-receipt-modal { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 16px; }
+.pos-offline-receipt { background: var(--pos-surface); color: var(--pos-text); border-radius: var(--pos-radius-lg); padding: 18px; width: min(360px, 100%); max-height: 100%; overflow: auto; }
+.pos-offline-receipt .r-head { text-align: center; margin-bottom: 10px; }
+.pos-offline-receipt .r-muted { display: block; color: var(--pos-text-2); font-size: 12px; }
+.pos-offline-receipt table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pos-offline-receipt td { padding: 3px 0; vertical-align: top; }
+.pos-offline-receipt .r-num { text-align: end; white-space: nowrap; padding-inline-start: 8px; font-variant-numeric: tabular-nums; }
+.pos-offline-receipt .r-lines { border-bottom: 1px dashed var(--pos-border); margin-bottom: 6px; padding-bottom: 6px; }
+.pos-offline-receipt .r-total td { font-weight: 700; font-size: 15px; border-top: 1px solid var(--pos-border); }
+.pos-offline-receipt .r-note { margin-top: 10px; text-align: center; font-size: 12px; color: var(--pos-text-2); border: 1px dashed var(--pos-border); padding: 6px; border-radius: 8px; }
+.pos-offline-receipt .r-void { text-align: center; font-weight: 700; color: var(--pos-danger); margin: 4px 0; }
+.pos-offline-receipt .r-actions { display: flex; gap: 8px; margin-top: 14px; }
+.pos-offline-receipt .r-actions button { flex: 1; }
+@media print {
+    @page { margin: 4mm; }
+    body.is-printing-receipt > *:not(.pos-offline-receipt-modal) { display: none !important; }
+    body.is-printing-receipt .pos-offline-receipt-modal { position: static; background: none; padding: 0; display: block !important; }
+    body.is-printing-receipt .pos-offline-receipt { background: #fff; color: #000; width: 72mm; max-width: 100%; padding: 0; overflow: visible; }
+    body.is-printing-receipt .pos-offline-receipt .r-muted, body.is-printing-receipt .pos-offline-receipt .r-note { color: #000; }
+    body.is-printing-receipt .pos-offline-receipt .r-actions { display: none; }
+}
+
+/* ==========================================================================
+   P0-4 — shell frame: nav rail + topbar controls + panels (UI-KIT §2)
+   ========================================================================== */
+
+/* body becomes the shell row: rail | main column */
+body { flex-direction: row; }
+
+/* ── nav rail ── */
+.pos-rail { width: var(--pos-rail-w); flex: 0 0 var(--pos-rail-w); background: var(--pos-surface); border-inline-end: 1px solid var(--pos-border); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; }
+.pos-rail .pos-rail-nav { display: flex; flex-direction: column; gap: 6px; width: 100%; align-items: center; }
+.pos-rail .pos-rail-spacer { flex: 1; }
+.pos-rail-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 100%; min-height: 56px; border: 0; background: none; color: var(--pos-text-2); border-radius: 12px; cursor: pointer; text-decoration: none; font-size: 11px; padding: 6px 2px; }
+.pos-rail-item .ico { font-size: 20px; line-height: 1; display: inline-flex; }
+.pos-ico { vertical-align: middle; flex: none; }
+.pos-rail-item:hover { color: var(--pos-text); background: var(--pos-surface-2); }
+.pos-rail-item.on { color: var(--pos-accent); background: var(--pos-accent-soft); }
+.pos-rail-shift { font-size: 10px; color: var(--pos-text-2); text-align: center; line-height: 1.2; padding: 4px 2px; }
+
+/* ── main column ── */
+.pos-main { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+
+/* topbar search + Select Table CTA + sync indicator */
+.pos-topbar-search { flex: 1 1 220px; min-width: 140px; max-width: 420px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); font-size: 14px; }
+.pos-topbar-search::placeholder { color: var(--pos-text-2); }
+.pos-cta-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--pos-cta); color: var(--pos-cta-ink); font-weight: 600; font-size: 13px; cursor: pointer; }
+.pos-topbar-ind { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 12px; cursor: pointer; }
+.pos-topbar-ind .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--pos-cta); }
+.pos-topbar-ind.is-queued .dot { background: var(--pos-warn); }
+.pos-topbar-ind.is-offline .dot { background: var(--pos-danger); }
+
+/* the menu|cart body fills the remaining height under the topbar */
+.pos { position: relative; grid-template-columns: 1fr var(--pos-cart-w); }
+
+/* ── panels (Tables / Orders open here; T3/T4 fill, stubbed with pos-empty) ── */
+.pos-panel { position: absolute; inset: 0; inset-inline-end: var(--pos-cart-w); background: var(--pos-bg); z-index: 20; display: flex; flex-direction: column; overflow-y: auto; }
+.pos-panel-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--pos-border); }
+.pos-panel-head h2 { margin: 0; font-size: 15px; }
+.pos-panel-close { margin-inline-start: auto; min-width: 40px; min-height: 40px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 18px; cursor: pointer; }
+
+/* ── empty state ── */
+.pos-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--pos-text-2); text-align: center; padding: 40px 16px; }
+.pos-empty .ico { font-size: 40px; line-height: 1; }
+
+/* touch targets: any rail/topbar control stays ≥40px tall (44px rail rows) */
+
+/* ==========================================================================
+   T1-1 — category chips + item photo-card grid (UI-KIT §3)
+   ========================================================================== */
+.pos-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.pos-chip { min-height: 40px; padding: 0 16px; border: 1px solid var(--pos-border); background: var(--pos-surface); color: var(--pos-text); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+.pos-chip:hover { border-color: var(--pos-accent); }
+.pos-chip.on { background: var(--pos-accent-soft); border-color: var(--pos-accent); color: var(--pos-accent); font-weight: 600; }
+
+.pos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+@media (max-width: 1024px) { .pos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; } }
+
+.pos-item { display: flex; flex-direction: column; text-align: start; padding: 0; overflow: hidden; background: var(--pos-surface); border: 1px solid var(--pos-border); box-shadow: var(--pos-shadow); border-radius: var(--pos-radius); cursor: pointer; color: inherit; transition: border-color .12s, transform .06s; }
+.pos-item:hover { border-color: var(--pos-accent); }
+.pos-item:active { transform: scale(.99); }
+.pos-item.is-sold { opacity: .5; pointer-events: none; }
+.pos-item-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--pos-surface-2); display: block; }
+.pos-item-thumb.ph { display: flex; align-items: center; justify-content: center; color: var(--pos-text-2); font-size: 30px; }
+.pos-item-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.pos-item-name { font-size: 14px; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pos-item-price { color: var(--pos-accent); font-size: 13px; font-weight: 700; }
+.pos-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 2px; }
+.pos-badge { font-size: 10px; font-weight: 600; letter-spacing: .3px; text-transform: uppercase; color: var(--pos-text-2); border: 1px solid var(--pos-border); border-radius: 6px; padding: 1px 6px; }
+.pos-badge.is-options { color: var(--pos-accent); border-color: var(--pos-accent); }
+.pos-badge.is-sold { color: var(--pos-danger); border-color: var(--pos-danger); }
+/* T6: combo tile — amber accent for the "Combo" tag + "you save" chip. */
+.pos-badge.is-combo { color: #b45309; border-color: #f59e0b; background: #f59e0b1a; }
+.pos-badge.is-save { color: #15803d; border-color: #16a34a; background: #16a34a1a; }
+.pos-item.is-combo { border-color: #f59e0b66; }
+.pos-item.is-combo:hover { border-color: #f59e0b; }
+
+/* ==========================================================================
+   T1-2 — cart lines v2 (UI-KIT §3 pos-line) + qty stepper
+   ========================================================================== */
+.pos-line { display: flex; gap: 8px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--pos-border); }
+.pos-line-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; text-align: start; background: none; border: 0; padding: 0; margin: 0; color: inherit; cursor: pointer; }
+.pos-line-name { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.pos-line-opts { font-size: 12px; color: var(--pos-text-2); }
+.pos-line-note { font-size: 12px; color: var(--pos-warn); font-style: italic; }
+.pos-line-unit { font-size: 12px; color: var(--pos-text-2); margin-top: 2px; }
+.pos-line-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.pos-line-x { align-self: flex-end; min-width: 28px; min-height: 28px; border: 0; background: none; color: var(--pos-text-2); font-size: 20px; line-height: 1; cursor: pointer; border-radius: 6px; }
+.pos-line-x:hover { color: var(--pos-danger); background: var(--pos-danger-soft); }
+.pos-step { display: inline-flex; align-items: center; gap: 4px; }
+.pos-step button { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); font-size: 16px; line-height: 1; cursor: pointer; }
+.pos-step span { min-width: 22px; text-align: center; font-weight: 600; font-size: 14px; }
+.pos-line-total { font-weight: 700; font-size: 14px; white-space: nowrap; }
+
+/* ==========================================================================
+   T1-3 — cart add-row (discount / coupon) + mini-sheets + cut totals
+   ========================================================================== */
+.pos-addrow { display: flex; gap: 8px; padding: 8px 16px 0; }
+.pos-addlink { flex: 1; min-height: 40px; border: 1px dashed var(--pos-border); background: none; color: var(--pos-text-2); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.pos-addlink:hover { border-color: var(--pos-accent); color: var(--pos-accent); }
+.pos-mini { padding: 8px 16px 0; }
+.pos-mini-row { display: flex; gap: 6px; }
+.pos-mini-select, .pos-mini-input { min-height: 40px; padding: 0 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 14px; }
+.pos-mini-select { flex: 0 0 auto; }
+.pos-mini-input { flex: 1; min-width: 0; }
+.pos-mini-apply { min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--pos-accent); color: var(--pos-accent-ink); font-weight: 600; font-size: 13px; cursor: pointer; }
+.pos-mini-apply:disabled { opacity: .6; cursor: default; }
+.pos-mini-err { color: var(--pos-danger); font-size: 12px; margin: 6px 0 0; }
+.pos-mini-clear { margin-top: 6px; background: none; border: 0; color: var(--pos-text-2); font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; }
+.totals .row.is-cut span { color: var(--pos-danger); }
+.totals .row.is-cut span:first-child { color: var(--pos-text-2); }
+
+/* ==========================================================================
+   T1-6 — toast (scanner / unknown code / general notices)
+   ========================================================================== */
+.pos-toast { position: fixed; inset-block-end: 20px; inset-inline: 0; margin-inline: auto; width: max-content; max-width: 90vw; z-index: 10000; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; background: var(--pos-surface); color: var(--pos-text); border: 1px solid var(--pos-border); box-shadow: var(--pos-shadow); }
+.pos-toast.is-warn { border-color: var(--pos-warn); color: var(--pos-warn); }
+.pos-toast.is-error { border-color: var(--pos-danger); color: var(--pos-danger); }
+.pos-toast.is-success { border-color: var(--pos-cta); color: var(--pos-cta); }
+
+/* ==========================================================================
+   T1-7 — keyboard-shortcuts help overlay
+   ========================================================================== */
+.pos-help { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: center; justify-content: center; z-index: 9998; padding: 16px; }
+.pos-help-card { background: var(--pos-surface); color: var(--pos-text); border: 1px solid var(--pos-border); border-radius: var(--pos-radius-lg); width: 100%; max-width: 380px; box-shadow: var(--pos-shadow); }
+.pos-help-head { display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--pos-border); }
+.pos-help-head h3 { margin: 0; font-size: 16px; }
+.pos-help-x { margin-inline-start: auto; min-width: 36px; min-height: 36px; border: 0; background: none; color: var(--pos-text-2); font-size: 22px; cursor: pointer; }
+.pos-help-list { list-style: none; margin: 0; padding: 8px 16px; }
+.pos-help-list li { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--pos-border); }
+.pos-help-list li span { margin-inline-start: auto; color: var(--pos-text-2); font-size: 14px; }
+.pos-help-list kbd { font: 600 12px/1 ui-monospace, monospace; background: var(--pos-surface-2); color: var(--pos-text); border: 1px solid var(--pos-border); border-radius: 6px; padding: 4px 7px; }
+.pos-help-card .muted { padding: 10px 16px 16px; margin: 0; }
+
+/* ==========================================================================
+   T2-2 — customer attach: bar/chip in cart header + search rows + MEMBER pill
+   ========================================================================== */
+.pos-cust-bar { padding: 0 16px 10px; border-bottom: 1px solid var(--pos-border); }
+.pos-covers { display: flex; align-items: center; gap: 8px; padding: 0 16px 10px; border-bottom: 1px solid var(--pos-border); }
+.pos-covers-lbl { font-size: 12px; color: var(--pos-text-2); }
+.pos-covers-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.pos-covers-chips button { min-width: 32px; min-height: 32px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.pos-covers-chips button.on { background: var(--pos-accent); color: var(--pos-accent-ink); border-color: var(--pos-accent); font-weight: 600; }
+.pos-covers-custom { width: 44px; min-height: 32px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; text-align: center; font-size: 13px; }
+.pos-cust-editbtn { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; min-height: 28px; border-radius: 6px; background: var(--pos-surface-2); color: var(--pos-text-2); font-size: 14px; cursor: pointer; }
+.pos-cust-editbtn:hover { color: var(--pos-text); }
+.pos-cust-detail { overflow-y: auto; }
+.pos-cust-hist-row { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--pos-border); font-size: 13px; }
+.pos-addmode-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 16px 10px; padding: 8px 10px; border-radius: 8px; background: var(--pos-info); color: var(--pos-info-ink); font-size: 13px; font-weight: 600; }
+.pos-addmode-bar button { border: 0; background: rgba(255,255,255,.25); color: inherit; border-radius: 6px; padding: 3px 10px; cursor: pointer; }
+/* Manage panel: shift + reports */
+.pos-report-cards { display: flex; gap: 10px; flex-wrap: wrap; }
+.pos-report-card { display: flex; flex-direction: column; gap: 2px; min-width: 140px; padding: 12px 14px; border: 1px solid var(--pos-border); border-radius: var(--pos-radius); background: var(--pos-surface); }
+.pos-report-card .lbl { font-size: 12px; color: var(--pos-text-2); }
+.pos-report-card .val { font-size: 20px; font-weight: 700; }
+.pos-hourbar { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 12px; }
+.pos-hourbar .h { width: 44px; color: var(--pos-text-2); }
+.pos-hourbar .bar { flex: 1; height: 10px; background: var(--pos-surface-2); border-radius: 5px; overflow: hidden; }
+.pos-hourbar .bar i { display: block; height: 100%; background: var(--pos-accent); border-radius: 5px; }
+.pos-hourbar .v { width: 80px; text-align: end; }
+.pos-zreport dd.is-short { color: var(--pos-danger); font-weight: 700; }
+.pos-cust-add { width: 100%; min-height: 40px; border: 1px dashed var(--pos-border); background: none; color: var(--pos-text-2); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.pos-cust-add:hover { border-color: var(--pos-accent); color: var(--pos-accent); }
+.pos-cust-chip { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 8px; background: var(--pos-surface-2); border: 1px solid var(--pos-border); border-radius: 999px; }
+.pos-cust-chip-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pos-cust-detach { margin-inline-start: auto; min-width: 28px; min-height: 28px; border: 0; background: none; color: var(--pos-text-2); font-size: 18px; cursor: pointer; border-radius: 50%; }
+.pos-cust-detach:hover { color: var(--pos-danger); background: var(--pos-danger-soft); }
+.pos-cust-avatar { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--pos-accent-soft); color: var(--pos-accent); font-weight: 700; font-size: 14px; flex: 0 0 auto; }
+.pos-cust-avatar.sm { width: 26px; height: 26px; font-size: 12px; }
+.pos-member { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .4px; color: var(--pos-accent); background: var(--pos-accent-soft); border-radius: 6px; padding: 1px 6px; }
+.pos-tier { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .3px; color: var(--pos-warn); background: color-mix(in srgb, var(--pos-warn) 15%, transparent); border-radius: 6px; padding: 1px 6px; margin-inline-start: 4px; }
+.pos-cust-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; padding: 10px 8px; border: 0; border-bottom: 1px solid var(--pos-border); background: none; color: inherit; cursor: pointer; border-radius: 8px; }
+.pos-cust-row:hover { background: var(--pos-surface-2); }
+.pos-cust-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pos-cust-name { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; }
+.pos-cust-sub { font-size: 12px; color: var(--pos-text-2); }
+.pos-cust-side { margin-inline-start: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12px; color: var(--pos-text-2); white-space: nowrap; }
+
+/* ── T2-4: loyalty display on the selected-customer card ── */
+.pos-loyalty { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; }
+.pos-loyalty-bal { font-weight: 600; color: var(--pos-accent); }
+.pos-loyalty-earn { color: var(--pos-text-2); }
+
+/* ── T6-3: choice-group option helpers in the customize sheet ── */
+.sheet .grp h4 .pos-opt-req { color: var(--pos-danger); font-size: 11px; margin-inline-start: 6px; text-transform: none; letter-spacing: 0; }
+.sheet .grp h4 .pos-opt-help { color: var(--pos-text-2); font-size: 11px; margin-inline-start: 6px; text-transform: none; letter-spacing: 0; }
+.sheet .addbtn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ==========================================================================
+   T3-2 — Select Table screen: filter, legend, zone tiles (UI-KIT pos-table-tile)
+   ========================================================================== */
+.pos-seatfilter { display: inline-flex; gap: 4px; margin-inline-start: 12px; background: var(--pos-surface-2); border-radius: 10px; padding: 3px; }
+.pos-seatfilter button { min-height: 34px; padding: 0 12px; border: 0; background: none; color: var(--pos-text-2); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.pos-seatfilter button.on { background: var(--pos-surface); color: var(--pos-text); font-weight: 600; box-shadow: var(--pos-shadow); }
+
+.pos-legend { display: flex; gap: 16px; padding: 10px 16px; border-bottom: 1px solid var(--pos-border); font-size: 12px; color: var(--pos-text-2); }
+.pos-legend .dot, .pos-table-tile .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-inline-end: 4px; }
+.dot.is-vacant { background: var(--pos-cta); }
+.dot.is-occupied { background: var(--pos-danger); }
+.dot.is-served { background: var(--pos-warn); }
+.dot.is-blocked { background: var(--pos-text-2); }
+.dot.is-reserved { background: var(--pos-info); }
+
+.pos-panel-body { flex: 1; overflow-y: auto; padding: 12px 16px; }
+.pos-zone { margin-bottom: 18px; }
+.pos-zone-title { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: var(--pos-text-2); }
+.pos-tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.pos-table-tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 84px; padding: 12px; border: 1px solid var(--pos-border); background: var(--pos-surface); box-shadow: var(--pos-shadow); border-radius: var(--pos-radius); cursor: pointer; color: inherit; text-align: start; }
+.pos-table-tile:hover { border-color: var(--pos-accent); }
+.pos-table-tile.is-occupied { border-inline-start: 3px solid var(--pos-danger); }
+.pos-table-tile.is-served { border-inline-start: 3px solid var(--pos-warn); }
+.pos-table-tile.is-vacant { border-inline-start: 3px solid var(--pos-cta); }
+.pos-table-tile.is-blocked { border-inline-start: 3px solid var(--pos-text-2); opacity: .6; }
+.pos-table-tile.is-reserved { border-inline-start: 3px solid var(--pos-info); }
+.pos-tile-covers { font-size: 11px; color: var(--pos-text-2); }
+.pos-table-tile.is-selected { outline: 2px solid var(--pos-accent); outline-offset: 1px; }
+.pos-tile-name { font-size: 15px; font-weight: 700; }
+.pos-tile-seats { font-size: 12px; color: var(--pos-text-2); }
+.pos-tile-total { font-size: 12px; font-weight: 600; color: var(--pos-accent); }
+.pos-table-tile .dot { position: absolute; inset-block-start: 12px; inset-inline-end: 12px; margin: 0; }
+
+/* ==========================================================================
+   T4-1 — orders hub: tabs, rows, detail side-panel
+   ========================================================================== */
+.pos-tabs { display: inline-flex; gap: 2px; margin-inline-start: 12px; }
+.pos-tabs button { min-height: 38px; padding: 0 14px; border: 0; background: none; color: var(--pos-text-2); font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; }
+.pos-tabs button.on { color: var(--pos-accent); border-bottom-color: var(--pos-accent); font-weight: 600; }
+.pos-tab-badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-inline-start: 5px; background: var(--pos-warn); color: var(--pos-cta-ink); border-radius: 999px; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+
+.pos-orders-body { display: flex; gap: 0; padding: 0; }
+.pos-orders-list { flex: 1; overflow-y: auto; padding: 8px 12px; min-width: 0; }
+.pos-order-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: start; padding: 12px; border: 1px solid var(--pos-border); background: var(--pos-surface); border-radius: var(--pos-radius); margin-bottom: 8px; cursor: pointer; color: inherit; }
+.pos-order-row.on { border-color: var(--pos-accent); }
+.pos-order-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pos-order-id { font-weight: 700; font-size: 14px; }
+.pos-order-sub { font-size: 12px; color: var(--pos-text-2); }
+.pos-order-side { margin-inline-start: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.pos-order-total { font-weight: 700; }
+.pos-order-status { font-size: 11px; color: var(--pos-text-2); text-transform: capitalize; }
+.pos-order-detail { width: 300px; flex: 0 0 300px; border-inline-start: 1px solid var(--pos-border); background: var(--pos-surface); overflow-y: auto; }
+.pos-detail-dl { padding: 8px 16px; }
+.pos-detail-dl > div { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--pos-border); }
+.pos-detail-dl dt { color: var(--pos-text-2); font-size: 13px; margin: 0; }
+.pos-detail-dl dd { margin: 0; font-weight: 600; font-size: 13px; text-transform: capitalize; }
+
+/* ── T4-2: hold note + age chip + resume button ── */
+.pos-age-chip { display: inline-block; margin-inline-start: 6px; font-size: 11px; font-weight: 600; color: var(--pos-text-2); background: var(--pos-surface-2); border-radius: 6px; padding: 1px 6px; }
+.pos-src-chip { display: inline-block; margin-inline-start: 6px; font-size: 10px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--pos-accent); background: var(--pos-accent-soft); border-radius: 6px; padding: 1px 6px; }
+.pos-order-note { font-size: 12px; color: var(--pos-warn); font-style: italic; }
+.pos-resume-btn { min-height: 32px; padding: 0 12px; margin-top: 4px; border: 0; border-radius: 8px; background: var(--pos-accent); color: var(--pos-accent-ink); font-size: 12px; font-weight: 600; cursor: pointer; }
+
+/* ── T4-3: held/order detail lines + actions ── */
+.pos-detail-lines { padding: 8px 16px; }
+.pos-detail-line { padding: 8px 0; border-bottom: 1px solid var(--pos-border); }
+.pos-detail-line-h { font-size: 13px; font-weight: 600; }
+.pos-detail-line .sub { display: block; font-size: 12px; color: var(--pos-text-2); }
+.pos-detail-line .sub.note { color: var(--pos-warn); font-style: italic; }
+.pos-detail-actions { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; }
+.pos-detail-btn { min-height: 44px; border: 0; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.pos-detail-btn.resume { background: var(--pos-accent); color: var(--pos-accent-ink); }
+.pos-detail-btn.settle { background: var(--pos-cta); color: var(--pos-cta-ink); }
+.pos-detail-btn.print { background: var(--pos-surface-2); color: var(--pos-text); }
+
+/* ── T4-4: offline queue rows (amber) + bar + discard ── */
+.pos-offline-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; margin-bottom: 8px; background: var(--pos-danger-soft); color: var(--pos-warn); border-radius: var(--pos-radius); font-size: 13px; font-weight: 600; }
+.pos-order-row.is-offline { border-inline-start: 3px solid var(--pos-warn); }
+.pos-discard-btn { min-height: 32px; padding: 0 12px; margin-top: 4px; border: 1px solid var(--pos-border); border-radius: 8px; background: none; color: var(--pos-danger); font-size: 12px; cursor: pointer; }
+.pos-discard-btn:hover { background: var(--pos-danger-soft); }
+
+/* ==========================================================================
+   T5-1 — settle screen v2 (split sheet: read region | actives)
+   ========================================================================== */
+.pos-settle { position: fixed; inset: 0; background: var(--pos-overlay); display: flex; align-items: center; justify-content: center; z-index: 600; padding: 16px; }
+.pos-settle-card { display: grid; grid-template-columns: 1fr 360px; width: 100%; max-width: 780px; max-height: 92vh; background: var(--pos-surface); color: var(--pos-text); border-radius: var(--pos-radius-lg); overflow: hidden; box-shadow: var(--pos-shadow); }
+@media (max-width: 640px) { .pos-settle-card { grid-template-columns: 1fr; } }
+.pos-settle-card.pos-ext-settle { grid-template-columns: 1fr; max-width: 420px; }
+
+.pos-settle-read { padding: 18px; overflow-y: auto; background: var(--pos-bg); border-inline-end: 1px solid var(--pos-border); }
+.pos-settle-read h3 { margin: 0 0 10px; font-size: 14px; text-transform: uppercase; letter-spacing: .4px; color: var(--pos-text-2); }
+.pos-settle-line { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px solid var(--pos-border); }
+.pos-settle-cust { margin-top: 10px; font-size: 13px; color: var(--pos-text-2); }
+.pos-settle-totals { margin: 12px 0 0; }
+.pos-settle-totals > div { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
+.pos-settle-totals dt { margin: 0; color: var(--pos-text-2); }
+.pos-settle-totals dd { margin: 0; font-weight: 600; }
+
+.pos-settle-act { position: relative; padding: 18px; display: flex; flex-direction: column; }
+.pos-settle-close { position: absolute; inset-block-start: 12px; inset-inline-end: 12px; min-width: 36px; min-height: 36px; border: 0; background: none; color: var(--pos-text-2); font-size: 24px; cursor: pointer; }
+.pos-settle-payable { text-align: center; margin: 6px 0 14px; }
+.pos-settle-payable .lbl { display: block; font-size: 13px; color: var(--pos-text-2); }
+.pos-settle-payable .amt { font-size: 30px; font-weight: 800; color: var(--pos-accent); }
+.pos-settle-body { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.pos-settle-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--pos-text-2); }
+.pos-settle-field input { font-size: 22px; padding: 12px; border-radius: 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); text-align: end; }
+.pos-settle-change { font-size: 14px; color: var(--pos-text-2); }
+.pos-settle-confirm { min-height: 52px; border: 0; border-radius: 12px; background: var(--pos-cta); color: var(--pos-cta-ink); font-weight: 700; font-size: 16px; cursor: pointer; }
+.pos-settle-confirm:disabled { opacity: .5; cursor: not-allowed; }
+.pos-settle-mode { min-height: 52px; border: 1px solid var(--pos-border); border-radius: 12px; background: var(--pos-surface); color: var(--pos-text); font-weight: 600; font-size: 15px; cursor: pointer; }
+.pos-settle-mode:hover { border-color: var(--pos-accent); }
+
+/* ── T5-2: cash keypad + presets + tender display ── */
+.pos-tender-display { display: flex; align-items: baseline; justify-content: space-between; padding: 8px 12px; border: 1px solid var(--pos-border); border-radius: 10px; background: var(--pos-surface-2); }
+.pos-tender-display .lbl { font-size: 12px; color: var(--pos-text-2); }
+.pos-tender-display .amt { font-size: 22px; font-weight: 700; }
+.pos-settle-change { font-size: 14px; color: var(--pos-text-2); text-align: end; }
+.pos-settle-change.is-due { color: var(--pos-danger); }
+.pos-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.pos-presets button { min-height: 40px; border: 1px solid var(--pos-border); background: var(--pos-surface); color: var(--pos-text); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.pos-presets button:hover { border-color: var(--pos-accent); }
+.pos-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.pos-keypad button { min-height: 52px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 10px; font-size: 20px; font-weight: 600; cursor: pointer; }
+.pos-keypad button:active { background: var(--pos-accent-soft); }
+.pos-keypad button.wide { grid-column: span 3; min-height: 44px; font-size: 18px; }
+
+/* ── T5-3: tip row ── */
+.pos-tip { margin: 4px 0 8px; }
+.pos-tip-lbl { font-size: 12px; color: var(--pos-text-2); }
+.pos-tip-chips { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.pos-tip-chips button { min-height: 36px; padding: 0 12px; border: 1px solid var(--pos-border); background: var(--pos-surface); color: var(--pos-text); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.pos-tip-chips button.on { background: var(--pos-accent-soft); border-color: var(--pos-accent); color: var(--pos-accent); font-weight: 600; }
+.pos-tip-custom { width: 80px; min-height: 36px; padding: 0 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 13px; }
+.pos-tip-amt { display: inline-block; margin-top: 6px; font-size: 12px; color: var(--pos-accent); font-weight: 600; }
+
+/* ── T5-4: coupon at settle ── */
+.pos-settle-coupon { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--pos-border); }
+.pos-settle-coupon-on { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
+.pos-settle-hint { margin: 6px 0 0; font-size: 11px; color: var(--pos-text-2); font-style: italic; }
+
+/* ── T5-5: wallet redemption ── */
+.pos-settle-wallet { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--pos-border); }
+.pos-wallet-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.pos-settle-wallet .pos-mini-input { width: 100%; margin-top: 8px; }
+
+/* ── T5-6: split payment ── */
+.pos-split-start { display: flex; flex-direction: column; gap: 10px; }
+.pos-split-start select { min-height: 44px; padding: 0 10px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 10px; font-size: 15px; }
+.pos-split-share { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--pos-border); }
+.pos-split-share.is-paid { opacity: .6; }
+.pos-split-share .no { font-weight: 700; color: var(--pos-text-2); }
+.pos-split-share .amt { font-weight: 700; }
+.pos-split-share .pay { margin-inline-start: auto; display: flex; gap: 6px; }
+.pos-split-share .pay select { min-height: 36px; border: 1px solid var(--pos-border); background: var(--pos-surface-2); color: var(--pos-text); border-radius: 8px; font-size: 13px; }
+.pos-split-share .pay button { min-height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--pos-cta); color: var(--pos-cta-ink); font-weight: 600; font-size: 13px; cursor: pointer; }
+.pos-split-share .paid { margin-inline-start: auto; color: var(--pos-cta); font-weight: 600; font-size: 13px; }
+
+/* ==========================================================================
+   T7-1 — dual-theme QA: visible focus rings on every interactive control
+   (many POS buttons use border:0, which drops the UA outline — restore it).
+   ========================================================================== */
+.topbar :focus-visible, .pos-rail :focus-visible, .pos-rail-item:focus, .pos-rail-item:focus-visible, .pos button:focus-visible,
+.cart button:focus-visible, .acts button:focus-visible, .type button:focus-visible,
+.pos-chip:focus-visible, .pos-item:focus-visible, .pos-line-main:focus-visible,
+.pos-step button:focus-visible, .pos-keypad button:focus-visible, .pos-presets button:focus-visible,
+.pos-settle button:focus-visible, .pos-settle input:focus-visible, .pos-settle select:focus-visible,
+.pos-table-tile:focus-visible, .pos-order-row:focus-visible, .pos-tabs button:focus-visible,
+.pos-cust-row:focus-visible, .pos-mini-input:focus-visible, .pos-topbar-search:focus-visible,
+.pos-theme-toggle:focus-visible, .pos-help-toggle:focus-visible, .pos-cta-btn:focus-visible, .pos-topbar-ind:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--pos-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+/* Keep the ring inside tight controls so it isn't clipped by overflow:hidden cards. */
+.pos-item:focus-visible, .pos-table-tile:focus-visible { outline-offset: -2px; }
+
+/* ==========================================================================
+   T7-4 — touch targets ≥ 44px on every tappable control (cashier speed).
+   Appended overrides win over the component rules above.
+   ========================================================================== */
+.pos-theme-toggle, .pos-help-toggle, .pos-cta-btn, .pos-topbar-ind, .pos-panel-close, .pos-chip,
+.pos-addlink, .pos-mini-select, .pos-mini-input, .pos-mini-apply, .pos-cust-add,
+.pos-seatfilter button, .pos-tabs button, .pos-resume-btn, .pos-discard-btn,
+.pos-settle-close, .pos-presets button, .pos-tip-chips button, .pos-tip-custom,
+.pos-split-share .pay select, .pos-split-share .pay button, .pos-help-x {
+    min-height: 44px;
+}
+/* Fixed-height controls need height cleared so min-height applies. */
+.pos-theme-toggle, .pos-panel-close, .pos-settle-close, .pos-help-x { height: auto; min-width: 44px; }
+/* Compact ± steppers → 44×44 hit area. */
+.sheet .qtybox button, .pos-step button { width: 44px; height: 44px; min-width: 44px; font-size: 20px; }
+
+/* ── T7-5: loading skeletons ── */
+.pos-skel { aspect-ratio: 4/3; border-radius: var(--pos-radius); background: linear-gradient(90deg, var(--pos-surface-2) 25%, var(--pos-border) 37%, var(--pos-surface-2) 63%); background-size: 400% 100%; animation: pos-shimmer 1.2s ease-in-out infinite; }
+@keyframes pos-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .pos-skel { animation: none; } }
+
+/* ==========================================================================
+   Mobile / phone layout (≤768px). Rail → bottom bar, cart → off-canvas drawer
+   opened by a floating cart button. Desktop-hidden helpers default to none. */
+.cart-mclose, .pos-cart-fab, .pos-mbackdrop { display: none; }
+.cart h2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+@media (max-width: 768px) {
+    /* rail as a bottom bar (DOM order rail→main, column-reverse puts rail last) */
+    body { flex-direction: column-reverse; }
+    .pos-rail { width: 100%; flex: 0 0 auto; flex-direction: row; justify-content: flex-start;
+        border-inline-end: 0; border-block-start: 1px solid var(--pos-border);
+        padding: 4px 6px; gap: 2px; overflow-x: auto; }
+    .pos-rail .pos-rail-nav { flex-direction: row; width: auto; gap: 2px; }
+    .pos-rail-spacer, .pos-rail-shift { display: none; }
+    .pos-rail-item { min-height: 46px; min-width: 58px; font-size: 10px; border-radius: 10px; }
+    .pos-rail-item .ico svg, .pos-rail-item .pos-ico { width: 20px; height: 20px; }
+
+    /* menu takes the full width; panels overlay it fully. min-height:0 lets the
+       menu column scroll instead of the flex parent growing past the viewport
+       (which clipped the lower items); padding-bottom clears the FAB + bottom bar. */
+    .pos { grid-template-columns: 1fr; min-height: 0; overflow: hidden; }
+    .menu { min-height: 0; padding-bottom: 96px; }
+    .pos-panel { inset-inline-end: 0; }
+    .pos-grid, .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+    /* cart → full-screen off-canvas drawer */
+    .cart { position: fixed; inset: 0; z-index: 60; width: 100%;
+        transform: translateX(100%); transition: transform .22s ease; border-inline-start: 0; }
+    [dir="rtl"] .cart { transform: translateX(-100%); }
+    .cart.m-open { transform: none; }
+    .cart-mclose { display: inline-flex; align-items: center; justify-content: center;
+        min-width: 40px; min-height: 40px; border: 0; background: var(--pos-surface-2);
+        color: var(--pos-text); border-radius: 8px; font-size: 22px; line-height: 1; cursor: pointer; }
+
+    /* backdrop behind the open drawer + the floating cart button */
+    .pos-mbackdrop { display: block; position: fixed; inset: 0; background: var(--pos-overlay); z-index: 55; }
+    .pos-cart-fab { display: inline-flex; align-items: center; gap: 8px;
+        position: fixed; inset-block-end: 76px; inset-inline-end: 16px; z-index: 50;
+        padding: 12px 18px; border: 0; border-radius: 999px; cursor: pointer;
+        background: var(--pos-cta); color: var(--pos-cta-ink); font-weight: 700; font-size: 14px;
+        box-shadow: 0 4px 16px rgba(16,24,40,.22); }
+    .pos-cart-fab .fab-ico { display: inline-flex; }
+    .pos-cart-fab .fab-n { min-width: 20px; height: 20px; display: inline-flex; align-items: center;
+        justify-content: center; padding: 0 5px; border-radius: 999px;
+        background: rgba(255,255,255,.28); font-size: 12px; }
+
+    /* comfortable touch targets */
+    .type button { min-height: 44px; }
+    .acts button { min-height: 50px; }
+    .topbar { padding: 6px 10px; gap: 6px; }
+    .topbar select { max-width: 150px; font-size: 13px; }
+}
+
+/* ==========================================================================
+   PARITY-RUN T1 — printer status chip + per-printer menu (topbar).
+   Token-driven like every other component; dark mode falls out of the vars.
+   ========================================================================== */
+.pos-printbox { position: relative; display: inline-flex; }
+.pos-print-menu {
+    position: absolute; inset-block-start: calc(100% + 6px); inset-inline-end: 0; z-index: 60;
+    min-width: 260px; max-width: 90vw; padding: 8px;
+    background: var(--pos-surface); border: 1px solid var(--pos-border);
+    border-radius: var(--pos-radius); box-shadow: var(--pos-shadow);
+}
+.pos-print-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 4px; }
+.pos-print-row + .pos-print-row { border-block-start: 1px solid var(--pos-border); }
+.pos-print-row .nm { flex: 1 1 100%; font-size: 13px; font-weight: 600; color: var(--pos-text); }
+.pos-print-row button {
+    min-height: 34px; padding: 0 10px; font-size: 12px; cursor: pointer;
+    border: 1px solid var(--pos-border); border-radius: 8px;
+    background: var(--pos-surface-2); color: var(--pos-text);
+}
+.pos-print-row button:hover { border-color: var(--pos-accent); }
+.pos-print-empty { padding: 10px 6px; font-size: 12px; color: var(--pos-text-2); }
+
+@media (max-width: 640px) {
+    .pos-print-menu { position: fixed; inset-inline: 8px; inset-block-start: 64px; min-width: 0; }
+}
+
+/* ==========================================================================
+   PARITY-RUN T4 — table merge + "move order to table".
+   Token-driven like every other component, and written with logical properties
+   so the RTL locales (ar/ur) mirror without a second rule.
+   ========================================================================== */
+
+/* Merge mode on the Select Table screen */
+.pos-mergebar {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    padding: 8px 16px; border-block-end: 1px solid var(--pos-border);
+    background: var(--pos-surface-2); font-size: 13px; color: var(--pos-text-2);
+}
+.pos-mergebar .grow { flex: 1 1 auto; }
+.pos-mergebar button {
+    min-height: 34px; padding: 0 12px; cursor: pointer; font-size: 13px;
+    border: 1px solid var(--pos-border); border-radius: 8px;
+    background: var(--pos-surface); color: var(--pos-text);
+}
+.pos-mergebar button:hover { border-color: var(--pos-accent); }
+.pos-mergebar button.go { background: var(--pos-accent); color: var(--pos-accent-ink); border-color: transparent; font-weight: 600; }
+.pos-mergebar button[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* Tile states: a linked secondary, and the pick-order badge in merge mode. */
+.pos-table-tile.is-merged { border-inline-start: 3px solid var(--pos-info); opacity: .75; }
+.dot.is-merged { background: var(--pos-info); }
+.pos-tile-merge {
+    font-size: 11px; font-weight: 600; color: var(--pos-info);
+    display: inline-flex; align-items: center; gap: 4px;
+}
+.pos-merge-pick {
+    position: absolute; inset-block-start: 8px; inset-inline-start: 8px;
+    min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px;
+    background: var(--pos-accent); color: var(--pos-accent-ink);
+    font-size: 11px; font-weight: 700; line-height: 20px; text-align: center;
+}
+.pos-tile-unmerge {
+    min-height: 28px; margin-block-start: 4px; padding: 0 8px; cursor: pointer;
+    border: 1px solid var(--pos-border); border-radius: 8px;
+    background: var(--pos-surface-2); color: var(--pos-text-2); font-size: 11px;
+}
+.pos-tile-unmerge:hover { border-color: var(--pos-accent); color: var(--pos-text); }
+
+/* Shared sheet shell for the merge + transfer dialogs */
+.pos-sheet-back {
+    position: fixed; inset: 0; z-index: 80; display: flex;
+    align-items: center; justify-content: center; padding: 16px;
+    background: rgba(11,18,32,.5);
+}
+.pos-sheet {
+    display: flex; flex-direction: column; width: min(560px, 100%); max-height: 86vh;
+    background: var(--pos-surface); border: 1px solid var(--pos-border);
+    border-radius: var(--pos-radius); box-shadow: var(--pos-shadow); overflow: hidden;
+}
+.pos-sheet-body { flex: 1; overflow-y: auto; padding: 12px 16px; }
+.pos-sheet-actions {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 10px 16px; border-block-start: 1px solid var(--pos-border);
+}
+.pos-merge-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.pos-merge-row {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border: 1px solid var(--pos-border); border-radius: 10px; margin-block-end: 8px;
+}
+.pos-merge-row.is-primary { border-color: var(--pos-accent); background: var(--pos-surface-2); }
+.pos-merge-name { flex: 1 1 auto; font-weight: 600; color: var(--pos-text); }
+.pos-merge-tag { font-size: 11px; font-weight: 700; color: var(--pos-accent); }
+.pos-merge-make {
+    min-height: 30px; padding: 0 10px; cursor: pointer; font-size: 12px;
+    border: 1px solid var(--pos-border); border-radius: 8px;
+    background: var(--pos-surface-2); color: var(--pos-text-2);
+}
+.pos-merge-make:hover { border-color: var(--pos-accent); color: var(--pos-text); }
+.pos-merge-error { margin: 10px 0 0; font-size: 13px; color: var(--pos-danger); }
+.pos-merge-grid { margin-block-start: 10px; }
+
+@media (max-width: 640px) {
+    .pos-sheet { width: 100%; max-height: 92vh; }
+    .pos-mergebar { padding: 8px 12px; }
+}

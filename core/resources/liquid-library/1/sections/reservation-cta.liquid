@@ -1,0 +1,39 @@
+{%- comment -%}
+  Reservation call-to-action (library v1): heading + text around the
+  platform reservation and (optionally) waitlist widgets. Each widget
+  gates itself on its feature switch; the section is only written when at
+  least one of them rendered, so a store without bookings gets nothing.
+{%- endcomment -%}
+{%- capture booking -%}{%- if features.reservations -%}{%- widget 'reservation' -%}{%- endif -%}{%- endcapture -%}
+{%- capture queue -%}{%- if section.settings.show_waitlist and features.waitlist -%}{%- widget 'waitlist' -%}{%- endif -%}{%- endcapture -%}
+{%- liquid
+  assign booking = booking | strip
+  assign queue = queue | strip
+  assign heading = section.settings.heading | strip
+  assign text = section.settings.text | strip
+-%}
+{%- if booking != '' or queue != '' -%}
+<section class="mbs-reservation-cta" aria-labelledby="mbs-reservation-cta-{{ section.id | escape }}">
+  <div class="mbs-reservation-cta__card">
+    {%- render 'icon', name: 'clock', size: 28 -%}
+    <h2 class="mbs-reservation-cta__title" id="mbs-reservation-cta-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- elsif booking != '' -%}{{ 'Reserve a Table' | t }}{%- else -%}{{ 'Join the waitlist' | t }}{%- endif -%}</h2>
+    {%- if text != '' -%}<p class="mbs-reservation-cta__text">{{ text | escape | newline_to_br }}</p>{%- endif -%}
+    <div class="mbs-reservation-cta__actions">{{ booking }}{{ queue }}</div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Reservations",
+  "group": "action",
+  "verticals": ["food", "stays"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = automatic)", "default": "" },
+    { "id": "text", "type": "textarea", "label": "Text", "default": "" },
+    { "id": "show_waitlist", "type": "checkbox", "label": "Also offer the waitlist (when on)", "default": true }
+  ],
+  "presets": [{ "name": "Reservations" }]
+}
+{% endschema %}

@@ -1,0 +1,34 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Cafe Pastel — warm cream, terracotta, rounded cards. Logical props (RTL). */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --rounded: 'Avenir Next Rounded', 'Trebuchet MS', 'Segoe UI', 'Geeza Pro', sans-serif; }
+html, body { background: #777; }
+.sheet {
+    background: var(--bg); color: var(--text); font-family: var(--rounded);
+    width: var(--page-w); min-height: var(--page-h); margin-inline: auto;
+    padding: 13mm 12mm; box-shadow: 0 2px 24px rgba(0,0,0,.35);
+}
+.menu-header { text-align: center; margin-block-end: 8mm; }
+.menu-header .rule { inline-size: 16mm; block-size: 2mm; border-radius: 2mm; background: var(--accent); margin: 3mm auto; opacity: .6; }
+.restaurant-name { font-size: 22pt; font-weight: 800; color: var(--accent); letter-spacing: .02em; }
+.tagline { font-size: 10pt; opacity: .75; margin-block-start: 1.5mm; }
+.menu-body { column-count: 2; column-gap: 8mm; }
+.category { break-inside: avoid; margin-block-end: 6mm; background: color-mix(in srgb, var(--accent) 7%, transparent); border-radius: 4mm; padding: 5mm; }
+.category-name { font-size: 12.5pt; font-weight: 800; color: var(--accent); margin-block-end: 3mm; }
+.item { break-inside: avoid; margin-block-end: 3.4mm; }
+.item-line { display: flex; align-items: baseline; gap: 2mm; }
+.item-name { font-size: 10.5pt; font-weight: 700; }
+.item-dots { flex: 1; border-block-end: 2px dotted color-mix(in srgb, var(--accent) 40%, transparent); min-width: 4mm; }
+.item-price { font-size: 10.5pt; font-weight: 800; color: var(--accent); white-space: nowrap; }
+.item-desc { font-size: 8.5pt; opacity: .75; margin-block-start: .8mm; line-height: 1.45; }
+.item-tags { margin-block-start: .8mm; }
+.tag { display: inline-block; font-size: 6.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); border-radius: 2mm; padding: .5mm 2mm; margin-inline-end: 1.2mm; }
+.item-variants, .item-extras { font-size: 8.5pt; opacity: .8; margin-block-start: .8mm; }
+.menu-footer { text-align: center; font-size: 8.5pt; opacity: .7; margin-block-start: 6mm; }
+.aspect-a4 { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+.aspect-square { --page-w: 210mm; --page-h: 210mm; }
+@media print { html, body { background: none; } .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .category, .item { break-inside: avoid; } }
+@page { margin: 0; }

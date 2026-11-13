@@ -1,0 +1,32 @@
+{
+  "slug": "vip_gold",
+  "starter": "fine_dining",
+  "name": "VIP Gold",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]},
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(180deg,#0c0c0e,#1a1610)",
+    "--ink": "#f4ecd8",
+    "--muted": "#a89c7e",
+    "--card": "linear-gradient(120deg,#a8813c,#e3c477 45%,#caa353 70%,#8f6b2c)",
+    "--btn-bg": "linear-gradient(120deg,#a8813c,#e3c477 45%,#caa353 70%,#8f6b2c)",
+    "--btn-fg": "#14110b",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#caa353",
+    "--accent-ink": "#14110b",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#14110b",
+    "--radius": "999px",
+    "--shadow": "0 4px 14px rgba(202,163,83,.25)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Fraunces',serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

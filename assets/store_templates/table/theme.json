@@ -1,0 +1,498 @@
+{
+  "version": 2,
+  "texts": {
+    "localized": true
+  },
+  "presets": [
+    {
+      "id": "classic",
+      "label": "Classic",
+      "thumb": "assets/store_templates/table/presets/classic.png",
+      "values": {
+        "colors.primary": "#B4331A",
+        "colors.background": "#FAF6F0",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#1F1A17",
+        "colors.accent": "#E8A33D",
+        "colors_dark.primary": "#F07A52",
+        "colors_dark.background": "#141210",
+        "colors_dark.surface": "#1E1B18",
+        "colors_dark.text": "#F6F1EA",
+        "colors_dark.accent": "#F2B65A",
+        "scheme.mode": "light"
+      }
+    },
+    {
+      "id": "app",
+      "label": "App",
+      "thumb": "assets/store_templates/table/presets/app.png",
+      "values": {
+        "colors.primary": "#137A3E",
+        "colors.background": "#F4F6F5",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#121614",
+        "colors.accent": "#FFB02E",
+        "colors_dark.primary": "#3FD463",
+        "colors_dark.background": "#15171A",
+        "colors_dark.surface": "#22262B",
+        "colors_dark.text": "#F4F6F5",
+        "colors_dark.accent": "#FFB02E",
+        "scheme.mode": "dark",
+        "layout.radius": "pill",
+        "layout.header": "compact"
+      }
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery",
+      "thumb": "assets/store_templates/table/presets/delivery.png",
+      "values": {
+        "colors.primary": "#C8361F",
+        "colors.background": "#FFFFFF",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#18181B",
+        "colors.accent": "#FFC233",
+        "colors_dark.primary": "#FF6A4D",
+        "colors_dark.background": "#111113",
+        "colors_dark.surface": "#1C1C1F",
+        "colors_dark.text": "#F7F7F8",
+        "colors_dark.accent": "#FFC233",
+        "scheme.mode": "light",
+        "layout.card": "grid"
+      }
+    },
+    {
+      "id": "pizzeria",
+      "label": "Pizzeria",
+      "thumb": "assets/store_templates/table/presets/pizzeria.png",
+      "values": {
+        "colors.primary": "#B83D0B",
+        "colors.background": "#FBF4E8",
+        "colors.surface": "#FFFDF8",
+        "colors.text": "#2A1E14",
+        "colors.accent": "#2F7D32",
+        "colors_dark.primary": "#FF8A3D",
+        "colors_dark.background": "#1A1714",
+        "colors_dark.surface": "#24201C",
+        "colors_dark.text": "#F6EBDD",
+        "colors_dark.accent": "#6BBF59",
+        "scheme.mode": "dark",
+        "layout.image_ratio": "1:1"
+      }
+    },
+    {
+      "id": "lounge",
+      "label": "Lounge",
+      "thumb": "assets/store_templates/table/presets/lounge.png",
+      "values": {
+        "colors.primary": "#6D2E8C",
+        "colors.background": "#F7F5F9",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#1B1722",
+        "colors.accent": "#B8862B",
+        "colors_dark.primary": "#C79BE0",
+        "colors_dark.background": "#14121A",
+        "colors_dark.surface": "#1E1B26",
+        "colors_dark.text": "#F3F0F7",
+        "colors_dark.accent": "#D9B26A",
+        "scheme.mode": "dark",
+        "layout.density": "comfortable",
+        "layout.card": "compact"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#B4331A"
+        },
+        "colors.background": {
+          "default": "#FAF6F0"
+        },
+        "colors.surface": {
+          "default": "#FFFFFF"
+        },
+        "colors.text": {
+          "default": "#1F1A17"
+        },
+        "colors.accent": {
+          "default": "#E8A33D"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        },
+        "fonts.pair": {
+          "default": "fraunces-jakarta"
+        }
+      }
+    },
+    {
+      "group": "Appearance",
+      "icon": "contrast",
+      "fields": [
+        {
+          "id": "scheme.mode",
+          "type": "select",
+          "label": "Colour scheme",
+          "options": [
+            "light",
+            "dark",
+            "auto"
+          ],
+          "option_labels": {
+            "light": "Light",
+            "dark": "Dark",
+            "auto": "Follow the device"
+          },
+          "default": "auto",
+          "help": "Auto follows the visitor's phone or computer setting."
+        },
+        {
+          "id": "colors_dark.primary",
+          "type": "color",
+          "label": "Brand colour (dark)",
+          "default": "#F07A52",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.background",
+          "type": "color",
+          "label": "Background (dark)",
+          "default": "#141210",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.surface",
+          "type": "color",
+          "label": "Card surface (dark)",
+          "default": "#1E1B18",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.text",
+          "type": "color",
+          "label": "Text colour (dark)",
+          "default": "#F6F1EA",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.accent",
+          "type": "color",
+          "label": "Accent colour (dark)",
+          "default": "#F2B65A",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group": "Layout",
+      "icon": "layout",
+      "fields": [
+        {
+          "id": "layout.card",
+          "type": "select",
+          "label": "Item card",
+          "options": [
+            "list",
+            "grid",
+            "compact"
+          ],
+          "option_labels": {
+            "list": "List",
+            "grid": "Grid",
+            "compact": "Compact (no image)"
+          },
+          "default": "list"
+        },
+        {
+          "id": "layout.image_ratio",
+          "type": "select",
+          "label": "Image shape",
+          "options": [
+            "1:1",
+            "4:3",
+            "16:9",
+            "4:5",
+            "3:4"
+          ],
+          "option_labels": {
+            "1:1": "Square",
+            "4:3": "4:3",
+            "16:9": "16:9",
+            "4:5": "Portrait 4:5",
+            "3:4": "Portrait 3:4"
+          },
+          "default": "1:1"
+        },
+        {
+          "id": "layout.category_nav",
+          "type": "select",
+          "label": "Categories",
+          "options": [
+            "chips",
+            "tabs"
+          ],
+          "option_labels": {
+            "chips": "Chips",
+            "tabs": "Tabs"
+          },
+          "default": "chips"
+        },
+        {
+          "id": "layout.header",
+          "type": "select",
+          "label": "Header",
+          "options": [
+            "cover",
+            "compact"
+          ],
+          "option_labels": {
+            "cover": "Cover image",
+            "compact": "Compact"
+          },
+          "default": "cover"
+        },
+        {
+          "id": "layout.desktop_cart",
+          "type": "select",
+          "label": "Cart on desktop",
+          "options": [
+            "panel",
+            "drawer"
+          ],
+          "option_labels": {
+            "panel": "Side panel",
+            "drawer": "Drawer"
+          },
+          "default": "panel"
+        }
+      ]
+    },
+    {
+      "group": "Content",
+      "icon": "list",
+      "fields": [
+        {
+          "id": "menu.show_descriptions",
+          "type": "toggle",
+          "label": "Show item descriptions",
+          "default": true
+        },
+        {
+          "id": "menu.show_calories",
+          "type": "toggle",
+          "label": "Show calories",
+          "default": true
+        },
+        {
+          "id": "menu.show_allergens",
+          "type": "toggle",
+          "label": "Show allergens",
+          "default": true
+        }
+      ]
+    },
+    {
+      "group": "Texts",
+      "icon": "type",
+      "fields": [
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Hero title",
+          "default": ""
+        },
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Today's specials"
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.enabled": {
+          "default": false
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "header",
+      "label": "Header",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "announcement",
+      "label": "Announcement bar",
+      "default": false,
+      "toggleable": true,
+      "orderable": false
+    },
+    {
+      "id": "order_type",
+      "label": "Order type",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "hero",
+      "label": "Hero",
+      "default": true,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "stories",
+      "label": "Stories",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "offers",
+      "label": "Offers",
+      "default": true,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "search",
+      "label": "Search",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "category_nav",
+      "label": "Categories",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "featured",
+      "label": "Featured",
+      "default": true,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "catalog",
+      "label": "Catalog",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "combos",
+      "label": "Combos",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "reservations",
+      "label": "Reservations",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "custom_blocks",
+      "label": "Custom blocks",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "info",
+      "label": "Store info",
+      "default": true,
+      "toggleable": false,
+      "orderable": true
+    },
+    {
+      "id": "footer",
+      "label": "Footer",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "cart_bar",
+      "label": "Cart bar",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    }
+  ]
+}

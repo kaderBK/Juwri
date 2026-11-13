@@ -1,0 +1,1611 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "retail-demo",
+            "name": "Northgate General Store",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Northgate General Store"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Northgate General Store"
+            },
+            "tagline": "Everyday essentials for home & outdoors",
+            "locale": "ar",
+            "dir": "rtl",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/retail-demo?lang=en"
+                },
+                {
+                    "code": "ar",
+                    "name": "ar",
+                    "url": "/retail-demo?lang=ar"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "retail",
+            "store_type": "retail",
+            "status": {
+                "open": true,
+                "next_change_at": null,
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966500000000",
+                "whatsapp": "966500000000",
+                "address": "King Fahd Rd, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=King%20Fahd%20Rd%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": true
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Northgate General Store — Main",
+                "address": "King Fahd Rd, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "ship",
+                    "label": "عنوان الشحن",
+                    "needs_address": true,
+                    "needs_slot": false
+                },
+                {
+                    "key": "pickup_slot",
+                    "label": "الاستلام",
+                    "needs_address": false,
+                    "needs_slot": true
+                },
+                {
+                    "key": "pickup",
+                    "label": "في المتجر",
+                    "needs_address": false,
+                    "needs_slot": false
+                }
+            ],
+            "selected_order_type": "ship",
+            "table": null,
+            "room": null,
+            "schedule_ahead": true,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": true,
+                "order_types": [
+                    "pickup"
+                ],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "aisle",
+            "settings": {
+                "colors.primary": "#111111",
+                "colors.background": "#FFFFFF",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#111111",
+                "colors.accent": "#C8281B",
+                "layout.radius": "soft",
+                "layout.density": "cozy",
+                "fonts.pair": "inter",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#F5F5F5",
+                "colors_dark.background": "#0C0C0D",
+                "colors_dark.surface": "#161618",
+                "colors_dark.text": "#F5F5F5",
+                "colors_dark.accent": "#FF6B5E",
+                "layout.card": "grid",
+                "layout.image_ratio": "4:5",
+                "layout.category_nav": "chips",
+                "layout.header": "compact",
+                "layout.desktop_cart": "drawer",
+                "menu.show_descriptions": true,
+                "menu.show_calories": false,
+                "menu.show_allergens": false,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "announcement",
+                "order_type",
+                "hero",
+                "search",
+                "category_nav",
+                "featured",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "hero_title": "The new edit",
+                "hero_cta": "Shop now",
+                "featured_title": "New in"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "الطازجة والألبان",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:10}",
+                    "name": "المؤن والوجبات الخفيفة",
+                    "item_ids": [
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}",
+                        "{id:14}",
+                        "{id:15}"
+                    ],
+                    "count": 5
+                },
+                {
+                    "id": "{id:16}",
+                    "name": "المشروبات",
+                    "item_ids": [
+                        "{id:17}",
+                        "{id:18}",
+                        "{id:19}",
+                        "{id:20}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:21}",
+                    "name": "المنزل والمطبخ",
+                    "item_ids": [
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}",
+                        "{id:26}"
+                    ],
+                    "count": 5
+                },
+                {
+                    "id": "{id:27}",
+                    "name": "الإلكترونيات والأجهزة",
+                    "item_ids": [
+                        "{id:28}",
+                        "{id:29}",
+                        "{id:30}",
+                        "{id:31}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:32}",
+                    "name": "الحدائق والهواء الطلق",
+                    "item_ids": [
+                        "{id:33}",
+                        "{id:34}",
+                        "{id:35}",
+                        "{id:36}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:37}",
+                    "name": "المكتب والقرطاسية",
+                    "item_ids": [
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}"
+                    ],
+                    "count": 3
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "موز (١ كجم)",
+                    "url": "/retail-demo?item={id:4}",
+                    "short": "Naturally ripened bananas, sweet and ready to eat.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:2}",
+                        "alt": "موز (١ كجم)"
+                    },
+                    "price": {
+                        "minor": 129,
+                        "currency": "SAR",
+                        "formatted": "1.29 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 152,
+                        "currency": "SAR",
+                        "formatted": "1.52 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "زيت زيتون بكر ممتاز ٥٠٠ مل",
+                    "url": "/retail-demo?item={id:11}",
+                    "short": "Cold-pressed extra virgin olive oil, rich and fruity.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:3}",
+                        "alt": "زيت زيتون بكر ممتاز ٥٠٠ مل"
+                    },
+                    "price": {
+                        "minor": 699,
+                        "currency": "SAR",
+                        "formatted": "6.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 822,
+                        "currency": "SAR",
+                        "formatted": "8.22 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Harvest"
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "مياه غازية ١ لتر",
+                    "url": "/retail-demo?item={id:17}",
+                    "short": "Naturally carbonated spring water, crisp and refreshing.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:4}",
+                        "alt": "مياه غازية ١ لتر"
+                    },
+                    "price": {
+                        "minor": 119,
+                        "currency": "SAR",
+                        "formatted": "1.19 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 140,
+                        "currency": "SAR",
+                        "formatted": "1.40 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Pure Springs"
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "طقم علب تخزين سيراميك",
+                    "url": "/retail-demo?item={id:22}",
+                    "short": "Set of 3 airtight ceramic canisters for pantry staples, stackable lids.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:5}",
+                        "alt": "طقم علب تخزين سيراميك"
+                    },
+                    "from_price": {
+                        "minor": 2499,
+                        "currency": "SAR",
+                        "formatted": "24.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2940,
+                        "currency": "SAR",
+                        "formatted": "29.40 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Norden Home"
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "سماعات أذن لاسلكية",
+                    "url": "/retail-demo?item={id:28}",
+                    "short": "Bluetooth 5.3 earbuds, 28h total battery with case, IPX4.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:6}",
+                        "alt": "سماعات أذن لاسلكية"
+                    },
+                    "from_price": {
+                        "minor": 4999,
+                        "currency": "SAR",
+                        "formatted": "49.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 5881,
+                        "currency": "SAR",
+                        "formatted": "58.81 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "ByteForge Electronics"
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "زجاجة ماء معزولة ١ لتر",
+                    "url": "/retail-demo?item={id:33}",
+                    "short": "Double-wall stainless steel, keeps drinks cold 24h / hot 12h.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:7}",
+                        "alt": "زجاجة ماء معزولة ١ لتر"
+                    },
+                    "from_price": {
+                        "minor": 1999,
+                        "currency": "SAR",
+                        "formatted": "19.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2352,
+                        "currency": "SAR",
+                        "formatted": "23.52 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "TrailPeak Outdoors"
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "دفتر جلدي مقاس A5",
+                    "url": "/retail-demo?item={id:38}",
+                    "short": "Refillable faux-leather cover, 192 dotted pages.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:8}",
+                        "alt": "دفتر جلدي مقاس A5"
+                    },
+                    "from_price": {
+                        "minor": 1299,
+                        "currency": "SAR",
+                        "formatted": "12.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1528,
+                        "currency": "SAR",
+                        "formatted": "15.28 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "InkWell Office"
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "أفوكادو هاس (٤ حبات)",
+                    "url": "/retail-demo?item={id:5}",
+                    "short": "Creamy Hass avocados, perfect for guacamole or toast.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:9}",
+                        "alt": "أفوكادو هاس (٤ حبات)"
+                    },
+                    "price": {
+                        "minor": 399,
+                        "currency": "SAR",
+                        "formatted": "3.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 499,
+                        "currency": "SAR",
+                        "formatted": "4.99 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "مكرونة بيني ٥٠٠ جم",
+                    "url": "/retail-demo?item={id:12}",
+                    "short": "Durum wheat semolina penne, cooks al dente in 11 minutes.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:10}",
+                        "alt": "مكرونة بيني ٥٠٠ جم"
+                    },
+                    "price": {
+                        "minor": 179,
+                        "currency": "SAR",
+                        "formatted": "1.79 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 224,
+                        "currency": "SAR",
+                        "formatted": "2.24 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Harvest"
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "قهوة كولد برو ٣٥٠ مل",
+                    "url": "/retail-demo?item={id:18}",
+                    "short": "Slow-steeped cold brew coffee, smooth and low-acid.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:11}",
+                        "alt": "قهوة كولد برو ٣٥٠ مل"
+                    },
+                    "price": {
+                        "minor": 379,
+                        "currency": "SAR",
+                        "formatted": "3.79 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 474,
+                        "currency": "SAR",
+                        "formatted": "4.74 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Pure Springs"
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "لوح تقطيع خيزران",
+                    "url": "/retail-demo?item={id:23}",
+                    "short": "Reversible bamboo board with juice groove, naturally antibacterial.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:12}",
+                        "alt": "لوح تقطيع خيزران"
+                    },
+                    "from_price": {
+                        "minor": 1850,
+                        "currency": "SAR",
+                        "formatted": "18.50 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 2313,
+                        "currency": "SAR",
+                        "formatted": "23.13 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Norden Home"
+                },
+                "{id:29}": {
+                    "id": "{id:29}",
+                    "name": "بطارية متنقلة سريعة الشحن ١٠٠٠٠ ملي أمبير",
+                    "url": "/retail-demo?item={id:29}",
+                    "short": "20W USB-C fast charging, fits in a pocket, dual-port output.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:13}",
+                        "alt": "بطارية متنقلة سريعة الشحن ١٠٠٠٠ ملي أمبير"
+                    },
+                    "price": {
+                        "minor": 2999,
+                        "currency": "SAR",
+                        "formatted": "29.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 3749,
+                        "currency": "SAR",
+                        "formatted": "37.49 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "ByteForge Electronics"
+                },
+                "{id:34}": {
+                    "id": "{id:34}",
+                    "name": "كرسي تخييم قابل للطي",
+                    "url": "/retail-demo?item={id:34}",
+                    "short": "Lightweight aluminum frame, carry bag included, 120kg rated.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:14}",
+                        "alt": "كرسي تخييم قابل للطي"
+                    },
+                    "from_price": {
+                        "minor": 3999,
+                        "currency": "SAR",
+                        "formatted": "39.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 4999,
+                        "currency": "SAR",
+                        "formatted": "49.99 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "TrailPeak Outdoors"
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "طقم أقلام جل (١٢ قطعة)",
+                    "url": "/retail-demo?item={id:39}",
+                    "short": "Smooth-writing gel pens in assorted colors.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:15}",
+                        "alt": "طقم أقلام جل (١٢ قطعة)"
+                    },
+                    "price": {
+                        "minor": 950,
+                        "currency": "SAR",
+                        "formatted": "9.50 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1188,
+                        "currency": "SAR",
+                        "formatted": "11.88 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "InkWell Office"
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "سبانخ بيبي عضوية ١٥٠ جم",
+                    "url": "/retail-demo?item={id:6}",
+                    "short": "Pre-washed organic baby spinach leaves, ready for salads or cooking.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:16}",
+                        "alt": "سبانخ بيبي عضوية ١٥٠ جم"
+                    },
+                    "price": {
+                        "minor": 249,
+                        "currency": "SAR",
+                        "formatted": "2.49 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "أرز بسمتي",
+                    "url": "/retail-demo?item={id:13}",
+                    "short": "Aromatic long-grain basmati rice, aged for extra fluffiness.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:17}",
+                        "alt": "أرز بسمتي"
+                    },
+                    "from_price": {
+                        "minor": 549,
+                        "currency": "SAR",
+                        "formatted": "5.49 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Harvest"
+                },
+                "{id:19}": {
+                    "id": "{id:19}",
+                    "name": "عصير برتقال بدون لب ١ لتر",
+                    "url": "/retail-demo?item={id:19}",
+                    "short": "100% pure-squeezed orange juice, no pulp.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:18}",
+                        "alt": "عصير برتقال بدون لب ١ لتر"
+                    },
+                    "price": {
+                        "minor": 299,
+                        "currency": "SAR",
+                        "formatted": "2.99 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Pure Springs"
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "بطانية نوردیك",
+                    "url": "/retail-demo?item={id:24}",
+                    "short": "Woven cotton-blend throw, 130x170cm, machine washable.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:19}",
+                        "alt": "بطانية نوردیك"
+                    },
+                    "from_price": {
+                        "minor": 3200,
+                        "currency": "SAR",
+                        "formatted": "32.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Norden Home"
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "مكبر صوت بلوتوث ميني",
+                    "url": "/retail-demo?item={id:30}",
+                    "short": "Palm-sized speaker, 12h playtime, splash resistant.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:20}",
+                        "alt": "مكبر صوت بلوتوث ميني"
+                    },
+                    "from_price": {
+                        "minor": 3499,
+                        "currency": "SAR",
+                        "formatted": "34.99 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "ByteForge Electronics"
+                },
+                "{id:35}": {
+                    "id": "{id:35}",
+                    "name": "فانوس حديقة بالطاقة الشمسية",
+                    "url": "/retail-demo?item={id:35}",
+                    "short": "Weatherproof solar-charging LED lantern, warm white glow.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:21}",
+                        "alt": "فانوس حديقة بالطاقة الشمسية"
+                    },
+                    "price": {
+                        "minor": 1450,
+                        "currency": "SAR",
+                        "formatted": "14.50 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "TrailPeak Outdoors"
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "منظم مكتب",
+                    "url": "/retail-demo?item={id:40}",
+                    "short": "Multi-compartment mesh-steel organizer for pens, phone and cards.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:22}",
+                        "alt": "منظم مكتب"
+                    },
+                    "from_price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "22.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "InkWell Office"
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "طماطم عنقودية (١ كجم)",
+                    "url": "/retail-demo?item={id:7}",
+                    "short": "Juicy tomatoes ripened on the vine for full flavor.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:23}",
+                        "alt": "طماطم عنقودية (١ كجم)"
+                    },
+                    "price": {
+                        "minor": 229,
+                        "currency": "SAR",
+                        "formatted": "2.29 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 327,
+                        "currency": "SAR",
+                        "formatted": "3.27 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                },
+                "{id:14}": {
+                    "id": "{id:14}",
+                    "name": "زبدة الفول السوداني ٣٤٠ جم",
+                    "url": "/retail-demo?item={id:14}",
+                    "short": "Smooth and creamy peanut butter, no added sugar.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:24}",
+                        "alt": "زبدة الفول السوداني ٣٤٠ جم"
+                    },
+                    "price": {
+                        "minor": 329,
+                        "currency": "SAR",
+                        "formatted": "3.29 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 470,
+                        "currency": "SAR",
+                        "formatted": "4.70 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Harvest"
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "أكياس شاي أخضر بالليمون (٢٠ كيس)",
+                    "url": "/retail-demo?item={id:20}",
+                    "short": "Natural green tea with lemon, 20 individually wrapped bags.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:25}",
+                        "alt": "أكياس شاي أخضر بالليمون (٢٠ كيس)"
+                    },
+                    "price": {
+                        "minor": 349,
+                        "currency": "SAR",
+                        "formatted": "3.49 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 499,
+                        "currency": "SAR",
+                        "formatted": "4.99 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Pure Springs"
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "طقم أكواب حجرية (٤ قطع)",
+                    "url": "/retail-demo?item={id:25}",
+                    "short": "Matte-glaze stoneware mugs, 350ml, dishwasher and microwave safe.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:26}",
+                        "alt": "طقم أكواب حجرية (٤ قطع)"
+                    },
+                    "from_price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "21.00 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 3000,
+                        "currency": "SAR",
+                        "formatted": "30.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Norden Home"
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "كابل شحن USB-C ٢ متر",
+                    "url": "/retail-demo?item={id:31}",
+                    "short": "Braided USB-C charging cable, 2 meters, fast-charge compatible.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:27}",
+                        "alt": "كابل شحن USB-C ٢ متر"
+                    },
+                    "price": {
+                        "minor": 999,
+                        "currency": "SAR",
+                        "formatted": "9.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1427,
+                        "currency": "SAR",
+                        "formatted": "14.27 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "ByteForge Electronics"
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "رأس رش لخرطوم الحديقة",
+                    "url": "/retail-demo?item={id:36}",
+                    "short": "Adjustable 8-pattern hose nozzle sprayer for garden and car washing.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:28}",
+                        "alt": "رأس رش لخرطوم الحديقة"
+                    },
+                    "price": {
+                        "minor": 1299,
+                        "currency": "SAR",
+                        "formatted": "12.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 1856,
+                        "currency": "SAR",
+                        "formatted": "18.56 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "TrailPeak Outdoors"
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "حليب كامل الدسم",
+                    "url": "/retail-demo?item={id:8}",
+                    "short": "Fresh pasteurized whole milk, rich and creamy.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:29}",
+                        "alt": "حليب كامل الدسم"
+                    },
+                    "from_price": {
+                        "minor": 189,
+                        "currency": "SAR",
+                        "formatted": "1.89 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 230,
+                        "currency": "SAR",
+                        "formatted": "2.30 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "رقائق بطاطس بملح البحر ١٥٠ جم",
+                    "url": "/retail-demo?item={id:15}",
+                    "short": "Thick-cut kettle chips, cooked in small batches with sea salt.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:30}",
+                        "alt": "رقائق بطاطس بملح البحر ١٥٠ جم"
+                    },
+                    "price": {
+                        "minor": 219,
+                        "currency": "SAR",
+                        "formatted": "2.19 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 267,
+                        "currency": "SAR",
+                        "formatted": "2.67 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Golden Harvest"
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "مقلاة غير لاصقة ٢٨ سم",
+                    "url": "/retail-demo?item={id:26}",
+                    "short": "Aluminum frying pan with durable non-stick coating, oven-safe to 180°C.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:31}",
+                        "alt": "مقلاة غير لاصقة ٢٨ سم"
+                    },
+                    "price": {
+                        "minor": 2799,
+                        "currency": "SAR",
+                        "formatted": "27.99 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 3413,
+                        "currency": "SAR",
+                        "formatted": "34.13 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Norden Home"
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "بيض بلدي (١٢ حبة)",
+                    "url": "/retail-demo?item={id:9}",
+                    "short": "Free-range dozen eggs from pasture-raised hens.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:32}",
+                        "alt": "بيض بلدي (١٢ حبة)"
+                    },
+                    "price": {
+                        "minor": 349,
+                        "currency": "SAR",
+                        "formatted": "3.49 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "brand": "Northgate Farms"
+                }
+            },
+            "total": 31
+        },
+        "features": {
+            "featured": [
+                "{id:4}",
+                "{id:22}",
+                "{id:28}",
+                "{id:33}",
+                "{id:8}",
+                "{id:15}"
+            ],
+            "wishlist": true
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/retail-demo",
+            "cart": "/retail-demo#cart",
+            "quote": "/retail-demo/retail/quote",
+            "track": "/retail-demo#track",
+            "place": "/retail-demo/retail/order",
+            "coupon": "/{store}/coupon",
+            "slots": "/{store}/schedule-slots",
+            "order_lookup": "/{store}/order-lookup",
+            "wishlist": "/retail-demo/wishlist",
+            "stock_alerts": "/retail-demo/stock-alerts",
+            "shipping_quote": "/retail-demo/retail/shipping-quote"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "after"
+            }
+        },
+        "i18n": {
+            "add_more": "أضف المزيد",
+            "nothing_in_your_order_yet": "لا شيء في طلبك بعد",
+            "total_to_pay": "المبلغ المستحق",
+            "store_closed": "المتجر مغلق",
+            "ordering_is_paused": "الطلب متوقف مؤقتًا",
+            "waiting_for_connection": "في انتظار الاتصال",
+            "youre_offline": "أنت غير متصل بالإنترنت",
+            "prices_changed_while_you_were_offline": "تغيّرت الأسعار أثناء عدم اتصالك بالإنترنت.",
+            "please_confirm_your_order_again": "يرجى تأكيد طلبك مرة أخرى",
+            "couldnt_update_total_retry": "تعذّر تحديث الإجمالي — أعد المحاولة",
+            "sold_out": "نفد من المخزون",
+            "free": "مجاني",
+            "added_to_your_order": "تمت الإضافة إلى طلبك",
+            "removed_from_your_order": "تمت إزالته من طلبك",
+            "sending_your_order": "جارٍ إرسال طلبك",
+            "needs_your_confirmation": "يحتاج إلى تأكيدك",
+            "order_placed": "تم تقديم الطلب",
+            "order_expired": "انتهت صلاحية الطلب",
+            "could_not_place_the_order": "تعذّر إرسال الطلب",
+            "connect_to_place_this_order": "اتصل بالإنترنت لإتمام الطلب",
+            "offline_prices_may_change": "بدون اتصال: قد تتغيّر الأسعار",
+            "some_items_are_no_longer_available": "بعض العناصر لم تعد متوفرة",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "تمت إزالة الطلبات المنتظرة لأن الطلب دون اتصال تم إيقافه.",
+            "still_there_starting_over_in_n_seconds": "هل ما زلت هنا؟ سنبدأ من جديد خلال :n ثانية",
+            "incorrect_pin": "رمز PIN غير صحيح",
+            "too_many_attempts_wait_a_moment": "محاولات كثيرة. انتظر قليلاً.",
+            "device_setup_pin": "رمز إعداد الجهاز PIN",
+            "enter_the_staff_pin": "أدخل رمز الموظفين",
+            "count_of_total_digits_entered": "تم إدخال :count من :total أرقام",
+            "starting_over_in_seconds_s": "إعادة البدء خلال :seconds ث",
+            "continue": "متابعة",
+            "exit_kiosk": "إنهاء وضع الطلب الذاتي",
+            "connection_lost_pay_at_the_counter_to_order_now": "انقطع الاتصال — ادفع عند الكاونتر لتطلب الآن",
+            "ordering_is_paused_until_the_connection_returns": "الطلب متوقف حتى يعود الاتصال"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "موز (١ كجم)",
+                    "brand": "Northgate Farms",
+                    "description": "Naturally ripened bananas, sweet and ready to eat.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:2}",
+                            "alt": "موز (١ كجم)"
+                        },
+                        {
+                            "src": "{app}/storage/menu/{file:2}",
+                            "alt": "موز (١ كجم)"
+                        }
+                    ],
+                    "price": {
+                        "minor": 129,
+                        "currency": "SAR",
+                        "formatted": "1.29 ⁨⃁⁩"
+                    },
+                    "compare_at": {
+                        "minor": 152,
+                        "currency": "SAR",
+                        "formatted": "1.52 ⁨⃁⁩"
+                    },
+                    "saving_label": "وفّر 0.23 ⁨⃁⁩",
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        },
+                        {
+                            "kind": "sale",
+                            "label": "تخفيضات"
+                        }
+                    ],
+                    "option_groups": [],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "add_label": "إضافة · 1.29 ⁨⃁⁩"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "موز (١ كجم)",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 129,
+                                "currency": "SAR",
+                                "formatted": "1.29 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:2}",
+                                "alt": "موز (١ كجم)"
+                            },
+                            "compare_at": {
+                                "minor": 152,
+                                "currency": "SAR",
+                                "formatted": "1.52 ⁨⃁⁩"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "المجموع الفرعي",
+                            "amount": {
+                                "minor": 129,
+                                "currency": "SAR",
+                                "formatted": "1.29 ⁨⃁⁩"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "saving",
+                            "label": "وفّر",
+                            "amount": {
+                                "minor": 23,
+                                "currency": "SAR",
+                                "formatted": "0.23 ⁨⃁⁩"
+                            },
+                            "kind": "discount",
+                            "muted": true,
+                            "informational": true
+                        }
+                    ],
+                    "total": {
+                        "minor": 129,
+                        "currency": "SAR",
+                        "formatted": "1.29 ⁨⃁⁩"
+                    },
+                    "total_label": "الإجمالي",
+                    "cta_label": "الانتقال إلى الدفع · 1.29 ⁨⃁⁩"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الاستلام",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        },
+                        {
+                            "id": "email",
+                            "label": "البريد الإلكتروني (اختياري)",
+                            "type": "email",
+                            "dir": "ltr"
+                        },
+                        {
+                            "id": "country",
+                            "label": "رمز الدولة",
+                            "type": "text",
+                            "dir": "ltr",
+                            "required": true,
+                            "help": "حرفان، مثل SA"
+                        },
+                        {
+                            "id": "address",
+                            "label": "عنوان الشارع",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "city",
+                            "label": "المدينة",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "region",
+                            "label": "المنطقة",
+                            "type": "text"
+                        },
+                        {
+                            "id": "postal_code",
+                            "label": "الرمز البريدي (Postcode)",
+                            "type": "text",
+                            "dir": "ltr"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "موز (١ كجم)",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 129,
+                                    "currency": "SAR",
+                                    "formatted": "1.29 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:2}",
+                                    "alt": "موز (١ كجم)"
+                                },
+                                "compare_at": {
+                                    "minor": 152,
+                                    "currency": "SAR",
+                                    "formatted": "1.52 ⁨⃁⁩"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 129,
+                                    "currency": "SAR",
+                                    "formatted": "1.29 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "saving",
+                                "label": "وفّر",
+                                "amount": {
+                                    "minor": 23,
+                                    "currency": "SAR",
+                                    "formatted": "0.23 ⁨⃁⁩"
+                                },
+                                "kind": "discount",
+                                "muted": true,
+                                "informational": true
+                            }
+                        ],
+                        "total": {
+                            "minor": 129,
+                            "currency": "SAR",
+                            "formatted": "1.29 ⁨⃁⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · 1.29 ⁨⃁⁩"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/retail-demo",
+                "cart": "/retail-demo#cart",
+                "quote": "/retail-demo/retail/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/retail-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "wishlist": "/retail-demo/wishlist",
+                "stock_alerts": "/retail-demo/stock-alerts",
+                "shipping_quote": "/retail-demo/retail/shipping-quote"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "تم تقديم الطلب",
+                    "heading": "الطلب رقم {order_no}",
+                    "steps": [
+                        {
+                            "label": "تم تقديم الطلب",
+                            "sub": "12:00 م",
+                            "state": "current"
+                        },
+                        {
+                            "label": "جار التحضير",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "تم الشحن",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "تم التسليم",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "موز (١ كجم)",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 129,
+                                    "currency": "SAR",
+                                    "formatted": "1.29 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:2}",
+                                    "alt": "موز (١ كجم)"
+                                },
+                                "compare_at": {
+                                    "minor": 152,
+                                    "currency": "SAR",
+                                    "formatted": "1.52 ⁨⃁⁩"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 129,
+                                    "currency": "SAR",
+                                    "formatted": "1.29 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "saving",
+                                "label": "وفّر",
+                                "amount": {
+                                    "minor": 23,
+                                    "currency": "SAR",
+                                    "formatted": "0.23 ⁨⃁⁩"
+                                },
+                                "kind": "discount",
+                                "muted": true,
+                                "informational": true
+                            }
+                        ],
+                        "total": {
+                            "minor": 129,
+                            "currency": "SAR",
+                            "formatted": "1.29 ⁨⃁⁩"
+                        },
+                        "total_label": "الإجمالي · الدفع عند الكاونتر"
+                    },
+                    "paid_label": "الدفع عند الكاونتر",
+                    "actions": [
+                        {
+                            "label": "اتصل بالمتجر",
+                            "url": "tel:966500000000",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "واتساب",
+                            "url": "https://wa.me/966500000000",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ]
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "pickup_slot",
+                        "label": "الاستلام",
+                        "needs_address": false,
+                        "needs_slot": true
+                    },
+                    {
+                        "key": "pickup",
+                        "label": "في المتجر",
+                        "needs_address": false,
+                        "needs_slot": false
+                    }
+                ],
+                "selected_order_type": "pickup_slot",
+                "table": null,
+                "room": null,
+                "schedule_ahead": true,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "pickup_slot",
+                        "pickup"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": true,
+                    "order_types": [
+                        "pickup"
+                    ],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/retail-demo",
+                "cart": "/retail-demo#cart",
+                "quote": "/retail-demo/retail/quote",
+                "track": "/retail-demo#track",
+                "place": "/retail-demo/retail/order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/retail-demo/kiosk/reset",
+                "kiosk_start": "/retail-demo/kiosk",
+                "kiosk_exit": "/retail-demo/kiosk/exit",
+                "kiosk_setup": "/retail-demo/kiosk/setup",
+                "wishlist": "/retail-demo/wishlist",
+                "stock_alerts": "/retail-demo/stock-alerts",
+                "shipping_quote": "/retail-demo/retail/shipping-quote"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "retail-demo",
+                "name": "Northgate General Store",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Northgate General Store"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Northgate General Store"
+                },
+                "tagline": "Everyday essentials for home & outdoors",
+                "locale": "ar",
+                "dir": "rtl",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/retail-demo?lang=en"
+                    },
+                    {
+                        "code": "ar",
+                        "name": "ar",
+                        "url": "/retail-demo?lang=ar"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "retail",
+                "store_type": "retail",
+                "status": {
+                    "open": false,
+                    "label": "الطلب متوقف مؤقتًا",
+                    "next_change_at": null,
+                    "paused_reason": "الطلب متوقف مؤقتًا"
+                },
+                "contact": {
+                    "phone": "966500000000",
+                    "whatsapp": "966500000000",
+                    "address": "King Fahd Rd, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=King%20Fahd%20Rd%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": true
+            }
+        }
+    }
+}

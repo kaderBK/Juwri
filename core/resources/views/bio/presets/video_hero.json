@@ -1,0 +1,27 @@
+{
+  "slug": "video_hero",
+  "starter": "social_grid",
+  "name": "Video Hero",
+  "family": "photo_hero",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#0c0c0e",
+    "--ink": "#ffffff",
+    "--muted": "#c8c8d0",
+    "--card": "rgba(255,255,255,.1)",
+    "--btn-bg": "rgba(255,255,255,.1)",
+    "--btn-fg": "#ffffff",
+    "--btn-border": "rgba(255,255,255,.22)",
+    "--accent": "#ff5c1c",
+    "--accent-ink": "#ffffff",
+    "--icon-fg": "#ffffff",
+    "--radius": "999px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

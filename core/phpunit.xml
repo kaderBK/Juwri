@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         recordTestRunHistory="false"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Architecture">
+            <directory suffix="Test.php">./tests/Architecture</directory>
+        </testsuite>
+        <!-- P1-18 part 3: Pest browser tests (Playwright Chromium); skip themselves when Playwright is not installed. -->
+        <testsuite name="Browser">
+            <directory suffix="Test.php">./tests/Browser</directory>
+        </testsuite>
+        <testsuite name="Modules">
+            <directory suffix="Test.php">./tests/Modules</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+    </source>
+    <php>
+        <!-- The full feature suite accumulates past PHP's 256M CLI default near the
+             end of the run; give the runner headroom. Raised 256M -> 512M at ~2200
+             tests, 512M -> 1G at ~4070 (FIX-6), where CI began dying with "Allowed
+             memory size of 536870912 bytes exhausted" while the same suite still
+             passed locally. Bump this when the suite grows, not the test count down. -->
+        <ini name="memory_limit" value="2G"/>
+        <env name="APP_ENV" value="testing"/>
+        <env name="JUWRI_THEME_ALIASES" value="false"/>
+        <env name="STOREFRONT_CATALOG_CACHE_TTL" value="0" force="true"/>
+        <env name="APP_KEY" value="base64:RZnTlGnNvFoELmF4kGb5asldVogAkaAW/AAMA0v7C5c="/>
+        <env name="INDEXNOW_KEY" value="juwritestindexnowkey00000000000"/>
+        <!-- SEO suite (hreflang/sitemap/redirect) is written for the deployed env:
+             ar as the unprefixed default locale + https URLs. Pin both here so CI
+             matches; .env.example (en/http) otherwise inverts those assertions. -->
+        <env name="DEFAULT_LANGUAGE" value="ar" force="true"/>
+        <env name="APP_URL" value="https://localhost" force="true"/>
+        <!-- Dates in tests assume the app default (UTC); a developer .env with
+             APP_TIMEZONE set (e.g. Asia/Qatar) must not leak in. -->
+        <env name="APP_TIMEZONE" value="UTC" force="true"/>
+        <env name="LOG_CHANNEL" value="null"/>
+        <!-- WI-M12: stays false ON PURPOSE. Flipping it to true does NOT give the suite
+             production's view context, it silently REPLACES every test's fixture:
+             View::gatherData() is array_merge(shared, data) and a composer's $view->with()
+             lands in `data`, so composer output beats view()->share() - 200+ files' seeded
+             settings would be overwritten by an empty options table. Use
+             TestCase::shareLayoutGlobals() for the production-shaped fixture, or
+             TestCase::bootRealViewComposers() to render against the real composers. -->
+        <env name="APP_INSTALLED" value="false"/>
+        <env name="THEME_NAME" value="juwri"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <!-- A1: admin step-up is exercised by its own test (config override); off for the rest of the suite -->
+        <env name="ADMIN_STEP_UP" value="false"/>
+        <env name="ADMIN_IDLE_TIMEOUT" value="0"/>
+        <!-- P1-17: Laravel Pulse is off in the suite (no recording, no extra writes); PulseTest turns pieces on itself. -->
+        <env name="PULSE_ENABLED" value="false" force="true"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="DB_FOREIGN_KEYS" value="true"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <!-- Browser-e2e stubs must NEVER arm under PHPUnit: the runner sets E2E_STUBS
+             via the shell/lane .env, and a worktree whose .env carries E2E_STUBS=1
+             would otherwise leak the AI/gateway/SMS stubs into the real-provider unit
+             tests (E2eStubServiceProvider::armed()). Force it off here, unconditionally. -->
+        <!-- Phase 4 item 18: the suite uses fake provider TEST keys (sk_test_…); tests of the flag set it off themselves -->
+        <env name="PAYMENTS_SANDBOX_ENABLED" value="true" force="true"/>
+        <env name="E2E_STUBS" value="0" force="true"/>
+        <env name="E2E_STUB_GATEWAY_FAIL" value="0" force="true"/>
+    </php>
+</phpunit>

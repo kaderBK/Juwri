@@ -1,0 +1,53 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Custom blocks (owner/marketing/custom-blocks/index.blade.php) — a composition of
+ * the owner UI kit: cards, list rows, pills, buttons, fields and sheets. Kit
+ * tokens (--ui-*) and logical properties only (dark mode + Arabic for free).
+ */
+
+.cb-page { display: flex; flex-direction: column; gap: var(--ui-space-4); }
+
+/* Store switcher (only when the owner has more than one store). */
+.cb-store { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ui-space-2); }
+.cb-store__control { flex: 0 1 300px; min-inline-size: 0; min-block-size: 44px; padding-inline: 12px; }
+.cb-store__control select { padding-block: 8px; font-size: var(--ui-fs-label); font-weight: 600; }
+.cb-store__icon { flex-shrink: 0; color: var(--ui-ink-3); }
+
+/* Blocks list: kit rows, flush inside the card, divided by hairlines. */
+.cb-blocks .ui-card__head { padding-block-end: var(--ui-space-3); margin-block-end: 0; }
+.cb-list { border: 0; border-block-start: 1px solid var(--ui-hair); border-radius: 0; }
+.cb-row { padding-inline: var(--ui-space-5); }
+.cb-row__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--ui-space-2); color: var(--ui-ink); }
+.cb-row__actions form { display: contents; }
+.cb-blocks > .ui-empty { padding-block: var(--ui-space-8); }
+
+/* New block form: kit fields on a two-column grid from tablets up. */
+.cb-new__form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ui-space-4); }
+.cb-new__actions { display: flex; justify-content: flex-start; }
+@media (min-width: 768px) {
+  .cb-new__form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cb-new__actions { grid-column: 1 / -1; }
+}
+
+/* The kit field control draws the focus ring; .ui-scope's generic outline would
+   add a second box around the input inside it. */
+.cb-page .ui-field__control :focus-visible { outline: 0; }
+
+/* Settings sheet: delete sits apart from Cancel / Save. */
+.cb-sheet__delete { margin-inline-end: auto; }
+
+@media (max-width: 767.98px) {
+  /* Phones: the actions drop under the block name instead of squeezing it. */
+  .cb-row { flex-wrap: wrap; row-gap: var(--ui-space-2); padding-inline: var(--ui-space-4); }
+  .cb-row .ui-row__body { flex: 1 1 calc(100% - 60px); }
+  .cb-row .ui-row__trail { flex: 1 1 100%; }
+  .cb-row__actions { flex: 1 1 auto; justify-content: flex-start; }
+  .cb-row__actions { gap: 6px; }
+  .cb-row__actions .ui-pill { margin-inline-end: auto; }
+  .cb-row__actions .ui-btn--sm { padding-inline: 10px; }
+  .cb-row__actions .ui-btn__icon { display: none; }
+  .cb-store__control { flex: 1 1 auto; }
+  .cb-sheet__delete { margin-inline-end: 0; }
+}

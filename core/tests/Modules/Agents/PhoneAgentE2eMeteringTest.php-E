@@ -1,0 +1,470 @@
+<?php
+
+namespace Tests\Modules\Agents;
+
+use App\Models\MenuCategory;
+use App\Models\Order;
+use App\Services\KdsService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Illuminate\Testing\TestResponse;
+use Juwri\Core\Models\Credential;
+use Juwri\Core\Models\Store;
+use Juwri\Core\Models\User;
+use Juwri\Modules\Agents\Models\AgentConversation;
+use Juwri\Modules\Agents\Models\AgentMessage;
+use Juwri\Modules\Agents\Models\CallLog;
+use Juwri\Modules\Agents\Models\PhoneLine;
+use Juwri\Modules\Agents\Services\Telephony\VoiceCostLedger;
+use Juwri\Modules\Agents\Services\Telephony\VoiceSession;
+use Juwri\Modules\Ai\Services\AiService;
+use Juwri\Modules\Menu\Models\Menu;
+use Juwri\Modules\Messaging\Contracts\Sms;
+use Juwri\Modules\Messaging\Models\MessageCost;
+use Juwri\Modules\Ordering\Contracts\HostedPayments;
+use Juwri\Modules\Ordering\Http\Controllers\User\PaymentController;
+use Juwri\Modules\Ordering\Services\Payments\HostedOrderPayments;
+use Juwri\Modules\Payments\Models\Transaction;
+use Tests\Support\TestPlans;
+use Tests\TestCase;
+
+/**
+ * P6-09 V-21: the phone-agent E2E metering journeys, driven with the suite's usual
+ * fakes (scripted AiService, recording Sms, real HostedOrderPayments::open, Fake
+ * telephony frames). One test per journey:
+ *
+ *  1. A full ordering call finalised by the provider's SIGNED status webhook writes
+ *     exactly one `message_costs` voice row (channel voice, feature phone_agent,
+ *     store-scoped, units = started minutes); a replayed webhook writes nothing more.
+ *     The pay link texted to the caller is the temporary SIGNED `payment.phone` URL
+ *     (OrderPayLink) with a valid signature — not the bare id route — localised via
+ *     VoiceLocale, and the order reaches the kitchen only after the gateway's
+ *     paySuccess funnel.
+ *  2. VoiceCostLedger::monthUsage totals ONLY this store's minutes this calendar
+ *     month at the plan defaults (600 included → $0.20/min overage); a call from the
+ *     previous month and another store's call are written to the ledger but excluded.
+ *  3. Store isolation of the provider webhooks: a status webhook on store A's line
+ *     carrying store B's call SID is acknowledged but never finalises or costs B's
+ *     call, and the inbound webhook for store B's number signed with store A's token
+ *     is refused 401.
+ *  4. At the monthly minute cap a new call hands off to staff ("put you through"),
+ *     marked `limit` with a `handoff:minute_cap` transcript line, with no AI turn,
+ *     no order and no SMS.
+ */
+class PhoneAgentE2eMeteringTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** The HostedPayments binding under test: real open(), configurable storeCanTake(). */
+    private object $hosted;
+
+    /** The Sms binding under test: records every send. */
+    private object $sms;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // V-21 journeys run the V-15 pay-link flow: a phone order waits for its link payment.
+        config(['voice.require_pay_link' => true]);
+        $this->withoutMiddleware();
+
+        $this->hosted = new class(app(HostedOrderPayments::class)) implements HostedPayments
+        {
+            public bool $canTake = true;
+
+            public function __construct(private HostedOrderPayments $real) {}
+
+            public function storeCanTake(Store $store, float $total): bool
+            {
+                return $this->canTake;
+            }
+
+            public function storeCanHold(Store $store, float $amount): bool
+            {
+                return $this->real->storeCanHold($store, $amount);
+            }
+
+            public function open(Store $store, Order $order, ?string $returnUrl, ?string $ip, ?int $holdMinor = null): Transaction
+            {
+                return $this->real->open($store, $order, $returnUrl, $ip, $holdMinor);
+            }
+
+            public function transactionFor(Order $order): ?Transaction
+            {
+                return $this->real->transactionFor($order);
+            }
+
+            public function isOpen(Order $order): bool
+            {
+                return $this->real->isOpen($order);
+            }
+
+            public function expire(Order $order): bool
+            {
+                return $this->real->expire($order);
+            }
+        };
+        app()->instance(HostedPayments::class, $this->hosted);
+
+        $this->sms = new class implements Sms
+        {
+            /** @var list<array{to: string, message: string, store: int|null, feature: string}> */
+            public array $sent = [];
+
+            public bool $result = true;
+
+            public function send(string $to, string $message, ?int $restaurantId = null, string $feature = 'general', bool $marketing = false): bool
+            {
+                $this->sent[] = ['to' => $to, 'message' => $message, 'store' => $restaurantId, 'feature' => $feature];
+
+                return $this->result;
+            }
+
+            public function normalizePhone(string $phone): string
+            {
+                return (string) preg_replace('/\D+/', '', $phone);
+            }
+        };
+        app()->instance(Sms::class, $this->sms);
+    }
+
+    private function fakeAi(array $script): void
+    {
+        $fake = new class extends AiService
+        {
+            public array $script = [];
+
+            public int $idx = 0;
+
+            public function __construct() {}
+
+            public function json(array $messages, array $options = [], ?callable $validator = null, ?int $userId = null, ?int $restaurantId = null, string $feature = 'general'): array
+            {
+                return $this->script[$this->idx++] ?? ['reply' => 'done'];
+            }
+        };
+        $fake->script = $script;
+        app()->instance(AiService::class, $fake);
+    }
+
+    /** @return array{0: Store, 1: Menu, 2: PhoneLine, 3: User} */
+    private function line(string $provider = 'fake'): array
+    {
+        $plan = TestPlans::create([
+            'name' => 'P'.Str::random(5), 'description' => 'T', 'monthly_price' => 1, 'annual_price' => 1,
+            'lifetime_price' => 1, 'status' => 1,
+            'settings' => ['restaurant_limit' => 999, 'menu_limit' => 999, 'ai_chatbot' => '1'],
+        ]);
+        $owner = User::factory()->create(['group_id' => (string) $plan->id, 'status' => 1, 'email_verified_at' => now()]);
+        $store = Store::create([
+            'user_id' => $owner->id, 'slug' => 'r-'.Str::lower(Str::random(6)), 'color' => '#111',
+            'title' => 'R', 'sub_title' => 'T', 'description' => 'T', 'main_image' => 'd.png',
+            'cover_image' => 'd.png', 'address' => '1', 'phone' => '1', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+        $cat = MenuCategory::create(['store_id' => $store->id, 'name' => 'Mains', 'active' => 1]);
+        $item = Menu::create(['store_id' => $store->id, 'category_id' => $cat->id, 'name' => 'Pizza', 'price' => 12, 'active' => 1]);
+        if ($provider === 'twilio') {
+            Credential::create([
+                'store_id' => $store->id, 'feature' => $provider, 'provider' => $provider,
+                // A distinct auth token per store, so webhook signatures are cross-store testable.
+                'secrets' => ['auth_token' => 'twilio-token-'.Str::random(8)], 'active' => true,
+            ]);
+        }
+        $line = PhoneLine::create([
+            'store_id' => $store->id, 'provider' => $provider, 'number' => '+1555'.rand(1000, 9999),
+            'active' => true, 'orders_enabled' => true,
+        ]);
+
+        return [$store, $item, $line, $owner];
+    }
+
+    private function orderStep(Menu $item): array
+    {
+        return ['tool' => 'create_order', 'args' => ['items' => [['item_id' => $item->id, 'quantity' => 1]], 'type' => 'takeaway', 'customer_name' => 'Caller']];
+    }
+
+    /** V-08: an order takes two turns — read-back (gated create_order), then "yes" (placed). */
+    private function confirmed(Menu $item, string $placed): array
+    {
+        return [$this->orderStep($item), ['reply' => 'Shall I place it?'], $this->orderStep($item), ['reply' => $placed]];
+    }
+
+    private function orderCall(PhoneLine $line, string $sid, string $from): void
+    {
+        VoiceSession::turn($line, $sid, $from, 'one pizza');
+        VoiceSession::turn($line, $sid, $from, 'yes please');
+    }
+
+    private function openLog(Store $store, PhoneLine $line, string $sid): CallLog
+    {
+        return CallLog::create([
+            'store_id' => $store->id, 'phone_line_id' => $line->id, 'provider' => $line->provider,
+            'call_sid' => $sid, 'from_number' => '+15559990000', 'outcome' => 'in_progress',
+            'transcript' => [],
+        ]);
+    }
+
+    /** Twilio signs base64(HMAC-SHA1(fullUrl + sorted params, token)). */
+    private function twilioSig(string $url, array $params, string $token): string
+    {
+        ksort($params);
+        $data = $url;
+        foreach ($params as $k => $v) {
+            $data .= $k.$v;
+        }
+
+        return base64_encode(hash_hmac('sha1', $data, $token, true));
+    }
+
+    /** The store's own Twilio auth token (the one the webhook controller verifies against). */
+    private function token(Store $store): string
+    {
+        return (string) (Credential::for('twilio', (int) $store->id)['auth_token'] ?? '');
+    }
+
+    /** POST a webhook signed as THIS store's line — the exact scheme TwilioTelephonyProvider verifies. */
+    private function signedWebhook(Store $store, string $url, array $params): TestResponse
+    {
+        $sig = $this->twilioSig($url, $params, $this->token($store));
+
+        return $this->call('POST', $url, $params, [], [], ['HTTP_X_TWILIO_SIGNATURE' => $sig]);
+    }
+
+    /** The pay-link URL texted on the (single) recorded SMS. */
+    private function smsUrl(array $sms): string
+    {
+        $this->assertSame(1, preg_match('~https?://\S+~', $sms['message'], $m));
+
+        return $m[0];
+    }
+
+    private function lastToolResult(): array
+    {
+        return (array) json_decode((string) AgentMessage::where('role', 'tool')->latest('id')->value('content'), true);
+    }
+
+    // ---- Journey 1: full ordering call → signed status webhook → one cost row ---
+
+    public function test_full_ordering_call_finalized_by_the_signed_status_webhook_writes_one_cost_row(): void
+    {
+        config([
+            'voice.cost_per_minute' => 0.12,
+            'voice.cost_currency' => 'USD',
+        ]);
+        [$store, $item, $line, $owner] = $this->line('twilio');
+        $sid = 'CA-E2E-1';
+        $this->fakeAi($this->confirmed($item, 'placed'));
+        $this->orderCall($line, $sid, '+15551110000');
+
+        // -- the order: phone · unpaid · hosted, waiting on its signed pay link --
+        $order = Order::where('store_id', $store->id)->firstOrFail();
+        $this->assertSame('phone', $order->source);
+        $this->assertSame('unpaid', $order->status);
+        $this->assertSame('hosted', $order->payment_mode);
+        $this->assertSame(0, (int) $order->is_paid);
+        $this->assertNotNull($order->payment_expires_at);
+        $this->assertTrue($order->payment_expires_at->isFuture());
+        $this->assertTrue($order->payment_expires_at->lessThanOrEqualTo(now()->addMinutes(31)), 'the payment window is ~30 minutes');
+
+        // -- the SMS carries the temporary SIGNED /payment/phone URL, not the bare id route --
+        $this->assertCount(1, $this->sms->sent, 'exactly one SMS');
+        $sms = $this->sms->sent[0];
+        $this->assertSame('+15551110000', $sms['to']);
+        $this->assertSame('phone_pay_link', $sms['feature']);
+        $this->assertStringStartsWith('Pay for your', $sms['message'], 'the pay-link SMS is localised via VoiceLocale');
+        $tx = Transaction::where('transaction_method', 'order')->where('product_id', $order->id)->firstOrFail();
+        $this->assertSame((int) $store->id, (int) $tx->store_id, 'one hosted transaction, store-scoped');
+        $url = $this->smsUrl($sms);
+        $this->assertStringContainsString('/payment/phone/'.$tx->id, $url);
+        $this->assertStringContainsString('signature=', $url);
+        $this->assertStringContainsString('expires=', $url);
+        $this->assertStringNotContainsString(route('payment.index', $tx->id), $url, 'never the guessable bare id route');
+        $this->assertTrue(URL::hasValidSignature(Request::create($url)), 'the texted link is a valid temporary signed URL');
+
+        $out = $this->lastToolResult();
+        $this->assertSame('link_required', $out['payment']);
+        $this->assertTrue($out['pay_link_sent']);
+
+        // -- unpaid, the phone order is kept out of the store KDS rail --
+        $ids = collect($this->actingAs($owner)->getJson(route('kds.poll', ['store_id' => $store->id]))->assertOk()->json())
+            ->pluck('id')->all();
+        $this->assertNotContains($order->id, $ids, 'an unpaid phone order never reaches the kitchen');
+
+        // -- every gateway funnels its confirmation into paySuccess → paid and on the rail --
+        $tx->forceFill(['transaction_gatway' => 'stripe'])->save();
+        ob_start();
+        PaymentController::paySuccess($tx->fresh());
+        ob_get_clean();
+
+        $paid = $order->fresh();
+        $this->assertSame(1, (int) $paid->is_paid);
+        $this->assertNotSame('unpaid', $paid->status, 'paySuccess moves the phone order into the kitchen flow');
+        KdsService::syncOrderStatus((int) $paid->id);
+        $ticket = collect($this->actingAs($owner)->getJson(route('kds.poll', ['store_id' => $store->id]))->assertOk()->json())
+            ->firstWhere('id', $order->id);
+        $this->assertNotNull($ticket, 'the paid phone order appears on the rail');
+        $this->assertSame('new', $ticket['status'], 'queued items derive the kitchen status');
+        $this->assertTrue($ticket['phone_paid']);
+
+        // -- call log + agent conversation are bound to THIS call SID --
+        $log = CallLog::where('call_sid', $sid)->firstOrFail();
+        $this->assertSame('order', $log->outcome, 'ordered call');
+        $this->assertSame((int) $order->id, (int) $log->order_id);
+        $conversation = AgentConversation::where('store_id', $store->id)->where('channel', 'voice')->firstOrFail();
+        $this->assertSame(substr(sha1($sid), 0, 40), $conversation->session_key, 'the conversation is keyed to the call SID');
+        $this->assertSame($sid, ((array) $conversation->meta)['call_sid'] ?? null);
+
+        // -- the signed final status webhook finalizes the call and writes exactly one cost row --
+        $this->signedWebhook($store, route('voice.status', 'twilio'), [
+            'To' => $line->number, 'CallSid' => $sid, 'CallStatus' => 'completed', 'CallDuration' => 61,
+        ])->assertStatus(204);
+
+        $this->assertSame(61, (int) $log->fresh()->duration_seconds);
+        $rows = MessageCost::where('channel', 'voice')->get();
+        $this->assertCount(1, $rows, 'exactly one voice cost row for the whole journey');
+        $row = $rows->first();
+        $this->assertSame('voice', $row->channel);
+        $this->assertSame('service', $row->category);
+        $this->assertSame('phone_agent', $row->feature);
+        $this->assertSame('twilio', $row->provider);
+        $this->assertSame((int) $store->id, (int) $row->store_id);
+        $this->assertSame($sid, $row->provider_ref);
+        $this->assertSame(2, (int) $row->units, '61s → 2 started minutes');
+        $this->assertEqualsWithDelta(24.0, (float) $row->cost_minor, 0.0001, '2 min × $0.12 = 24 minor');
+        $this->assertSame('USD', $row->currency);
+
+        // -- a replayed final webhook writes nothing more --
+        $this->signedWebhook($store, route('voice.status', 'twilio'), [
+            'To' => $line->number, 'CallSid' => $sid, 'CallStatus' => 'completed', 'CallDuration' => 90,
+        ])->assertStatus(204);
+        $this->assertSame(1, MessageCost::where('channel', 'voice')->where('provider_ref', $sid)->count());
+        $this->assertSame(2, (int) MessageCost::where('provider_ref', $sid)->value('units'), 'the billed minutes of the first delivery stand');
+    }
+
+    // ---- Journey 2: monthUsage — only this store's minutes this calendar month ----
+
+    public function test_month_usage_counts_only_this_stores_current_month_minutes(): void
+    {
+        config([
+            'voice.plan_included_minutes' => 600,
+            'voice.overage_per_minute' => 0.20,
+            'voice.plan_price' => 149,
+            'voice.cost_per_minute' => 0.12,
+            'voice.cost_currency' => 'USD',
+        ]);
+        [$store, , $line] = $this->line('fake');
+        [$storeOther, , $lineOther] = $this->line('fake');
+
+        // A fixed "now": the month boundary the ledger compares against is deterministic.
+        $this->travelBack();
+        $now = Carbon::parse('2026-10-15 12:00:00')->utc();
+        Carbon::setTestNow($now);
+
+        // This store, this month: 61s + 3600s + 32340s = 601 billed minutes.
+        $this->openLog($store, $line, 'CA-MONTH-1');
+        VoiceSession::finalize('CA-MONTH-1', 'hangup', 61);
+        $this->openLog($store, $line, 'CA-MONTH-2');
+        VoiceSession::finalize('CA-MONTH-2', 'hangup', 3600);
+        $this->openLog($store, $line, 'CA-MONTH-3');
+        VoiceSession::finalize('CA-MONTH-3', 'hangup', 32340);
+
+        // Last calendar month: its cost row is written but must not count this month.
+        Carbon::setTestNow($now->copy()->subDays(31));
+        $this->openLog($store, $line, 'CA-PAST-1');
+        VoiceSession::finalize('CA-PAST-1', 'hangup', 600);
+
+        // Another store, this month: never affects this store's usage.
+        Carbon::setTestNow($now);
+        $this->openLog($storeOther, $lineOther, 'CA-OTHER-1');
+        VoiceSession::finalize('CA-OTHER-1', 'hangup', 3600);
+
+        $usage = VoiceCostLedger::monthUsage((int) $store->id);
+        $this->assertSame(601, $usage['minutes']);
+        $this->assertSame(600, $usage['included']);
+        $this->assertSame(1, $usage['overage_minutes']);
+        $this->assertEqualsWithDelta(0.20, $usage['overage_charge'], 0.001, '1 overage minute × $0.20');
+        $this->assertEqualsWithDelta(149.0, $usage['plan_price'], 0.001);
+        $this->assertEqualsWithDelta(72.12, $usage['cost'], 0.001, '601 min × $0.12/min');
+        $this->assertSame('USD', $usage['currency']);
+
+        // The excluded rows really live in the ledger, but out of the totals.
+        $this->assertSame(5, MessageCost::where('channel', 'voice')->count(), 'every call wrote its cost row');
+        $this->assertSame(3, MessageCost::where('channel', 'voice')->where('store_id', (int) $store->id)
+            ->where('created_at', '>=', now()->startOfMonth())->count());
+        $this->assertSame(10, (int) MessageCost::where('provider_ref', 'CA-PAST-1')->value('units'));
+        $this->assertTrue(
+            Carbon::parse((string) MessageCost::where('provider_ref', 'CA-PAST-1')->value('created_at'))->lt(now()->startOfMonth()),
+            'last month\'s row is written before this month\'s boundary'
+        );
+        $this->assertSame((int) $storeOther->id, (int) MessageCost::where('provider_ref', 'CA-OTHER-1')->value('store_id'));
+
+        // Never leak the pinned clock into later tests.
+        $this->travelBack();
+    }
+
+    // ---- Journey 3: provider webhooks never cross stores -----------------------
+
+    public function test_status_and_incoming_webhooks_are_cross_store_isolated(): void
+    {
+        [$storeA, , $lineA] = $this->line('twilio');
+        [$storeB, , $lineB] = $this->line('twilio');
+        $this->assertNotSame($this->token($storeA), $this->token($storeB), 'the two stores hold different auth tokens');
+        $this->openLog($storeB, $lineB, 'CA-FOREIGN');
+
+        // A status webhook on store A's line carrying store B's call SID is acknowledged
+        // (a provider delivery is never an error for the caller) but touches nothing.
+        $this->signedWebhook($storeA, route('voice.status', 'twilio'), [
+            'To' => $lineA->number, 'CallSid' => 'CA-FOREIGN', 'CallStatus' => 'completed', 'CallDuration' => 125,
+        ])->assertStatus(204);
+
+        $foreign = CallLog::where('call_sid', 'CA-FOREIGN')->firstOrFail();
+        $this->assertNull($foreign->duration_seconds, 'store A must not finalize store B\'s call');
+        $this->assertSame('in_progress', $foreign->outcome, 'store B\'s call log is unchanged');
+        $this->assertSame(0, MessageCost::where('channel', 'voice')->where('provider_ref', 'CA-FOREIGN')->count(), 'and nothing is costed');
+
+        // The inbound webhook for store B's number signed with store A's token is refused.
+        $incoming = route('voice.incoming', 'twilio');
+        $params = ['To' => $lineB->number, 'From' => '+15559998888', 'CallSid' => 'CA-INTRUDER'];
+        $forged = $this->twilioSig($incoming, $params, $this->token($storeA));
+        $this->call('POST', $incoming, $params, [], [], ['HTTP_X_TWILIO_SIGNATURE' => $forged])->assertStatus(401);
+
+        // Positive control: the same number signed with store B's OWN token is answered,
+        // so the 401 above is a credential mismatch, not an unknown number.
+        $genuine = $this->twilioSig($incoming, $params, $this->token($storeB));
+        $res = $this->call('POST', $incoming, $params, [], [], ['HTTP_X_TWILIO_SIGNATURE' => $genuine]);
+        $res->assertStatus(200);
+        $this->assertStringContainsString('ConversationRelay', $res->getContent());
+    }
+
+    // ---- Journey 4: at the monthly minute cap a new call hands off to staff -----
+
+    public function test_at_the_monthly_cap_a_new_call_hands_off_without_ai_order_or_sms(): void
+    {
+        [$store, , $line] = $this->line('fake');
+        $line->forceFill(['monthly_minute_cap' => 1])->save();
+        $this->fakeAi([['reply' => 'ok']]);
+
+        // One call burns the cap: 61 billed seconds ≥ 1 minute × 60.
+        $this->assertSame('ok', VoiceSession::turn($line, 'CA-CAP-1', '+15551110000', 'hi'));
+        VoiceSession::finalize('CA-CAP-1', 'hangup', 61);
+
+        $reply = VoiceSession::turn($line, 'CA-CAP-2', '+15551110001', 'one pizza');
+
+        $this->assertSame(__('Let me put you through to a team member.'), $reply, 'a capped call is handed off to staff');
+        $log = CallLog::where('call_sid', 'CA-CAP-2')->firstOrFail();
+        $this->assertSame('limit', $log->outcome);
+        $this->assertSame([['role' => 'system', 'text' => 'handoff:minute_cap']], $log->transcript);
+        $this->assertSame(1, app(AiService::class)->idx, 'the capped call never reaches the model');
+        $this->assertSame(0, Order::where('store_id', $store->id)->count(), 'no order');
+        $this->assertCount(0, $this->sms->sent, 'no pay-link SMS');
+        $this->assertSame(0, MessageCost::where('channel', 'voice')->where('provider_ref', 'CA-CAP-2')->count());
+
+        // Another store with no cap is unaffected (the cap is per store).
+        [$storeB, , $lineB] = $this->line('fake');
+        $this->assertSame('done', VoiceSession::turn($lineB, 'CA-CAP-B', '+15552220000', 'hi'));
+        $this->assertSame('in_progress', CallLog::where('call_sid', 'CA-CAP-B')->value('outcome'));
+    }
+}

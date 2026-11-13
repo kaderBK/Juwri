@@ -1,0 +1,2655 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "juwri/storefront-view-model/v1",
+  "title": "Storefront View Model v1",
+  "description": "The one read-only object a kit theme receives (THEME-CONTRACT.md §4). Absent optional keys mean the section is not rendered. Additions beyond §4 are marked in each description with the spec that needs them.",
+  "type": "object",
+  "required": [
+    "store",
+    "branch",
+    "context",
+    "theme",
+    "catalog",
+    "features",
+    "customer",
+    "endpoints",
+    "money",
+    "i18n"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "store": {
+      "type": "object",
+      "required": [
+        "public_id",
+        "slug",
+        "name",
+        "locale",
+        "dir",
+        "locales",
+        "timezone",
+        "vertical_set",
+        "store_type",
+        "status",
+        "contact",
+        "legal_links",
+        "powered_by"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "public_id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "logo": {
+          "$ref": "#/$defs/Image"
+        },
+        "cover": {
+          "$ref": "#/$defs/Image"
+        },
+        "tagline": {
+          "type": "string",
+          "description": "book header tagline; falls back to texts.hero_title"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "dir": {
+          "enum": [
+            "ltr",
+            "rtl"
+          ]
+        },
+        "locales": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "code",
+              "name",
+              "url"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "vertical_set": {
+          "enum": [
+            "food",
+            "retail",
+            "service",
+            "hotel"
+          ]
+        },
+        "store_type": {
+          "type": "string",
+          "description": "config/verticals.php type, incl. new cafe, grocery, services"
+        },
+        "status": {
+          "type": "object",
+          "required": [
+            "open"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "open": {
+              "type": "boolean"
+            },
+            "label": {
+              "type": "string",
+              "description": "server-formatted, e.g. 'Open · closes 10 pm'"
+            },
+            "next_change_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "paused_reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepting_bookings": {
+              "type": "boolean",
+              "description": "book: false until the owner sets hours (D13)"
+            }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "phone": {
+              "type": "string"
+            },
+            "whatsapp": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "map_url": {
+              "type": "string"
+            }
+          }
+        },
+        "social": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "network",
+              "url"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "network": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rating": {
+          "type": "object",
+          "required": [
+            "avg",
+            "count"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "avg": {
+              "type": "number"
+            },
+            "count": {
+              "type": "integer"
+            }
+          }
+        },
+        "legal_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Link"
+          }
+        },
+        "identity": {
+          "type": "object",
+          "required": [
+            "legal_name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "legal_name": {
+              "type": "string",
+              "description": "registered legal / trading name of the business (core setting fiscal.legal_name)"
+            },
+            "commercial_registration": {
+              "type": "object",
+              "required": [
+                "number"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "number": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "server-localised row label, e.g. 'Commercial registration (CR)', 'Trade licence', 'Commercial register'; theme falls back to 'Commercial registration'"
+                }
+              },
+              "description": "commercial registration / trade licence (core setting core.fiscal_cr_number). Carely F3: core blocks publish of a pharmacy store in SA, AE, KW and EG until it is filled"
+            },
+            "tax_registration": {
+              "type": "object",
+              "required": [
+                "number"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "number": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "server-localised row label, e.g. 'VAT number', 'TRN'; theme falls back to 'Tax number'"
+                }
+              },
+              "description": "VAT / tax registration number when the store has one (core setting core.fiscal_vat_number); optional everywhere, no publish gate"
+            },
+            "address": {
+              "type": "string",
+              "description": "registered (legal) address; may differ from contact.address"
+            }
+          },
+          "description": "Store identity block (contract §4.1, carely F3): shared by every theme and rendered in the footer when present; each row only when its field is present (no data, no claim). Optional for every store type unless core's per-country checklist requires it (pharmacy stores in SA, AE, KW, EG: legal_name, commercial_registration, address)"
+        },
+        "powered_by": {
+          "type": "boolean"
+        },
+        "seo": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "kit/seo (SEO item 13): what JSON-LD and meta need",
+          "properties": {
+            "schema_type": {
+              "type": "string",
+              "description": "schema.org type, e.g. Restaurant, CafeOrCoffeeShop, GroceryStore, ClothingStore, BeautySalon"
+            },
+            "description": {
+              "type": "string"
+            },
+            "default_locale": {
+              "type": "string"
+            },
+            "noindex": {
+              "type": "boolean"
+            },
+            "canonical": {
+              "type": "string"
+            },
+            "alternates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "hreflang",
+                  "href"
+                ],
+                "properties": {
+                  "hreflang": {
+                    "type": "string"
+                  },
+                  "href": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "image": {
+              "$ref": "#/$defs/Image"
+            },
+            "cuisines": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "price_range": {
+              "type": "string"
+            }
+          }
+        },
+        "hours": {
+          "type": "array",
+          "description": "structured opening hours (SEO + status)",
+          "items": {
+            "type": "object",
+            "required": [
+              "days",
+              "opens",
+              "closes"
+            ],
+            "properties": {
+              "days": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "Mo",
+                    "Tu",
+                    "We",
+                    "Th",
+                    "Fr",
+                    "Sa",
+                    "Su"
+                  ]
+                }
+              },
+              "opens": {
+                "type": "string"
+              },
+              "closes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "geo": {
+          "type": "object",
+          "required": [
+            "lat",
+            "lng"
+          ],
+          "properties": {
+            "lat": {
+              "type": "number"
+            },
+            "lng": {
+              "type": "number"
+            }
+          }
+        },
+        "address_parts": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "days": {
+              "type": "integer"
+            },
+            "free": {
+              "type": "boolean"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "description": "aisle returns policy (SEO + item info rows)"
+        },
+        "shipping_rate": {
+          "$ref": "#/$defs/Money",
+          "description": "lowest standard shipping rate (Google merchant listing)"
+        }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "required": [
+        "current"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "current": {
+          "type": "object",
+          "required": [
+            "public_id",
+            "name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "public_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            }
+          }
+        },
+        "switchable": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "public_id",
+              "name",
+              "url"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "public_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "order_types",
+        "selected_order_type",
+        "schedule_ahead"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "order_types": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "label",
+              "needs_address",
+              "needs_slot"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "key": {
+                "enum": [
+                  "dine_in",
+                  "takeaway",
+                  "delivery",
+                  "pickup",
+                  "pickup_slot",
+                  "appointment",
+                  "at_home",
+                  "ship",
+                  "room_service",
+                  "walk_in"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "needs_address": {
+                "type": "boolean"
+              },
+              "needs_slot": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "selected_order_type": {
+          "type": "string"
+        },
+        "table": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "room": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "schedule_ahead": {
+          "type": "boolean"
+        },
+        "min_order": {
+          "$ref": "#/$defs/Money"
+        },
+        "free_delivery_threshold": {
+          "$ref": "#/$defs/Money",
+          "description": "basket §3, aisle §8"
+        },
+        "prep_time_min": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "brew §2 ready-time chip; null hides it"
+        },
+        "next_free_slot": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "label",
+            "at"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "at": {
+              "type": "string"
+            }
+          },
+          "description": "book §2"
+        },
+        "staff": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Staff"
+          },
+          "description": "book §6; absent when staff choice is off"
+        },
+        "vehicle": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "year": {
+              "type": "integer"
+            },
+            "make": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            }
+          },
+          "description": "aisle §13 fitment (D12)"
+        },
+        "delivery_address": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "in_zone": {
+              "type": "boolean"
+            }
+          }
+        },
+        "kiosk": {
+          "type": "object",
+          "required": [
+            "on"
+          ],
+          "additionalProperties": false,
+          "description": "contract §2.5, sections/kiosk.md",
+          "properties": {
+            "on": {
+              "type": "boolean"
+            },
+            "idle_seconds": {
+              "type": "integer"
+            },
+            "show_identity": {
+              "type": "boolean",
+              "description": "Show the store identity block (contract §4.1) in the kiosk footer. Per-store setting, default false (owner, 2026-10-03)."
+            },
+            "order_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "print": {
+              "type": "object",
+              "properties": {
+                "auto": {
+                  "type": "boolean"
+                },
+                "width": {
+                  "enum": [
+                    32,
+                    48
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "offline_queue": {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false,
+          "description": "contract §5.5 / D4: false when any kill switch is on",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "order_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expiry_min": {
+              "type": "integer"
+            }
+          }
+        },
+        "refunds": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "D7 per-flow switches; themes only change copy",
+          "properties": {
+            "weighed_difference": {
+              "type": "boolean"
+            },
+            "deposits": {
+              "type": "boolean"
+            },
+            "returns": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": [
+        "slug",
+        "settings",
+        "sections",
+        "texts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "preset": {
+          "type": "string"
+        },
+        "settings": {
+          "type": "object",
+          "description": "resolved Customizer values keyed by field id (kit/<theme>/theme.json)"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "enabled section ids, in order"
+        },
+        "texts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "required": [
+        "categories",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "item_ids"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "$ref": "#/$defs/Image"
+              },
+              "item_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "count": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "items": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/ItemCard"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "description": "large catalogs: total matching items (server search, basket §2, aisle §6)"
+        },
+        "next_page_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "facets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Facet"
+          },
+          "description": "aisle §6 filters"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "absent key = section not rendered",
+      "properties": {
+        "announcement": {
+          "type": "object",
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string"
+            }
+          }
+        },
+        "stories": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "offers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "title"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "featured": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "item ids"
+        },
+        "combos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loyalty": {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "balance": {
+              "type": "integer"
+            }
+          }
+        },
+        "reviews": {
+          "type": "object"
+        },
+        "reservations": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "boolean"
+            },
+            "waitlist": {
+              "type": "boolean"
+            }
+          }
+        },
+        "custom_blocks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "html"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "html": {
+                "type": "string",
+                "description": "core-sanitised"
+              }
+            }
+          }
+        },
+        "gift_cards": {
+          "type": "boolean"
+        },
+        "wallet": {
+          "type": "boolean"
+        },
+        "agent_chat": {
+          "type": "boolean"
+        },
+        "bnpl": {
+          "type": "object",
+          "required": [
+            "providers"
+          ],
+          "description": "D10: present only when the Tabby/Tamara add-on is installed and on",
+          "properties": {
+            "providers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "instalments": {
+              "type": "integer"
+            }
+          }
+        },
+        "wishlist": {
+          "type": "boolean",
+          "description": "aisle §12"
+        },
+        "barcode_scan": {
+          "type": "boolean",
+          "description": "basket §2"
+        },
+        "fitment": {
+          "type": "boolean",
+          "description": "aisle §13"
+        },
+        "line_note": {
+          "type": "object",
+          "required": [
+            "max_length"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "max_length": {
+              "type": "integer"
+            }
+          },
+          "description": "brew §7 (P3-07): present = the item sheet offers the one-line per-line note (\"Name on the cup\"), printed on the KDS ticket and the receipt; absent = not offered"
+        },
+        "pharmacy": {
+          "type": "object",
+          "required": [
+            "disclaimer"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "disclaimer": {
+              "type": "string",
+              "description": "resolved disclaimer text, plain text not HTML"
+            },
+            "entry_gate": {
+              "type": "boolean",
+              "description": "show the store-entry interstitial"
+            },
+            "min_age": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "store default minimum age for age-restricted items"
+            },
+            "licence": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "required": [
+                "legal_name",
+                "number",
+                "authority",
+                "pharmacist_in_charge",
+                "address"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "legal_name": {
+                  "type": "string",
+                  "description": "same value as store.identity.legal_name (core fills both from one setting); themes show it once, preferring store.identity"
+                },
+                "number": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{2}$",
+                  "description": "ISO 3166-1 alpha-2 of the licensing country (SA, AE, KW, EG at launch); picks core's per-country checklist (research/pharmacy-licence). Not rendered by the theme"
+                },
+                "regulator": {
+                  "type": "string",
+                  "description": "core regulator code, e.g. sa_moh, ae_mohap, ae_dha, ae_doh, kw_moh, eg_eda; core resolves `authority` from it. Not rendered by the theme"
+                },
+                "commercial_registration": {
+                  "type": "object",
+                  "required": [
+                    "number"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "number": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "server-localised row label, e.g. 'Commercial registration', 'Trade licence'; theme falls back to 'Commercial registration'"
+                    }
+                  },
+                  "description": "DEPRECATED (carely F3, 2026-10-03): moved to store.identity.commercial_registration. Core no longer fills it and themes ignore it; kept only so the schema stays additive"
+                },
+                "authority": {
+                  "type": "string"
+                },
+                "authority_url": {
+                  "type": "string"
+                },
+                "verify_url": {
+                  "type": "string",
+                  "description": "regulator register link; optional, rendered only when present (required only where a country rule says so)"
+                },
+                "logo": {
+                  "$ref": "#/$defs/Image",
+                  "description": "regulator logo; optional, rendered only when present"
+                },
+                "pharmacist_in_charge": {
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "registration_no": {
+                      "type": "string",
+                      "description": "required before publish in every country (carely F2); the theme still renders it only when present"
+                    },
+                    "registration_label": {
+                      "type": "string",
+                      "description": "server-localised label for registration_no, e.g. 'SCFHS no.'; theme falls back to 'Registration :number'"
+                    }
+                  }
+                },
+                "address": {
+                  "type": "string",
+                  "description": "same value as store.identity.address; themes show it once, preferring store.identity"
+                }
+              },
+              "description": "no licence data = no licence claim (the theme renders nothing). Core blocks publish of a pharmacy store until its country's counsel sign-off is recorded (F1), the online-sales approval is uploaded (F6; plus EDA approval in EG, F5) and every field its country checklist requires is filled (carely Q5, F2, F3)"
+            },
+            "show_expiry": {
+              "type": "boolean",
+              "description": "DEPRECATED (carely Q8, 2026-10-03): expiry stays internal, no shopper-facing 'Use by' date. Themes ignore it; core no longer fills it"
+            },
+            "analytics_off": {
+              "type": "boolean",
+              "description": "always true for pharmacy; core reads it to drop analytics on product, cart, checkout, track and account pages (§8)"
+            }
+          },
+          "description": "carely §7 (Tier A): present for pharmacy stores, absent = off. Tier R (features.rx) is NOT in the schema (owner question Q1)"
+        }
+      }
+    },
+    "customer": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "has_passkey": {
+          "type": "boolean"
+        },
+        "loyalty_points": {
+          "type": "integer"
+        },
+        "wallet_balances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Money"
+          }
+        },
+        "recent_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "item_id",
+              "label",
+              "reorder_url"
+            ],
+            "properties": {
+              "item_id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "choices_label": {
+                "type": "string"
+              },
+              "reorder_url": {
+                "type": "string"
+              },
+              "variant": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "P3-07: the last variant (public id), null when none or gone"
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "P3-07: the last option / add-on public ids that still exist"
+              },
+              "complete": {
+                "type": "boolean",
+                "description": "P3-07: every last choice still exists, so the theme may add the line straight to the cart; false = open the item sheet (\"Some choices changed\")"
+              }
+            }
+          },
+          "description": "brew §4 reorder, server-filtered for availability"
+        },
+        "wishlist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "aisle §12, item ids"
+        }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "description": "named URLs only; themes never build URLs",
+      "required": [
+        "cart",
+        "quote",
+        "place",
+        "track"
+      ],
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "money": {
+      "type": "object",
+      "required": [
+        "currency"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "type": "object",
+          "required": [
+            "code",
+            "symbol",
+            "exponent",
+            "symbol_position_effective"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "symbol": {
+              "type": "string"
+            },
+            "exponent": {
+              "type": "integer"
+            },
+            "symbol_position_effective": {
+              "enum": [
+                "before",
+                "after"
+              ]
+            },
+            "step": {
+              "type": "integer"
+            }
+          }
+        },
+        "tax": {
+          "type": "object",
+          "required": [
+            "mode",
+            "rate"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "inclusive",
+                "exclusive"
+              ]
+            },
+            "rate": {
+              "type": "number"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "i18n": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "home",
+            "item",
+            "cart",
+            "checkout",
+            "track",
+            "states"
+          ]
+        },
+        "item": {
+          "$ref": "#/$defs/ItemDetail"
+        },
+        "cart": {
+          "$ref": "#/$defs/Quote"
+        },
+        "checkout": {
+          "$ref": "#/$defs/Checkout"
+        },
+        "order": {
+          "$ref": "#/$defs/Order"
+        }
+      },
+      "description": "Per-page payload. Absent on old fixtures = home. Item sheet, cart, checkout and track data; all money is server-formatted."
+    }
+  },
+  "$defs": {
+    "Money": {
+      "type": "object",
+      "required": [
+        "minor",
+        "currency",
+        "formatted"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minor": {
+          "type": "integer"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "formatted": {
+          "type": "string"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "required": [
+        "src",
+        "alt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "src": {
+          "type": "string"
+        },
+        "srcset": {
+          "type": "string"
+        },
+        "w": {
+          "type": "integer"
+        },
+        "h": {
+          "type": "integer"
+        },
+        "alt": {
+          "type": "string"
+        }
+      }
+    },
+    "Link": {
+      "type": "object",
+      "required": [
+        "label",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "Staff": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "photo": {
+          "$ref": "#/$defs/Image"
+        },
+        "service_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Facet": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "options"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "checkbox",
+            "size",
+            "swatch",
+            "range",
+            "toggle"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "label"
+            ],
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "swatch": {
+                "type": "string"
+              },
+              "selected": {
+                "type": "boolean"
+              },
+              "available": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ItemCard": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "sold_out",
+        "has_required_choices",
+        "badges",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "short": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "description": "item sheet / product page URL"
+        },
+        "image": {
+          "$ref": "#/$defs/Image"
+        },
+        "price": {
+          "$ref": "#/$defs/Money"
+        },
+        "from_price": {
+          "$ref": "#/$defs/Money"
+        },
+        "compare_at": {
+          "$ref": "#/$defs/Money",
+          "description": "aisle sale price: struck-through was-price"
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "label"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "new",
+                  "popular",
+                  "sale",
+                  "low_stock",
+                  "sold_out",
+                  "spicy",
+                  "vegan",
+                  "offer"
+                ]
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "sold_out": {
+          "type": "boolean"
+        },
+        "has_required_choices": {
+          "type": "boolean"
+        },
+        "calories": {
+          "type": "integer"
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "brand": {
+          "type": "string",
+          "description": "aisle card brand line"
+        },
+        "swatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "hex"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "hex": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "aisle; max 3 shown + count"
+        },
+        "unit": {
+          "type": "object",
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "server-formatted, e.g. '1 kg · SAR 6.50 / kg'"
+            },
+            "sold_by_weight": {
+              "type": "boolean"
+            },
+            "step_g": {
+              "type": "integer"
+            }
+          },
+          "description": "basket §6"
+        },
+        "duration_min": {
+          "type": "integer",
+          "description": "book §3"
+        },
+        "meta_label": {
+          "type": "string",
+          "description": "server-formatted duration · price line, e.g. '45 min · SAR 120.00'"
+        },
+        "cart_qty": {
+          "type": "integer",
+          "description": "basket in-cart stepper state"
+        },
+        "fits_vehicle": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "aisle fitment; null = unknown"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "gtin": {
+          "type": "string"
+        },
+        "category_url": {
+          "type": "string"
+        },
+        "age_restricted": {
+          "type": "boolean",
+          "description": "carely §7 (Tier A): 18+ badge; the server decides, the theme never infers it"
+        },
+        "pack_label": {
+          "type": "string",
+          "description": "carely §7: server-formatted pack line, e.g. '24 tablets · SAR 0.40 / tablet' (reuses unit.label if that lands first)"
+        },
+        "promo_allowed": {
+          "type": "boolean",
+          "description": "carely §7 / rule G4: false = the theme renders no sale/popular/new badge, compare-at price, low-stock urgency or featured placement for this item"
+        },
+        "expiring_soon": {
+          "type": "boolean",
+          "description": "DEPRECATED (carely Q8, 2026-10-03): the 'Expires soon' badge is not shown to shoppers; expiry stays internal. Themes ignore it; core no longer fills it"
+        },
+        "venue": {
+          "type": "boolean",
+          "description": "book: can be done at the venue"
+        },
+        "at_home": {
+          "type": "boolean",
+          "description": "book: can be done at the customer's address"
+        }
+      }
+    },
+    "Option": {
+      "type": "object",
+      "required": [
+        "id",
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "sub_label": {
+          "type": "string"
+        },
+        "price_delta": {
+          "$ref": "#/$defs/Money"
+        },
+        "duration_delta_min": {
+          "type": "integer"
+        },
+        "swatch": {
+          "type": "string"
+        },
+        "selected": {
+          "type": "boolean"
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "stock_label": {
+          "type": "string"
+        }
+      }
+    },
+    "OptionGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "required",
+        "options"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "radio",
+            "checkbox",
+            "segmented",
+            "chips",
+            "swatch",
+            "size",
+            "weight",
+            "quantity"
+          ]
+        },
+        "purpose": {
+          "enum": [
+            "substitution"
+          ],
+          "description": "basket: this group is the store's \"If it's out of stock\" choice — never priced; the line carries the picked option as its substitution, not as an option"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        },
+        "rule_label": {
+          "type": "string"
+        },
+        "selected_label": {
+          "type": "string"
+        },
+        "help_url": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Option"
+          }
+        }
+      }
+    },
+    "Disclosure": {
+      "type": "object",
+      "required": [
+        "title",
+        "html"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string",
+          "description": "core-sanitised"
+        }
+      }
+    },
+    "InfoRow": {
+      "type": "object",
+      "required": [
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "icon": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "ItemDetail": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "option_groups",
+        "add_label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "gallery": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Image"
+          }
+        },
+        "price": {
+          "$ref": "#/$defs/Money"
+        },
+        "from_price": {
+          "$ref": "#/$defs/Money"
+        },
+        "compare_at": {
+          "$ref": "#/$defs/Money"
+        },
+        "saving_label": {
+          "type": "string"
+        },
+        "base_label": {
+          "type": "string",
+          "description": "e.g. 'From 45 min · from SAR 120.00'"
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "option_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OptionGroup"
+          }
+        },
+        "quantity": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            },
+            "step": {
+              "type": "integer"
+            },
+            "value": {
+              "type": "integer"
+            },
+            "limit_note": {
+              "type": "string",
+              "description": "carely §7: server limit text, e.g. 'Limit 2 packs per order'; quantity.max already exists"
+            }
+          }
+        },
+        "unit": {
+          "type": "object"
+        },
+        "stock_note": {
+          "type": "string"
+        },
+        "estimate_note": {
+          "type": "string",
+          "description": "basket weighed items: estimate + cap text"
+        },
+        "nutrition": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Disclosure"
+          }
+        },
+        "info_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InfoRow"
+          },
+          "description": "delivery date, returns, pick up in store, policy"
+        },
+        "bnpl_label": {
+          "type": "string"
+        },
+        "policy_note": {
+          "type": "string"
+        },
+        "deposit": {
+          "$ref": "#/$defs/Money"
+        },
+        "size_guide_url": {
+          "type": "string"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "item ids"
+        },
+        "add_label": {
+          "type": "string",
+          "description": "server-formatted for the default choice, e.g. 'Add · SAR 25.00'; JS re-quotes on change"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "fits_vehicle": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "aisle fitment (D12): the item fits the shopper's vehicle; null = no fitments entered; absent when no vehicle is chosen"
+        },
+        "gtin": {
+          "type": "string"
+        },
+        "category_url": {
+          "type": "string"
+        },
+        "variants": {
+          "type": "array",
+          "description": "aisle: per-variant sku, price, stock and image for ProductGroup",
+          "items": {
+            "type": "object",
+            "required": [
+              "sku",
+              "options"
+            ],
+            "properties": {
+              "sku": {
+                "type": "string"
+              },
+              "options": {
+                "type": "object"
+              },
+              "price": {
+                "$ref": "#/$defs/Money"
+              },
+              "stock": {
+                "type": "integer"
+              },
+              "image": {
+                "$ref": "#/$defs/Image"
+              }
+            }
+          }
+        },
+        "medicine": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "active_ingredients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "strength": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "form": {
+              "type": "string"
+            },
+            "strength_label": {
+              "type": "string"
+            },
+            "dosage": {
+              "type": "string"
+            },
+            "usage": {
+              "type": "string"
+            },
+            "pack_label": {
+              "type": "string"
+            }
+          },
+          "description": "carely §7: medicine facts, all plain text"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "carely §7: plain-text bullets (max 12 x 200 chars)"
+        },
+        "leaflet": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "url"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "size_label": {
+              "type": "string"
+            },
+            "type": {
+              "enum": [
+                "pdf",
+                "html"
+              ]
+            }
+          },
+          "description": "carely §7: patient information leaflet in store media (public, not personal data); null = show the static 'read the leaflet in the pack' text"
+        },
+        "use_by_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "DEPRECATED (carely Q8, 2026-10-03): no shopper-facing 'Use by' date; expiry stays internal. Themes ignore it; core no longer fills it"
+        },
+        "medicine_text_lang": {
+          "type": "string",
+          "description": "carely Q23 (optional): language code of medicine.dosage and warnings when it differs from the page locale (e.g. 'en' on an Arabic page, because the store gave English only). The theme sets lang/dir on that text and shows the 'Shown in English' note. Absent = same language as the page"
+        },
+        "age": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "min"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "confirm_label": {
+              "type": "string"
+            }
+          },
+          "description": "carely §7: age-restricted item; the confirmation travels with the cart line (rule G3)"
+        },
+        "promo_allowed": {
+          "type": "boolean",
+          "description": "carely §7 / rule G4"
+        }
+      }
+    },
+    "QuoteLine": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "qty",
+        "line_total"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "item_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "thumb": {
+          "$ref": "#/$defs/Image"
+        },
+        "choices_label": {
+          "type": "string"
+        },
+        "qty": {
+          "type": "integer"
+        },
+        "unit_label": {
+          "type": "string"
+        },
+        "line_total": {
+          "$ref": "#/$defs/Money"
+        },
+        "compare_at": {
+          "$ref": "#/$defs/Money"
+        },
+        "estimate": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        },
+        "warning": {
+          "type": "string"
+        },
+        "substitution": {
+          "type": "string"
+        },
+        "age_confirmed": {
+          "type": "boolean",
+          "description": "carely §7: shows '18+ confirmed' on the line"
+        },
+        "limit_note": {
+          "type": "string",
+          "description": "carely §7: server correction text, e.g. 'Limit 2 per order. We changed the quantity to 2'"
+        }
+      }
+    },
+    "QuoteRow": {
+      "type": "object",
+      "required": [
+        "key",
+        "label",
+        "amount"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "amount": {
+          "$ref": "#/$defs/Money",
+          "description": "discounts are negative"
+        },
+        "kind": {
+          "enum": [
+            "subtotal",
+            "discount",
+            "fee",
+            "delivery",
+            "tax",
+            "tip",
+            "deposit",
+            "due_later",
+            "estimate_cap",
+            "total"
+          ]
+        },
+        "muted": {
+          "type": "boolean"
+        },
+        "amount_label": {
+          "type": "string",
+          "description": "display word instead of the amount, e.g. 'Free' for a zero delivery row; amount stays real Money"
+        },
+        "informational": {
+          "type": "boolean",
+          "description": "shown but not summed into total: savings, inclusive tax, estimate caps, deposit / due-later splits (contract §5.2)"
+        }
+      }
+    },
+    "Quote": {
+      "type": "object",
+      "required": [
+        "lines",
+        "rows",
+        "total"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QuoteLine"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QuoteRow"
+          }
+        },
+        "total": {
+          "$ref": "#/$defs/Money"
+        },
+        "total_label": {
+          "type": "string"
+        },
+        "tax_note": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coupon": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "boolean"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "free_delivery": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "remaining": {
+              "$ref": "#/$defs/Money"
+            },
+            "progress": {
+              "type": "number"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "substitution_preference": {
+          "type": "string"
+        },
+        "cta_label": {
+          "type": "string"
+        }
+      }
+    },
+    "Slot": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "state"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "available",
+            "selected",
+            "few",
+            "full",
+            "closed"
+          ]
+        }
+      }
+    },
+    "SlotPicker": {
+      "type": "object",
+      "required": [
+        "groups"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Slot"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "slots"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "slots": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Slot"
+                }
+              }
+            }
+          }
+        },
+        "note": {
+          "type": "string"
+        },
+        "timezone_note": {
+          "type": "string"
+        },
+        "selection_label": {
+          "type": "string"
+        },
+        "express": {
+          "$ref": "#/$defs/Choice"
+        }
+      }
+    },
+    "Choice": {
+      "type": "object",
+      "required": [
+        "id",
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "amount": {
+          "$ref": "#/$defs/Money"
+        },
+        "amount_label": {
+          "type": "string"
+        },
+        "selected": {
+          "type": "boolean"
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      }
+    },
+    "Checkout": {
+      "type": "object",
+      "required": [
+        "payment_methods",
+        "quote",
+        "place_label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "step_label": {
+          "type": "string"
+        },
+        "summary_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InfoRow"
+          }
+        },
+        "address": {
+          "$ref": "#/$defs/InfoRow"
+        },
+        "staff": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Staff"
+          }
+        },
+        "selected_staff": {
+          "type": "string"
+        },
+        "slots": {
+          "$ref": "#/$defs/SlotPicker"
+        },
+        "delivery_methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          }
+        },
+        "payment_methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          }
+        },
+        "tip": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "options": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Choice"
+              }
+            }
+          }
+        },
+        "substitution": {
+          "$ref": "#/$defs/OptionGroup",
+          "description": "basket: the store's \"If it's out of stock\" choice for the whole order (radio; each option's `sub_label` names what the picker does)"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "dir": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "help": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "hold_note": {
+          "type": "string"
+        },
+        "policy_note": {
+          "type": "string"
+        },
+        "quote": {
+          "$ref": "#/$defs/Quote"
+        },
+        "place_label": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "error",
+                  "success"
+                ]
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "what the last step answered (refused or done)"
+        },
+        "form": {
+          "type": "object",
+          "required": [
+            "action"
+          ],
+          "additionalProperties": false,
+          "description": "book: where the step posts, where it refreshes and goes back, and the hidden values it carries",
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "refresh": {
+              "type": "string"
+            },
+            "back": {
+              "type": "string"
+            },
+            "hidden": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "required": [
+        "number",
+        "status",
+        "status_label",
+        "steps",
+        "quote"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "number": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "status_label": {
+          "type": "string"
+        },
+        "eta_label": {
+          "type": "string"
+        },
+        "heading": {
+          "type": "string"
+        },
+        "ticket": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "big": {
+              "type": "string"
+            },
+            "sub": {
+              "type": "string"
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "state"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "sub": {
+                "type": "string"
+              },
+              "state": {
+                "enum": [
+                  "done",
+                  "current",
+                  "todo"
+                ]
+              }
+            }
+          }
+        },
+        "carrier": {
+          "type": "object",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "tracking": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "location": {
+          "$ref": "#/$defs/InfoRow"
+        },
+        "review": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QuoteLine"
+          },
+          "description": "basket: replacements to review"
+        },
+        "quote": {
+          "$ref": "#/$defs/Quote"
+        },
+        "paid_label": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "primary",
+                  "secondary",
+                  "danger",
+                  "link"
+                ]
+              },
+              "icon": {
+                "type": "string"
+              },
+              "method": {
+                "enum": [
+                  "get",
+                  "post"
+                ]
+              }
+            }
+          }
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "error",
+                  "success"
+                ]
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "what the last step answered (refused or done)"
+        },
+        "policy_note": {
+          "type": "string",
+          "description": "book: the cancellation / change rule of this booking"
+        }
+      }
+    }
+  }
+}

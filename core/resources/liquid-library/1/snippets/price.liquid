@@ -1,0 +1,12 @@
+{%- comment -%}
+  Price (library v1). Every visible amount goes through `money` and carries
+  data-mb-money so the runtime can re-format it when the diner switches the
+  display currency. An offer shows the pre-offer price struck through.
+  Params: amount (number), original (number|nil: pre-offer price),
+  from (bool: the item has variants, so this is a starting price).
+{%- endcomment -%}
+<span class="mbs-price{% if original %} is-offer{% endif %}">
+  {%- if from -%}<span class="mbs-price__from">{{ 'From' | t }}</span>{%- endif -%}
+  <b class="mbs-price__now" data-mb-money="{{ amount }}">{{ amount | money }}</b>
+  {%- if original -%}<span class="mbs-price__sr">{{ 'Original price' | t }}</span><s class="mbs-price__was" data-mb-money="{{ original }}">{{ original | money }}</s>{%- endif -%}
+</span>

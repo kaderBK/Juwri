@@ -1,0 +1,36 @@
+{
+  "operationId": "createHold",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/holds",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_bloom_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://bloom-coffee.example",
+      "Idempotency-Key": "01a0fce5-2acf-7230-a8ea-efa70c029a87"
+    },
+    "body": {
+      "kind": "delivery_slot",
+      "slot_id": "pslot_cfeabbd562"
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:45:30 GMT"
+    },
+    "body": {
+      "id": "01a0fc7a-45b6-785b-a039-fa5059394082",
+      "token": "hld_fd771790d7b2e3115ed7c4ad2c7eb8e2",
+      "kind": "delivery_slot",
+      "slot_id": "pslot_cfeabbd562",
+      "expires_at": "2026-10-02T09:55:30+03:00",
+      "ttl_seconds": 600,
+      "hold_note": "We hold this pickup time for 10 minutes."
+    }
+  }
+}

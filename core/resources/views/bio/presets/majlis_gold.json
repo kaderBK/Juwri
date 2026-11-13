@@ -1,0 +1,29 @@
+{
+  "slug": "majlis_gold",
+  "starter": "fine_dining",
+  "name": "Majlis Gold",
+  "family": "list",
+  "tier": "basic",
+  "rtl_native": true,
+  "fonts": [
+    {"family": "Tajawal", "weights": [400, 500, 700, 800]},
+    {"family": "Amiri", "weights": [400, 700]}
+  ],
+  "tokens": {
+    "--bg": "#0d3229",
+    "--ink": "#f3ecd9",
+    "--muted": "#c9bf9f",
+    "--card": "rgba(212,175,55,.05)",
+    "--btn-bg": "rgba(212,175,55,.05)",
+    "--btn-fg": "#f3ecd9",
+    "--btn-border": "rgba(212,175,55,.32)",
+    "--accent": "#d4af37",
+    "--accent-ink": "#0d3229",
+    "--icon-bg": "rgba(212,175,55,.12)",
+    "--icon-fg": "#d4af37",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Tajawal',sans-serif",
+    "--font-display": "'Amiri',serif"
+  }
+}

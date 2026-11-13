@@ -1,0 +1,26 @@
+{
+  "slug": "broadsheet",
+  "starter": "fine_dining",
+  "name": "Broadsheet",
+  "family": "broadsheet",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Playfair Display", "weights": [500, 700, 900]},
+    {"family": "Manrope", "weights": [400, 600]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#f4f1e7",
+    "--ink": "#191713",
+    "--muted": "#6b675c",
+    "--card": "#faf8f0",
+    "--accent": "#8a3324",
+    "--accent-ink": "#f4f1e7",
+    "--radius": "0px",
+    "--shadow": "none",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Playfair Display',Georgia,serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

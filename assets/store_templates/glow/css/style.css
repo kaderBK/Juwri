@@ -1,0 +1,1821 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   glow — glass & glow menu template · theme stylesheet
+   Deep espresso-green dark · translucent glass panels ·
+   green glow rings · aurora backdrop bleeding through.
+   ═══════════════════════════════════════════════════════════ */
+
+.glow{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is glow's own value,
+     kept as the var() fallback so a store that customized nothing — or a render
+     with no token include — is byte-identical to today. */
+  --bg:var(--tc-background, #0b0f0d);
+  --bg-deep:#070a09;                 /* darker chrome; derived bg-700 differs, keep literal */
+  /* glass panels are white-alpha overlays bleeding the aurora backdrop through,
+     a translucency effect and not an opaque surface fill — intentionally literal */
+  --glass:rgba(255,255,255,.055);
+  --glass-2:rgba(255,255,255,.09);
+  --glass-hi:rgba(255,255,255,.14);
+  --stroke:rgba(255,255,255,.09);
+  --stroke-2:rgba(255,255,255,.16);
+  /* ink */
+  --ink:var(--tc-text, #f2f6f3);
+  --ink-2:#aeb9b2;                   /* hand-tuned secondary ink, keep literal */
+  --ink-3:#87938b;                   /* hand-tuned tertiary ink, keep literal */
+  /* brand — glow's design accent is the green (the customizer PRIMARY role) */
+  --green:var(--tc-primary, #22c37a);
+  --green-hi:#7bf0b6;                /* hand-tuned highlight; derived primary-300 differs, keep */
+  --green-deep:#0c8a52;              /* hand-tuned deep; derived primary-600 differs, keep */
+  --green-ink:#06130c;
+  --green-grad:linear-gradient(135deg,#66e8a9 0%,#22c37a 55%,#0c8a52 100%);
+  /* semantic status colours — NOT the customizer accent (ratings, spice,
+     discount/availability badges vs. errors/removed); intentionally literal */
+  --gold:#e8b34a;
+  --red:#ff6c62;
+  /* glow */
+  --glow-green:0 0 22px rgba(34,195,122,.45);
+  --glow-soft:0 0 34px rgba(34,195,122,.22);
+  /* cta — the sole var carrying glow's opaque surface value (its visible panels
+     are the translucent --glass layers above); maps the SURFACE role */
+  --cta-bg:var(--tc-surface, #1c2420);
+  --cta-ink:#eafff3;
+  /* radius — glow's card corner is 22px, which is NOT the round-scale card value
+     (18px), so --r-card stays literal; img/sheet stay literal too (control-radius
+     at "pill" would circle images / reshape sheets). Only --r-pill follows the scale. */
+  --r-card:22px;
+  --r-img:16px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:360ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* fonts — follow the self-hosted pair (WI-T2); pair "none" emits no --tf-*, so
+     these degrade to glow's own stacks. glow is single-typeface, so only the body
+     stack is adopted (there is no display face to map to --tf-heading); --font-ar
+     shares --tf-body — every pair's body stack carries the Arabic face and the
+     Latin faces have no Arabic glyphs, so RTL text falls through safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Plus Jakarta Sans",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+/* ── page chrome: the app owns the whole viewport ────────── */
+html:has(.glow), body:has(.glow){height:100%;background:#070a09}
+body:has(.glow){margin:0;overflow:hidden}
+/* the layout's floating WhatsApp widget clashes with the tab bar — glow has its own WhatsApp entry */
+body:has(.glow) #whatsapp-chat-widget{display:none}
+.glow, .glow *{margin:0;padding:0;box-sizing:border-box}
+.glow{
+  font-family:var(--font-ui);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  isolation:isolate;overflow:clip;
+  margin-inline:auto;width:100%;
+}
+[dir="rtl"] .glow, [dir="rtl"] .glow input, [dir="rtl"] .glow button, [dir="rtl"] .glow textarea{font-family:var(--font-ar)}
+/* desktop: centered phone-column on an aurora backdrop */
+@media (min-width:768px){
+  body:has(.glow){
+    background:
+      radial-gradient(42rem 30rem at 18% 18%,rgba(129,84,255,.30),transparent 62%),
+      radial-gradient(44rem 32rem at 82% 24%,rgba(34,195,122,.28),transparent 60%),
+      radial-gradient(40rem 30rem at 70% 86%,rgba(232,179,74,.22),transparent 60%),
+      #080a09;
+  }
+  .glow{
+    max-width:430px;top:2dvh;bottom:2dvh;left:0;right:0;
+    border-radius:34px;border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 60px 120px -30px rgba(0,0,0,.85);
+  }
+}
+/* :where() keeps resets at zero specificity so component classes always win */
+:where(.glow) img{display:block;max-width:100%}
+:where(.glow) button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:where(.glow) a{color:inherit;text-decoration:none}
+.glow input,.glow textarea,.glow select{
+  font:inherit;color:var(--ink);background:var(--glass);
+  border:1px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.glow input::placeholder,.glow textarea::placeholder{color:var(--ink-3)}
+.glow input:focus,.glow textarea:focus,.glow select:focus{border-color:var(--green);background:rgba(34,195,122,.06)}
+.glow ::-webkit-scrollbar{display:none}
+.glow [hidden]{display:none !important}
+
+/* icons */
+.glow .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.glow .ic-xs{width:15px;height:15px}
+
+/* ── app shell + in-app aurora ───────────────────────────── */
+.app-aurora{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.app-aurora i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5}
+.app-aurora i:nth-child(1){width:340px;height:340px;background:rgba(34,195,122,.30);top:-120px;inset-inline-end:-100px;animation:aur-a 16s ease-in-out infinite alternate}
+.app-aurora i:nth-child(2){width:300px;height:300px;background:rgba(129,84,255,.20);top:34%;inset-inline-start:-140px;animation:aur-b 20s ease-in-out infinite alternate}
+.app-aurora i:nth-child(3){width:280px;height:280px;background:rgba(232,179,74,.14);bottom:-120px;inset-inline-end:-70px;animation:aur-a 22s ease-in-out infinite alternate-reverse}
+@keyframes aur-a{to{transform:translate(-40px,50px) scale(1.15)}}
+@keyframes aur-b{to{transform:translate(50px,-40px) scale(1.1)}}
+
+.cv-views{position:relative;flex:1;min-height:0;z-index:1}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:transparent;
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.5;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+.view-sub{background:var(--bg)}
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0}
+.tail-space{height:118px}
+.tail-space.tall{height:40px}
+.page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.page-head h1{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.page-head.sub{justify-content:flex-start;gap:14px}
+
+/* ── splash ──────────────────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:74px 30px 30px;overflow:hidden;
+  background:
+    radial-gradient(30rem 22rem at 80% 8%,rgba(34,195,122,.22),transparent 60%),
+    radial-gradient(26rem 20rem at 12% 30%,rgba(129,84,255,.18),transparent 60%),
+    radial-gradient(30rem 24rem at 60% 100%,rgba(232,179,74,.14),transparent 65%),
+    var(--bg);
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+/* NO pointer-events:none here: the layer fades for 500ms and used to become
+   click-through immediately, so a tap aimed at "Get started" landed on a category
+   chip behind it. `visibility:hidden` lands at the end of the transition and does
+   the job properly. */
+.splash.is-done{opacity:0;visibility:hidden}
+.splash{cursor:pointer}
+.splash-brand{display:grid;justify-items:center;gap:10px;animation:sp-in .7s var(--ease) both}
+.brand-ring{
+  width:76px;height:76px;border-radius:50%;overflow:hidden;display:block;
+  border:2.5px solid var(--green);box-shadow:var(--glow-green);
+  padding:3px;background:var(--bg);
+}
+.brand-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.brand-ring.sm{width:46px;height:46px;border-width:2px;padding:2px}
+.brand-word{font-size:12px;font-weight:800;letter-spacing:.34em;color:var(--ink-2);padding-inline-start:.34em}
+.splash-title{font-size:35px;font-weight:800;letter-spacing:-.02em;line-height:1.14;margin-top:26px;animation:sp-in .7s var(--ease) .1s both}
+.splash-title .accent{color:var(--green-hi)}
+.splash-sub{font-size:13.5px;color:var(--ink-2);max-width:30ch;margin-top:10px;line-height:1.6;animation:sp-in .7s var(--ease) .18s both}
+@keyframes sp-in{from{opacity:0;transform:translateY(22px)}}
+.splash-hero{position:relative;flex:1;min-height:0;width:100%;display:grid;place-items:center;margin-top:8px}
+.hero-halo{
+  position:absolute;width:290px;height:290px;border-radius:50%;
+  background:radial-gradient(circle,rgba(34,195,122,.38),transparent 68%);
+  filter:blur(6px);animation:halo 4.5s ease-in-out infinite alternate;
+}
+@keyframes halo{to{transform:scale(1.14);opacity:.75}}
+.hero-cup{
+  width:min(64%,250px);aspect-ratio:.82;object-fit:cover;border-radius:26px;
+  box-shadow:0 40px 70px -22px rgba(0,0,0,.75),var(--glow-soft);
+  animation:cup-rise 1s var(--ease-pop) .3s both,cup-float 5.5s ease-in-out 1.4s infinite alternate;
+  position:relative;z-index:1;
+}
+@keyframes cup-rise{from{opacity:0;transform:translateY(80px) rotate(-6deg)}}
+@keyframes cup-float{to{transform:translateY(-13px)}}
+.splash-minis{position:absolute;inset:0;pointer-events:none}
+.mini{
+  position:absolute;width:56px;height:56px;object-fit:cover;border-radius:16px;
+  border:1px solid var(--stroke-2);box-shadow:0 16px 30px rgba(0,0,0,.55);
+  opacity:.9;
+}
+.m-1{top:17%;inset-inline-start:6%;rotate:-12deg;animation:mini-f 5s ease-in-out infinite alternate}
+.m-2{top:25%;inset-inline-end:5%;rotate:10deg;animation:mini-f 6s ease-in-out .6s infinite alternate-reverse}
+.m-3{bottom:30%;inset-inline-start:5%;rotate:8deg;animation:mini-f 5.5s ease-in-out .3s infinite alternate}
+.m-4{bottom:24%;inset-inline-end:9%;rotate:-9deg;animation:mini-f 6.5s ease-in-out .9s infinite alternate-reverse}
+@keyframes mini-f{to{translate:0 -16px}}
+.splash-cta{
+  position:relative;z-index:2;width:100%;max-width:330px;
+  display:flex;align-items:center;gap:12px;
+  padding:9px 20px 9px 9px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.10);backdrop-filter:blur(16px);
+  border:1px solid var(--stroke-2);
+  font-size:14.5px;font-weight:700;color:var(--ink);
+  box-shadow:0 18px 40px -14px rgba(0,0,0,.6);
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:sp-in .7s var(--ease) .3s both;
+}
+[dir="rtl"] .splash-cta{padding:9px 9px 9px 20px}
+.splash-cta:active{transform:scale(.97)}
+.cta-orb{
+  width:44px;height:44px;border-radius:50%;flex:none;
+  background:var(--green-grad);color:var(--green-ink);
+  display:grid;place-items:center;box-shadow:var(--glow-green);
+}
+[dir="rtl"] .cta-orb .ic{transform:scaleX(-1)}
+.splash-cta span:nth-child(2){flex:1;text-align:start}
+.cta-chevs{letter-spacing:2px;color:var(--green-hi);font-weight:800}
+
+/* ── home top ────────────────────────────────────────────── */
+.home-top{display:flex;align-items:center;gap:10px;padding:12px 2px 4px}
+.brandbtn{flex:none}
+.spacer{flex:1}
+.iconbtn{
+  position:relative;width:44px;height:44px;flex:none;border-radius:15px;
+  background:var(--glass);border:1px solid var(--stroke);
+  backdrop-filter:blur(10px);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),border-color var(--t-fast);
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn:hover{border-color:var(--stroke-2)}
+.iconbtn .dot{position:absolute;top:9px;inset-inline-end:10px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:var(--glow-green)}
+.iconbtn.solid{background:var(--glass-2);border-radius:50%}
+.iconbtn.wa{background:var(--green);color:var(--green-ink);border-radius:50%;box-shadow:var(--glow-green)}
+
+.greet{padding:14px 2px 4px}
+.greet-title{font-size:27px;font-weight:800;letter-spacing:-.025em}
+.greet-sub{font-size:13px;color:var(--ink-2);margin-top:5px;max-width:52ch}
+.status-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0 2px;font-size:12px;line-height:1.4;color:var(--ink-3);flex-wrap:wrap}
+.open-chip{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink-2)}
+.open-chip i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,195,122,.5);animation:pulse 2.2s infinite}
+.open-chip.closed i{background:var(--red);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 7px transparent}}
+.viewers{display:inline-flex;align-items:center;gap:5px}
+.viewers b{color:var(--ink-2)}
+
+/* search */
+.search{
+  display:flex;align-items:center;gap:10px;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  backdrop-filter:blur(10px);
+  padding:5px 5px 5px 20px;margin-top:14px;color:var(--ink-3);
+  transition:border-color var(--t-fast);
+}
+[dir="rtl"] .search{padding:5px 20px 5px 5px}
+.search:focus-within{border-color:rgba(34,195,122,.5)}
+/* 16px floor on every focusable field: below it Safari iOS force-zooms the
+   viewport on focus and never zooms back out */
+.search input{background:none;border:0;padding:10px 0;font-size:16px;font-style:italic}
+.search input:focus{background:none}
+/* search + filter docked directly above the grid: the search pill flexes, the
+   filter circle (moved out of the grid header) sits beside it. */
+.searchrow{display:flex;align-items:center;gap:10px;margin-top:14px}
+.searchrow .search{flex:1;margin-top:0}
+/* Reserve-a-Table button — beside the search pill on the search row. */
+.reserve-btn{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 16px;
+  border-radius:var(--r-pill);border:0;background:var(--green);color:var(--green-ink);
+  font-weight:700;font-size:13.5px;box-shadow:var(--glow-soft);white-space:nowrap;cursor:pointer;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.reserve-btn .ic{width:20px;height:20px;fill:none;stroke:currentColor}
+.reserve-btn:active{transform:scale(.96)}
+@media (max-width:360px){.reserve-btn{padding:0 14px}.reserve-btn-label{display:none}}
+
+/* ── cover hero (crave-parity fold-in) ─────────────────────────────
+   the store cover fills a band behind the top chrome + greeting; the media
+   layer is clipped, a scrim fades it into the page bg. No cover / toggle off =
+   the old markup unchanged (the wrap simply is not emitted). */
+.glow-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:150px}
+.glow-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--glass-2)}
+.glow-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.glow-cover-scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,0) 34%),
+  linear-gradient(180deg, transparent 28%, var(--bg) 96%);}
+.glow-cover .home-top,.glow-cover .greet,.glow-cover .qc-cen-slot{position:relative;z-index:2}
+.glow-cover .home-top .iconbtn,.glow-cover .home-top .brandbtn{backdrop-filter:blur(6px)}
+
+/* ── cover-backed splash ───────────────────────────────────────── */
+.cv-splash-cover{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:blur(9px) brightness(.4) saturate(1.05);transform:scale(1.12);
+  z-index:0;pointer-events:none;
+}
+/* Exclude .splash-minis: it is already `position:absolute;inset:0` by design, and
+   flipping it to relative makes it a 0-height flex item (all its children are
+   absolute, so they contribute no intrinsic size). The four floating dish photos
+   then stack at the rail's origin instead of spreading to the splash corners —
+   the ice-cream mini (.m-4) ended up an 11px sliver. */
+.splash--cover > *:not(.cv-splash-cover):not(.splash-minis){position:relative;z-index:1}
+
+/* ── collapsing header ─────────────────────────────────────────── */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;
+  background:rgba(11,15,13,.86);
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-block-end:1px solid var(--stroke-2);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .28s var(--ease);
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{position:relative;width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;background:var(--glass-2);display:grid;place-items:center}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-logo::before{content:attr(data-initial);position:absolute;inset:0;display:grid;place-items:center;color:var(--green-hi);font-weight:800;font-size:14px}
+.cv-condensed-name{flex:1;min-width:0;font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+.cv-condensed-actions .iconbtn{width:38px;height:38px}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.search-btn{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  background:var(--glass-2);display:grid;place-items:center;color:var(--ink);
+}
+
+/* category circles */
+.cats{display:flex;align-items:flex-start;gap:16px;overflow-x:auto;padding:20px 4px 6px;scroll-snap-type:x proximity}
+/* Category label: show the full name across up to two lines (2-line clamp is the
+   safety cap; long words break instead of clipping). Row is align-items:flex-start
+   so a 2-line chip grows downward and the rings stay level. */
+.cat>span:last-child{width:74px;text-align:center;line-height:1.25;overflow-wrap:break-word;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.cat{
+  flex:none;display:grid;justify-items:center;gap:8px;scroll-snap-align:start;
+  font-size:11px;font-weight:600;color:var(--ink-3);min-width:62px;
+  transition:color var(--t-fast);
+}
+.cat-ring{
+  width:58px;height:58px;border-radius:50%;padding:3px;
+  background:var(--glass);border:1.5px solid var(--stroke);
+  display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.cat-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cat-ring .emoji{font-size:22px}
+.cat:active .cat-ring{transform:scale(.9)}
+.cat.is-on{color:var(--ink);font-weight:700}
+.cat.is-on .cat-ring{border-color:var(--green);box-shadow:var(--glow-green);background:rgba(34,195,122,.10)}
+
+/* secondary sub-category chip row (reveals under the active parent) */
+.subchips{display:flex;gap:8px;overflow-x:auto;padding:2px 4px 8px;scroll-snap-type:x proximity}
+.subchip{
+  flex:none;scroll-snap-align:start;display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--r-pill);
+  background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(8px);
+  font-size:12px;font-weight:700;color:var(--ink-3);white-space:nowrap;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.subchip-img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+.subchip:active{transform:scale(.94)}
+.subchip.is-on{background:var(--green);color:var(--green-ink);border-color:var(--green);box-shadow:var(--glow-green)}
+
+/* banners */
+.banners{position:relative;margin-top:16px}
+.banner-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:20px}
+.banner{
+  position:relative;flex:0 0 88%;scroll-snap-align:start;
+  border-radius:20px;overflow:hidden;height:126px;
+  display:flex;align-items:center;color:var(--ink);
+  background:var(--glass);border:1px solid var(--stroke-2);
+  backdrop-filter:blur(14px);text-align:start;
+}
+.banner-bg{position:absolute;inset:0;background:linear-gradient(120deg,rgba(34,195,122,.30),rgba(34,195,122,.06) 60%)}
+.banner.alt .banner-bg{background:linear-gradient(120deg,rgba(232,179,74,.30),rgba(232,179,74,.05) 60%)}
+.banner-copy{position:relative;z-index:2;padding-inline-start:18px;max-width:56%}
+/* image 404s and is dropped by onerror — release the room it was holding */
+.banner.no-img .banner-copy{max-width:none;padding-inline-end:18px}
+.banner-kicker{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--green-hi)}
+.banner.alt .banner-kicker{color:var(--gold)}
+.banner-title{font-size:18px;font-weight:800;line-height:1.15;letter-spacing:-.01em;margin:4px 0 10px;display:block}
+.banner-btn{display:inline-block;padding:7px 14px;border-radius:var(--r-pill);background:var(--green);color:var(--green-ink);font-size:12px;font-weight:800;box-shadow:var(--glow-green)}
+.banner.alt .banner-btn{background:var(--gold);color:#221503;box-shadow:0 0 18px rgba(232,179,74,.4)}
+.banner-img{
+  position:absolute;inset-inline-end:-26px;top:50%;translate:0 -50%;
+  width:150px;height:150px;object-fit:cover;border-radius:50%;
+  box-shadow:0 18px 40px rgba(0,0,0,.45);
+  transition:transform .6s var(--ease);
+}
+.banner:hover .banner-img{transform:rotate(6deg) scale(1.05)}
+.banner-dots{display:flex;justify-content:center;gap:6px;padding-top:12px}
+.banner-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--glass-2);transition:all .3s var(--ease)}
+.banner-dots i.is-on{width:20px;background:var(--green);box-shadow:var(--glow-green)}
+
+/* section heads */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 24px) 2px 13px}
+.section-head h2{font-size:18px;font-weight:800;letter-spacing:-.015em;display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 auto}
+/* never let the oval pill shrink — its text clips (no ellipsis) and escapes the ring */
+.oval-tag{position:relative;font-weight:800;padding:2px 10px;flex:none;white-space:nowrap}
+.oval-tag::before{
+  content:"";position:absolute;inset:-4px -6px;border:1.6px solid var(--green);
+  border-radius:50%;transform:rotate(-4deg);opacity:.9;
+}
+.filterbtn{
+  position:relative;width:42px;height:42px;border-radius:50%;flex:none;
+  background:var(--glass);border:1px solid var(--stroke);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.filterbtn:active{transform:scale(.9)}
+.filterbtn .dot{position:absolute;top:8px;inset-inline-end:9px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:var(--glow-green)}
+
+/* rails */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 6px}
+.rail-card{
+  flex:0 0 150px;width:150px;min-width:0;scroll-snap-align:start;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);
+  backdrop-filter:blur(12px);
+  padding:9px;position:relative;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast),box-shadow var(--t-fast);
+}
+.rail-card:hover{border-color:rgba(34,195,122,.4);box-shadow:var(--glow-soft)}
+.rail-card:active{transform:scale(.96)}
+.rail-card img{width:100%;aspect-ratio:1.1;object-fit:cover;border-radius:var(--r-img);background:var(--glass-2)}
+.rail-card b{display:block;font-size:13px;font-weight:700;margin:8px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .price{font-size:12.5px;color:var(--green-hi);font-weight:700;padding:0 2px}
+.rail-card .off{position:absolute;top:16px;inset-inline-start:16px;background:var(--gold);color:#221503;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+
+/* product grid — glass cards */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:8px}
+.grid.is-list{grid-template-columns:1fr}
+.card{
+  position:relative;min-width:0;border-radius:var(--r-card);padding:10px;text-align:start;
+  display:flex;flex-direction:column;
+  background:linear-gradient(160deg,rgba(255,255,255,.085),rgba(255,255,255,.03) 55%);
+  border:1px solid var(--stroke);backdrop-filter:blur(14px);
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast),box-shadow .3s var(--ease),opacity .3s;
+  animation:card-in .5s var(--ease) backwards;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.card:hover{border-color:rgba(34,195,122,.35);box-shadow:var(--glow-soft)}
+.card:active{transform:scale(.965)}
+.card.is-unavailable{opacity:.4;pointer-events:none}
+.card-imgwrap{display:block;position:relative;flex:none;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.04;background:var(--glass-2)}
+/* the card has no body wrapper, so auto-placement scatters name/sub/meta/foot across
+   both columns — pin the thumb to col 1 and stack every body row in col 2 */
+.grid.is-list .card{display:grid;grid-template-columns:104px 1fr;gap:0 12px;align-items:center}
+.grid.is-list .card-imgwrap{aspect-ratio:1;grid-column:1;grid-row:1/span 4}
+.grid.is-list :is(.card-name,.card-sub,.card-meta,.card-foot){grid-column:2}
+/* compact thumbnail can't fit corner badges + heart without overlap (esp. RTL) — drop badges, keep the heart */
+.grid.is-list .card-badges{display:none}
+.card-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-imgwrap img{transform:scale(1.06)}
+.card-fav{
+  position:absolute;top:7px;inset-inline-end:7px;width:31px;height:31px;border-radius:50%;
+  background:rgba(7,10,9,.5);backdrop-filter:blur(8px);
+  display:grid;place-items:center;color:#fff;z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+/* drawn 31px to keep the card clean; hit box padded out to 45x45 */
+.card-fav::after{content:"";position:absolute;inset:-7px;border-radius:50%}
+.card-fav:active{transform:scale(.82)}
+.card-fav .ic{width:15px;height:15px}
+.card-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.card-badges{position:absolute;top:8px;inset-inline-start:8px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;z-index:2}
+.badge-pop{background:var(--gold);color:#221503;font-size:10px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill)}
+.badge-veg{width:17px;height:17px;border-radius:5px;background:rgba(7,10,9,.55);display:grid;place-items:center}
+.badge-veg i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:var(--glow-green)}
+.badge-veg.nv i{background:var(--red);box-shadow:none}
+.card-soldout{
+  position:absolute;inset:0;background:rgba(7,10,9,.66);backdrop-filter:blur(2px) grayscale(1);
+  display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;z-index:3;
+}
+.avail-badge{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(7,10,9,.7);color:var(--gold);font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+.card-name{display:block;font-size:14.5px;font-weight:800;margin:10px 2px 1px;line-height:1.25}
+.card-sub{display:block;font-size:12px;color:var(--ink-3);margin:1px 2px 6px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{display:flex;align-items:center;gap:6px;padding:0 2px 8px}
+.pill-rate{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--green);color:var(--green-ink);
+  font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:8px;
+}
+.pill-rate .ic{width:10px;height:10px;fill:currentColor;stroke:none}
+.pill-rev{
+  display:inline-flex;align-items:center;
+  background:var(--glass-2);color:var(--ink-2);
+  font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;
+}
+.spice{letter-spacing:-1px;font-size:10.5px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px;border-top:1px dashed var(--stroke);padding-top:9px}
+/* grid cells stretch to the tallest card in the row — pin the price/CTA foot to the
+   bottom so prices line up across a row whether or not a card has a .card-sub */
+.grid:not(.is-list) .card-foot{margin-top:auto}
+.card-price{font-size:15.5px;font-weight:800;color:var(--ink);display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.card-price .cur{color:var(--green-hi);margin-inline-end:1px}
+/* Happy-hour "was" stacks ABOVE the live price (not inline beside it). */
+.card-price s{margin-inline-end:0 !important;font-size:11px;line-height:1.2}
+/* Happy-hour ribbon bonded to the thumbnail bottom (imgwrap clips it to the
+   rounded corners) — moved off the price row where it crowded the price. */
+.card-imgwrap .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-from{font-size:11px;line-height:1.4;color:var(--ink-3);font-weight:600;display:block;letter-spacing:.02em}
+.card-add{
+  position:relative;width:38px;height:38px;border-radius:12px;flex:none;
+  background:var(--green-grad);color:var(--green-ink);
+  display:grid;place-items:center;
+  box-shadow:var(--glow-green);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+/* drawn 38px, but the real hit box is 48x48 — this is the primary add-to-cart
+   affordance on every card and it measured 36x36 */
+.card-add::after{content:"";position:absolute;inset:-5px;border-radius:16px}
+.card-add:active{transform:scale(.85)}
+.card-add .ic{width:17px;height:17px;stroke-width:2}
+
+/* skeletons */
+.sk .card-imgwrap,.sk-line{position:relative;overflow:hidden;background:var(--glass-2)}
+.sk-line{height:13px;border-radius:7px;margin:9px 2px 6px}
+.sk-line.short{width:55%;margin-top:2px}
+.sk .card-imgwrap::after,.sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
+  animation:shimmer 1.3s infinite;
+}
+@keyframes shimmer{to{translate:100% 0}}
+
+/* empty states */
+.grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.7}
+
+/* ── product view ────────────────────────────────────────── */
+.view[data-view="product"] .view-scroll{padding:0}
+.p-hero{position:relative;padding:8px 20px 0}
+.p-halo{
+  position:absolute;left:50%;top:44%;translate:-50% -50%;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(34,195,122,.30),transparent 68%);
+  filter:blur(8px);pointer-events:none;
+}
+/* aspect-ratio 1.08 put a 426px hero on a 390x844 phone and pushed the REQUIRED
+   variant group below the fold. Cap it so the first choice is visible. */
+.p-gallery{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;aspect-ratio:1.5;max-height:34dvh;
+  border-radius:26px;background:var(--glass);border:1px solid var(--stroke);
+  position:relative;
+}
+.p-gallery img{flex:0 0 100%;scroll-snap-align:start;object-fit:cover;width:100%;height:100%;border-radius:25px}
+/* R8 — desktop/pointer gallery arrows (glow has swipe+dots only); shown when >1 image */
+.gal-nav{position:absolute;top:calc(50% - 20px);z-index:4;width:40px;height:40px;border-radius:50%;display:none;place-items:center;
+  border:1px solid var(--stroke);background:rgba(15,20,17,.62);color:#fff;backdrop-filter:blur(6px);cursor:pointer;transition:transform var(--t-fast) var(--ease),background var(--t-fast) var(--ease)}
+.gal-nav .ic{width:20px;height:20px}
+.gal-nav.prev{inset-inline-start:28px}
+.gal-nav.next{inset-inline-end:28px}
+.gal-nav:hover{background:rgba(15,20,17,.82)}
+.gal-nav:active{transform:scale(.9)}
+[dir="rtl"] .gal-nav .ic{transform:scaleX(-1)}
+@media (hover:hover) and (pointer:fine){.gal-nav:not([hidden]){display:grid}}
+.p-gallery-dots{position:absolute;bottom:16px;left:50%;translate:-50% 0;display:flex;gap:5px;z-index:3}
+.p-gallery-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:rgba(255,255,255,.45);transition:all .3s var(--ease)}
+.p-gallery-dots i.is-on{width:18px;background:var(--green);box-shadow:var(--glow-green)}
+.fab{
+  position:absolute;top:22px;width:44px;height:44px;border-radius:14px;z-index:4;
+  background:rgba(7,10,9,.55);backdrop-filter:blur(10px);color:#fff;
+  display:grid;place-items:center;border:1px solid var(--stroke-2);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+.fab.back{inset-inline-start:34px}
+[dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+.fab.fav{inset-inline-end:34px}
+.fab.fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.fab.inline{position:static;background:var(--glass);border:1px solid var(--stroke);color:var(--ink);flex:none;border-radius:14px}
+.p-stock{
+  position:absolute;bottom:18px;inset-inline-start:34px;z-index:3;
+  background:var(--gold);color:#221503;font-size:11px;font-weight:800;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.p-body{padding:18px 20px 0;position:relative;z-index:2}
+.p-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.p-title{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.p-price{text-align:end}
+.p-price b{font-size:21px;font-weight:800;color:var(--green-hi)}
+.p-price s{display:block;font-size:12.5px;color:var(--ink-3)}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px;padding:13px 0 4px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;color:var(--ink-2);
+  background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(8px);
+  padding:7px 12px;border-radius:var(--r-pill);
+}
+.meta-chip .ic{width:14px;height:14px}
+.meta-chip.star{color:var(--gold)}
+.meta-chip.star .ic{fill:currentColor}
+.meta-chip.kcal{color:var(--green-hi)}
+.p-desc{padding:12px 0 2px;font-size:14px;line-height:1.6;color:var(--ink-2);max-width:62ch}
+.p-desc b{color:var(--ink);font-weight:700;display:block;margin-bottom:4px;font-size:14.5px}
+.p-allergens{display:flex;flex-wrap:wrap;gap:7px;padding:10px 0 2px}
+.allergen{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--gold);
+  background:rgba(232,179,74,.09);border:1px solid rgba(232,179,74,.28);
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.allergen img{width:14px;height:14px;border-radius:3px;object-fit:cover}
+.p-groups{display:grid;gap:16px;padding:18px 0 2px}
+.opt-group{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:15px}
+.opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;gap:8px}
+.opt-head b{font-size:14.5px;font-weight:700}
+.opt-req{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--green-hi);background:rgba(34,195,122,.12);padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap}
+.opt-req.optional{color:var(--ink-3);background:var(--glass-2)}
+.opt-list{display:grid;gap:4px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:9px 6px;border-radius:12px;
+  transition:background var(--t-fast);cursor:pointer;
+}
+.opt:active{background:var(--glass-2)}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:2px solid var(--stroke-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.opt-ctl.box{border-radius:7px}
+.opt.is-on .opt-ctl{border-color:var(--green);background:var(--green);box-shadow:var(--glow-green)}
+.opt-ctl svg{width:11px;height:11px;stroke:var(--green-ink);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-thumb{width:36px;height:36px;border-radius:9px;object-fit:cover;flex:none;background:var(--glass-2)}
+.opt-name{flex:1;font-size:14px;font-weight:600;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink)}
+.opt-price{font-size:13px;font-weight:700;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--green-hi)}
+
+/* bottom cta bar */
+.p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--bg) 40%);
+  position:relative;z-index:6;
+}
+.qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  backdrop-filter:blur(10px);padding:5px;
+}
+.qty-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.qty-btn:active{transform:scale(.82);background:var(--glass-2)}
+.qty output{min-width:30px;text-align:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.cta{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  background:var(--green-grad);color:var(--green-ink);
+  font-size:15.5px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+  box-shadow:var(--glow-green);
+  position:relative;overflow:hidden;
+}
+.cta:active{transform:scale(.97)}
+.cta b{font-weight:800;opacity:.75}
+.cta.wide{width:100%}
+.cta:disabled{opacity:.45;box-shadow:none}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(6,19,12,.25);border-top-color:var(--green-ink);
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+.p-cart-jump{
+  flex:none;position:relative;width:54px;height:54px;border-radius:var(--r-pill);
+  background:var(--glass);border:1px solid var(--stroke);color:var(--ink);
+  backdrop-filter:blur(10px);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.p-cart-jump:active{transform:scale(.94)}
+.p-cart-jump[hidden]{display:none}
+.p-cart-jump .ic{width:22px;height:22px}
+.p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:19px;height:19px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--green);color:var(--green-ink);
+  font-size:10.5px;font-weight:800;line-height:19px;text-align:center;
+  font-style:normal;font-variant-numeric:tabular-nums;
+  box-shadow:var(--glow-green);
+}
+
+/* ── cart ────────────────────────────────────────────────── */
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);
+  backdrop-filter:blur(12px);
+  padding:10px;overflow:hidden;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94);height:0;padding-block:0;margin-bottom:-10px}
+.cart-item img{width:76px;height:76px;object-fit:cover;border-radius:var(--r-img);background:var(--glass-2)}
+/* image + name are tappable (reopen the product) — reset the button chrome */
+.ci-im{position:relative;width:76px;height:76px;border-radius:var(--r-img);overflow:hidden;background:var(--glass-2);padding:0;border:0;cursor:pointer;align-self:start}
+.ci-im img{width:100%;height:100%;display:block}
+.ci-hh{position:absolute;inset-inline:0;bottom:0;font-size:8.5px;font-weight:800;text-align:center;padding:2px 3px;background:var(--green);color:var(--green-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-name{display:block;background:none;border:0;padding:0;text-align:start;cursor:pointer;color:inherit;font-family:inherit;font-size:14px;font-weight:700;line-height:1.25}
+.ci-opts{font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.45}
+.ci-price{font-size:14px;font-weight:800;color:var(--green-hi);margin-top:5px}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3)}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3)}
+/* Side column: remove tucked top-right, a HORIZONTAL stepper at the bottom —
+   the old vertical +/qty/−/trash stack left the card tall with dead space. */
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;align-self:stretch}
+.ci-side .qty{flex-direction:row;padding:3px}
+.ci-side .qty-btn{position:relative;width:32px;height:32px}
+.ci-side .qty-btn::after{content:"";position:absolute;inset:-5px}
+.ci-side .qty output{font-size:13px;min-width:0;padding:2px 0}
+.ci-remove{position:relative;color:var(--ink-3);width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
+.ci-remove::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+.ci-remove:active{color:var(--red)}
+
+.cart-tools{display:grid;gap:16px;padding-top:18px}
+.cart-tools h3,.contact h3,.addr h3,.paymethods h3,.tips h3,.pref h3,.orders-block h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em}
+
+.seg{display:flex;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-pill);backdrop-filter:blur(8px);padding:4px;gap:3px}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:16px;height:16px}
+.seg button.is-on{background:var(--green);color:var(--green-ink);box-shadow:var(--glow-green)}
+/* A stray global `.mini{position:absolute}` (meant for a different element) was
+   matching this segmented control — class collision — pulling it out of flow so it
+   overlapped its label and blew out to viewport width. Pin it back in flow. */
+.seg.mini{padding:3px;position:relative}
+.seg.mini button{padding:7px 13px;flex:none}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--green)}
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.when-time{width:auto;flex:1;min-width:0;padding:11px 14px;border-radius:var(--r-pill);font-size:16px;color-scheme:dark}
+.glow input[type="datetime-local"],.glow input[type="date"],.glow input[type="time"]{color-scheme:dark;min-height:48px}
+.glow input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.glow input[type="date"]::-webkit-calendar-picker-indicator,
+.glow input[type="time"]::-webkit-calendar-picker-indicator{
+  filter:invert(1);opacity:.9;cursor:pointer;width:20px;height:20px;padding:3px;margin-inline-start:4px;border-radius:6px;
+}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--glass);border:1px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px;padding-inline-start:15px}
+.coupon-field .ic{color:var(--green-hi);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:16px}
+.coupon-field input:focus{background:none}
+.coupon-field.is-applied{border-color:var(--green);border-style:solid;box-shadow:var(--glow-soft)}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--glass-2);font-size:12.5px;font-weight:700;
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+.coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--green-hi)}
+.coupon-msg.err{color:var(--red)}
+
+.ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:9px}
+.ordernote textarea{resize:none;font-size:16px}
+
+/* ── checkout order summary ── */
+.ck-items{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:14px;display:grid;gap:11px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ck-edit{padding:0}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:12px;background:var(--glass-2)}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--green-hi);text-align:end}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+.totals{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:15px;display:grid;gap:9px}
+.tr{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr b{font-weight:600;font-variant-numeric:tabular-nums}
+.tr.disc{color:var(--green-hi)}
+.tr.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px}
+.tr.grand b{font-weight:800;font-size:17px}
+.minorder{font-size:12.5px;color:var(--gold);display:flex;gap:7px;align-items:center;padding:0 4px}
+
+.waiter-row{display:flex;gap:10px}
+.waiter-row .ghostbtn{flex:1;justify-content:center}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(8px);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);text-decoration:none;
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.sm{padding:8px 14px;font-size:12.5px}
+.linkbtn{font-size:13px;font-weight:600;color:var(--green-hi);padding:10px 2px 0;text-align:start}
+
+/* ── checkout ────────────────────────────────────────────── */
+.contact,.addr,.paymethods,.tips{padding-top:16px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.map{
+  position:relative;height:120px;border-radius:var(--r-card);overflow:hidden;
+  background:#101613;border:1px solid var(--stroke);margin-bottom:9px;
+}
+.map-art{width:100%;height:100%}
+.map-art .mr{stroke:#1d2822;stroke-width:7;fill:none}
+.map-art .mr.thin{stroke-width:3;stroke:#182019}
+.map-art .mb{fill:#141c17}
+.pin{position:absolute;left:50%;top:50%;translate:-50% -78%}
+.pin svg{width:34px;height:34px;fill:var(--green);stroke:var(--green-deep);stroke-width:1;filter:drop-shadow(0 0 10px rgba(34,195,122,.7));animation:pin-drop .6s var(--ease-pop)}
+@keyframes pin-drop{from{translate:0 -26px;opacity:0}}
+.pin-pulse{position:absolute;left:50%;bottom:-4px;translate:-50% 0;width:26px;height:8px;border-radius:50%;background:rgba(34,195,122,.35);animation:pulse 2.2s infinite}
+
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--glass);border:1.5px solid var(--stroke);border-radius:18px;
+  backdrop-filter:blur(8px);
+  padding:13px 15px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.pm.is-on{border-color:var(--green);background:rgba(34,195,122,.08);box-shadow:var(--glow-soft)}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--glass-2);display:grid;place-items:center;color:var(--ink-2)}
+.pm.is-on .pm-ic{background:var(--green);color:var(--green-ink);box-shadow:var(--glow-green)}
+.pm b{flex:1;font-size:14px;font-weight:700}
+.pm small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast);flex:none}
+.pm.is-on .pm-radio{border-color:var(--green)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
+.pm-logos{display:flex;gap:4px}
+.pm-logos span{font-size:8.5px;font-weight:800;letter-spacing:.02em;background:var(--glass-2);border-radius:4px;padding:3px 5px;color:var(--ink-2)}
+.cardform{display:grid;gap:9px;padding-top:10px;animation:card-in .35s var(--ease)}
+
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:15px;
+  background:var(--glass);border:1.5px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--green);color:var(--green-hi);background:rgba(34,195,122,.09);box-shadow:var(--glow-soft)}
+
+.terms{display:flex;gap:10px;align-items:flex-start;padding:16px 2px 0;font-size:12.5px;color:var(--ink-3);cursor:pointer}
+.terms input{width:17px;height:17px;accent-color:var(--green);margin-top:1px;flex:none}
+#checkoutTotals{margin-top:18px}
+
+/* ── confirmed ───────────────────────────────────────────── */
+.view-center{justify-content:center}
+/* minmax(0,1fr) pins the single column to the frame width. Without it the grid
+   sizes to max-content of its widest child (the 0–10 NPS row, which max-content
+   ignores wrapping and reports at ~574px), stretching the column past the phone
+   frame and dragging the width:100% action buttons off the left edge on desktop. */
+.confirm-wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;text-align:center;padding:0 34px;gap:6px}
+.cup-art{position:relative;width:230px;height:200px;margin-bottom:6px}
+.cup-halo{
+  position:absolute;inset:0;margin:auto;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle,rgba(34,195,122,.35),transparent 66%);
+  filter:blur(6px);animation:halo 4s ease-in-out infinite alternate;
+}
+.cup{position:absolute;inset:0;margin:auto;width:190px;height:180px;overflow:visible;animation:box-pop .7s var(--ease-pop) .1s backwards}
+@keyframes box-pop{0%{transform:scale(.3) rotate(-8deg);opacity:0}}
+.cup-body{fill:#1da76a}
+.cup-band{fill:#0c8a52}
+.cup-lid{fill:#66e8a9}
+.cup-cap{fill:#2ecf85}
+.check-badge circle{fill:var(--green);stroke:var(--bg);stroke-width:6;filter:drop-shadow(0 0 12px rgba(34,195,122,.8))}
+.check-badge{animation:box-pop .6s var(--ease-pop) .45s backwards}
+.check{stroke:var(--green-ink);stroke-width:6;fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .75s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.box-doodles{position:absolute;inset:-12px;color:var(--ink);opacity:.7;animation:dd-breathe 3.4s ease-in-out infinite alternate}
+.box-doodles .bd{stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
+.bd-star{fill:var(--gold);stroke:none}
+@keyframes dd-breathe{to{transform:scale(1.05) rotate(2deg)}}
+.confirm-title{font-size:27px;font-weight:800;letter-spacing:-.02em}
+.confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65}
+.confirm-eta{color:var(--ink-2);font-weight:700}
+.confirm-code{
+  font-size:12.5px;font-weight:700;color:var(--green-hi);
+  background:rgba(34,195,122,.09);border:1px dashed rgba(34,195,122,.45);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .cta{max-width:280px;text-decoration:none}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.confirm-actions .ghostbtn{width:100%;max-width:280px}
+.confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.confirm-actions .ghostbtn:hover{background:var(--glass-2)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#22c37a);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track ───────────────────────────────────────────────── */
+.track-card{background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(12px);padding:17px;display:grid;gap:16px}
+.track-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tk-label{font-size:12px;line-height:1.4;color:var(--ink-3);font-weight:600;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--green-hi)}
+.courier{display:flex;align-items:center;gap:11px;background:var(--glass-2);border-radius:16px;padding:10px}
+.courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.courier>div{flex:1}
+.courier b{font-size:14px}
+.courier .iconbtn{width:38px;height:38px;border:0}
+.timeline{list-style:none;display:grid;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--bg);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:var(--green-ink);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--green);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--green);background:var(--green);box-shadow:var(--glow-green)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{animation:pulse 2s infinite}
+.tl-copy b{font-size:14px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--ink-3)}
+.nps{margin-top:16px;width:100%;max-width:100%;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:16px;text-align:center;font-size:13.5px;color:var(--ink-2)}
+/* 0–10 is 11 buttons — wrap them instead of forcing one 574px-wide row. */
+.nps-row{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;padding-top:12px}
+.nps-row button{flex:none;font-size:21px;width:44px;height:44px;border-radius:50%;background:var(--glass-2);border:1px solid var(--stroke);transition:transform var(--t-fast) var(--ease-pop)}
+.nps-row button:active{transform:scale(.85)}
+.nps-row button.is-on{border-color:var(--green);background:rgba(34,195,122,.12);transform:scale(1.08);box-shadow:var(--glow-soft)}
+.nps-thanks{padding-top:10px;color:var(--green-hi);font-weight:700}
+
+/* ── profile ─────────────────────────────────────────────── */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:14px}
+.me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.me-card>div{flex:1}
+.me-card b{font-size:16px;font-weight:800}
+.wallet-card{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:16px 18px;border-radius:var(--r-card);
+  background:var(--green-grad);color:var(--green-ink);box-shadow:var(--glow-soft);
+}
+.wallet-card .tk-label{color:rgba(6,19,12,.65)}
+.wallet-amt{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums}
+.wallet-card .ic{width:26px;height:26px;stroke-width:1.9}
+.pref{padding-top:22px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;gap:10px;flex-wrap:wrap}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink-2)}
+/* The side-by-side label + segment layout collapsed (the segment sheared to a sliver
+   and overlapped the label). Stack them: label on its own line, then a full-width
+   segmented control whose options split the row evenly (scrolls if there are many).
+   Clean on mobile and immune to the horizontal-flex shrink fight. */
+.pref-row{flex-direction:column;align-items:stretch;gap:9px}
+.pref-row>span{flex:none}
+.pref-row .seg{flex:none;width:100%;overflow-x:auto;scrollbar-width:none}
+.pref-row .seg::-webkit-scrollbar{display:none}
+.pref-row .seg.mini button{flex:1 1 auto;min-width:max-content;white-space:nowrap;justify-content:center}
+.orders-block{padding-top:22px}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:12px 14px;
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;text-decoration:none;
+}
+.order-row .ic{color:var(--green-hi)}
+.order-row>div{flex:1;min-width:0}
+.order-row b{font-size:13.5px;font-weight:700;display:block}
+.order-row small{font-size:11.5px;color:var(--ink-3)}
+.order-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:rgba(34,195,122,.12);color:var(--green-hi);white-space:nowrap}
+.orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px}
+.wa-line{
+  display:flex;align-items:center;gap:11px;margin-top:22px;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:16px;backdrop-filter:blur(8px);
+  padding:14px 15px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:700;
+}
+.wa-line .ic:first-child{color:var(--green-hi)}
+.wa-line span{flex:1}
+.wa-line .arr{color:var(--ink-3)}
+[dir="rtl"] .wa-line .arr{transform:scaleX(-1)}
+.demo-foot{text-align:center;font-size:12px;line-height:1.4;color:var(--ink-3);padding:26px 0 4px;opacity:.7}
+
+/* ── tabbar: frosted glass, icon-only ────────────────────── */
+.tabbar{
+  position:absolute;inset-inline:44px;bottom:calc(16px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.10);backdrop-filter:blur(22px);
+  border:1px solid var(--stroke-2);border-radius:var(--r-pill);
+  padding:7px;
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.7);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.tabbar.is-hidden{transform:translateY(130%);opacity:0;pointer-events:none}
+.tab{display:grid;justify-items:center;color:rgba(255,255,255,.75)}
+.tab-pill{
+  position:relative;width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+}
+.tab:active .tab-pill{transform:scale(.86)}
+.tab.is-on .tab-pill{background:rgba(7,10,9,.85);color:var(--green-hi);box-shadow:inset 0 0 0 1px rgba(34,195,122,.35)}
+.badge{
+  position:absolute;top:-1px;inset-inline-end:-3px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--green);color:var(--green-ink);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  box-shadow:var(--glow-green);
+  transition:transform .25s var(--ease-pop);
+}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+
+/* ── sheets / scrim / toast ──────────────────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(4,6,5,.62);backdrop-filter:blur(4px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:rgba(18,24,20,.92);backdrop-filter:blur(24px);
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-top:1px solid var(--stroke-2);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+/* Explicit close button (top corner), restyled off the grab-bar it borrows for
+   its close wiring. Generic so any sheet can carry one. */
+.sheet .sheet-x{
+  position:absolute;inset-block-start:12px;inset-inline-end:14px;
+  width:34px;height:34px;margin:0;border-radius:50%;border:0;
+  background:var(--glass-2);color:var(--ink-2);display:grid;place-items:center;
+  cursor:pointer;z-index:2;
+}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px}
+.sheet h4{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase;margin:16px 0 10px}
+.sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:14px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--glass);border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--green);color:var(--green-hi);background:rgba(34,195,122,.10);box-shadow:var(--glow-soft)}
+.spice-scale{display:flex;gap:8px}
+.spice-scale button{
+  flex:1;padding:10px 4px;border-radius:15px;font-size:13px;font-weight:700;
+  background:var(--glass);border:1.5px solid var(--stroke);color:var(--ink-2);
+  transition:all var(--t-fast);
+}
+.spice-scale button.is-on{border-color:var(--gold);color:var(--gold);background:rgba(232,179,74,.09)}
+.sheet-actions{display:flex;gap:10px;padding-top:22px}
+.sheet-actions .cta{height:50px}
+.branch-list{display:grid;gap:8px}
+.branch-row{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--glass);border:1.5px solid var(--stroke);border-radius:16px;padding:13px 15px;
+  transition:all var(--t-fast);text-decoration:none;width:100%;
+}
+.branch-row.is-on{border-color:var(--green);box-shadow:var(--glow-soft)}
+.branch-row .ic{color:var(--green-hi)}
+.branch-row b{flex:1;font-size:14px;font-weight:700}
+.branch-row b small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.branch-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.branch-row.is-on .branch-check{border-color:var(--green);background:var(--green);box-shadow:var(--glow-green)}
+.otp-step{display:grid;gap:12px;padding-bottom:8px}
+.otp-boxes{display:flex;gap:10px;justify-content:center}
+.otp-boxes input{width:56px;height:60px;text-align:center;font-size:23px;font-weight:800;border-radius:16px}
+
+.toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:rgba(24,32,27,.92);border:1px solid var(--stroke-2);backdrop-filter:blur(14px);
+  color:var(--ink);font-size:13px;font-weight:600;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:var(--green-hi)}
+
+/* fly-to-cart */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(0,0,0,.5),var(--glow-soft);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] :is(.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate;text-align:right}
+[dir="rtl"] :is(.opt-price,.meta-chip,.card-price,.ci-price,.ci-was,.ci-unit,.p-price b,.p-price s,.card-meta,.tr b,.wallet-amt,.confirm-code,#trackCode,#trackEta,.cta b,.rail-card .off,.rail-card .price,.banner-title b,.pill-rate,.pill-rev){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .glow :is(.ci-price,.p-price s){text-align:right}
+
+/* footer CTA on cart view must clear the floating tab bar */
+.view[data-view="cart"] .p-cta{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+
+/* ── google-review prompt (confirmed) ────────────────────── */
+.greview{
+  display:flex;align-items:center;gap:12px;width:100%;max-width:320px;margin:18px auto 0;
+  padding:13px 15px;border-radius:var(--r-card);text-decoration:none;
+  background:rgba(232,179,74,.10);border:1px solid rgba(232,179,74,.30);color:var(--ink);
+}
+.greview-star{font-size:22px;line-height:1}
+.greview-copy{flex:1;min-width:0;text-align:start}
+.greview-copy b{display:block;font-size:14px;font-weight:800}
+.greview-copy small{font-size:11.5px;color:var(--ink-2)}
+.greview .arr{color:var(--gold)}
+[dir="rtl"] .greview .arr{transform:scaleX(-1)}
+
+/* ── loyalty card (profile) ──────────────────────────────── */
+.loyalty{
+  margin-top:16px;padding:18px 16px;border-radius:var(--r-card);
+  background:var(--glass);border:1px solid var(--stroke);text-align:center;
+}
+.loyalty-head{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:800}
+.loyalty-head .ic{width:18px;height:18px;color:var(--green);fill:none;stroke:var(--green)}
+.loyalty-num{font-size:34px;font-weight:800;color:var(--green);line-height:1.05;margin:6px 0 2px}
+.loyalty-sub{font-size:11.5px;color:var(--ink-3);margin-bottom:12px}
+.stamp-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:14px}
+.stamp-dot{
+  width:30px;height:30px;border-radius:50%;border:2px solid var(--stroke-2);
+  display:flex;align-items:center;justify-content:center;transition:all var(--t-fast) var(--ease);
+}
+.stamp-dot .ic{width:14px;height:14px;fill:none;stroke:var(--ink-3)}
+.stamp-dot.is-on{border-color:var(--green);background:var(--green);box-shadow:var(--glow-green)}
+.stamp-dot.is-on .ic{fill:var(--green-ink);stroke:var(--green-ink)}
+.loyalty-bar{height:8px;border-radius:var(--r-pill);background:var(--stroke-2);overflow:hidden;margin-bottom:14px}
+.loyalty-bar i{display:block;height:100%;width:0;background:var(--green-grad);border-radius:var(--r-pill);transition:width .6s var(--ease)}
+.loyalty-ok{color:var(--green);font-weight:700;font-size:13px;margin-top:6px}
+.row-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap;flex:none}
+.row-status.ok{background:rgba(34,195,122,.14);color:var(--green)}
+
+/* ── reservation / waitlist sheets ───────────────────────── */
+.sheet-form input,.sheet-form textarea{
+  width:100%;background:var(--glass-2);border:1px solid var(--stroke-2);border-radius:var(--r-img);
+  color:var(--ink);font:inherit;font-size:14px;padding:12px 13px;margin-bottom:2px;
+}
+.sheet-form textarea{resize:vertical;min-height:52px}
+.sheet-form input:focus,.sheet-form textarea:focus{outline:none;border-color:var(--green)}
+.sheet-done{text-align:center;padding:18px 0 8px}
+.sheet-done-emoji{font-size:44px;line-height:1;display:block;margin-bottom:8px}
+.sheet-done b{font-size:17px;font-weight:800;display:block;margin-bottom:4px}
+.sheet-done p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.sheet-done p.muted{color:var(--ink-3);font-size:12px}
+
+/* ── reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .confetti{display:none}
+}
+
+
+/* ── crave-scaffold components (glow skin) ───────────────── */
+.cv-block{padding-top:16px}
+.cv-h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em;display:block}
+.field-label{display:block;font-size:12px;font-weight:700;color:var(--ink-3);margin:10px 0 7px;letter-spacing:.02em}
+.tr-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr-row b{font-weight:600;font-variant-numeric:tabular-nums}
+.tr-row.disc{color:var(--green-hi)}
+.tr-row.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px}
+.tr-row.grand b{font-weight:800;font-size:17px}
+.err-box{font-size:13px;color:var(--red);background:rgba(255,108,98,.09);border:1px solid rgba(255,108,98,.32);border-radius:14px;padding:10px 14px}
+.me-avatar{width:52px;height:52px;border-radius:50%;background:var(--green-grad);color:var(--green-ink);display:grid;place-items:center;font-weight:800;font-size:19px;flex:none;box-shadow:var(--glow-soft)}
+.biz-card{margin-top:14px;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-card);backdrop-filter:blur(10px);padding:15px;display:grid;gap:9px;font-size:13.5px;color:var(--ink-2)}
+.biz-card span{display:flex;align-items:center;gap:9px}
+.biz-card .ic{width:16px;height:16px;color:var(--green-hi)}
+.order-lines{display:grid;gap:8px}
+.order-line{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--ink-2)}
+.order-line b{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+.order-line small{display:block;color:var(--ink-3);font-size:11.5px}
+.auth-tabs{display:flex;background:var(--glass);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:6px}
+.auth-tabs button{flex:1;padding:9px;border-radius:var(--r-pill);font-size:13px;font-weight:700;color:var(--ink-3)}
+.auth-tabs button.is-on{background:var(--green);color:var(--green-ink);box-shadow:var(--glow-green)}
+.auth-form{display:grid;gap:11px;padding-bottom:8px}
+.rate-row{display:flex;align-items:center;gap:8px;padding:16px 0 0;flex-wrap:wrap}
+.rate-row>span:first-child{font-size:13px;font-weight:600;color:var(--ink-2)}
+.rate-stars{display:flex;gap:4px}
+.rate-stars button{width:44px;height:44px;display:grid;place-items:center;color:var(--ink-3);transition:transform var(--t-fast) var(--ease-pop)}
+.rate-stars button:active{transform:scale(.8)}
+.rate-stars button .ic{width:20px;height:20px}
+.rate-stars button.is-on{color:var(--gold)}
+.rate-stars button.is-on .ic{fill:currentColor}
+.rate-thanks{font-size:12.5px;color:var(--green-hi);font-weight:700}
+/* shrink to the room the oval pill leaves over, rather than an arbitrary % cap —
+   a % of a shrink-wrapped h2 truncates long titles that still have space to spare */
+.gt-brand{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+[dir="rtl"] .glow :is(.tr-row b,.order-line b){direction:ltr;unicode-bidi:isolate}
+
+/* direction:ltr (number guard) flips the badge's own logical inset — pin it physically in RTL */
+[dir="rtl"] .rail-card .off{left:auto;right:16px}
+
+/* ══════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7) — glow-adapted from crave
+   ══════════════════════════════════════════════════════════ */
+
+/* F2 · brand / follow row */
+.brand-row{display:flex;align-items:center;gap:12px;padding:2px 20px 12px}
+.brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--glass);display:grid;place-items:center;border:1.5px solid var(--stroke-2)}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.brand-followers{display:block;font-size:12px;line-height:1.4;color:var(--ink-3);margin-top:2px}
+/* verified = an actual badge: a filled brand seal with a white check, inline
+   after the store name (title/aria-label carry the accessible name). */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--green)}
+.verified-badge .vb-seal-check{fill:#fff}
+.followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--green);color:var(--green-ink);font-size:13px;font-weight:700;flex:none;box-shadow:var(--glow-soft);transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.followbtn:active{transform:scale(.94)}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--glass);color:var(--ink-2);border:1.5px solid var(--stroke-2);box-shadow:none}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+
+/* B1/B2 · shared follower-count partial classes (proof line under the name) */
+.brand-followers--cta{color:var(--green-hi);font-weight:700}
+.brand-dot{color:var(--ink-3)}
+.brand-viewers b{color:var(--ink-2);font-weight:800}
+
+
+/* B5 · scale-pop beat on a successful follow */
+@keyframes followPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.followbtn--pop{animation:followPop .25s var(--ease-pop)}
+@media (prefers-reduced-motion:reduce){.followbtn--pop{animation:none}}
+
+/* B7 · story ring on the brand logo when stories are live */
+.brand-logo--live{border:0;padding:2.5px;background:var(--green-grad);box-shadow:var(--glow-soft);cursor:pointer}
+.brand-logo--live img,.brand-logo--live[data-initial]::before{border-radius:11px}
+.brand-logo--live img{border:2px solid var(--bg)}
+
+/* B6 · Following sheet + B8 About sheet */
+.follow-sheet-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--stroke);font-size:15px;color:var(--ink)}
+.follow-sheet-row input[type="checkbox"]{width:44px;height:26px;appearance:none;-webkit-appearance:none;background:var(--glass-2);border:1px solid var(--stroke-2);border-radius:var(--r-pill);position:relative;cursor:pointer;transition:background .2s;flex:none}
+.follow-sheet-row input[type="checkbox"]::after{content:"";position:absolute;inset-block-start:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:inset-inline-start .2s}
+.follow-sheet-row input[type="checkbox"]:checked{background:var(--green)}
+.follow-sheet-row input[type="checkbox"]:checked::after{inset-inline-start:20px}
+.cta.wide{width:100%}
+.cta.danger{background:rgba(255,108,98,.14);color:var(--red);box-shadow:none}
+.cta.ghost{background:var(--glass);color:var(--ink-2);border:1.5px solid var(--stroke-2);box-shadow:none}
+.about-rating{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:var(--ink);margin:2px 0 14px}
+.about-star{color:#ffcf5a}
+.about-rating small{color:var(--ink-3);font-weight:500}
+.about-list{display:flex;flex-direction:column}
+.about-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--stroke);color:var(--ink);font-size:14px;text-decoration:none}
+.about-row .ic{width:19px;height:19px;flex:none;color:var(--green-hi)}
+.about-row span{min-width:0;word-break:break-word}
+.about-reviews{margin-top:18px;display:flex;flex-direction:column;gap:14px}
+.about-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.about-review p{color:var(--ink-3);font-size:13px;margin-top:4px;line-height:1.5}
+
+/* F3 · stories rail + viewer */
+.stories-rail{display:flex;gap:14px;overflow-x:auto;padding:4px 20px 14px;scrollbar-width:none}
+.stories-rail::-webkit-scrollbar{display:none}
+.story-bubble{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px}
+.sb-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:var(--green-grad);display:grid;place-items:center;box-shadow:var(--glow-soft)}
+.sb-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.story-bubble small{font-size:11px;color:var(--ink-2);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-viewer{position:absolute;inset:0;z-index:90;background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.story-viewer.is-open{opacity:1}
+.sv-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.sv-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.sv-close .ic{width:20px;height:20px}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-nav.prev{inset-inline-start:0}
+.sv-nav.next{inset-inline-end:0}
+.sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.sv-caption{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.sv-cta{height:50px}
+
+/* F1 · meal-plan CTA */
+.mealplan-cta{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:rgba(34,195,122,.07);border:1.5px solid rgba(34,195,122,.30);border-radius:16px;padding:13px 15px;transition:transform var(--t-fast) var(--ease-pop)}
+.mealplan-cta:active{transform:scale(.98)}
+.mealplan-cta .mp-ic{width:38px;height:38px;border-radius:11px;background:rgba(34,195,122,.14);display:grid;place-items:center;color:var(--green-hi);flex:none}
+.mealplan-cta .mp-copy{flex:1}
+.mealplan-cta .mp-copy b{display:block;font-size:14px;font-weight:700}
+.mealplan-cta .mp-copy small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.mealplan-cta .arr{color:var(--ink-3)}
+#cvMealPlanSheet input[type="date"]{width:100%}
+
+/* F4 · branch map */
+.sheet-tall{max-height:88%}
+.branchmap{width:100%;height:240px;border-radius:16px;overflow:hidden;background:var(--glass);margin-bottom:8px}
+.branchmap .leaflet-container{height:100%;background:var(--glass);font:inherit}
+.branch-dist{font-size:12px;font-weight:700;color:var(--green-hi);flex:none}
+.nearest-branch-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:10px 15px;border-radius:var(--r-pill);background:var(--glass);border:1.5px solid var(--stroke-2);font-size:13px;font-weight:700;color:var(--ink-2)}
+.nearest-branch-btn .ic{color:var(--green-hi)}
+.geo-attrib{font-size:10.5px;color:var(--ink-3);margin:6px 2px 0}
+
+/* F5 · address autocomplete */
+.addr-field{position:relative}
+.addr-field input{padding-inline-end:46px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--green-hi)}
+.uselocbtn.is-loading{opacity:.5;animation:cv-spin 1s linear infinite}
+@keyframes cv-spin{to{transform:rotate(360deg)}}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:#131a16;border:1px solid var(--stroke-2);border-radius:14px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.5);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--stroke)}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--glass)}
+
+/* saved addresses (logged-in customers) */
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1px solid var(--stroke);border-radius:14px;background:var(--glass);color:var(--ink);transition:border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease)}
+.saved-addr .ic{flex:none;color:var(--ink-2)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--green);box-shadow:var(--glow-soft)}
+.saved-addr.is-on .ic{color:var(--green-hi)}
+
+/* F6 · rich reviews */
+.p-reviews{padding:6px 20px 0}
+.rv-head{display:flex;gap:18px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:16px;margin-bottom:12px}
+.rv-avg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;min-width:78px}
+.rv-avg b{font-size:32px;font-weight:800;line-height:1}
+.rv-avg small{font-size:11px;color:var(--ink-3);margin-top:4px}
+.stars-mini{color:var(--gold);font-size:13px;letter-spacing:1px}
+.stars-mini .s-dim{color:var(--stroke-2)}
+.rv-dist{flex:1;display:flex;flex-direction:column;gap:5px;justify-content:center}
+.rv-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.rv-bar em{font-style:normal;width:10px;text-align:end}
+.rv-bar i{flex:1;height:6px;border-radius:3px;background:var(--glass-2);overflow:hidden}
+.rv-bar i s{display:block;height:100%;background:var(--gold);border-radius:3px}
+.rv-bar b{width:20px;text-align:end;font-weight:700}
+.rv-filters{display:flex;gap:8px;margin-bottom:12px}
+.rv-filters button{padding:7px 14px;border-radius:var(--r-pill);background:var(--glass);border:1.5px solid var(--stroke);font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rv-filters button.is-on{border-color:var(--green);color:var(--green-hi);background:rgba(34,195,122,.10)}
+.rv-list{display:grid;gap:12px}
+.rv-item{background:var(--glass);border:1px solid var(--stroke);border-radius:14px;padding:13px 15px}
+.rv-item-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rv-item-top b{font-size:13.5px;font-weight:700}
+.rv-verified{font-size:10.5px;font-weight:800;color:var(--green-hi);background:rgba(34,195,122,.12);padding:2px 8px;border-radius:var(--r-pill)}
+.rv-item p{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:6px}
+.rv-photos{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.rv-photos img{width:66px;height:66px;border-radius:11px;object-fit:cover;border:1px solid var(--stroke)}
+.rv-empty{font-size:13px;color:var(--ink-3);text-align:center;padding:22px 0}
+.rv-stars{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.rv-stars button{color:var(--stroke-2);transition:transform var(--t-fast) var(--ease-pop)}
+.rv-stars button .ic{width:34px;height:34px}
+.rv-stars button:active{transform:scale(1.2)}
+.rv-stars button.is-on{color:var(--gold)}
+#cvReviewSheet textarea{width:100%;margin-top:12px}
+
+/* F7 · OTP checkout gate */
+.otp-boxes.otp-6{gap:8px}
+.otp-boxes.otp-6 input{width:46px;height:56px;font-size:21px}
+#cvCheckoutOtpSheet .cta{margin-top:16px}
+
+/* misc */
+.cv-noscroll{overflow:hidden}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .tabbar (bottom 16px + 60px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(70px + env(safe-area-inset-bottom, 0px)); }
+
+/* ═══════════════════════════════════════════════════════════
+   theme-rescue wave 2 — glow
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── logo fallback: a monogram lives behind every logo slot ─────────────
+   `/storage/store/logo/default.png` 404s, and `onerror="this.remove()"`
+   used to leave the styled container behind as an empty glass square. The
+   monogram is painted by the CONTAINER, so it is correct whether the <img>
+   never existed, 404s later, or loads fine (it simply sits on top). */
+.glow [data-initial]{position:relative}
+.glow [data-initial]::before{
+  content:attr(data-initial);
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-weight:800;letter-spacing:-.02em;
+  color:var(--green-hi);background:rgba(34,195,122,.12);
+  font-size:.52em;line-height:1;
+}
+.glow .brand-ring[data-initial]::before{border-radius:50%;font-size:34px}
+.glow .brand-ring.sm[data-initial]::before{font-size:20px}
+.glow .brand-logo[data-initial]::before{font-size:20px}
+.glow [data-initial] > img{position:relative;z-index:1}
+
+/* ── splash artwork when the store has no photography yet ──────────────
+   `default.png` is the PLATFORM placeholder; blowing it up to a 250px
+   glowing hero looked broken. Draw the theme's own cup instead. */
+.sp-art{
+  width:min(58%,220px);height:auto;position:relative;z-index:1;
+  fill:none;stroke:var(--green-hi);stroke-width:5;
+  stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 26px rgba(34,195,122,.35));
+  animation:cup-rise 1s var(--ease-pop) .3s both,cup-float 5.5s ease-in-out 1.4s infinite alternate;
+}
+.sp-art .sp-body,.sp-art .sp-lid,.sp-art .sp-cap{fill:rgba(34,195,122,.10)}
+.sp-art .sp-band{fill:rgba(34,195,122,.18);stroke:none}
+.sp-art .sp-steam path{stroke:var(--green-hi);opacity:.55;animation:sp-steam 3.4s ease-in-out infinite}
+.sp-art .sp-steam path:nth-child(2){animation-delay:.5s}
+.sp-art .sp-steam path:nth-child(3){animation-delay:1s}
+@keyframes sp-steam{50%{opacity:.15;transform:translateY(-5px)}}
+
+/* ── cart "Clear" needs a second tap ───────────────────────────────────── */
+.ghostbtn.is-armed{color:var(--red);border-color:var(--red);background:rgba(255,108,98,.10)}
+
+/* ── zero-review collapse ──────────────────────────────────────────────── */
+.rv-compact{font-size:13.5px;line-height:1.5;color:var(--ink-3);padding:2px 2px 14px}
+
+/* ── dietary legend in the filter sheet ────────────────────────────────── */
+.diet-legend{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  font-size:12px;line-height:1.4;color:var(--ink-3);padding:9px 2px 0;
+}
+.diet-legend .badge-veg{position:static;margin-inline-start:6px}
+.diet-legend .badge-veg:first-child{margin-inline-start:0}
+
+/* ── guest order-lookup row: give it an affordance ─────────────────────── */
+.row-track{font-size:12px;font-weight:800;color:var(--green-hi);flex:none}
+.order-row.is-flat{cursor:default}
+.order-row.is-flat:active{transform:none}
+
+/* ── autofilled fields must keep the theme's own surface ───────────────── */
+.glow input:-webkit-autofill,
+.glow input:-webkit-autofill:hover,
+.glow input:-webkit-autofill:focus,
+.glow textarea:-webkit-autofill{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px #131a16 inset;
+  caret-color:var(--ink);
+}
+
+/* ── checkout labels: one treatment for the whole form ─────────────────── */
+.glow .field-label{
+  display:block;font-size:12.5px;font-weight:700;line-height:1.4;
+  color:var(--ink-2);margin:0 2px 6px;
+}
+
+/* ── desktop companion panel ───────────────────────────────────────────
+   The app column stays 430px (that is the design), but on a 1280px screen
+   850px of bare gradient carried no logo, no name, no address, no hours. */
+.glow-desk,.glow-desk *{box-sizing:border-box}
+.glow-desk{display:none}
+@media (min-width:1100px){
+  .glow-desk{
+    box-sizing:border-box;
+    position:fixed;z-index:2;
+    inset-block:0;inset-inline-start:0;
+    /* the app column is a centred 430px frame, so the left gutter is
+       (50% - 215px); leave a 25px breathing gap before it */
+    width:calc(50% - 240px);
+    display:flex;flex-direction:column;justify-content:center;gap:14px;
+    padding-inline:clamp(24px,4vw,72px) 0;
+    font-family:var(--font-ui);color:#f2f6f3;
+    pointer-events:none;
+  }
+  [dir="rtl"] .glow-desk{font-family:var(--font-ar)}
+  .gd-logo{
+    width:84px;height:84px;border-radius:26px;overflow:hidden;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+    display:grid;place-items:center;
+  }
+  /* the generic monogram rule is scoped `.glow [data-initial]` and this aside is
+     a SIBLING of .glow, not a descendant — so it never matched and the tile
+     rendered as an empty 84x84 square on every logo-less store. Paint it here. */
+  .gd-logo[data-initial]{position:relative}
+  .gd-logo[data-initial]::before{
+    content:attr(data-initial);
+    position:absolute;inset:0;display:grid;place-items:center;
+    font-weight:800;letter-spacing:-.02em;line-height:1;
+    color:var(--green-hi);background:rgba(34,195,122,.12);
+    font-size:38px;border-radius:26px;
+  }
+  .gd-logo[data-initial] > img{position:relative;z-index:1}
+  .gd-logo img{width:100%;height:100%;object-fit:cover}
+  .gd-name{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+  .gd-desc{font-size:14.5px;line-height:1.6;color:#aeb9b2;max-width:38ch}
+  .gd-chip{
+    display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+    font-size:12.5px;font-weight:700;color:#aeb9b2;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+    border-radius:999px;padding:7px 14px;
+  }
+  .gd-chip i{width:8px;height:8px;border-radius:50%;background:var(--tc-primary, #22c37a)}
+  .gd-chip.closed i{background:#ff6c62}
+  .gd-facts{display:grid;gap:9px;font-size:13.5px;line-height:1.5;color:#aeb9b2}
+  .gd-facts span{display:flex;align-items:center;gap:9px}
+  .gd-facts .ic{width:15px;height:15px;fill:none;stroke:#7bf0b6;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  .gd-note{
+    font-size:12.5px;line-height:1.5;color:#87938b;max-width:34ch;
+    padding-top:6px;border-top:1px dashed rgba(255,255,255,.14);
+  }
+}
+/* below 1024 the panel would overlap the app column — never render it */
+@media (max-width:1099.98px){.glow-desk{display:none !important}}
+
+/* Keyboard focus rings (a11y). The theme only styled input :focus — every
+   button, link, icon button, category, menu card, banner and bottom-nav tab
+   was invisible to keyboard users. One brand-green ring for all; the outline
+   follows each control's own radius, so round icon buttons ring as circles. */
+.glow a:focus-visible,
+.glow button:focus-visible,
+.glow [tabindex]:focus-visible,
+.glow .card:focus-visible,
+.glow .cat:focus-visible,
+.glow .banner:focus-visible,
+.glow .tab:focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+/* inputs already tint on focus above; keep them outline-free to avoid a double
+   indicator, but the search wrapper still shows its focus-within border. */
+.glow input:focus-visible,
+.glow textarea:focus-visible,
+.glow select:focus-visible { outline:none; }
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--glass-2);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ci-side .qty-btn::after{inset:-6px -5px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.minibtn,.followbtn,.ghostbtn.sm{min-height:44px}
+.filterbtn{inline-size:44px;block-size:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, glow skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Frosted glass chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--glass-2);border:1px solid var(--stroke-2);color:var(--ink-2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--green)}
+
+/* ── notification-center panel — glow skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--cta-bg,#1c2420);--nb-surface-2:color-mix(in srgb,#22c37a 16%,transparent);--nb-line:var(--stroke-2,rgba(255,255,255,.16));--nb-ink:var(--ink,#f2f6f3);--nb-muted:var(--ink-2,#aeb9b2);--nb-accent:var(--green,#22c37a)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — glow skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#cvBrandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#cvFollowBtn. Maps the shared
+   --mbh-* token contract onto glow's glass/dark tokens. glow is dark-only
+   (no scheme flip), so the surfaces stay glass; the hub — a modal — paints
+   glow's one solid surface (--cta-bg). Chip + checkout controls stay
+   translucent so they never fight the glass chrome. Logical props for RTL.
+   ═══════════════════════════════════════════════════════════ */
+.glow #mbHotelChip,
+.glow #mbHotelOrderCtrls,
+.glow #mbHotelBook,
+.glow #mbHotelHub{
+  --mbh-surface:var(--glass);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--green);
+  --mbh-on-accent:var(--green-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a glass pill sitting with the follow button in the brand row ── */
+.glow #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--glass);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.glow #mbHotelChip:active{transform:scale(.95)}
+.glow #mbHotelChip .mb-hotel-roomchip__ic{color:var(--green)}
+.glow #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: glow's bottom sheet — the one solid surface (--cta-bg), r-sheet corners ── */
+.glow #mbHotelHubScrim{background:rgba(6,10,8,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.glow #mbHotelHub{
+  background:var(--cta-bg);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.glow #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.glow #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.glow #mbHotelHub .mb-hotel-hub__x{
+  background:var(--glass-2);border:1px solid var(--stroke);color:var(--ink-2);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.glow #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.glow #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.glow #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.glow #mbHotelHub .mb-hotel-card summary,
+.glow #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.glow #mbHotelHub .mb-hotel-info-link{color:var(--green)}
+/* service form controls → glass inputs / green CTA */
+.glow #mbHotelHub .mb-hotel-field{
+  background:var(--glass);border:1px solid var(--stroke);color:var(--ink);border-radius:12px;
+}
+.glow #mbHotelHub .mb-hotel-btn{
+  background:var(--green);color:var(--green-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → glow tender rows ── */
+.glow #mbHotelOrderCtrls{margin:0}
+.glow #mbHotelSched,
+.glow #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.glow #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.glow #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.glow #mbHotelSched input[type="radio"]{accent-color:var(--green)}
+.glow #mbHotelSched .mb-hotel-field{
+  background:var(--glass);border:1.5px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.glow #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.glow #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.glow #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.glow #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.glow #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.glow #mbHotelCharge input[type="checkbox"]{accent-color:var(--green)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for glow. Surface,
+   ink, border and radius come from glow tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.glow .mb-paypending{
+  --pp-surface:var(--cta-bg,#1c2420);
+  --pp-ink:var(--ink,#f2f6f3);
+  --pp-muted:var(--ink-2,#aeb9b2);
+  --pp-border:var(--stroke-2,rgba(255,255,255,.16));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,22px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.glow .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.glow .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.glow .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.glow .mb-paypending-txn:empty{display:none}
+.glow .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.glow .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.glow .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.glow .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.glow .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* ═══════════════ PERF-LITE ▸ reversible ▸ added 2026-08-27 ═══════════════
+   Idle GPU/CPU fix (same convention as ember/vivid). glow paints many
+   backdrop-filter glass panels; a whole set of always-on decorations keep
+   repainting behind them at idle — the 3 big drifting aurora blobs, two
+   filter:blur(6px) halos (animated blur = costly), the hero cup + 4 floating
+   minis, the map-pin pulse, the box doodles, and orphaned skeleton shimmers.
+   Pausing them lets the blurred backdrops go static so the GPU rests.
+   LEFT running: loading spinners (.cta .spinner, .uselocbtn.is-loading), the
+   live order-tracking node (.tl.now .tl-node), and the splash-screen art
+   (.sp-art / .sp-steam — visible only on the brief splash).
+   REVERT: set  data-mbfx="full"  on <html>, OR delete to the END marker. */
+html:not([data-mbfx="full"]) .app-aurora i,
+html:not([data-mbfx="full"]) .hero-halo,
+html:not([data-mbfx="full"]) .hero-cup,
+html:not([data-mbfx="full"]) .mini,
+html:not([data-mbfx="full"]) .open-chip i,
+html:not([data-mbfx="full"]) .pin-pulse,
+html:not([data-mbfx="full"]) .cup-halo,
+html:not([data-mbfx="full"]) .box-doodles,
+html:not([data-mbfx="full"]) .sk .card-imgwrap::after,
+html:not([data-mbfx="full"]) .sk-line::after{
+  animation: none !important;
+}
+/* ═══════════════ PERF-LITE END ═══════════════ */
+
+/* Share row is a <button> reusing .wa-line — reset the UA button box to match the anchor rows. */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* ── Address map picker + device-data (shared engines, glow-skinned) ─────── */
+.cv-mapbtn{margin-top:8px}
+.map-sheet h2{margin-bottom:12px}
+/* reuse .branchmap (glass rounded map box); give it a real picker height + a pin stage */
+.map-sheet .map-canvas{position:relative;height:min(52vh,360px);margin-bottom:0;border:1px solid var(--stroke-2)}
+.map-sheet .map-preview{margin:12px 4px 0;font-size:13px;line-height:1.4;color:var(--ink-2);min-height:18px;text-align:center}
+.map-sheet .sheet-actions{padding-top:16px}
+/* centre pin (engine injects .mb-map-pin) — glow green teardrop with the theme's glow halo */
+.mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.45))}
+.mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--green-grad);border:2px solid #fff;box-shadow:var(--glow-green)}
+.mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#fff}
+/* clear-saved-data row (profile surface) — muted ghost link */
+.device-data{margin:18px 4px 4px;text-align:center}
+.device-data .cv-cleardata{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:auto;min-height:0;padding:8px 6px;background:none;border:0;border-radius:var(--r-pill);color:var(--ink-3);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;-webkit-appearance:none;appearance:none}
+.device-data .cv-cleardata .ic{width:15px;height:15px;color:inherit}
+.device-data .cv-cleardata:active{color:var(--red);transform:scale(.97)}
+.device-data-hint{margin:6px auto 0;max-width:34ch;font-size:11px;line-height:1.45;color:var(--ink-3)}

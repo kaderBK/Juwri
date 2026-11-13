@@ -1,0 +1,82 @@
+{
+  "name": "juwri: Review request after delivery",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Review request after delivery\n\n1. Connect your **juwri API** credential.\n2. The IF node keeps only orders whose new status is `delivered`.\n3. Connect **Gmail** (or a WhatsApp node) and personalise the thank-you + review link.",
+        "height": 220,
+        "width": 340
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [300, 100]
+    },
+    {
+      "parameters": {
+        "events": ["order.status_changed"]
+      },
+      "id": "trigger-1",
+      "name": "On status change",
+      "type": "n8n-nodes-juwri.juwriTrigger",
+      "typeVersion": 1,
+      "position": [680, 320],
+      "webhookId": "juwri-review-request",
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.data.new_status }}",
+              "rightValue": "delivered",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ]
+        }
+      },
+      "id": "if-1",
+      "name": "Only delivered",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.data.customer_email }}",
+        "subject": "How was your order?",
+        "message": "=Thanks for order #{{ $json.data.order_id }}! We'd love a quick review."
+      },
+      "id": "gmail-1",
+      "name": "Send review request",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1140, 240],
+      "credentials": {
+        "gmailOAuth2": { "id": "4", "name": "Gmail account" }
+      }
+    }
+  ],
+  "connections": {
+    "On status change": {
+      "main": [[{ "node": "Only delivered", "type": "main", "index": 0 }]]
+    },
+    "Only delivered": {
+      "main": [
+        [{ "node": "Send review request", "type": "main", "index": 0 }],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-review-request" },
+  "tags": [{ "name": "juwri" }]
+}

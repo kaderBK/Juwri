@@ -1,0 +1,22 @@
+[
+ {
+  "id": 1,
+  "name": "Natasha",
+  "designation": "Designer",
+  "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cumque dolor ducimus ea error exercitationem hic in ipsa minima odio odit, porro quia sapiente sed similique sint totam! Mollitia, porro?",
+  "image": "default_user.png",
+  "translations": null,
+  "created_at": "2024-05-09 03:34:11",
+  "updated_at": "2024-05-09 03:34:11"
+ },
+ {
+  "id": 2,
+  "name": "John",
+  "designation": "Writer",
+  "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium cumque dolor ducimus ea error exercitationem hic in ipsa minima odio odit, porro quia sapiente sed similique sint totam! Mollitia, porro?",
+  "image": "default_user.png",
+  "translations": null,
+  "created_at": "2024-05-09 03:35:48",
+  "updated_at": "2024-05-09 03:35:48"
+ }
+]

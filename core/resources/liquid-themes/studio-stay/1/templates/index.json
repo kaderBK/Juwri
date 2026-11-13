@@ -1,0 +1,95 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "variant": "centered",
+        "sticky": true
+      }
+    },
+    "hero": {
+      "type": "hero-cover",
+      "settings": {
+        "variant": "image",
+        "height": "l",
+        "align": "center",
+        "image_source": "cover",
+        "overlay": 45
+      },
+      "blocks": {
+        "cta-catalog": {
+          "type": "cta",
+          "settings": {
+            "target": "catalog",
+            "anchor": "rooms"
+          }
+        }
+      },
+      "block_order": [
+        "cta-catalog"
+      ]
+    },
+    "brand": {
+      "type": "brand-row",
+      "settings": {
+        "show_status": false
+      }
+    },
+    "rooms": {
+      "type": "room-list",
+      "settings": {
+        "layout": "grid",
+        "show_amenities": true,
+        "per_night": true
+      }
+    },
+    "reserve": {
+      "type": "reservation-cta",
+      "settings": {
+        "show_waitlist": false
+      }
+    },
+    "offers": {
+      "type": "offers-strip",
+      "settings": []
+    },
+    "about": {
+      "type": "about",
+      "settings": {
+        "use_description": true,
+        "layout": "image-start"
+      }
+    },
+    "loyalty": {
+      "type": "loyalty-card",
+      "settings": []
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": []
+    },
+    "location": {
+      "type": "location",
+      "settings": []
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "tone": "inverse"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "hero",
+    "brand",
+    "rooms",
+    "reserve",
+    "offers",
+    "about",
+    "loyalty",
+    "reviews",
+    "location",
+    "footer"
+  ]
+}

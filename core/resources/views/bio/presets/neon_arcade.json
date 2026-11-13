@@ -1,0 +1,31 @@
+{
+  "slug": "neon_arcade",
+  "starter": "delivery_late_night",
+  "name": "Neon Arcade",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Orbitron", "weights": [600, 800]},
+    {"family": "Manrope", "weights": [400, 600, 700]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#07070d",
+    "--ink": "#e8f6f8",
+    "--muted": "#8fa8b5",
+    "--card": "rgba(33,230,240,.03)",
+    "--btn-bg": "rgba(33,230,240,.03)",
+    "--btn-fg": "#e8f6f8",
+    "--btn-border": "rgba(33,230,240,.4)",
+    "--accent": "#21e6f0",
+    "--accent-ink": "#07070d",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#21e6f0",
+    "--radius": "6px",
+    "--shadow": "none",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Orbitron',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

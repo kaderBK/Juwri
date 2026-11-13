@@ -1,0 +1,70 @@
+{
+  "operationId": "getKiosk",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/kiosk",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_kiosk_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 05:02:11 GMT"
+    },
+    "body": {
+      "kiosk": {
+        "on": true,
+        "idle_seconds": 60,
+        "order_types": [
+          "dine_in",
+          "takeaway"
+        ],
+        "print": {
+          "auto": true,
+          "width": 48
+        }
+      },
+      "context": {
+        "order_types": [
+          {
+            "key": "takeaway",
+            "label": "Takeaway",
+            "needs_address": false,
+            "needs_slot": false
+          },
+          {
+            "key": "dine_in",
+            "label": "Dine in",
+            "needs_address": false,
+            "needs_slot": false
+          }
+        ],
+        "selected_order_type": "dine_in",
+        "schedule_ahead": false,
+        "table": null,
+        "min_order": {
+          "minor": 5000,
+          "currency": "SAR",
+          "formatted": "SAR 50.00"
+        },
+        "kiosk": {
+          "on": true,
+          "idle_seconds": 60,
+          "order_types": [
+            "dine_in",
+            "takeaway"
+          ],
+          "print": {
+            "auto": true,
+            "width": 48
+          }
+        }
+      }
+    }
+  }
+}

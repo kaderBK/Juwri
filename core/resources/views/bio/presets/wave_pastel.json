@@ -1,0 +1,30 @@
+{
+  "slug": "wave_pastel",
+  "starter": "cafe",
+  "name": "Wave Pastel",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#dff0f7",
+    "--ink": "#1d3a47",
+    "--muted": "#5b7c8a",
+    "--card": "#eaf6fb",
+    "--btn-bg": "#eaf6fb",
+    "--btn-fg": "#1d3a47",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#3ba7cf",
+    "--accent-ink": "#ffffff",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#3ba7cf",
+    "--avatar-bg": "#ffffff",
+    "--radius": "16px",
+    "--shadow": "0 3px 10px rgba(29,58,71,.08)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

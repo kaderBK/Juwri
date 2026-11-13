@@ -1,0 +1,26 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* chat family — sticky bar, greeting bubbles, links as quick-reply chips, whatsapp/reservation as the CTA. */
+.fam-chat .bio-chatbar{position:sticky;inset-block-start:0;z-index:5;display:flex;align-items:center;gap:11px;
+  padding:46px 16px 12px;background:var(--accent,#106e5a);color:var(--accent-ink,#fff)}
+.fam-chat .bio-avatar--chat{width:42px;height:42px;margin:0;background:#fff;font-size:20px;box-shadow:none}
+.fam-chat .bio-chatbar__id b{font-size:14.5px;display:block}
+.fam-chat .bio-chatbar__id span{font-size:10.5px;display:flex;align-items:center;gap:5px;opacity:.9}
+.fam-chat .bio-chatbar__id span i{width:7px;height:7px;border-radius:50%;background:#5ee39a}
+.fam-chat .bio-chat{padding:16px 14px 0;text-align:start}
+.fam-chat .bio-msg{max-width:82%;background:var(--card,#fff);color:var(--ink,#1e2126);
+  border-radius:16px 16px 16px 5px;padding:11px 14px;font-size:12.5px;line-height:1.5;margin-bottom:12px;
+  box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.fam-chat .bio-blocks{display:flex;flex-wrap:wrap;gap:8px}
+.fam-chat .bio-block{margin:0}
+.fam-chat .bio-link{display:inline-flex;padding:9px 15px;border-radius:999px;background:var(--card,#fff);
+  color:var(--accent,#106e5a);border:1.5px solid var(--accent,#106e5a);box-shadow:none}
+.fam-chat .bio-link:hover{background:var(--accent,#106e5a);color:var(--accent-ink,#fff);transform:none}
+.fam-chat .bio-link__icon,.fam-chat .bio-link__arrow,.fam-chat .bio-link__sub{display:none}
+.fam-chat .bio-link__label{font-size:12px;font-weight:700}
+.fam-chat .bio-block--whatsapp,.fam-chat .bio-block--reservation{flex-basis:100%;margin-top:6px}
+.fam-chat .bio-block--whatsapp .bio-link,.fam-chat .bio-block--reservation .bio-link{width:100%;justify-content:center;
+  background:var(--accent,#106e5a);color:var(--accent-ink,#fff);border-color:transparent}
+.fam-chat .bio-block--whatsapp .bio-link__icon{display:grid;background:none;color:inherit;width:auto;height:auto}
+.fam-chat .bio-pow{color:var(--muted,#7d8288)}

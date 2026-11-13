@@ -1,0 +1,51 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* announcement-bar */
+.mbs-announcement-bar {
+  position: relative;
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  font-size: .85rem;
+}
+.mbs-announcement-bar--accent { background: var(--tc-accent, #f59e0b); color: var(--tc-on-accent, #111); }
+.mbs-announcement-bar--surface { background: var(--tc-surface, #f4f4f5); color: var(--tc-text, #111); }
+.mbs-announcement-bar--inverse { background: var(--tc-text, #111); color: var(--tc-background, #fff); }
+.mbs-announcement-bar:has(.mbs-announcement-bar__toggle:checked),
+.mbs-announcement-bar__toggle:checked + .mbs-announcement-bar__inner { display: none; }
+.mbs-announcement-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ts-gap-2, 10px);
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding-block: var(--ts-gap-1, 6px);
+  padding-inline: var(--ts-gap-3, 16px);
+  min-block-size: 36px;
+}
+.mbs-announcement-bar__text { margin: 0; flex: 1; text-align: center; }
+.mbs-announcement-bar__link { color: inherit; font-weight: 600; text-underline-offset: 3px; }
+.mbs-announcement-bar__link:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.mbs-announcement-bar__toggle {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--ts-gap-2, 10px);
+  inline-size: 36px;
+  block-size: 36px;
+  margin-block-start: -18px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.mbs-announcement-bar__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 36px;
+  block-size: 36px;
+  flex: none;
+  border-radius: var(--tr-pill, 999px);
+}
+.mbs-announcement-bar__toggle:focus-visible + .mbs-announcement-bar__inner .mbs-announcement-bar__close { outline: 2px solid currentColor; outline-offset: 1px; }

@@ -1,0 +1,49 @@
+{
+  "operationId": "legacyRestaurant",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/restaurant",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_saffron_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Date": "Fri, 02 Oct 2026 06:01:30 GMT",
+      "Deprecation": "true",
+      "Sunset": "Sun, 03 Oct 2027 00:00:00 GMT",
+      "Link": "</developers>; rel=\"deprecation\", </api/v1/storefront/store>; rel=\"successor-version\""
+    },
+    "body": {
+      "id": 42,
+      "title": "Saffron House",
+      "slug": "saffron-house-demo",
+      "description": "Levantine grill and mezze in Riyadh.",
+      "phone": "+966112345678",
+      "address": "King Fahd Road, Al Olaya, Riyadh",
+      "store_type": "restaurant",
+      "vertical": {
+        "label": "Restaurant",
+        "group": "food",
+        "capabilities": {
+          "food_attrs": true,
+          "variant_goods": false,
+          "fitment": false,
+          "age_gate": false,
+          "expiry": false,
+          "service": false
+        },
+        "fulfillment_modes": [
+          "on-table",
+          "takeaway",
+          "delivery",
+          "curbside"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "thumb": "assets/store_templates/aurora/presets/aurora.png",
+      "values": {
+        "colors.primary": "#f5b54a",
+        "colors.background": "#07070b",
+        "colors.surface": "#0d0d15",
+        "colors.text": "#f5f5fa",
+        "colors.accent": "#7c5cff",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "nebula",
+      "label": "Nebula",
+      "thumb": "assets/store_templates/aurora/presets/nebula.png",
+      "values": {
+        "colors.primary": "#7c5cff",
+        "colors.background": "#0a0812",
+        "colors.surface": "#141020",
+        "colors.text": "#f0edfa",
+        "colors.accent": "#39d0e0",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "solstice",
+      "label": "Solstice",
+      "thumb": "assets/store_templates/aurora/presets/solstice.png",
+      "values": {
+        "colors.primary": "#ff7a3d",
+        "colors.background": "#0d0a07",
+        "colors.surface": "#181109",
+        "colors.text": "#faf1e6",
+        "colors.accent": "#f5b54a",
+        "layout.radius": "soft"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#f5b54a"
+        },
+        "colors.background": {
+          "default": "#07070b"
+        },
+        "colors.surface": {
+          "default": "#0d0d15"
+        },
+        "colors.text": {
+          "default": "#f5f5fa"
+        },
+        "colors.accent": {
+          "default": "#f5b54a"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Typography",
+      "fields": [
+        {
+          "id": "fonts.body",
+          "type": "select",
+          "label": "Body font",
+          "options": [
+            "Inter",
+            "Roboto",
+            "Poppins"
+          ],
+          "default": "Inter"
+        }
+      ]
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Hero title",
+          "default": ""
+        },
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.menu_title",
+          "type": "text",
+          "label": "Menu section title",
+          "default": "Menu"
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Featured"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": ""
+        },
+        {
+          "id": "texts.cart_button",
+          "type": "text",
+          "label": "View-cart button",
+          "default": "View cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.view_menu",
+          "type": "text",
+          "label": "View-menu button",
+          "default": "View Menu"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery label",
+          "default": "Delivery"
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup label",
+          "default": "Pickup"
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        }
+      ]
+    },
+    {
+      "include": "splash"
+    },
+    {
+      "include": "search",
+      "fields": {
+        "search.enabled": {
+          "default": true,
+          "label": "Show search bar"
+        },
+        "texts.search_placeholder": {
+          "default": "Search the menu",
+          "label": "Search box placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hero",
+      "label": "Hero",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "specials",
+      "label": "Chef's specials",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

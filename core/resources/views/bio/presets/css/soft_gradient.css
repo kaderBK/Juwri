@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* soft_gradient residual — pastel cards give a gentle scale-up on hover
+   (mirrors the .d19 artifact). All colours/radius/shadow come from tokens. */
+.bio--soft_gradient .bio-link:hover{transform:scale(1.02)}

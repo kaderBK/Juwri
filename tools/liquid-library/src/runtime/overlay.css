@@ -1,0 +1,112 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — accessible dialog (age gate, confirmations), toast, order confirmed */
+.mb-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  max-block-size: none;
+  margin: 0;
+  padding: var(--ts-gap-3, 16px);
+  border: 0;
+  background: rgba(var(--tc-overlay-rgb, 17, 17, 17), .55);
+}
+dialog.mb-dialog:not([open]) { display: none; }
+.mb-dialog::backdrop { background: transparent; }
+.mb-dialog-card {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 420px;
+  max-block-size: 85dvh;
+  overflow-y: auto;
+  padding: var(--ts-gap-4, 24px);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-background, #fff);
+  box-shadow: 0 24px 60px rgba(var(--tc-overlay-rgb, 17, 17, 17), .3);
+  animation: mb-overlay-rise .2s ease-out;
+}
+.mb-dialog-title { margin: 0 0 8px; font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.2rem; }
+.mb-dialog-text { margin: 0 0 var(--ts-gap-4, 24px); line-height: 1.5; color: var(--tc-text-muted, #6b7280); }
+.mb-dialog-text:empty { display: none; }
+.mb-dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.mb-dialog-actions > * { flex: 1 1 140px; inline-size: auto; }
+
+.mb-toast {
+  position: fixed;
+  inset-inline: var(--ts-gap-3, 16px);
+  inset-block-end: calc(80px + env(safe-area-inset-bottom, 0px));
+  z-index: 95;
+  box-sizing: border-box;
+  max-inline-size: 420px;
+  margin-inline: auto;
+  padding: 12px var(--ts-gap-3, 16px);
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-text, #111);
+  color: var(--tc-background, #fff);
+  font-family: var(--tf-body, system-ui, sans-serif);
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(var(--tc-overlay-rgb, 17, 17, 17), .25);
+  animation: mb-overlay-rise .2s ease-out;
+}
+
+.mb-confirm {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  overflow: hidden;
+  padding: 40px var(--ts-gap-3, 16px);
+  text-align: center;
+}
+.mb-confirm h2 { margin: 0; font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.6rem; }
+.mb-confirm p { margin: 0; color: var(--tc-text-muted, #6b7280); }
+.mb-confirm .mb-place,
+.mb-confirm .mb-ghost { inline-size: auto; min-inline-size: 220px; }
+.mb-confirm-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 88px;
+  block-size: 88px;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  animation: mb-overlay-pop .5s ease-out both;
+}
+.mb-confirm-check svg { inline-size: 44px; block-size: 44px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.mb-confetti { position: absolute; inset-block-start: 0; inset-inline: 0; block-size: 0; pointer-events: none; }
+.mb-confetti i {
+  position: absolute;
+  inset-block-start: -12px;
+  inset-inline-start: 50%;
+  inline-size: 8px;
+  block-size: 14px;
+  opacity: 0;
+  background: var(--tc-primary, #3fd463);
+  animation: mb-overlay-fall 2.4s ease-in 1 forwards;
+}
+.mb-confetti i:nth-child(4n+1) { inset-inline-start: 12%; background: var(--tc-accent, #ffb02e); }
+.mb-confetti i:nth-child(4n+2) { inset-inline-start: 34%; }
+.mb-confetti i:nth-child(4n+3) { inset-inline-start: 62%; background: var(--tc-danger, #f04438); }
+.mb-confetti i:nth-child(4n) { inset-inline-start: 84%; background: var(--tc-success, #12b76a); }
+.mb-confetti i:nth-child(2n) { block-size: 8px; border-radius: 50%; }
+.mb-confetti i:nth-child(3n) { animation-delay: .3s; }
+.mb-confetti i:nth-child(5n) { animation-delay: .6s; }
+@keyframes mb-overlay-rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes mb-overlay-pop { 0% { opacity: 0; transform: scale(.4); } 60% { transform: scale(1.12); } }
+@keyframes mb-overlay-fall { 0% { opacity: 1; transform: translateY(0) rotate(0); } 100% { opacity: 0; transform: translateY(420px) rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .mb-confetti { display: none; }
+  .mb-dialog-card,
+  .mb-toast,
+  .mb-confirm-check,
+  .mb-slots-loading { animation: none; }
+}

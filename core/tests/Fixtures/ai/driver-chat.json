@@ -1,0 +1,533 @@
+{
+    "openai_plain": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.xiaomimimo.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-mimo",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 2048,
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": "Kabsa 30",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "mimo-v2.5-pro",
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "plain answer",
+            "provider": "mimo",
+            "model": "mimo-v2.5-pro",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_json": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.xiaomimimo.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-mimo",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 2048,
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": "Kabsa 30",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "mimo-v2.5-pro",
+                    "response_format": {
+                        "type": "json_object"
+                    },
+                    "temperature": 0.5
+                }
+            }
+        ],
+        "result": {
+            "text": "{\"a\":1}",
+            "provider": "mimo",
+            "model": "mimo-v2.5-pro",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_json_unsupported": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.deepseek.com/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-ds",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": "Kabsa 30",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "deepseek-chat",
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "{\"a\":1}",
+            "provider": "deepseek",
+            "model": "deepseek-chat",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_history": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.xiaomimimo.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-mimo",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": "hi",
+                            "role": "user"
+                        },
+                        {
+                            "content": "{\"tool\":\"search_menu\"}",
+                            "role": "assistant"
+                        },
+                        {
+                            "content": "TOOL_RESULT: []",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "mimo-v2.5-pro",
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "ok",
+            "provider": "mimo",
+            "model": "mimo-v2.5-pro",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "kimi_pinned_temperature_and_floor": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.moonshot.ai/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-kimi",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 1024,
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": "Kabsa 30",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "kimi-k2.5",
+                    "temperature": 1
+                }
+            }
+        ],
+        "result": {
+            "text": "k",
+            "provider": "kimi",
+            "model": "kimi-k2.5",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_vision_data_url": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-openai",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 100,
+                    "messages": [
+                        {
+                            "content": "You extract menus.",
+                            "role": "system"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "text": "Read this photo",
+                                    "type": "text"
+                                },
+                                {
+                                    "image_url": {
+                                        "url": "data:image/png;base64,iVBORw0KGgo="
+                                    },
+                                    "type": "image_url"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "gpt-4o",
+                    "response_format": {
+                        "type": "json_object"
+                    },
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "{\"items\":[]}",
+            "provider": "openai",
+            "model": "gpt-4o",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_vision_raw_base64": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-openai",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "text": "Raw photo",
+                                    "type": "text"
+                                },
+                                {
+                                    "image_url": {
+                                        "url": "data:image/jpeg;base64,QUJD"
+                                    },
+                                    "type": "image_url"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "gpt-4o",
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "seen",
+            "provider": "openai",
+            "model": "gpt-4o",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "openai_image_ignored_without_vision": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.xiaomimimo.com/v1/chat/completions",
+                "headers": {
+                    "Authorization": "Bearer k-mimo",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "messages": [
+                        {
+                            "content": "Read this photo",
+                            "role": "user"
+                        }
+                    ],
+                    "model": "mimo-v2.5-pro",
+                    "temperature": 0.2
+                }
+            }
+        ],
+        "result": {
+            "text": "no eyes",
+            "provider": "mimo",
+            "model": "mimo-v2.5-pro",
+            "prompt": 11,
+            "completion": 7
+        }
+    },
+    "anthropic_plain": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "headers": {
+                    "x-api-key": "k-ant",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 4096,
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "text": "Kabsa 30",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "claude-sonnet-4-6",
+                    "system": "You extract menus."
+                }
+            }
+        ],
+        "result": {
+            "text": "claude says",
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "prompt": 13,
+            "completion": 5
+        }
+    },
+    "anthropic_json": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "headers": {
+                    "x-api-key": "k-ant",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 2048,
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "text": "Kabsa 30",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "claude-sonnet-4-6",
+                    "system": "You extract menus.\nRespond with a single valid JSON object and nothing else."
+                }
+            }
+        ],
+        "result": {
+            "text": "{\"a\":1}",
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "prompt": 13,
+            "completion": 5
+        }
+    },
+    "anthropic_no_system": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "headers": {
+                    "x-api-key": "k-ant",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 10,
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "text": "Kabsa 30",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "claude-sonnet-4-6"
+                }
+            }
+        ],
+        "result": {
+            "text": "x",
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "prompt": 13,
+            "completion": 5
+        }
+    },
+    "anthropic_vision": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "headers": {
+                    "x-api-key": "k-ant",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 4096,
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "source": {
+                                        "data": "iVBORw0KGgo=",
+                                        "media_type": "image/png",
+                                        "type": "base64"
+                                    },
+                                    "type": "image"
+                                },
+                                {
+                                    "text": "Read this photo",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "source": {
+                                        "data": "QUJD",
+                                        "media_type": "image/jpeg",
+                                        "type": "base64"
+                                    },
+                                    "type": "image"
+                                },
+                                {
+                                    "text": "Raw photo",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "claude-sonnet-4-6",
+                    "system": "You extract menus."
+                }
+            }
+        ],
+        "result": {
+            "text": "pic",
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "prompt": 13,
+            "completion": 5
+        }
+    },
+    "anthropic_history": {
+        "request": [
+            {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "headers": {
+                    "x-api-key": "k-ant",
+                    "anthropic-version": "2023-06-01",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                "body": {
+                    "max_tokens": 64,
+                    "messages": [
+                        {
+                            "content": [
+                                {
+                                    "text": "hi",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "text": "{\"tool\":\"search_menu\"}",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "assistant"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "text": "TOOL_RESULT: []",
+                                    "type": "text"
+                                }
+                            ],
+                            "role": "user"
+                        }
+                    ],
+                    "model": "claude-sonnet-4-6",
+                    "system": "You extract menus."
+                }
+            }
+        ],
+        "result": {
+            "text": "ok",
+            "provider": "anthropic",
+            "model": "claude-sonnet-4-6",
+            "prompt": 13,
+            "completion": 5
+        }
+    }
+}

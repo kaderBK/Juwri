@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => '我们使用 Cookie',
+    'cookie.body' => '必要 Cookie 保障 :brand 正常运行。在您同意后，我们还会使用分析 Cookie 来了解网站的使用情况。未经您同意，我们不会设置任何营销 Cookie。[隐私政策](/privacy)',
+    'cookie.accept' => '接受分析',
+    'cookie.reject' => '仅必要',
+    'cookie.settings' => 'Cookie 设置',
+    'cookie.settings.essential' => '必要（始终开启）',
+    'cookie.settings.analytics' => '分析：帮助我们改进网站',
+    'cookie.settings.marketing' => '营销：衡量我们的推广活动',
+    'cookie.save' => '保存选择',
+    'signup.accept' => '我同意[订阅条款](/terms)、[数据处理附录](/legal/dpa)和[可接受使用政策](/legal/aup)。',
+    'signup.business' => '我确认我是以企业身份注册，而非以消费者身份注册。',
+    'signup.privacy' => '我们按照[隐私政策](/privacy)所述，使用您的信息来运营您的账户。',
+    'signup.marketing_optin' => '通过电子邮件向我发送产品资讯和使用技巧（您可随时退订）。',
+    'checkout.accept' => '付款即表示您接受[订阅条款](/terms)。套餐会自动续订；您可随时在设置中取消。',
+    'checkout.vat' => '如适用，价格不含增值税。',
+    'pharmacy.gate' => '药品销售仅在我们已开通的国家/地区提供。请上传您的许可证文件后再发布。不允许销售处方药和管制药品。',
+    'footer.legal' => '法律信息',
+    'footer.terms' => '订阅条款',
+    'footer.privacy' => '隐私政策',
+    'footer.dpa' => '数据处理附录',
+    'footer.aup' => '可接受使用政策',
+    'footer.sla' => '服务级别与支持',
+    'footer.subprocessors' => '次级处理者',
+    'footer.security' => '安全',
+    'footer.free_reseller' => '免费经销商等级条款',
+    'footer.status' => '系统状态',
+    'footer.trademarks' => '商标政策',
+    'footer.licensing' => '开源许可',
+    'footer.company' => 'JUWRI LTD · 公司编号 14363043 · 128 City Road, London, EC1V 2NX，英国',
+    'footer.copyright' => '© 2026 JUWRI LTD。juwri 依据 AGPL-3.0 开源。',
+    'footer.powered' => '由 juwri 提供技术支持',
+    'footer.contact' => '联系我们',
+    'footer.language' => '语言',
+    'legal.version' => '版本 :version · 自 :date 起生效',
+    'legal.updated' => '最后更新：:date · 通俗语言摘要——不构成法律意见',
+    'legal.translation_note' => '本阿拉伯语译本仅为方便阅读而提供，以英文版本为准。',
+    'legal.changes' => '这些文件如有重大变更，我们会至少提前 30 天通知。',
+    'legal.contact' => '如有疑问：legal@juwri.com',
+    'mail.terms_changed.subject' => '我们将于 :date 更新 juwri 条款',
+    'mail.renewal.subject' => '您的 juwri 套餐将于 :date 续订',
+    'mail.payment_failed.subject' => '需要处理：juwri 付款失败',
+    'mail.suspension_warning.subject' => '您的 juwri 服务将在 7 天后暂停',
+    'mail.breach_notice.subject' => '关于您 juwri 账户的重要安全通知',
+    'mail.export_window.subject' => '您的数据可导出至 :date',
+    'mail.reseller_winddown_reseller.subject' => '您的经销商账户需要续订：您的店铺面临风险',
+    'mail.reseller_winddown_store.subject' => '运行您店铺的平台即将变更',
+    'signup.accept_required' => '请接受订阅条款、数据处理附录和可接受使用政策以继续。',
+    'signup.business_required' => '请确认您是以企业身份注册。',
+    'legal.reaccept.upcoming' => '我们将于 :date 更新以下文件：:documents。请查看新版本并予以接受。',
+    'legal.reaccept.updated' => '我们已更新以下文件：:documents。请查看新版本并予以接受。',
+    'legal.reaccept.accept' => '我接受',
+    'legal.reaccept.done' => '谢谢，您的同意已记录。',
+    'legal.english_only' => '本文件以英文发布。',
+];

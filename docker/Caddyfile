@@ -1,0 +1,146 @@
+# Phase 2 / item 16 — FrankenPHP (Caddy) in front of the Laravel Octane worker.
+#
+# The web root is the repository root (/app); the Laravel application lives in /app/core and is reached only through
+# the Octane worker script. This file mirrors the deny rules of .htaccess / web.config: nothing under core/ and none of
+# the internal folders or dotfiles is ever served as a static file.
+#
+# Written to the FrankenPHP worker-mode documentation; the TLS / listen address come from SERVER_NAME
+# (":80" behind a TLS proxy, or a domain name for automatic HTTPS).
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	frankenphp {
+		worker {
+			file /app/frankenphp-worker.php
+			num {$FRANKENPHP_WORKERS:2}
+			env APP_BASE_PATH /app/core
+			env LARAVEL_OCTANE 1
+			env MAX_REQUESTS {$OCTANE_MAX_REQUESTS:1000}
+		}
+	}
+}
+
+{$SERVER_NAME::80} {
+	root * /app
+	encode zstd br gzip
+
+	log {
+		output stderr
+		level WARN
+	}
+
+	request_body {
+		max_size 64MB
+	}
+
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# `route` keeps the directives below in the order written (Caddy would otherwise sort them by its own directive order).
+	route {
+		# --- denied outright (same set as .htaccess) -------------------------------------------------------------
+		@dotfiles {
+			path_regexp dot (^|/)\.
+			not path /.well-known/*
+		}
+		respond @dotfiles 404
+
+		# nothing under core/ is public except core/plugins/<id>/assets/; the internal folders never are
+		@internal {
+			path /docker/* /Dockerfile /core/* /rev/* /integrations/* /deploy/* /docs/* /tools/* /distribution/* /desktop/* /driver-app/* /mobile/*
+			not path /core/plugins/*/assets/*
+		}
+		respond @internal 404
+
+		# Only files that exist on disk (composer.json, *.md, .env backups, …): app routes that end in .json / .md
+		# (storefront boot.json and snapshot.json, the store manifest.json, api/v1/openapi.json, help pages) are
+		# Laravel's and must reach PHP (found by the P4-17 ZAP scan: they all answered an empty 404).
+		@sensitive {
+			file
+			path_regexp sens \.(bak|config|dist|fla|inc|ini|log|psd|sql|sw[op]|md|lock|json|php|sh)$
+			not path /core/plugins/*/assets/*
+		}
+		respond @sensitive 404
+		@backups path *~ *.config.js
+		respond @backups 404
+
+		# P6-78: uploads live under /storage/. Nothing there is ever executed or served as a page: script and markup
+		# extensions are 404 (the PHP handler below would otherwise run an existing .php/.phtml/.phar file).
+		@storageActive {
+			path_regexp storageactive (?i)^/storage/.*\.(php[0-9]*|phtml|phar|pht|phps|html?|xhtml|shtml|xml|js|mjs)$
+		}
+		respond @storageActive 404
+
+		# front controller path: /index.php/<path> -> /<path> (Laravel does it under php-fpm; an Octane worker cannot)
+		@frontController path_regexp fc ^/index\.php/(.*)$
+		redir @frontController /{re.fc.1} 301
+
+		# a trailing slash is dropped (301) unless it is a directory, as .htaccess does
+		@trailing {
+			path_regexp trail ^(.+)/$
+			not file {path}
+		}
+		redir @trailing {re.trail.1} 301
+
+		# a missing file under /storage/ is dead media: 404 without booting the framework (as .htaccess does)
+		@deadMedia {
+			path /storage/*
+			not file
+		}
+		respond @deadMedia 404
+
+		# files that really exist: long cache (URLs carry ?v=<version>), served by Caddy
+		@static {
+			file
+			path_regexp static \.(css|js|mjs|webp|avif|png|jpe?g|gif|svg|ico|woff2?|ttf|otf|eot|webmanifest|txt|xml|html|mp3|mp4|webm|pdf)$
+		}
+		header @static Cache-Control "public, max-age=31536000"
+		# user-uploaded SVG is active content: if opened directly (not via <img>) it must not run script from our origin
+		@svg {
+			file
+			path_regexp svg \.svg$
+		}
+		header @svg Content-Type "image/svg+xml"
+		header @svg X-Content-Type-Options "nosniff"
+		header @svg Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+		file_server @static
+
+		# Live updates (Reverb): the browser's WebSocket (wss://<host>/app/<key>) is proxied to the reverb service, so one
+		# public port serves both. Only a real WebSocket upgrade on /app/* goes there; nothing else is touched. Without the
+		# reverb service running the upgrade simply fails and the screens poll (no effect on any page). Set REVERB_UPSTREAM
+		# to move it.
+		@reverbws {
+			path /app/*
+			header Connection *Upgrade*
+			header Upgrade websocket
+		}
+		reverse_proxy @reverbws {$REVERB_UPSTREAM:reverb:8081}
+
+		# everything else is the application (one Octane worker script)
+		# (docker test 2026-10-07: `index off` + `try_files {path} /frankenphp-worker.php` never reached the worker, every page
+		# answered an empty 200. Octane's own Caddyfile uses `index frankenphp-worker.php` and a try_files target without a
+		# leading slash; that is what works.)
+		php_server {
+			index frankenphp-worker.php
+			try_files {path} frankenphp-worker.php
+			file_server off
+		}
+	}
+
+	# P6-112: PHP/Octane down or crashing (502/503/504 from the php_server) -> the static branded page, still with the
+	# real status code, so uptime monitors see the outage. Laravel's own 503 (php artisan down) is a normal response
+	# from the worker and does not come through here.
+	handle_errors {
+		@phpdown expression {err.status_code} in [502, 503, 504]
+		handle @phpdown {
+			rewrite * /maintenance.html
+			header Retry-After "300"
+			header Cache-Control "no-store"
+			file_server
+		}
+	}
+}

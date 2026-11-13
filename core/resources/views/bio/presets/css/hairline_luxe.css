@@ -1,0 +1,14 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--hairline_luxe .bio-in{padding-top:70px}
+.bio--hairline_luxe .bio-avatar{display:none}
+.bio--hairline_luxe .bio-name{font-weight:300;font-size:44px;letter-spacing:.14em}
+.bio--hairline_luxe .bio-tagline{font-style:italic;font-size:17px}
+.bio--hairline_luxe .bio-link{padding:19px 0;justify-content:center;border-width:0;
+  border-bottom:1px solid rgba(196,164,105,.22)}
+.bio--hairline_luxe .bio-block:first-child .bio-link{border-top:1px solid rgba(196,164,105,.22)}
+.bio--hairline_luxe .bio-link:hover{color:#c4a469;transform:none}
+.bio--hairline_luxe .bio-link__icon,.bio--hairline_luxe .bio-link__arrow{display:none}
+.bio--hairline_luxe .bio-link__label{font-weight:400;font-size:20px;letter-spacing:.06em}
+.bio--hairline_luxe .bio-socials a{border:1px solid rgba(196,164,105,.35);border-radius:0}

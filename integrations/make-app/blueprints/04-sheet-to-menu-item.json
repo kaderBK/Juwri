@@ -1,0 +1,28 @@
+{
+  "name": "Google Sheets → juwri: bulk-create menu items",
+  "description": "When a new row is added to a Google Sheet, create a menu item in juwri.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "google-sheets:watchRows",
+      "version": 2,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "juwri:createMenuItem",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "restaurant_id": "{{1.restaurant_id}}",
+        "name": "{{1.name}}",
+        "price": "{{1.price}}",
+        "category_id": "{{1.category_id}}"
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    }
+  ],
+  "metadata": { "instant": false }
+}

@@ -1,0 +1,55 @@
+{%- comment -%}
+  Service card (library v1, B1c) for services / laundry. Shows the
+  turnaround ("Ready in 24 hours"), "From" pricing when variant prices differ,
+  the pricing unit ("per kg") and a Book button. Booking uses the commerce
+  runtime v2 flow: data-mb-add puts the service in the cart and checkout
+  asks for a time slot (service stores must pick one).
+  Params: item (ItemDrop), heading_tag ('h3'), show_desc, show_image (bools).
+{%- endcomment -%}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign out = false
+  if item.is_sold_out or item.stock_status == 'out'
+    assign out = true
+  endif
+  assign min_price = item.price
+  assign max_price = item.price
+  for v in item.variants
+    if forloop.first
+      assign min_price = v.price
+      assign max_price = v.price
+    else
+      if v.price < min_price
+        assign min_price = v.price
+      endif
+      if v.price > max_price
+        assign max_price = v.price
+      endif
+    endif
+  endfor
+-%}
+<article class="mbs-card-service{% if out %} is-out{% endif %}" data-mb-item="{{ item.id }}" data-mb-name="{{ item.name | escape }}" data-mb-price="{{ min_price }}" data-mb-rating="{{ item.rating }}"{% if item.is_daily_special %} data-mb-special{% endif %}>
+  {%- if show_image and item.image -%}
+    {%- assign img = item.image | media_url: 'menu' -%}
+    {%- render 'media', src: img, alt: item.name, width: 160, height: 160, class: 'mbs-card-service__img', priority: false, sizes: '80px' -%}
+  {%- endif -%}
+  <div class="mbs-card-service__body">
+    <{{ tag }} class="mbs-card-service__name"><a class="mbs-card-service__link" href="?item={{ item.id }}" data-mb-open="{{ item.id }}">{{ item.name | escape }}</a></{{ tag }}>
+    {%- if show_desc and item.description -%}<p class="mbs-card-service__desc">{{ item.description | strip_html | truncate: 120 | escape }}</p>{%- endif -%}
+    <p class="mbs-card-service__meta">
+      {%- if item.turnaround_hours -%}
+        <span class="mbs-card-service__eta">{%- render 'icon', name: 'clock', size: 16 -%}{{ 'Ready in :hours hours' | t | replace: ':hours', item.turnaround_hours }}</span>
+      {%- endif -%}
+      <span class="mbs-card-service__price">
+        {%- if min_price != max_price -%}<span class="mbs-card-service__from">{{ 'From' | t }}</span> {% endif -%}
+        <bdi data-mb-money="{{ min_price }}">{{ min_price | money }}</bdi>
+        {%- if item.pricing_unit == 'kg' %} <span class="mbs-card-service__unit">{{ 'per kg' | t }}</span>{%- endif -%}
+      </span>
+    </p>
+  </div>
+  {%- if flags.allow_order -%}
+  <button type="button" class="mbs-card-service__book" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}"{% if out %} disabled{% endif %}>
+    {%- if out -%}{{ 'Unavailable' | t }}{%- else -%}{{ vocab.add_to_cart | escape }}{%- endif -%}
+  </button>
+  {%- endif -%}
+</article>

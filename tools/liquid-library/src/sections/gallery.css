@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* gallery - square grid or CSS-columns masonry; no JS */
+.mbs-gallery {
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-gallery__title { margin: 0 0 var(--ts-gap-3, 16px); font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.3rem; }
+.mbs-gallery__list { margin: 0; padding: 0; list-style: none; }
+.mbs-gallery__figure { margin: 0; }
+.mbs-gallery__img { display: block; inline-size: 100%; block-size: auto; border-radius: var(--tr-control, 12px); background: var(--tc-surface, #f4f4f5); }
+.mbs-gallery__caption { padding-block-start: 6px; color: var(--tc-text-muted, #6b7280); font-size: .85rem; }
+.mbs-gallery--grid .mbs-gallery__list { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ts-gap-2, 10px); }
+.mbs-gallery--grid .mbs-gallery__img { aspect-ratio: 1; object-fit: cover; }
+.mbs-gallery--masonry .mbs-gallery__list { columns: 2; column-gap: var(--ts-gap-2, 10px); }
+.mbs-gallery--masonry .mbs-gallery__item { break-inside: avoid; margin-block-end: var(--ts-gap-2, 10px); }
+@media (min-width: 768px) {
+  .mbs-gallery--grid .mbs-gallery__list { grid-template-columns: repeat(var(--mbs-gallery-cols, 3), 1fr); }
+  .mbs-gallery--masonry .mbs-gallery__list { columns: var(--mbs-gallery-cols, 3); }
+}

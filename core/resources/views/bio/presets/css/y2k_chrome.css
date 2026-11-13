@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--y2k_chrome .bio-name{background:linear-gradient(180deg,#fdfdff 8%,#8b93b8 38%,#e8ebf7 52%,#5d6488 78%,#c9cee6);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1.5px 0 rgba(40,40,70,.45))}
+.bio--y2k_chrome .bio-link{border:0}
+.bio--y2k_chrome .bio-link:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 10px 24px rgba(80,80,130,.35)}
+.bio--y2k_chrome .bio-avatar{background:conic-gradient(from 0deg,#b7bdd6,#fff 20%,#8f96b8 35%,#e8eaf5 55%,#9aa1c4 70%,#fff 85%,#b7bdd6);padding:4px}
+.bio--y2k_chrome .bio-avatar img,.bio--y2k_chrome .bio-avatar span{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff,#d5d8e8 60%,#aab0cc);display:grid;place-items:center}

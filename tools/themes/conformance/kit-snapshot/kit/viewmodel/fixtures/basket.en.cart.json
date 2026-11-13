@@ -1,0 +1,2094 @@
+{
+ "store": {
+  "public_id": "st_fresh_mart",
+  "slug": "fresh-mart-demo",
+  "name": "Fresh Mart",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "Fresh Mart"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "Fresh Mart"
+  },
+  "tagline": "Groceries delivered in 25 minutes",
+  "locale": "en",
+  "dir": "ltr",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/fresh-mart-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/fresh-mart-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "grocery",
+  "status": {
+   "open": true,
+   "label": "Open · closes 12 am",
+   "next_change_at": "2026-10-03T00:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0103",
+   "whatsapp": "+966 55 010 0103",
+   "address": "Al Olaya, Riyadh"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/fresh-mart"
+   }
+  ],
+  "rating": {
+   "avg": 4.6,
+   "count": 2310
+  },
+  "legal_links": [
+   {
+    "label": "Privacy",
+    "url": "/fresh-mart-demo/privacy"
+   },
+   {
+    "label": "Terms",
+    "url": "/fresh-mart-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "Fresh Mart Markets Co.",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-3303",
+    "label": "Commercial registration (CR)"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-3303",
+    "label": "VAT number"
+   },
+   "address": "Al Olaya, Riyadh 12214"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "Main branch",
+   "address": "Al Olaya, Riyadh"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "delivery",
+    "label": "Delivery",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "pickup_slot",
+    "label": "Pickup slot",
+    "needs_address": false,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "delivery",
+  "schedule_ahead": true,
+  "min_order": {
+   "minor": 8000,
+   "currency": "SAR",
+   "formatted": "SAR 80.00"
+  },
+  "free_delivery_threshold": {
+   "minor": 9000,
+   "currency": "SAR",
+   "formatted": "SAR 90.00"
+  },
+  "delivery_address": {
+   "label": "Al Olaya, Riyadh",
+   "in_zone": true
+  },
+  "refunds": {
+   "weighed_difference": true,
+   "deposits": false,
+   "returns": false
+  }
+ },
+ "theme": {
+  "slug": "basket",
+  "preset": "fresh",
+  "settings": {
+   "colors.primary": "#0B7A3B",
+   "colors.background": "#F6F7F4",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#161A14",
+   "colors.accent": "#FFC83D",
+   "layout.radius": "soft",
+   "layout.density": "compact",
+   "fonts.pair": "instrument",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#45C97A",
+   "colors_dark.background": "#0E1210",
+   "colors_dark.surface": "#171C19",
+   "colors_dark.text": "#F1F5F2",
+   "colors_dark.accent": "#FFC83D",
+   "layout.card": "grid",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": true,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "free_delivery",
+   "search",
+   "category_nav",
+   "offers",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "hero_title": "Deals this week",
+   "featured_title": "Deals this week",
+   "search_placeholder": "Search 107 products"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "fruits-veg",
+    "name": "Fruits & vegetables",
+    "item_ids": [
+     "bananas",
+     "tomatoes-on-the-vine",
+     "avocado-hass-ready-to-eat",
+     "strawberries",
+     "raspberries",
+     "cucumbers",
+     "red-apples",
+     "oranges",
+     "mango",
+     "khalas-dates",
+     "lemons",
+     "onions"
+    ],
+    "count": 15,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fruits & vegetables"
+    }
+   },
+   {
+    "id": "dairy-eggs",
+    "name": "Dairy & eggs",
+    "item_ids": [
+     "full-fat-milk",
+     "low-fat-milk",
+     "greek-yoghurt",
+     "labneh",
+     "cheddar-slices",
+     "eggs"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dairy & eggs"
+    }
+   },
+   {
+    "id": "bakery",
+    "name": "Bakery",
+    "item_ids": [
+     "sourdough-loaf",
+     "arabic-flatbread",
+     "wholemeal-toast",
+     "butter-croissants",
+     "wholemeal-pita",
+     "zaatar-manakish"
+    ],
+    "count": 10,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Bakery"
+    }
+   },
+   {
+    "id": "meat-fish",
+    "name": "Meat & fish",
+    "item_ids": [
+     "chicken-breast-fillet",
+     "whole-chicken",
+     "lamb-chops",
+     "beef-ribeye",
+     "peeled-shrimp",
+     "marinated-chicken-shawarma"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Meat & fish"
+    }
+   },
+   {
+    "id": "drinks",
+    "name": "Drinks",
+    "item_ids": [
+     "mineral-water",
+     "sparkling-water",
+     "orange-juice",
+     "arabic-coffee-with-cardamom",
+     "karak-tea-mix",
+     "pomegranate-juice"
+    ],
+    "count": 12,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Drinks"
+    }
+   },
+   {
+    "id": "snacks",
+    "name": "Snacks",
+    "item_ids": [
+     "potato-chips",
+     "dark-chocolate-70",
+     "milk-chocolate",
+     "mixed-nuts",
+     "granola-bars",
+     "fruit-gummies"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Snacks"
+    }
+   },
+   {
+    "id": "pantry",
+    "name": "Pantry",
+    "item_ids": [
+     "basmati-rice",
+     "spaghetti",
+     "extra-virgin-olive-oil",
+     "sunflower-oil",
+     "white-sugar",
+     "sidr-honey"
+    ],
+    "count": 16,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Pantry"
+    }
+   },
+   {
+    "id": "household",
+    "name": "Household",
+    "item_ids": [
+     "dishwashing-liquid",
+     "laundry-detergent",
+     "fabric-softener",
+     "paper-towels",
+     "toilet-tissue",
+     "aluminium-foil"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Household"
+    }
+   },
+   {
+    "id": "baby",
+    "name": "Baby",
+    "item_ids": [
+     "nappies-size-4",
+     "baby-wipes",
+     "infant-formula-stage-1",
+     "baby-cereal",
+     "baby-shampoo",
+     "nappy-rash-cream"
+    ],
+    "count": 8,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby"
+    }
+   }
+  ],
+  "items": {
+   "bananas": {
+    "id": "bananas",
+    "name": "Bananas",
+    "url": "/fresh-mart-demo/item/bananas",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Bananas"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Sweet and ripe, sold loose by weight.",
+    "unit": {
+     "label": "1 kg · SAR 6.50 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "cart_qty": 2,
+    "price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "SAR 6.50"
+    }
+   },
+   "tomatoes-on-the-vine": {
+    "id": "tomatoes-on-the-vine",
+    "name": "Tomatoes on the vine",
+    "url": "/fresh-mart-demo/item/tomatoes-on-the-vine",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Tomatoes on the vine"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Juicy vine tomatoes with a deep flavour.",
+    "unit": {
+     "label": "1 kg · SAR 11.80 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "cart_qty": 3,
+    "price": {
+     "minor": 1180,
+     "currency": "SAR",
+     "formatted": "SAR 11.80"
+    }
+   },
+   "avocado-hass-ready-to-eat": {
+    "id": "avocado-hass-ready-to-eat",
+    "name": "Avocado Hass, ready to eat",
+    "url": "/fresh-mart-demo/item/avocado-hass-ready-to-eat",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Avocado Hass, ready to eat"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −20%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Creamy flesh, ripe today.",
+    "compare_at": {
+     "minor": 1250,
+     "currency": "SAR",
+     "formatted": "SAR 12.50"
+    },
+    "unit": {
+     "label": "2 pc"
+    },
+    "cart_qty": 1,
+    "price": {
+     "minor": 995,
+     "currency": "SAR",
+     "formatted": "SAR 9.95"
+    }
+   },
+   "strawberries": {
+    "id": "strawberries",
+    "name": "Strawberries",
+    "url": "/fresh-mart-demo/item/strawberries",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Strawberries"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Sweet red berries, hand-picked.",
+    "unit": {
+     "label": "250 g"
+    },
+    "cart_qty": 1,
+    "price": {
+     "minor": 1495,
+     "currency": "SAR",
+     "formatted": "SAR 14.95"
+    }
+   },
+   "raspberries": {
+    "id": "raspberries",
+    "name": "Raspberries",
+    "url": "/fresh-mart-demo/item/raspberries",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Raspberries"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Tart and juicy, great with yoghurt.",
+    "unit": {
+     "label": "125 g"
+    },
+    "price": {
+     "minor": 1250,
+     "currency": "SAR",
+     "formatted": "SAR 12.50"
+    }
+   },
+   "cucumbers": {
+    "id": "cucumbers",
+    "name": "Cucumbers",
+    "url": "/fresh-mart-demo/item/cucumbers",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Cucumbers"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Crisp and cool, sold by weight.",
+    "unit": {
+     "label": "1 kg · SAR 4.90 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 490,
+     "currency": "SAR",
+     "formatted": "SAR 4.90"
+    }
+   },
+   "red-apples": {
+    "id": "red-apples",
+    "name": "Red apples",
+    "url": "/fresh-mart-demo/item/red-apples",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Red apples"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Crunchy and sweet, sold by weight.",
+    "unit": {
+     "label": "1 kg · SAR 9.50 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 950,
+     "currency": "SAR",
+     "formatted": "SAR 9.50"
+    }
+   },
+   "oranges": {
+    "id": "oranges",
+    "name": "Oranges",
+    "url": "/fresh-mart-demo/item/oranges",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Oranges"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −22%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Juicy navel oranges, sold by weight.",
+    "compare_at": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    },
+    "unit": {
+     "label": "1 kg · SAR 7.00 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "SAR 7.00"
+    }
+   },
+   "mango": {
+    "id": "mango",
+    "name": "Mango",
+    "url": "/fresh-mart-demo/item/mango",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mango"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Sweet, fragrant, sold by weight.",
+    "unit": {
+     "label": "1 kg · SAR 18.00 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "khalas-dates": {
+    "id": "khalas-dates",
+    "name": "Khalas dates",
+    "url": "/fresh-mart-demo/item/khalas-dates",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Khalas dates"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Soft, caramel-like dates from Al Ahsa.",
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "lemons": {
+    "id": "lemons",
+    "name": "Lemons",
+    "url": "/fresh-mart-demo/item/lemons",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lemons"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Thin-skinned and very juicy.",
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 550,
+     "currency": "SAR",
+     "formatted": "SAR 5.50"
+    }
+   },
+   "onions": {
+    "id": "onions",
+    "name": "Onions",
+    "url": "/fresh-mart-demo/item/onions",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Onions"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Yellow cooking onions.",
+    "unit": {
+     "label": "2 kg"
+    },
+    "price": {
+     "minor": 590,
+     "currency": "SAR",
+     "formatted": "SAR 5.90"
+    }
+   },
+   "full-fat-milk": {
+    "id": "full-fat-milk",
+    "name": "Full-fat milk",
+    "url": "/fresh-mart-demo/item/full-fat-milk",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Full-fat milk"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fresh, pasteurised and homogenised.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "2 L"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    }
+   },
+   "low-fat-milk": {
+    "id": "low-fat-milk",
+    "name": "Low-fat milk",
+    "url": "/fresh-mart-demo/item/low-fat-milk",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Low-fat milk"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Light milk with 1% fat.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "1 L"
+    },
+    "price": {
+     "minor": 850,
+     "currency": "SAR",
+     "formatted": "SAR 8.50"
+    }
+   },
+   "greek-yoghurt": {
+    "id": "greek-yoghurt",
+    "name": "Greek yoghurt",
+    "url": "/fresh-mart-demo/item/greek-yoghurt",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Greek yoghurt"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Thick, creamy and high in protein.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "450 g"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    }
+   },
+   "labneh": {
+    "id": "labneh",
+    "name": "Labneh",
+    "url": "/fresh-mart-demo/item/labneh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Labneh"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Strained yoghurt, spreadable.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 1450,
+     "currency": "SAR",
+     "formatted": "SAR 14.50"
+    }
+   },
+   "cheddar-slices": {
+    "id": "cheddar-slices",
+    "name": "Cheddar slices",
+    "url": "/fresh-mart-demo/item/cheddar-slices",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Cheddar slices"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −17%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Ten slices, individually wrapped.",
+    "compare_at": {
+     "minor": 1450,
+     "currency": "SAR",
+     "formatted": "SAR 14.50"
+    },
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "200 g"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    }
+   },
+   "eggs": {
+    "id": "eggs",
+    "name": "Eggs",
+    "url": "/fresh-mart-demo/item/eggs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Eggs"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Large white eggs, tray of 30.",
+    "allergens": [
+     "Eggs"
+    ],
+    "unit": {
+     "label": "30 pc"
+    },
+    "price": {
+     "minor": 2900,
+     "currency": "SAR",
+     "formatted": "SAR 29.00"
+    }
+   },
+   "sourdough-loaf": {
+    "id": "sourdough-loaf",
+    "name": "Sourdough loaf",
+    "url": "/fresh-mart-demo/item/sourdough-loaf",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sourdough loaf"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Slow-fermented, crisp crust.",
+    "allergens": [
+     "Gluten"
+    ],
+    "unit": {
+     "label": "800 g"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "arabic-flatbread": {
+    "id": "arabic-flatbread",
+    "name": "Arabic flatbread",
+    "url": "/fresh-mart-demo/item/arabic-flatbread",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Arabic flatbread"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Soft white pita, pack of 7.",
+    "allergens": [
+     "Gluten"
+    ],
+    "unit": {
+     "label": "7 pc"
+    },
+    "price": {
+     "minor": 350,
+     "currency": "SAR",
+     "formatted": "SAR 3.50"
+    }
+   },
+   "wholemeal-toast": {
+    "id": "wholemeal-toast",
+    "name": "Wholemeal toast",
+    "url": "/fresh-mart-demo/item/wholemeal-toast",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Wholemeal toast"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Sliced, 600 g loaf.",
+    "allergens": [
+     "Gluten"
+    ],
+    "unit": {
+     "label": "600 g"
+    },
+    "price": {
+     "minor": 500,
+     "currency": "SAR",
+     "formatted": "SAR 5.00"
+    }
+   },
+   "butter-croissants": {
+    "id": "butter-croissants",
+    "name": "Butter croissants",
+    "url": "/fresh-mart-demo/item/butter-croissants",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Butter croissants"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Four flaky croissants.",
+    "allergens": [
+     "Gluten",
+     "Dairy",
+     "Eggs"
+    ],
+    "unit": {
+     "label": "4 pc"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    }
+   },
+   "wholemeal-pita": {
+    "id": "wholemeal-pita",
+    "name": "Wholemeal pita",
+    "url": "/fresh-mart-demo/item/wholemeal-pita",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Wholemeal pita"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Six high-fibre pockets.",
+    "allergens": [
+     "Gluten"
+    ],
+    "unit": {
+     "label": "6 pc"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "SAR 4.50"
+    }
+   },
+   "zaatar-manakish": {
+    "id": "zaatar-manakish",
+    "name": "Zaatar manakish",
+    "url": "/fresh-mart-demo/item/zaatar-manakish",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Zaatar manakish"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Four baked flatbreads with zaatar.",
+    "allergens": [
+     "Gluten",
+     "Sesame"
+    ],
+    "unit": {
+     "label": "4 pc"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "chicken-breast-fillet": {
+    "id": "chicken-breast-fillet",
+    "name": "Chicken breast fillet",
+    "url": "/fresh-mart-demo/item/chicken-breast-fillet",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken breast fillet"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Skinless and boneless, cut to order.",
+    "unit": {
+     "label": "1 kg · SAR 28.00 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "SAR 28.00"
+    }
+   },
+   "whole-chicken": {
+    "id": "whole-chicken",
+    "name": "Whole chicken",
+    "url": "/fresh-mart-demo/item/whole-chicken",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Whole chicken"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fresh whole chicken, about 1.2 kg.",
+    "unit": {
+     "label": "1.2 kg"
+    },
+    "price": {
+     "minor": 2500,
+     "currency": "SAR",
+     "formatted": "SAR 25.00"
+    }
+   },
+   "lamb-chops": {
+    "id": "lamb-chops",
+    "name": "Lamb chops",
+    "url": "/fresh-mart-demo/item/lamb-chops",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb chops"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −10%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cut from the rack, sold by weight.",
+    "compare_at": {
+     "minor": 9900,
+     "currency": "SAR",
+     "formatted": "SAR 99.00"
+    },
+    "unit": {
+     "label": "1 kg · SAR 89.00 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "SAR 89.00"
+    }
+   },
+   "beef-ribeye": {
+    "id": "beef-ribeye",
+    "name": "Beef ribeye",
+    "url": "/fresh-mart-demo/item/beef-ribeye",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Beef ribeye"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Well marbled, steak cut.",
+    "unit": {
+     "label": "1 kg · SAR 99.00 / kg",
+     "sold_by_weight": true,
+     "step_g": 250
+    },
+    "price": {
+     "minor": 9900,
+     "currency": "SAR",
+     "formatted": "SAR 99.00"
+    }
+   },
+   "peeled-shrimp": {
+    "id": "peeled-shrimp",
+    "name": "Peeled shrimp",
+    "url": "/fresh-mart-demo/item/peeled-shrimp",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Peeled shrimp"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cleaned, ready to cook.",
+    "allergens": [
+     "Shellfish"
+    ],
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "SAR 39.00"
+    }
+   },
+   "marinated-chicken-shawarma": {
+    "id": "marinated-chicken-shawarma",
+    "name": "Marinated chicken shawarma",
+    "url": "/fresh-mart-demo/item/marinated-chicken-shawarma",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Marinated chicken shawarma"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Garlic and lemon marinade.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "SAR 21.00"
+    }
+   },
+   "mineral-water": {
+    "id": "mineral-water",
+    "name": "Mineral water",
+    "url": "/fresh-mart-demo/item/mineral-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mineral water"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "12 bottles of 500 ml.",
+    "unit": {
+     "label": "12 pc"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    }
+   },
+   "sparkling-water": {
+    "id": "sparkling-water",
+    "name": "Sparkling water",
+    "url": "/fresh-mart-demo/item/sparkling-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sparkling water"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Natural mineral, 1 L.",
+    "unit": {
+     "label": "1 L"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "SAR 4.50"
+    }
+   },
+   "orange-juice": {
+    "id": "orange-juice",
+    "name": "Orange juice",
+    "url": "/fresh-mart-demo/item/orange-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Orange juice"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "100% juice, not from concentrate.",
+    "unit": {
+     "label": "1 L"
+    },
+    "price": {
+     "minor": 950,
+     "currency": "SAR",
+     "formatted": "SAR 9.50"
+    }
+   },
+   "arabic-coffee-with-cardamom": {
+    "id": "arabic-coffee-with-cardamom",
+    "name": "Arabic coffee with cardamom",
+    "url": "/fresh-mart-demo/item/arabic-coffee-with-cardamom",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Arabic coffee with cardamom"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Light roast, ground with cardamom.",
+    "unit": {
+     "label": "250 g"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "SAR 21.00"
+    }
+   },
+   "karak-tea-mix": {
+    "id": "karak-tea-mix",
+    "name": "Karak tea mix",
+    "url": "/fresh-mart-demo/item/karak-tea-mix",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Karak tea mix"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "20 sachets with milk and cardamom.",
+    "allergens": [
+     "Dairy"
+    ],
+    "unit": {
+     "label": "20 pc"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "pomegranate-juice": {
+    "id": "pomegranate-juice",
+    "name": "Pomegranate juice",
+    "url": "/fresh-mart-demo/item/pomegranate-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Pomegranate juice"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "Sold out"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": false,
+    "short": "Cold-pressed, 750 ml.",
+    "unit": {
+     "label": "750 ml"
+    },
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "potato-chips": {
+    "id": "potato-chips",
+    "name": "Potato chips",
+    "url": "/fresh-mart-demo/item/potato-chips",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Potato chips"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Lightly salted, 150 g bag.",
+    "unit": {
+     "label": "150 g"
+    },
+    "price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "SAR 6.50"
+    }
+   },
+   "dark-chocolate-70": {
+    "id": "dark-chocolate-70",
+    "name": "Dark chocolate 70%",
+    "url": "/fresh-mart-demo/item/dark-chocolate-70",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dark chocolate 70%"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Smooth bar with deep cocoa.",
+    "allergens": [
+     "Dairy",
+     "Soy"
+    ],
+    "unit": {
+     "label": "100 g"
+    },
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    }
+   },
+   "milk-chocolate": {
+    "id": "milk-chocolate",
+    "name": "Milk chocolate",
+    "url": "/fresh-mart-demo/item/milk-chocolate",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Milk chocolate"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Creamy bar for sharing.",
+    "allergens": [
+     "Dairy",
+     "Soy",
+     "Tree nuts"
+    ],
+    "unit": {
+     "label": "100 g"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    }
+   },
+   "mixed-nuts": {
+    "id": "mixed-nuts",
+    "name": "Mixed nuts",
+    "url": "/fresh-mart-demo/item/mixed-nuts",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mixed nuts"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −13%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Roasted, lightly salted.",
+    "compare_at": {
+     "minor": 4500,
+     "currency": "SAR",
+     "formatted": "SAR 45.00"
+    },
+    "allergens": [
+     "Tree nuts",
+     "Peanuts"
+    ],
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "SAR 39.00"
+    }
+   },
+   "granola-bars": {
+    "id": "granola-bars",
+    "name": "Granola bars",
+    "url": "/fresh-mart-demo/item/granola-bars",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Granola bars"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Six oat bars with honey.",
+    "allergens": [
+     "Gluten",
+     "Tree nuts"
+    ],
+    "unit": {
+     "label": "6 pc"
+    },
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "fruit-gummies": {
+    "id": "fruit-gummies",
+    "name": "Fruit gummies",
+    "url": "/fresh-mart-demo/item/fruit-gummies",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fruit gummies"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fruit-flavoured gummies, 140 g.",
+    "unit": {
+     "label": "140 g"
+    },
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "SAR 7.00"
+    }
+   },
+   "basmati-rice": {
+    "id": "basmati-rice",
+    "name": "Basmati rice",
+    "url": "/fresh-mart-demo/item/basmati-rice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Basmati rice"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     },
+     {
+      "kind": "sale",
+      "label": "Sale −14%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Aged long-grain rice.",
+    "compare_at": {
+     "minor": 4900,
+     "currency": "SAR",
+     "formatted": "SAR 49.00"
+    },
+    "unit": {
+     "label": "5 kg"
+    },
+    "price": {
+     "minor": 4200,
+     "currency": "SAR",
+     "formatted": "SAR 42.00"
+    }
+   },
+   "spaghetti": {
+    "id": "spaghetti",
+    "name": "Spaghetti",
+    "url": "/fresh-mart-demo/item/spaghetti",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Spaghetti"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Durum wheat pasta.",
+    "allergens": [
+     "Gluten"
+    ],
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 450,
+     "currency": "SAR",
+     "formatted": "SAR 4.50"
+    }
+   },
+   "extra-virgin-olive-oil": {
+    "id": "extra-virgin-olive-oil",
+    "name": "Extra virgin olive oil",
+    "url": "/fresh-mart-demo/item/extra-virgin-olive-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Extra virgin olive oil"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cold-pressed, first harvest.",
+    "unit": {
+     "label": "750 ml"
+    },
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "SAR 38.00"
+    }
+   },
+   "sunflower-oil": {
+    "id": "sunflower-oil",
+    "name": "Sunflower oil",
+    "url": "/fresh-mart-demo/item/sunflower-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sunflower oil"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Light oil for frying.",
+    "unit": {
+     "label": "1.5 L"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    }
+   },
+   "white-sugar": {
+    "id": "white-sugar",
+    "name": "White sugar",
+    "url": "/fresh-mart-demo/item/white-sugar",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "White sugar"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fine granulated sugar.",
+    "unit": {
+     "label": "2 kg"
+    },
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    }
+   },
+   "sidr-honey": {
+    "id": "sidr-honey",
+    "name": "Sidr honey",
+    "url": "/fresh-mart-demo/item/sidr-honey",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sidr honey"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Raw honey from Saudi highlands.",
+    "unit": {
+     "label": "500 g"
+    },
+    "price": {
+     "minor": 4500,
+     "currency": "SAR",
+     "formatted": "SAR 45.00"
+    }
+   },
+   "dishwashing-liquid": {
+    "id": "dishwashing-liquid",
+    "name": "Dishwashing liquid",
+    "url": "/fresh-mart-demo/item/dishwashing-liquid",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dishwashing liquid"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cuts grease, lemon scent.",
+    "unit": {
+     "label": "750 ml"
+    },
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "SAR 11.00"
+    }
+   },
+   "laundry-detergent": {
+    "id": "laundry-detergent",
+    "name": "Laundry detergent",
+    "url": "/fresh-mart-demo/item/laundry-detergent",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Laundry detergent"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Concentrated liquid, 3 L.",
+    "unit": {
+     "label": "3 L"
+    },
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "SAR 38.00"
+    }
+   },
+   "fabric-softener": {
+    "id": "fabric-softener",
+    "name": "Fabric softener",
+    "url": "/fresh-mart-demo/item/fabric-softener",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fabric softener"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Long-lasting oud scent.",
+    "unit": {
+     "label": "2 L"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    }
+   },
+   "paper-towels": {
+    "id": "paper-towels",
+    "name": "Paper towels",
+    "url": "/fresh-mart-demo/item/paper-towels",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Paper towels"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Six absorbent rolls.",
+    "unit": {
+     "label": "6 pc"
+    },
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    }
+   },
+   "toilet-tissue": {
+    "id": "toilet-tissue",
+    "name": "Toilet tissue",
+    "url": "/fresh-mart-demo/item/toilet-tissue",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Toilet tissue"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −13%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "24 soft 2-ply rolls.",
+    "compare_at": {
+     "minor": 3900,
+     "currency": "SAR",
+     "formatted": "SAR 39.00"
+    },
+    "unit": {
+     "label": "24 pc"
+    },
+    "price": {
+     "minor": 3400,
+     "currency": "SAR",
+     "formatted": "SAR 34.00"
+    }
+   },
+   "aluminium-foil": {
+    "id": "aluminium-foil",
+    "name": "Aluminium foil",
+    "url": "/fresh-mart-demo/item/aluminium-foil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Aluminium foil"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "30 m roll, 30 cm wide.",
+    "unit": {
+     "label": "30 m"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "nappies-size-4": {
+    "id": "nappies-size-4",
+    "name": "Nappies size 4",
+    "url": "/fresh-mart-demo/item/nappies-size-4",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Nappies size 4"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Dry-lock, 44 nappies, 9–14 kg.",
+    "unit": {
+     "label": "44 pc"
+    },
+    "price": {
+     "minor": 7900,
+     "currency": "SAR",
+     "formatted": "SAR 79.00"
+    }
+   },
+   "baby-wipes": {
+    "id": "baby-wipes",
+    "name": "Baby wipes",
+    "url": "/fresh-mart-demo/item/baby-wipes",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby wipes"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fragrance-free, 80 wipes.",
+    "unit": {
+     "label": "80 pc"
+    },
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "infant-formula-stage-1": {
+    "id": "infant-formula-stage-1",
+    "name": "Infant formula stage 1",
+    "url": "/fresh-mart-demo/item/infant-formula-stage-1",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Infant formula stage 1"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "From birth to 6 months, 400 g.",
+    "allergens": [
+     "Dairy",
+     "Soy"
+    ],
+    "unit": {
+     "label": "400 g"
+    },
+    "price": {
+     "minor": 5400,
+     "currency": "SAR",
+     "formatted": "SAR 54.00"
+    }
+   },
+   "baby-cereal": {
+    "id": "baby-cereal",
+    "name": "Baby cereal",
+    "url": "/fresh-mart-demo/item/baby-cereal",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby cereal"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Rice cereal with banana, 200 g.",
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "unit": {
+     "label": "200 g"
+    },
+    "price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "SAR 17.00"
+    }
+   },
+   "baby-shampoo": {
+    "id": "baby-shampoo",
+    "name": "Baby shampoo",
+    "url": "/fresh-mart-demo/item/baby-shampoo",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby shampoo"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Tear-free, 200 ml.",
+    "unit": {
+     "label": "200 ml"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "nappy-rash-cream": {
+    "id": "nappy-rash-cream",
+    "name": "Nappy rash cream",
+    "url": "/fresh-mart-demo/item/nappy-rash-cream",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Nappy rash cream"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Zinc oxide barrier cream, 100 g.",
+    "unit": {
+     "label": "100 g"
+    },
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    }
+   }
+  },
+  "total": 107,
+  "next_page_url": "/fresh-mart-demo?page=2"
+ },
+ "features": {
+  "offers": [
+   {
+    "id": "off_weekly",
+    "title": "Weekly deals on fruit and veg"
+   },
+   {
+    "id": "off_free",
+    "title": "Free delivery over SAR 90",
+    "code": "FRESH"
+   }
+  ],
+  "barcode_scan": true
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/fresh-mart-demo/cart",
+  "quote": "/fresh-mart-demo/quote",
+  "place": "/fresh-mart-demo/order",
+  "track": "/fresh-mart-demo/track",
+  "coupon": "/fresh-mart-demo/coupon",
+  "otp": "/fresh-mart-demo/otp",
+  "account": "/fresh-mart-demo/account",
+  "search": "/fresh-mart-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "SAR",
+   "exponent": 2,
+   "symbol_position_effective": "before"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "VAT"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "cart",
+  "cart": {
+   "lines": [
+    {
+     "id": "ln_1",
+     "item_id": "bananas",
+     "name": "Bananas",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "Bananas"
+     },
+     "qty": 2,
+     "line_total": {
+      "minor": 1300,
+      "currency": "SAR",
+      "formatted": "SAR 13.00"
+     },
+     "unit_label": "1 kg · SAR 6.50 / kg"
+    },
+    {
+     "id": "ln_2",
+     "item_id": "tomatoes-on-the-vine",
+     "name": "Tomatoes on the vine",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "Tomatoes on the vine"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 590,
+      "currency": "SAR",
+      "formatted": "SAR 5.90"
+     },
+     "unit_label": "500 g · by weight",
+     "estimate": true,
+     "note": "Estimated: you pay the actual weight, max SAR 6.49"
+    },
+    {
+     "id": "ln_3",
+     "item_id": "strawberries",
+     "name": "Strawberries",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "Strawberries"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1495,
+      "currency": "SAR",
+      "formatted": "SAR 14.95"
+     },
+     "unit_label": "250 g"
+    },
+    {
+     "id": "ln_4",
+     "item_id": "full-fat-milk",
+     "name": "Full-fat milk",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "Full-fat milk"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1900,
+      "currency": "SAR",
+      "formatted": "SAR 19.00"
+     },
+     "unit_label": "2 L"
+    },
+    {
+     "id": "ln_5",
+     "item_id": "sourdough-loaf",
+     "name": "Sourdough loaf",
+     "thumb": {
+      "src": "../../_kit/img/placeholder-1x1.svg",
+      "alt": "Sourdough loaf"
+     },
+     "qty": 1,
+     "line_total": {
+      "minor": 1400,
+      "currency": "SAR",
+      "formatted": "SAR 14.00"
+     },
+     "unit_label": "800 g"
+    }
+   ],
+   "rows": [
+    {
+     "key": "subtotal",
+     "label": "Items (6)",
+     "amount": {
+      "minor": 6685,
+      "currency": "SAR",
+      "formatted": "SAR 66.85"
+     },
+     "kind": "subtotal"
+    },
+    {
+     "key": "delivery",
+     "label": "Delivery",
+     "amount": {
+      "minor": 900,
+      "currency": "SAR",
+      "formatted": "SAR 9.00"
+     },
+     "kind": "delivery"
+    },
+    {
+     "key": "estimate_cap",
+     "label": "Weighed items may add up to",
+     "amount": {
+      "minor": 59,
+      "currency": "SAR",
+      "formatted": "SAR 0.59"
+     },
+     "kind": "estimate_cap",
+     "muted": true,
+     "informational": true
+    }
+   ],
+   "total": {
+    "minor": 7585,
+    "currency": "SAR",
+    "formatted": "SAR 75.85"
+   },
+   "total_label": "Estimated total",
+   "tax_note": "Prices include VAT 15% (SAR 9.89). Weighed items may change the total by up to SAR 0.59.",
+   "free_delivery": {
+    "remaining": {
+     "minor": 2315,
+     "currency": "SAR",
+     "formatted": "SAR 23.15"
+    },
+    "progress": 0.74,
+    "label": "Add SAR 23.15 more for free delivery"
+   },
+   "substitution_preference": "Replace with similar (same price or cheaper)",
+   "notes": [
+    "6 items · Fresh Mart"
+   ],
+   "cta_label": "Choose delivery time · SAR 75.85"
+  }
+ }
+}

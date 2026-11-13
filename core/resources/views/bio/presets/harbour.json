@@ -1,0 +1,31 @@
+{
+  "slug": "harbour",
+  "starter": "restaurant_essential",
+  "name": "Harbour",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "Manrope", "weights": [400, 600, 700, 800]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#0d2438",
+    "--ink": "#eef4f6",
+    "--muted": "#9db4c2",
+    "--card": "#12314a",
+    "--btn-bg": "#12314a",
+    "--btn-fg": "#eef4f6",
+    "--btn-border": "#1e425e",
+    "--accent": "#c98f43",
+    "--accent-ink": "#0d2438",
+    "--icon-bg": "#0d2438",
+    "--icon-fg": "#c98f43",
+    "--radius": "12px",
+    "--shadow": "none",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Fraunces',Georgia,serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

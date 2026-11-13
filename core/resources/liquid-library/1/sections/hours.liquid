@@ -1,0 +1,64 @@
+{%- comment -%}
+  Opening hours (library v1): the weekly schedule from `hours.week`
+  (Monday-first rows {day, open, close, closed}) with today highlighted.
+  A store without a schedule shows nothing (or a short note if the owner
+  opts in). Times are direction-isolated so "09:00–23:00" never flips in RTL.
+{%- endcomment -%}
+{%- assign row_count = hours.week | size -%}
+{%- comment -%} Today in the STORE's timezone (not the server's). {%- endcomment -%}
+{%- assign today_key = hours.today_key -%}
+{%- if row_count > 0 or section.settings.show_when_empty -%}
+<section class="mbs-hours" aria-labelledby="mbs-hours-{{ section.id | escape }}">
+  <div class="mbs-hours__head">
+    <h2 class="mbs-hours__title" id="mbs-hours-{{ section.id | escape }}">{%- if section.settings.heading != '' -%}{{ section.settings.heading | escape }}{%- else -%}{{ 'Opening hours' | t }}{%- endif -%}</h2>
+    {%- if section.settings.show_status -%}{%- render 'open-badge', hours: hours, detail: false -%}{%- endif -%}
+  </div>
+  {%- if row_count > 0 -%}
+  <table class="mbs-hours__table">
+    <caption class="mbs-hours__sr">{{ 'Opening hours' | t }}</caption>
+    <tbody>
+    {%- for row in hours.week -%}
+      {%- assign is_today = false -%}
+      {%- if row.day == today_key -%}{%- assign is_today = true -%}{%- endif -%}
+      <tr class="mbs-hours__row{% if is_today %} is-today{% endif %}"{% if is_today %} aria-current="date"{% endif %}>
+        <th scope="row" class="mbs-hours__day">
+          {%- case row.day -%}
+            {%- when 'mon' -%}{{ 'Monday' | t }}
+            {%- when 'tue' -%}{{ 'Tuesday' | t }}
+            {%- when 'wed' -%}{{ 'Wednesday' | t }}
+            {%- when 'thu' -%}{{ 'Thursday' | t }}
+            {%- when 'fri' -%}{{ 'Friday' | t }}
+            {%- when 'sat' -%}{{ 'Saturday' | t }}
+            {%- when 'sun' -%}{{ 'Sunday' | t }}
+            {%- else -%}{{ row.day | escape }}
+          {%- endcase -%}
+          {%- if is_today -%}<span class="mbs-hours__today">{{ 'Today' | t }}</span>{%- endif -%}
+        </th>
+        <td class="mbs-hours__time">
+          {%- if row.closed or row.open == nil or row.open == '' -%}<span class="mbs-hours__closed">{{ 'Closed' | t }}</span>
+          {%- else -%}<bdi>{{ row.open | escape }}–{{ row.close | escape }}</bdi>{%- endif -%}
+        </td>
+      </tr>
+    {%- endfor -%}
+    </tbody>
+  </table>
+  {%- else -%}
+  <p class="mbs-hours__empty">{{ 'Hours not set yet' | t }}</p>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Opening hours",
+  "group": "info",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = Opening hours)", "default": "" },
+    { "id": "show_status", "type": "checkbox", "label": "Show open / closed badge", "default": true },
+    { "id": "show_when_empty", "type": "checkbox", "label": "Show a note when no hours are set", "default": false }
+  ],
+  "presets": [{ "name": "Opening hours" }]
+}
+{% endschema %}

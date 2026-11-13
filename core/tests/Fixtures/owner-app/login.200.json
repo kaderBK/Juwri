@@ -1,0 +1,28 @@
+{
+    "status": 200,
+    "body": {
+        "default_store_id": "int",
+        "expires_at": "string",
+        "stores": {
+            "list_of": {
+                "currency": "string",
+                "group": "string",
+                "id": "int",
+                "logo_url": "string",
+                "slug": "string",
+                "store_type": "string",
+                "title": "string"
+            }
+        },
+        "token": "string",
+        "token_type": "string",
+        "user": {
+            "dir": "string",
+            "email": "string",
+            "id": "int",
+            "locale": "string",
+            "name": "string",
+            "username": "string"
+        }
+    }
+}

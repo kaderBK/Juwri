@@ -1,0 +1,19 @@
+name: CLA
+
+# STUB, DISABLED. The contributor licence agreement bot is not configured yet (individual and corporate agreements:
+# CLA-INDIVIDUAL.md and CLA-CORPORATE.md). The repository owner replaces this file with the chosen CLA bot's workflow
+# and enables it. Until then this workflow only runs when started by hand and its job never runs.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cla:
+    name: CLA check (not configured)
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "CLA bot not configured"

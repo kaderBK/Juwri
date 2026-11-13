@@ -1,0 +1,53 @@
+{%- comment -%}
+  Store status strip (library v1): open / closed right now from `hours`,
+  when that next changes, today's hours, and (optionally) the branch list
+  with each branch's live state. Renders nothing for a store with no hours
+  and no branches. The branch switcher itself is a platform widget (B0.7).
+{%- endcomment -%}
+{%- liquid
+  assign branch_count = branches | size
+  assign show_branches = false
+  if section.settings.show_branches and branch_count > 1
+    assign show_branches = true
+  endif
+  assign has_state = false
+  if hours.state != 'unknown' or hours.manual_closed
+    assign has_state = true
+  endif
+-%}
+{%- if has_state or show_branches -%}
+<section class="mbs-store-status{% if hours.state == 'open' and hours.manual_closed == false %} is-open{% elsif has_state %} is-closed{% endif %}" aria-label="{{ 'Opening hours' | t }}">
+  {%- if has_state -%}
+  <p class="mbs-store-status__now" role="status">
+    {%- render 'icon', name: 'clock', size: 18 -%}
+    {%- render 'open-badge', hours: hours, detail: true -%}
+    {%- if section.settings.show_today and hours.today -%}<span class="mbs-store-status__today">{{ 'Today' | t }} <bdi>{{ hours.today | escape }}</bdi></span>{%- endif -%}
+  </p>
+  {%- endif -%}
+  {%- if show_branches -%}
+  <ul class="mbs-store-status__branches" role="list" aria-label="{{ 'Branches' | t }}">
+    {%- for branch in branches -%}
+      <li class="mbs-store-status__branch{% if branch.is_open %} is-open{% endif %}">
+        <i class="mbs-store-status__dot" aria-hidden="true"></i>
+        <span class="mbs-store-status__branch-name">{{ branch.name | escape }}</span>
+        <span class="mbs-store-status__branch-state">{% if branch.is_open %}{{ 'Open now' | t }}{% else %}{{ 'Closed now' | t }}{% endif %}</span>
+      </li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Store status",
+  "group": "info",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "show_today", "type": "checkbox", "label": "Show today's hours", "default": true },
+    { "id": "show_branches", "type": "checkbox", "label": "List branches (multi-branch stores)", "default": true }
+  ],
+  "presets": [{ "name": "Store status" }]
+}
+{% endschema %}

@@ -1,0 +1,12 @@
+{
+  "group": "Share",
+  "icon": "share",
+  "fields": [
+    {
+      "id": "share.fallback_button",
+      "type": "toggle",
+      "label": "Show a Share button when the theme has none",
+      "default": false
+    }
+  ]
+}

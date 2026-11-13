@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "_comment": "MCP-PAGE M3-1. The two PUBLIC juwri MCP servers, ready to publish to the official registry (registry.modelcontextprotocol.io). Token-auth servers (Admin, Storefront, Customer) are intentionally EXCLUDED from v1 — the registry lists servers a client can connect to without credentials. Replace 'juwri.com' with the exact domain you will prove ownership of (DNS TXT or HTTP challenge); the namespace host and the remotes host must match that domain. mcp-publisher publishes ONE server per call — see RUNBOOK.md.",
+  "servers": [
+    {
+      "name": "com.juwri/catalog-mcp",
+      "description": "Discover restaurants across the juwri platform: search stores, search dishes cross-store, and get a store's details with a deep-link hint into its storefront ordering server. Public, read-only; lists only active, publicly-listed stores and never exposes owner PII.",
+      "version": "1.0.0",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://juwri.com/mcp/catalog"
+        }
+      ]
+    },
+    {
+      "name": "com.juwri/dev-mcp",
+      "description": "Build on juwri from any MCP-capable editor: searchable developer + help docs, the authoritative generated Liquid theme reference, section-schema format, and server-side theme validation with the marketplace's own rules. Public, read-only (plus a docs-feedback tool).",
+      "version": "1.0.0",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://juwri.com/mcp/dev"
+        }
+      ]
+    }
+  ]
+}

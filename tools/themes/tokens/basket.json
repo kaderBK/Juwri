@@ -1,0 +1,308 @@
+{
+ "$schema_note": "Juwri theme tokens v1. Customizer roles (primary, background, surface, text, accent) map 1:1 to colors.* in theme.json; the other colour keys are theme tokens (--x-*) derived in theme.css. Checked by tools/contrast.py (contract §8).",
+ "theme": "basket",
+ "vertical_set": "retail (default for new grocery store type)",
+ "default_preset": "fresh",
+ "scheme_default": "auto",
+ "customizer_roles": [
+  "primary",
+  "background",
+  "surface",
+  "text",
+  "accent"
+ ],
+ "presets": {
+  "fresh": {
+   "label": {
+    "en": "Fresh",
+    "ar": "طازج"
+   },
+   "source": "zevoa + shelf",
+   "default_scheme": "light",
+   "layout_overrides": {},
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#0B7A3B",
+    "background": "#F6F7F4",
+    "surface": "#FFFFFF",
+    "surface_2": "#ECEFE8",
+    "text": "#161A14",
+    "muted": "#59605A",
+    "border": "#E0E4DC",
+    "border_strong": "#828A80",
+    "accent": "#FFC83D"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#45C97A",
+    "background": "#0E1210",
+    "surface": "#171C19",
+    "surface_2": "#212824",
+    "text": "#F1F5F2",
+    "muted": "#A5AEA8",
+    "border": "#2C3430",
+    "border_strong": "#6F7973",
+    "accent": "#FFC83D"
+   }
+  },
+  "market": {
+   "label": {
+    "en": "Market",
+    "ar": "سوق"
+   },
+   "source": "new (produce market)",
+   "default_scheme": "light",
+   "layout_overrides": {
+    "layout.radius": "round"
+   },
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#B3261E",
+    "background": "#FFF8F1",
+    "surface": "#FFFFFF",
+    "surface_2": "#F7ECE0",
+    "text": "#22170F",
+    "muted": "#67584B",
+    "border": "#EEDFCF",
+    "border_strong": "#8E7E70",
+    "accent": "#2E7D32"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#FF7B6B",
+    "background": "#16110D",
+    "surface": "#211A15",
+    "surface_2": "#2B231C",
+    "text": "#F8EFE6",
+    "muted": "#BCAB9B",
+    "border": "#3A3028",
+    "border_strong": "#857668",
+    "accent": "#6CC16F"
+   }
+  },
+  "night": {
+   "label": {
+    "en": "Night",
+    "ar": "ليلي"
+   },
+   "source": "zevoa super-app shell",
+   "default_scheme": "dark",
+   "layout_overrides": {
+    "layout.radius": "round"
+   },
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#4B2BB8",
+    "background": "#F6F5FB",
+    "surface": "#FFFFFF",
+    "surface_2": "#ECE9F7",
+    "text": "#17142A",
+    "muted": "#5D5970",
+    "border": "#E2DFF0",
+    "border_strong": "#847F99",
+    "accent": "#FFD23F"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#A895FF",
+    "background": "#100E1C",
+    "surface": "#1A1729",
+    "surface_2": "#242036",
+    "text": "#F2F0FA",
+    "muted": "#ABA6C2",
+    "border": "#312C47",
+    "border_strong": "#77718F",
+    "accent": "#FFD23F"
+   }
+  }
+ },
+ "color_usage": {
+  "primary": "CTA fill (add, cart bar, place order), active category chip, focus ring, links",
+  "accent": "deal / discount badges and free-delivery progress fill — never body text",
+  "surface_2": "input fill, skeletons, segmented control track, quantity stepper track",
+  "muted": "descriptions, meta (calories, prep time), placeholder — passes 4.5:1, replaces 55% mix for body-size text",
+  "border": "card hairline, dividers (decorative, no contrast requirement)",
+  "border_strong": "input + toggle outlines (3:1 non-text)",
+  "danger/success/warning": "status text + icons; fills use 12% tint of the same colour with the text colour on top"
+ },
+ "typography": {
+  "font_pair": "instrument",
+  "heading": "Instrument Sans 700 (Latin) → IBM Plex Sans Arabic 700",
+  "body": "Instrument Sans (Latin) → IBM Plex Sans Arabic",
+  "weights": {
+   "body": 400,
+   "strong": 600,
+   "heading": 700
+  },
+  "scale_px": {
+   "xs": 12,
+   "sm": 14,
+   "base": 16,
+   "lg": 18,
+   "xl": 20,
+   "2xl": 24,
+   "3xl": 30,
+   "4xl": 38,
+   "5xl": 48
+  },
+  "roles": {
+   "store_name": {
+    "phone": "3xl/heading/700",
+    "desktop": "5xl/heading/700"
+   },
+   "category_title": {
+    "phone": "2xl/heading/700",
+    "desktop": "3xl/heading/700"
+   },
+   "item_name": {
+    "phone": "sm/body/600, 2 lines",
+    "desktop": "base/body/600, 2 lines"
+   },
+   "item_desc": {
+    "phone": "sm/body/400 muted, 2-line clamp",
+    "desktop": "sm/body/400 muted, 2-line clamp"
+   },
+   "price": {
+    "phone": "base/body/600 tabular-nums",
+    "desktop": "base/body/600 tabular-nums"
+   },
+   "sheet_title": {
+    "phone": "2xl/heading/700",
+    "desktop": "3xl/heading/700"
+   },
+   "total": {
+    "phone": "xl/body/700 tabular-nums",
+    "desktop": "xl/body/700 tabular-nums"
+   },
+   "label": {
+    "phone": "sm/body/600",
+    "desktop": "sm/body/600"
+   },
+   "meta": {
+    "phone": "xs/body/400 muted (min 12px, never smaller)",
+    "desktop": "xs/body/400 muted"
+   },
+   "unit_price": {
+    "phone": "xs/body/400 muted",
+    "desktop": "xs/body/400 muted"
+   }
+  },
+  "line_height": {
+   "latin": {
+    "tight": 1.15,
+    "base": 1.5
+   },
+   "arabic": {
+    "tight": 1.4,
+    "base": 1.7
+   }
+  },
+  "rules": [
+   "no letter-spacing on Arabic",
+   "no uppercase transforms",
+   "price per unit always visible (e.g. SAR 12.50 / kg)",
+   "min body 16px on inputs (iOS zoom)"
+  ]
+ },
+ "radius": {
+  "customizer": "layout.radius",
+  "default": "soft",
+  "values_px": {
+   "card": 10,
+   "control": 8,
+   "chip": 999,
+   "sheet_top": 20,
+   "image": 8
+  },
+  "note": "card/control follow core Tokens RADIUS_SCALE for the default 'soft' (10/8); the .pen designs drew 12-14/10, build uses the core scale"
+ },
+ "spacing": {
+  "customizer": "layout.density",
+  "default": "cozy",
+  "grid_px": 4,
+  "scale_px": {
+   "1": 4,
+   "2": 8,
+   "3": 12,
+   "4": 16,
+   "5": 20,
+   "6": 24,
+   "8": 32,
+   "10": 40,
+   "12": 48,
+   "16": 64
+  },
+  "gutter": {
+   "phone": 16,
+   "desktop": 32
+  },
+  "max_content_px": 1200,
+  "section_gap": {
+   "phone": 32,
+   "desktop": 56
+  },
+  "customizer_default": "compact"
+ },
+ "sizes": {
+  "target_primary": 44,
+  "target_chip": 32,
+  "header_phone": 56,
+  "category_bar": 52,
+  "cart_bar": 64,
+  "item_thumb_list": 96,
+  "item_thumb_desktop": 120,
+  "icon": 20,
+  "icon_small": 16,
+  "scroll_padding_note": "scroll-padding-top = header + category_bar; scroll-padding-bottom = cart_bar + 16 (WCAG 2.4.11)"
+ },
+ "elevation": {
+  "card": "0 1px 2px rgb(0 0 0 / .06)",
+  "raised": "0 6px 20px rgb(0 0 0 / .10)",
+  "sheet": "0 -8px 32px rgb(0 0 0 / .18)",
+  "dark_note": "dark scheme uses surface steps (surface → surface_2) instead of shadows"
+ },
+ "motion": {
+  "fast_ms": 120,
+  "base_ms": 200,
+  "slow_ms": 320,
+  "ease": "cubic-bezier(.2,.8,.2,1)",
+  "ease_exit": "cubic-bezier(.4,0,1,1)",
+  "patterns": {
+   "sheet_open": "translateY(100%)→0, slow, ease",
+   "add_to_cart": "button label → check, fast; cart bar count bump scale 1→1.08→1, base",
+   "chip_active": "background colour, fast",
+   "skeleton": "opacity pulse 1.2s"
+  },
+  "reduced_motion": "all transforms off; opacity fades ≤ fast only"
+ },
+ "breakpoints_px": {
+  "phone": 0,
+  "tablet": 768,
+  "desktop": 1080,
+  "wide": 1440
+ },
+ "layout": {
+  "card_default": "grid",
+  "image_ratio_default": "1:1",
+  "category_nav_default": "chips",
+  "header_default": "compact",
+  "desktop_cart_default": "panel",
+  "order_type_default": "delivery",
+  "grid": "phone 2 col (3 col at ≥ 400px), desktop 5 col",
+  "product_image": "product on white (surface), contain not cover, 8px inset",
+  "desktop": "category sidebar 220 | catalog 5-col grid | cart panel 360",
+  "grocery_flow": "qty-first: add button turns into an inline stepper once in cart; delivery slot picker; substitution preference per line and per order; free-delivery progress bar"
+ }
+}

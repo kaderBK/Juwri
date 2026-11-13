@@ -1,0 +1,157 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "scoop",
+      "label": "Scoop",
+      "thumb": "assets/store_templates/scoop/presets/scoop.png",
+      "values": {
+        "colors.primary": "#F5C518",
+        "colors.background": "#141416",
+        "colors.surface": "#26262A",
+        "colors.text": "#F7F7F5",
+        "colors.accent": "#FFC93C",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "sorbet",
+      "label": "Sorbet",
+      "thumb": "assets/store_templates/scoop/presets/sorbet.png",
+      "values": {
+        "colors.primary": "#ff6f91",
+        "colors.background": "#fff5f7",
+        "colors.surface": "#ffffff",
+        "colors.text": "#2a0a16",
+        "colors.accent": "#ffc93c",
+        "layout.radius": "pill"
+      }
+    },
+    {
+      "id": "mint",
+      "label": "Mint",
+      "thumb": "assets/store_templates/scoop/presets/mint.png",
+      "values": {
+        "colors.primary": "#3ddc84",
+        "colors.background": "#0f1512",
+        "colors.surface": "#1a221d",
+        "colors.text": "#eef7f2",
+        "colors.accent": "#f5c518",
+        "layout.radius": "round"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#F5C518"
+        },
+        "colors.background": {
+          "default": "#141416"
+        },
+        "colors.surface": {
+          "default": "#26262A"
+        },
+        "colors.text": {
+          "default": "#F7F7F5"
+        },
+        "colors.accent": {
+          "default": "#FFC93C"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Today's pick label",
+          "default": "Today’s pick"
+        },
+        {
+          "id": "texts.order_now",
+          "type": "text",
+          "label": "Order Now",
+          "default": ""
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.title": {
+          "default": "cold · bold · yellow",
+          "label": "Splash title"
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        },
+        {
+          "id": "brand.show_cover",
+          "type": "toggle",
+          "label": "Show cover photo",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    },
+    {
+      "id": "catbar",
+      "label": "Underline category tabs",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "daily_specials",
+      "label": "Promo / today's pick card",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    },
+    {
+      "id": "menu",
+      "label": "Staggered catalog grid",
+      "toggleable": true,
+      "default": true,
+      "orderable": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "photo_hero",
+  "starter": "social_grid",
+  "name": "Photo Hero",
+  "family": "photo_hero",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#101014",
+    "--ink": "#ffffff",
+    "--muted": "#a8a8b4",
+    "--card": "rgba(255,255,255,.08)",
+    "--btn-bg": "rgba(255,255,255,.08)",
+    "--btn-fg": "#ffffff",
+    "--btn-border": "rgba(255,255,255,.16)",
+    "--accent": "#e2603a",
+    "--accent-ink": "#ffffff",
+    "--icon-fg": "#ffffff",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

@@ -1,0 +1,65 @@
+{%- comment -%}
+  Fitment search (library v1, B1c) — car parts. Renders only for stores with
+  the `fitment` capability. The form follows the commerce runtime v2
+  contract: <form data-mb-fitment> with make / model / year selects
+  (data-mb-fitment-make|model|year, filled from storefront.fitment.options),
+  an optional part-number box (data-mb-fitment-oem → storefront.fitment
+  .oemSearch on submit), a reset button and a live status line. The runtime
+  then filters (or, in "highlight" mode, marks) every [data-mb-item] card
+  with data-mb-fit = fit | universal | nofit. Without the runtime (or when
+  fitment is switched off server-side) the runtime hides the form.
+{%- endcomment -%}
+{%- if features.fitment -%}
+{%- liquid
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = 'Find parts for your vehicle' | t
+  endif
+  assign sub = section.settings.subheading | strip
+-%}
+<section class="mbs-fitment-search" aria-labelledby="mbs-fs-{{ section.id | escape }}">
+  <div class="mbs-fitment-search__card">
+    <div class="mbs-fitment-search__head">
+      <svg class="mbs-fitment-search__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg>
+      <div>
+        <h2 class="mbs-fitment-search__title" id="mbs-fs-{{ section.id | escape }}">{{ heading | escape }}</h2>
+        {%- if sub != '' -%}<p class="mbs-fitment-search__sub">{{ sub | escape }}</p>{%- endif -%}
+      </div>
+    </div>
+    <form class="mbs-fitment-search__form" data-mb-fitment{% if section.settings.mode == 'highlight' %} data-mb-fitment-mode="highlight"{% endif %} role="search" aria-labelledby="mbs-fs-{{ section.id | escape }}">
+      <div class="mbs-fitment-search__fields">
+        <label class="mbs-fitment-search__field"><span class="mbs-fitment-search__label">{{ 'Make' | t }}</span><select class="mbs-fitment-search__select" data-mb-fitment-make disabled><option value="">{{ 'Make' | t }}</option></select></label>
+        <label class="mbs-fitment-search__field"><span class="mbs-fitment-search__label">{{ 'Model' | t }}</span><select class="mbs-fitment-search__select" data-mb-fitment-model disabled><option value="">{{ 'Model' | t }}</option></select></label>
+        <label class="mbs-fitment-search__field"><span class="mbs-fitment-search__label">{{ 'Year' | t }}</span><select class="mbs-fitment-search__select" data-mb-fitment-year disabled><option value="">{{ 'Year' | t }}</option></select></label>
+      </div>
+      {%- if section.settings.show_part_number -%}
+      <label class="mbs-fitment-search__field mbs-fitment-search__field--oem"><span class="mbs-fitment-search__label">{{ 'Part number' | t }}</span><input class="mbs-fitment-search__input" type="search" data-mb-fitment-oem autocomplete="off" enterkeyhint="search" spellcheck="false" dir="ltr"></label>
+      {%- endif -%}
+      <div class="mbs-fitment-search__actions">
+        <button type="submit" class="mbs-fitment-search__submit">{%- render 'icon', name: 'search', size: 18 -%}<span>{{ 'Search' | t }}</span></button>
+        <button type="button" class="mbs-fitment-search__reset" data-mb-fitment-reset>{{ 'Reset' | t }}</button>
+      </div>
+      <p class="mbs-fitment-search__status" data-mb-fitment-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fitment search",
+  "group": "catalogue",
+  "verticals": ["carparts"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = \"Find parts for your vehicle\")", "default": "" },
+    { "id": "subheading", "type": "textarea", "label": "Intro text", "default": "" },
+    { "id": "mode", "type": "select", "label": "When a vehicle is chosen", "options": [
+      { "value": "filter", "label": "Hide parts that don't fit" },
+      { "value": "highlight", "label": "Keep all parts, mark the ones that fit" }
+    ], "default": "filter" },
+    { "id": "show_part_number", "type": "checkbox", "label": "Show part-number search", "default": true }
+  ],
+  "presets": [{ "name": "Fitment search" }]
+}
+{% endschema %}

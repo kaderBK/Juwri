@@ -1,0 +1,18 @@
+{
+    "_comment": "The browser policy the conformance job serves pages under: the core StorefrontPolicy (app/Support/Csp/StorefrontPolicy.php) without nonces, tightened to what the kit themes must be ready for (style-src-attr 'none': no inline style attributes, THEME-CONTRACT 7). A drift test (ThemeConformanceTest) keeps every directive no looser than core's.",
+    "directives": {
+        "base-uri": "'self'",
+        "default-src": "'self'",
+        "connect-src": "'self'",
+        "form-action": "'self'",
+        "frame-ancestors": "'self'",
+        "object-src": "'none'",
+        "img-src": "'self' data: https:",
+        "font-src": "'self' data: https:",
+        "media-src": "'self' https:",
+        "script-src": "'self'",
+        "script-src-attr": "'none'",
+        "style-src": "'self' https:",
+        "style-src-attr": "'none'"
+    }
+}

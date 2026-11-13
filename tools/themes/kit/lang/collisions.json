@@ -1,0 +1,116 @@
+{
+  "min": {
+    "key": "kit_min",
+    "themes_call": "___('kit_min')",
+    "themes": "aisle",
+    "meaning": "price-range lower bound label (\"Min\" next to \"Max\"); core `min` = minutes",
+    "values": {
+      "en": "Min",
+      "ar": "الأدنى",
+      "de": "Min.",
+      "es": "Mín.",
+      "fr": "Min.",
+      "hi": "न्यूनतम",
+      "pt": "Mín.",
+      "ru": "От",
+      "tr": "En az",
+      "ur": "کم از کم",
+      "zh": "最低"
+    }
+  },
+  "per_unit": {
+    "key": "kit_per_unit",
+    "themes_call": "___('kit_per_unit')",
+    "themes": "carely (pharmacy unit price)",
+    "meaning": "static label \"Per unit\"; core `per_unit` = \"per :unit\" template with a placeholder",
+    "values": {
+      "en": "Per unit",
+      "ar": "سعر الوحدة",
+      "de": "Pro Einheit",
+      "es": "Por unidad",
+      "fr": "Par unité",
+      "hi": "प्रति इकाई",
+      "pt": "Por unidade",
+      "ru": "За единицу",
+      "tr": "Birim fiyatı",
+      "ur": "فی یونٹ",
+      "zh": "单价"
+    }
+  },
+  "your_name": {
+    "key": "kit_your_name",
+    "themes_call": "___('kit_your_name')",
+    "themes": "book",
+    "meaning": "booking form field label \"Your name\"; core `your_name` = bare \"Name\"",
+    "values": {
+      "en": "Your name",
+      "ar": "اسمك",
+      "de": "Dein Name",
+      "es": "Tu nombre",
+      "fr": "Votre nom",
+      "hi": "आपका नाम",
+      "pt": "Seu nome",
+      "ru": "Ваше имя",
+      "tr": "Adınız",
+      "ur": "آپ کا نام",
+      "zh": "您的姓名"
+    }
+  },
+  "items": {
+    "key": "kit_items",
+    "themes_call": "___('kit_items')",
+    "themes": "aisle",
+    "meaning": "plural noun \"Items\" (cart / summary heading); core `items` = \"Item(s)\"",
+    "values": {
+      "en": "Items",
+      "ar": "المنتجات",
+      "de": "Artikel",
+      "es": "Artículos",
+      "fr": "Articles",
+      "hi": "आइटम",
+      "pt": "Itens",
+      "ru": "Товары",
+      "tr": "Ürünler",
+      "ur": "اشیاء",
+      "zh": "商品"
+    }
+  },
+  "shop": {
+    "key": "kit_shop",
+    "themes_call": "___('kit_shop')",
+    "themes": "aisle",
+    "meaning": "nav/CTA verb-style \"Shop\"; core `shop` = the noun (a store) in ar/hi and others",
+    "values": {
+      "en": "Shop",
+      "ar": "تسوق",
+      "de": "Einkaufen",
+      "es": "Tienda",
+      "fr": "Boutique",
+      "hi": "शॉप",
+      "pt": "Loja",
+      "ru": "Магазин",
+      "tr": "Mağaza",
+      "ur": "شاپ",
+      "zh": "商店"
+    }
+  },
+  "sale": {
+    "key": "kit_sale",
+    "themes_call": "___('kit_sale')",
+    "themes": "aisle",
+    "meaning": "nav entry for discounted goods (\"Sale\", last and bold); core `sale` was \"selling\" in ar/es/hi/pt/tr/ur",
+    "values": {
+      "en": "Sale",
+      "ar": "التخفيضات",
+      "de": "Reduziert",
+      "es": "Rebajas",
+      "fr": "Soldes",
+      "hi": "सेल",
+      "pt": "Promoção",
+      "ru": "Распродажа",
+      "tr": "İndirim",
+      "ur": "سیل",
+      "zh": "特卖"
+    }
+  }
+}

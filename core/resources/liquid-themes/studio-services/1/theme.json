@@ -1,0 +1,24 @@
+{
+    "name": "Studio Services",
+    "slug": "studio-services",
+    "version": "1",
+    "author": "juwri",
+    "description": "A calm, bookable storefront for laundries and service businesses: a service price list with booking notes, offers and loyalty, reviews and opening hours.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "general",
+    "vertical": "services",
+    "recipe": "laundry/default",
+    "tokens": {
+        "colors.primary": "#1f5fbf",
+        "colors.background": "#f3f7fc",
+        "colors.surface": "#ffffff",
+        "colors.text": "#0f1f33",
+        "colors.accent": "#0f766e",
+        "layout.radius": "pill",
+        "layout.density": "cozy",
+        "fonts.pair": "jakarta"
+    }
+}

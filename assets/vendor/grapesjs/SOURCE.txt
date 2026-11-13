@@ -1,0 +1,7 @@
+GrapesJS 0.23.6 (BSD-3-Clause) — npm grapesjs@0.23.6
+https://registry.npmjs.org/grapesjs/-/grapesjs-0.23.6.tgz
+integrity sha512-I8M/sPWjHm6MLIdUtRFNOKsQ3PtDgIDsc2S8ANkJsfHj3ZoH98oNMMWr64Kx22XgjHCQ4xpUx7nvXyQSKV1mrQ==
+https://grapesjs.com  https://github.com/GrapesJS/grapesjs
+Files copied unmodified from the package: dist/grapes.min.js, dist/css/grapes.min.css,
+LICENSE, locale/{ar,de,es,fr,pt,ru,tr,zh}.mjs (ES modules, imported by the editor).
+Used by the html-mode builder editor (core/resources/views/builder/editor.blade.php).

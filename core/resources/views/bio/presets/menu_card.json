@@ -1,0 +1,27 @@
+{
+  "slug": "menu_card",
+  "starter": "restaurant_essential",
+  "name": "Menu Card",
+  "family": "menu_card",
+  "tier": "basic",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "Manrope", "weights": [400, 600, 700]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#f6f2e6",
+    "--ink": "#2b371f",
+    "--muted": "#5c6b4a",
+    "--card": "#faf7ee",
+    "--accent": "#8a4a2b",
+    "--accent-ink": "#f6f2e6",
+    "--rule": "#2b371f",
+    "--radius": "0px",
+    "--shadow": "none",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Fraunces',Georgia,serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

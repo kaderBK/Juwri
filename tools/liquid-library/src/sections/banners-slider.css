@@ -1,0 +1,16 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* banners-slider — scroll-snap carousel (autoplay via the runtime's data-mb-slider) */
+.mbs-banners-slider { box-sizing: border-box; max-inline-size: 1200px; margin-inline: auto; padding: 12px var(--ts-gap-3, 16px); }
+.mbs-banners-slider__track { display: flex; gap: 12px; margin: 0; padding: 0; list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: var(--tr-card, 16px); }
+.mbs-banners-slider__slide { flex: 0 0 100%; scroll-snap-align: start; }
+.mbs-banners-slider__slide:not(:only-child) { flex-basis: 92%; }
+.mbs-banners-slider__card { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: var(--tr-card, 16px); background: rgba(var(--tc-primary-rgb, 63, 212, 99), .16); color: var(--tc-on-overlay, #fff); text-decoration: none; overflow: hidden; }
+.mbs-banners-slider--wide .mbs-banners-slider__card { aspect-ratio: 21 / 9; }
+.mbs-banners-slider--strip .mbs-banners-slider__card { aspect-ratio: 3 / 1; }
+.mbs-banners-slider__card:focus-visible { outline: 3px solid var(--tc-primary, #3fd463); outline-offset: -3px; }
+.mbs-banners-slider__img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.mbs-banners-slider__text { position: absolute; inset-inline: 0; inset-block-end: 0; display: grid; gap: 2px; padding: 28px var(--ts-gap-3, 16px) 14px; background: linear-gradient(to top, rgba(var(--tc-overlay-rgb, 0, 0, 0), .65), rgba(var(--tc-overlay-rgb, 0, 0, 0), 0)); }
+.mbs-banners-slider__title { font-size: 1.1rem; line-height: 1.25; }
+.mbs-banners-slider__sub { font-size: .85rem; opacity: .9; }

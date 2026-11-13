@@ -1,0 +1,240 @@
+{
+  "operationId": "getStore",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/store",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=120",
+      "Date": "Fri, 02 Oct 2026 12:00:05 GMT",
+      "ETag": "W/\"sidra-store-en-3a91\""
+    },
+    "body": {
+      "store": {
+        "public_id": "019f6cf1-9700-716b-97ff-d727f2ddbe34",
+        "slug": "sidra-salon-demo",
+        "name": "Sidra Salon",
+        "logo": {
+          "src": "https://media.example/img/placeholder-1x1.svg",
+          "alt": "Sidra Salon"
+        },
+        "cover": {
+          "src": "https://media.example/img/placeholder-16x9.svg",
+          "alt": "Sidra Salon"
+        },
+        "tagline": "Hair, nails and spa in Al Malqa",
+        "locale": "en",
+        "dir": "ltr",
+        "locales": [
+          {
+            "code": "en",
+            "name": "English",
+            "url": "/sidra-salon-demo?lang=en"
+          },
+          {
+            "code": "ar",
+            "name": "العربية",
+            "url": "/sidra-salon-demo?lang=ar"
+          }
+        ],
+        "timezone": "Asia/Riyadh",
+        "vertical_set": "service",
+        "store_type": "services",
+        "status": {
+          "open": true,
+          "label": "Open · closes 10 pm",
+          "next_change_at": "2026-10-02T22:00:00+03:00",
+          "paused_reason": null,
+          "accepting_bookings": true
+        },
+        "contact": {
+          "phone": "+966 55 010 0105",
+          "whatsapp": "+966 55 010 0105",
+          "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh"
+        },
+        "social": [
+          {
+            "network": "instagram",
+            "url": "https://instagram.com/sidra-salon"
+          }
+        ],
+        "rating": {
+          "avg": 4.8,
+          "count": 320
+        },
+        "legal_links": [
+          {
+            "label": "Privacy",
+            "url": "/sidra-salon-demo/privacy"
+          },
+          {
+            "label": "Terms",
+            "url": "/sidra-salon-demo/terms"
+          }
+        ],
+        "powered_by": true
+      },
+      "branch": {
+        "current": {
+          "public_id": "019f8cb3-7900-776e-a6b5-f7af87dd6a8a",
+          "name": "Main branch",
+          "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh"
+        }
+      },
+      "context": {
+        "order_types": [
+          {
+            "key": "appointment",
+            "label": "In salon",
+            "needs_address": false,
+            "needs_slot": true
+          },
+          {
+            "key": "at_home",
+            "label": "At home",
+            "needs_address": true,
+            "needs_slot": true
+          }
+        ],
+        "selected_order_type": "appointment",
+        "schedule_ahead": true,
+        "next_free_slot": {
+          "label": "Today 4:30 pm",
+          "at": "2026-10-02T16:30:00+03:00"
+        },
+        "staff": [
+          {
+            "id": "019ed498-2000-71f5-ae20-debce6e349f7",
+            "name": "Maha",
+            "role": "Senior stylist",
+            "photo": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Maha"
+            },
+            "service_ids": [
+              "019ed72b-4e00-76d8-a0e0-611df411c074",
+              "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+              "019fb3c1-0800-7ead-8509-4e4a0900b788",
+              "019fc77e-be00-77da-9f84-6b4858089ed4",
+              "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+              "019fe589-2c00-7463-853d-56d20532e3bb",
+              "019f9c5d-7b80-701b-ad13-993c8e046a49",
+              "019faa50-0a00-7f1d-84b5-87ed3b68886b",
+              "019fab62-b280-71f1-803c-570445c0e2b0",
+              "019ebfc7-c180-790b-b11a-4ffa137bd321",
+              "019fb955-4100-7648-a0d3-8af308dd3d1c"
+            ]
+          },
+          {
+            "id": "019ec449-5200-727a-a25a-1a736f3f33d9",
+            "name": "Lina",
+            "role": "Stylist",
+            "photo": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Lina"
+            },
+            "service_ids": [
+              "019ed72b-4e00-76d8-a0e0-611df411c074",
+              "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+              "019fb3c1-0800-7ead-8509-4e4a0900b788",
+              "019fc77e-be00-77da-9f84-6b4858089ed4",
+              "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+              "019e8457-b100-7636-ac74-350ed86ff236",
+              "019eac77-e880-7848-a337-677140941d9b",
+              "019fab62-b280-71f1-803c-570445c0e2b0",
+              "019ebfc7-c180-790b-b11a-4ffa137bd321",
+              "019fb955-4100-7648-a0d3-8af308dd3d1c"
+            ]
+          },
+          {
+            "id": "019fae9a-ac00-74ce-9097-b86a1ad9bc1e",
+            "name": "Sara",
+            "role": "Colourist",
+            "photo": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Sara"
+            },
+            "service_ids": [
+              "019ed72b-4e00-76d8-a0e0-611df411c074",
+              "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+              "019fb3c1-0800-7ead-8509-4e4a0900b788",
+              "019fc77e-be00-77da-9f84-6b4858089ed4",
+              "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+              "019fe589-2c00-7463-853d-56d20532e3bb",
+              "019f9c5d-7b80-701b-ad13-993c8e046a49",
+              "019faa50-0a00-7f1d-84b5-87ed3b68886b"
+            ]
+          },
+          {
+            "id": "019f3dbc-a100-728a-bbbc-3a650fbfab72",
+            "name": "Reem",
+            "role": "Nail technician",
+            "photo": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Reem"
+            },
+            "service_ids": [
+              "019f626d-f080-7fee-9f4d-e78430b184e1",
+              "019f3904-2200-75d0-8fef-88e517db4f91",
+              "019ec637-b480-702c-9b8b-0d4af3cf6b40",
+              "01a016e3-7300-7d61-8982-4477626625f6"
+            ]
+          },
+          {
+            "id": "019eef6a-9480-7d20-9c7f-e36de7398248",
+            "name": "Dana",
+            "role": "Beauty therapist",
+            "photo": {
+              "src": "https://media.example/img/placeholder-1x1.svg",
+              "alt": "Dana"
+            },
+            "service_ids": [
+              "019f626d-f080-7fee-9f4d-e78430b184e1",
+              "019f3904-2200-75d0-8fef-88e517db4f91",
+              "019ec637-b480-702c-9b8b-0d4af3cf6b40",
+              "01a016e3-7300-7d61-8982-4477626625f6",
+              "019ed5aa-c880-7215-98d5-69c42e720921",
+              "019f713c-3900-7ce3-98bb-5a0dba5724c7",
+              "019f4877-3600-7523-87b8-7185bbaa4b35",
+              "019ecab9-4500-7e4c-a605-ec16bc6b740c",
+              "019efd5d-2300-7e7f-96b7-912c8fbaea5e",
+              "019f0027-3f80-773d-87fb-4e2c39674db4",
+              "019e8457-b100-7636-ac74-350ed86ff236",
+              "019eac77-e880-7848-a337-677140941d9b",
+              "019fab62-b280-71f1-803c-570445c0e2b0",
+              "019ebfc7-c180-790b-b11a-4ffa137bd321",
+              "019fb955-4100-7648-a0d3-8af308dd3d1c"
+            ]
+          }
+        ]
+      },
+      "money": {
+        "currency": {
+          "code": "SAR",
+          "symbol": "SAR",
+          "exponent": 2,
+          "symbol_position_effective": "before"
+        },
+        "tax": {
+          "mode": "inclusive",
+          "rate": 15,
+          "label": "VAT"
+        }
+      },
+      "booking": {
+        "verify_guest_phone": false
+      },
+      "holds": {
+        "release_during_payment": true
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "findCustomer",
+  "label": "Find Customer",
+  "description": "Finds a customer by phone or email.",
+  "type": "search",
+  "connection": "juwri",
+  "parameters": [
+    { "name": "restaurant_id", "type": "integer", "label": "Restaurant ID", "required": true },
+    { "name": "search", "type": "text", "label": "Phone or email", "required": true }
+  ],
+  "communication": {
+    "url": "{{baseUrl}}/api/v1/stores/{{parameters.restaurant_id}}/customers",
+    "method": "GET",
+    "qs": {
+      "search": "{{parameters.search}}",
+      "per_page": 100,
+      "page": "{{pagination.page}}"
+    },
+    "response": {
+      "iterate": "{{body.data}}",
+      "output": "{{item}}"
+    },
+    "pagination": {
+      "qs": { "page": "{{pagination.page}}" },
+      "condition": "{{body.current_page < body.last_page}}"
+    }
+  },
+  "interface": [
+    { "name": "id", "type": "number", "label": "Customer ID" },
+    { "name": "name", "type": "text", "label": "Name" },
+    { "name": "phone", "type": "text", "label": "Phone" },
+    { "name": "email", "type": "text", "label": "Email" },
+    { "name": "orders_count", "type": "number", "label": "Orders" },
+    { "name": "total_spent", "type": "number", "label": "Total spent" }
+  ],
+  "samples": {
+    "id": 8841,
+    "name": "Jordan Rivera",
+    "phone": "+15551234567",
+    "email": "jr@example.com",
+    "orders_count": 3,
+    "total_spent": 128.4,
+    "last_order_at": "2026-07-08T14:03:11+00:00",
+    "tags": ["vip"],
+    "created_at": "2026-07-01T09:00:00+00:00"
+  }
+}

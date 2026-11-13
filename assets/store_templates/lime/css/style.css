@@ -1,0 +1,1932 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   lime — black + neon-lime snack-delivery post_template
+   Faithful port of rev/lime/demo.css, scoped under .lime and
+   sized to fill the real viewport (no phone-in-stage chrome).
+   Extra primitives at the bottom serve track/account pages.
+   ═══════════════════════════════════════════════════════════ */
+
+:root{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is lime's own
+     value, kept as the var() fallback so a store that customized nothing —
+     or a render with no token include — is byte-identical to today. */
+  --paper:var(--tc-background, #ffffff);
+  --tile:var(--tc-surface, #EEF0F2);
+  --tile-2:#E3E6EA;                  /* hand-tuned surface step; derived surface-700 differs, keep literal */
+  --stroke:#E9EBEE;
+  --stroke-2:#DCDFE3;
+  /* ink */
+  --ink:var(--tc-text, #101010);
+  --ink-2:#5d6167;
+  --ink-3:#6b7178;   /* was #9aa0a7 = 2.65:1 on white — under AA; keep the AA-tuned literal */
+  /* brand — lime's neon accent is the customizer PRIMARY role. This used to be
+     driven by the legacy inline --lime-brand, which is itself
+     theme_setting(colors.primary); --tc-primary is the same source, so nothing moves. */
+  --lime:var(--tc-primary, #CDF34B);
+  --lime-hi:#D6FF4B;                 /* hand-tuned highlight; derived primary-300 differs, keep */
+  --lime-soft:#F3FBDA;               /* hand-tuned tint wash; keep literal */
+  --lime-ink:#151a04;                /* hand-tuned ink ON lime fills; keep literal */
+  /* semantic status colours — NOT the customizer accent (online-dot / error),
+     intentionally literal so a recolor never turns "available" or "error" off-hue */
+  --go:#2fb56b;
+  --red:#ff5a4e;
+  /* radius — pill follows the layout.radius scale; card stays literal (22px is
+     lime's own, NOT round's 18px) and img/sheet stay literal (control-radius at
+     "pill" would circle images / reshape sheets) */
+  --r-card:22px;
+  --r-img:18px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:30px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-story:75; --z-splash:80;
+  /* type — lime is a deliberate single-typeface design (Sora everywhere via
+     .lime *{font-family:inherit}). The selected self-hosted pairing (WI-T2)
+     feeds --tf-body; pair "none" (the default) emits no --tf-*, so these degrade
+     to lime's own Sora stack. Both UI + Arabic share --tf-body since the pair's
+     body stack already ends in an Arabic face. --tf-heading is intentionally not
+     consumed: lime has no separate heading font primitive, and splitting one would
+     be a design change beyond token adoption (see report). */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Sora",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic","Tajawal",system-ui,sans-serif);
+}
+
+/* ── root container (fills viewport, replaces .stage/.phone) ── */
+/* Scoped to the ROOT element by id, not the bare `.lime` class: the class is
+   reused as a colour modifier on dietary chips (`.meta-chip.lime`), so a bare
+   `.lime{position:fixed;inset:0;display:flex}` rule cascaded onto those chips
+   and blew them up into full-viewport lime ovals that covered the product page
+   on wide screens. `#lime` targets only the theme root (`<div class="lime"
+   id="lime">`); every `.lime .descendant` rule below is unaffected. */
+#lime{
+  position:fixed;inset:0;z-index:0;
+  display:flex;flex-direction:column;
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-ui)!important;
+  -webkit-font-smoothing:antialiased;
+  /* clip (not hidden): the inactive views sit at translateX(±26%) and stick out
+     ~26% to the side. `overflow:hidden` still makes this a SCROLLABLE box, so a
+     focus() / scrollIntoView / stray swipe could pan the whole stack sideways and
+     leave the active view off-screen ("view stuck to the left, locked until
+     reload"). `clip` creates no scroll container, so nothing can offset it. */
+  overflow:clip;isolation:isolate;
+}
+[dir="rtl"] .lime{font-family:var(--font-ar)!important}
+.lime *{box-sizing:border-box;margin:0;padding:0;font-family:inherit}
+.lime img{display:block;max-width:100%}
+.lime button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.lime input,.lime textarea,.lime select{
+  font:inherit;color:var(--ink);background:var(--paper);
+  border:1.5px solid var(--stroke-2);border-radius:16px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.lime input::placeholder,.lime textarea::placeholder{color:var(--ink-3)}
+.lime input:focus,.lime textarea:focus,.lime select:focus{border-color:var(--ink)}
+.lime ::-webkit-scrollbar{display:none}
+
+/* icons */
+.lime .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.lime .ic-xs{width:15px;height:15px}
+.lime .godot{width:8px;height:8px;border-radius:50%;background:var(--go);flex:none;box-shadow:0 0 0 0 rgba(47,181,107,.5);animation:lm-pulse 2.2s infinite}
+@keyframes lm-pulse{70%{box-shadow:0 0 0 7px transparent}}
+
+/* ── app shell & router ──────────────────────────────── */
+.lime .app{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;isolation:isolate;overflow:clip}
+.lime .views{position:relative;flex:1;min-height:0;overflow:clip}
+
+.lime .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--paper);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .lime .view{transform:translateX(-26%)}
+.lime .view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.lime .view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .lime .view.is-under{transform:translateX(9%) scale(.985)}
+
+.lime .view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.lime .tail-space{height:118px}
+.lime .tail-space.tall{height:40px}
+.lime .view-center{justify-content:center}
+
+.lime .page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 20px}
+.lime .page-head h1{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.lime .page-head.sub{gap:12px;padding-bottom:16px}
+.lime .page-head.sub h1{flex:1}
+.lime .ph-title{flex:1;text-align:center;font-size:16.5px!important;font-weight:800!important}
+.lime .ph-spacer,.lime .spacer{width:44px;flex:none}
+.lime .title-ul{position:relative;display:inline-block}
+.lime .title-ul::after{content:"";position:absolute;inset-inline-start:2px;bottom:-8px;width:32px;height:5px;border-radius:var(--r-pill);background:var(--ink)}
+
+.lime .block-label{font-size:14px;font-weight:800;letter-spacing:-.01em;padding:20px 2px 11px}
+.lime .section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 24px) 2px 13px}
+.lime .section-head h2{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.lime .big-head{font-size:23px!important;line-height:1.2;letter-spacing:-.03em!important;max-width:86%}
+.lime .bs-dot{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--ink-2)}
+
+/* chunky black + lime primitives */
+.lime .dots{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop)}
+.lime .dots:active{transform:scale(.88)}
+.lime .dots.blk{background:var(--ink);color:var(--paper)}
+.lime .dots.ghost,.lime .fab.back{background:var(--tile);color:var(--ink)}
+[dir="rtl"] .lime .dots.ghost .ic,[dir="rtl"] .lime .fab.back .ic{transform:scaleX(-1)}
+.lime .fab{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop);text-decoration:none}
+.lime .fab:active{transform:scale(.88)}
+.lime .iconbtn{
+  position:relative;width:44px;height:44px;flex:none;border-radius:50%;
+  display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .iconbtn:active{transform:scale(.88)}
+.lime .iconbtn.blk{background:var(--ink);color:var(--paper)}
+.lime .iconbtn .dot{position:absolute;top:9px;inset-inline-end:10px;width:8px;height:8px;border-radius:50%;background:var(--lime);outline:2.5px solid var(--ink)}
+.lime .lime-pill{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--lime);color:var(--lime-ink);
+  font-size:13.5px;font-weight:800;
+  padding:12px 20px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);text-decoration:none;
+}
+.lime .lime-pill:active{transform:scale(.94)}
+.lime .ghostbtn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--paper);border:1.5px solid var(--ink);
+  font-size:13.5px;font-weight:700;color:var(--ink);text-decoration:none;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .ghostbtn:active{transform:scale(.96)}
+.lime .ghostbtn.sm{padding:8px 14px;font-size:12px}
+
+/* big black action bar */
+.lime .blkbar,.lime .cta{
+  width:100%;height:60px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;gap:12px;
+  padding:0 7px 0 24px;text-decoration:none;
+  font-weight:800;letter-spacing:-.01em;
+  transition:transform var(--t-fast) var(--ease-pop);
+  position:relative;
+}
+.lime .cta{justify-content:center;padding:0 24px}
+.lime .cta.wide{width:100%}
+.lime .cta>b{margin-inline-start:auto;font-size:15px;font-variant-numeric:tabular-nums}
+[dir="rtl"] .lime .blkbar{padding:0 24px 0 7px}
+.lime .blkbar:active,.lime .cta:active{transform:scale(.97)}
+.lime .blkbar:disabled,.lime .cta:disabled{opacity:.45}
+.lime .bb-copy{display:grid;justify-items:start;line-height:1.2;text-align:start}
+.lime .bb-copy small{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lime)}
+.lime .bb-copy b{font-size:14.5px;font-variant-numeric:tabular-nums}
+.lime .bb-label{flex:1;text-align:center;font-size:15px}
+.lime .bb-go{
+  width:46px;height:46px;flex:none;border-radius:50%;
+  background:var(--lime);color:var(--lime-ink);
+  display:grid;place-items:center;position:relative;
+}
+.lime .bb-go .ic{width:19px;height:19px;stroke-width:2.2}
+[dir="rtl"] .lime .bb-go .ic,[dir="rtl"] .lime .tb-chevs{transform:scaleX(-1)}
+.lime .spinner{
+  position:absolute;inset:0;margin:auto;
+  width:22px;height:22px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.25);border-top-color:var(--lime);
+  animation:lm-spin .7s linear infinite;
+}
+@keyframes lm-spin{to{rotate:360deg}}
+
+/* ── splash ───────────────────────────────────────────── */
+.lime .splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--lime);color:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;
+  padding:96px 32px 0;overflow:hidden;
+  transition:opacity .45s var(--ease),visibility 0s linear .45s;
+}
+.lime .splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.lime .splash-word{
+  font-size:76px;font-weight:800;letter-spacing:-.05em;line-height:.95;
+  animation:lm-st-in .7s var(--ease) backwards;
+}
+.lime .splash-word span{color:transparent;position:relative}
+.lime .splash-word span::after{content:"";position:absolute;inset-inline-start:6px;bottom:14px;width:17px;height:17px;border-radius:50%;background:#fff;outline:3px solid var(--ink)}
+.lime .splash-tag{font-size:15px;font-weight:600;margin-top:12px;animation:lm-st-in .7s var(--ease) .12s backwards;max-width:70%}
+@keyframes lm-st-in{from{opacity:0;transform:translateY(26px)}}
+.lime .splash-hero{position:absolute;inset-inline:0;bottom:-46px;height:52%;pointer-events:none}
+.lime .splash-ring{
+  position:absolute;inset-inline-start:50%;bottom:2%;width:104%;aspect-ratio:1;
+  transform:translateX(-50%);border-radius:50%;border:3px dashed var(--ink);opacity:.5;
+  animation:lm-dd-spin 26s linear infinite;
+}
+[dir="rtl"] .lime .splash-ring{transform:translateX(50%)}
+.lime .splash-pop{
+  position:absolute;inset-inline-start:50%;bottom:-9%;width:94%;max-width:340px;aspect-ratio:1;object-fit:cover;
+  border-radius:50%;transform:translateX(-50%);
+  border:6px solid var(--ink);background:var(--paper);
+  box-shadow:0 30px 60px -18px rgba(16,16,16,.45);
+  animation:lm-pop-rise 1s var(--ease-pop) .3s backwards;
+}
+[dir="rtl"] .lime .splash-pop{transform:translateX(50%)}
+@keyframes lm-pop-rise{from{transform:translateX(-50%) translateY(80px) rotate(-8deg);opacity:0}}
+.lime .splash-mini{position:absolute;width:66px;height:66px;object-fit:cover;border-radius:20px;border:3px solid var(--ink);box-shadow:0 14px 30px rgba(16,16,16,.3)}
+.lime .mini-a{inset-inline-start:9%;bottom:56%;rotate:-12deg;animation:lm-chip-float 4s ease-in-out infinite alternate}
+.lime .mini-b{inset-inline-end:8%;bottom:48%;rotate:10deg;animation:lm-chip-float 4.6s ease-in-out .4s infinite alternate-reverse}
+@keyframes lm-chip-float{to{translate:0 -14px}}
+.lime .splash-doodles .dd{position:absolute;width:34px;height:34px;stroke:var(--ink);stroke-width:2;fill:none;opacity:.65}
+.lime .dd-1{top:46px;inset-inline-end:38px;animation:lm-dd-spin 14s linear infinite}
+.lime .dd-2{top:210px;inset-inline-end:14%}
+.lime .dd-3{top:37%;inset-inline-start:26px;width:16px;height:16px}
+.lime .dd-4{top:29%;inset-inline-end:8%}
+@keyframes lm-dd-spin{to{rotate:360deg}}
+.lime .splash-skip{
+  position:absolute;top:16px;inset-inline-end:22px;z-index:3;
+  padding:10px 20px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);
+  font-size:13px;font-weight:700;
+}
+
+/* ── home ─────────────────────────────────────────────── */
+.lime .home-top{display:flex;align-items:center;gap:11px;padding:12px 2px 4px}
+.lime .avatar{width:46px;height:46px;border-radius:50%;overflow:hidden;border:2.5px solid var(--ink);flex:none;transition:transform var(--t-fast) var(--ease-pop);background:var(--tile)}
+.lime .avatar:active{transform:scale(.9)}
+.lime .avatar img{width:100%;height:100%;object-fit:cover}
+.lime .loc{
+  flex:1;min-width:0;text-align:start;
+  background:var(--ink);color:var(--paper);border-radius:var(--r-pill);
+  padding:8px 18px;display:grid;gap:1px;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .loc:active{transform:scale(.97)}
+.lime .loc-label{font-size:9.5px;color:var(--lime);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.lime .loc-value{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700}
+.lime .loc-value .ic-xs{color:var(--lime);width:13px;height:13px}
+
+.lime .searchpill{
+  width:100%;display:flex;align-items:center;gap:11px;
+  background:var(--tile);border-radius:var(--r-pill);
+  padding:0 18px;height:52px;color:var(--ink-3);
+  font-size:14px;font-weight:600;text-align:start;
+  margin-top:14px;transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .searchpill:active{transform:scale(.98)}
+.lime .searchpill .ic{color:var(--ink)}
+.lime .searchpill.live{background:var(--paper);border:2px solid var(--ink);color:var(--ink)}
+.lime .searchpill input{background:none;border:0;padding:0;height:100%;font-size:16px;font-weight:600}
+.lime .searchpill input:focus{border:0}
+
+/* hero */
+.lime .hero{
+  position:relative;margin-top:16px;
+  background:var(--lime);border-radius:28px;
+  min-height:196px;padding:58px 22px 20px;
+  display:flex;align-items:flex-end;overflow:hidden;
+}
+.lime .daily{
+  position:absolute;top:14px;inset-inline-start:16px;z-index:3;
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--ink);color:var(--paper);
+  font-size:11px;font-weight:800;
+  padding:8px 13px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .daily:active{transform:scale(.93)}
+.lime .daily i{font-style:normal}
+.lime .daily b{color:var(--lime)}
+.lime .hero-copy{position:relative;z-index:2;max-width:58%}
+.lime .hero-copy h1{font-size:27px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-bottom:13px}
+.lime .hero-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:var(--paper);
+  font-size:12px;font-weight:700;
+  padding:11px 16px;border-radius:var(--r-pill);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .hero-cta:active{transform:scale(.95)}
+.lime .hero-cta .ic-xs{color:var(--lime)}
+[dir="rtl"] .lime .hero-cta .ic-xs{transform:scaleX(-1)}
+.lime .hero-art{position:absolute;inset-inline-end:-30px;top:50%;translate:0 -50%;width:168px;height:168px}
+.lime .hero-art img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:5px solid var(--ink);background:var(--paper)}
+.lime .hero-ring{position:absolute;inset:-13px;border-radius:50%;border:2.5px dashed var(--ink);opacity:.55;animation:lm-dd-spin 22s linear infinite}
+
+/* chips */
+.lime .chips{display:flex;gap:9px;overflow-x:auto;padding:18px 2px 4px;position:sticky;top:0;z-index:5;background:linear-gradient(var(--paper) 78%,transparent)}
+.lime .chip{
+  flex:none;display:flex;align-items:center;gap:7px;
+  padding:10px 17px;border-radius:var(--r-pill);
+  background:var(--tile);
+  font-size:13px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.lime .chip .emoji{font-size:15px;line-height:1}
+/* category image ring (emoji underlay shows if no image / image fails) */
+.lime .chip .chip-media{position:relative;width:26px;height:26px;flex:none;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--stroke-2)}
+.lime .chip .chip-media .emoji{font-size:14px;color:var(--ink)}
+.lime .chip .chip-media .chip-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lime .chip{padding-inline-start:8px}
+.lime .chip.is-on .chip-media{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}
+.lime .chip:active{transform:scale(.94)}
+.lime .chip.is-on{background:var(--ink);color:var(--lime)}
+.lime .chip[data-has-sub]::after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45;margin-inline-start:1px}
+/* secondary sub-category chip row — lighter/outlined so it reads below the parents */
+.lime .subchips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 4px}
+.lime .subchip{flex:none;padding:7px 14px;border-radius:var(--r-pill);background:var(--paper);border:1.5px solid var(--stroke);font-size:12px;font-weight:700;color:var(--ink-2);white-space:nowrap;transition:all var(--t-fast) var(--ease)}
+.lime .subchip:active{transform:scale(.94)}
+.lime .subchip.is-on{background:var(--ink);color:var(--lime);border-color:var(--ink)}
+
+/* story rail — only ever visible once the stories fetch returns items */
+.lime .stories{display:flex;gap:13px;overflow-x:auto;padding:14px 2px 0}
+/* [hidden] guard: the class-based display must not out-rank the native attribute */
+.lime .stories[hidden]{display:none!important}
+.lime .story{flex:none;width:68px;display:grid;justify-items:center;gap:6px}
+.lime .story-ring{
+  width:60px;height:60px;border-radius:50%;padding:2.5px;
+  background:linear-gradient(135deg,var(--lime),var(--lime-hi) 45%,var(--ink));
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .story:active .story-ring{transform:scale(.93)}
+.lime .story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--paper);background:var(--tile)}
+.lime .story small{font-size:11px;font-weight:700;color:var(--ink-2);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* best-seller rail */
+.lime .rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 6px}
+.lime .rail-card{
+  flex:0 0 146px;width:146px;min-width:0;scroll-snap-align:start;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);
+  padding:9px;position:relative;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.lime .rail-card:active{transform:scale(.96)}
+.lime .rail-card>img,.lime .rail-card .rc-img{width:100%;aspect-ratio:1.12;object-fit:cover;border-radius:var(--r-img);background:var(--tile)}
+.lime .rail-card b{display:block;font-size:12.5px;font-weight:700;margin:8px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .rail-card .price{font-size:12px;color:var(--ink-2);font-weight:700;padding:0 2px}
+.lime .rail-card .rc-add,.lime .rail-card .rail-add{
+  position:absolute;bottom:9px;inset-inline-end:9px;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--ink);color:var(--lime);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .rail-card .rc-add:active,.lime .rail-card .rail-add:active{transform:scale(.82)}
+.lime .rail-card .rc-add .ic,.lime .rail-card .rail-add .ic{width:15px;height:15px;stroke-width:2.4}
+.lime .rail-card .off{position:absolute;top:16px;inset-inline-start:16px;background:var(--lime);color:var(--lime-ink);font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:var(--r-pill);outline:2px solid var(--ink)}
+[dir="rtl"] .lime .rail-card .off{left:auto;right:16px}
+.lime .rail-card .rail-fav{position:absolute;top:13px;inset-inline-end:13px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;color:var(--ink)}
+.lime .rail-card .rail-fav .ic{width:14px;height:14px}
+.lime .rail-card .rail-fav.is-on{background:var(--lime)}
+.lime .rail-card .rail-fav.is-on .ic{fill:var(--ink)}
+
+/* product grid */
+.lime .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding-top:8px}
+.lime .card{
+  position:relative;background:var(--paper);border:1.5px solid var(--stroke);
+  border-radius:var(--r-card);padding:9px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+  animation:lm-card-in .5s var(--ease) backwards;
+}
+@keyframes lm-card-in{from{opacity:0;transform:translateY(18px)}}
+.lime .card:active{transform:scale(.965)}
+.lime .card:hover{border-color:var(--stroke-2)}
+.lime .card-imgwrap{position:relative;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.06;background:var(--tile)}
+.lime .card-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.lime .card:hover .card-imgwrap img{transform:scale(1.06)}
+.lime .card-fav{
+  position:absolute;top:14px;inset-inline-end:14px;width:31px;height:31px;border-radius:50%;
+  background:rgba(255,255,255,.85);backdrop-filter:blur(6px);
+  display:grid;place-items:center;color:var(--ink);z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .card-fav:active{transform:scale(.82)}
+.lime .card-fav .ic{width:15px;height:15px}
+.lime .card-fav.is-on{background:var(--lime)}
+.lime .card-fav.is-on .ic{fill:var(--ink)}
+.lime .card-off,.lime .card-badges{position:absolute;top:14px;inset-inline-start:14px;z-index:2}
+.lime .card-off{background:var(--lime);color:var(--lime-ink);font-size:10px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);outline:2px solid var(--ink)}
+[dir="rtl"] .lime .card-off,[dir="rtl"] .lime .card-badges{left:auto;right:14px}
+.lime .card-badges{display:flex;gap:5px}
+.lime .badge-pop{background:var(--lime);color:var(--lime-ink);font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);outline:1.5px solid var(--ink)}
+.lime .badge-veg{width:16px;height:16px;border-radius:5px;background:var(--paper);border:1.5px solid var(--go);display:grid;place-items:center}
+.lime .badge-veg i{width:7px;height:7px;border-radius:50%;background:var(--go)}
+.lime .badge-veg.nv{border-color:var(--red)}
+.lime .badge-veg.nv i{background:var(--red)}
+.lime .card-soldout{position:absolute;inset:0;display:grid;place-items:center;background:rgba(16,16,16,.55);color:#fff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;z-index:2}
+.lime .avail-badge{position:absolute;left:0;right:0;bottom:0;background:rgba(16,16,16,.8);color:#fff;font-size:10px;font-weight:700;text-align:center;padding:4px}
+.lime .card.is-unavailable .card-imgwrap img{filter:grayscale(.6) opacity(.7)}
+.lime .card-name{display:block;font-size:13.5px;font-weight:700;margin:9px 2px 1px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .card-sub{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .card-meta{display:flex;align-items:center;gap:7px;padding:3px 2px;font-size:11px;color:var(--ink-3);font-weight:600}
+.lime .card-meta .pill-rate,.lime .card-meta .star{color:var(--ink);display:inline-flex;align-items:center;gap:3px;font-weight:800}
+.lime .card-meta .pill-rate .ic,.lime .card-meta .star .ic{width:11px;height:11px;fill:var(--lime);stroke:var(--ink);stroke-width:1.4}
+.lime .card-foot{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 3px}
+.lime .card-price{font-size:14.5px;font-weight:800;padding:0 2px}
+.lime .card-price s{color:var(--ink-3);font-weight:600;font-size:11px;margin-inline-start:5px}
+/* Happy-hour ribbon bonded to the thumbnail bottom (imgwrap clips it to the
+   rounded corners) — moved off the price row where it crowded the price. */
+.lime .card-imgwrap .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .card-from{display:block;font-size:9.5px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;padding:0 2px}
+.lime .card-add{
+  position:absolute;bottom:12px;inset-inline-end:12px;
+  width:34px;height:34px;border-radius:50%;flex:none;
+  background:var(--ink);color:var(--lime);
+  display:grid;place-items:center;z-index:2;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .card-add:active{transform:scale(.85)}
+.lime .card-add .ic{width:16px;height:16px;stroke-width:2.4}
+
+/* skeletons */
+.lime .sk .card-imgwrap,.lime .sk-line{position:relative;overflow:hidden;background:var(--tile)}
+.lime .sk-line{height:13px;border-radius:7px;margin:9px 2px 6px}
+.lime .sk-line.short{width:55%;margin-top:2px}
+.lime .sk .card-imgwrap::after,.lime .sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:lm-shimmer 1.3s infinite;
+}
+@keyframes lm-shimmer{to{translate:100% 0}}
+
+/* empty states */
+.lime .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-2);font-size:14px}
+.lime .empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.7}
+
+/* chiprow (search popular / filters) */
+.lime .chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.lime .chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--tile);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.lime .chiprow button:active{transform:scale(.93)}
+.lime .chiprow button.is-on{background:var(--ink);color:var(--lime)}
+.lime .spice-scale{display:flex;gap:8px}
+.lime .spice-scale button{flex:1;padding:10px 4px;border-radius:var(--r-pill);background:var(--tile);font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.lime .spice-scale button.is-on{background:var(--ink);color:var(--lime)}
+
+/* ── product / snack information ─────────────────────── */
+.lime .p-photo-wrap{position:relative;display:grid;place-items:center;padding:6px 0 2px}
+.lime .p-blob{position:absolute;width:266px;height:266px;border-radius:50%;background:var(--tile)}
+.lime .p-blob::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:2.5px dashed var(--stroke-2);animation:lm-dd-spin 30s linear infinite}
+.lime #pPhoto{
+  position:relative;z-index:2;width:238px;height:238px;object-fit:cover;
+  border-radius:50%;border:6px solid var(--ink);background:var(--tile);
+  box-shadow:0 26px 48px -20px rgba(16,16,16,.45);
+  animation:lm-pop-in .55s var(--ease-pop) backwards;
+}
+@keyframes lm-pop-in{from{transform:scale(.7);opacity:0}}
+.lime .fav-fab{
+  position:absolute;top:12px;inset-inline-end:26px;z-index:3;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--ink);color:var(--ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.lime .fav-fab:active{transform:scale(.85)}
+.lime .fav-fab.is-on{background:var(--lime)}
+.lime .fav-fab.is-on .ic{fill:var(--ink)}
+.lime .p-off{
+  position:absolute;bottom:16px;inset-inline-start:26px;z-index:3;
+  background:var(--lime);color:var(--lime-ink);font-size:11.5px;font-weight:800;
+  padding:6px 12px;border-radius:var(--r-pill);outline:2.5px solid var(--ink);
+}
+
+/* giant counter */
+.lime .giant{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:14px 12px 4px}
+.lime .g-btn{
+  width:62px;height:62px;border-radius:50%;
+  background:var(--ink);color:var(--paper);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .g-btn:active{transform:scale(.82)}
+.lime .g-btn .ic{width:24px;height:24px;stroke-width:2.4}
+.lime .g-mid{display:grid;justify-items:center;gap:6px}
+.lime #giantNum{font-size:88px;font-weight:800;line-height:.95;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.lime #giantNum.up{animation:lm-roll-up .32s var(--ease-pop)}
+.lime #giantNum.down{animation:lm-roll-down .32s var(--ease-pop)}
+@keyframes lm-roll-up{from{transform:translateY(.42em);opacity:0}}
+@keyframes lm-roll-down{from{transform:translateY(-.42em);opacity:0}}
+.lime .g-price{
+  background:var(--ink);color:var(--paper);
+  font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;
+  padding:8px 18px;border-radius:var(--r-pill);
+}
+.lime .p-name{font-size:24px;font-weight:800;letter-spacing:-.03em;padding:16px 2px 0;text-align:center}
+.lime .p-desc{padding:8px 22px 2px;font-size:13px;line-height:1.65;color:var(--ink-2);text-align:center}
+.lime .p-desc .clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lime .p-desc .clamp.open{display:block}
+.lime .readmore{font-weight:800;color:var(--ink);font-size:12.5px;padding:6px 4px 0;text-decoration:underline;text-underline-offset:3px}
+.lime .p-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;padding:14px 8px 4px}
+.lime .meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:700;color:var(--ink);
+  background:var(--tile);padding:7px 12px;border-radius:var(--r-pill);
+}
+.lime .meta-chip .ic{width:14px;height:14px}
+.lime .meta-chip.star .ic{fill:var(--lime);stroke:var(--ink);stroke-width:1.4}
+.lime .meta-chip.lime{background:var(--lime);color:var(--lime-ink);outline:1.5px solid var(--ink)}
+.lime .p-allergens{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;padding:6px 8px 0}
+.lime .allergen{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-2);background:var(--tile);padding:5px 10px;border-radius:var(--r-pill)}
+.lime .allergen img{width:15px;height:15px;object-fit:contain}
+
+/* option groups */
+.lime .p-groups{display:grid;gap:14px;padding:18px 0 2px}
+.lime .opt-group{background:var(--tile);border-radius:var(--r-card);padding:15px}
+.lime .opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.lime .opt-head b{font-size:14px;font-weight:800}
+.lime .opt-req{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--lime-ink);background:var(--lime);padding:4px 10px;border-radius:var(--r-pill)}
+.lime .opt-req.optional{color:var(--ink-2);background:var(--paper)}
+.lime .opt-list{display:grid;gap:4px}
+.lime .opt{display:flex;align-items:center;gap:11px;padding:9px 6px;border-radius:14px;transition:background var(--t-fast);cursor:pointer}
+.lime .opt:active{background:rgba(255,255,255,.7)}
+.lime .opt-ctl{
+  width:22px;height:22px;flex:none;border-radius:50%;
+  border:2px solid var(--ink);background:var(--paper);
+  display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.lime .opt-ctl.box{border-radius:8px}
+.lime .opt.is-on .opt-ctl{background:var(--ink)}
+.lime .opt-ctl svg{width:11px;height:11px;stroke:var(--lime);stroke-width:3.2;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.lime .opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.lime .opt-name{flex:1;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.lime .opt.is-on .opt-name{color:var(--ink)}
+.lime .opt-price{font-size:12.5px;font-weight:800;color:var(--ink-3)}
+.lime .opt.is-on .opt-price{color:var(--ink)}
+.lime .opt-thumb{width:34px;height:34px;border-radius:10px;object-fit:cover;background:var(--paper)}
+
+/* inline rating row on product */
+.lime .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 2px 0;font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.lime .rate-stars{display:inline-flex;gap:4px}
+.lime .rate-stars button{width:30px;height:30px;border-radius:50%;background:var(--tile);display:grid;place-items:center;color:var(--ink-3)}
+.lime .rate-stars button .ic{width:15px;height:15px}
+.lime .rate-stars button.is-on{background:var(--lime);color:var(--ink)}
+.lime .rate-stars button.is-on .ic{fill:var(--ink)}
+.lime .rate-thanks{font-weight:800;color:var(--go)}
+
+/* product gallery (multi-image) */
+.lime .p-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0;border-radius:var(--r-card)}
+.lime .p-gallery:empty{display:none}
+.lime .p-gallery img{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:1.4;object-fit:cover;background:var(--tile)}
+.lime .p-gallery-dots{display:flex;justify-content:center;gap:5px;padding-top:8px}
+.lime .p-gallery-dots i{width:6px;height:6px;border-radius:50%;background:var(--stroke-2)}
+.lime .p-gallery-dots i.is-on{background:var(--ink);width:16px;border-radius:var(--r-pill)}
+
+/* product cta bar */
+.lime .p-cta{
+  flex:none;display:flex;gap:10px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--paper) 30%);
+  position:relative;z-index:6;
+}
+.lime .total-banner{
+  flex:1;min-width:0;height:60px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px 0 22px;
+}
+[dir="rtl"] .lime .total-banner{padding:0 22px 0 16px}
+.lime .tb-copy{display:grid;line-height:1.25;min-width:0;text-align:start}
+.lime .tb-copy small{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--lime)}
+.lime .tb-copy b{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .tb-price{margin-inline-start:auto;font-size:15.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.lime .tb-chevs{width:22px;height:19px;flex:none;fill:none;stroke:var(--lime);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.lime .cart-pill{
+  flex:none;height:60px;padding:0 24px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:15px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+  box-shadow:0 12px 26px -12px rgba(205,243,75,.9);
+}
+.lime .cart-pill:disabled{opacity:.5;box-shadow:none}
+.lime .cart-pill:active{transform:scale(.94)}
+.lime .cart-pill .ic{stroke-width:2.1}
+/* direct "go to cart" button beside Add to Cart on the product footer; a
+   card/outline pill (not the solid-lime CTA) so it reads as the secondary
+   action, with a lime count badge. Toggled visible by script.js only once
+   the cart holds something (mirrors orbit #pCartJump / aurora #au-cart-jump). */
+.lime .p-cart-jump{
+  flex:none;position:relative;width:60px;height:60px;border-radius:var(--r-pill);
+  background:var(--paper);border:1.5px solid var(--stroke);color:var(--ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .p-cart-jump:active{transform:scale(.94)}
+.lime .p-cart-jump[hidden]{display:none}
+.lime .p-cart-jump .ic{width:22px;height:22px;stroke-width:2.1}
+.lime .p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:19px;height:19px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+  font-size:10.5px;font-weight:800;line-height:19px;text-align:center;
+  font-style:normal;font-variant-numeric:tabular-nums;
+}
+
+/* ── cart ─────────────────────────────────────────────── */
+.lime .cart-list{display:grid;gap:10px}
+.lime .cart-item{
+  display:grid;grid-template-columns:64px 1fr auto;gap:13px;align-items:center;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:20px;
+  padding:10px;overflow:hidden;
+  animation:lm-card-in .4s var(--ease) backwards;
+}
+.lime .cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.lime .cart-item>img{width:64px;height:64px;object-fit:cover;border-radius:16px;background:var(--tile)}
+.lime .ci-name{font-size:13.5px;font-weight:800;line-height:1.25}
+.lime .ci-opts{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.4;font-weight:600}
+.lime .ci-price{font-size:12px;font-weight:700;color:var(--ink-2);margin-top:4px;font-variant-numeric:tabular-nums}
+.lime .ci-note{font-size:11px;color:var(--go);font-weight:600;margin-top:3px;display:flex;align-items:center;gap:5px}
+.lime .ci-note .ic{width:11px;height:11px}
+.lime .ci-side{display:grid;justify-items:center;gap:7px}
+.lime .qty-min,.lime .qty{display:flex;align-items:center;gap:9px}
+.lime .qty-min button,.lime .qty .qty-btn,.lime .ci-remove{
+  width:27px;height:27px;border-radius:50%;
+  border:2px solid var(--ink);color:var(--ink);
+  display:grid;place-items:center;position:relative;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+/* the 27px ring is the visual; widen the touch area to clear the 32px floor
+   without changing the layout */
+.lime .qty-min button::after,.lime .qty .qty-btn::after,.lime .ci-remove::after{
+  content:"";position:absolute;inset:-3px;border-radius:50%;
+}
+.lime .ci-remove{border-color:var(--red);color:var(--red)}
+.lime .qty-min button:active,.lime .qty .qty-btn:active,.lime .ci-remove:active{transform:scale(.8)}
+.lime .qty-min button .ic,.lime .qty .qty-btn .ic,.lime .ci-remove .ic{width:12px;height:12px;stroke-width:2.6}
+.lime .qty-min output,.lime .qty output{min-width:18px;text-align:center;font-size:15.5px;font-weight:800;color:var(--go);font-variant-numeric:tabular-nums}
+.lime .qty-min output.pop{animation:lm-num-pop .3s var(--ease-pop)}
+@keyframes lm-num-pop{40%{transform:scale(1.45)}}
+.lime .ci-note-btn{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink-3);padding:3px 6px;border-radius:8px}
+.lime .ci-note-btn:active{color:var(--ink)}
+.lime .ci-note-btn .ic{width:12px;height:12px}
+
+/* ── checkout order summary ── */
+.lime .ck-items{background:var(--paper);border:1.5px solid var(--stroke);border-radius:20px;padding:14px;display:grid;gap:11px;margin-top:16px}
+.lime .ck-head{display:flex;align-items:center;justify-content:space-between}
+.lime .ck-head h3{margin:0;font-size:14px;font-weight:800}
+.lime .ck-head .linkbtn{justify-self:auto;padding:4px 2px}
+.lime .ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.lime .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:12px;background:var(--tile)}
+.lime .ck-mid{min-width:0}
+.lime .ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lime .ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lime .ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.lime .ck-price{font-size:12.5px;font-weight:800;color:var(--ink);text-align:end;font-variant-numeric:tabular-nums}
+.lime .ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+
+.lime .cart-tools{display:grid;gap:16px;padding-top:18px}
+.lime .cart-tools h3,.lime .ck-block h3{font-size:14px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em;display:block}
+
+.lime .seg{display:flex;background:var(--tile);border-radius:var(--r-pill);padding:4px;gap:3px}
+.lime .seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.lime .seg button .ic{width:16px;height:16px}
+.lime .seg button.is-on{background:var(--ink);color:var(--lime)}
+.lime .seg.mini{padding:3px;background:var(--tile)}
+.lime .seg.mini button{padding:7px 13px;flex:none}
+
+.lime .ot-fields{display:grid;gap:9px;padding-top:10px}
+.lime .ot-fields:empty{display:none}
+.lime .ot-hint{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:7px;padding:2px 4px;font-weight:600}
+.lime .ot-hint .ic{width:14px;height:14px;color:var(--go)}
+
+.lime .schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.lime .sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.lime .when-time{width:auto;flex:1;min-width:140px;padding:9px 13px;border-radius:var(--r-pill);font-size:16px;min-height:44px}
+
+.lime .ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:8px}
+.lime .ordernote textarea{resize:none}
+.lime .curbside-field{font-size:13px;font-weight:600;color:var(--ink-2)}
+
+.lime .coupon-field{display:flex;align-items:center;gap:9px;background:var(--paper);border:2px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .lime .coupon-field{padding:5px 15px 5px 6px}
+.lime .coupon-field .ic{color:var(--ink);flex:none}
+.lime .coupon-field input{background:none;border:0;padding:8px 0;font-size:16px;font-weight:600}
+.lime .coupon-field input:focus{border:0}
+.lime .coupon-field.is-applied{border-color:var(--ink);border-style:solid;background:var(--lime-soft)}
+.lime .minibtn{
+  flex:none;padding:10px 17px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--paper);font-size:12px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .minibtn:active{transform:scale(.94)}
+.lime .coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--go);font-weight:700}
+.lime .coupon-msg.err{color:var(--red)}
+.lime .minorder{font-size:12px;color:var(--red);font-weight:700;padding:6px 2px 0}
+.lime .err-box{font-size:12.5px;color:var(--red);font-weight:700;background:rgba(255,90,78,.1);border-radius:14px;padding:11px 14px}
+
+.lime .totals{background:var(--tile);border-radius:var(--r-card);padding:16px;display:grid;gap:9px}
+.lime .tr,.lime .tr-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:600}
+.lime .tr b,.lime .tr-row b{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lime .tr.disc,.lime .tr.disc b,.lime .tr-row.disc,.lime .tr-row.disc b{color:var(--go)}
+.lime .tr.grand,.lime .tr-row.grand{border-top:2px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px;font-weight:800}
+.lime .tr.grand b,.lime .tr-row.grand b{font-weight:800;font-size:17px}
+
+.lime .waiter-row{display:flex;gap:10px}
+.lime .waiter-row .ghostbtn{flex:1}
+
+/* ── checkout ─────────────────────────────────────────── */
+.lime .ck-block{padding-top:16px;display:grid;gap:9px}
+.lime .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lime .field-label{display:block;font-size:11px;font-weight:700;color:var(--ink-3);margin:6px 2px 3px}
+.lime .linkbtn{background:none;border:0;color:var(--ink);font-size:12.5px;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:4px 2px 0;justify-self:start}
+.lime .minimap{position:relative;height:110px;border-radius:var(--r-card);overflow:hidden;margin-bottom:9px;border:1.5px solid var(--stroke)}
+.lime .minimap svg{width:100%;height:100%}
+.lime .mm-base{fill:var(--tile)}
+.lime .mm-block{fill:var(--tile-2)}
+.lime .mm-road{stroke:#fff;stroke-width:9;fill:none}
+.lime .mm-dot{fill:var(--go)}
+.lime .minimap .pin{position:absolute;left:50%;top:50%;translate:-50% -82%}
+.lime .minimap .pin svg{width:34px;height:34px;fill:var(--ink);stroke:var(--ink)}
+.lime .minimap .pin circle{fill:var(--lime);stroke:none}
+.lime .pin-pulse{position:absolute;left:50%;bottom:-4px;translate:-50% 0;width:26px;height:8px;border-radius:50%;background:rgba(205,243,75,.85);animation:lm-pulse 2.2s infinite}
+
+.lime .pm-list{display:grid;gap:9px}
+.lime .pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:2px solid var(--stroke);border-radius:18px;
+  padding:12px 14px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.lime .pm.is-on{border-color:var(--ink);background:var(--lime-soft)}
+.lime .pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--tile);display:grid;place-items:center;color:var(--ink);transition:all var(--t-fast)}
+.lime .pm.is-on .pm-ic{background:var(--ink);color:var(--lime)}
+.lime .pm b{flex:1;font-size:13.5px;font-weight:800}
+.lime .pm b small{display:block;font-weight:600;font-size:11px;color:var(--ink-3);margin-top:2px}
+.lime .pm-radio{width:21px;height:21px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.lime .pm.is-on .pm-radio{border-color:var(--ink)}
+.lime .pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.lime .cardform{display:grid;gap:9px;padding-top:10px;animation:lm-card-in .35s var(--ease)}
+
+.lime .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.lime .tip-row button{
+  flex:1;min-width:56px;padding:12px 4px;border-radius:var(--r-pill);
+  background:var(--tile);
+  font-size:13px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.lime .tip-row button:active{transform:scale(.93)}
+.lime .tip-row button.is-on{background:var(--ink);color:var(--lime)}
+
+.lime .earn-line{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;color:var(--lime-ink);
+  background:var(--lime);border-radius:14px;
+  padding:10px 14px;margin-top:16px;
+}
+.lime .earn-line:empty{display:none}
+.lime .terms{display:flex;gap:10px;align-items:flex-start;padding:8px 2px 0;font-size:12px;color:var(--ink-2);cursor:pointer;font-weight:600}
+.lime .terms input{width:17px;height:17px;accent-color:var(--ink);margin-top:1px;flex:none}
+
+/* auth / otp */
+.lime .auth-tabs{display:flex;background:var(--tile);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:14px}
+.lime .auth-tabs button{flex:1;padding:9px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast)}
+.lime .auth-tabs button.is-on{background:var(--ink);color:var(--lime)}
+.lime .auth-form{display:grid;gap:10px}
+.lime .otp-boxes{display:flex;gap:9px}
+.lime .otp-boxes input{text-align:center;font-size:20px;font-weight:800}
+.lime .sheet-sub{font-size:12.5px;color:var(--ink-2);margin-bottom:12px;font-weight:600}
+
+/* ── confirmed ────────────────────────────────────────── */
+.lime .confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:7px}
+.lime .cf-badge,.lime .cup-art{
+  position:relative;width:148px;height:148px;border-radius:50%;
+  background:var(--lime);display:grid;place-items:center;margin-bottom:14px;
+  animation:lm-pop-in .6s var(--ease-pop) .1s backwards;
+}
+.lime .cup-art{background:none}
+.lime .cup-halo{position:absolute;inset:-6px;border-radius:50%;background:var(--lime)}
+.lime .cup{position:relative;z-index:2;width:120px;height:auto}
+.lime .cup-lid,.lime .cup-cap,.lime .cup-body,.lime .cup-band{fill:var(--ink)}
+.lime .cup-band{fill:var(--lime)}
+.lime .check-badge circle{fill:var(--lime);stroke:var(--ink);stroke-width:4}
+.lime .check-badge .check{stroke:var(--ink);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:lm-draw .5s var(--ease) .55s forwards}
+.lime .box-doodles{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.lime .box-doodles .bd{stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round;opacity:.6}
+.lime .box-doodles .bd-star{fill:var(--ink);stroke:none}
+.lime .cf-badge svg{width:74px;height:74px}
+.lime .cf-check{stroke:var(--ink);stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:lm-draw .5s var(--ease) .55s forwards}
+@keyframes lm-draw{to{stroke-dashoffset:0}}
+.lime .cf-ring{position:absolute;inset:-14px;border-radius:50%;border:3px dashed var(--ink);opacity:.5;animation:lm-dd-spin 24s linear infinite}
+.lime .confirm-title{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.lime .confirm-sub{font-size:13px;color:var(--ink-2);line-height:1.7;font-weight:600}
+.lime .confirm-eta{color:var(--ink);font-weight:800}
+.lime .confirm-code{
+  font-size:12.5px;font-weight:800;color:var(--ink);
+  background:var(--tile);border:2px dashed var(--stroke-2);
+  padding:9px 18px;border-radius:var(--r-pill);margin-top:8px;font-variant-numeric:tabular-nums;
+}
+.lime .confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.lime .confirm-actions .blkbar,.lime .confirm-actions .cta{max-width:300px}
+/* Match the Track Order bar's footprint — the bare ghost pill hugging its own
+   text next to a 300px primary read as an afterthought. */
+.lime .confirm-actions .ghostbtn{width:100%;max-width:300px}
+.lime .confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.lime .confirm-actions .ghostbtn:hover{background:var(--tile)}
+.lime .nps{padding-top:24px;text-align:center;width:100%}
+.lime .nps>p{font-size:12.5px;font-weight:700;color:var(--ink-2);margin-bottom:10px}
+.lime .nps-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.lime .nps-row button{width:32px;height:32px;border-radius:10px;background:var(--tile);font-size:12px;font-weight:800;color:var(--ink-2)}
+.lime .nps-row button.is-on{background:var(--ink);color:var(--lime)}
+.lime .nps-thanks{font-size:12px;font-weight:800;color:var(--go);padding-top:10px}
+.lime .greview{display:flex;align-items:center;gap:11px;margin-top:18px;background:var(--tile);border-radius:16px;padding:13px 15px;text-decoration:none;color:var(--ink);width:100%}
+.lime .greview-star{font-size:20px}
+.lime .greview-copy{flex:1;text-align:start}
+.lime .greview-copy b{display:block;font-size:13px;font-weight:800}
+.lime .greview-copy small{font-size:11px;color:var(--ink-3)}
+.lime .greview .arr{color:var(--ink-3)}
+[dir="rtl"] .lime .greview .arr{transform:scaleX(-1)}
+.lime .confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.lime .confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:lm-pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#CDF34B);rotate:var(--rz,0deg);
+}
+.lime .confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes lm-pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track / live tracking (in-app view) ──────────────── */
+.lime .order-chip{flex:none;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--tile);padding:9px 13px;border-radius:var(--r-pill)}
+.lime .mapcard{position:relative;border-radius:26px;overflow:hidden;border:2.5px solid var(--ink);aspect-ratio:336/232}
+.lime .mapcard svg{width:100%;height:100%;display:block}
+.lime .m-base{fill:var(--tile)}
+.lime .m-block{fill:var(--tile-2)}
+.lime .m-park{fill:#E4F3C2}
+.lime .m-road{stroke:#fff;stroke-width:12;fill:none}
+.lime .m-road.thin{stroke-width:6}
+.lime .m-dot{fill:var(--go);stroke:#fff;stroke-width:2}
+.lime .m-route{stroke:var(--lime);stroke-width:5.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lime .m-poi rect{fill:var(--ink)}
+.lime .poi-glyph{stroke:#fff;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lime .c-body{fill:var(--ink)}
+.lime .c-pulse{fill:var(--lime);opacity:.65;transform-box:fill-box;transform-origin:center;animation:lm-cpulse 1.9s var(--ease) infinite}
+@keyframes lm-cpulse{0%{transform:scale(.7);opacity:.75}80%{transform:scale(1.7);opacity:0}100%{opacity:0}}
+.lime .c-bike{stroke:var(--lime);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lime .c-bike circle{fill:none}
+
+.lime .arrive-banner{display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);border-radius:22px;padding:14px 16px;margin-top:12px;animation:lm-card-in .45s var(--ease) backwards}
+.lime .ab-ic{width:38px;height:38px;flex:none;border-radius:50%;background:#1f1f1f;color:var(--lime);display:grid;place-items:center}
+.lime .ab-ic .ic{width:18px;height:18px}
+.lime .arrive-banner p{font-size:12.5px;font-weight:600;line-height:1.5}
+.lime .arrive-banner b{color:var(--lime);font-weight:800;font-variant-numeric:tabular-nums}
+
+.lime .courier-card{background:var(--paper);border:1.5px solid var(--stroke);border-radius:24px;padding:14px 16px 18px;margin-top:12px;display:grid;gap:16px;animation:lm-card-in .45s var(--ease) .06s backwards}
+.lime .cc-top{display:flex;align-items:center;gap:12px}
+.lime .cc-top img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2.5px solid var(--ink);background:var(--tile)}
+.lime .cc-who{flex:1}
+.lime .cc-who b{font-size:14.5px;font-weight:800;display:block}
+.lime .cc-who small{font-size:11px;color:var(--ink-3);font-weight:600}
+.lime .cc-live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;background:var(--tile);padding:7px 12px;border-radius:var(--r-pill)}
+
+.lime .steps{position:relative;display:flex;justify-content:space-between;padding:6px 6px 0}
+.lime .steps-line{position:absolute;top:27px;inset-inline:13%;border-top:2.5px dashed var(--stroke-2)}
+.lime .step{position:relative;z-index:1;display:grid;justify-items:center;gap:8px;width:33%}
+.lime .step-ic{width:38px;height:38px;border-radius:50%;background:var(--paper);border:2.5px solid var(--stroke-2);color:var(--ink-3);display:grid;place-items:center;transition:all .35s var(--ease)}
+.lime .step-ic .ic{width:17px;height:17px}
+.lime .step.done .step-ic{background:var(--lime);border-color:var(--ink);color:var(--lime-ink)}
+.lime .step.now .step-ic{width:46px;height:46px;background:var(--ink);border-color:var(--ink);color:var(--lime);box-shadow:0 0 0 0 rgba(205,243,75,.7);animation:lm-limepulse 2s infinite}
+@keyframes lm-limepulse{70%{box-shadow:0 0 0 10px transparent}}
+.lime .step b{font-size:10.5px;font-weight:800;color:var(--ink-3);text-align:center;transition:color .3s}
+.lime .step.done b,.lime .step.now b{color:var(--ink)}
+
+.lime .contact-capsule{display:flex;align-items:stretch;background:var(--ink);border-radius:var(--r-pill);padding:9px;margin-top:12px;animation:lm-card-in .45s var(--ease) .12s backwards}
+.lime .contact-capsule button,.lime .contact-capsule a{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-size:13.5px;font-weight:800;border-radius:var(--r-pill);padding:8px 6px;text-decoration:none;transition:background var(--t-fast)}
+.lime .contact-capsule button:active,.lime .contact-capsule a:active{background:#1e1e1e}
+.lime .ccap-ic{position:relative;width:38px;height:38px;flex:none;border-radius:50%;background:#242424;color:var(--lime);display:grid;place-items:center}
+.lime .ccap-ic .ic{width:17px;height:17px}
+.lime .chat-dot{position:absolute;top:0;inset-inline-end:-1px;width:10px;height:10px;border-radius:50%;background:var(--lime);outline:2.5px solid var(--ink)}
+.lime .ccap-div{width:1.5px;background:#2c2c2c;margin:6px 2px}
+
+.lime .review-block{margin-top:14px;background:var(--tile);border-radius:var(--r-card);padding:18px 16px;display:grid;justify-items:center;gap:12px;text-align:center}
+.lime .rv-q{font-size:13.5px;font-weight:800}
+.lime .stars{display:flex;gap:8px}
+.lime .star-btn{width:42px;height:42px;border-radius:50%;background:var(--paper);border:2px solid var(--stroke-2);color:var(--ink-3);display:grid;place-items:center;transition:all var(--t-fast) var(--ease-pop)}
+.lime .star-btn .ic{width:19px;height:19px}
+.lime .star-btn:active{transform:scale(.85)}
+.lime .star-btn.is-on{background:var(--lime);border-color:var(--ink);color:var(--ink)}
+.lime .star-btn.is-on .ic{fill:var(--ink)}
+.lime .stars.big .star-btn{width:48px;height:48px}
+.lime .rv-thanks{font-size:12.5px;font-weight:800;color:var(--go)}
+.lime .rv-form{display:grid;gap:10px;width:100%}
+.lime .rv-form textarea{resize:none;background:var(--paper)}
+.lime .lime-pill.google{background:var(--lime);color:var(--lime-ink)}
+
+/* ── orders / activity ────────────────────────────────── */
+.lime .loyalty-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--paper);border-radius:26px;padding:20px 22px}
+.lime .lc-label{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--lime)}
+.lime .lc-num{display:flex;align-items:baseline;gap:7px;margin-top:4px}
+.lime .lc-num b{font-size:34px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.lime .lc-num small{font-size:12px;font-weight:700;color:#9aa0a7}
+.lime .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:12px}
+.lime .tilebtn{display:flex;align-items:center;gap:10px;background:var(--tile);border-radius:18px;padding:15px;font-size:12.5px;font-weight:800;text-align:start;transition:transform var(--t-fast) var(--ease-pop)}
+.lime .tilebtn:active{transform:scale(.96)}
+.lime .tilebtn .ic{width:19px;height:19px}
+.lime .orders-list{display:grid;gap:9px}
+.lime .order-row{display:flex;align-items:center;gap:12px;background:var(--paper);border:1.5px solid var(--stroke);border-radius:18px;padding:12px 14px;animation:lm-card-in .4s var(--ease) backwards;text-align:start;width:100%;text-decoration:none;color:inherit}
+.lime .or-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--ink);color:var(--lime);display:grid;place-items:center}
+.lime .or-ic .ic{width:18px;height:18px}
+.lime .order-row>div{flex:1;min-width:0}
+.lime .order-row b{font-size:13px;font-weight:800;display:block;font-variant-numeric:tabular-nums}
+.lime .order-row small{font-size:11px;color:var(--ink-3);font-weight:600}
+.lime .order-row>.ic{color:var(--ink)}
+.lime .order-row .arr{color:var(--ink-3)}
+[dir="rtl"] .lime .order-row .arr{transform:scaleX(-1)}
+.lime .order-status{flex:none;font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:6px 11px;border-radius:var(--r-pill);background:var(--lime);color:var(--lime-ink)}
+.lime .order-status.done{background:var(--tile);color:var(--ink-2)}
+.lime .row-status.ok{font-size:10px;font-weight:800;text-transform:uppercase;padding:6px 11px;border-radius:var(--r-pill);background:var(--lime);color:var(--lime-ink)}
+.lime .orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px;font-weight:600}
+.lime .orders-block{padding-top:18px}
+.lime .pref{padding-top:8px}
+
+/* ── sheets / scrim / toast ───────────────────────────── */
+.lime .scrim{position:absolute;inset:0;z-index:var(--z-scrim);background:rgba(16,16,16,.45);backdrop-filter:blur(3px);opacity:0;transition:opacity .3s var(--ease)}
+.lime .scrim.is-open{opacity:1}
+.lime .sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--paper);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:0 -18px 50px rgba(16,16,16,.18);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.lime .sheet.is-open{transform:none}
+.lime .sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.lime .sheet h2{font-size:19px;font-weight:800;letter-spacing:-.025em;margin-bottom:14px}
+.lime .sheet h4{font-size:12px;font-weight:800;color:var(--ink-2);margin:14px 0 9px}
+.lime .sheet .blkbar,.lime .sheet .cta{margin-top:14px}
+.lime .sheet-list{display:grid;gap:8px}
+.lime .sheet-row{display:flex;align-items:center;gap:12px;text-align:start;background:var(--tile);border-radius:16px;padding:14px 15px;font-size:13.5px;font-weight:800;transition:transform var(--t-fast) var(--ease-pop);width:100%}
+.lime .sheet-row:active{transform:scale(.97)}
+.lime .sheet-row .ic{color:var(--ink)}
+.lime .sheet-row.danger,.lime .sheet-row.danger .ic{color:var(--red)}
+.lime .sheet-row span{flex:1}
+.lime .sheet-actions{display:flex;gap:10px;margin-top:16px}
+.lime .sheet-actions .ghostbtn{flex:none}
+.lime .sheet-actions .cta{flex:1}
+.lime .sheet-form{display:grid;gap:4px}
+.lime .sheet-done{text-align:center;display:grid;gap:6px;padding:10px 0}
+.lime .sheet-done-emoji{font-size:38px}
+.lime .sheet-done b{font-size:16px;font-weight:800}
+.lime .sheet-done p{font-size:12.5px;color:var(--ink-2)}
+.lime .sheet-done .muted{color:var(--ink-3)}
+.lime .branch-list{display:grid;gap:8px}
+/* nearest-branch map picker (self-hosted Leaflet) */
+.lime .sheet-tall{max-height:88vh;overflow-y:auto}
+.lime .branchmap{height:240px;border-radius:16px;overflow:hidden;background:var(--tile);margin-bottom:8px}
+.lime .branchmap .leaflet-container{height:100%;width:100%;background:var(--tile);font:inherit}
+.lime .geo-attrib{font-size:10.5px;color:var(--ink-3);margin:0 2px 10px}
+
+/* delivery address suite — saved chips, autocomplete field, use-my-location */
+.lime .saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.lime .saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:11px 13px;border:1.5px solid var(--stroke-2);border-radius:16px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all var(--t-fast) var(--ease)}
+.lime .saved-addr .ic{flex:none;color:var(--ink-2)}
+.lime .saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.lime .saved-addr .sa-text b{font-size:13px;font-weight:700}
+.lime .saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .saved-addr.is-on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.lime .saved-addr.is-on .ic{color:var(--ink)}
+.lime .addr-field{position:relative}
+.lime .addr-field input#custAddr{padding-inline-end:46px}
+.lime .uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--ink);background:none;border:0;cursor:pointer}
+.lime .uselocbtn:active{transform:scale(.9)}
+.lime .uselocbtn.is-loading{opacity:.5;animation:lm-dd-spin 1s linear infinite}
+.lime .addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--paper);border:1.5px solid var(--stroke-2);border-radius:16px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(16,16,16,.35);max-height:230px;overflow-y:auto}
+.lime .addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--stroke);cursor:pointer}
+.lime .addr-opt:last-child{border-bottom:0}
+.lime .addr-opt:active,.lime .addr-opt:hover{background:var(--tile)}
+.lime .branch-row small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.lime .branch-dist{font-size:11px;font-weight:800;color:var(--ink-2);flex:none}
+.lime .branch-row.is-on .branch-dist{color:var(--lime-ink)}
+.lime .branch-row{display:flex;align-items:center;gap:11px;background:var(--tile);border-radius:16px;padding:14px 15px;font-size:13.5px;font-weight:800;text-decoration:none;color:inherit;width:100%;text-align:start}
+.lime .branch-row.is-on{background:var(--lime);color:var(--lime-ink)}
+.lime .branch-row b{flex:1}
+.lime .branch-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.lime .branch-row.is-on .branch-check{border-color:var(--ink);background:var(--ink)}
+
+.lime .me-card{display:flex;align-items:center;gap:13px;background:var(--tile);border-radius:var(--r-card);padding:14px}
+.lime .me-card img,.lime .me-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2.5px solid var(--ink);flex:none}
+.lime .me-avatar{display:grid;place-items:center;background:var(--lime);color:var(--lime-ink);font-size:22px;font-weight:800}
+.lime .me-card>div{flex:1;min-width:0}
+.lime .me-card b{font-size:16px;font-weight:800;display:block}
+.lime .me-card small,.lime .me-card .tk-label{font-size:11.5px;color:var(--ink-2);font-weight:600}
+.lime .pts-chip{flex:none;display:inline-flex;align-items:baseline;gap:4px;background:var(--lime);color:var(--lime-ink);font-size:11px;font-weight:800;padding:8px 13px;border-radius:var(--r-pill)}
+.lime .pts-chip b{font-size:13px}
+.lime .wallet-line{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:15px 18px;border-radius:var(--r-card);background:var(--ink);color:var(--paper);font-size:13px;font-weight:700}
+.lime .wallet-line b{font-size:17px;font-weight:800;color:var(--lime);font-variant-numeric:tabular-nums}
+.lime .pref-row{display:flex;align-items:center;justify-content:space-between;padding:13px 2px}
+.lime .pref-row>span{display:flex;align-items:center;gap:11px;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.lime .pref-row .ic{width:20px;height:20px}
+.lime .row-line{width:100%;display:flex;align-items:center;gap:11px;margin-top:9px;background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;padding:14px 15px;color:var(--ink);font-size:13.5px;font-weight:800;text-align:start}
+.lime .row-line span{flex:1}
+.lime .row-line .arr{color:var(--ink-3)}
+[dir="rtl"] .lime .row-line .arr{transform:scaleX(-1)}
+.lime .wa-ic{color:var(--go)!important}
+.lime .wa-line{display:flex;align-items:center;gap:11px;margin-top:12px;background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;padding:14px 15px;color:var(--ink);font-size:13.5px;font-weight:800;text-decoration:none}
+.lime .wa-line>.ic:first-child{color:var(--go)}
+.lime .wa-line span{flex:1}
+.lime .wa-line .arr{color:var(--ink-3)}
+[dir="rtl"] .lime .wa-line .arr{transform:scaleX(-1)}
+.lime .biz-card{display:grid;gap:8px;background:var(--tile);border-radius:var(--r-card);padding:15px;margin-top:12px}
+.lime .biz-card span{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.lime .biz-card .ic{width:17px;height:17px;color:var(--ink)}
+.lime .biz-card a{color:var(--ink-2);text-decoration:none}
+.lime .demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:22px 0 4px;font-weight:600}
+
+/* loyalty block on profile */
+.lime .loyalty{background:var(--ink);color:var(--paper);border-radius:var(--r-card);padding:18px;margin-top:16px}
+.lime .loyalty-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800}
+.lime .loyalty-head .ic{color:var(--lime)}
+.lime .loyalty-num{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;padding:6px 0 2px}
+.lime .loyalty-sub{font-size:11.5px;color:#9aa0a7;font-weight:600}
+.lime .loyalty-bar{height:10px;border-radius:var(--r-pill);background:#2a2a2a;overflow:hidden;margin:12px 0}
+.lime .loyalty-bar i{display:block;height:100%;width:0;background:var(--lime);border-radius:var(--r-pill);transition:width .8s var(--ease)}
+.lime .stamp-dots{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.lime .stamp-dot{width:30px;height:30px;border-radius:50%;background:#2a2a2a;color:#555;display:grid;place-items:center}
+.lime .stamp-dot .ic{width:15px;height:15px}
+.lime .stamp-dot.is-on{background:var(--lime);color:var(--lime-ink)}
+.lime .loyalty-ok{font-size:12.5px;font-weight:800;color:var(--lime);padding-top:10px}
+
+.lime .loy-big{display:flex;align-items:baseline;gap:8px;font-size:15px;font-weight:700;color:var(--ink-2)}
+.lime .loy-big b{font-size:44px;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.lime .loy-bar{height:12px;border-radius:var(--r-pill);background:var(--tile);margin:14px 0 12px;overflow:hidden}
+.lime .loy-bar i{display:block;height:100%;width:0%;border-radius:var(--r-pill);background:var(--lime);outline:1.5px solid var(--ink);transition:width .8s var(--ease)}
+.lime .loy-msg{font-size:12.5px;font-weight:800;color:var(--go);padding-top:12px}
+.lime .loy-msg.err{color:var(--red)}
+
+.lime .rsv-body{display:grid;gap:12px;padding-top:14px}
+.lime .guests-row{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:700;color:var(--ink-2);padding:2px 4px}
+.lime .guests-row .qty-min output{color:var(--ink)}
+
+.lime .wa-preview{font:600 12px/1.7 var(--font-ui);color:var(--ink-2);background:var(--tile);border-radius:18px;padding:16px;white-space:pre-wrap;word-break:break-word}
+[dir="rtl"] .lime .wa-preview{font-family:var(--font-ar)}
+.lime .wa-go{background:var(--go)}
+.lime .wa-go .ic{color:#fff}
+
+/* ── full-screen story viewer ─────────────────────────── */
+.lime .storyview{position:absolute;inset:0;z-index:var(--z-story);background:var(--ink);opacity:0;transition:opacity .3s var(--ease)}
+.lime .storyview.is-open{opacity:1}
+.lime .sv-progress{position:absolute;top:calc(12px + env(safe-area-inset-top));inset-inline:14px;z-index:3;display:flex;gap:5px}
+.lime .sv-seg{flex:1;height:3px;border-radius:var(--r-pill);background:rgba(255,255,255,.3);overflow:hidden}
+.lime .sv-seg i{display:block;height:100%;width:0;background:var(--lime);transition:width .05s linear}
+.lime .sv-close{
+  position:absolute;top:calc(26px + env(safe-area-inset-top));inset-inline-end:18px;z-index:4;
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.18);color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime .sv-close:active{transform:scale(.9)}
+.lime .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.lime .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lime .sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent}
+.lime .sv-nav.prev{inset-inline-start:0}
+.lime .sv-nav.next{inset-inline-end:0}
+.lime .sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:24px 22px calc(28px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(16,16,16,.78),transparent);
+}
+.lime .sv-caption{color:#fff;font-size:17px;font-weight:800;line-height:1.32;letter-spacing:-.01em;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.lime .sv-cta{height:52px;background:var(--lime);color:var(--lime-ink)}
+
+.lime .toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--paper);font-size:13px;font-weight:700;
+  padding:12px 19px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(16,16,16,.35);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.lime .toast.is-on{opacity:1;translate:-50% 0}
+.lime .toast .ic{width:16px;height:16px;color:var(--lime)}
+
+/* fly-to-bag */
+.lime .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.lime .fly-img{position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--lime);box-shadow:0 10px 26px rgba(16,16,16,.4);transition:all .75s cubic-bezier(.4,.1,.3,1)}
+
+/* ── tabbar (black pill bottom-nav — lime signature) ───── */
+.lime .tabbar{
+  position:absolute;inset-inline:10px;bottom:calc(16px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--ink);border-radius:var(--r-pill);padding:9px 12px;
+  box-shadow:0 20px 44px -14px rgba(16,16,16,.55);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.lime .tabbar.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.lime .tab{display:grid;justify-items:center;color:#8b9096;transition:color var(--t-fast)}
+.lime .tab-pill{position:relative;width:46px;height:46px;border-radius:16px;display:grid;place-items:center;transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop)}
+.lime .tab:active .tab-pill{transform:scale(.86)}
+.lime .tab.is-on{color:var(--lime-ink)}
+.lime .tab.is-on .tab-pill{background:var(--lime)}
+.lime .tab-pill.ring::after{content:"";position:absolute;inset:-6px;border-radius:20px;border:3px solid var(--lime);animation:lm-ringfade .9s var(--ease) forwards}
+@keyframes lm-ringfade{0%{opacity:1;transform:scale(.65)}100%{opacity:0;transform:scale(1.3)}}
+.lime .tab .badge{position:absolute;top:-3px;inset-inline-end:-4px;min-width:19px;height:19px;border-radius:var(--r-pill);background:var(--lime);color:var(--lime-ink);font-size:10.5px;font-weight:800;font-style:normal;display:grid;place-items:center;padding:0 5px;outline:2.5px solid var(--ink);transition:transform .25s var(--ease-pop)}
+.lime .tab .badge.bump{animation:lm-badge-bump .45s var(--ease-pop)}
+@keyframes lm-badge-bump{40%{transform:scale(1.45)}}
+
+/* footer CTA on cart view must clear the floating tab bar */
+.lime .view[data-view="cart"] .p-cta{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+
+/* ── track / account page cards (server-rendered) ─────── */
+.lime .track-card{background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);padding:16px}
+.lime .track-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.lime .tk-label{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.lime .tk-label.amt{margin-top:5px;text-align:end;font-variant-numeric:tabular-nums}
+.lime [data-view="track"] .view-scroll>.track-card{margin-top:12px}
+.lime [data-view="track"] .view-scroll>.page-head+.track-card{margin-top:0}
+.lime .track-card.curbside{text-align:center}
+.lime .curbside-btn{width:100%}
+.lime .curbside-msg{display:none;margin-top:10px;font-size:13px;font-weight:800;color:var(--go)}
+.lime .order-line.total{border-top:2px dashed var(--stroke-2);padding-top:11px;color:var(--ink);font-weight:800}
+.lime .order-line.total b{font-size:16px}
+.lime .trk-foot{display:grid;place-items:center;padding-top:18px}
+.lime .track-top b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.lime .tk-eta{text-align:end}
+.lime .timeline{list-style:none;display:grid;gap:2px}
+.lime .tl{display:grid;grid-template-columns:32px 1fr;column-gap:12px;position:relative}
+.lime .tl-node{grid-row:1;width:32px;height:32px;border-radius:50%;background:var(--tile);color:var(--ink-3);display:grid;place-items:center;z-index:1}
+.lime .tl-node svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .3s}
+.lime .tl-line{grid-column:1;justify-self:center;width:2.5px;background:var(--stroke-2);min-height:26px;margin:2px 0}
+.lime .tl-copy{grid-column:2;padding-bottom:16px}
+.lime .tl-copy b{font-size:13.5px;font-weight:800;display:block}
+.lime .tl-copy small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.lime .tl.done .tl-node,.lime .tl.now .tl-node{background:var(--lime);color:var(--lime-ink)}
+.lime .tl.done .tl-node svg{opacity:1}
+.lime .tl.now .tl-node{background:var(--ink);color:var(--lime);box-shadow:0 0 0 0 rgba(205,243,75,.7);animation:lm-limepulse 2s infinite}
+.lime .tl.done .tl-line{background:var(--lime)}
+.lime .tl.cancelled .tl-node{background:var(--red);color:#fff}
+.lime .order-lines{display:grid;gap:9px}
+.lime .order-line{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--ink-2);font-weight:600}
+.lime .order-line b{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lime .order-line small{display:block;color:var(--ink-3);font-weight:600;font-size:11px}
+.lime .order-line.disc,.lime .order-line.disc b{color:var(--go)}
+
+/* lime signature courier map on track page */
+.lime .lm-mapcard{position:relative;border-radius:26px;overflow:hidden;border:2.5px solid var(--ink);aspect-ratio:336/232}
+.lime .lm-mapcard svg{width:100%;height:100%;display:block}
+.lime .lm-m-base{fill:var(--tile)}
+.lime .lm-m-block{fill:var(--tile-2)}
+.lime .lm-m-park{fill:#E4F3C2}
+.lime .lm-m-road{stroke:#fff;stroke-width:12;fill:none}
+.lime .lm-m-road.thin{stroke-width:6}
+.lime .lm-m-route{stroke:var(--lime);stroke-width:5.5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:520;stroke-dashoffset:520;animation:lm-route-draw 1.6s var(--ease) .3s forwards}
+@keyframes lm-route-draw{to{stroke-dashoffset:0}}
+.lime .lm-m-poi rect{fill:var(--ink)}
+.lime .lm-poi-glyph{stroke:#fff;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lime .lm-c-body{fill:var(--ink)}
+.lime .lm-c-pulse{fill:var(--lime);opacity:.65;transform-box:fill-box;transform-origin:center;animation:lm-cpulse 1.9s var(--ease) infinite}
+.lime .lm-c-bike{stroke:var(--lime);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lime .lm-c-bike circle{fill:none}
+.lime .lm-courier{animation:lm-courier-move 6s var(--ease) 1.6s infinite alternate}
+@keyframes lm-courier-move{from{transform:translate(30px,206px)}to{transform:translate(302px,68px)}}
+.lime .lm-courier-card{display:flex;background:var(--paper);border:1.5px solid var(--stroke);border-radius:24px;padding:14px 16px;margin-top:12px}
+.lime .lm-cc-top{display:flex;align-items:center;gap:12px;width:100%}
+.lime .lm-cc-top img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2.5px solid var(--ink);background:var(--tile)}
+.lime .lm-cc-who{flex:1}
+.lime .lm-cc-who b{font-size:14.5px;font-weight:800;display:block}
+.lime .lm-cc-who small{font-size:11px;color:var(--ink-3);font-weight:600}
+.lime .lm-cc-live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;background:var(--tile);padding:7px 12px;border-radius:var(--r-pill)}
+.lime .lm-godot{width:8px;height:8px;border-radius:50%;background:var(--go);flex:none;animation:lm-pulse 2.2s infinite}
+.lime .lm-contact-capsule{display:flex;align-items:stretch;background:var(--ink);border-radius:var(--r-pill);padding:9px;margin-top:12px}
+.lime .lm-contact-capsule a{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-size:13.5px;font-weight:800;border-radius:var(--r-pill);padding:8px 6px;text-decoration:none}
+.lime .lm-ccap-ic{width:38px;height:38px;flex:none;border-radius:50%;background:#242424;color:var(--lime);display:grid;place-items:center}
+.lime .lm-ccap-ic .ic{width:17px;height:17px}
+.lime .lm-ccap-div{width:1.5px;background:#2c2c2c;margin:6px 2px}
+
+/* status strip / banners on home */
+.lime .status-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 2px 2px}
+.lime .open-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--go)}
+.lime .open-chip i{width:8px;height:8px;border-radius:50%;background:var(--go)}
+.lime .open-chip.closed{color:var(--red)}
+.lime .open-chip.closed i{background:var(--red)}
+.lime .viewers{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+.lime .viewers b{color:var(--ink);font-weight:800}
+
+/* F2 · brand / follow row (ported from crave) */
+.lime .brand-row{display:flex;align-items:center;gap:12px;padding:12px 2px 2px}
+.lime .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--tile);display:grid;place-items:center;border:1.5px solid var(--stroke)}
+.lime .brand-logo img{width:100%;height:100%;object-fit:cover}
+.lime .brand-info{flex:1;min-width:0}
+.lime .brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.lime .brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = a filled lime seal + dark check (bright lime → dark check reads). */
+.lime .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.lime .verified-badge .vb-seal{width:17px;height:17px;display:block}
+.lime .verified-badge .vb-seal-fill{fill:var(--lime)}
+.lime .verified-badge .vb-seal-check{fill:var(--lime-ink)}
+/* explicit sheet close (top corner), off the grab bar it borrows for close wiring. */
+.lime .sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.lime .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.lime .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover as a rounded CARD floating inset on the paper (lime cards everything):
+     only the top chrome floats over the photo — search + status drop below the
+     brand row so the card stays a clean photo. Side gutters scale with width
+     (clamp) so it reads as an inset card at the storefront's real render width,
+     not just at phone size where a fixed 12px inset would vanish. ── */
+.lime .lime-cover{position:relative;isolation:isolate;min-block-size:172px;margin:12px clamp(14px,3.6vw,60px) 0}
+.lime .lime-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;border-radius:26px;background:var(--lime-soft,#F3FBDA);box-shadow:0 18px 34px -16px rgba(16,16,16,.45)}
+.lime .lime-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.lime .lime-cover-scrim{position:absolute;inset:0;border-radius:26px;background:linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.06) 42%, rgba(0,0,0,.30) 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.lime .lime-cover .home-top,.lime .lime-cover .qc-cen-slot{position:relative;z-index:2}
+.lime .lime-cover .home-top{text-shadow:0 1px 3px rgba(0,0,0,.4);padding-inline:14px}
+.lime .lime-cover .loc-label{color:rgba(255,255,255,.85)}
+.lime .lime-cover .loc-value,.lime .lime-cover .loc-value b{color:#fff}
+.lime .lime-cover .open-chip{color:#fff}
+/* brand row overlaps the card's bottom edge; match its inline padding to the card
+   gutter so the logo lands under the card, not out at the screen edge */
+.lime .brand-row--hero{margin-block-start:-30px;position:relative;z-index:3;padding-inline:clamp(14px,3.6vw,60px)}
+.lime .brand-row--hero .brand-logo{border:3px solid var(--paper);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+
+/* ── collapsing header ── */
+.lime .cv-menu-sentinel{display:block;block-size:1px;inline-size:1px;pointer-events:none}
+.lime .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--paper);box-shadow:0 6px 18px rgba(0,0,0,.10);
+  border-block-end:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.lime .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.lime .cv-condensed-logo{width:32px;height:32px;border-radius:11px;overflow:hidden;flex:none;background:var(--lime-soft,#F3FBDA);display:grid;place-items:center}
+.lime .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.lime .cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lime .cv-condensed-actions{display:flex;gap:7px;flex:none}
+@media (prefers-reduced-motion:reduce){.lime .cv-condensed{transition:none}}
+.lime .followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--lime);color:var(--lime-ink);font-size:13px;font-weight:800;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.lime .followbtn:active{transform:scale(.94)}
+.lime .followbtn .following-label{display:none}
+.lime .followbtn.is-on{background:var(--paper);color:var(--ink);border:1.5px solid var(--stroke)}
+.lime .followbtn.is-on .follow-label,.lime .followbtn.is-on .ic{display:none}
+.lime .followbtn.is-on .following-label{display:inline}
+.lime .followbtn--pop{animation:lm-badge-bump .3s var(--ease-pop)}
+@media (prefers-reduced-motion:reduce){.lime .followbtn--pop{animation:none}}
+
+.lime .banners{padding:14px 0 2px}
+.lime .banner-track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory}
+.lime .banner{position:relative;flex:0 0 90%;scroll-snap-align:center;border-radius:var(--r-card);overflow:hidden;background:var(--ink);color:var(--paper);min-height:120px;display:flex;align-items:center;padding:18px;text-decoration:none}
+.lime .banner.alt{background:var(--lime);color:var(--lime-ink)}
+.lime .banner-copy{position:relative;z-index:2;display:grid;gap:5px}
+.lime .banner-kicker{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+.lime .banner-title{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.lime .banner-btn{justify-self:start;margin-top:6px;font-size:11px;font-weight:800;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:var(--r-pill)}
+.lime .banner.alt .banner-btn{background:rgba(0,0,0,.15)}
+.lime .banner-img{position:absolute;inset-inline-end:0;top:0;height:100%;width:45%;object-fit:cover;opacity:.9}
+.lime .banner-dots{display:flex;justify-content:center;gap:5px;padding-top:9px}
+.lime .banner-dots i{width:6px;height:6px;border-radius:50%;background:var(--stroke-2)}
+.lime .banner-dots i.is-on{background:var(--ink);width:16px;border-radius:var(--r-pill)}
+
+/* ── reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  /* delays must collapse too — a delayed reveal (check-badge, cf-check) otherwise
+     holds its hidden from-state for the full delay before snapping in */
+  .lime *,.lime *::before,.lime *::after{animation-duration:.01ms!important;animation-delay:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:.01ms!important;scroll-behavior:auto!important}
+  .lime .confetti{display:none}
+  .lime .card,.lime .cart-item,.lime .arrive-banner,.lime .courier-card,.lime .contact-capsule,.lime .order-row,.lime #pPhoto,.lime .cf-badge{opacity:1!important;transform:none!important}
+  .lime .lm-m-route{stroke-dashoffset:0}
+  .lime .lm-courier{animation:none}
+}
+
+/* hidden attribute must win over component display rules */
+.lime [hidden]{display:none!important}
+
+/* ── desktop: center the app like a large phone canvas ─── */
+@media (min-width:760px){
+  .lime{background:#f2f3f5}
+  .lime .app,.lime>.views{
+    max-width:460px;margin:0 auto;width:100%;
+    background:var(--paper);
+    box-shadow:0 40px 90px -30px rgba(16,16,16,.35);
+  }
+}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .lime .tabbar (bottom 16px + 64px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(74px + env(safe-area-inset-bottom, 0px)); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME-RESCUE (wave 2) — new components, touch targets, desktop, dark mode.
+   Appended so the original cascade is untouched; every rule below is either a
+   new component or a deliberate override.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── LIME-F17 · touch targets ≥44×44 ────────────────────────────────────────
+   The drawn circles stay small (the design depends on it); a transparent
+   ::after pad extends the hit area to the platform minimum. */
+.lime .card-fav,.lime .card-add,.lime .rail-card .rail-fav,.lime .rail-card .rc-add,
+.lime .rail-card .rail-add,.lime .sv-close{position:absolute}
+.lime .card-fav::after,.lime .card-add::after,
+.lime .rail-card .rail-fav::after,.lime .rail-card .rc-add::after,
+.lime .rail-card .rail-add::after{
+  content:"";position:absolute;top:50%;left:50%;
+  width:44px;height:44px;transform:translate(-50%,-50%);border-radius:50%;
+}
+.lime .card-fav{width:34px;height:34px}
+.lime .card-add{width:38px;height:38px}
+.lime .rail-card .rc-add,.lime .rail-card .rail-add{width:34px;height:34px}
+.lime .chip{min-height:44px}
+.lime .subchip{min-height:44px;padding-block:0;display:inline-flex;align-items:center}
+.lime .splash-skip{min-height:44px;display:inline-flex;align-items:center}
+.lime .hero-cta{min-height:44px}
+.lime .minibtn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.lime .seg button{min-height:44px}
+.lime .seg.mini button{min-height:38px}
+.lime .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+.lime .tip-row button,.lime .chiprow button,.lime .auth-tabs button,
+.lime .spice-scale button,.lime .ghostbtn{min-height:44px}
+.lime .ci-note-btn{min-height:34px;padding:6px 9px}
+.lime .rate-stars button,.lime .nps-row button{min-width:38px;min-height:38px}
+
+/* ── LIME-F18 · no iOS zoom-on-focus (16px floor on anything focusable) ──── */
+.lime input,.lime textarea,.lime select{font-size:16px}
+.lime .terms{font-size:13px}
+.lime .terms input{width:20px;height:20px}
+
+/* ── LIME-F21 · hero sells a real dish ──────────────────────────────────── */
+.lime .hero-kicker{
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);margin-bottom:6px;
+}
+.lime .hero-copy h1{
+  font-size:24px;line-height:1.08;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.lime .hero-price{
+  font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;
+  padding-inline-start:9px;margin-inline-start:2px;
+  border-inline-start:1.5px solid rgba(255,255,255,.28);
+}
+
+/* ── LIME-F26 · cards carry their description ───────────────────────────── */
+.lime .card-desc{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:11.5px;line-height:1.4;color:var(--ink-2);font-weight:500;
+  margin:0 2px 2px;min-height:2.8em;
+  unicode-bidi:isolate;
+}
+.lime .card-name,.lime .rail-card b,.lime .ci-name,.lime .ci-opts,
+.lime .card-price,.lime .rail-card .price,.lime .ci-price,
+.lime .tr b,.lime .opt-name,.lime .opt-price{unicode-bidi:isolate}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .lime :is(.card-price,.rail-card .price,.ci-price,.ci-was,.ci-unit,.tr b,.tr-row b,.opt-price,.bb-copy b,.g-price,.tb-price,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] .lime :is(.ck-price,.ck-qty){text-align:right}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .lime :is(.tr b,.tr-row b,.ci-price,.ci-was,.ci-unit){text-align:right}
+
+/* ── LIME-F19 · dietary filter chips ────────────────────────────────────── */
+.lime .dietrow{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 2px;scrollbar-width:none}
+.lime .dietrow::-webkit-scrollbar{display:none}
+.lime .dietrow:empty{display:none}
+.lime .dietchip{
+  flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;
+  padding:0 15px;border-radius:var(--r-pill);
+  background:var(--paper);border:1.5px solid var(--stroke-2);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);white-space:nowrap;
+  transition:all var(--t-fast) var(--ease);
+}
+.lime .dietchip .ic{width:15px;height:15px}
+.lime .dietchip:active{transform:scale(.94)}
+.lime .dietchip.is-on{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.lime .dietchip.reset{border-style:dashed;color:var(--ink-3)}
+.lime .dietchip.reset .ic{display:none}
+
+/* ── LIME-F22 · the confirmation shows what was actually charged ─────────── */
+.lime .confirm-amount{
+  display:grid;justify-items:center;gap:2px;margin-top:14px;
+  background:var(--tile);border-radius:18px;padding:12px 26px;
+}
+.lime .confirm-amount small{
+  font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);
+}
+.lime .confirm-amount b{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* ── LIME-F20 · reorder from the activity list ──────────────────────────── */
+.lime .order-wrap{display:grid;gap:0}
+.lime .order-wrap .order-row{border-end-start-radius:0;border-end-end-radius:0;border-bottom:0}
+.lime .or-again{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;
+  border:1.5px solid var(--stroke);border-top:0;
+  border-end-start-radius:18px;border-end-end-radius:18px;
+  background:var(--tile);font-size:12px;font-weight:800;color:var(--ink);
+}
+.lime .or-again .ic{width:15px;height:15px;stroke-width:2.4}
+.lime .or-again:active{transform:scale(.98)}
+
+/* ── LIME-F6 · honest status banner ─────────────────────────────────────── */
+.lime .arrive-banner span{opacity:.82;font-weight:600}
+.lime .cc-who small{text-transform:none}
+
+/* ══════════ LIME-F9 · desktop — the app is allowed to grow up ══════════════
+   Before: ONE width query capping .app at 460px, so a 1280px screen showed a
+   460px phone and ~800px of dead grey. */
+@media (min-width:600px){
+  .lime .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:760px){
+  .lime .app,.lime>.views{max-width:720px}
+  .lime .view-scroll{padding-inline:28px}
+  .lime .hero-copy h1{font-size:30px}
+}
+@media (min-width:1024px){
+  .lime .app,.lime>.views{max-width:1000px;border-radius:0}
+  .lime .view-scroll{padding-inline:40px}
+  .lime .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+  .lime .hero{min-height:230px}
+  .lime .hero-copy{max-width:52%}
+  .lime .hero-copy h1{font-size:38px}
+  /* the sticky action bars stop spanning a 1000px column */
+  .lime .p-cta{max-width:560px;margin-inline:auto;width:100%}
+  /* two-pane product view — photo left, everything you decide right */
+  .lime .view[data-view="product"] .view-scroll{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    column-gap:36px;align-items:start;
+  }
+  .lime .view[data-view="product"] .page-head{grid-column:1/-1}
+  .lime .view[data-view="product"] .p-photo-wrap{grid-row:2/span 4;position:sticky;top:0}
+  .lime .view[data-view="product"] .tail-space{grid-column:1/-1}
+  /* cart: receipt left, decisions right */
+  .lime .view[data-view="cart"] .view-scroll{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    column-gap:32px;align-items:start;
+  }
+  .lime .view[data-view="cart"] .page-head,
+  .lime .view[data-view="cart"] .grid-empty,
+  .lime .view[data-view="cart"] .tail-space{grid-column:1/-1}
+}
+@media (min-width:1360px){
+  .lime .app,.lime>.views{max-width:1180px}
+  .lime .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media (hover:hover){
+  .lime .card:hover .card-imgwrap img{transform:scale(1.04)}
+  .lime .card-imgwrap img{transition:transform .35s var(--ease)}
+  .lime .chip:hover,.lime .dietchip:hover{border-color:var(--ink-2)}
+  .lime .order-row:hover,.lime .or-again:hover{border-color:var(--ink-2)}
+}
+
+/* ══════════ LIME-F7 · DARK MODE ═══════════════════════════════════════════
+   A real night palette for a black+lime brand, not an inversion: warm-black
+   surfaces, cream ink, and the neon lime promoted to the primary action fill
+   (a black pill would vanish on a black page). --solid / --on-solid keep the
+   light theme bit-identical. */
+:root{--solid:var(--ink);--on-solid:#ffffff;--on-solid-accent:var(--lime);--on-solid-dim:var(--lime)}
+
+.lime .blkbar,.lime .cta,.lime .splash-skip,.lime .loc,.lime .daily,.lime .hero-cta,
+.lime .g-btn,.lime .g-price,.lime .total-banner,.lime .minibtn,
+.lime .dots.blk,.lime .iconbtn.blk{background:var(--solid);color:var(--on-solid)}
+.lime .chip.is-on,.lime .subchip.is-on,.lime .rail-card .rc-add,.lime .rail-card .rail-add,
+.lime .card-add,.lime .chiprow button.is-on,.lime .spice-scale button.is-on,
+.lime .seg button.is-on,.lime .nps-row button.is-on,.lime .or-ic,
+.lime .tip-row button.is-on,.lime .auth-tabs button.is-on,.lime .pm.is-on .pm-ic,
+.lime .step.now .step-ic,.lime .tl.now .tl-node{background:var(--solid);color:var(--on-solid-accent)}
+.lime .subchip.is-on{border-color:var(--solid)}
+.lime .bb-copy small,.lime .loc-label,.lime .loc-value .ic-xs,.lime .daily b,
+.lime .hero-cta .ic-xs,.lime .tb-copy small{color:var(--on-solid-dim)}
+.lime .tb-chevs{stroke:var(--on-solid-dim)}
+
+html[data-lime-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0E100C;
+  --tile:#191C15;
+  --tile-2:#232719;
+  --stroke:#272B20;
+  --stroke-2:#343A29;
+  --ink:#F1F4EA;
+  --ink-2:#B4BBA9;   /* 8.9:1 on --paper */
+  --ink-3:#8E9683;   /* 5.6:1 on --paper */
+  --lime-soft:#1F2A0B;
+  --go:#5BD08C;
+  --red:#FF7A70;
+  /* the lime becomes the solid action fill; its text is the theme's black */
+  --solid:var(--lime);
+  --on-solid:#101010;
+  --on-solid-accent:#101010;
+  --on-solid-dim:rgba(16,16,16,.66);
+}
+html[data-lime-theme="dark"] .lime{background:var(--paper)}
+html[data-lime-theme="dark"] .lime .splash{background:var(--paper)}
+html[data-lime-theme="dark"] .lime .avatar,
+html[data-lime-theme="dark"] .lime .mapcard{border-color:var(--lime)}
+html[data-lime-theme="dark"] .lime .title-ul::after,
+html[data-lime-theme="dark"] .lime .banner-dots i.is-on,
+html[data-lime-theme="dark"] .lime .p-gallery-dots i.is-on,
+html[data-lime-theme="dark"] .lime .opt.is-on .opt-ctl{background:var(--lime)}
+html[data-lime-theme="dark"] .lime .opt-ctl svg{stroke:#101010}
+html[data-lime-theme="dark"] .lime .cf-check{stroke:var(--lime)}
+html[data-lime-theme="dark"] .lime .cf-ring{border-color:var(--lime);opacity:.35}
+html[data-lime-theme="dark"] .lime .check-badge circle{stroke:var(--paper)}
+html[data-lime-theme="dark"] .lime .card-meta .pill-rate .ic,
+html[data-lime-theme="dark"] .lime .card-meta .star .ic,
+html[data-lime-theme="dark"] .lime .meta-chip.star .ic{stroke:var(--paper)}
+html[data-lime-theme="dark"] .lime .m-road,
+html[data-lime-theme="dark"] .lime .lm-m-road{stroke:#0E100C}
+html[data-lime-theme="dark"] .lime .m-park,
+html[data-lime-theme="dark"] .lime .lm-m-park{fill:#22300C}
+html[data-lime-theme="dark"] .lime .m-dot{stroke:var(--paper)}
+html[data-lime-theme="dark"] .lime .ab-ic,
+html[data-lime-theme="dark"] .lime .ccap-ic,
+html[data-lime-theme="dark"] .lime .lm-ccap-ic{background:var(--tile-2)}
+html[data-lime-theme="dark"] .lime .card-fav,
+html[data-lime-theme="dark"] .lime .rail-card .rail-fav{background:rgba(14,16,12,.72);color:var(--ink)}
+html[data-lime-theme="dark"] .lime .card-fav.is-on,
+html[data-lime-theme="dark"] .lime .rail-card .rail-fav.is-on{background:var(--lime);color:#101010}
+html[data-lime-theme="dark"] .lime .dietchip{background:var(--tile)}
+html[data-lime-theme="dark"] .lime .order-row{background:var(--tile)}
+html[data-lime-theme="dark"] .lime .or-again{background:var(--tile-2)}
+html[data-lime-theme="dark"] .lime .order-status.done{background:var(--tile-2);color:var(--ink-2)}
+html[data-lime-theme="dark"] .lime input,
+html[data-lime-theme="dark"] .lime textarea,
+html[data-lime-theme="dark"] .lime select{background:var(--tile);border-color:var(--stroke-2)}
+html[data-lime-theme="dark"] .lime input:focus,
+html[data-lime-theme="dark"] .lime textarea:focus{border-color:var(--lime)}
+html[data-lime-theme="dark"] .lime .hero-price{border-inline-start-color:rgba(16,16,16,.3)}
+html[data-lime-theme="dark"] .lime .sheet,
+html[data-lime-theme="dark"] .lime .storyview{background:var(--tile)}
+html[data-lime-theme="dark"] .lime .coupon-field.is-applied{background:var(--lime-soft);border-color:var(--lime)}
+html[data-lime-theme="dark"] .lime .err-box{background:rgba(255,122,112,.14)}
+html[data-lime-theme="dark"] .lime .p-cta{background:linear-gradient(transparent,var(--paper) 30%)}
+
+/* appearance control in Profile */
+.lime .pref-row .seg.mini button{white-space:nowrap}
+
+/* ── dark mode · surfaces that are ALWAYS lime ─────────────────────────────
+   The hero, loyalty card, promo pills etc. keep their lime fill in both modes,
+   so their contents must stay dark ink — inheriting the flipped --ink/--ink-2
+   would put cream text on neon lime. */
+html[data-lime-theme="dark"] .lime .hero,
+html[data-lime-theme="dark"] .lime .hero *,
+html[data-lime-theme="dark"] .lime .loyalty-card,
+html[data-lime-theme="dark"] .lime .loyalty-card *,
+html[data-lime-theme="dark"] .lime .earn-line{color:var(--lime-ink)}
+html[data-lime-theme="dark"] .lime .hero-kicker{color:rgba(21,26,4,.72)}
+html[data-lime-theme="dark"] .lime .hero-ring{border-color:rgba(21,26,4,.35)}
+/* the hero's own CTA and the daily badge sit ON the lime, so they invert */
+html[data-lime-theme="dark"] .lime .hero-cta,
+html[data-lime-theme="dark"] .lime .hero-cta span,
+html[data-lime-theme="dark"] .lime .daily,
+html[data-lime-theme="dark"] .lime .daily span,
+html[data-lime-theme="dark"] .lime .daily i{background-color:transparent;color:#F1F4EA}
+html[data-lime-theme="dark"] .lime .hero-cta,
+html[data-lime-theme="dark"] .lime .daily{background:#101010}
+html[data-lime-theme="dark"] .lime .hero-cta .ic-xs,
+html[data-lime-theme="dark"] .lime .daily b{color:var(--lime)}
+html[data-lime-theme="dark"] .lime .hero-price{border-inline-start-color:rgba(241,244,234,.28);color:#F1F4EA}
+/* the tab bar is the one place a black pill still reads on a black page */
+html[data-lime-theme="dark"] .lime .tabbar{background:#1D2118;box-shadow:0 20px 44px -14px rgba(0,0,0,.8)}
+html[data-lime-theme="dark"] .lime .tab.is-on .tab-pill{background:var(--lime)}
+html[data-lime-theme="dark"] .lime .tab.is-on{color:var(--lime-ink)}
+/* outlines drawn against the light paper */
+html[data-lime-theme="dark"] .lime .badge-pop,
+html[data-lime-theme="dark"] .lime .card-off,
+html[data-lime-theme="dark"] .lime .rail-card .off,
+html[data-lime-theme="dark"] .lime .meta-chip.lime{outline-color:var(--paper)}
+html[data-lime-theme="dark"] .lime .iconbtn .dot{outline-color:var(--paper)}
+html[data-lime-theme="dark"] .lime .story-ring img{border-color:var(--paper)}
+/* the daily-special badge is a real shortcut into the item — give it the pad too */
+.lime .daily{position:absolute}
+.lime .daily::after{content:"";position:absolute;inset:-6px -4px;border-radius:var(--r-pill)}
+.lime .card-fav,.lime .rail-card .rail-fav{z-index:4}
+
+/* Keyboard focus rings (a11y). Only inputs styled :focus — every button,
+   link, icon button, category, menu card, banner and nav tab was invisible
+   to keyboard users. Ring uses var(--ink) (the theme foreground, which flips
+   with light/dark) rather than the brand lime: #CDF34B is too pale for an
+   accessible ring on the light paper surface. Outline follows each control's
+   own radius, so round icon buttons ring as circles. */
+.lime a:focus-visible,
+.lime button:focus-visible,
+.lime [tabindex]:focus-visible,
+.lime .card:focus-visible,
+.lime .chip:focus-visible,
+.lime .banner:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+/* inputs already show an --ink border on focus; suppress the ring to avoid
+   a double indicator. */
+.lime input:focus-visible,
+.lime textarea:focus-visible,
+.lime select:focus-visible { outline:none; }
+
+/* ── cart line pricing (strike-through / qty×unit) ─────────────────────── */
+.lime .ci-priceline{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:4px}
+.lime .ci-priceline .ci-price{margin-top:0}
+.lime .ci-was{font-size:11px;font-weight:600;color:var(--ink-3);text-decoration:line-through}
+.lime .ci-unit{font-size:11px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.lime .cart-item>img[data-open],.lime .ci-name[data-open]{cursor:pointer}
+.lime .ci-remove{color:var(--red);border-color:var(--red)}
+
+/* ── product reviews ───────────────────────────────────────────────────── */
+.lime .product-reviews .pr-card{
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;
+  padding:11px 13px;margin-top:9px;
+}
+.lime .product-reviews .pr-card b{font-size:12.5px;font-weight:800;display:block}
+.lime .product-reviews .pr-card p{font-size:12px;color:var(--ink-2);margin:4px 0 0;line-height:1.45}
+.lime .review-stars{font-size:12px;color:var(--ink);letter-spacing:1px}
+.lime .review-stars-dim{color:var(--stroke-2)}
+.lime .product-reviews .pr-empty{font-size:12px;color:var(--ink-3);margin:6px 2px 0}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.lime .ck-head{gap:10px;padding:4px 0 2px}
+.lime .ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.lime .ck-items{gap:0}
+.lime .ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.lime .ck-row + .ck-row{border-top:1px solid var(--stroke)}
+/* Combo lines (lm-combo-group) carry no thumbnail, so they drop the 40px image
+   column the normal cart row leads with — otherwise the name is crushed into
+   that 40px cell and the ×n/price float across an empty 1fr track. */
+.lime .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.lime .ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--tile);border-radius:9px;padding:3px 6px}
+.lime .ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.lime .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+/* the 27px rings sit 7px apart in .ci-side, too close for a 44px box; the
+   column has room inside the 76px thumbnail, so widen the gap and let both
+   hit areas grow to the floor instead of shaving them to fit. */
+.lime .ci-side{gap:16px}
+.lime .qty-min button::after,.lime .qty .qty-btn::after,.lime .ci-remove::after{inset:-8px}
+.lime .ci-note-btn{position:relative;min-height:44px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+.lime select{min-height:44px}
+.lime input[type=checkbox],.lime input[type=radio]{inline-size:22px;block-size:22px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, lime skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Lime-soft chip with the brand underline. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--lime-soft);border:1px solid var(--stroke-2);color:var(--ink-2);box-shadow:inset 0 -2px 0 var(--lime);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--lime-ink)}
+
+/* ── notification-center panel — lime skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--paper,#ffffff);--nb-surface-2:var(--lime-soft,#F3FBDA);--nb-line:var(--stroke-2,#DCDFE3);--nb-ink:var(--ink,#101010);--nb-muted:var(--ink-2,#5d6167);--nb-accent:var(--lime-ink,#151a04)}
+
+/* topbar toggle icons (Lane B) — rides lime's NATIVE appearance system
+   (html[data-lime-theme], key `lime-theme`, LIME-F7): light shows the moon
+   (action = go dark), dark shows the sun */
+#lime .mb-th-sun{display:none}
+html[data-lime-theme="dark"] #lime .mb-th-sun{display:block}
+html[data-lime-theme="dark"] #lime .mb-th-moon{display:none}
+
+/* B9 · shared-component dark fixes on lime's NATIVE dark palette: the notif
+   panel accent and the currency-notice icon used --lime-ink (near-black ink
+   meant for ON-lime fills) — invisible on dark surfaces. */
+html[data-lime-theme="dark"] .mb-nb-card{--nb-accent:var(--lime, #CDF34B)}
+html[data-lime-theme="dark"] #qc-cur-estimate .qc-cen-ic{stroke:var(--ink-2)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.lime .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — lime skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Two moving parts mirror the crave reference:
+     1) lime marks .brand-row#brandRow with data-mb-hotel-chip-slot (its index),
+        so the shared partial mounts the room chip there natively, beside .followbtn;
+     2) this block maps the shared --mbh-* token contract onto lime's own tokens and
+        gives each relocated layer surface lime's native look. Scoped under .lime so
+        lime's tokens (--tile/--ink/--lime/--r-sheet…) resolve once the layer elements
+        relocate into the theme root. Only the hub paints an opaque surface (a modal
+        legitimately does); the chip + checkout rows stay translucent/borderless.
+   ═══════════════════════════════════════════════════════════ */
+.lime #mbHotelChip,
+.lime #mbHotelOrderCtrls,
+.lime #mbHotelBook,
+.lime #mbHotelHub{
+  --mbh-surface:var(--paper);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--lime);
+  --mbh-on-accent:var(--lime-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill riding the brand row beside the follow button ── */
+.lime #mbHotelChip{
+  margin:0;padding:6px 12px;gap:7px;
+  background:var(--tile);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.lime #mbHotelChip:active{transform:scale(.95)}
+.lime #mbHotelChip .mb-hotel-roomchip__room{color:var(--ink)}
+.lime #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+/* let the brand row wrap the chip to its own line on narrow screens — only when present */
+.lime .brand-row:has(#mbHotelChip){flex-wrap:wrap}
+
+/* ── Hub: lime's own bottom-sheet look (paper surface, r-sheet corners, grab + round x) ── */
+.lime #mbHotelHubScrim{background:rgba(16,16,16,.45);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.lime #mbHotelHub{
+  background:var(--paper);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  box-shadow:0 -18px 50px rgba(16,16,16,.18);
+}
+.lime #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.lime #mbHotelHub .mb-hotel-hub__title{font-size:19px;font-weight:800;letter-spacing:-.025em}
+.lime #mbHotelHub .mb-hotel-hub__x{
+  background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.lime #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.lime #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.lime #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.lime #mbHotelHub .mb-hotel-card summary,
+.lime #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.lime #mbHotelHub .mb-hotel-info-link{color:var(--ink)}
+/* service form controls → lime inputs / lime-fill CTA (as the follow button) */
+.lime #mbHotelHub .mb-hotel-field{
+  background:var(--tile);border:1.5px solid var(--stroke-2);color:var(--ink);border-radius:16px;
+}
+.lime #mbHotelHub .mb-hotel-btn{
+  background:var(--lime);color:var(--lime-ink);border-radius:var(--r-pill);font-weight:800;
+}
+/* dark: mirror lime's own sheet flipping to the --tile surface (lime has no OS-auto dark) */
+html[data-lime-theme="dark"] .lime #mbHotelHub{background:var(--tile)}
+
+/* ── Order-flow controls relocated into the checkout → lime tender rows ── */
+.lime #mbHotelOrderCtrls{margin:0}
+.lime #mbHotelSched,
+.lime #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.lime #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.lime #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.lime #mbHotelSched input[type="radio"]{accent-color:var(--ink)}
+.lime #mbHotelSched .mb-hotel-field{
+  background:var(--tile);border:1.5px solid var(--stroke-2);color:var(--ink);border-radius:16px;
+}
+.lime #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → lime's terms-checkbox row (drop the emoji chip, plain toggle) */
+.lime #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.lime #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.lime #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.lime #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.lime #mbHotelCharge input[type="checkbox"]{accent-color:var(--ink)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .lime, RTL-safe (logical props). Cards use the theme --paper /
+   --stroke card surface; the star is a scheme-aware gold TOKEN (lime has no
+   brand gold — stars aren't the neon accent — so --review-star is scoped on
+   :root / the dark html attr and re-inks on the light/dark flip, lifted a
+   touch on the near-black dark paper). */
+:root{--review-star:#F5A623}
+html[data-lime-theme="dark"]{--review-star:#F9B84D}
+.lime .lime-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.lime .lime-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.lime .lime-rating-star{color:var(--review-star)}
+.lime .lime-rating small{color:var(--ink-3);font-weight:600}
+.lime .lime-review-list{display:flex;flex-direction:column;gap:8px}
+.lime .lime-review{background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.lime .lime-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:800;color:var(--ink)}
+.lime .lime-review-star{color:var(--review-star);font-weight:800;white-space:nowrap}
+.lime .lime-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.lime .lime-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for lime. Surface,
+   ink, border and radius come from lime tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.lime .mb-paypending{
+  --pp-surface:var(--tile,#EEF0F2);
+  --pp-ink:var(--ink,#101010);
+  --pp-muted:var(--ink-2,#5d6167);
+  --pp-border:var(--stroke-2,#DCDFE3);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,22px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.lime .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.lime .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.lime .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.lime .mb-paypending-txn:empty{display:none}
+.lime .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.lime .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.lime .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.lime .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.lime .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.row-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}

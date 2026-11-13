@@ -1,0 +1,31 @@
+{
+  "operationId": "rescheduleBooking",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/bookings/mgt_fa27a0ac471f03dcaad42a6f2d39/reschedule",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://sidra-salon.example",
+      "Idempotency-Key": "01a0fcd8-89b0-7b26-b340-7d50a4789203",
+      "X-Hold-Token": "hld_8ecd4eec13e55606f607e9917f5fd834"
+    },
+    "body": {
+      "hold_id": "01a0fc8e-cd4e-7ec1-be55-606f607e9917"
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:20:00 GMT"
+    },
+    "body": {
+      "message": "This time has a different price. To change the price, cancel and book again.",
+      "code": "price_changed"
+    }
+  }
+}

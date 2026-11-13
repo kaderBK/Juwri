@@ -1,0 +1,30 @@
+{
+  "slug": "stats_promo",
+  "starter": "restaurant_essential",
+  "name": "Stats & Promo",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#ffffff",
+    "--ink": "#1e2126",
+    "--muted": "#8a8f99",
+    "--card": "#f4f5f7",
+    "--btn-bg": "#f4f5f7",
+    "--btn-fg": "#1e2126",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#ff5f3c",
+    "--accent-ink": "#ffffff",
+    "--icon-fg": "#ff5f3c",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

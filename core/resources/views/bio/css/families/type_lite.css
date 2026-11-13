@@ -1,0 +1,20 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* type_lite one-off — lowercase minimal, no avatar/buttons, hairline text rows with right-aligned hints. */
+.fam-type_lite .bio-in{padding:64px 26px 0;text-align:start}
+.fam-type_lite .bio-avatar,.fam-type_lite .bio-status{display:none}
+.fam-type_lite .bio-name{font-weight:600;font-size:22px;letter-spacing:-.02em;text-transform:lowercase;margin:0}
+.fam-type_lite .bio-tagline{font-size:13px;color:var(--muted,#8c8c8c);margin:6px 0 26px;line-height:1.6}
+.fam-type_lite .bio-blocks{margin-top:0}
+.fam-type_lite .bio-block{margin:0}
+.fam-type_lite .bio-link{background:transparent;border:0;border-radius:0;box-shadow:none;padding:16px 2px;
+  justify-content:space-between;align-items:baseline;gap:10px;
+  border-top:1px solid color-mix(in srgb,var(--ink,#191919) 10%,transparent)}
+.fam-type_lite .bio-block:last-of-type .bio-link{border-bottom:1px solid color-mix(in srgb,var(--ink,#191919) 10%,transparent)}
+.fam-type_lite .bio-link:hover{transform:none;padding-inline-start:8px;color:var(--accent,#0a66ff)}
+.fam-type_lite .bio-link__icon,.fam-type_lite .bio-link__arrow{display:none}
+.fam-type_lite .bio-link__body{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%}
+.fam-type_lite .bio-link__label{font-size:15px;font-weight:500}
+.fam-type_lite .bio-link__sub{font-size:11.5px;color:var(--muted,#b3b3b3);margin:0}
+.fam-type_lite .bio-socials{justify-content:flex-start;margin-top:22px}

@@ -1,0 +1,38 @@
+{
+  "operationId": "releaseHold",
+  "request": {
+    "method": "DELETE",
+    "path": "/api/v1/storefront/holds/01a0fd21-6a80-7c14-9b2e-3f5d7a1c8e02",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Origin": "https://sidra-salon.example",
+      "X-Hold-Token": "hld_7c2e91a4d05b3f68e1a9c4b27d60f3e5"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 12:03:00 GMT"
+    },
+    "body": {
+      "hold_id": "01a0fd21-6a80-7c14-9b2e-3f5d7a1c8e02",
+      "released": true,
+      "cancelled": {
+        "kind": "booking",
+        "public_id": "01a0fd22-0b40-7a51-8c3d-6e2f9b4a7d15",
+        "number": "SB-4836",
+        "status": "cancelled",
+        "manage_token": "mgt_3d8a61f0c94e27b5a1d0e6c8f492"
+      },
+      "payment": {
+        "mode": "hosted",
+        "status": "failed",
+        "next_action": null
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* countdown family — static countdown card + waitlist CTA + quiet supporting links. */
+.fam-countdown .bio-in{padding:54px 22px 0;text-align:center}
+.fam-countdown .bio-countdown{margin:6px 0 18px;background:var(--card,#1a1628);
+  border:1px solid color-mix(in srgb,var(--ink,#f0edfa) 18%,transparent);border-radius:20px;padding:18px 16px}
+.fam-countdown .bio-countdown em{font-style:normal;font-family:var(--font-mono,monospace);font-size:9.5px;
+  letter-spacing:.26em;color:var(--accent,#9f7aff);text-transform:uppercase}
+.fam-countdown .bio-countdown>b{display:block;font-size:17px;font-weight:800;margin:6px 0 12px}
+.fam-countdown .bio-countdown__digits{display:flex;justify-content:center;gap:8px}
+.fam-countdown .bio-countdown__digits div{background:var(--bg,#12101c);
+  border:1px solid color-mix(in srgb,var(--ink,#f0edfa) 18%,transparent);border-radius:12px;padding:9px 0;width:58px}
+.fam-countdown .bio-countdown__digits b{font-size:22px;margin:0;font-variant-numeric:tabular-nums;color:var(--accent,#cbb8ff)}
+.fam-countdown .bio-countdown__digits span{font-size:8.5px;letter-spacing:.14em;color:var(--muted,#a49cc0);
+  text-transform:uppercase;font-weight:600}
+.fam-countdown .bio-countdown__cta{display:inline-block;margin-top:14px;background:var(--accent,#9f7aff);
+  color:var(--accent-ink,#12101c);text-decoration:none;font-weight:800;font-size:13px;border-radius:999px;padding:11px 24px}
+.fam-countdown .bio-blocks{text-align:start;margin-top:4px}

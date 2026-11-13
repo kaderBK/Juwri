@@ -1,0 +1,1933 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   orbit — ultra-clean iOS ordering post_template
+   white screens · ink #0F1115 · brand accent used sparingly
+   Faithful port of rev/orbit/demo.css (frame chrome removed,
+   accent driven by --theme-color-1, real-data helper classes)
+   ═══════════════════════════════════════════════════════════ */
+
+.orbit{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is orbit's own
+     value, kept as the var() fallback so a store that customized nothing —
+     or a render with no token include — is byte-identical to today. */
+  --bg:var(--tc-background, #ffffff);
+  --card:#ffffff;          /* raised WHITE surface; the surface ROLE default (#f5f6f7) is --soft below, so --card stays orbit's own literal */
+  --glass:rgba(255,255,255,.92);  /* frosted overlay buttons on imagery */
+  --soft:var(--tc-surface, #f5f6f7);  /* recessed soft fill = the surface role */
+  --soft-2:#eef0f3;        /* second soft step; hand-tuned, keep literal */
+  --line:#f0f1f4;
+  --line-2:#e7e9ee;
+  --fixed-dark:#101115;    /* stays dark in BOTH modes (nav pill, loyalty card) — intentionally not a role */
+  --nav-bg:#101115;
+  /* ink */
+  --ink:var(--tc-text, #0f1115);
+  --on-ink:#ffffff;        /* text/icons painted ON an --ink fill; no on-text role token, keep literal */
+  --ink-2:#6f7580;         /* hand-tuned cool grey; derived text-muted (#7b7c7e) differs, keep literal */
+  --ink-3:#a2a8b3;
+  --gray-h:#b9bec7;
+  /* brand — orbit's design accent is the orange (the customizer PRIMARY role).
+     orbit is a --theme-color-1 theme, so the legacy per-store brand colour stays
+     in the fallback chain: token → legacy store colour → literal. */
+  --orange:var(--tc-primary, var(--theme-color-1, #f4633c));
+  --orange-deep:color-mix(in srgb, var(--orange) 82%, #000);  /* hand-tuned shade (18% black ≠ primary-700's 24%), follows --orange */
+  --orange-soft:color-mix(in srgb, var(--orange) 12%, var(--card));  /* follows --orange */
+  --dot:#ff4b2e;
+  /* accent — orbit's secondary brand colour (discounts, positive states); the customizer ACCENT role */
+  --green:var(--tc-accent, #22b573);
+  /* genuine error status colours — NOT the customizer accent; intentionally literal */
+  --red:#e5484d;
+  --red-soft:#fdebec;
+  /* radius — pill follows the layout.radius scale; card KEEPS orbit's signature
+     22px (the "round" scale is 18px, so a role token would reshape every card);
+     img/sheet stay literal (control-radius at "pill" would circle images / reshape sheets) */
+  --r-card:22px;
+  --r-img:16px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:30px;
+  /* shadow */
+  --sh-card:0 8px 26px -16px rgba(15,17,21,.16);
+  --sh-pop:0 18px 40px -18px rgba(15,17,21,.22);
+  --sh-nav:0 26px 52px -20px rgba(15,17,21,.5);
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --spring:cubic-bezier(.3,1.4,.4,1);
+  --t-fast:170ms;
+  --t-view:360ms;
+  /* z scale */
+  --z-nav:30; --z-search:38; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — follow the self-hosted pair (WI-T2); pair "none" emits no --tf-*,
+     so these degrade to orbit's own stacks. orbit is a single-family design
+     (Inter for body AND headings), so it has no --tf-heading adoption point;
+     --tf-body drives both. The --tf-body stack ends in the pair's Arabic face,
+     so RTL (--font-ar) can share it safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Inter",-apple-system,system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+
+  /* fullscreen app shell (replaces demo .stage/.phone/.app) */
+  position:fixed;inset:0;z-index:1;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-ui);
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;isolation:isolate;
+  overflow:clip;
+}
+.orbit *{margin:0;padding:0;box-sizing:border-box}
+[dir="rtl"] .orbit,[dir="rtl"] .orbit input,[dir="rtl"] .orbit button,[dir="rtl"] .orbit textarea,[dir="rtl"] .orbit select{font-family:var(--font-ar)}
+.orbit img{display:block;max-width:100%}
+/* :where() keeps this reset at zero specificity — as `.orbit button` (0,1,1) it
+   outranked every single-class rule below (.search, .iconbtn, .step-btn …),
+   stripping their background/colour while still beating the UA defaults. */
+:where(.orbit button){font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.orbit input,.orbit textarea,.orbit select{
+  font:inherit;color:var(--ink);background:var(--soft);
+  border:1.5px solid transparent;border-radius:14px;
+  padding:13px 15px;width:100%;outline:none;
+  /* ALL-F1 — anything below 16px force-zooms Safari iOS on focus and never
+     zooms back. Visual density is kept via padding, never via font-size. */
+  font-size:16px;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.orbit input::placeholder,.orbit textarea::placeholder{color:var(--ink-3)}
+.orbit input:focus,.orbit textarea:focus,.orbit select:focus{border-color:var(--ink);background:var(--card)}
+.orbit ::-webkit-scrollbar{display:none}
+
+/* icons */
+.orbit .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.orbit .ic-xs{width:15px;height:15px}
+[dir="rtl"] .orbit .chev,[dir="rtl"] .orbit .arr{transform:scaleX(-1)}
+
+/* ── app shell & view routing ────────────────────────── */
+.cv-views,.views{position:relative;flex:1;min-height:0}
+
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.5;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.tail-space{height:122px}
+.tail-space.tall{height:40px}
+
+.page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.page-head h1{font-size:23px;font-weight:800;letter-spacing:-.03em}
+.page-head.sub{justify-content:flex-start;gap:14px}
+
+/* ── splash ──────────────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--bg);
+  display:grid;place-content:center;justify-items:center;gap:10px;
+  transition:opacity .5s var(--ease),visibility 0s linear .5s;
+}
+.splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.orb-mark{position:relative;width:150px;height:150px;margin-bottom:14px}
+.orb-core{
+  position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;
+  border-radius:50%;background:var(--ink);
+  animation:core-pop .8s var(--ease-pop) backwards;
+}
+@keyframes core-pop{from{transform:scale(.2);opacity:0}}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--line-2)}
+.orb-ring.r2{inset:26px;border-color:#f2d9cf}
+.orb-ring i{
+  position:absolute;top:-4.5px;left:50%;width:9px;height:9px;margin-left:-4.5px;
+  border-radius:50%;background:var(--orange);
+}
+.orb-ring.r1{animation:orb-spin 4.5s linear infinite}
+.orb-ring.r2{animation:orb-spin 3s linear infinite reverse}
+@keyframes orb-spin{to{rotate:360deg}}
+.splash-word{font-size:46px;font-weight:800;letter-spacing:-.045em;animation:rise .7s var(--ease) .15s backwards}
+.splash-word span{color:var(--orange)}
+.splash-logo{width:96px;height:96px;border-radius:26px;object-fit:cover;box-shadow:var(--sh-pop);animation:rise .7s var(--ease) .15s backwards;margin-bottom:4px}
+.splash-tag{font-size:15px;font-weight:700;color:var(--ink);animation:rise .7s var(--ease) .3s backwards}
+.splash-tag .hh-gray{color:var(--gray-h)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.splash-skip{
+  position:absolute;top:calc(18px + env(safe-area-inset-top));inset-inline-end:22px;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:var(--soft);font-size:13px;font-weight:600;color:var(--ink-2);
+}
+
+/* ── home top bar ────────────────────────────────────── */
+.topbar{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 0 0}
+.iconbtn{
+  position:relative;width:42px;height:42px;flex:none;border-radius:50%;
+  background:var(--card);border:1px solid var(--line-2);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn .ic{width:20px;height:20px}
+.iconbtn.dark{background:var(--ink);border-color:var(--ink);color:var(--on-ink);width:38px;height:38px}
+/* dark/light toggle: moon shown in light, sun in dark. Icon tracks the effective
+   mode, mirroring orbit's dark selectors (explicit .orbit[data-theme=dark] +
+   auto @media prefers-color-scheme:dark unless forced light). */
+.theme-toggle .ic-sun{display:none}
+.theme-toggle .ic-moon{display:block}
+.orbit[data-theme="dark"] .theme-toggle .ic-moon{display:none}
+.orbit[data-theme="dark"] .theme-toggle .ic-sun{display:block}
+@media (prefers-color-scheme:dark){
+  .orbit:not([data-theme="light"]) .theme-toggle .ic-moon{display:none}
+  .orbit:not([data-theme="light"]) .theme-toggle .ic-sun{display:block}
+}
+.dot{position:absolute;top:8px;inset-inline-end:9px;width:7px;height:7px;border-radius:50%;background:var(--dot);outline:2px solid var(--card)}
+.addr{flex:1;min-width:0;text-align:center}
+.addr-label{display:block;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.addr-value{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;max-width:100%}
+.addr-value b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.addr-value .ic-xs{width:16px;height:16px}
+/* crave-parity top bar: profile avatar (initial when signed in) + .loc branch/
+   location button. Crave's green accent maps to orbit's --orange. */
+.avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;border:1.5px solid var(--line-2);flex:none;background:var(--card);display:grid;place-items:center;color:var(--ink-2);font-weight:800;font-size:16px;cursor:pointer;padding:0;transition:transform var(--t-fast) var(--ease-pop)}
+.avatar:active{transform:scale(.9)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar .ic{width:21px;height:21px}
+.avatar--me{background:var(--orange);color:#fff;border-color:transparent}
+.loc{flex:1;min-width:0;text-align:start}
+.loc-label{display:block;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.loc-value{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden}
+.loc-value b{overflow:hidden;text-overflow:ellipsis}
+.loc-value .ic{width:15px;height:15px;color:var(--orange)}
+.loc-value .ic-xs{width:15px;height:15px}
+/* F2 · brand / follow row (crave cvBrandRow parity). Green accent → orange;
+   no inline padding (the .view-scroll already gutters 20px). */
+.brand-row{display:flex;align-items:center;gap:12px;padding:6px 0 4px}
+.brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1.5px solid var(--line-2)}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = a filled orange seal + white check. */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--orange)}
+.verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner), off the grab bar it borrows for close wiring. */
+.sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── retro cover header: full-bleed cover behind the dark chrome pills + hero
+   title + store strip, fading to the page. ── */
+.orbit-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:206px}
+.orbit-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--nav-bg)}
+.orbit-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.orbit-cover-scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,.44), rgba(0,0,0,.12) 40%, var(--bg) 98%)}
+.orbit-cover .topbar,.orbit-cover .hero-h,.orbit-cover .store-strip,.orbit-cover .qc-cen-slot{position:relative;z-index:2}
+.orbit-cover .topbar{text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.orbit-cover .hero-h{color:#fff}
+.orbit-cover .hero-h .hh-gray{color:rgba(255,255,255,.72)}
+.orbit-cover .loc-label{color:rgba(255,255,255,.85)}
+.orbit-cover .loc-value,.orbit-cover .loc-value b{color:#fff}
+/* the branch button (#addrBtn) is white text over a busy cover photo — give it a
+   compact frosted chip so it reads; it hugs its content and pushes the trailing
+   icons to the end (replacing the stretched flex:1 it uses off-cover) */
+.orbit-cover .loc{flex:0 1 auto;max-width:64%;margin-inline-end:auto;padding:6px 12px;background:rgb(0 0 0 / 9%);border:1px solid rgb(255 255 255 / 18%);border-radius:12px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.orbit-cover .loc-value .chev-d{color:rgba(255,255,255,.85)}
+/* on phones the branch button drops to its own full-width row under the icon bar
+   so a long branch name never squeezes the language / theme / bell controls. The
+   avatar takes the spacer role .loc's flex:1 used to fill on the single row. */
+@media (max-width:560px){
+  .topbar{flex-wrap:wrap}
+  .topbar .avatar{margin-inline-end:auto}
+  .topbar .loc,.orbit-cover .loc{order:9;flex:1 0 100%;max-width:100%;margin-inline-end:0;margin-block-start:8px}
+  /* narrow screens wrap the store-strip chips onto more lines, so the brand row's
+     -26px hero overlap collided with it; a cover bottom pad lands the overlap on
+     the photo strip instead (scales with the strip's height, any line count) */
+  .orbit-cover{padding-block-end:30px}
+}
+.orbit-cover .ss-chip{background:rgba(0,0,0,.42);color:#fff;border-color:rgba(255,255,255,.22)}
+.brand-row--hero{margin-block-start:-26px;position:relative;z-index:3}
+.brand-row--hero .brand-logo{border:3px solid var(--bg);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+
+/* ── collapsing header ── */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--bg);box-shadow:0 6px 18px rgba(0,0,0,.12);
+  border-block-end:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{width:32px;height:32px;border-radius:50%;overflow:hidden;flex:none;background:var(--nav-bg);display:grid;place-items:center}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+.cv-condensed-actions .cv-cbtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--nav-bg);color:#fff;border:0;cursor:pointer}
+.cv-condensed-actions .cv-cbtn .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--on-ink);font-size:13px;font-weight:700;flex:none;cursor:pointer;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.followbtn:active{transform:scale(.94)}
+.followbtn .ic{width:15px;height:15px}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--card);color:var(--ink-2);border:1.5px solid var(--line-2)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+.followbtn--pop{animation:followbtnPop .25s var(--ease-pop,ease)}
+@keyframes followbtnPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.followbtn--pop{animation:none}}
+.addr-value .chev-d{width:13px;height:13px;color:var(--ink-3)}
+
+/* headline */
+.hero-h{font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.12;padding:20px 2px 2px}
+.hh-gray{color:var(--gray-h)}
+
+/* search */
+.searchrow{padding-top:16px}
+.search{
+  width:100%;display:flex;align-items:center;gap:11px;
+  background:var(--soft);border-radius:var(--r-pill);
+  padding:7px 7px 7px 18px;min-height:54px;color:var(--ink-3);
+  font-size:14.5px;font-weight:500;text-align:start;
+  transition:background var(--t-fast);
+}
+[dir="rtl"] .search{padding:7px 18px 7px 7px}
+.search:active{background:var(--soft-2)}
+.search>span:not(.search-filter){flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-filter{
+  position:relative;margin-inline-start:auto;width:40px;height:40px;flex:none;
+  border-radius:50%;background:var(--ink);color:var(--on-ink);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.search-filter:active{transform:scale(.88)}
+.search-filter .ic{width:18px;height:18px}
+.search-filter .dot{top:1px;inset-inline-end:2px;outline-color:var(--bg)}
+
+/* ── ARC category selector (signature) ───────────────── */
+/* ORBIT-F23 — 158px of arc pushed the first dish off a 667px viewport.
+   ORBIT-F8 — chips now fan on a parabola instead of a circle, so the far ones
+   travel outward forever; clip them instead of letting them widen the page. */
+.arc-wrap{position:relative;height:136px;margin-top:6px;overflow:clip;overflow-clip-margin:16px}
+.arc{position:absolute;inset:0;touch-action:pan-y;cursor:grab;user-select:none}
+.arc:active{cursor:grabbing}
+.arc-chip{
+  position:absolute;left:0;top:0;
+  display:grid;justify-items:center;gap:7px;
+  will-change:transform;user-select:none;touch-action:pan-y;
+}
+.arc-bub{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--card);border:1px solid var(--line-2);
+  box-shadow:0 8px 20px -12px rgba(15,17,21,.22);
+  display:grid;place-items:center;font-size:23px;line-height:1;overflow:hidden;
+  transition:background .25s var(--ease),border-color .25s var(--ease),box-shadow .25s var(--ease);
+}
+.arc-bub img{width:100%;height:100%;object-fit:cover}
+.arc-star{font-size:21px;color:var(--ink);transition:color .25s var(--ease);font-style:normal}
+.arc-label{
+  font-size:11.5px;font-weight:600;color:var(--ink-3);
+  width:78px;text-align:center;line-height:1.2;overflow-wrap:break-word;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+  transition:color .25s var(--ease);
+}
+.arc-chip.is-on .arc-bub{background:var(--ink);border-color:var(--ink);box-shadow:0 16px 28px -12px rgba(15,17,21,.45)}
+.arc-chip.is-on .arc-star{color:var(--on-ink)}
+/* ORBIT-F9 — `brightness(0) invert(1)` over an object-fit:cover PHOTO turned the
+   whole bubble into a blank white disc, so the SELECTED category was the only
+   one with no icon. Photo chips keep their image and get an accent ring instead. */
+.arc-chip.has-img.is-on .arc-bub{background:var(--card);border-color:var(--orange);box-shadow:0 0 0 2.5px var(--orange),0 16px 28px -12px rgba(15,17,21,.45)}
+.arc-chip.has-img.is-on .arc-bub img{filter:none}
+.arc-chip.is-on .arc-label{color:var(--ink);font-weight:700}
+
+/* ── secondary sub-category chips ────────────────────── */
+.subchips{margin-top:14px}
+.subchips[hidden]{display:none}
+.subgroup{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:1px 0}
+.subgroup::-webkit-scrollbar{display:none}
+.subgroup[hidden]{display:none}
+.subchip{
+  flex:none;display:inline-flex;align-items:center;gap:7px;
+  padding:8px 15px;border-radius:var(--r-pill);white-space:nowrap;
+  background:var(--soft);border:1.5px solid transparent;
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.subchip:active{transform:scale(.96)}
+.subchip.is-on{background:var(--ink);border-color:var(--ink);color:var(--on-ink);box-shadow:0 8px 16px -8px rgba(15,17,21,.4)}
+.subchip-img{width:20px;height:20px;border-radius:50%;object-fit:cover;flex:none}
+
+/* ── stories strip ───────────────────────────────────── */
+.stories{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;margin-top:14px;padding:1px 0 2px}
+.stories::-webkit-scrollbar{display:none}
+/* belt-and-braces: never let the flex above resurrect an empty rail */
+.stories[hidden]{display:none}
+.story{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px}
+.story-ring{
+  width:60px;height:60px;border-radius:50%;padding:2.5px;
+  background:conic-gradient(from 210deg,var(--orange),var(--orange-deep),var(--ink),var(--orange));
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.story:active .story-ring{transform:scale(.94)}
+.story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.story small{font-size:11px;font-weight:600;color:var(--ink-3);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── promo slot ──────────────────────────────────────── */
+.promos{position:relative;margin-top:4px}
+.promos.is-empty{display:none}
+.promo-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.promo-track::-webkit-scrollbar{display:none}
+.promo{
+  position:relative;flex:0 0 100%;scroll-snap-align:start;
+  border-radius:24px;overflow:hidden;min-height:128px;
+  display:flex;align-items:center;padding:18px 22px;text-align:start;
+  background:linear-gradient(120deg,#ffe5d7,#ffd0bf);color:var(--ink);border:0;text-decoration:none;
+  /* lift the card off the page + a hairline top sheen so it reads as a surface. */
+  box-shadow:0 12px 28px -16px rgba(15,17,21,.4),inset 0 1px 0 rgba(255,255,255,.45);
+}
+.promo.blush{background:linear-gradient(120deg,#ffdfe6,#ffcdd9)}
+.promo-copy{position:relative;z-index:2;max-width:64%;min-width:0;display:grid;gap:5px;justify-items:start}
+/* Kicker: a clear one-line eyebrow (bigger + darker than before). Long store
+   subtitles truncate; caps/spacing dropped for RTL where they break Arabic. */
+.promo-kicker{max-width:100%;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(15,17,21,.66);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+[dir="rtl"] .promo-kicker{letter-spacing:normal;text-transform:none;font-size:12px}
+/* Title is the hero — noticeably bigger + heavier. Clamps to 2 lines. */
+.promo-title{font-size:23px;font-weight:900;letter-spacing:-.03em;line-height:1.08;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.promo-btn{margin-top:9px;display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--on-ink);font-size:12.5px;font-weight:800;box-shadow:0 8px 18px -8px rgba(15,17,21,.45)}
+.promo-btn::after{content:"→";font-weight:700}
+[dir="rtl"] .promo-btn::after{content:"←"}
+.promo-img{
+  position:absolute;inset-inline-end:-22px;top:50%;translate:0 -50%;
+  width:138px;height:138px;object-fit:cover;border-radius:50%;
+  /* softer drop + a translucent ring so the "orbit" disc sits on the card cleanly. */
+  box-shadow:0 14px 30px -14px rgba(15,17,21,.32),0 0 0 5px rgba(255,255,255,.4);
+  transition:transform .6s var(--ease);
+}
+.promo:hover .promo-img{transform:rotate(6deg) scale(1.04)}
+.promo-dots{display:flex;justify-content:center;gap:6px;padding-top:11px}
+.promo-dots:empty{display:none}
+.promo-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--line-2);transition:all .3s var(--ease)}
+.promo-dots i.is-on{width:20px;background:var(--ink)}
+
+/* ── section heads / grid ────────────────────────────── */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 22px) 2px 13px}
+.section-head h2{font-size:18px;font-weight:800;letter-spacing:-.025em}
+.favlink,.viewall{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  padding:7px 13px;border-radius:var(--r-pill);background:var(--soft);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.favlink:active,.viewall:active{transform:scale(.94)}
+
+/* minmax(0,1fr) — plain 1fr is minmax(auto,1fr), so one long unbreakable item
+   name sets a min-content floor that inflates its column for every row and
+   pushes the opposite card past the viewport. .card-name already ellipsizes. */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;padding-top:4px}
+.card{
+  position:relative;display:block;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-card);padding:9px;text-align:start;color:inherit;text-decoration:none;
+  box-shadow:var(--sh-card);
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+  animation:card-in .5s var(--ease) backwards;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.card:active{transform:scale(.97)}
+.card.is-unavailable,.card.is-sold{opacity:.62}
+.card-imgwrap{display:block;position:relative;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.05;background:var(--soft)}
+.card-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-imgwrap img{transform:scale(1.06)}
+.card-badges{position:absolute;top:8px;inset-inline-start:8px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;z-index:2}
+.off-badge{background:var(--orange);color:#fff;font-size:10.5px;font-weight:800;padding:4px 8px;border-radius:var(--r-pill);letter-spacing:.01em}
+.sp-badge{display:inline-flex;align-items:center;gap:4px;background:var(--ink);color:var(--on-ink);font-size:9.5px;font-weight:800;padding:4px 8px;border-radius:var(--r-pill)}
+.card-soldout,.avail-badge{
+  position:absolute;top:8px;inset-inline-start:8px;z-index:3;
+  background:var(--ink);color:var(--on-ink);font-size:10px;font-weight:800;
+  padding:4px 9px;border-radius:var(--r-pill);letter-spacing:.02em;text-transform:uppercase;
+}
+.avail-badge{background:var(--orange-deep);color:#fff}
+.card-fav{
+  position:absolute;top:7px;inset-inline-end:7px;width:30px;height:30px;border-radius:50%;z-index:2;
+  background:var(--glass);backdrop-filter:blur(4px);
+  display:grid;place-items:center;color:var(--ink);
+  box-shadow:0 4px 12px -4px rgba(15,17,21,.2);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.card-fav:active{transform:scale(.82)}
+.card-fav .ic{width:15px;height:15px}
+.card-fav.is-on .ic{fill:var(--orange);stroke:var(--orange)}
+/* Happy-hour ribbon — a full-width bar bonded to the bottom of the thumbnail
+   (the imgwrap clips it to the image's rounded corners). Moved off the price
+   row where it clipped/covered the live price. Ellipsis guards a long label. */
+.hh-badge{
+  position:absolute;bottom:0;inset-inline:0;z-index:2;
+  background:#f59e0b;color:#1b1b1b;
+  font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;
+  padding:5px 8px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.card-name{display:block;font-size:14.5px;font-weight:700;margin:10px 2px 1px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-sub{display:block;font-size:11.5px;color:var(--ink-3);padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* flex-wrap: on a card too narrow to hold the price beside a widened stepper
+   (.buy.is-in on a 2-col phone), the stepper drops to its own line instead of
+   squeezing .card-price to a hard-clipped stub — the live price stays legible. */
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;row-gap:4px;flex-wrap:wrap;padding:9px 2px 2px}
+/* was + live price stack vertically — no more horizontal squeeze (so the nowrap/ellipsis clip is gone) */
+.card-price{font-size:15px;font-weight:800;letter-spacing:-.01em;min-width:0;display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.card-price s{color:var(--ink-3);font-weight:600;font-size:11px;margin-inline-start:0;line-height:1.2}
+.card-price .from{font-size:10px;font-weight:600;color:var(--ink-3);margin-inline-end:3px}
+.card-foot:has(.buy.is-in) .card-price s{display:none}
+
+/* ⊕ buy button → morphs to stepper */
+.buy{
+  height:44px;width:44px;min-width:44px;border-radius:var(--r-pill);flex:none;
+  background:var(--ink);color:var(--on-ink);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  transition:width .35s var(--spring),min-width .35s var(--spring),background .25s var(--ease);
+  box-shadow:0 8px 16px -8px rgba(15,17,21,.4);
+}
+.buy .b-dec,.buy .b-inc{height:44px;display:grid;place-items:center;color:inherit;flex:none;transition:transform var(--t-fast) var(--ease-pop)}
+.buy .b-inc{width:44px}
+.buy .b-dec{width:0;opacity:0;transition:width .3s var(--spring),opacity .2s}
+.buy .b-q{width:0;opacity:0;text-align:center;font-size:13px;font-weight:800;transition:width .3s var(--spring),opacity .2s;font-style:normal}
+.buy .ic{width:16px;height:16px;stroke-width:2.4}
+.buy .b-dec:active,.buy .b-inc:active{transform:scale(.8)}
+.buy.is-in{width:114px;min-width:114px;background:var(--orange);color:#fff;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--orange) 60%,transparent)}
+.buy.is-in .b-dec{width:38px;opacity:1}
+.buy.is-in .b-q{width:26px;opacity:1}
+
+/* skeletons */
+.sk .card-imgwrap,.sk-line{position:relative;overflow:hidden;background:var(--soft-2)}
+.sk-line{height:13px;border-radius:7px;margin:10px 2px 6px}
+.sk-line.short{width:55%;margin-top:2px}
+.sk .card-imgwrap::after,.sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ink) 9%,transparent),transparent);
+  animation:shimmer 1.2s infinite;
+}
+@keyframes shimmer{to{translate:100% 0}}
+
+/* empty states */
+.empty,.grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.empty-art{width:78px;height:78px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.55}
+
+/* rail (specials / related) */
+.rail-block{margin-top:6px}
+.rail{display:flex;gap:12px;overflow-x:auto;padding:4px 0 2px}
+.rail-card{flex:0 0 128px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:8px;box-shadow:var(--sh-card);text-align:start;position:relative}
+.rail-card img{width:100%;aspect-ratio:1.1;object-fit:cover;border-radius:12px}
+.rail-card b{display:block;font-size:12.5px;font-weight:700;margin:7px 2px 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .price{font-size:12.5px;font-weight:800;padding:0 2px}
+.rail-add{position:absolute;bottom:38px;inset-inline-end:12px;width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -6px color-mix(in srgb,var(--orange) 60%,transparent)}
+.rail-add .ic{width:15px;height:15px;stroke-width:2.4}
+.rail-fav{position:absolute;top:14px;inset-inline-end:14px;width:26px;height:26px;border-radius:50%;background:var(--glass);display:grid;place-items:center;z-index:2}
+.rail-fav .ic{width:13px;height:13px}
+.rail-fav.is-on .ic{fill:var(--orange);stroke:var(--orange)}
+
+/* reserve row */
+.reserve-row{
+  margin-top:18px;width:100%;display:flex;align-items:center;gap:13px;
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:12px 15px;box-shadow:var(--sh-card);text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.reserve-row:active{transform:scale(.98)}
+.rr-ic{width:44px;height:44px;flex:none;border-radius:14px;background:var(--orange-soft);color:var(--orange);display:grid;place-items:center}
+.rr-copy{flex:1;min-width:0;display:grid;gap:1px}
+.rr-copy b{font-size:14px;font-weight:700}
+.rr-copy small{font-size:11.5px;color:var(--ink-3)}
+.reserve-row .chev{color:var(--ink-3)}
+
+/* ── offers view ─────────────────────────────────────── */
+.loy-card{
+  /* deliberately dark in BOTH modes (wallet-card language) — its children paint
+     on white-alpha, so flipping it with --ink would erase them in dark mode. */
+  background:var(--fixed-dark);color:#fff;border-radius:var(--r-card);
+  padding:17px;display:grid;gap:13px;overflow:hidden;position:relative;
+}
+.loy-top{display:flex;align-items:center;gap:13px}
+.loy-orbit{position:relative;width:46px;height:46px;flex:none;border-radius:50%;border:1.5px solid rgba(255,255,255,.25)}
+.loy-orbit::before{content:"";position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff}
+.loy-orbit i{position:absolute;inset:-1.5px;border-radius:50%;animation:orb-spin 4s linear infinite}
+.loy-orbit i::after{content:"";position:absolute;top:-3.5px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--orange)}
+.loy-copy{flex:1;display:grid;gap:1px}
+.loy-copy small{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.03em}
+.loy-copy b{font-size:19px;font-weight:800}
+.loy-bar{height:7px;border-radius:var(--r-pill);background:rgba(255,255,255,.16);overflow:hidden}
+.loy-bar i{display:block;height:100%;border-radius:var(--r-pill);background:var(--orange);width:0;transition:width .8s var(--ease)}
+.loy-next{font-size:11.5px;color:rgba(255,255,255,.6)}
+.loy-dots{display:flex;flex-wrap:wrap;gap:7px}
+.loy-dots .stamp{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;color:rgba(255,255,255,.4)}
+.loy-dots .stamp.on{background:var(--orange);color:#fff}
+.loy-dots .stamp .ic{width:14px;height:14px}
+
+.offer-card{
+  display:flex;align-items:center;gap:13px;margin-top:12px;
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:13px 15px;box-shadow:var(--sh-card);width:100%;text-align:start;
+}
+.offer-card.dashed{border:1.5px dashed var(--line-2)}
+.oc-ic{width:42px;height:42px;flex:none;border-radius:14px;background:var(--soft);color:var(--ink);display:grid;place-items:center}
+.oc-copy{flex:1;min-width:0;display:grid;gap:1px}
+.oc-copy b{font-size:14px;font-weight:800;letter-spacing:.01em}
+.oc-copy small{font-size:11.5px;color:var(--ink-3)}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--soft);font-size:12.5px;font-weight:700;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.minibtn:active{transform:scale(.93)}
+.minibtn.orange{background:var(--orange);color:#fff}
+.minibtn:disabled{opacity:.4}
+.special-card{
+  width:100%;display:flex;align-items:center;gap:13px;margin-top:12px;
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:11px;box-shadow:var(--sh-card);text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.special-card:active{transform:scale(.98)}
+.special-card img{width:64px;height:64px;border-radius:16px;object-fit:cover;flex:none}
+.sc-copy{flex:1;min-width:0;display:grid;gap:3px;justify-items:start}
+.sc-copy b{font-size:14.5px;font-weight:700}
+.sc-copy small{font-size:12.5px;color:var(--ink-3)}
+.sc-copy small em{font-style:normal;font-weight:800;color:var(--ink)}
+.sc-copy small s{margin-inline-end:5px}
+.special-card .chev{color:var(--ink-3)}
+
+/* ── orders view ─────────────────────────────────────── */
+.orders-list{display:grid;gap:10px}
+.orders-block{margin-top:18px}
+.order-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;cursor:pointer;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 14px;
+  box-shadow:var(--sh-card);animation:card-in .4s var(--ease) backwards;text-decoration:none;color:inherit;
+}
+.order-row .or-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--soft);display:grid;place-items:center;color:var(--ink)}
+.order-row>svg{width:22px;height:22px;flex:none;color:var(--ink)}
+.order-row>div{flex:1;min-width:0}
+.order-row b{font-size:13.5px;font-weight:700;display:block}
+.order-row small{font-size:11.5px;color:var(--ink-3)}
+.order-status{flex:none;font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill);background:var(--orange-soft);color:var(--orange-deep)}
+.order-status.done,.order-status.ok{background:#e9f8f0;color:var(--green)}
+.reorder-btn{flex:none;padding:8px 12px;border-radius:var(--r-pill);background:var(--soft);font-size:11.5px;font-weight:700}
+.order-lines{display:grid;gap:9px;padding:10px 2px 2px;border-top:1px solid var(--line);margin-top:4px}
+.order-line{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.order-line b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.order-line small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.order-line.disc{color:var(--green)}
+.order-line.grand{border-top:1px dashed var(--line-2);padding-top:10px}
+.order-line.grand span{color:var(--ink);font-weight:700}
+.order-line.grand b{font-size:16px}
+.row-status{flex:none;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:5px 10px;border-radius:var(--r-pill);background:var(--soft);color:var(--ink-2)}
+.row-status.ok{background:#e9f8f0;color:var(--green)}
+.lookup-field{display:flex;align-items:center;gap:9px;background:var(--soft);border:1.5px solid var(--line-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px;margin-top:8px}
+[dir="rtl"] .lookup-field{padding:5px 15px 5px 6px}
+.lookup-field .ic{color:var(--ink-2);flex:none}
+.lookup-field input{background:none;border:0;padding:8px 0;font-size:16px}
+.lookup-field input:focus{background:none}
+
+/* ── cart ────────────────────────────────────────────── */
+.linkbtn{font-size:13px;font-weight:700;color:var(--orange-deep);padding:6px 2px}
+
+/* checkout order summary — one row per cart line, Edit → cart */
+.ck-items{display:grid;gap:11px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--ink);text-align:end}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+/* ORBIT-F31 — armed state for the two-step "Clear cart" confirm */
+.linkbtn.is-armed{color:var(--red);background:var(--red-soft);border-radius:var(--r-pill);padding:6px 12px}
+.spacer{flex:1}
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);
+  padding:10px;box-shadow:var(--sh-card);overflow:hidden;
+  display:grid;grid-template-columns:72px 1fr;gap:12px;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.ci-im{position:relative;width:72px;height:72px;border-radius:var(--r-img);overflow:hidden;padding:0;border:0;background:var(--soft);cursor:pointer}
+.ci-im img{width:100%;height:100%;object-fit:cover}
+.ci-hh{position:absolute;inset-inline:0;bottom:0;font-size:8.5px;font-weight:800;text-align:center;padding:2px 3px;background:var(--orange);color:#1b1b1b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item>div{min-width:0}
+.ci-main{min-width:0;display:grid;gap:3px;align-content:start}
+.ci-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.ci-name{font-size:14px;font-weight:700;line-height:1.25;background:none;border:0;padding:0;text-align:start;color:inherit;cursor:pointer;min-width:0}
+.ci-opts{font-size:11px;color:var(--ink-3);line-height:1.45}
+.ci-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:3px}
+.ci-priceline{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;min-width:0}
+.ci-price{font-size:14px;font-weight:800}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3)}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3)}
+.ci-stepper{display:flex;align-items:center;gap:9px}
+.ci-stepper output{min-width:16px;text-align:center;font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.step-btn,.qty-btn{
+  width:28px;height:28px;border-radius:50%;flex:none;
+  background:var(--orange);color:#fff;display:grid;place-items:center;
+  box-shadow:0 6px 12px -6px color-mix(in srgb,var(--orange) 60%,transparent);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.step-btn:active,.qty-btn:active{transform:scale(.82)}
+.step-btn .ic,.qty-btn .ic{width:14px;height:14px;stroke-width:2.4}
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;justify-content:space-between}
+.qty{display:flex;align-items:center;gap:9px}
+.ci-remove{width:30px;height:30px;flex:none;border-radius:50%;background:var(--soft);color:var(--ink-2);display:grid;place-items:center}
+.ci-remove .ic{width:15px;height:15px}
+.ci-note-btn{
+  justify-self:start;display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:600;color:var(--ink-3);padding:2px 0;
+}
+.ci-note-btn{min-height:34px}
+.ci-note-btn .ic{width:12px;height:12px}
+.ci-note-btn.has-note{color:var(--orange-deep)}
+.ci-note{grid-column:1/-1}
+.ci-note input{padding:9px 12px;font-size:16px;border-radius:12px}
+
+.cart-tools{display:grid;gap:14px;padding-top:16px}
+.tool-card,.cart-tools>section{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:15px;box-shadow:var(--sh-card)}
+.cart-tools>section.totals{display:grid;gap:9px}
+.tool-card h3,.co-block h3,.cv-block .cv-h3,.cart-tools>section>h3,.cv-h3{font-size:14px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em;display:block}
+
+.seg{display:flex;background:var(--soft);border-radius:var(--r-pill);padding:4px;gap:3px}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 4px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:15px;height:15px}
+.seg button.is-on{background:var(--ink);color:var(--on-ink);box-shadow:0 6px 14px -8px rgba(15,17,21,.5)}
+.seg.mini{padding:3px;flex-wrap:wrap}
+.seg.mini button{padding:7px 13px;flex:none}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:7px;padding:2px 2px 0}
+.ot-hint .ic{width:14px;height:14px;color:var(--orange)}
+.ot-addr{display:flex;align-items:center;gap:9px;background:var(--soft);border-radius:14px;padding:11px 13px;font-size:12.5px;font-weight:600}
+.ot-addr .ic{width:15px;height:15px;color:var(--ink-2)}
+.ot-addr b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ot-addr .linkbtn{padding:0;font-size:12px}
+
+.schedule-row,.when-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label,.when-label{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:16px;background:var(--soft)}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--soft);border:1.5px dashed var(--line-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .coupon-field{padding:5px 15px 5px 6px}
+.coupon-field .ic{color:var(--ink-2);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:16px}
+.coupon-field input:focus{background:none}
+.coupon-field.is-applied{border-color:var(--orange);border-style:solid}
+.coupon-field.is-applied .ic{color:var(--orange)}
+.coupon-msg{font-size:12px;padding:8px 8px 2px;color:var(--green);font-weight:600}
+.coupon-msg.err{color:var(--red)}
+.ordernote label{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.ordernote textarea{resize:none;font-size:16px}
+
+.totals{display:grid;gap:9px}
+.tr,.tr-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2)}
+.tr b,.tr-row b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.tr.disc,.tr.disc b,.tr-row.disc,.tr-row.disc b{color:var(--green);font-weight:700}
+.tr.grand,.tr-row.grand{border-top:1.5px dashed var(--line-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:14.5px;font-weight:700}
+.tr.grand b,.tr-row.grand b{font-weight:800;font-size:16.5px;color:var(--ink)}
+.minorder,.minerror{font-size:12px;font-weight:600;color:var(--red);padding-top:8px}
+
+.waiter-row{display:flex;gap:10px;flex-wrap:wrap}
+.waiter-row .ghostbtn{flex:1}
+.ghostbtn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--card);border:1.5px solid var(--line-2);
+  font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.wide{width:100%}
+.ghostbtn.sm{padding:8px 14px;font-size:12px}
+.wa-order,.wa-line{
+  width:100%;display:flex;align-items:center;gap:11px;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:13px 15px;font-size:13.5px;font-weight:700;text-align:start;text-decoration:none;color:inherit;
+  box-shadow:var(--sh-card);margin-top:12px;
+}
+.wa-order>.ic:first-child,.wa-line>.ic:first-child{color:#fff;background:var(--green);border-radius:50%;width:34px;height:34px;padding:7px}
+.wa-order span,.wa-line span{flex:1}
+.wa-order .chev,.wa-line .arr{color:var(--ink-3)}
+
+/* CTA bars */
+.cta-bar,.p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--bg) 30%);
+  position:relative;z-index:6;
+}
+/* ORBIT-F1 — the floating pill nav is painted by an ANCESTOR stacking context
+   (.orbit) and can never be out-z-indexed from inside a .view (z-index:2), so a
+   CTA that merely raises its own z-index still has zero clickable pixels. The
+   cart is the only ROOT view with a CTA bar (product/checkout are sub-views and
+   hide the nav), so it must physically reserve the pill's box: 16px offset +
+   68px pill + 12px breathing room. */
+.view[data-view="cart"] .cta-bar{
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+}
+/* the product footer is markup'd .cta-bar (never .p-cta), so these had no
+   target: the stepper lost its pill and stayed at the 28px .qty-btn base. */
+.qtybox,.p-cta .qty,.cta-bar .qty{
+  display:flex;align-items:center;gap:10px;flex:none;
+  background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r-pill);
+  padding:7px 9px;
+}
+.qtybox output,.p-cta .qty output,.cta-bar .qty output{min-width:20px;text-align:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.p-cta .qty .qty-btn,.cta-bar .qty .qty-btn{background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);box-shadow:none;width:32px;height:32px}
+.cta{
+  flex:1;height:56px;border-radius:var(--r-pill);
+  background:var(--ink);color:var(--on-ink);
+  font-size:15px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);
+  box-shadow:0 16px 30px -14px rgba(15,17,21,.5);
+  position:relative;overflow:hidden;text-decoration:none;
+}
+.cta:active{transform:scale(.97)}
+.cta b{font-weight:800;opacity:.5}
+.cta.wide{width:100%}
+/* direct "go to cart" button beside Add to Cart on the product footer; a
+   card/outline pill (not the solid-ink CTA) so it reads as the secondary
+   action, with a brand-orange count badge. Toggled visible by script.js only
+   once the cart holds something. */
+.p-cart-jump{
+  flex:none;position:relative;width:56px;height:56px;border-radius:var(--r-pill);
+  background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);
+  display:grid;place-items:center;
+  box-shadow:0 10px 24px -16px rgba(15,17,21,.5);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.p-cart-jump:active{transform:scale(.94)}
+.p-cart-jump[hidden]{display:none}
+.p-cart-jump .ic{width:23px;height:23px}
+.p-cart-jump-count{
+  position:absolute;top:-5px;inset-inline-end:-5px;
+  min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--orange);color:#fff;
+  font-size:11px;font-weight:800;line-height:20px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+}
+.cta:disabled{opacity:.4;box-shadow:none}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+
+/* ── product view ────────────────────────────────────── */
+.view[data-view="product"] .view-scroll{padding:0}
+.p-hero{position:relative;aspect-ratio:1.08;background:var(--soft);overflow:hidden}
+.p-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%}
+.p-gallery img{width:100%;height:100%;object-fit:cover;flex:0 0 100%;scroll-snap-align:start}
+.p-gallery-dots{position:absolute;left:0;right:0;bottom:70px;display:flex;justify-content:center;gap:6px;z-index:3}
+.p-gallery-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:rgba(255,255,255,.55);transition:all .3s var(--ease)}
+.p-gallery-dots i.is-on{width:18px;background:var(--card)}
+.p-hero::after{content:"";position:absolute;inset-inline:0;bottom:-1px;height:64px;background:linear-gradient(transparent,var(--bg));pointer-events:none;z-index:2}
+/* R8 · gallery prev/next arrows (multi-image dishes) */
+/* the prev/next arrows deliberately break from the frosted-white .fab back/fav
+   corners: a solid brand-orange fill so the gallery controls read as their own
+   thing over the imagery. */
+.p-gal-arrow{position:absolute;top:50%;translate:0 -50%;width:38px;height:38px;border-radius:50%;z-index:3;background:var(--orange);color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px -6px rgba(244,99,60,.55);transition:transform var(--t-fast) var(--ease-pop),opacity .2s var(--ease)}
+.p-gal-arrow:active{transform:scale(.88)}
+.p-gal-arrow.prev{inset-inline-start:12px}
+.p-gal-arrow.next{inset-inline-end:12px}
+.p-gal-arrow[hidden]{display:none}
+[dir="rtl"] .p-gal-arrow .ic{transform:scaleX(-1)}
+.p-stock{position:absolute;top:calc(14px + env(safe-area-inset-top));left:50%;translate:-50% 0;z-index:4;background:var(--ink);color:var(--on-ink);font-size:11px;font-weight:800;padding:6px 14px;border-radius:var(--r-pill);text-transform:uppercase}
+.fab{
+  position:absolute;top:calc(14px + env(safe-area-inset-top));width:42px;height:42px;border-radius:50%;z-index:4;
+  background:var(--glass);backdrop-filter:blur(8px);color:var(--ink);
+  display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(15,17,21,.3);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+.fab.back{inset-inline-start:16px}
+[dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+.fab.fav{inset-inline-end:16px}
+.fab.fav.is-on .ic{fill:var(--orange);stroke:var(--orange)}
+.fab.inline{position:static;top:auto;background:var(--card);border:1px solid var(--line-2);box-shadow:none;flex:none}
+
+.p-body{padding:4px 20px 0;position:relative;z-index:2;margin-top:-10px}
+.p-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.p-name{display:grid;gap:2px}
+.p-title{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.p-sub{font-size:13px;color:var(--ink-3);font-weight:500}
+.p-price{text-align:end}
+.p-price b{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.p-price s{display:block;font-size:12px;color:var(--ink-3)}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px;padding:14px 0 2px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;color:var(--ink-2);
+  background:var(--soft);padding:7px 12px;border-radius:var(--r-pill);
+}
+.meta-chip .ic{width:14px;height:14px}
+.meta-chip.star{color:var(--orange-deep)}
+.meta-chip.star .ic{fill:var(--orange);stroke:var(--orange)}
+.diet-tags{display:flex;flex-wrap:wrap;gap:7px;padding:10px 0 2px}
+.diet-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;color:var(--green);
+  background:#e9f8f0;padding:5px 11px;border-radius:var(--r-pill);
+}
+.diet-tag .ic{width:13px;height:13px}
+.diet-tag.spicy{color:#c2410c;background:#fdf0e5}
+.p-desc{padding:12px 0 2px;font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.p-allergens{display:flex;flex-wrap:wrap;gap:7px;padding:12px 0 2px}
+.allergen{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-2);background:var(--soft);padding:5px 11px;border-radius:var(--r-pill)}
+.allergen img{width:15px;height:15px;border-radius:50%;object-fit:cover}
+.p-groups{display:grid;gap:14px;padding:16px 0 2px}
+.opt-group{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:var(--sh-card)}
+.opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.opt-head b{font-size:14px;font-weight:800}
+.opt-req{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--orange-deep);background:var(--orange-soft);padding:3px 9px;border-radius:var(--r-pill)}
+.opt-req.optional{color:var(--ink-3);background:var(--soft)}
+.opt-list{display:grid;gap:2px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:9px 4px;border-radius:12px;
+  transition:background var(--t-fast);cursor:pointer;
+  /* these rows are real <button>s now (ORBIT-F19) — a button's UA text-align
+     is `center`, which shoved every option label into the middle of the row. */
+  width:100%;text-align:start;
+}
+.opt:active{background:var(--soft)}
+.opt-thumb{width:34px;height:34px;border-radius:9px;object-fit:cover;flex:none}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:2px solid var(--line-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);background:var(--card);
+}
+.opt-ctl.box{border-radius:7px}
+.opt.is-on .opt-ctl{border-color:var(--orange);background:var(--orange)}
+.opt-ctl svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-name{flex:1;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink)}
+.opt-price{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--orange-deep)}
+/* ORBIT-F39 — label + 5 stars + the thank-you all fought for one row on a
+   narrow phone; the label now holds its own line and the thanks wraps below. */
+.rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:18px 0 2px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.rate-row>span:first-child{flex:1 1 auto;min-width:0}
+.rate-row .rate-thanks{flex:1 0 100%}
+.rate-stars{display:flex;gap:0;flex:none}
+.rate-stars button{padding:11px}
+.rate-stars button .ic{width:22px;height:22px;stroke:var(--gray-h);fill:none}
+.rate-stars button.is-on .ic{stroke:var(--orange);fill:var(--orange)}
+.rate-thanks{color:var(--green);font-weight:700}
+.p-related{padding:0 20px}
+
+/* ── checkout ────────────────────────────────────────── */
+.co-block,.cv-block{padding-top:14px}
+.field-label{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin:9px 0 6px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.co-addr{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:11px 13px;
+  box-shadow:var(--sh-card);
+}
+.co-addr b{flex:1;min-width:0;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.tip-row button{
+  flex:1;padding:12px 4px;border-radius:16px;min-width:56px;
+  background:var(--soft);border:1.5px solid transparent;
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--orange);color:var(--orange-deep);background:var(--orange-soft)}
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--card);border:1.5px solid var(--line-2);border-radius:18px;
+  padding:12px 14px;transition:all var(--t-fast) var(--ease);
+}
+.pm.is-on{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 5%,var(--card))}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--soft);display:grid;place-items:center;color:var(--ink)}
+.pm.is-on .pm-ic{background:var(--orange);color:#fff}
+.pm b{flex:1;font-size:13.5px;font-weight:700}
+.pm b small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-top:2px}
+.pm-radio{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid var(--line-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.pm.is-on .pm-radio{border-color:var(--orange)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--orange)}
+.terms{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--ink-2);line-height:1.45;cursor:pointer;padding:4px 0}
+.terms input{width:auto;margin-top:2px}
+.linkbtn2{font-size:13px;font-weight:700;color:var(--orange-deep)}
+.err-box{font-size:12.5px;font-weight:600;color:var(--red);background:var(--red-soft);border-radius:12px;padding:11px 14px}
+
+/* ── confirmed ───────────────────────────────────────── */
+.view-center{justify-content:center}
+.confirm-wrap{display:grid;place-items:center;text-align:center;padding:0 30px;gap:7px}
+.ok-art{position:relative;width:190px;height:190px;margin-bottom:8px}
+.ok-ring{position:absolute;border-radius:50%;border:1.5px solid var(--line-2)}
+.ok-ring.o1{inset:0;animation:orb-spin 5s linear infinite}
+.ok-ring.o2{inset:24px;border-color:#f6dcd2;animation:orb-spin 3.4s linear infinite reverse}
+.ok-ring i{position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--orange)}
+.ok-core{
+  position:absolute;left:50%;top:50%;width:96px;height:96px;margin:-48px 0 0 -48px;
+  border-radius:50%;background:var(--orange);display:grid;place-items:center;
+  box-shadow:0 24px 46px -16px color-mix(in srgb,var(--orange) 60%,transparent);
+  animation:core-pop .7s var(--ease-pop) .1s backwards;
+}
+.ok-core svg{width:46px;height:46px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ok-check{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .5s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confirm-title{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65}
+.confirm-eta{color:var(--ink-2);font-weight:700}
+.confirm-code{
+  font-size:12.5px;font-weight:800;color:var(--ink);
+  background:var(--soft);border:1.5px dashed var(--line-2);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-pts{
+  font-size:12px;font-weight:800;color:var(--orange-deep);
+  background:var(--orange-soft);padding:6px 14px;border-radius:var(--r-pill);
+}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:20px;justify-items:center}
+.confirm-actions .cta{max-width:280px}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.confirm-actions .ghostbtn{width:100%;max-width:280px}
+.confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.confirm-actions .ghostbtn:hover{background:var(--soft)}
+.review-card,.nps{margin-top:14px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:18px;text-align:center;box-shadow:var(--sh-card);display:grid;gap:12px;justify-items:center}
+.rv-q,.nps p{font-size:14px;font-weight:700;color:var(--ink)}
+.star-row,.nps-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
+/* ALL-F2 — padding (not gap) grows these to a 44px tap box without inflating
+   the drawn star, and without neighbouring hit areas stealing each other's taps. */
+.star-row button{transition:transform var(--t-fast) var(--ease-pop);padding:7px;display:grid;place-items:center}
+.star-row button:active{transform:scale(.8)}
+.star-row .ic{width:30px;height:30px;stroke:var(--gray-h);fill:none;transition:all var(--t-fast)}
+.star-row button.is-on .ic{stroke:var(--orange);fill:var(--orange)}
+.rv-thanks,.nps-thanks{font-size:12.5px;color:var(--green);font-weight:700}
+.nps-row{gap:6px}
+.nps-row button{width:44px;height:44px;border-radius:13px;background:var(--soft);font-size:13px;font-weight:700;color:var(--ink-2)}
+.nps-row button.is-on{background:var(--orange);color:#fff}
+.greview{display:flex;align-items:center;gap:11px;width:100%;margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 15px;box-shadow:var(--sh-card);text-decoration:none;color:inherit}
+.greview-star{font-size:22px}
+.greview-copy{flex:1;display:grid;gap:1px;text-align:start}
+.greview-copy b{font-size:14px;font-weight:700}
+.greview-copy small{font-size:11.5px;color:var(--ink-3)}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:34%;left:50%;width:9px;height:14px;background:var(--c,var(--orange));border-radius:2px;opacity:0;animation:confetti 1.5s var(--d,0s) ease-out forwards;transform:rotate(var(--rz,0))}
+.confetti i.round{width:10px;height:10px;border-radius:50%}
+@keyframes confetti{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--spin,360deg))}}
+
+/* ── track ───────────────────────────────────────────── */
+.track-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:17px;display:grid;gap:16px;box-shadow:var(--sh-card)}
+.track-top{display:flex;justify-content:space-between;align-items:center}
+.tk-label{font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--orange-deep)}
+.courier{display:flex;align-items:center;gap:11px;background:var(--soft);border-radius:16px;padding:10px}
+.courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.courier>div{flex:1}
+.courier b{font-size:14px}
+.timeline{list-style:none;display:grid;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--line-2);background:var(--card);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--line-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--orange);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node,.tl.is-done .tl-node,.tl.is-active .tl-node{border-color:var(--orange);background:var(--orange)}
+.tl.done .tl-node svg,.tl.is-done .tl-node svg,.tl.is-active .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after,.tl.is-done .tl-line::after{transform:none}
+.tl.now .tl-node,.tl.is-active .tl-node{box-shadow:0 0 0 0 color-mix(in srgb,var(--orange) 45%,transparent);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}}
+.tl-copy b{font-size:13.5px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b,.tl.is-done .tl-copy b,.tl.is-active .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11px;color:var(--ink-3)}
+.tl.cancelled .tl-node{border-color:var(--red);background:var(--red)}
+.tl.cancelled .tl-copy b{color:var(--red)}
+
+/* ── standalone account / track pages ────────────────── */
+.track-flow{display:grid;gap:14px;align-content:start}
+.tk-eta .tk-label{margin-top:5px;text-align:end}
+.track-foot{display:grid;place-items:center;padding-top:18px}
+.imhere-msg{display:none;font-size:13.5px;font-weight:700;color:var(--green);text-align:center}
+@media (prefers-reduced-motion:reduce){.tl.now .tl-node{animation:none}}
+
+/* ── profile ─────────────────────────────────────────── */
+.me{display:grid;justify-items:center;gap:3px;padding:8px 0 20px;text-align:center}
+.me-ava{position:relative;width:92px;height:92px;margin-bottom:9px}
+.me-ava img{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--card);box-shadow:var(--sh-pop)}
+/* ORBIT-F37 — initial behind the logo; if the logo 404s the ring still reads */
+.me-ava-fallback{
+  position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;
+  background:var(--soft);border:3px solid var(--card);box-shadow:var(--sh-pop);
+  font-size:34px;font-weight:800;color:var(--ink-3);
+}
+.me-badge{
+  position:absolute;bottom:2px;inset-inline-end:2px;width:24px;height:24px;border-radius:50%;
+  background:var(--orange);display:grid;place-items:center;outline:3px solid var(--bg);
+}
+.me-badge svg{width:12px;height:12px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.me-name{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.me-mail{font-size:13px;color:var(--ink-3)}
+.me-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:14px;box-shadow:var(--sh-card);margin-bottom:6px}
+.me-avatar{width:52px;height:52px;flex:none;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:21px;font-weight:800}
+.me-card>div{flex:1;min-width:0}
+.me-card b{font-size:15px;font-weight:800;display:block}
+
+.list-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--sh-card);overflow:hidden;margin-top:6px}
+.prow{
+  width:100%;display:flex;align-items:center;gap:13px;text-align:start;
+  padding:14px 16px;border-bottom:1px solid var(--line);
+  transition:background var(--t-fast);
+}
+.prow:last-child{border-bottom:0}
+.prow:active{background:var(--soft)}
+.prow-ic{width:38px;height:38px;flex:none;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--ink)}
+.prow-ic .ic{width:18px;height:18px}
+.prow-ic.red{background:var(--red-soft);color:var(--red)}
+.prow-ic.green{background:#e9f8f0;color:var(--green)}
+.prow-label{flex:1;font-size:14px;font-weight:600}
+.prow .chev{color:var(--gray-h)}
+.prow.logout .prow-label{color:var(--red)}
+.demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:24px 0 4px;opacity:.75}
+.biz-card{display:grid;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:15px;box-shadow:var(--sh-card);margin-top:14px}
+.biz-card span{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-2)}
+.biz-card .ic{color:var(--ink-3)}
+.biz-card a{color:inherit}
+
+/* ── floating black pill nav ─────────────────────────── */
+.orbit-nav{
+  position:absolute;inset-inline:20px;bottom:calc(16px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--nav-bg);border-radius:var(--r-pill);
+  padding:0 12px;box-shadow:var(--sh-nav);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.orbit-nav.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.navdot{
+  position:absolute;left:0;top:50%;margin-top:-24px;width:48px;height:48px;
+  border-radius:50%;background:var(--orange);z-index:1;
+  box-shadow:0 10px 22px -8px color-mix(in srgb,var(--orange) 75%,transparent);
+  transition:transform .55s var(--spring);
+}
+.nav-btn{
+  position:relative;z-index:2;flex:1 1 0;min-width:0;height:48px;
+  display:grid;place-items:center;color:rgba(255,255,255,.5);
+  transition:color .3s var(--ease),transform var(--t-fast) var(--ease-pop);
+}
+.nav-btn:active{transform:scale(.86)}
+.nav-btn.is-on{color:#fff}
+.nav-btn .ic{width:22px;height:22px}
+.nav-badge{
+  position:absolute;top:5px;inset-inline-end:3px;
+  min-width:17px;height:17px;border-radius:var(--r-pill);
+  background:var(--dot);color:#fff;
+  font-size:9.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 4px;
+  outline:2px solid var(--nav-bg);
+  transition:transform .25s var(--ease-pop);
+}
+.nav-badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+
+/* ── search overlay ──────────────────────────────────── */
+.search-layer{
+  position:absolute;inset:0;z-index:var(--z-search);
+  background:var(--bg);padding:calc(14px + env(safe-area-inset-top)) 20px 0;
+  display:flex;flex-direction:column;
+  opacity:0;transform:translateY(3%);
+  transition:opacity .28s var(--ease),transform .28s var(--ease),visibility 0s linear .28s;
+  visibility:hidden;pointer-events:none;
+}
+.search-layer.is-open{opacity:1;transform:none;visibility:visible;pointer-events:auto;transition:opacity .28s var(--ease),transform .28s var(--ease)}
+.sl-top{display:flex;align-items:center;gap:10px}
+.sl-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--soft);border-radius:var(--r-pill);padding:0 16px;height:50px;color:var(--ink-3);
+}
+.sl-field input{background:none;border:0;padding:0;height:100%;font-size:16px}
+.sl-field input:focus{background:none}
+.sl-h{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;padding:20px 2px 10px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--soft);border:1.5px solid transparent;
+  font-size:12.5px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--orange);color:var(--orange-deep);background:var(--orange-soft)}
+.sl-results{flex:1;min-height:0;overflow-y:auto;padding:14px 0 20px;display:grid;gap:8px;align-content:start}
+.sl-row{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:9px;
+  box-shadow:var(--sh-card);animation:card-in .3s var(--ease) backwards;
+}
+.sl-row img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.sl-row>div{flex:1;min-width:0}
+.sl-row b{font-size:13.5px;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sl-row small{font-size:11.5px;color:var(--ink-3)}
+.sl-row .price{font-size:13px;font-weight:800;flex:none}
+.sl-none{text-align:center;color:var(--ink-3);font-size:13px;padding:26px 0}
+
+/* ── full-screen story viewer ────────────────────────── */
+.story-layer{
+  /* sits above the pill nav, sheets and the fly layer, below the splash (80) */
+  position:absolute;inset:0;z-index:75;
+  background:#000;opacity:0;
+  transition:opacity .3s var(--ease);
+}
+.story-layer.is-open{opacity:1}
+.sv-bars{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.sv-bar{flex:1;height:3px;border-radius:var(--r-pill);background:rgba(255,255,255,.28);overflow:hidden}
+.sv-bar i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.sv-x{
+  position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,.35);color:#fff;
+  display:grid;place-items:center;
+}
+.sv-x .ic{width:20px;height:20px}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-tap{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-tap.prev{inset-inline-start:0}
+.sv-tap.next{inset-inline-end:0}
+.sv-foot{
+  position:relative;z-index:3;width:100%;
+  padding:24px 22px calc(30px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(0,0,0,.72),transparent);
+}
+.sv-cap{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 8px rgba(15,17,21,.55)}
+.sv-cta{height:50px;background:#fff;color:#0f1115;box-shadow:none}
+
+/* ── sheets / scrim / toast ──────────────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(15,17,21,.35);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--bg);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  box-shadow:0 -18px 50px -20px rgba(15,17,21,.3);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--line-2);margin:6px auto 16px}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.025em;margin-bottom:14px}
+.sheet h4{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;margin:16px 0 10px}
+.sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:12px}
+.sheet-list{display:grid;gap:9px;padding-bottom:12px}
+.branch-list{display:grid;gap:9px}
+.branch-row,.srow{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--card);border:1.5px solid var(--line-2);border-radius:16px;padding:12px 14px;
+  transition:border-color var(--t-fast);text-decoration:none;color:inherit;
+}
+.branch-row.is-on,.srow.is-on{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 5%,var(--card))}
+.srow b,.branch-row b{flex:1;min-width:0;font-size:13.5px;font-weight:700}
+.srow b small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-top:2px}
+.srow .chev{color:var(--gray-h)}
+.srow-check,.branch-check{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid var(--line-2);transition:all var(--t-fast)}
+.srow.is-on .srow-check,.branch-row.is-on .branch-check{border-color:var(--orange);background:var(--orange);box-shadow:inset 0 0 0 3.5px var(--card)}
+.branch-dist{flex:none;font-size:11px;font-weight:800;color:var(--orange-deep);background:var(--orange-soft);padding:3px 8px;border-radius:var(--r-pill)}
+
+/* ── nearest-branch map picker ───────────────────────── */
+.nearest-branch-btn{
+  display:flex;align-items:center;gap:11px;width:100%;margin-bottom:12px;
+  background:var(--orange-soft);border:1.5px solid transparent;border-radius:16px;
+  padding:12px 14px;text-align:start;color:var(--orange-deep);
+  transition:all var(--t-fast) var(--ease);
+}
+.nearest-branch-btn:active{transform:scale(.98)}
+.nearest-branch-btn .ic{color:var(--orange)}
+.nearest-branch-btn span{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--ink)}
+.nearest-branch-btn .chev{color:var(--ink-3)}
+.sheet.sheet-tall{max-height:90%}
+.branchmap{width:100%;height:300px;border-radius:18px;overflow:hidden;background:var(--soft);z-index:0}
+.branchmap .leaflet-container{border-radius:18px}
+.geo-attrib{font-size:10px;color:var(--ink-3);margin-top:7px;text-align:center}
+/* saved delivery addresses (logged-in) */
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1.5px solid var(--line-2);border-radius:14px;background:var(--card);color:var(--ink);cursor:pointer}
+.saved-addr .ic{flex:none;color:var(--ink-2)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.saved-addr.is-on .ic{color:var(--orange)}
+/* delivery address autocomplete + use-my-location */
+.addr-field{position:relative}
+.addr-field input#coAddr,.addr-field input#cartAddr{padding-inline-end:46px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--orange);background:none;border:0;cursor:pointer}
+.uselocbtn:active{transform:scale(.9)}
+.uselocbtn.is-loading{opacity:.5;animation:orb-spin 1s linear infinite}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--card);border:1px solid var(--line-2);border-radius:14px;overflow:hidden;box-shadow:0 12px 30px -12px rgba(15,17,21,.35);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--soft)}
+.spice-scale{display:flex;gap:8px;flex-wrap:wrap}
+.spice-scale button{
+  flex:1;padding:10px 4px;border-radius:14px;font-size:12.5px;font-weight:700;min-width:52px;
+  background:var(--soft);border:1.5px solid transparent;color:var(--ink-2);
+  transition:all var(--t-fast);
+}
+.spice-scale button.is-on{border-color:var(--orange);color:var(--orange-deep);background:var(--orange-soft)}
+/* ORBIT-F5 — the sheet's primary action used to scroll off the bottom of its own
+   scroll box (and, before the nav rename, sat under the pill). Pinning it to the
+   sheet's floor makes "Show dishes" reachable at every content length. */
+.sheet-actions{
+  position:sticky;bottom:0;z-index:3;
+  display:flex;gap:10px;
+  margin-top:16px;
+  padding:14px 0 calc(10px + env(safe-area-inset-bottom));
+  background:var(--bg);
+  box-shadow:0 -14px 18px -14px rgba(15,17,21,.28);
+}
+.sheet-actions .cta{height:50px}
+.sheet-actions .ghostbtn{flex:none}
+.sheet-form{display:grid;gap:8px;padding-bottom:8px}
+.sheet-form label{display:grid;gap:7px;font-size:12px;font-weight:700;color:var(--ink-2)}
+.sheet-done{display:grid;justify-items:center;gap:6px;text-align:center;padding:14px 6px 20px}
+.sheet-done-emoji{font-size:40px}
+.sheet-done b{font-size:16px;font-weight:800}
+.sheet-done p{font-size:12.5px;color:var(--ink-2)}
+.sheet-done .muted{color:var(--ink-3)}
+.auth-tabs{display:flex;background:var(--soft);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:14px}
+.auth-tabs button{flex:1;padding:10px 4px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--ink-2)}
+.auth-tabs button.is-on{background:var(--ink);color:var(--on-ink)}
+.auth-form{display:grid;gap:10px}
+.otp-boxes{display:flex;gap:10px;justify-content:center;padding:6px 0}
+.otp-boxes input{width:52px;height:58px;text-align:center;font-size:22px;font-weight:800}
+.pref-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 2px}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink)}
+.pref-row .ic{color:var(--ink-2)}
+.switch{
+  width:50px;height:30px;border-radius:var(--r-pill);background:var(--line-2);
+  position:relative;transition:background .25s var(--ease);flex:none;
+}
+.switch i{
+  position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+  background:var(--card);box-shadow:0 2px 6px rgba(15,17,21,.25);
+  transition:translate .25s var(--ease-pop);
+}
+.switch.is-on{background:var(--orange)}
+.switch.is-on i{translate:20px 0}
+[dir="rtl"] .switch i{left:auto;right:3px}
+[dir="rtl"] .switch.is-on i{translate:-20px 0}
+.party-row{display:flex;align-items:center;gap:16px;justify-content:center;padding:4px 0 6px}
+.party-row output{min-width:34px;text-align:center;font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+.party-row .step-btn{width:34px;height:34px;background:var(--soft);color:var(--ink)}
+.res-ok{margin-top:12px;font-size:12.5px;font-weight:700;color:var(--green);background:#e9f8f0;border-radius:14px;padding:11px 14px;text-align:center;line-height:1.5}
+.reward{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line-2);border-radius:16px;padding:12px 14px}
+.reward-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--orange-soft);color:var(--orange);display:grid;place-items:center;font-size:18px}
+.reward>div{flex:1;min-width:0}
+.reward b{font-size:13.5px;font-weight:700;display:block}
+.reward small{font-size:11px;color:var(--ink-3);font-weight:600}
+
+/* ORBIT-F26 — a white toast over white card imagery was barely legible at the
+   one moment it matters; the theme already owns a high-contrast dark pill. */
+.toast{
+  position:absolute;bottom:110px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--fixed-dark);border:1px solid rgba(255,255,255,.1);
+  color:#fff;font-size:13.5px;font-weight:600;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:var(--sh-pop);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:var(--orange);stroke:currentColor}
+
+/* fly-to-cart */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:60px;height:60px;border-radius:50%;object-fit:cover;
+  box-shadow:0 12px 26px rgba(15,17,21,.35);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .orbit :is(.card-price,.ci-price,.ci-was,.ci-unit,.p-price b,.p-price s,.opt-price,.tr b,.tr-row b,.cta b,.off-badge,.confirm-code,.tk-eta b,.track-top b,.sl-row .price,.sc-copy small,.loy-copy b,.meta-chip,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] .orbit .card-badges .off-badge{align-self:flex-start}
+/* grid members: isolation alone leaves them flush-left in RTL */
+[dir="rtl"] .orbit :is(.ck-price,.ck-qty){text-align:right}
+
+/* hidden attribute must win over component display rules */
+.orbit [hidden]{display:none!important}
+
+/* ── store status strip (ORBIT-F22) ──────────────────── */
+.store-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 2px 0}
+.ss-chip{
+  display:inline-flex;align-items:center;gap:6px;min-height:30px;
+  padding:6px 12px;border-radius:var(--r-pill);background:var(--soft);
+  font-size:12px;font-weight:700;color:var(--ink-2);max-width:100%;
+}
+.ss-chip .ic{width:14px;height:14px;color:var(--ink-3)}
+.ss-chip>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-chip.is-open{background:#e9f8f0;color:#12805a}
+.ss-chip.is-closed{background:var(--red-soft);color:var(--red)}
+.ss-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.ss-chip.is-open .ss-dot{box-shadow:0 0 0 3px color-mix(in srgb,#22b573 22%,transparent)}
+
+/* ── designed empty states everywhere (ORBIT-F21 / F28) ── */
+.empty.sm{padding:30px 20px;gap:9px}
+.empty.sm .empty-art{width:58px;height:58px}
+.sl-none{display:grid;place-items:center;gap:10px;text-align:center;color:var(--ink-3);font-size:13.5px;padding:30px 0}
+.sl-none .empty-art{width:58px;height:58px}
+
+/* ── ALL-F2 · ≥44px touch targets ─────────────────────────────────────────
+   The drawn control keeps its iOS size; an invisible centred pseudo-element
+   carries the pointer/tap box out to 44px. Only used on controls that are NOT
+   inside an overflow:hidden box (.buy was resized instead, see above). */
+/* NB: every position:absolute overlay button is deliberately absent from this
+   position:relative list — .fab (product back/fav), .sv-x (story close),
+   .splash-skip, and the card/rail badges .card-fav / .rail-add / .rail-fav.
+   This higher-specificity rule was overriding their own position:absolute to
+   relative, dropping them into normal flow — the "invisible back / story-close"
+   and "add button overlaps the price/text on cards & rails" bugs. Their 44px
+   hit box (the ::after below) still works over an absolute parent. */
+.orbit :is(.ci-remove,.step-btn,.qty-btn,
+           .search-filter,.iconbtn,.opt-ctl,.linkbtn,.linkbtn2,
+           .minibtn,.subchip,.ci-note-btn,.favlink,.viewall){position:relative}
+.orbit :is(.card-fav,.ci-remove,.rail-add,.rail-fav,.step-btn,.qty-btn,
+           .sv-x,.search-filter,.iconbtn,.fab,.linkbtn,.linkbtn2,
+           .minibtn,.subchip,.favlink,.viewall,.splash-skip)::after{
+  content:"";position:absolute;top:50%;left:50%;translate:-50% -50%;
+  width:max(100%,44px);height:max(100%,44px);
+}
+/* the checkbox/radio glyph inside an .opt row: the whole row is the target,
+   so the glyph must NOT grow a competing hit box — it only needs to look right. */
+.orbit .opt{min-height:44px}
+.orbit .seg button,.orbit .auth-tabs button,.orbit .chiprow button,
+.orbit .spice-scale button,.orbit .tip-row button,.orbit .nav-btn,
+.orbit .prow,.orbit .ghostbtn,.orbit .pm,.orbit .branch-row,.orbit .srow{min-height:44px}
+
+/* keyboard users must be able to see where they are (ORBIT-F19) */
+.orbit :is(button,a,input,textarea,select,[role="button"],[tabindex]):focus-visible{
+  /* No `border-radius` here: it overrode the focused element's own radius, so
+     round controls (icon buttons, the ⊕/stepper pill, avatar) snapped to an
+     8px rounded-square ring on focus. The outline follows each control's
+     native radius instead. */
+  outline:2.5px solid var(--orange);outline-offset:2px;
+}
+.orbit .arc-chip:focus-visible,.orbit .card:focus-visible{outline-offset:4px}
+
+/* ── DARK MODE (ORBIT-F6) ─────────────────────────────────────────────────
+   orbit's own palette re-mixed, NOT an inversion: the white app surface drops
+   to a cool near-black, "ink" fills become light pills with dark glyphs, and
+   the brand accent is untouched so the restaurant still owns the colour.
+   `data-theme` (set by the in-theme toggle) always wins over the OS preference. */
+@media (prefers-color-scheme:dark){
+  .orbit:not([data-theme="light"]){
+    --bg:#0e1013;
+    --card:#171a20;
+    --glass:rgba(23,26,32,.86);
+    --soft:#1b1f26;
+    --soft-2:#232830;
+    --line:#22262e;
+    --line-2:#2f3540;
+    --ink:#f2f4f7;
+    --on-ink:#0e1013;
+    --ink-2:#a7aeb9;
+    --ink-3:#79808c;
+    --gray-h:#5c636e;
+    --nav-bg:#20242c;
+    --red-soft:#3a2024;
+    --orange-soft:color-mix(in srgb, var(--orange) 22%, #171a20);
+    --sh-card:0 8px 26px -16px rgba(0,0,0,.85);
+    --sh-pop:0 18px 40px -18px rgba(0,0,0,.9);
+    --sh-nav:0 26px 52px -20px rgba(0,0,0,.85);
+  }
+  .orbit:not([data-theme="light"]) .diet-tag{color:#5ed9a0;background:#12291f}
+  .orbit:not([data-theme="light"]) .order-status.done,
+  .orbit:not([data-theme="light"]) .order-status.ok,
+  .orbit:not([data-theme="light"]) .row-status.ok,
+  .orbit:not([data-theme="light"]) .res-ok{background:#12291f;color:#5ed9a0}
+  .orbit:not([data-theme="light"]) .ss-chip.is-open{background:#12291f;color:#5ed9a0}
+  .orbit:not([data-theme="light"]) .diet-tag.spicy{color:#f0a06a;background:#312014}
+  .orbit:not([data-theme="light"]) .promo{background:linear-gradient(120deg,#3a2118,#4a2a1e);color:#f7ece7}
+  .orbit:not([data-theme="light"]) .promo.blush{background:linear-gradient(120deg,#3a1b24,#4a222f)}
+  .orbit:not([data-theme="light"]) .promo-kicker{color:rgba(255,255,255,.55)}
+  .orbit:not([data-theme="light"]) .imhere-msg,
+  .orbit:not([data-theme="light"]) .rv-thanks,
+  .orbit:not([data-theme="light"]) .nps-thanks,
+  .orbit:not([data-theme="light"]) .coupon-msg{color:#5ed9a0}
+}
+.orbit[data-theme="dark"]{
+  --bg:#0e1013;
+  --card:#171a20;
+  --glass:rgba(23,26,32,.86);
+  --soft:#1b1f26;
+  --soft-2:#232830;
+  --line:#22262e;
+  --line-2:#2f3540;
+  --ink:#f2f4f7;
+  --on-ink:#0e1013;
+  --ink-2:#a7aeb9;
+  --ink-3:#79808c;
+  --gray-h:#5c636e;
+  --nav-bg:#20242c;
+  --red-soft:#3a2024;
+  --orange-soft:color-mix(in srgb, var(--orange) 22%, #171a20);
+  --sh-card:0 8px 26px -16px rgba(0,0,0,.85);
+  --sh-pop:0 18px 40px -18px rgba(0,0,0,.9);
+  --sh-nav:0 26px 52px -20px rgba(0,0,0,.85);
+}
+.orbit[data-theme="dark"] .diet-tag{color:#5ed9a0;background:#12291f}
+.orbit[data-theme="dark"] .order-status.done,
+.orbit[data-theme="dark"] .order-status.ok,
+.orbit[data-theme="dark"] .row-status.ok,
+.orbit[data-theme="dark"] .res-ok{background:#12291f;color:#5ed9a0}
+.orbit[data-theme="dark"] .ss-chip.is-open{background:#12291f;color:#5ed9a0}
+.orbit[data-theme="dark"] .diet-tag.spicy{color:#f0a06a;background:#312014}
+.orbit[data-theme="dark"] .promo{background:linear-gradient(120deg,#3a2118,#4a2a1e);color:#f7ece7}
+.orbit[data-theme="dark"] .promo.blush{background:linear-gradient(120deg,#3a1b24,#4a222f)}
+.orbit[data-theme="dark"] .promo-kicker{color:rgba(255,255,255,.55)}
+.orbit[data-theme="dark"] .imhere-msg,
+.orbit[data-theme="dark"] .rv-thanks,
+.orbit[data-theme="dark"] .nps-thanks,
+.orbit[data-theme="dark"] .coupon-msg{color:#5ed9a0}
+/* the theme switch row lives in the profile list */
+.appearance-seg{display:flex;background:var(--soft);border-radius:var(--r-pill);padding:4px;gap:3px;flex:none}
+.appearance-seg button{padding:8px 13px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--ink-2);min-height:36px}
+.appearance-seg button.is-on{background:var(--ink);color:var(--on-ink)}
+
+/* ── REAL BREAKPOINTS (ORBIT-F7) ──────────────────────────────────────────
+   orbit shipped with zero width queries, so a 1280px desktop rendered two
+   ~610px food cards with 610px-tall photos. The phone layout is the base; the
+   rules below let it grow up instead of stretching. */
+@media (min-width:560px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
+  .card-imgwrap{aspect-ratio:1.15}
+  .card-name{font-size:15px}
+  .rail-card{flex:0 0 150px}
+  .hero-h{font-size:36px}
+}
+@media (min-width:900px){
+  /* one centred reading column instead of a stretched phone */
+  .view-scroll,.cta-bar,.p-cta,.p-body,.p-related,.search-layer{
+    padding-inline:max(20px,calc((100% - 940px) / 2));
+  }
+  .view[data-view="product"] .view-scroll{padding-inline:0}
+  .p-hero{aspect-ratio:auto;height:min(46vh,380px)}
+  .p-gallery img{object-fit:cover}
+  .confirm-wrap{max-width:560px;margin-inline:auto}
+  .orbit-nav{inset-inline:auto;left:50%;translate:-50% 0;width:min(460px,calc(100% - 40px))}
+  .toast{max-width:520px}
+  .sheet{
+    left:50%;right:auto;translate:-50% 0;width:min(620px,100%);
+    border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  }
+  .search-layer .sl-results{padding-inline:0}
+  /* a dish page is a reading column, not a billboard */
+  .p-body,.p-related{max-width:820px;margin-inline:auto}
+  .arc-wrap{height:150px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+@media (min-width:1200px){
+  .view-scroll,.cta-bar,.p-cta,.p-body,.p-related,.search-layer{
+    padding-inline:max(20px,calc((100% - 1080px) / 2));
+  }
+  .grid{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+}
+/* dish body tracks the full-bleed hero from 1000px up. The 900px block above
+   caps .p-body/.p-related at a 820px reading column, which under the edge-to-edge
+   hero left the name/price/option groups (and the "you might also like" rail) as a
+   narrow centred island beside dead space. From 1000px let them fill the
+   width with a comfortable gutter; at >=1400px the shell itself caps to 1180px, so
+   the body simply tracks that. */
+@media (min-width:1000px){
+  .p-body,.p-related{max-width:none;padding-inline:clamp(24px,4vw,56px)}
+}
+/* a cart line or a checkout field 1080px wide is a stretched phone, not a
+   desktop layout — those two surfaces keep a form-width column, centred, and
+   their CTA bar tracks the same column. */
+@media (min-width:900px){
+  .view[data-view="cart"] .view-scroll>*,
+  .view[data-view="checkout"] .view-scroll>*{max-width:720px;margin-inline:auto}
+  .cta-bar{justify-content:center}
+  .cta-bar .cta{max-width:720px}
+}
+/* very narrow phones: the ⊕→stepper pill must not shove the price out */
+@media (max-width:380px){
+  .buy{height:40px;width:40px;min-width:40px}
+  .buy .b-inc{width:40px}
+  .buy .b-dec,.buy .b-inc{height:40px}
+  .buy.is-in{width:100px;min-width:100px}
+  .buy.is-in .b-dec{width:34px}
+}
+
+/* ── reduced motion ──────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .orbit *,.orbit *::before,.orbit *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .card,.order-row,.sl-row,.cardform,.cart-item{opacity:1!important;transform:none!important}
+}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .orbit-nav (bottom 16px + 68px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(78px + env(safe-area-inset-bottom, 0px)); }
+
+/* ── shared WhatsApp float clearance (ORBIT-F20) ───────────────────────────
+   The wati/Shopify widget is injected by the shared layout at `left:0;bottom:0`
+   with z-index 16000160, so it permanently covered the first card's price, the
+   "Choose an option" heading and the nav pill's home button. The widget markup
+   is shared and off-limits — but this stylesheet only ever loads on orbit, so
+   parking it above the pill nav here is a theme-scoped safe zone, not an edit
+   to shared code. */
+/* the widget ships its own `#whatsapp-chat-widget #wa-widget-send-button` rule,
+   so the safe zone has to match that specificity to land. */
+/* Vertical lift only — the widget sets BOTH left and right, so overriding one
+   inset stretches it into a full-width bar. Lifting it clears the pill nav,
+   which is the collision that actually hurt. */
+body #whatsapp-chat-widget #wa-widget-send-button{
+  transform:translateY(calc(-1 * (52px + env(safe-area-inset-bottom,0px))))!important;
+}
+
+.orbit .home-order-types{margin:10px 16px 14px}
+.orbit .product-home-link{margin:0 0 14px}
+.orbit .product-reviews{margin-top:20px;display:grid;gap:10px}
+.orbit .product-reviews article{padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.orbit .product-reviews article b{display:block;font-size:13px}
+.orbit .product-reviews article p,.orbit .product-reviews>p{margin:7px 0 0;color:var(--ink-2);font-size:13px;line-height:1.55}
+.orbit .review-stars{display:block;color:#e59b16;letter-spacing:2px;font-size:12px;margin-top:4px}
+
+@media (min-width:1400px){
+  /* Cap + centre the whole app on wide screens: --app-w was defined but never
+     applied, so the storefront stretched edge-to-edge (product page floated its
+     image left with dead space right). The shell is position:fixed;inset:0 with
+     in-flow topbar/views/tabbar children and no nested fixed elements, so a
+     max-width + inset-inline:0 + margin-inline:auto centres the lot. */
+  .orbit{
+    --app-w:min(1180px,calc(100vw - 96px));
+    max-width:var(--app-w);
+    inset-inline:0;
+    margin-inline:auto;
+    box-shadow:0 0 0 1px var(--line-2),0 30px 90px -46px rgba(18,18,38,.28);
+  }
+  .orbit .view-scroll{padding-inline:clamp(32px,5vw,72px)}
+  .orbit .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  /* Full-bleed banner across the capped shell. A 16/9 aspect-ratio here fought
+     the inherited height:min(46vh,380px) from the 900px block — with a definite
+     height set, aspect-ratio drove the WIDTH instead, collapsing the hero to a
+     small ~590px image floated in dead space. Keep an explicit height and let
+     the image fill the full shell width. */
+  .orbit .p-hero{aspect-ratio:auto;height:clamp(380px,44vh,560px);max-height:none}
+  .orbit .p-gallery img{object-fit:cover}
+}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--line)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--soft);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.ck-items{background:var(--card);border-radius:var(--r-card);padding:6px 14px 8px}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+/* the note link is the one cart control the centred hit box does not reach */
+.orbit .ci-note-btn{min-height:44px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.splash-skip,.addr,.minibtn,.linkbtn,.linkbtn2{min-height:44px}
+.fab.back,.fab.fav{width:44px;height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.appearance-seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, orbit skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Soft recessed chip; tokens flip with orbit's dark mode. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--soft);border:1px solid var(--line-2);color:var(--ink-2);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--ink-2)}
+
+/* ── notification-center panel — orbit skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--card,#ffffff);--nb-surface-2:var(--soft-2,#eef0f3);--nb-line:var(--line-2,#e7e9ee);--nb-ink:var(--ink,#0f1115);--nb-muted:var(--ink-2,#6f7580);--nb-accent:var(--dot,#ff4b2e)}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — orbit skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   1) orbit marks .store-strip with data-mb-hotel-chip-slot (its index), so the
+      shared partial mounts the room chip there natively, beside the .ss-chip pills;
+   2) this block maps the shared --mbh-* contract onto orbit's own tokens and gives
+      each relocated surface orbit's native look. Scoped under .orbit so its tokens
+      (--card/--soft/--ink/--orange/--r-sheet…) resolve once the layer elements
+      relocate into the theme root. Only the hub paints an opaque surface (a modal
+      legitimately does); the chip + checkout rows stay translucent/borderless.
+      The store-strip already wraps, so the chip flows onto a new line on its own.
+   ═══════════════════════════════════════════════════════════ */
+.orbit #mbHotelChip,
+.orbit #mbHotelOrderCtrls,
+.orbit #mbHotelBook,
+.orbit #mbHotelHub{
+  --mbh-surface:var(--card);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-2);
+  --mbh-accent:var(--orange);
+  --mbh-on-accent:var(--on-ink);
+  --mbh-border:var(--line-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a status pill in the store-strip, matching .ss-chip ── */
+.orbit #mbHotelChip{
+  margin:0;min-height:30px;padding:6px 12px;gap:6px;
+  background:var(--soft);border:0;color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.orbit #mbHotelChip:active{transform:scale(.96)}
+.orbit #mbHotelChip .mb-hotel-roomchip__room{color:var(--ink)}
+.orbit #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+/* over the cover hero the strip chips go dark-glass (mirrors .orbit-cover .ss-chip) */
+.orbit-cover #mbHotelChip{background:rgba(0,0,0,.42);color:#fff}
+.orbit-cover #mbHotelChip .mb-hotel-roomchip__room,
+.orbit-cover #mbHotelChip .mb-hotel-roomchip__guest{color:#fff}
+
+/* ── Hub: orbit's own bottom-sheet look (page surface, r-sheet corners, grab + round x) ── */
+.orbit #mbHotelHubScrim{background:rgba(15,17,21,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.orbit #mbHotelHub{
+  background:var(--bg);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  box-shadow:0 -18px 50px -20px rgba(15,17,21,.3);
+}
+.orbit #mbHotelHub .mb-hotel-hub__grab{background:var(--line-2)}
+.orbit #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;font-weight:800;letter-spacing:-.025em}
+.orbit #mbHotelHub .mb-hotel-hub__x{
+  background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.orbit #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.orbit #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-2)}
+.orbit #mbHotelHub .mb-hotel-card{border-color:var(--line-2)}
+.orbit #mbHotelHub .mb-hotel-card summary,
+.orbit #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.orbit #mbHotelHub .mb-hotel-info-link{color:var(--orange)}
+/* service form controls → orbit inputs / ink-fill CTA (orbit's primary button language) */
+.orbit #mbHotelHub .mb-hotel-field{
+  background:var(--soft);border:1px solid var(--line-2);color:var(--ink);border-radius:14px;
+}
+.orbit #mbHotelHub .mb-hotel-btn{
+  background:var(--ink);color:var(--on-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls relocated into the checkout → orbit tender rows ── */
+.orbit #mbHotelOrderCtrls{margin:0}
+.orbit #mbHotelSched,
+.orbit #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--line);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.orbit #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.orbit #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.orbit #mbHotelSched input[type="radio"]{accent-color:var(--orange)}
+.orbit #mbHotelSched .mb-hotel-field{
+  background:var(--soft);border:1px solid var(--line-2);color:var(--ink);border-radius:14px;
+}
+.orbit #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.orbit #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.orbit #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.orbit #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.orbit #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.orbit #mbHotelCharge input[type="checkbox"]{accent-color:var(--orange)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .orbit, RTL-safe (logical props). Reuses the theme --card
+   surface and the --orange rating colour orbit already uses for its stars. */
+.orbit .orb-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.orbit .orb-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.orbit .orb-rating-star{color:var(--orange)}
+.orbit .orb-rating small{color:var(--ink-3);font-weight:600}
+.orbit .orb-review-list{display:flex;flex-direction:column;gap:8px}
+.orbit .orb-review{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.orbit .orb-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.orbit .orb-review-star{color:var(--orange);font-weight:800;white-space:nowrap}
+.orbit .orb-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.orbit .orb-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for orbit. Surface,
+   ink, border and radius come from orbit tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.orbit .mb-paypending{
+  --pp-surface:var(--card,#ffffff);
+  --pp-ink:var(--ink,#0f1115);
+  --pp-muted:var(--ink-2,#6f7580);
+  --pp-border:var(--line-2,#e7e9ee);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,22px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.orbit .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.orbit .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.orbit .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.orbit .mb-paypending-txn:empty{display:none}
+.orbit .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.orbit .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.orbit .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.orbit .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.orbit .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.wa-order.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* Account view sub-tab switcher (Orders / Offers / Profile merged into one tab). */
+.orbit .acct-seg{margin-block:2px 14px}
+.orbit .acct-panel[hidden]{display:none!important}
+
+/* ── Address map picker + clear-device-data (shared engines, orbit-skinned) ──
+   Picker lives in orbit's own bottom .sheet with its own scrim (#orbitMapScrim);
+   the trigger clones the nearest-branch map button, the clear-data row mirrors the
+   settings .prow. Pin uses orbit's orange accent. */
+.omap-trigger{margin:10px 0 0}
+/* decorative grab bar — clone of .sheet-grab WITHOUT the theme's native grab close
+   handler (this sheet closes via #orbitMapClose + its own scrim). */
+.omap-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--line-2);margin:6px auto 16px}
+/* map area: a real height so Leaflet has room to render (bottom-sheet sizing). */
+.omap-canvas{position:relative;width:100%;height:min(52vh,360px);border-radius:18px;overflow:hidden;background:var(--soft);z-index:0}
+.omap-canvas .leaflet-container{width:100%;height:100%;border-radius:18px;font:inherit;background:var(--soft)}
+.omap-preview{margin:10px 2px 0;font-size:12.5px;line-height:1.45;color:var(--ink-2);text-align:center;min-height:18px}
+/* centre pin the engine injects into the map div — orbit accent teardrop. */
+.orbit .mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(15,17,21,.4))}
+.orbit .mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--orange);border:2px solid #fff}
+.orbit .mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#fff}
+/* clear-saved-data hint under the settings list (the row itself reuses .prow). */
+.orbit-cleardata-hint{margin:9px 6px 0;font-size:11.5px;line-height:1.5;color:var(--ink-3);text-align:center}

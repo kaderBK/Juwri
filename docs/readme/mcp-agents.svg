@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="juwri-mcp-title juwri-mcp-desc">
+  <title id="juwri-mcp-title">juwri Agentic Commerce — MCP and REST Architecture</title>
+  <desc id="juwri-mcp-desc">Animated diagram showing AI agents and automation tools connecting over five scoped Model Context Protocol endpoints into the juwri commerce runtime.</desc>
+  <defs>
+    <linearGradient id="jm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1410"/>
+      <stop offset="0.55" stop-color="#0F2018"/>
+      <stop offset="1" stop-color="#132B20"/>
+    </linearGradient>
+    <radialGradient id="jm-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5AD6AE" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#5AD6AE" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="jm-beam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0E9F6E" stop-opacity="0.25"/>
+      <stop offset="0.5" stop-color="#5AD6AE" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#8FE8C9" stop-opacity="0.25"/>
+    </linearGradient>
+    <pattern id="jm-grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#FFFFFF" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+    <clipPath id="jm-card">
+      <rect x="0" y="0" width="1200" height="360" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#jm-card)">
+    <rect width="1200" height="360" fill="url(#jm-bg)"/>
+    <rect width="1200" height="360" fill="url(#jm-grid)"/>
+    <ellipse cx="600" cy="180" rx="280" ry="170" fill="url(#jm-glow)">
+      <animate attributeName="rx" values="250;310;250" dur="6s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+      <!-- Top bar -->
+      <text x="44" y="42" font-size="11.5" font-weight="700" letter-spacing="3" fill="#5AD6AE">AGENTIC COMMERCE · MODEL CONTEXT PROTOCOL</text>
+      <circle cx="1018" cy="37" r="4" fill="#5AD6AE">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+      <text x="1156" y="42" text-anchor="end" font-size="11.5" font-weight="600" letter-spacing="1.4" fill="#8FE8C9">SCOPED TOKENS · ZERO THEME JS</text>
+
+      <!-- Flowing connector paths Left -> Center -->
+      <path id="p-l1" d="M290 102 C370 102, 380 120, 446 120" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-l2" d="M290 164 C370 164, 380 164, 446 164" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-l3" d="M290 226 C370 226, 380 208, 446 208" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-l4" d="M290 288 C370 288, 380 252, 446 252" fill="none" stroke="#234436" stroke-width="2"/>
+
+      <!-- Animated flow overlays Left -> Center -->
+      <path d="M290 102 C370 102, 380 120, 446 120" fill="none" stroke="#5AD6AE" stroke-width="2" stroke-dasharray="10 14" stroke-opacity="0.7">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" repeatCount="indefinite"/>
+      </path>
+      <path d="M290 164 C370 164, 380 164, 446 164" fill="none" stroke="#5AD6AE" stroke-width="2" stroke-dasharray="10 14" stroke-opacity="0.7">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="0.35s" repeatCount="indefinite"/>
+      </path>
+      <path d="M290 226 C370 226, 380 208, 446 208" fill="none" stroke="#5AD6AE" stroke-width="2" stroke-dasharray="10 14" stroke-opacity="0.7">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="0.7s" repeatCount="indefinite"/>
+      </path>
+      <path d="M290 288 C370 288, 380 252, 446 252" fill="none" stroke="#5AD6AE" stroke-width="2" stroke-dasharray="10 14" stroke-opacity="0.7">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="1.05s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Moving packets Left -> Center -->
+      <circle r="4" fill="#8FE8C9">
+        <animateMotion dur="2.2s" repeatCount="indefinite"><mpath href="#p-l1"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#8FE8C9">
+        <animateMotion dur="2.2s" begin="0.55s" repeatCount="indefinite"><mpath href="#p-l2"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#8FE8C9">
+        <animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite"><mpath href="#p-l3"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#8FE8C9">
+        <animateMotion dur="2.2s" begin="1.65s" repeatCount="indefinite"><mpath href="#p-l4"/></animateMotion>
+      </circle>
+
+      <!-- Flowing connector paths Center -> Right -->
+      <path id="p-r1" d="M754 120 C820 120, 830 102, 910 102" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-r2" d="M754 164 C820 164, 830 164, 910 164" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-r3" d="M754 208 C820 208, 830 226, 910 226" fill="none" stroke="#234436" stroke-width="2"/>
+      <path id="p-r4" d="M754 252 C820 252, 830 288, 910 288" fill="none" stroke="#234436" stroke-width="2"/>
+
+      <path d="M754 120 C820 120, 830 102, 910 102" fill="none" stroke="url(#jm-beam)" stroke-width="2" stroke-dasharray="10 14">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" repeatCount="indefinite"/>
+      </path>
+      <path d="M754 164 C820 164, 830 164, 910 164" fill="none" stroke="url(#jm-beam)" stroke-width="2" stroke-dasharray="10 14">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="0.35s" repeatCount="indefinite"/>
+      </path>
+      <path d="M754 208 C820 208, 830 226, 910 226" fill="none" stroke="url(#jm-beam)" stroke-width="2" stroke-dasharray="10 14">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="0.7s" repeatCount="indefinite"/>
+      </path>
+      <path d="M754 252 C820 252, 830 288, 910 288" fill="none" stroke="url(#jm-beam)" stroke-width="2" stroke-dasharray="10 14">
+        <animate attributeName="stroke-dashoffset" values="24;0" dur="1.4s" begin="1.05s" repeatCount="indefinite"/>
+      </path>
+
+      <circle r="4" fill="#5AD6AE">
+        <animateMotion dur="2.2s" begin="0.3s" repeatCount="indefinite"><mpath href="#p-r1"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#5AD6AE">
+        <animateMotion dur="2.2s" begin="0.85s" repeatCount="indefinite"><mpath href="#p-r2"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#5AD6AE">
+        <animateMotion dur="2.2s" begin="1.4s" repeatCount="indefinite"><mpath href="#p-r3"/></animateMotion>
+      </circle>
+      <circle r="4" fill="#5AD6AE">
+        <animateMotion dur="2.2s" begin="1.95s" repeatCount="indefinite"><mpath href="#p-r4"/></animateMotion>
+      </circle>
+
+      <!-- Left column: AI Clients & Automation -->
+      <g>
+        <rect x="44" y="76" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="66" cy="102" r="5" fill="#5AD6AE"/>
+        <text x="82" y="99" font-size="13.5" font-weight="700" fill="#F7FAF8">Claude &amp; Cursor</text>
+        <text x="82" y="116" font-size="11" fill="#9DB3A9">MCP tool calls · OAuth / Bearer</text>
+      </g>
+      <g>
+        <rect x="44" y="138" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="66" cy="164" r="5" fill="#5AD6AE"/>
+        <text x="82" y="161" font-size="13.5" font-weight="700" fill="#F7FAF8">Codex &amp; Coding Agents</text>
+        <text x="82" y="178" font-size="11" fill="#9DB3A9">Public dev docs at POST /mcp/dev</text>
+      </g>
+      <g>
+        <rect x="44" y="200" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="66" cy="226" r="5" fill="#5AD6AE"/>
+        <text x="82" y="223" font-size="13.5" font-weight="700" fill="#F7FAF8">Shopping &amp; Concierge Bots</text>
+        <text x="82" y="240" font-size="11" fill="#9DB3A9">Scoped storefront &amp; customer tokens</text>
+      </g>
+      <g>
+        <rect x="44" y="262" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="66" cy="288" r="5" fill="#5AD6AE"/>
+        <text x="82" y="285" font-size="13.5" font-weight="700" fill="#F7FAF8">Make · n8n · Zapier</text>
+        <text x="82" y="302" font-size="11" fill="#9DB3A9">Signed webhooks &amp; REST connectors</text>
+      </g>
+
+      <!-- Center hub: 5 MCP Servers -->
+      <rect x="446" y="72" width="308" height="244" rx="18" fill="#101D16" stroke="#5AD6AE" stroke-opacity="0.55" stroke-width="2">
+        <animate attributeName="stroke-opacity" values="0.45;0.9;0.45" dur="4s" repeatCount="indefinite"/>
+      </rect>
+      <text x="600" y="98" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="2" fill="#5AD6AE">5 BUILT-IN MCP SERVERS</text>
+
+      <rect x="466" y="112" width="268" height="32" rx="8" fill="#172B21" stroke="#2D5240"/>
+      <text x="480" y="132" font-size="12" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#8FE8C9">POST /mcp</text>
+      <text x="722" y="132" text-anchor="end" font-size="10.5" fill="#9DB3A9">owner / OAuth</text>
+
+      <rect x="466" y="150" width="268" height="32" rx="8" fill="#172B21" stroke="#2D5240"/>
+      <text x="480" y="170" font-size="12" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#8FE8C9">POST /mcp/catalog</text>
+      <text x="722" y="170" text-anchor="end" font-size="10.5" fill="#9DB3A9">public read</text>
+
+      <rect x="466" y="188" width="268" height="32" rx="8" fill="#172B21" stroke="#2D5240"/>
+      <text x="480" y="208" font-size="12" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#8FE8C9">POST /mcp/storefront</text>
+      <text x="722" y="208" text-anchor="end" font-size="10.5" fill="#9DB3A9">agent token</text>
+
+      <rect x="466" y="226" width="268" height="32" rx="8" fill="#172B21" stroke="#2D5240"/>
+      <text x="480" y="246" font-size="12" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#8FE8C9">POST /mcp/customer</text>
+      <text x="722" y="246" text-anchor="end" font-size="10.5" fill="#9DB3A9">customer token</text>
+
+      <rect x="466" y="264" width="268" height="32" rx="8" fill="#172B21" stroke="#2D5240"/>
+      <text x="480" y="284" font-size="12" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#8FE8C9">POST /mcp/dev</text>
+      <text x="722" y="284" text-anchor="end" font-size="10.5" fill="#9DB3A9">public docs</text>
+
+      <!-- Right column: Commerce Runtime -->
+      <g>
+        <rect x="910" y="76" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="932" cy="102" r="5" fill="#10B981"/>
+        <text x="948" y="99" font-size="13.5" font-weight="700" fill="#F7FAF8">Catalogue &amp; Inventory</text>
+        <text x="948" y="116" font-size="11" fill="#9DB3A9">Items, modifiers, stock, branches</text>
+      </g>
+      <g>
+        <rect x="910" y="138" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="932" cy="164" r="5" fill="#10B981"/>
+        <text x="948" y="161" font-size="13.5" font-weight="700" fill="#F7FAF8">Cart, Checkout &amp; POS</text>
+        <text x="948" y="178" font-size="11" fill="#9DB3A9">Orders, payments, fiscal receipts</text>
+      </g>
+      <g>
+        <rect x="910" y="200" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="932" cy="226" r="5" fill="#10B981"/>
+        <text x="948" y="223" font-size="13.5" font-weight="700" fill="#F7FAF8">Bookings &amp; Fulfilment</text>
+        <text x="948" y="240" font-size="11" fill="#9DB3A9">Kitchen, delivery, rooms, slots</text>
+      </g>
+      <g>
+        <rect x="910" y="262" width="246" height="52" rx="12" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.35" stroke-width="1.5"/>
+        <circle cx="932" cy="288" r="5" fill="#10B981"/>
+        <text x="948" y="285" font-size="13.5" font-weight="700" fill="#F7FAF8">Loyalty &amp; Analytics</text>
+        <text x="948" y="302" font-size="11" fill="#9DB3A9">Points, gift cards, reports</text>
+      </g>
+    </g>
+  </g>
+</svg>

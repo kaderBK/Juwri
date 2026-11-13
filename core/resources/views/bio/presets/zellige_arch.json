@@ -1,0 +1,27 @@
+{
+  "slug": "zellige_arch",
+  "starter": "fine_dining",
+  "name": "Zellige Arch",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "Manrope", "weights": [400, 600, 700, 800]}
+  ],
+  "tokens": {
+    "--bg": "#f0e6d2",
+    "--ink": "#3a2a20",
+    "--muted": "#8a715c",
+    "--card": "#fdf9f0",
+    "--btn-border": "#b45b3e",
+    "--accent": "#b45b3e",
+    "--accent-ink": "#fdf9f0",
+    "--icon-bg": "#f4e7cd",
+    "--icon-fg": "#b45b3e",
+    "--radius": "16px",
+    "--shadow": "0 10px 22px rgba(58,42,32,.16)",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Fraunces',Georgia,serif"
+  }
+}

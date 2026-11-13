@@ -1,0 +1,38 @@
+name: Bug report
+description: Something does not work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report security vulnerabilities here. Public issues are visible to everyone.
+        Follow SECURITY.md instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you saw instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: juwri version
+    validations:
+      required: true
+  - type: input
+    id: stack
+    attributes:
+      label: PHP version and database
+      placeholder: PHP 8.4, MySQL 8
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Remove customer data, keys and passwords first.

@@ -1,0 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter");
+:root { --x-brand: #123456; }
+.card { background: #fff; margin-left: 8px; padding-right: 4px; text-align: left; float: right; border-left: 1px solid var(--x-border); }
+.logo { left: 0; background: url(//cdn.example/bg.png); color: var(--tc-primary, #111); }
+@media (min-width: 40em) { .a { inset-inline-start: 0; color: #abc; } }

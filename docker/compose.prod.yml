@@ -1,0 +1,130 @@
+# Production example: one image, three roles (web, queue worker, scheduler) and a database service. Put your own TLS
+# proxy in front (SERVER_NAME=:8080) or set SERVER_NAME to your domain and publish 80/443 for Caddy's automatic HTTPS.
+# From the repository root:
+#   cp docker/env.example docker/.env      # fill it in; keep it out of git and out of the image
+#   docker compose -f docker/compose.prod.yml --env-file docker/.env up -d --build
+# Nothing secret lives in this file: every secret comes from docker/.env (or your orchestrator's secret store).
+name: juwri
+
+x-app: &app
+  image: juwri/app:${JUWRI_VERSION:-local}
+  build:
+    context: ..
+    dockerfile: Dockerfile
+    target: app
+  env_file: [.env]
+  restart: unless-stopped
+  volumes:
+    - uploads:/app/storage
+    - framework:/app/core/storage
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+      required: false   # only exists with the "redis" profile
+
+services:
+  app:
+    <<: *app
+    # Loopback by default (proxy mode): a published 0.0.0.0:8080 lets LAN/internet peers talk to Caddy directly and forge
+    # X-Forwarded-For. Change APP_BIND in docker/.env to expose it (docker/README.md, "Behind a proxy").
+    ports: ["${APP_BIND:-127.0.0.1}:${APP_PORT:-8080}:8080"]
+    environment:
+      JUWRI_MIGRATE: ${JUWRI_MIGRATE:-0}
+
+  # queue, scheduler and reverb wait for the app to be healthy, i.e. until its first-start migration has finished
+  # (docker test 2026-10-07: started earlier, the scheduler's commands failed against a half-migrated database). On top of
+  # that `docker/entrypoint.sh` runs `juwri:migrate-gate --wait` first inside each role, so a worker never opens against a
+  # half-migrated database and refuses to start (exit 3) when the database is newer than this image (version skew).
+  queue:
+    <<: *app
+    depends_on: &after-app
+      db: {condition: service_healthy}
+      app: {condition: service_healthy}
+      redis: {condition: service_healthy, required: false}
+    command: ["queue"]
+    healthcheck: {test: ["CMD-SHELL", "pgrep -f 'artisan queue:work' >/dev/null"], interval: 30s, timeout: 5s, retries: 3}
+    deploy:
+      replicas: 2
+
+  # P6-64b: long jobs (backups, imports, AI) on their own worker + connection (retry_after 1860s).
+  queue-heavy:
+    <<: *app
+    depends_on: *after-app
+    command: ["queue-heavy"]
+    stop_grace_period: 30m
+    healthcheck: {test: ["CMD-SHELL", "pgrep -f 'artisan queue:work heavy' >/dev/null"], interval: 30s, timeout: 5s, retries: 3}
+
+  scheduler:
+    <<: *app
+    depends_on: *after-app
+    command: ["scheduler"]
+    healthcheck: {test: ["CMD-SHELL", "pgrep -f 'artisan schedule:work' >/dev/null"], interval: 30s, timeout: 5s, retries: 3}
+
+  # Live updates (orders list, KDS, POS). Optional: leave BROADCAST_CONNECTION=log in docker/.env and this service
+  # simply idles (the screens poll). To use it: BROADCAST_CONNECTION=reverb, fill REVERB_APP_ID / _KEY / _SECRET,
+  # REVERB_HOST=reverb (the app publishes to it inside the compose network) and expose this port through your TLS
+  # proxy as wss (REVERB_PUBLIC_HOST / _PORT=443 / _SCHEME=https). Published on 127.0.0.1 only, like the app port (the
+  # TLS proxy on this host reaches it); set REVERB_BIND in docker/.env to expose it elsewhere (docker/README.md).
+  reverb:
+    <<: *app
+    depends_on: *after-app
+    command: ["reverb"]
+    healthcheck: {test: ["CMD-SHELL", "pgrep -f 'artisan reverb:start' >/dev/null"], interval: 30s, timeout: 5s, retries: 3}
+    ports: ["${REVERB_BIND:-127.0.0.1}:${REVERB_SERVER_PORT:-8081}:${REVERB_SERVER_PORT:-8081}"]
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-juwri}
+      MYSQL_USER: ${DB_USERNAME:-juwri}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in docker/.env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in docker/.env}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  # Optional Redis for cache + sessions + queue (production profile). Off unless the "redis" profile is active
+  # (COMPOSE_PROFILES=redis) and docker/.env has CACHE_DRIVER/SESSION_DRIVER/QUEUE_CONNECTION=redis, REDIS_HOST=redis and a
+  # REDIS_PASSWORD. Not published on any host port; only the compose network reaches it.
+  redis:
+    image: redis:7-alpine
+    profiles: ["redis"]
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    command: ["sh", "-c", "exec redis-server --appendonly yes $${REDIS_PASSWORD:+--requirepass \"$$REDIS_PASSWORD\"}"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli $${REDIS_PASSWORD:+-a \"$$REDIS_PASSWORD\"} ping 2>/dev/null | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  # PostgreSQL instead of MySQL: remove `db` above, add this, and set DB_CONNECTION=pgsql, DB_HOST=db, DB_PORT=5432.
+  # db:
+  #   image: postgres:17
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_DATABASE:-juwri}
+  #     POSTGRES_USER: ${DB_USERNAME:-juwri}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in docker/.env}
+  #   volumes: [db-data:/var/lib/postgresql/data]
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-juwri}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 30
+
+volumes:
+  db-data:
+  redis-data:
+  uploads:
+  framework:

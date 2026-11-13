@@ -1,0 +1,168 @@
+{
+    "name": "Pharmacy",
+    "description": "Clean and trustworthy: the OTC notice up top, sticky search, image category tiles and a product grid that shows expiry dates.",
+    "vertical": "pharmacy",
+    "priority": "fast_ordering",
+    "tokens": {
+        "colors.primary": "#0b7a75",
+        "colors.background": "#f4f9f9",
+        "colors.surface": "#ffffff",
+        "colors.text": "#10292b",
+        "colors.accent": "#1f5fbf",
+        "layout.radius": "round",
+        "layout.density": "cozy"
+    },
+    "font_pair": "inter",
+    "translations": {
+        "ar": {
+            "name": "صيدلية",
+            "description": "نظيف وموثوق: تنبيه الأدوية دون وصفة في الأعلى، بحث ثابت، بلاطات تصنيفات بالصور وشبكة منتجات تعرض تواريخ الصلاحية."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "split",
+                    "sticky": true
+                }
+            },
+            "pharmacy": {
+                "type": "pharmacy-notice",
+                "settings": {
+                    "tone": "info",
+                    "show_age_note": true
+                }
+            },
+            "search": {
+                "type": "search-bar",
+                "settings": {
+                    "sticky": true
+                }
+            },
+            "status": {
+                "type": "store-status",
+                "settings": []
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "image-tiles",
+                    "sticky": false
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "popular",
+                    "card": "compact"
+                }
+            },
+            "products": {
+                "type": "product-grid",
+                "settings": {
+                    "image_ratio": "square",
+                    "columns_desktop": 4,
+                    "show_expiry": true,
+                    "show_filters": true
+                }
+            },
+            "branches": {
+                "type": "branch-picker",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "hours": {
+                "type": "hours",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "bar",
+                    "above_tabbar": true
+                }
+            },
+            "tabbar": {
+                "type": "bottom-tabbar",
+                "settings": {
+                    "style": "bar",
+                    "show_labels": true
+                },
+                "blocks": {
+                    "tab-home": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "home"
+                        }
+                    },
+                    "tab-catalog": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "products"
+                        }
+                    },
+                    "tab-search": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "search"
+                        }
+                    },
+                    "tab-cart": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    },
+                    "tab-profile": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "profile"
+                        }
+                    }
+                },
+                "block_order": [
+                    "tab-home",
+                    "tab-catalog",
+                    "tab-search",
+                    "tab-cart",
+                    "tab-profile"
+                ]
+            }
+        },
+        "order": [
+            "header",
+            "pharmacy",
+            "search",
+            "status",
+            "catnav",
+            "offers",
+            "featured",
+            "products",
+            "branches",
+            "location",
+            "hours",
+            "footer",
+            "cart-bar",
+            "tabbar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

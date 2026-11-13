@@ -1,0 +1,1677 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   velora — lime ordering-app post_template · production stylesheet
+   Faithful port of rev/velora/demo.css. Design DNA: warm-beige
+   stage, near-white app, white cards, ink-black text, signature
+   lime-green accents, black icon circles, floating white pill nav,
+   green promo banner, category photo-pills, size squares S/M/L/XL,
+   seller "Following" row, bottom Total + green Add-to-Cart bar.
+   Accent driven by --velora-brand (default lime #b5d336).
+   ═══════════════════════════════════════════════════════════ */
+
+.velora{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is velora's own
+     value, kept as the var() fallback so a store that customized nothing —
+     or a render with no token include — is byte-identical to today. */
+  --stage:#b9b5b0;                   /* warm-beige backdrop, not the app bg; keep literal */
+  --bg:var(--tc-background, #f7f7f5);
+  --card:var(--tc-surface, #ffffff);
+  --soft:#ededea;                    /* derived neutral tints/strokes, hand-tuned; keep literal */
+  --soft-2:#e4e4df;
+  --stroke:#e7e7e2;
+  --stroke-2:#dcdcd6;
+  /* ink */
+  --ink:var(--tc-text, #141414);
+  --ink-2:#63635e;
+  --ink-3:#9a9a97;
+  /* text drawn ON an --ink fill (the black pills, chips, segs and the splash mark).
+     It has to flip with the palette, otherwise dark mode paints white-on-white. */
+  --on-ink:#ffffff;
+  /* brand lime — velora's design accent is the lime (the customizer PRIMARY role).
+     The inline --velora-brand (set on .velora from colors.primary) stays the top
+     override for back-compat; the token is the next fallback, then velora's literal. */
+  --lime:var(--velora-brand, var(--tc-primary, #b5d336));
+  --lime-2:var(--velora-brand, var(--tc-primary, #a6ce39));
+  --lime-deep:#96b527;               /* hand-tuned deep; derived primary-600 differs, keep */
+  --lime-text:#7e9a16;
+  --lime-soft:#f0f6d6;
+  --lime-ink:#1f260c;
+  /* semantic status colour — velora's error/discount red, NOT the customizer
+     accent role; intentionally literal so status hues stay stable */
+  --red:#e05a4e;
+  /* radius — velora's card corner is 20px, but the layout.radius "round" step
+     derives --tr-card:18px, so adopting it would shrink every untouched card
+     2px and break parity. No radius step reproduces 20px, so --r-card stays
+     literal. --r-pill (999px) DOES match round's pill step, so it adopts the
+     token; img/sheet stay literal (control-radius would reshape them). */
+  --r-card:20px;
+  --r-img:18px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  /* shadow */
+  --sh-1:0 6px 18px rgba(20,20,20,.08);
+  --sh-2:0 18px 44px -14px rgba(20,20,20,.22);
+  --sh-lime:0 10px 24px -8px rgba(166,206,57,.6);
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-search:45; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — body follows the self-hosted pairing (WI-T2); pair "none" emits no
+     --tf-body, so these degrade to velora's own stacks. velora has no separate
+     display face, so there is no --tf-heading consumer. Both stacks end in the
+     Arabic face, so RTL (--font-ar) can share --tf-body safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Plus Jakarta Sans",system-ui,-apple-system,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+/* ── dark mode ─────────────────────────────────────────
+   velora's own palette, not an inversion: warm near-black surfaces that keep the
+   beige/lime mood, with --ink and --on-ink swapped so every "black pill" in the
+   theme becomes a light pill with dark glyphs instead of white-on-white. The lime
+   accent (and therefore the store's brand colour) is deliberately untouched.
+   Driven by the OS preference AND by an explicit Appearance choice; the
+   [data-velora-theme] attribute always wins so the in-app control is real. */
+@media (prefers-color-scheme:dark){
+  .velora:not([data-velora-theme="light"]){
+    --stage:#131211;
+    --bg:#141311;
+    --card:#1e1d1a;
+    --soft:#26241f;
+    --soft-2:#302d27;
+    --stroke:#2c2a25;
+    --stroke-2:#3a372f;
+    --ink:#f4f2ec;
+    --ink-2:#b3afa4;
+    --ink-3:#807c72;
+    --on-ink:#17160f;
+    --lime-soft:#2b3312;
+    --lime-text:#c9de6e;
+    --red:#f07b6f;
+    --sh-1:0 6px 18px rgba(0,0,0,.45);
+    --sh-2:0 18px 44px -14px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+.velora[data-velora-theme="dark"]{
+  --stage:#131211;
+  --bg:#141311;
+  --card:#1e1d1a;
+  --soft:#26241f;
+  --soft-2:#302d27;
+  --stroke:#2c2a25;
+  --stroke-2:#3a372f;
+  --ink:#f4f2ec;
+  --ink-2:#b3afa4;
+  --ink-3:#807c72;
+  --on-ink:#17160f;
+  --lime-soft:#2b3312;
+  --lime-text:#c9de6e;
+  --red:#f07b6f;
+  --sh-1:0 6px 18px rgba(0,0,0,.45);
+  --sh-2:0 18px 44px -14px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+.velora *{margin:0;padding:0;box-sizing:border-box}
+.velora{
+  position:fixed;inset:0;z-index:1;
+  display:flex;flex-direction:column;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-ui);
+  -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: an overflow:hidden box is still programmatically scrollable,
+     so scrollIntoView on a mid-transition view (translateX 26%) used to h-scroll the
+     whole shell left and leave it stuck. clip forbids that scroll while still clipping. */
+  overflow:clip;isolation:isolate;
+}
+[dir="rtl"] .velora,[dir="rtl"] .velora input,[dir="rtl"] .velora button,[dir="rtl"] .velora textarea,[dir="rtl"] .velora select{font-family:var(--font-ar)}
+.velora img{display:block;max-width:100%}
+.velora button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.velora input,.velora textarea,.velora select{
+  font:inherit;color:var(--ink);background:var(--card);
+  border:1px solid var(--stroke);border-radius:14px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease);
+}
+.velora input::placeholder,.velora textarea::placeholder{color:var(--ink-3)}
+.velora input:focus,.velora textarea:focus,.velora select:focus{border-color:var(--lime-2);box-shadow:0 0 0 3px rgba(181,211,54,.22)}
+.velora ::-webkit-scrollbar{display:none}
+
+/* ── desktop / tablet ──────────────────────────────────
+   The port shipped exactly ONE width breakpoint, which pinned the app to a 420px
+   column and painted a literal phone bezel around it (a showcase device mockup
+   from the demo page). On a 1280 screen that is 420px of menu and 860px of dead
+   beige. velora keeps its centred-column identity — it is a mobile-first ordering
+   app — but the column now grows, the card grid reflows, and the fake hardware
+   frame is replaced by a real elevated app surface. */
+@media (min-width:600px){
+  html,body{height:100%}
+  body{
+    background:var(--stage,#b9b5b0);
+    display:flex;align-items:center;justify-content:center;min-height:100dvh;
+  }
+  .velora{
+    position:relative;inset:auto;margin:auto;
+    width:min(460px,96vw);height:min(900px,96dvh);
+    border-radius:30px;overflow:clip;
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 36px 80px -30px rgba(30,28,24,.55);
+  }
+}
+@media (min-width:900px){
+  .velora{width:720px}
+  .velora .view-scroll{padding-inline:28px}
+}
+@media (min-width:1200px){
+  .velora{width:840px;height:min(940px,94dvh)}
+}
+/* the grid overrides live at the END of this file — the base `.velora .grid` rule
+   is declared later than this block and would otherwise win on source order. */
+
+/* icons */
+.velora .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.velora .ic-xs{width:15px;height:15px}
+
+/* ── app shell / view router ──────────────────────────── */
+.velora .views{position:relative;flex:1;min-height:0}
+.velora .view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .velora .view{transform:translateX(-26%)}
+.velora .view.is-active{
+  visibility:visible;pointer-events:auto;transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.velora .view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .velora .view.is-under{transform:translateX(9%) scale(.985)}
+
+.velora .view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.velora .view[data-view="product"] .view-scroll{padding:6px 0 0}
+.velora .tail-space{height:118px}
+.velora .tail-space.tall{height:36px}
+.velora .tail-space.tall2{height:26px}
+
+.velora .page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.velora .page-head h1{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.velora .sub-head{display:flex;align-items:center;gap:12px;padding:12px 20px 14px}
+.velora .view[data-view="product"] .sub-head{padding-inline:20px}
+.velora .sub-head h1{flex:1;text-align:center;font-size:17px;font-weight:800;letter-spacing:-.01em}
+.velora .ghostslot{visibility:hidden;pointer-events:none}
+
+/* circle buttons — white, soft shadow, black glyph */
+.velora .cbtn{
+  position:relative;width:44px;height:44px;flex:none;border-radius:50%;
+  background:var(--card);color:var(--ink);box-shadow:var(--sh-1);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.velora .cbtn:active{transform:scale(.9)}
+.velora .cbtn.sm{width:38px;height:38px}
+.velora .cbtn.sm .ic{width:18px;height:18px}
+.velora .cbtn.wa{background:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-lime)}
+.velora .cbtn.p-fav .ic{width:19px;height:19px}
+.velora .cbtn.is-on .ic{fill:var(--red);stroke:var(--red)}
+[dir="rtl"] .velora [data-back] .ic{transform:scaleX(-1)}
+
+.velora .bagcount{
+  position:absolute;top:-3px;inset-inline-end:-4px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid var(--bg);
+  transition:transform .25s var(--ease-pop);
+}
+.velora .bagcount.bump{animation:vl-badge-bump .45s var(--ease-pop)}
+@keyframes vl-badge-bump{40%{transform:scale(1.45)}}
+
+/* ── splash ───────────────────────────────────────────── */
+.velora .splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--lime);color:var(--lime-ink);
+  display:grid;place-items:center;overflow:hidden;
+  transition:opacity .45s var(--ease),visibility 0s linear .45s;
+}
+.velora .splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.velora .splash-waves{position:absolute;inset:0;width:100%;height:100%}
+.velora .splash-waves path{fill:none;stroke:var(--lime-deep);stroke-width:2;opacity:.5;stroke-linecap:round}
+.velora .splash-core{position:relative;display:grid;justify-items:center;gap:8px;text-align:center}
+.velora .splash-logo{
+  width:86px;height:86px;border-radius:28px;background:var(--ink);color:var(--on-ink);overflow:hidden;
+  display:grid;place-items:center;margin-bottom:12px;
+  box-shadow:0 22px 44px -14px rgba(20,20,20,.45);
+  animation:vl-logo-pop .8s var(--ease-pop) backwards;
+}
+.velora .splash-logo img{width:100%;height:100%;object-fit:cover}
+.velora .splash-logo .ic{width:38px;height:38px;stroke-width:1.6}
+@keyframes vl-logo-pop{from{transform:scale(.4) rotate(-10deg);opacity:0}}
+.velora .splash-name{font-size:46px;font-weight:800;letter-spacing:-.04em;animation:vl-rise .7s var(--ease) .15s backwards}
+.velora .splash-name span{color:#fff}
+.velora .splash-tag{font-size:14px;font-weight:600;opacity:.72;animation:vl-rise .7s var(--ease) .28s backwards}
+@keyframes vl-rise{from{opacity:0;transform:translateY(18px)}}
+.velora .splash-skip{
+  position:absolute;top:26px;inset-inline-end:22px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(20,20,20,.14);
+  font-size:13px;font-weight:700;color:var(--lime-ink);
+}
+
+/* ── home top ─────────────────────────────────────────── */
+.velora .home-top{display:flex;align-items:center;gap:8px;padding:12px 2px 4px}
+.velora .home-mid{flex:1}
+
+.velora .searchbar{
+  display:flex;align-items:center;
+  background:var(--card);border-radius:var(--r-pill);box-shadow:var(--sh-1);
+  margin-top:16px;height:52px;padding:0 6px 0 0;
+}
+[dir="rtl"] .velora .searchbar{padding:0 0 0 6px}
+.velora .sb-main{
+  flex:1;min-width:0;display:flex;align-items:center;gap:10px;
+  height:100%;padding:0 12px 0 18px;color:var(--ink-3);text-align:start;
+}
+[dir="rtl"] .velora .sb-main{padding:0 18px 0 12px}
+.velora .sb-main .ic{width:19px;height:19px;color:var(--ink)}
+.velora .sb-ph{font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .sb-div{width:1px;height:22px;background:var(--stroke-2);flex:none}
+.velora .sb-filter{
+  position:relative;width:46px;height:100%;flex:none;
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .sb-filter:active{transform:scale(.88)}
+.velora .sb-filter .dot{position:absolute;top:12px;inset-inline-end:9px;width:8px;height:8px;border-radius:50%;background:var(--lime-2);outline:2.5px solid var(--card)}
+
+/* status strip (open now + viewers) */
+.velora .status-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0;margin:14px 2px 0;background:rgb(0 0 0 / 18%);border:1px solid rgb(255 255 255 / 15%);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);border-radius:11px}
+.velora .home-address{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:800;padding:5px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.velora .home-address:hover,.velora .home-address:focus-visible{color:var(--ink)}
+/* Branch selector (crave cvBranchBtn parity): tiny label over the active branch
+   name with a pin + chevron. Lives in the status strip on multi-branch stores. */
+.velora .home-branch{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:transparent;font:inherit;padding:2px 0;min-width:0;cursor:pointer;text-align:start}
+.velora .hb-label{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.velora .hb-value{display:inline-flex;align-items:center;gap:5px;max-width:210px;font-size:14px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden}
+.velora .hb-value b{overflow:hidden;text-overflow:ellipsis;font-weight:800}
+.velora .hb-value .ic{width:15px;height:15px;flex:none;color:var(--lime-2)}
+.velora .hb-value .chev{width:13px;height:13px;color:var(--ink-3)}
+.velora .home-branch:hover .hb-value,.velora .home-branch:focus-visible .hb-value{color:var(--lime-text)}
+.velora .open-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--lime-text)}
+.velora .open-chip i{width:7px;height:7px;border-radius:50%;background:var(--lime-2);box-shadow:0 0 0 3px rgba(166,206,57,.25)}
+.velora .open-chip.closed{color:var(--red)}
+.velora .open-chip.closed i{background:var(--red);box-shadow:0 0 0 3px rgba(224,90,78,.2)}
+.velora .viewers{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-3)}
+.velora .viewers .ic{width:14px;height:14px}
+.velora .viewers b{color:var(--ink-2);font-weight:800}
+
+/* F2 · brand / follow row (crave cvBrandRow parity, ported via orbit).
+   Green/orange accent → lime, velora's own brand token. */
+.velora .brand-row{display:flex;align-items:center;gap:12px;padding:10px 2px 4px}
+.velora .brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1px solid var(--stroke)}
+.velora .brand-logo img{width:100%;height:100%;object-fit:cover}
+.velora .brand-info{flex:1;min-width:0}
+.velora .brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.velora .brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = a filled olive seal + white check. */
+.velora .verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.velora .verified-badge .vb-seal{width:17px;height:17px;display:block}
+.velora .verified-badge .vb-seal-fill{fill:var(--lime-text)}
+.velora .verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner), off the grab bar it borrows for close wiring. */
+.velora .sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2}
+.velora .sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.velora .sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover under an olive VEIL (duotone) + hairline inner frame ── */
+.velora .velora-cover{position:relative;isolation:isolate;overflow:visible;margin:-6px -20px 0;padding:0 20px;min-block-size:176px}
+.velora .velora-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--card,#ececea)}
+.velora .velora-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.velora .velora-cover-scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(126,154,22,.34), rgba(126,154,22,.12) 46%, rgba(20,19,17,.30) 100%),
+  linear-gradient(180deg, transparent 52%, var(--bg) 98%);}
+.velora .velora-cover-frame{position:absolute;inset:11px;border:1px solid rgba(247,247,245,.5);z-index:1;pointer-events:none}
+.velora .velora-cover .home-top,.velora .velora-cover .status-strip,.velora .velora-cover .qc-cen-slot{position:relative;z-index:2}
+.velora .velora-cover .home-top{text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.velora .velora-cover .home-top .cbtn{color:#fff;background:rgba(0,0,0,.28);border-color:rgba(255,255,255,.24);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.velora .velora-cover .open-chip{color:#fff}
+.velora .velora-cover .hb-label{color:rgba(255,255,255,.85)}
+.velora .velora-cover .hb-value,.velora .velora-cover .hb-value b{color:#fff}
+.velora .brand-row--hero{margin-block-start:-24px;position:relative;z-index:3}
+.velora .brand-row--hero .brand-logo{border:3px solid var(--bg);box-shadow:0 6px 16px rgba(0,0,0,.28)}
+
+/* ── collapsing header ── */
+.velora .cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--bg);box-shadow:0 6px 18px rgba(0,0,0,.12);
+  border-block-end:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.velora .cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.velora .cv-condensed-logo{width:32px;height:32px;border-radius:12px;overflow:hidden;flex:none;background:var(--card,#ececea);display:grid;place-items:center}
+.velora .cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.velora .cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .cv-condensed-actions{display:flex;gap:7px;flex:none}
+.velora .cv-condensed-actions .cbtn{width:38px;height:38px}
+@media (prefers-reduced-motion:reduce){.velora .cv-condensed{transition:none}}
+.velora .followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--on-ink);font-size:13px;font-weight:700;flex:none;cursor:pointer;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.velora .followbtn:active{transform:scale(.94)}
+.velora .followbtn .ic{width:15px;height:15px}
+.velora .followbtn .following-label{display:none}
+.velora .followbtn.is-on{background:var(--card);color:var(--ink-2);border:1px solid var(--stroke-2)}
+.velora .followbtn.is-on .follow-label,.velora .followbtn.is-on .ic{display:none}
+.velora .followbtn.is-on .following-label{display:inline}
+.velora .followbtn--pop{animation:vlFollowbtnPop .25s var(--ease-pop)}
+@keyframes vlFollowbtnPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.velora .followbtn--pop{animation:none}}
+
+/* ── promo banners — signature lime card ──────────────── */
+.velora .banners{position:relative;margin-top:18px}
+.velora .banner-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px}
+.velora .banner{
+  position:relative;flex:0 0 100%;scroll-snap-align:start;
+  border-radius:24px;overflow:hidden;height:158px;
+  background:var(--lime);color:var(--lime-ink);
+  display:flex;align-items:center;text-align:start;text-decoration:none;
+}
+.velora .banner.alt{background:var(--ink);color:var(--on-ink)}
+.velora .banner-squiggle{position:absolute;inset:0;width:100%;height:100%}
+.velora .banner-squiggle path{fill:none;stroke:var(--lime-deep);stroke-width:2;opacity:.5;stroke-linecap:round}
+.velora .banner.alt .banner-squiggle path{stroke:rgba(255,255,255,.25)}
+.velora .banner-copy{position:relative;z-index:2;padding:0 18px;max-width:62%;display:grid;gap:8px;justify-items:start}
+.velora .banner-chip{
+  display:inline-block;background:var(--ink);color:var(--on-ink);
+  font-size:10.5px;font-weight:700;letter-spacing:.03em;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.velora .banner.alt .banner-chip{background:var(--lime);color:var(--lime-ink)}
+.velora .banner-title{font-size:18px;font-weight:800;line-height:1.18;letter-spacing:-.015em}
+.velora .banner-note{font-size:11px;font-weight:700;opacity:.72;margin-top:-3px}
+.velora .banner-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--ink);color:var(--on-ink);
+  padding:7px 7px 7px 15px;border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;margin-top:2px;
+}
+.velora .banner.alt .banner-btn{background:var(--lime);color:var(--lime-ink)}
+[dir="rtl"] .velora .banner-btn{padding:7px 15px 7px 7px}
+.velora .btn-arr{width:22px;height:22px;border-radius:50%;flex:none;border:1.4px solid rgba(255,255,255,.85);display:grid;place-items:center}
+.velora .banner.alt .btn-arr{border-color:rgba(31,38,12,.6)}
+.velora .btn-arr svg{width:11px;height:11px;stroke:var(--on-ink);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.velora .banner.alt .btn-arr svg{stroke:var(--lime-ink)}
+[dir="rtl"] .velora .btn-arr svg{transform:scaleX(-1)}
+.velora .banner-img{
+  position:absolute;inset-inline-end:-12px;top:50%;translate:0 -50%;
+  width:148px;height:88%;object-fit:cover;border-radius:20px;
+  box-shadow:0 16px 34px -12px rgba(31,38,12,.45);
+  transition:transform .6s var(--ease);
+}
+.velora .banner:hover .banner-img{transform:scale(1.04) rotate(1.5deg)}
+.velora .banner-dots{display:flex;justify-content:center;gap:6px;padding-top:12px}
+.velora .banner-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--soft-2);transition:all .35s var(--ease)}
+.velora .banner-dots i.is-on{width:22px;background:var(--lime-2)}
+
+/* ── stories (rail + full-screen viewer) ─────────────── */
+.velora .story-rail{display:flex;gap:14px;overflow-x:auto;padding:14px 2px 4px;scroll-snap-type:x proximity}
+.velora .story-rail[hidden]{display:none}
+.velora .story-pill{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:68px;scroll-snap-align:start;transition:transform var(--t-fast) var(--ease-pop)}
+.velora .story-pill:active{transform:scale(.94)}
+.velora .sp-ring{width:62px;height:62px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--lime),var(--lime-deep) 55%,var(--ink));display:grid;place-items:center;box-shadow:var(--sh-1)}
+.velora .sp-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.velora .story-pill small{font-size:11px;font-weight:700;color:var(--ink-2);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.velora .story-viewer{position:absolute;inset:0;z-index:var(--z-sheet);background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.velora .story-viewer.is-open{opacity:1}
+.velora .sv-bars{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.velora .sv-bar{flex:1;height:3px;border-radius:var(--r-pill);background:rgba(255,255,255,.28);overflow:hidden}
+.velora .sv-bar i{display:block;height:100%;width:0;background:var(--lime);transition:width .05s linear}
+.velora .sv-x{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.38);color:#fff;display:grid;place-items:center}
+.velora .sv-x .ic{width:20px;height:20px}
+.velora .sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.velora .sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.velora .sv-tap{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.velora .sv-tap.prev{inset-inline-start:0}
+.velora .sv-tap.next{inset-inline-end:0}
+.velora .sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.velora .sv-caption{color:#fff;font-size:17px;font-weight:800;line-height:1.3;letter-spacing:-.015em;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.velora .sv-cta{display:flex;width:100%;text-decoration:none}
+.velora .sv-cta[hidden]{display:none}
+
+/* ── section heads ────────────────────────────────────── */
+.velora .section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 24px) 2px 13px}
+.velora .section-head h2{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.velora .seeall{display:inline-flex;align-items:center;min-height:32px;font-size:12.5px;font-weight:700;color:var(--lime-text);padding:4px 2px}
+.velora .seeall:active{opacity:.6}
+
+/* categories — white pill-cards, label + photo on the end */
+.velora .cat-rail{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;scroll-snap-type:x proximity}
+.velora .catpill{
+  flex:none;display:flex;align-items:center;gap:12px;
+  background:var(--card);border-radius:var(--r-pill);box-shadow:var(--sh-1);
+  padding:6px 6px 6px 16px;font-size:13px;font-weight:700;color:var(--ink);
+  scroll-snap-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast),color var(--t-fast);
+}
+[dir="rtl"] .velora .catpill{padding:6px 16px 6px 6px}
+.velora .catpill:active{transform:scale(.94)}
+.velora .catpill img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--soft)}
+.velora .catpill .cat-emoji{width:36px;height:36px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:18px}
+.velora .catpill.is-on{background:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-lime)}
+
+/* ── product grid — 2-col photo cards ─────────────────── */
+.velora .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;padding-top:6px}
+.velora .gcard{
+  text-align:start;position:relative;display:block;width:100%;
+  transition:transform var(--t-fast) var(--ease-pop);
+  animation:vl-card-in .5s var(--ease) backwards;
+}
+@keyframes vl-card-in{from{opacity:0;transform:translateY(18px)}}
+.velora .gcard:active{transform:scale(.965)}
+.velora .gcard.is-unavailable{opacity:.6}
+.velora .g-photo{position:relative;display:block;border-radius:var(--r-img);overflow:hidden;aspect-ratio:.94;background:var(--soft)}
+.velora .g-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+/* Happy-hour ribbon bonded to the thumbnail bottom (g-photo clips it to the
+   rounded corners) — moved off the price row where it crowded the price. */
+.velora .g-photo .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .gcard:hover .g-photo img{transform:scale(1.05)}
+.velora .g-fav{
+  position:absolute;top:9px;inset-inline-end:9px;width:38px;height:38px;border-radius:50%;
+  background:var(--card);box-shadow:var(--sh-1);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .g-fav:active{transform:scale(.82)}
+.velora .g-fav .ic{width:26px;height:26px}
+.velora .g-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.velora .g-badge{
+  position:absolute;top:9px;inset-inline-start:9px;
+  font-size:9.5px;font-weight:800;letter-spacing:.02em;
+  padding:4px 9px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+}
+.velora .g-badge.dark{background:var(--ink);color:var(--on-ink)}
+.velora .g-soldout{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(247,247,245,.72);color:var(--ink);
+  font-size:12px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;
+}
+.velora .g-name{display:block;font-size:14px;font-weight:700;margin:10px 2px 2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .g-sub{display:block;font-size:11px;font-weight:600;color:var(--ink-3);padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .g-price{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;margin:5px 2px 0}
+/* was + live price stack vertically inside the price cell (no inline squeeze) */
+.velora .g-price-v{min-width:0;flex:1;display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+.velora .g-price s{color:var(--ink-3);font-weight:600;font-size:11.5px;margin-inline-start:0;line-height:1.2}
+.velora .g-price small{color:var(--ink-3);font-weight:600;font-size:10.5px}
+/* quick-add: a real <button>, so its click stops the card anchor (see script.js) */
+.velora .g-add{
+  flex:none;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-1);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .g-add:active{transform:scale(.85)}
+.velora .g-add .ic{width:26px;height:26px}
+.velora .gcard.is-unavailable .g-add{display:none}
+
+/* skeletons */
+.velora .sk .g-photo,.velora .sk-line{position:relative;overflow:hidden;background:var(--soft)}
+.velora .sk-line{height:13px;border-radius:7px;margin:10px 2px 6px}
+.velora .sk-line.short{width:55%;margin-top:2px}
+.velora .sk .g-photo::after,.velora .sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:vl-shimmer 1.3s infinite;
+}
+@keyframes vl-shimmer{to{translate:100% 0}}
+
+/* empty states */
+.velora .grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px;grid-column:1/-1}
+.velora .empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.7}
+
+/* ── product details ──────────────────────────────────── */
+.velora .p-photo{position:relative;margin:2px 20px 0;border-radius:28px;overflow:hidden;background:var(--soft);aspect-ratio:1.04}
+/* multi-image paging arrows — pointer/desktop only, since touch users swipe */
+.velora .p-gal-arr{position:absolute;top:calc(50% - 19px);z-index:4;width:38px;height:38px;border-radius:50%;display:none;place-items:center;background:var(--card);color:var(--ink);border:1px solid var(--stroke);box-shadow:0 4px 14px rgba(0,0,0,.14);cursor:pointer;transition:transform .18s var(--ease),background .18s var(--ease)}
+.velora .p-gal-arr .ic{width:19px;height:19px}
+.velora .p-gal-arr.prev{inset-inline-start:12px}
+.velora .p-gal-arr.next{inset-inline-end:12px}
+.velora .p-gal-arr:active{transform:scale(.9)}
+.velora[dir="rtl"] .p-gal-arr .ic,[dir="rtl"] .velora .p-gal-arr .ic{transform:scaleX(-1)}
+@media (hover:hover) and (pointer:fine){.velora .p-gal-arr:not([hidden]){display:grid}}
+.velora .p-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%}
+.velora .p-gallery img{flex:0 0 100%;scroll-snap-align:start;object-fit:cover;width:100%;height:100%}
+.velora .p-dots{display:flex;justify-content:center;gap:6px;padding-top:13px}
+.velora .p-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--soft-2);transition:all .35s var(--ease)}
+.velora .p-dots i.is-on{width:20px;background:var(--ink)}
+
+.velora .p-eyebrow{font-size:12px;font-weight:700;color:var(--ink-3);padding:16px 22px 0;letter-spacing:.01em}
+.velora .p-title-row{display:flex;align-items:flex-start;gap:12px;padding:4px 22px 0}
+.velora .p-title{flex:1;font-size:24px;font-weight:800;letter-spacing:-.025em;line-height:1.15}
+.velora .p-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px 14px;padding:11px 22px 0;font-size:12px;font-weight:600;color:var(--ink-2)}
+.velora .p-meta .m{display:inline-flex;align-items:center;gap:5px}
+.velora .p-meta .m .ic{width:14px;height:14px}
+.velora .p-meta .m.star .ic{fill:var(--lime-2);stroke:var(--lime-deep)}
+.velora .diet-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10.5px;font-weight:700;color:var(--lime-text);
+  background:var(--lime-soft);border:1px solid rgba(166,206,57,.45);
+  padding:4px 10px;border-radius:var(--r-pill);
+}
+.velora .diet-chip .ic{width:12px;height:12px}
+
+/* allergens */
+.velora .p-allergens{display:flex;flex-wrap:wrap;gap:7px;padding:12px 22px 0}
+.velora .allergen{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--ink-2);background:var(--soft);border-radius:var(--r-pill);padding:4px 10px}
+.velora .allergen img{width:14px;height:14px;border-radius:50%;object-fit:cover}
+
+.velora .p-stock{display:inline-block;margin:12px 22px 0;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--red);background:rgba(224,90,78,.12);padding:5px 12px;border-radius:var(--r-pill)}
+
+/* seller / restaurant-brand row */
+.velora .seller{display:flex;align-items:center;gap:11px;margin:16px 20px 0;background:var(--card);border-radius:18px;box-shadow:var(--sh-1);padding:10px 12px}
+.velora .seller-av{width:42px;height:42px;border-radius:14px;object-fit:cover;background:var(--soft)}
+.velora .seller-txt{flex:1;min-width:0}
+.velora .seller-txt b{display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:800}
+.velora .seller-txt small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:1px}
+/* Replaces the demo's fabricated "Official restaurant ✓" line with real store state. */
+.velora .seller-txt small.seller-status{display:flex;align-items:center;gap:6px}
+.velora .seller-status i{width:7px;height:7px;border-radius:50%;flex:none;background:var(--lime-deep);box-shadow:0 0 0 3px var(--lime-soft)}
+.velora .seller-txt small.seller-status.is-closed{color:var(--red)}
+.velora .seller-status.is-closed i{background:var(--red);box-shadow:0 0 0 3px rgba(224,90,78,.18)}
+.velora span.seller-av{display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--ink-2)}
+
+/* size squares + qty stepper */
+.velora .sec-row{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 0}
+.velora .sec-row h3,.velora .p-sec h3{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.velora .size-qty{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 22px 0}
+.velora .size-row{display:flex;gap:9px;flex-wrap:wrap}
+.velora .size-sq{
+  min-width:46px;height:46px;padding:0 10px;border-radius:14px;
+  background:var(--card);border:1.5px solid var(--stroke-2);
+  font-size:15px;font-weight:800;color:var(--ink-2);
+  display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.velora .size-sq:active{transform:scale(.9)}
+.velora .size-sq.is-on{background:var(--lime);border-color:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-lime);animation:vl-sq-pop .38s var(--ease-pop)}
+@keyframes vl-sq-pop{45%{transform:scale(1.14)}}
+/* Word-length variant names get labelled rows instead of two-letter squares —
+   "RE"/"SP" told a customer nothing about Regular vs Spicy, or about the price. */
+.velora .variant-list{display:grid;gap:8px;padding:12px 22px 0}
+.velora .variant-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  background:var(--card);border:1.5px solid var(--stroke);border-radius:15px;
+  box-shadow:var(--sh-1);padding:12px 14px;min-height:52px;
+  font-size:13.5px;font-weight:700;color:var(--ink);
+  transition:all var(--t-fast) var(--ease);
+}
+.velora .variant-row:active{transform:scale(.985)}
+.velora .variant-row.is-on{border-color:var(--lime-2);background:var(--lime-soft)}
+.velora .variant-box{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:1.8px solid var(--stroke-2);background:var(--card);
+  display:grid;place-items:center;transition:all var(--t-fast) var(--ease);
+}
+.velora .variant-box svg{width:12px;height:12px;stroke:var(--lime-ink);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity var(--t-fast)}
+.velora .variant-row.is-on .variant-box{background:var(--lime);border-color:var(--lime)}
+.velora .variant-row.is-on .variant-box svg{opacity:1}
+.velora .variant-name{flex:1;min-width:0}
+.velora .variant-price{flex:none;font-weight:800}
+.velora .sec-row.qty-only{justify-content:flex-end}
+.velora .size-note{font-size:11.5px;font-weight:600;color:var(--ink-3);padding:9px 22px 0}
+
+.velora .stepper{display:flex;align-items:center;gap:8px;flex:none}
+.velora .stepper button{
+  width:34px;height:34px;border-radius:11px;background:var(--card);box-shadow:var(--sh-1);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .stepper button:active{transform:scale(.85)}
+.velora .stepper button .ic{width:15px;height:15px;stroke-width:2.2}
+.velora .stepper output{min-width:24px;text-align:center;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.velora .stepper.big{justify-content:center;gap:18px;padding-top:4px}
+.velora .stepper.big button{width:44px;height:44px;border-radius:14px;border:1.5px solid var(--stroke)}
+.velora .stepper.big output{font-size:21px;min-width:36px}
+
+/* extras + option groups */
+.velora .p-sec{padding:20px 22px 0}
+.velora .p-sec .opt-note{font-size:11px;font-weight:700;color:var(--ink-3);background:var(--soft);padding:4px 10px;border-radius:var(--r-pill)}
+.velora .p-sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.velora .p-sec-head .req{font-size:11px;font-weight:800;color:var(--lime-text)}
+.velora .p-sec-head .req.optional{color:var(--ink-3)}
+.velora .extras{display:grid;gap:8px}
+.velora .extra{
+  display:flex;align-items:center;gap:11px;
+  background:var(--card);border-radius:15px;box-shadow:var(--sh-1);
+  padding:11px 13px;cursor:pointer;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .extra:active{transform:scale(.98)}
+.velora .extra-box{width:22px;height:22px;flex:none;border-radius:7px;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast) var(--ease-pop)}
+.velora .extra-box.radio{border-radius:50%}
+.velora .extra.is-on .extra-box{border-color:var(--lime-2);background:var(--lime)}
+.velora .extra-box svg{width:11px;height:11px;stroke:var(--lime-ink);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.velora .extra.is-on .extra-box svg{opacity:1;transform:none}
+.velora .extra-thumb{width:38px;height:38px;flex:none;border-radius:11px;object-fit:cover;background:var(--soft)}
+.velora .extra-name{flex:1;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.velora .extra.is-on .extra-name{color:var(--ink)}
+.velora .extra-price{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.velora .extra.is-on .extra-price{color:var(--lime-text)}
+
+.velora .p-desc{padding:8px 22px 0;font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.velora .p-desc .macros{display:block;margin-top:7px;font-size:11.5px;color:var(--ink-3);font-weight:600}
+
+/* inline rate-this-dish */
+.velora .rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 22px 0;background:var(--card);border-radius:15px;box-shadow:var(--sh-1);padding:12px 14px;font-size:13px;font-weight:700}
+.velora .rate-stars{display:inline-flex;gap:4px;margin:-6px 0}
+.velora .rate-stars button{display:inline-grid;place-items:center;min-width:32px;min-height:32px;color:var(--stroke-2)}
+.velora .rate-stars .ic{width:20px;height:20px;fill:currentColor;stroke:none}
+.velora .rate-stars button.is-on{color:var(--lime-2)}
+.velora .rate-thanks{color:var(--lime-text);font-size:12px}
+
+/* bottom buy bar — white rounded bar: total + lime pill */
+.velora .buybar{
+  flex:none;display:flex;align-items:center;gap:14px;
+  margin:0 16px calc(16px + env(safe-area-inset-bottom));
+  background:var(--card);border-radius:26px;box-shadow:var(--sh-2);
+  padding:12px 12px 12px 22px;position:relative;z-index:6;
+}
+[dir="rtl"] .velora .buybar{padding:12px 22px 12px 12px}
+.velora .view[data-view="cart"] .buybar{margin-bottom:calc(98px + env(safe-area-inset-bottom))}
+.velora .buy-total{flex:1;min-width:0;display:grid;gap:1px}
+.velora .buy-total span{font-size:11px;font-weight:700;color:var(--ink-3)}
+.velora .buy-total b{font-size:20px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.velora .buy-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;flex:none;
+  height:52px;padding:0 22px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+  font-size:14.5px;font-weight:800;letter-spacing:-.01em;
+  box-shadow:var(--sh-lime);
+  transition:transform var(--t-fast) var(--ease-pop),opacity var(--t-fast);
+  position:relative;overflow:hidden;
+}
+.velora .buy-cta:active{transform:scale(.96)}
+.velora .buy-cta:disabled{opacity:.5;box-shadow:none}
+.velora .buy-cta .ic{width:19px;height:19px}
+.velora .buy-cta.wide{width:100%}
+.velora .buy-cta b{font-weight:800;opacity:.6}
+.velora .spinner{width:19px;height:19px;border-radius:50%;border:2.5px solid rgba(31,38,12,.25);border-top-color:var(--lime-ink);animation:vl-spin .7s linear infinite}
+@keyframes vl-spin{to{rotate:360deg}}
+
+/* product footer: a direct jump to the cart, beside Add to Cart, shown once
+   the cart holds something (orbit #pCartJump parity). Card icon-button (like
+   .cbtn) so it reads as the secondary action next to the solid lime buy-cta;
+   the count badge carries the lime accent. Toggled by script.js syncBadge(). */
+.velora .p-cart-jump{
+  flex:none;position:relative;width:52px;height:52px;border-radius:var(--r-pill);
+  background:var(--card);color:var(--ink);box-shadow:var(--sh-1);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.velora .p-cart-jump:active{transform:scale(.94)}
+.velora .p-cart-jump[hidden]{display:none}
+.velora .p-cart-jump .ic{width:21px;height:21px}
+.velora .p-cart-jump-count{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:18px;height:18px;padding:0 4px;border-radius:var(--r-pill);
+  background:var(--lime);color:var(--lime-ink);
+  font-size:10.5px;font-weight:800;line-height:18px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+  box-shadow:0 0 0 2px var(--card);
+}
+
+.velora .pill{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:50px;padding:0 22px;border-radius:var(--r-pill);font-size:14px;font-weight:700;transition:transform var(--t-fast) var(--ease-pop);text-decoration:none;color:inherit}
+.velora .pill:active{transform:scale(.96)}
+.velora .pill.dark{background:var(--ink);color:var(--on-ink);box-shadow:0 12px 26px -10px rgba(20,20,20,.45)}
+.velora .pill.wide{width:100%}
+.velora .gmark{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:13px;font-weight:800;background:conic-gradient(from -45deg,#ea4335 0 25%,#fbbc05 0 50%,#34a853 0 75%,#4285f4 0 100%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+
+.velora .ghostbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:var(--r-pill);background:var(--card);box-shadow:var(--sh-1);font-size:13px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop);text-decoration:none}
+.velora .ghostbtn:active{transform:scale(.96)}
+.velora .ghostbtn.sm{min-height:32px;padding:8px 14px;font-size:12px}
+.velora .ghostbtn.wide{width:100%}
+
+/* ── cart ─────────────────────────────────────────────── */
+.velora .cart-list{display:grid;gap:10px}
+.velora .cart-item{
+  display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:stretch;
+  background:var(--card);border-radius:var(--r-card);box-shadow:var(--sh-1);
+  padding:11px;overflow:hidden;animation:vl-card-in .4s var(--ease) backwards;
+}
+.velora .cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.velora .ci-im{position:relative;width:72px;height:72px;border-radius:16px;overflow:hidden;background:var(--soft);padding:0;border:0;cursor:pointer;align-self:start}
+.velora .ci-im img{width:100%;height:100%;object-fit:cover}
+.velora .ci-im:active img{transform:scale(1.06)}
+.velora .ci-hh{position:absolute;inset-inline:0;bottom:0;font-size:8.5px;font-weight:800;text-align:center;padding:2px 3px;background:var(--lime);color:var(--lime-ink,#1c2405);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .ci-main{min-width:0;padding-top:2px}
+.velora .ci-name{display:block;background:none;border:0;padding:0;text-align:start;cursor:pointer;font-size:13.5px;font-weight:700;line-height:1.25;color:inherit}
+.velora .ci-opts{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:3px;line-height:1.45}
+.velora .ci-priceline{display:flex;align-items:baseline;gap:8px;margin-top:5px;flex-wrap:wrap}
+.velora .ci-price{font-size:13.5px;font-weight:800}
+.velora .ci-was{font-size:11px;font-weight:600;color:var(--ink-3)}
+.velora .ci-unit{font-size:11px;font-weight:600;color:var(--ink-3)}
+.velora .ci-reward{font-size:9.5px;font-weight:800;background:var(--lime);color:var(--lime-ink);padding:3px 8px;border-radius:var(--r-pill)}
+.velora .ci-notebtn{display:inline-flex;align-items:center;min-height:32px;gap:5px;font-size:11px;font-weight:700;color:var(--lime-text);padding:7px 0 0}
+.velora .ci-notebtn .ic{width:12px;height:12px}
+.velora .ci-note{margin-top:8px;font-size:12px;padding:9px 11px;border-radius:11px;resize:none;background:var(--bg)}
+.velora .ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px}
+.velora .ci-side .stepper{flex-direction:row;gap:4px;align-items:center}
+.velora .ci-side .stepper button{width:32px;height:32px;border-radius:10px;border:1px solid var(--stroke)}
+.velora .ci-side .stepper output{font-size:13px;min-width:22px;text-align:center;padding:0 2px}
+.velora .ci-remove{color:var(--ink-3);width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.velora .ci-remove:active{color:var(--red)}
+.velora .ci-remove .ic{width:16px;height:16px}
+
+.velora .cart-tools{display:grid;gap:16px;padding-top:18px}
+.velora .cart-tools h3,.velora .blk h3,.velora .cart-tools .cv-h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em}
+
+.velora .seg{display:flex;background:var(--soft);border-radius:var(--r-pill);padding:4px;gap:3px}
+.velora .seg button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast) var(--ease)}
+.velora .seg button .ic{width:16px;height:16px}
+.velora .seg button.is-on{background:var(--ink);color:var(--on-ink);box-shadow:0 6px 14px -6px rgba(20,20,20,.4)}
+.velora .seg.mini{padding:3px;flex-wrap:wrap}
+.velora .seg.mini button{padding:7px 13px;flex:none}
+
+.velora .ot-fields{display:grid;gap:9px;padding-top:10px}
+.velora .ot-fields:empty{display:none}
+.velora .ot-hint{font-size:12px;font-weight:600;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.velora .ot-hint .ic{width:14px;height:14px;color:var(--lime-text)}
+
+.velora .schedule-row,.velora .when-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.velora .sched-label,.velora .when-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.velora .when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:13px}
+
+.velora .coupon-field{display:flex;align-items:center;gap:9px;background:var(--card);border:1.5px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .velora .coupon-field{padding:5px 15px 5px 6px}
+.velora .coupon-field .ic{color:var(--lime-text);flex:none}
+.velora .coupon-field input{background:none;border:0;padding:8px 0;font-size:13px;box-shadow:none}
+.velora .coupon-field input:focus{box-shadow:none}
+.velora .coupon-field.is-applied{border-color:var(--lime-2);border-style:solid;background:var(--lime-soft)}
+.velora .minibtn{flex:none;padding:9px 16px;border-radius:var(--r-pill);background:var(--ink);color:var(--on-ink);font-size:12px;font-weight:700;transition:all var(--t-fast)}
+.velora .minibtn:active{transform:scale(.94)}
+.velora .minibtn:disabled{opacity:.4}
+.velora .coupon-msg{font-size:12px;font-weight:600;padding:7px 6px 0;color:var(--lime-text)}
+.velora .coupon-msg.err{color:var(--red)}
+.velora .minorder{font-size:12px;font-weight:700;color:var(--red);padding:2px 4px}
+
+.velora .waiter-row{display:flex;gap:10px}
+.velora .waiter-row .ghostbtn{flex:1;justify-content:center}
+
+.velora .wa-order{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:13px 15px;font-size:13.5px;font-weight:700;color:var(--ink);text-align:start;text-decoration:none;width:100%}
+.velora .wa-order .ic:first-child{color:var(--lime-text);fill:var(--lime);stroke:var(--lime-deep)}
+.velora .wa-order span{flex:1}
+.velora .wa-order .arr{color:var(--ink-3)}
+[dir="rtl"] .velora .arr{transform:scaleX(-1)}
+
+.velora .ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.velora .ordernote .ic{color:var(--lime-text)}
+
+.velora .totals{background:var(--card);border-radius:var(--r-card);box-shadow:var(--sh-1);padding:16px;display:grid;gap:9px}
+.velora .tr,.velora .tr-row{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--ink-2)}
+.velora .tr b,.velora .tr-row b{font-weight:700;font-variant-numeric:tabular-nums}
+.velora .tr.disc,.velora .tr-row.disc{color:var(--lime-text)}
+.velora .tr .free{color:var(--lime-text);font-weight:800}
+.velora .tr.grand,.velora .tr-row.grand{border-top:1.5px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:14.5px}
+.velora .tr.grand b,.velora .tr-row.grand b{font-weight:800;font-size:17px}
+
+/* ── checkout ─────────────────────────────────────────── */
+.velora .blk,.velora .cv-block{padding:8px 20px 10px}
+.velora .view[data-view="checkout"] .view-scroll{padding-inline:0}
+.velora .view[data-view="checkout"] .totals{margin:8px 20px 0}
+.velora .cv-h3{display:block;font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em}
+.velora .field-label{display:block;font-size:11px;font-weight:700;color:var(--ink-3);margin:9px 2px 5px}
+.velora .field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.velora .cv-block>input+input{margin-top:9px}
+.velora .linkbtn{font-size:12.5px;font-weight:700;color:var(--lime-text);padding:9px 2px 0;text-align:start;background:none}
+
+/* checkout order summary — one row per cart line, Edit → cart */
+.velora .ck-items{display:grid;gap:11px}
+.velora .ck-head{display:flex;align-items:center;justify-content:space-between}
+.velora .ck-head h3{margin:0;font-size:14px;font-weight:800}
+.velora .ck-head .linkbtn{padding:2px 0}
+.velora .ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.velora .ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.velora .ck-mid{min-width:0}
+.velora .ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.velora .ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.velora .ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.velora .ck-price{font-size:12.5px;font-weight:800;color:var(--ink);text-align:end}
+.velora .ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+.velora .tip-row{display:flex;gap:8px;flex-wrap:wrap}
+.velora .tip-row button{flex:1;min-width:56px;padding:12px 4px;border-radius:14px;background:var(--card);border:1.5px solid var(--stroke);font-size:13px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.velora .tip-row button:active{transform:scale(.93)}
+.velora .tip-row button.is-on{border-color:var(--lime-2);color:var(--lime-ink);background:var(--lime)}
+.velora .pm-list{display:grid;gap:9px}
+.velora .pm{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid transparent;border-radius:17px;box-shadow:var(--sh-1);padding:12px 14px;text-align:start;transition:all var(--t-fast) var(--ease);width:100%}
+.velora .pm.is-on{border-color:var(--lime-2);background:var(--lime-soft)}
+.velora .pm-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--soft);display:grid;place-items:center;color:var(--ink-2)}
+.velora .pm.is-on .pm-ic{background:var(--lime);color:var(--lime-ink)}
+.velora .pm b{flex:1;font-size:13.5px;font-weight:700}
+.velora .pm b small{display:block;font-weight:600;font-size:11px;color:var(--ink-3);margin-top:2px}
+.velora .pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.velora .pm.is-on .pm-radio{border-color:var(--lime-2)}
+.velora .pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--lime-2)}
+.velora .cardform{display:grid;gap:9px;padding-top:12px;animation:vl-card-in .35s var(--ease)}
+.velora .terms{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.velora .terms input{width:auto;flex:none;margin-top:1px}
+.velora .err-box{font-size:12.5px;font-weight:700;color:var(--red);background:rgba(224,90,78,.1);border-radius:12px;padding:11px 14px;margin:0 20px}
+
+/* ── confirmed ────────────────────────────────────────── */
+.velora .view-center{justify-content:center}
+.velora .confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:7px}
+.velora .confirm-art{position:relative;width:150px;height:150px;margin-bottom:14px}
+.velora .ca-ring{position:absolute;inset:0;animation:vl-ring-spin 14s linear infinite}
+.velora .ca-ring circle{fill:none;stroke:var(--lime);stroke-width:2.5;stroke-dasharray:6 10;stroke-linecap:round;opacity:.8}
+@keyframes vl-ring-spin{to{rotate:360deg}}
+.velora .ca-circle{position:absolute;inset:14px;border-radius:50%;background:var(--lime);box-shadow:var(--sh-lime);display:grid;place-items:center;animation:vl-logo-pop .7s var(--ease-pop) .1s backwards}
+.velora .ca-circle svg{width:60px;height:60px}
+.velora .ca-check{stroke:var(--lime-ink);stroke-width:4.2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:vl-draw .55s var(--ease) .55s forwards}
+@keyframes vl-draw{to{stroke-dashoffset:0}}
+.velora .confirm-title{font-size:26px;font-weight:800;letter-spacing:-.025em}
+.velora .confirm-sub{font-size:13px;font-weight:600;color:var(--ink-3);line-height:1.65}
+.velora .confirm-eta{color:var(--ink-2);font-weight:700}
+.velora .confirm-code{font-size:12.5px;font-weight:800;color:var(--ink);background:var(--lime-soft);border:1.5px dashed var(--lime-2);padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;font-variant-numeric:tabular-nums}
+.velora .confirm-pts{font-size:12px;font-weight:700;color:var(--lime-text)}
+.velora .confirm-actions{display:grid;gap:10px;width:100%;padding-top:20px;justify-items:center}
+.velora .confirm-actions .pill,.velora .confirm-actions .buy-cta{max-width:280px;width:100%}
+/* Match the Track Order pill's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.velora .confirm-actions .ghostbtn{width:100%;max-width:280px}
+.velora .confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.velora .confirm-actions .ghostbtn:hover{background:var(--soft)}
+.velora .confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.velora .confetti i{position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;opacity:0;transform-origin:center;animation:vl-pop-fly 1.25s var(--ease) var(--d,0s) forwards;background:var(--c,#b5d336);rotate:var(--rz,0deg)}
+.velora .confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes vl-pop-fly{0%{opacity:0;translate:0 0;scale:.4}12%{opacity:1}100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}}
+/* NPS + google review on confirmed */
+.velora .nps{width:100%;max-width:320px;margin-top:22px;text-align:center}
+.velora .nps>p{font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.velora .nps-row{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.velora .nps-row button{width:32px;height:32px;border-radius:9px;background:var(--card);box-shadow:var(--sh-1);font-size:12px;font-weight:800;color:var(--ink-2)}
+.velora .nps-row button.is-on{background:var(--lime);color:var(--lime-ink)}
+.velora .nps-thanks{color:var(--lime-text);font-weight:700;font-size:12px;margin-top:8px}
+.velora .greview{display:flex;align-items:center;gap:11px;width:100%;max-width:320px;margin-top:16px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:13px 15px;text-decoration:none;color:var(--ink)}
+.velora .greview-star{font-size:20px}
+.velora .greview-copy{flex:1;text-align:start}
+.velora .greview-copy b{display:block;font-size:13px;font-weight:800}
+.velora .greview-copy small{font-size:11px;color:var(--ink-3)}
+
+/* ── track ────────────────────────────────────────────── */
+.velora .view[data-view="track"] .view-scroll{padding-inline:20px}
+.velora .track-card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--sh-1);padding:17px;display:grid;gap:16px}
+.velora .track-top{display:flex;justify-content:space-between;align-items:center}
+.velora .lbl{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.velora .track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.velora .tk-eta{text-align:end}
+.velora .tk-eta b{color:var(--lime-text)}
+.velora .courier{display:flex;align-items:center;gap:11px;background:var(--bg);border-radius:15px;padding:10px}
+.velora .courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.velora .courier>div{flex:1}
+.velora .courier b{font-size:14px;font-weight:800}
+.velora .timeline{list-style:none;display:grid;gap:0;padding:2px 4px}
+.velora .tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.velora .tl:last-child{padding-bottom:0}
+.velora .tl-node{width:22px;height:22px;border-radius:50%;z-index:2;border:2.5px solid var(--stroke-2);background:var(--card);display:grid;place-items:center;transition:all .4s var(--ease)}
+.velora .tl-node svg{width:11px;height:11px;stroke:var(--lime-ink);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.velora .tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke)}
+.velora .tl-line::after{content:"";position:absolute;inset:0;background:var(--lime-2);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.velora .tl.done .tl-node,.velora .tl.now .tl-node{border-color:var(--lime-2);background:var(--lime)}
+.velora .tl.done .tl-node svg{opacity:1;transform:none}
+.velora .tl.done .tl-line::after{transform:none}
+.velora .tl.now .tl-node{box-shadow:0 0 0 0 rgba(166,206,57,.55);animation:vl-pulse 2s infinite}
+@keyframes vl-pulse{70%{box-shadow:0 0 0 8px transparent}}
+.velora .tl-copy b{font-size:13.5px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.velora .tl.done .tl-copy b,.velora .tl.now .tl-copy b{color:var(--ink)}
+.velora .tl-copy small{font-size:11px;font-weight:600;color:var(--ink-3)}
+.velora .rate-cta{display:flex;align-items:center;gap:11px;width:100%;margin-top:14px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:14px 15px;font-size:13.5px;font-weight:700;color:var(--ink);text-align:start;text-decoration:none}
+.velora .rate-cta .ic:first-child{fill:var(--lime);stroke:var(--lime-deep)}
+.velora .rate-cta span{flex:1}
+.velora .rate-cta .arr{color:var(--ink-3)}
+
+/* ── profile ──────────────────────────────────────────── */
+.velora .view[data-view="profile"] .view-scroll{padding-inline:0}
+.velora .view[data-view="profile"] .page-head{padding-inline:22px}
+.velora .me-card{display:flex;align-items:center;gap:13px;background:var(--card);border-radius:var(--r-card);box-shadow:var(--sh-1);padding:14px;margin:0 20px}
+.velora .me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.velora .me-avatar{width:52px;height:52px;border-radius:50%;background:var(--lime);color:var(--lime-ink);display:grid;place-items:center;font-size:22px;font-weight:800;flex:none}
+.velora .me-card>div{flex:1}
+.velora .me-card b{font-size:16px;font-weight:800}
+.velora .me-card .tk-label{font-size:11.5px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.velora .loyalty-card{position:relative;display:flex;align-items:center;gap:12px;overflow:hidden;margin:12px 20px 0;padding:16px 18px;border-radius:var(--r-card);background:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-lime)}
+.velora .loyalty-head{position:relative;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}
+.velora .loyalty-head .ic{width:18px;height:18px;fill:var(--lime-ink);stroke:none}
+.velora .loy-waves{position:absolute;inset:0;width:100%;height:100%}
+.velora .loy-waves path{fill:none;stroke:var(--lime-deep);stroke-width:2;opacity:.5;stroke-linecap:round}
+.velora .loy-copy{position:relative;flex:1;display:grid;gap:1px}
+.velora .loy-copy .lbl{color:rgba(31,38,12,.65)}
+.velora .loy-pts,.velora .loyalty-num{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.velora .loy-pts small{font-size:12px;font-weight:700}
+.velora .loy-sub,.velora .loyalty-sub{font-size:10.5px;font-weight:700;color:rgba(31,38,12,.6)}
+.velora .loyalty-card .pill{position:relative;height:42px;padding:0 18px;font-size:12.5px}
+.velora .loyalty{position:relative;overflow:hidden;margin:12px 20px 0;padding:16px 18px;border-radius:var(--r-card);background:var(--lime);color:var(--lime-ink);box-shadow:var(--sh-lime)}
+.velora .loyalty .cta{margin-top:12px;height:44px;background:var(--ink);color:var(--card);box-shadow:none}
+.velora .loyalty-ok{font-size:12px;font-weight:800;margin-top:8px}
+.velora .loyalty-bar{position:relative;height:7px;border-radius:var(--r-pill);background:rgba(31,38,12,.16);margin-top:8px;overflow:hidden}
+.velora .loyalty-bar i{position:absolute;inset:0 auto 0 0;width:0;background:var(--lime-ink);border-radius:var(--r-pill);transition:width .5s var(--ease)}
+.velora .stamp-dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.velora .stamp-dot{width:20px;height:20px;border-radius:50%;background:rgba(31,38,12,.14);display:grid;place-items:center;color:transparent}
+.velora .stamp-dot .ic{width:12px;height:12px}
+.velora .stamp-dot.is-on{background:var(--lime-ink);color:var(--lime)}
+.velora .prow-list{display:grid;gap:9px}
+.velora .prow{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:13px 14px;text-align:start;transition:transform var(--t-fast) var(--ease-pop);text-decoration:none;color:inherit}
+.velora .prow:active{transform:scale(.98)}
+.velora .prow>.ic:first-child{color:var(--ink);background:var(--soft);width:38px;height:38px;border-radius:12px;padding:9px}
+.velora .prow-txt{flex:1;min-width:0}
+.velora .prow-txt b{display:block;font-size:13.5px;font-weight:700}
+.velora .prow-txt small{display:block;font-size:11px;font-weight:600;color:var(--lime-text);margin-top:1px}
+.velora .prow-txt small.muted{color:var(--ink-3)}
+.velora .prow-txt small:empty{display:none}
+.velora .prow .arr{color:var(--ink-3)}
+.velora .row-status{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:4px 10px;border-radius:var(--r-pill);background:var(--lime-soft);color:var(--lime-text)}
+.velora .pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;gap:10px}
+.velora .pref-row>span{display:flex;align-items:center;gap:11px;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.velora .pref-row .ic{width:19px;height:19px}
+.velora .orders-list{display:grid;gap:9px}
+.velora .order-row{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:12px 14px;animation:vl-card-in .4s var(--ease) backwards;text-align:start;text-decoration:none;color:inherit}
+.velora .order-row>.ic:first-child{color:var(--lime-text)}
+.velora .order-row>div{flex:1}
+.velora .order-row b{font-size:13px;font-weight:800;display:block}
+.velora .order-row small{font-size:11px;font-weight:600;color:var(--ink-3)}
+.velora .order-status{font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:var(--lime-soft);color:var(--lime-text)}
+.velora .orders-empty{font-size:12.5px;font-weight:600;color:var(--ink-3);padding:6px 2px}
+.velora .biz-card{display:grid;gap:9px;margin:14px 20px 0;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:14px}
+.velora .biz-card span{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.velora .biz-card .ic{color:var(--lime-text)}
+.velora .biz-card a{color:inherit;text-decoration:none}
+.velora .store-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.8}
+.velora .orders-block,.velora .pref{padding:8px 20px 10px}
+
+/* ── navbar — floating white pill, sliding lime chip ──── */
+.velora .navbar{
+  position:absolute;inset-inline:18px;bottom:calc(18px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);height:66px;display:flex;align-items:center;
+  background:var(--card);border-radius:var(--r-pill);padding:0 8px;box-shadow:var(--sh-2);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.velora .navbar.is-hidden{transform:translateY(140%);opacity:0;pointer-events:none}
+.velora .nav-glider{position:absolute;top:7px;left:0;height:52px;width:48px;border-radius:var(--r-pill);
+  background:linear-gradient(160deg,var(--lime) 0%,var(--lime-2) 60%,var(--lime-deep) 100%);
+  box-shadow:0 6px 16px -8px rgba(166,206,57,.6),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1.5px 0 rgba(31,38,12,.14);
+  transition:transform .42s var(--ease-pop),width .42s var(--ease-pop);opacity:0;z-index:0}
+/* Dark mode: the lime glow reads as noise on the near-black bar, so drop the outer
+   halo to a whisper and lean on the inset edges for the raised look instead. */
+@media (prefers-color-scheme:dark){
+  .velora:not([data-velora-theme="light"]) .nav-glider{box-shadow:0 3px 10px -6px rgba(166,206,57,.35),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1.5px 0 rgba(31,38,12,.22)}
+}
+.velora[data-velora-theme="dark"] .nav-glider{box-shadow:0 3px 10px -6px rgba(166,206,57,.35),inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1.5px 0 rgba(31,38,12,.22)}
+.velora .nav-tab{position:relative;z-index:1;flex:1;height:48px;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--ink);border-radius:var(--r-pill);transition:color var(--t-fast) var(--ease)}
+.velora .nav-tab .ic{width:22px;height:22px;transition:transform var(--t-fast) var(--ease-pop),stroke-width var(--t-fast) var(--ease)}
+/* Inactive tabs recede so the lime selection carries the eye. */
+.velora .nav-tab:not(.is-on){opacity:.5}
+.velora .nav-tab:active{transform:scale(.94)}
+/* The active tab sits on the lime glider (--lime, unchanged in dark), so its text
+   needs the fixed on-lime ink — NOT --lime-text, which flips light in dark mode and
+   then vanishes against the lime chip. --lime-ink is the same token every other
+   on-lime element uses and is never re-declared in the dark blocks. */
+.velora .nav-tab.is-on{color:var(--lime-ink);opacity:1}
+/* Active icon grows and bolds — the .ic ease-pop transition makes the grow spring
+   on selection, and it stays enlarged so the selected tab reads at a glance.
+   Motion-safe: reduced-motion keeps the size, drops the spring. */
+.velora .nav-tab.is-on .ic{transform:scale(1.16);stroke-width:2.4}
+@media (prefers-reduced-motion:reduce){.velora .nav-tab .ic{transition:none}}
+.velora .nt-ic{position:relative;display:grid;place-items:center;flex:none}
+.velora .nav-badge{outline-color:var(--card)}
+.velora .nav-tab.is-on .nav-badge{outline-color:var(--lime)}
+.velora .nt-label{font-size:12.5px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;max-width:0;opacity:0;overflow:hidden;transition:max-width .4s var(--ease-pop),opacity .3s var(--ease)}
+.velora .nav-tab.is-on .nt-label{max-width:86px;opacity:1}
+
+/* ── search overlay ───────────────────────────────────── */
+.velora .search-overlay{position:absolute;inset:0;z-index:var(--z-search);background:var(--bg);display:flex;flex-direction:column;padding:14px 20px 0;opacity:0;transform:translateY(14px);transition:opacity .3s var(--ease),transform .3s var(--ease);overflow-y:auto;overscroll-behavior:contain}
+.velora .search-overlay.is-open{opacity:1;transform:none}
+.velora .so-head{display:flex;align-items:center;gap:11px}
+.velora .so-bar{flex:1;margin-top:0;padding:0 16px;gap:10px;cursor:text}
+.velora .so-bar .ic{width:19px;height:19px;color:var(--ink)}
+.velora .so-bar input{background:none;border:0;padding:0;height:100%;font-size:13.5px;box-shadow:none}
+.velora .so-bar input:focus{box-shadow:none}
+.velora .so-title{font-size:12px;font-weight:800;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;padding:20px 2px 10px}
+.velora .so-results{display:grid;gap:9px;padding:16px 0 24px}
+.velora .so-row{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:9px 12px 9px 9px;text-align:start;animation:vl-card-in .35s var(--ease) backwards;width:100%}
+[dir="rtl"] .velora .so-row{padding:9px 9px 9px 12px}
+.velora .so-row img{width:48px;height:48px;border-radius:13px;object-fit:cover;background:var(--soft)}
+.velora .so-row>div{flex:1;min-width:0}
+.velora .so-row b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .so-row small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.velora .so-row .arr{color:var(--ink-3)}
+
+/* ── sheets / scrim / toast ───────────────────────────── */
+.velora .scrim{position:absolute;inset:0;z-index:var(--z-scrim);background:rgba(24,24,22,.42);backdrop-filter:blur(3px);opacity:0;transition:opacity .3s var(--ease)}
+.velora .scrim.is-open{opacity:1}
+.velora .sheet{position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);background:var(--bg);border-radius:var(--r-sheet) var(--r-sheet) 0 0;box-shadow:0 -18px 50px rgba(20,20,20,.18);padding:10px 22px calc(28px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .42s var(--ease);max-height:82%;overflow-y:auto}
+.velora .sheet.is-open{transform:none}
+.velora .sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.velora .sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.velora .sheet h4{font-size:11.5px;font-weight:800;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase;margin:16px 0 10px}
+.velora .sheet-sub{font-size:12.5px;font-weight:600;color:var(--ink-3);margin-bottom:14px;line-height:1.5}
+.velora .sheet .prow-list{padding-bottom:6px}
+.velora .sheet-form{display:grid;gap:2px}
+.velora .sheet-form input,.velora .sheet-form textarea{margin-bottom:4px}
+.velora .sheet-done{display:grid;justify-items:center;gap:8px;text-align:center;padding:14px 0}
+.velora .sheet-done-emoji{font-size:38px}
+.velora .sheet-done b{font-size:15px;font-weight:800}
+.velora .sheet-done p{font-size:12.5px;color:var(--ink-2);font-weight:600}
+.velora .sheet-done .muted{color:var(--ink-3)}
+
+.velora .chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.velora .chiprow button{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke);font-size:12.5px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.velora .chiprow button:active{transform:scale(.93)}
+.velora .chiprow button.is-on{border-color:var(--lime);color:var(--lime-ink);background:var(--lime)}
+.velora .spice-scale{display:flex;gap:8px}
+.velora .spice-scale button{flex:1;padding:10px 4px;border-radius:14px;font-size:12.5px;font-weight:700;background:var(--card);border:1.5px solid var(--stroke);color:var(--ink-2);transition:all var(--t-fast)}
+.velora .spice-scale button.is-on{border-color:var(--lime);color:var(--lime-ink);background:var(--lime)}
+/* The sheet is capped at 82% of the viewport and scrolls, so a static action row
+   sits BELOW the fold whenever the sheet's content overflows — the filter sheet's
+   "Show dishes" measured y 655–705 in a 667px viewport and hit-tested to null.
+   Pinning the row to the sheet floor keeps the primary action on screen at every
+   content length. The negative inline margin + padding lets the surface bleed to
+   the sheet's edges so content scrolls *under* it cleanly. */
+.velora .sheet-actions{
+  position:sticky;bottom:calc(-1 * (28px + env(safe-area-inset-bottom)));
+  display:flex;gap:10px;
+  margin-inline:-22px;padding:14px 22px calc(14px + env(safe-area-inset-bottom));
+  margin-top:18px;
+  background:var(--bg);border-top:1px solid var(--stroke);
+}
+.velora .sheet-actions .ghostbtn{flex:none}
+.velora .sheet-actions .buy-cta{flex:1;height:50px}
+
+/* branch / lang sheet list */
+.velora .branch-list{display:grid;gap:9px}
+.velora .branch-row{display:flex;align-items:center;gap:11px;width:100%;background:var(--card);border-radius:15px;box-shadow:var(--sh-1);padding:13px 14px;text-align:start;text-decoration:none;color:inherit}
+.velora .branch-row .ic{color:var(--lime-text)}
+.velora .branch-row b{flex:1;font-size:13.5px;font-weight:700}
+.velora .branch-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.velora .branch-row.is-on .branch-check{border-color:var(--lime-2);background:var(--lime);box-shadow:inset 0 0 0 3px var(--card)}
+.velora #nearestBranchBtn{margin:2px 0 12px}
+.velora .branch-row b small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.velora .branch-dist{font-size:11.5px;font-weight:700;color:var(--lime-text);flex:none}
+
+/* secondary sub-category chip row (two-tier nav) — horizontal scroller under cat-rail */
+.velora .subchips{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding:0 2px 8px;scroll-snap-type:x proximity}
+.velora .subchips[hidden]{display:none}
+.velora .subchips button{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;white-space:nowrap;padding:8px 14px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke);font-size:12px;font-weight:700;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.velora .subchips button:active{transform:scale(.93)}
+.velora .subchips button.is-on{border-color:var(--lime);color:var(--lime-ink);background:var(--lime)}
+
+/* nearest-branch map */
+.velora .branchmap{height:230px;border-radius:16px;overflow:hidden;margin:2px 0 8px;background:var(--soft)}
+.velora .branchmap .leaflet-container{height:100%;width:100%;font:inherit}
+.velora .geo-attrib{font-size:10px;color:var(--ink-3);margin:0 0 10px;text-align:end}
+
+/* delivery address: saved-address chips + autocomplete + use-my-location */
+.velora .saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.velora .saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1px solid var(--stroke);border-radius:14px;background:var(--card);color:var(--ink);cursor:pointer}
+.velora .saved-addr .ic{flex:none;color:var(--ink-2)}
+.velora .saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.velora .saved-addr .sa-text b{font-size:13px;font-weight:700}
+.velora .saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.velora .saved-addr.is-on{border-color:var(--lime-2);box-shadow:0 0 0 1px var(--lime-2)}
+.velora .saved-addr.is-on .ic{color:var(--lime-deep)}
+.velora .addr-field{position:relative}
+.velora .addr-field input#custAddr,.velora .addr-field input#addrInput{padding-inline-end:46px}
+.velora .uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--lime-deep);background:none;border:0;cursor:pointer}
+.velora .uselocbtn:active{transform:scale(.9)}
+.velora .uselocbtn.is-loading{opacity:.5;animation:vl-spin 1s linear infinite}
+.velora .addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--card);border:1px solid var(--stroke);border-radius:14px;overflow:hidden;box-shadow:var(--sh-2);max-height:230px;overflow-y:auto}
+.velora .addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);background:none;border:0;border-bottom:1px solid var(--soft);cursor:pointer}
+.velora .addr-opt:last-child{border-bottom:0}
+.velora .addr-opt:active,.velora .addr-opt:hover{background:var(--soft)}
+
+/* auth sheet */
+.velora .auth-tabs{display:flex;background:var(--soft);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:14px}
+.velora .auth-tabs button{flex:1;padding:9px 6px;border-radius:var(--r-pill);font-size:12px;font-weight:700;color:var(--ink-2)}
+.velora .auth-tabs button.is-on{background:var(--ink);color:var(--card)}
+.velora .auth-form{display:grid;gap:9px}
+.velora .otp-boxes{display:flex;gap:9px;justify-content:center}
+.velora .otp-boxes input{width:52px;text-align:center;font-size:20px;font-weight:800}
+
+/* loyalty sheet */
+.velora .loy-balance{display:flex;align-items:baseline;gap:8px;padding:2px 0 6px}
+.velora .loy-spark{color:var(--lime-2);font-size:19px}
+.velora .loy-balance b{font-size:34px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.velora .loy-balance span{font-size:13px;font-weight:700;color:var(--ink-3)}
+.velora .reward-list{display:grid;gap:9px;padding-bottom:6px}
+.velora .reward{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:12px 13px}
+.velora .rw-ic{width:40px;height:40px;flex:none;border-radius:13px;background:var(--lime-soft);color:var(--lime-text);display:grid;place-items:center}
+.velora .rw-ic .ic{width:19px;height:19px}
+.velora .reward>div{flex:1;min-width:0}
+.velora .reward b{display:block;font-size:13px;font-weight:700}
+.velora .reward small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:1px}
+.velora .reward .minibtn.done{background:var(--lime);color:var(--lime-ink)}
+
+/* review sheet */
+.velora .star-row{display:flex;justify-content:center;gap:10px;padding:8px 0 4px}
+.velora .star-btn{width:48px;height:48px;display:grid;place-items:center;color:var(--stroke-2);transition:transform var(--t-fast) var(--ease-pop),color var(--t-fast)}
+.velora .star-btn .ic{width:34px;height:34px;fill:currentColor;stroke:none}
+.velora .star-btn.is-on{color:var(--lime-2)}
+.velora .star-btn.pop{animation:vl-sq-pop .4s var(--ease-pop)}
+.velora .rv-pane{display:grid;gap:10px;padding-top:14px}
+
+.velora .toast{position:absolute;bottom:108px;left:50%;translate:-50% 16px;z-index:var(--z-toast);background:var(--ink);color:var(--card);font-size:12.5px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);box-shadow:0 14px 34px rgba(20,20,20,.35);opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .3s var(--ease),translate .3s var(--ease);display:flex;align-items:center;gap:8px;max-width:88%}
+.velora .toast.is-on{opacity:1;translate:-50% 0}
+.velora .toast .ic{width:15px;height:15px;color:var(--lime)}
+
+/* fly-to-bag */
+.velora .fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.velora .fly-img{position:absolute;width:60px;height:60px;border-radius:16px;object-fit:cover;box-shadow:0 12px 26px rgba(20,20,20,.35);transition:all .75s cubic-bezier(.4,.1,.3,1)}
+
+/* catering (shared partial) — tidy inside phone */
+.velora .tp-catering{padding:2rem 20px!important}
+
+/* hidden attribute must win over component display rules */
+.velora [hidden]{display:none}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .velora :is(.g-price-v,.ci-price,.ci-was,.ci-unit,.buy-total b,.tr b,.tr-row b,.extra-price,.size-note,.confirm-code,.confirm-pts,#trackCode,#trackEta,.loy-pts,.loyalty-num,.loy-balance b,.order-row b,.order-row small,.so-row small,.p-meta,.banner-note,.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .velora :is(.order-row b,.order-row small,.buy-total b,.ck-price,.ck-qty){text-align:right}
+
+/* ── standalone pages (track.blade / account.blade) ──── */
+.velora .page-head.sub{justify-content:flex-start;gap:12px;padding:14px 2px 16px}
+.velora .page-head.sub h1{flex:1;font-size:20px}
+.velora .fab{width:44px;height:44px;flex:none;border-radius:50%;background:var(--card);color:var(--ink);box-shadow:var(--sh-1);display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop);text-decoration:none}
+.velora .fab:active{transform:scale(.9)}
+[dir="rtl"] .velora .fab.back .ic{transform:scaleX(-1)}
+.velora .tk-label{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.velora .order-lines{display:grid;gap:9px;padding-top:10px}
+.velora .order-line{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.velora .order-line b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.velora .order-line small{display:block;font-size:11px;font-weight:600;color:var(--ink-3);margin-top:2px}
+.velora .order-line.disc{color:var(--lime-text)}
+.velora .wa-line{display:flex;align-items:center;gap:11px;width:100%;margin-top:14px;background:var(--card);border-radius:16px;box-shadow:var(--sh-1);padding:13px 15px;font-size:13.5px;font-weight:700;color:var(--ink);text-align:start;text-decoration:none}
+.velora .wa-line .ic:first-child{color:var(--lime-text);fill:var(--lime);stroke:var(--lime-deep)}
+.velora .wa-line span{flex:1}
+.velora .wa-line .arr{color:var(--ink-3)}
+.velora .view[data-view="account"] .view-scroll{padding:6px 0 0}
+.velora .view[data-view="account"] .page-head{padding-inline:22px}
+.velora .view[data-view="account"] .orders-list .track-card{margin:0}
+.velora .orders-block h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em;display:block}
+.velora .track-flow{display:grid;gap:14px;align-content:start}
+.velora .track-flow .wa-line{margin-top:0}
+.velora .track-foot{display:grid;place-items:center;padding-top:18px}
+.velora .track-card .err-box{margin:0}
+.velora .imhere-msg{display:none;font-size:13.5px;font-weight:700;color:var(--lime-text);text-align:center}
+.velora .tk-eta .tk-label{margin-top:5px;text-align:end}
+.velora .order-line.grand{border-top:1px dashed var(--stroke-2);padding-top:10px}
+.velora .order-line.grand span{color:var(--ink);font-weight:700}
+.velora .order-line.grand b{font-size:16px}
+.velora .tl.cancelled .tl-node{border-color:var(--red);background:var(--red)}
+.velora .tl.cancelled .tl-copy b{color:var(--red)}
+
+/* ── reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .velora *,.velora *::before,.velora *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .velora .gcard,.velora .cart-item,.velora .so-row,.velora .order-row{opacity:1!important;transform:none!important}
+  .velora .confetti{display:none}
+}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .velora .navbar (bottom 18px + 66px tall). It renders outside
+   this theme's root element, so the offset must be declared on :root — this
+   stylesheet only loads on this theme, so the scoping still holds. */
+:root { --agent-fab-offset: calc(78px + env(safe-area-inset-bottom, 0px)); }
+
+/* ── shared WhatsApp float clearance (VELORA-F12) ──────────────────────────
+   The wati/Shopify widget is injected by the shared layout at `left:0;bottom:0`
+   with z-index 16000160, so it permanently covered the product buy bar's
+   "Total Price" label, the cart total and the nav pill's Home tab. The widget
+   markup is shared and off-limits — but this stylesheet only ever loads on
+   velora, so parking it above the buy bar here is a theme-scoped safe zone,
+   not an edit to shared code.
+   The widget ships its own `#whatsapp-chat-widget #wa-widget-send-button` rule,
+   so the safe zone has to match that specificity to land.
+   Vertical lift ONLY — the widget sets BOTH left and right, so overriding one
+   horizontal inset stretches it into a full-width green bar (learned in wave 1). */
+body #whatsapp-chat-widget #wa-widget-send-button{
+  transform:translateY(calc(-1 * (44px + env(safe-area-inset-bottom,0px))))!important;
+}
+
+/* ── responsive grid (must stay last: source order beats the base .velora .grid) ── */
+@media (min-width:900px){
+  /* two 184px columns inside a 720px shell is the phone layout stretched — let the
+     card grid actually use the room. 3 columns at 900, 4 at 1200. */
+  .velora .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+@media (min-width:1200px){
+  .velora .grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   VELORA-F10 · iOS zoom-on-focus (ALL-F1)
+   Safari on iOS force-zooms the page whenever a focused input's font-size is
+   below 16px, and it never zooms back out. Seven fields in this theme were
+   12–13.5px, including the coupon box and the search field — the two inputs a
+   customer is most likely to touch. The fields keep their visual weight through
+   padding and their labels; only the text they hold grows.
+   ══════════════════════════════════════════════════════════════════════════ */
+.velora input,
+.velora textarea,
+.velora select,
+.velora .coupon-field input,
+.velora .so-bar input,
+.velora .when-time,
+.velora .ci-note{font-size:16px}
+.velora .coupon-field input{padding:10px 0}
+.velora .when-time{padding:11px 14px}
+.velora .ci-note{padding:10px 12px;line-height:1.4}
+.velora .so-bar input{font-size:16px}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   VELORA-F11 · 44px touch targets (ALL-F2)
+   Measured rects before this block: product stepper 34×34, cart-line stepper
+   32×32, cart-line remove 32×32, product favourite 38×38, card favourite 31×31,
+   "See all" 43×32, "Clear" 58×32, "Add note" 65×32, splash Skip 64×34.
+   The two steppers are enlarged outright — they are the most-tapped controls in
+   the whole funnel. Everything else keeps its drawn size and gains a centred,
+   invisible hit box, so the visual language is untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+.velora .stepper button{width:44px;height:44px;border-radius:14px}
+.velora .ci-side .stepper button{width:44px;height:44px;border-radius:12px}
+.velora .ci-remove{width:44px;height:44px}
+
+/* g-fav (card heart overlay) and splash-skip (splash corner button) keep their
+   OWN position:absolute — do NOT list them here, or this relative rule overrides
+   it and drops them into flow, overlapping card/splash text. They stay in the
+   ::after group below so they still get the 44px hit box. */
+.velora .cbtn.sm,
+.velora .seeall,
+.velora .ghostbtn.sm,
+.velora .ci-notebtn,
+.velora .rate-stars button,
+.velora .nps-row button,
+.velora .sb-filter{position:relative}
+.velora .g-fav::after,
+.velora .cbtn.sm::after,
+.velora .seeall::after,
+.velora .ghostbtn.sm::after,
+.velora .ci-notebtn::after,
+.velora .splash-skip::after,
+.velora .rate-stars button::after,
+.velora .nps-row button::after,
+.velora .sb-filter::after{
+  content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:max(100%,44px);height:max(100%,44px);
+}
+.velora .ghostbtn{min-height:44px}
+.velora .ghostbtn.sm{min-height:32px}   /* keeps its drawn size; ::after supplies the 44px */
+.velora .linkbtn,
+.velora #loginLink,
+.velora #meAuthBtn{position:relative}
+.velora .linkbtn::after,
+.velora #loginLink::after,
+.velora #meAuthBtn::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:max(100%,44px);height:max(100%,44px)}
+
+/* the star and NPS rows sit shoulder-to-shoulder, so their 44px boxes would
+   steal each other's taps — space them with padding instead of a gap. */
+.velora .rate-stars{gap:0}
+.velora .rate-stars button{padding:0 5px}
+.velora .nps-row{gap:2px}
+
+/* a <button> inherits the UA's text-align:center, which shoved every option and
+   extra label to the middle when these rows became real buttons (F22). */
+.velora .extra,
+.velora .variant-row{width:100%;text-align:start;font:inherit;color:var(--ink)}
+.velora .extra:focus-visible,
+.velora .variant-row:focus-visible,
+.velora .size-sq:focus-visible,
+.velora .buy-cta:focus-visible,
+.velora .nav-tab:focus-visible{outline:2px solid var(--lime-2);outline-offset:2px}
+
+/* Keyboard focus rings across the whole home ordering funnel (a11y). The
+   product view already rings above; without this, tabbing the home path —
+   icon buttons, order-type, search, category chips, stories, banner, offer &
+   menu cards — showed no visible focus. Outline follows each element's own
+   border-radius, so round buttons and pills ring cleanly. */
+.velora .cbtn:focus-visible,
+.velora .home-order-types button:focus-visible,
+.velora .sb-main:focus-visible,
+.velora .sb-filter:focus-visible,
+.velora .seeall:focus-visible,
+.velora .catpill:focus-visible,
+.velora .story-pill:focus-visible,
+.velora .banner:focus-visible,
+.velora .mbo-card:focus-visible,
+.velora .gcard:focus-visible{outline:2px solid var(--lime-2);outline-offset:2px}
+
+/* two-step "Clear" confirm (F18) */
+.velora .ghostbtn.is-armed{color:var(--red);box-shadow:0 0 0 1.5px var(--red) inset}
+
+/* guest order-lookup empty state (F20) */
+.velora .grid-empty.sm{padding:22px 0 6px;gap:8px}
+.velora .grid-empty.sm .empty-art{width:44px;height:44px}
+
+/* The `hidden` attribute is only a UA `display:none`, so ANY author display rule
+   beats it — `.grid-empty{display:grid}` meant #gridEmpty / #cartEmpty / #favEmpty
+   stayed on screen while JS believed it had hidden them. One guard, once. */
+.velora [hidden]{display:none!important}
+
+.velora .home-order-types{margin:10px 16px 14px}
+.velora .product-home-link{margin:0 0 14px}
+.velora .product-reviews{margin-top:20px;display:grid;gap:10px;background:var(--card);border-radius:18px;padding:16px;box-shadow:var(--sh-1)}
+.velora .product-reviews .p-sec-head{margin-bottom:0}
+.velora .product-reviews .p-sec-head h3{font-size:15px;font-weight:800}
+.velora .product-reviews .p-sec-head>span{font-size:11px;font-weight:800;color:var(--lime-text);background:var(--lime-soft);padding:3px 10px;border-radius:99px}
+.velora .product-reviews article{padding:12px 14px;border:1px solid var(--stroke);border-radius:14px;background:var(--soft)}
+.velora .product-reviews article b{display:block;font-size:13px;font-weight:800}
+.velora .product-reviews article p,.velora .product-reviews>p{margin:7px 0 0;color:var(--ink-2);font-size:13px;line-height:1.55}
+.velora .product-reviews.empty-reviews>p{margin:0;color:var(--ink-3);font-size:12.5px}
+/* injected histogram + write button (shared item-reviews partial) */
+.velora .product-reviews .mbr-x{margin:0}
+.velora .product-reviews .mbr-x-write{border:1.5px solid var(--lime-text);color:var(--lime-text);opacity:1;font-weight:800}
+.velora .product-reviews .mbr-x-bar i s{background:var(--lime-deep,var(--lime-text))}
+.velora .review-stars{display:block;color:#e59b16;letter-spacing:2px;font-size:12px;margin-top:4px}
+.velora .review-stars-dim{color:var(--stroke)}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.velora .ck-head{gap:10px;padding:4px 0 2px}
+.velora .ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.velora .ck-items{gap:0}
+.velora .ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.velora .ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.velora .ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.velora .ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--soft);border-radius:9px;padding:3px 6px}
+.velora .ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.velora .ck-items{background:var(--card);border-radius:var(--r-card);padding:6px 14px 8px}
+.velora .linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.velora .stepper button{position:relative}
+.velora .stepper button::after{content:"";position:absolute;inset:-5px -4px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+.velora input[type=checkbox],.velora input[type=radio]{inline-size:20px;block-size:20px}
+.velora .minibtn,.velora .splash-skip,.velora .home-address,.velora .home-branch,.velora .ghostbtn.sm{min-height:44px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.nps-row button{position:relative}
+.nps-row button::after{content:"";position:absolute;inset:-6px -1px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, velora skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Quiet neutral chip with the lime underline. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--soft);border:1px solid var(--stroke-2);color:var(--ink-2);box-shadow:inset 0 -2px 0 var(--lime);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--ink-2)}
+
+/* ── notification-center panel — velora skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--card,#ffffff);--nb-surface-2:var(--soft-2,#e4e4df);--nb-line:var(--stroke-2,#dcdcd6);--nb-ink:var(--ink,#141414);--nb-muted:var(--ink-2,#63635e);--nb-accent:var(--lime-text,#7e9a16)}
+
+/* topbar toggle icons (Lane B) — light shows the moon (action = go dark), dark shows the sun */
+.velora .mb-th-sun{display:none}
+@media (prefers-color-scheme:dark){
+  .velora:not([data-velora-theme="light"]) .mb-th-sun{display:block}
+  .velora:not([data-velora-theme="light"]) .mb-th-moon{display:none}
+}
+.velora[data-velora-theme="dark"] .mb-th-sun{display:block}
+.velora[data-velora-theme="dark"] .mb-th-moon{display:none}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.velora .brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — velora skin  (copy-adapted from the crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   1) velora marks .status-strip with data-mb-hotel-chip-slot (its index), so the
+      shared partial mounts the room chip there natively, beside the .open-chip;
+   2) this block maps the shared --mbh-* contract onto velora's own tokens and gives
+      each relocated surface velora's native look. Scoped under .velora so its tokens
+      (--card/--soft/--ink/--lime-2/--r-sheet…) resolve once the layer elements
+      relocate into the theme root. The status-strip is a borderless text-chip band,
+      so the room chip rides it as a borderless icon+text chip (matching .open-chip),
+      NOT a filled pill. Only the hub paints an opaque surface (a modal legitimately
+      does); the checkout rows stay borderless.
+   ═══════════════════════════════════════════════════════════ */
+.velora #mbHotelChip,
+.velora #mbHotelOrderCtrls,
+.velora #mbHotelBook,
+.velora #mbHotelHub{
+  --mbh-surface:var(--card);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-2);
+  --mbh-accent:var(--lime-2);
+  --mbh-on-accent:var(--lime-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: its own row under the brand row, on velora's card surface. (It used to
+      be a borderless chip inside the status-strip, but that band sits ON the cover art,
+      so the chip washed out against the image — the blade now mounts it after
+      #cvBrandRow via data-mb-hotel-chip-after.) ── */
+.velora #mbHotelChip{
+  margin:0;padding:8px 12px;gap:8px;
+  background:var(--card);border:1px solid var(--stroke-2);color:var(--ink);
+  border-radius:var(--r-card);font-size:12.5px;font-weight:800;
+}
+.velora #mbHotelChip .mb-hotel-roomchip__ic{color:var(--lime-text)}
+.velora #mbHotelChip .mb-hotel-roomchip__room{color:var(--ink)}
+.velora #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: velora's own bottom-sheet look (page surface, r-sheet corners, grab + round x) ── */
+.velora #mbHotelHubScrim{background:rgba(24,24,22,.42);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.velora #mbHotelHub{
+  background:var(--bg);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  box-shadow:0 -18px 50px rgba(20,20,20,.18);
+}
+.velora #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.velora #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;font-weight:800;letter-spacing:-.025em}
+.velora #mbHotelHub .mb-hotel-hub__x{
+  background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink);
+  border-radius:50%;width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.velora #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.velora #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-2)}
+.velora #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.velora #mbHotelHub .mb-hotel-card summary,
+.velora #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.velora #mbHotelHub .mb-hotel-info-link{color:var(--lime-text)}
+/* service form controls → velora inputs / ink-fill CTA (velora's primary button language) */
+.velora #mbHotelHub .mb-hotel-field{
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.velora #mbHotelHub .mb-hotel-btn{
+  background:var(--ink);color:var(--on-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls relocated into the checkout → velora tender rows ── */
+.velora #mbHotelOrderCtrls{margin:0}
+.velora #mbHotelSched,
+.velora #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.velora #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.velora #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.velora #mbHotelSched input[type="radio"]{accent-color:var(--lime-2)}
+.velora #mbHotelSched .mb-hotel-field{
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.velora #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.velora #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.velora #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.velora #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.velora #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.velora #mbHotelCharge input[type="checkbox"]{accent-color:var(--lime-2)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .velora, RTL-safe (logical props), scheme-flip via tokens (velora
+   ships explicit dark blocks). Uses --card/--stroke; the star is a scheme-aware
+   gold TOKEN (velora's accent is lime — wrong for a star — so --review-star is
+   scoped on .velora and re-inks with the OS/attr dark flip like the theme's own
+   tokens, lifted a touch on the dark surface). */
+.velora{--review-star:#F5A623}
+@media (prefers-color-scheme:dark){.velora:not([data-velora-theme="light"]){--review-star:#F9B84D}}
+.velora[data-velora-theme="dark"]{--review-star:#F9B84D}
+.velora .vel-reviews{margin-block:12px 2px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.velora .vel-rating{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);background:var(--card);border:1px solid var(--stroke-2);border-radius:var(--r-pill);padding-block:6px;padding-inline:13px}
+.velora .vel-rating-star{color:var(--review-star)}
+.velora .vel-rating small{color:var(--ink-3);font-weight:600}
+.velora .vel-review-list{display:flex;flex-direction:column;gap:8px}
+.velora .vel-review{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);padding-block:11px;padding-inline:14px}
+.velora .vel-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:700;color:var(--ink)}
+.velora .vel-review-star{color:var(--review-star);font-weight:800;white-space:nowrap}
+.velora .vel-review p{margin-block:5px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.velora .vel-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for velora. Surface,
+   ink, border and radius come from velora tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.velora .mb-paypending{
+  --pp-surface:var(--card,#ffffff);
+  --pp-ink:var(--ink,#141414);
+  --pp-muted:var(--ink-2,#63635e);
+  --pp-border:var(--stroke-2,#dcdcd6);
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,20px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.velora .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.velora .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.velora .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.velora .mb-paypending-txn:empty{display:none}
+.velora .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.velora .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.velora .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.velora .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.velora .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing the WhatsApp row class — reset the UA button box to match the anchor rows. */
+.prow.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* ── Address map picker + clear-device-data (shared engines, velora-skinned) ──
+   Map lives in velora's own .sheet bottom sheet (the shared #scrim). The trigger
+   mirrors the theme's .ghostbtn secondary; confirm reuses the .buy-cta primary. */
+.velora .vl-map-trigger{margin-top:12px}
+.velora .vl-map-trigger .ic{color:var(--lime-deep)}
+/* the picker sheet sits above any sheet it might open from; shares the #scrim */
+.velora .vl-map-sheet{z-index:calc(var(--z-sheet) + 2)}
+.velora .vl-map-canvas{position:relative;height:min(52vh,360px);border-radius:16px;overflow:hidden;margin:2px 0 10px;background:var(--soft);border:1px solid var(--stroke-2)}
+.velora .vl-map-canvas .leaflet-container{height:100%;width:100%;font:inherit;background:var(--soft)}
+.velora .vl-map-preview{font-size:12.5px;font-weight:600;color:var(--ink-2);text-align:center;margin:0 0 14px;min-height:18px;line-height:1.5}
+/* centre pin the engine injects (.mb-map-pin) — velora lime teardrop */
+.velora .mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(20,20,20,.4))}
+.velora .mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--lime);border:2px solid #fff}
+.velora .mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:9px;height:9px;border-radius:50%;background:var(--lime-ink)}
+/* clear-saved-data row — guest-reachable profile view */
+.velora .vl-device-data{text-align:center}
+.velora .vl-cleardata{color:var(--ink-2)}
+.velora .vl-cleardata .ic{color:var(--ink-3)}
+.velora .vl-device-data-hint{margin:9px auto 0;max-width:38ch;font-size:11px;line-height:1.5;color:var(--ink-3)}

@@ -1,0 +1,2685 @@
+{
+ "store": {
+  "public_id": "st_dune_and_co",
+  "slug": "dune-and-co-demo",
+  "name": "ديون آند كو",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "ديون آند كو"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "ديون آند كو"
+  },
+  "tagline": "كتان وصوف وألوان دافئة",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/dune-and-co-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/dune-and-co-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "retail",
+  "status": {
+   "open": true,
+   "label": "مفتوح · يغلق 10 م",
+   "next_change_at": "2026-10-02T22:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0104",
+   "whatsapp": "+966 55 010 0104",
+   "address": "النخيل مول، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/dune-and-co"
+   }
+  ],
+  "rating": {
+   "avg": 4.7,
+   "count": 438
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/dune-and-co-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/dune-and-co-demo/terms"
+   },
+   {
+    "label": "الإرجاع",
+    "url": "/dune-and-co-demo/returns"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "شركة ديون وشركاه لتجارة الأزياء",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-4404",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-4404",
+    "label": "الرقم الضريبي"
+   },
+   "address": "النخيل مول، الرياض 12384"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "الفرع الرئيسي",
+   "address": "النخيل مول، الرياض"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "ship",
+    "label": "شحن",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "pickup_slot",
+    "label": "استلام بموعد",
+    "needs_address": false,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "ship",
+  "schedule_ahead": true,
+  "free_delivery_threshold": {
+   "minor": 20000,
+   "currency": "SAR",
+   "formatted": "200.00 ر.س"
+  },
+  "refunds": {
+   "returns": true
+  }
+ },
+ "theme": {
+  "slug": "aisle",
+  "preset": "clean",
+  "settings": {
+   "colors.primary": "#111111",
+   "colors.background": "#FFFFFF",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#111111",
+   "colors.accent": "#C8281B",
+   "layout.radius": "soft",
+   "layout.density": "cozy",
+   "fonts.pair": "inter",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#F5F5F5",
+   "colors_dark.background": "#0C0C0D",
+   "colors_dark.surface": "#161618",
+   "colors_dark.text": "#F5F5F5",
+   "colors_dark.accent": "#FF6B5E",
+   "layout.card": "grid",
+   "layout.image_ratio": "4:5",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "drawer",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "announcement",
+   "order_type",
+   "hero",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "announcement": "شحن مجاني فوق 200 ر.س · إرجاع خلال 14 يوماً",
+   "hero_title": "الإصدار الجديد",
+   "hero_cta": "تسوق الآن",
+   "featured_title": "وصل حديثاً",
+   "search_placeholder": "ابحث عن المنتجات"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "women",
+    "name": "نسائي",
+    "item_ids": [
+     "relaxed-linen-shirt",
+     "wide-leg-trousers",
+     "linen-maxi-dress",
+     "pleated-midi-skirt",
+     "cotton-poplin-blouse",
+     "tailored-linen-blazer",
+     "satin-slip-dress",
+     "straight-leg-jeans",
+     "linen-shorts",
+     "organic-cotton-tee",
+     "shirt-dress"
+    ],
+    "count": 11,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "نسائي"
+    }
+   },
+   {
+    "id": "men",
+    "name": "رجالي",
+    "item_ids": [
+     "linen-camp-collar-shirt",
+     "oxford-shirt",
+     "slim-chinos",
+     "cotton-polo",
+     "linen-drawstring-trousers",
+     "crew-neck-tee",
+     "denim-jacket",
+     "cotton-blend-thobe"
+    ],
+    "count": 8,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "رجالي"
+    }
+   },
+   {
+    "id": "abayas",
+    "name": "عبايات",
+    "item_ids": [
+     "classic-open-abaya",
+     "crepe-closed-abaya",
+     "embroidered-cuff-abaya",
+     "linen-blend-abaya",
+     "butterfly-abaya",
+     "kimono-abaya"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عبايات"
+    }
+   },
+   {
+    "id": "knitwear",
+    "name": "تريكو",
+    "item_ids": [
+     "merino-crew-sweater",
+     "wool-blend-cardigan",
+     "ribbed-knit-polo",
+     "chunky-knit-vest",
+     "merino-turtleneck"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "تريكو"
+    }
+   },
+   {
+    "id": "shoes",
+    "name": "أحذية",
+    "item_ids": [
+     "leather-loafers",
+     "suede-ankle-boots",
+     "canvas-sneakers",
+     "leather-sandals",
+     "ballet-flats",
+     "chelsea-boots"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "أحذية"
+    }
+   },
+   {
+    "id": "bags",
+    "name": "حقائب",
+    "item_ids": [
+     "leather-tote",
+     "canvas-shopper",
+     "crossbody-bag",
+     "mini-bucket-bag",
+     "weekend-duffle"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقائب"
+    }
+   },
+   {
+    "id": "accessories",
+    "name": "إكسسوارات",
+    "item_ids": [
+     "wool-and-cashmere-scarf",
+     "leather-belt",
+     "straw-hat",
+     "silk-scarf",
+     "acetate-sunglasses",
+     "leather-card-holder"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "إكسسوارات"
+    }
+   }
+  ],
+  "items": {
+   "relaxed-linen-shirt": {
+    "id": "relaxed-linen-shirt",
+    "name": "قميص كتان واسع",
+    "url": "/dune-and-co-demo/p/relaxed-linen-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "قميص كتان واسع"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "sale",
+      "label": "تخفيض −30%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "كتان خفيف بياقة ناعمة وكتف منسدل.",
+    "compare_at": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "199.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 13900,
+     "currency": "SAR",
+     "formatted": "139.00 ر.س"
+    }
+   },
+   "wide-leg-trousers": {
+    "id": "wide-leg-trousers",
+    "name": "بنطلون واسع",
+    "url": "/dune-and-co-demo/p/wide-leg-trousers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "بنطلون واسع"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "خصر عالٍ وانسدال انسيابي.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "229.00 ر.س"
+    }
+   },
+   "linen-maxi-dress": {
+    "id": "linen-maxi-dress",
+    "name": "فستان ماكسي من الكتان",
+    "url": "/dune-and-co-demo/p/linen-maxi-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "فستان ماكسي من الكتان"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "تنورة بطبقات وياقة مربعة وجيوب جانبية.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "قرميدي",
+      "hex": "#B5654A"
+     },
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "أخضر فاتح",
+      "hex": "#9CAF88"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "289.00 ر.س"
+    }
+   },
+   "pleated-midi-skirt": {
+    "id": "pleated-midi-skirt",
+    "name": "تنورة ميدي مثنية",
+    "url": "/dune-and-co-demo/p/pleated-midi-skirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "تنورة ميدي مثنية"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ثنيات رفيعة تتحرك معك.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "رمادي حجري",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "189.00 ر.س"
+    }
+   },
+   "cotton-poplin-blouse": {
+    "id": "cotton-poplin-blouse",
+    "name": "بلوزة بوبلين قطنية",
+    "url": "/dune-and-co-demo/p/cotton-poplin-blouse",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "بلوزة بوبلين قطنية"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −21%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قماش مقرمش بأزرار مخفية.",
+    "compare_at": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "189.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "سماوي",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "وردي باهت",
+      "hex": "#E6C9C3"
+     }
+    ],
+    "price": {
+     "minor": 14900,
+     "currency": "SAR",
+     "formatted": "149.00 ر.س"
+    }
+   },
+   "tailored-linen-blazer": {
+    "id": "tailored-linen-blazer",
+    "name": "جاكيت كتان مفصّل",
+    "url": "/dune-and-co-demo/p/tailored-linen-blazer",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "جاكيت كتان مفصّل"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "صدر واحد وبطانة جزئية وجيبان خارجيان.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "349.00 ر.س"
+    }
+   },
+   "satin-slip-dress": {
+    "id": "satin-slip-dress",
+    "name": "فستان ساتان ناعم",
+    "url": "/dune-and-co-demo/p/satin-slip-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "فستان ساتان ناعم"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قصّة مائلة وحمّالات قابلة للتعديل بطول الكاحل.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "عنابي",
+      "hex": "#6D2432"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "وردي باهت",
+      "hex": "#E6C9C3"
+     }
+    ],
+    "price": {
+     "minor": 25900,
+     "currency": "SAR",
+     "formatted": "259.00 ر.س"
+    }
+   },
+   "straight-leg-jeans": {
+    "id": "straight-leg-jeans",
+    "name": "جينز مستقيم",
+    "url": "/dune-and-co-demo/p/straight-leg-jeans",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "جينز مستقيم"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "خصر متوسط وخمسة جيوب مع مطاطية خفيفة.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أزرق دينم",
+      "hex": "#5B7FA3"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 21900,
+     "currency": "SAR",
+     "formatted": "219.00 ر.س"
+    }
+   },
+   "linen-shorts": {
+    "id": "linen-shorts",
+    "name": "شورت كتان",
+    "url": "/dune-and-co-demo/p/linen-shorts",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "شورت كتان"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −24%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "خصر خلفي مطاطي وقصّة مريحة.",
+    "compare_at": {
+     "minor": 16900,
+     "currency": "SAR",
+     "formatted": "169.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 12900,
+     "currency": "SAR",
+     "formatted": "129.00 ر.س"
+    }
+   },
+   "organic-cotton-tee": {
+    "id": "organic-cotton-tee",
+    "name": "تيشيرت قطن عضوي",
+    "url": "/dune-and-co-demo/p/organic-cotton-tee",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "تيشيرت قطن عضوي"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "تيشيرت يومي ناعم برقبة دائرية.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "رمادي حجري",
+      "hex": "#BDB8AD"
+     },
+     {
+      "label": "كريمي",
+      "hex": "#F2E8D5"
+     }
+    ],
+    "price": {
+     "minor": 6900,
+     "currency": "SAR",
+     "formatted": "69.00 ر.س"
+    }
+   },
+   "shirt-dress": {
+    "id": "shirt-dress",
+    "name": "فستان قميص",
+    "url": "/dune-and-co-demo/p/shirt-dress",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "فستان قميص"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "بحزام وأزرار أمامية بطول ميدي.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "سماوي",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 26900,
+     "currency": "SAR",
+     "formatted": "269.00 ر.س"
+    }
+   },
+   "linen-camp-collar-shirt": {
+    "id": "linen-camp-collar-shirt",
+    "name": "قميص كتان بياقة مفتوحة",
+    "url": "/dune-and-co-demo/p/linen-camp-collar-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "قميص كتان بياقة مفتوحة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "أكمام قصيرة وقصّة واسعة مريحة.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "سماوي",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     }
+    ],
+    "price": {
+     "minor": 15900,
+     "currency": "SAR",
+     "formatted": "159.00 ر.س"
+    }
+   },
+   "oxford-shirt": {
+    "id": "oxford-shirt",
+    "name": "قميص أكسفورد",
+    "url": "/dune-and-co-demo/p/oxford-shirt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "قميص أكسفورد"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قطن مصقول بياقة بأزرار.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "سماوي",
+      "hex": "#A9C7DD"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 17900,
+     "currency": "SAR",
+     "formatted": "179.00 ر.س"
+    }
+   },
+   "slim-chinos": {
+    "id": "slim-chinos",
+    "name": "بنطلون تشينو ضيق",
+    "url": "/dune-and-co-demo/p/slim-chinos",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "بنطلون تشينو ضيق"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −20%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قطن مطاطي بقصّة ضيقة عند الكاحل.",
+    "compare_at": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "249.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "199.00 ر.س"
+    }
+   },
+   "cotton-polo": {
+    "id": "cotton-polo",
+    "name": "تيشيرت بولو قطني",
+    "url": "/dune-and-co-demo/p/cotton-polo",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "تيشيرت بولو قطني"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قطن بيكيه مع فتحة بزرّين.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "أخضر غابي",
+      "hex": "#2F4F3E"
+     }
+    ],
+    "price": {
+     "minor": 11900,
+     "currency": "SAR",
+     "formatted": "119.00 ر.س"
+    }
+   },
+   "linen-drawstring-trousers": {
+    "id": "linen-drawstring-trousers",
+    "name": "بنطلون كتان بحزام مطاطي",
+    "url": "/dune-and-co-demo/p/linen-drawstring-trousers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "بنطلون كتان بحزام مطاطي"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "بنطلون صيفي مريح بخصر مطاطي.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 16900,
+     "currency": "SAR",
+     "formatted": "169.00 ر.س"
+    }
+   },
+   "crew-neck-tee": {
+    "id": "crew-neck-tee",
+    "name": "تيشيرت برقبة دائرية",
+    "url": "/dune-and-co-demo/p/crew-neck-tee",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "تيشيرت برقبة دائرية"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قطن سميك يدوم طويلاً.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "فحمي",
+      "hex": "#3A3A3C"
+     },
+     {
+      "label": "رمادي حجري",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 7900,
+     "currency": "SAR",
+     "formatted": "79.00 ر.س"
+    }
+   },
+   "denim-jacket": {
+    "id": "denim-jacket",
+    "name": "جاكيت جينز",
+    "url": "/dune-and-co-demo/p/denim-jacket",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "جاكيت جينز"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −18%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "جينز مغسول بجيبين على الصدر.",
+    "compare_at": {
+     "minor": 39900,
+     "currency": "SAR",
+     "formatted": "399.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أزرق دينم",
+      "hex": "#5B7FA3"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 32900,
+     "currency": "SAR",
+     "formatted": "329.00 ر.س"
+    }
+   },
+   "cotton-blend-thobe": {
+    "id": "cotton-blend-thobe",
+    "name": "ثوب قطني مختلط",
+    "url": "/dune-and-co-demo/p/cotton-blend-thobe",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "ثوب قطني مختلط"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "سهل العناية وبياقة وأكمام مشغولة يدوياً.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "كريمي",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "رمادي حجري",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "289.00 ر.س"
+    }
+   },
+   "classic-open-abaya": {
+    "id": "classic-open-abaya",
+    "name": "عباية مفتوحة كلاسيكية",
+    "url": "/dune-and-co-demo/p/classic-open-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية مفتوحة كلاسيكية"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "فتحة أمامية مع إغلاق مخفي بأزرار ضغط.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 39900,
+     "currency": "SAR",
+     "formatted": "399.00 ر.س"
+    }
+   },
+   "crepe-closed-abaya": {
+    "id": "crepe-closed-abaya",
+    "name": "عباية كريب مغلقة",
+    "url": "/dune-and-co-demo/p/crepe-closed-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية كريب مغلقة"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "أمامية مغلقة وأكمام واسعة بلمسة مطفية.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "فحمي",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 45900,
+     "currency": "SAR",
+     "formatted": "459.00 ر.س"
+    }
+   },
+   "embroidered-cuff-abaya": {
+    "id": "embroidered-cuff-abaya",
+    "name": "عباية بأكمام مطرزة",
+    "url": "/dune-and-co-demo/p/embroidered-cuff-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية بأكمام مطرزة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "تطريز بنفس اللون عند الأكمام.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "عنابي",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 54900,
+     "currency": "SAR",
+     "formatted": "549.00 ر.س"
+    }
+   },
+   "linen-blend-abaya": {
+    "id": "linen-blend-abaya",
+    "name": "عباية من خليط الكتان",
+    "url": "/dune-and-co-demo/p/linen-blend-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية من خليط الكتان"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "خفيفة للصيف ومنظمة للعمل.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 42900,
+     "currency": "SAR",
+     "formatted": "429.00 ر.س"
+    }
+   },
+   "butterfly-abaya": {
+    "id": "butterfly-abaya",
+    "name": "عباية فراشة",
+    "url": "/dune-and-co-demo/p/butterfly-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية فراشة"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −14%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قصّة واسعة بتأثير الكاب المنسدل.",
+    "compare_at": {
+     "minor": 56900,
+     "currency": "SAR",
+     "formatted": "569.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     }
+    ],
+    "price": {
+     "minor": 48900,
+     "currency": "SAR",
+     "formatted": "489.00 ر.س"
+    }
+   },
+   "kimono-abaya": {
+    "id": "kimono-abaya",
+    "name": "عباية كيمونو",
+    "url": "/dune-and-co-demo/p/kimono-abaya",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "عباية كيمونو"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "أكمام كيمونو مفتوحة وحزام ربط.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "أخضر غابي",
+      "hex": "#2F4F3E"
+     },
+     {
+      "label": "رمادي حجري",
+      "hex": "#BDB8AD"
+     }
+    ],
+    "price": {
+     "minor": 51900,
+     "currency": "SAR",
+     "formatted": "519.00 ر.س"
+    }
+   },
+   "merino-crew-sweater": {
+    "id": "merino-crew-sweater",
+    "name": "سترة ميرينو برقبة دائرية",
+    "url": "/dune-and-co-demo/p/merino-crew-sweater",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "سترة ميرينو برقبة دائرية"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ميرينو رفيع دافئ دون سُمك.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "فحمي",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "249.00 ر.س"
+    }
+   },
+   "wool-blend-cardigan": {
+    "id": "wool-blend-cardigan",
+    "name": "كارديجان صوف مختلط",
+    "url": "/dune-and-co-demo/p/wool-blend-cardigan",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "كارديجان صوف مختلط"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −17%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "أزرار أمامية وحواف مضلّعة.",
+    "compare_at": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "349.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "كريمي",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 28900,
+     "currency": "SAR",
+     "formatted": "289.00 ر.س"
+    }
+   },
+   "ribbed-knit-polo": {
+    "id": "ribbed-knit-polo",
+    "name": "بولو تريكو مضلّع",
+    "url": "/dune-and-co-demo/p/ribbed-knit-polo",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "بولو تريكو مضلّع"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "تريكو مضلّع ناعم بياقة بولو.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "199.00 ر.س"
+    }
+   },
+   "chunky-knit-vest": {
+    "id": "chunky-knit-vest",
+    "name": "سترة تريكو سميكة بلا أكمام",
+    "url": "/dune-and-co-demo/p/chunky-knit-vest",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "سترة تريكو سميكة بلا أكمام"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "نفدت الكمية"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": true,
+    "short": "تُلبس فوق قميص أو تيشيرت.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "كريمي",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "فحمي",
+      "hex": "#3A3A3C"
+     },
+     {
+      "label": "قرميدي",
+      "hex": "#B5654A"
+     }
+    ],
+    "price": {
+     "minor": 21900,
+     "currency": "SAR",
+     "formatted": "219.00 ر.س"
+    }
+   },
+   "merino-turtleneck": {
+    "id": "merino-turtleneck",
+    "name": "سترة ميرينو برقبة عالية",
+    "url": "/dune-and-co-demo/p/merino-turtleneck",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "سترة ميرينو برقبة عالية"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قصّة قريبة من الجسم وناعمة جداً.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "عنابي",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "229.00 ر.س"
+    }
+   },
+   "leather-loafers": {
+    "id": "leather-loafers",
+    "name": "حذاء جلد موكاسين",
+    "url": "/dune-and-co-demo/p/leather-loafers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حذاء جلد موكاسين"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "خياطة يدوية وفرشة داخلية مريحة.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 35900,
+     "currency": "SAR",
+     "formatted": "359.00 ر.س"
+    }
+   },
+   "suede-ankle-boots": {
+    "id": "suede-ankle-boots",
+    "name": "جزمة سويد بكاحل",
+    "url": "/dune-and-co-demo/p/suede-ankle-boots",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "جزمة سويد بكاحل"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "كعب متوسط وسحّاب جانبي وسويد ناعم.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 44900,
+     "currency": "SAR",
+     "formatted": "449.00 ر.س"
+    }
+   },
+   "canvas-sneakers": {
+    "id": "canvas-sneakers",
+    "name": "حذاء رياضي قماش",
+    "url": "/dune-and-co-demo/p/canvas-sneakers",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حذاء رياضي قماش"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "sale",
+      "label": "تخفيض −15%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "حذاء منخفض بنعل مطاطي مقوّى.",
+    "compare_at": {
+     "minor": 26900,
+     "currency": "SAR",
+     "formatted": "269.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أبيض",
+      "hex": "#FFFFFF"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     }
+    ],
+    "price": {
+     "minor": 22900,
+     "currency": "SAR",
+     "formatted": "229.00 ر.س"
+    }
+   },
+   "leather-sandals": {
+    "id": "leather-sandals",
+    "name": "صندل جلد",
+    "url": "/dune-and-co-demo/p/leather-sandals",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "صندل جلد"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "حزامان وفرشة مشكّلة.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "199.00 ر.س"
+    }
+   },
+   "ballet-flats": {
+    "id": "ballet-flats",
+    "name": "حذاء باليرينا",
+    "url": "/dune-and-co-demo/p/ballet-flats",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حذاء باليرينا"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مقدمة مستديرة وحافة مطاطية وبطانة جلد.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "وردي باهت",
+      "hex": "#E6C9C3"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     }
+    ],
+    "price": {
+     "minor": 18900,
+     "currency": "SAR",
+     "formatted": "189.00 ر.س"
+    }
+   },
+   "chelsea-boots": {
+    "id": "chelsea-boots",
+    "name": "جزمة تشيلسي",
+    "url": "/dune-and-co-demo/p/chelsea-boots",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "جزمة تشيلسي"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "جلد مع جوانب مطاطية.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 42900,
+     "currency": "SAR",
+     "formatted": "429.00 ر.س"
+    }
+   },
+   "leather-tote": {
+    "id": "leather-tote",
+    "name": "حقيبة جلد كبيرة",
+    "url": "/dune-and-co-demo/p/leather-tote",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقيبة جلد كبيرة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "تتسع لحاسوب محمول مع جيب داخلي بسحّاب.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 49900,
+     "currency": "SAR",
+     "formatted": "499.00 ر.س"
+    }
+   },
+   "canvas-shopper": {
+    "id": "canvas-shopper",
+    "name": "حقيبة قماش للتسوق",
+    "url": "/dune-and-co-demo/p/canvas-shopper",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقيبة قماش للتسوق"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "متينة وقابلة للغسل والطي.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 15900,
+     "currency": "SAR",
+     "formatted": "159.00 ر.س"
+    }
+   },
+   "crossbody-bag": {
+    "id": "crossbody-bag",
+    "name": "حقيبة كتف قطرية",
+    "url": "/dune-and-co-demo/p/crossbody-bag",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقيبة كتف قطرية"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "صغيرة بحزام قابل للتعديل.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "عنابي",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 32900,
+     "currency": "SAR",
+     "formatted": "329.00 ر.س"
+    }
+   },
+   "mini-bucket-bag": {
+    "id": "mini-bucket-bag",
+    "name": "حقيبة دلو صغيرة",
+    "url": "/dune-and-co-demo/p/mini-bucket-bag",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقيبة دلو صغيرة"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −14%"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "فتحة بشدّاد وحزام قابل للفك.",
+    "compare_at": {
+     "minor": 34900,
+     "currency": "SAR",
+     "formatted": "349.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "وردي باهت",
+      "hex": "#E6C9C3"
+     },
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     },
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     }
+    ],
+    "price": {
+     "minor": 29900,
+     "currency": "SAR",
+     "formatted": "299.00 ر.س"
+    }
+   },
+   "weekend-duffle": {
+    "id": "weekend-duffle",
+    "name": "حقيبة سفر قصير",
+    "url": "/dune-and-co-demo/p/weekend-duffle",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حقيبة سفر قصير"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "قماش قطني بمقابض جلدية.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "زيتي",
+      "hex": "#6B705C"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 56900,
+     "currency": "SAR",
+     "formatted": "569.00 ر.س"
+    }
+   },
+   "wool-and-cashmere-scarf": {
+    "id": "wool-and-cashmere-scarf",
+    "name": "وشاح صوف وكشمير",
+    "url": "/dune-and-co-demo/p/wool-and-cashmere-scarf",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "وشاح صوف وكشمير"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "عريض ودافئ وناعم جداً.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "كريمي",
+      "hex": "#F2E8D5"
+     },
+     {
+      "label": "فحمي",
+      "hex": "#3A3A3C"
+     }
+    ],
+    "price": {
+     "minor": 17900,
+     "currency": "SAR",
+     "formatted": "179.00 ر.س"
+    }
+   },
+   "leather-belt": {
+    "id": "leather-belt",
+    "name": "حزام جلد",
+    "url": "/dune-and-co-demo/p/leather-belt",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حزام جلد"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إبزيم مطفي وجلد طبيعي.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 12900,
+     "currency": "SAR",
+     "formatted": "129.00 ر.س"
+    }
+   },
+   "straw-hat": {
+    "id": "straw-hat",
+    "name": "قبعة قش",
+    "url": "/dune-and-co-demo/p/straw-hat",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "قبعة قش"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "حافة عريضة للحماية من الشمس.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "رملي",
+      "hex": "#D8C3A5"
+     }
+    ],
+    "price": {
+     "minor": 11900,
+     "currency": "SAR",
+     "formatted": "119.00 ر.س"
+    }
+   },
+   "silk-scarf": {
+    "id": "silk-scarf",
+    "name": "وشاح حرير",
+    "url": "/dune-and-co-demo/p/silk-scarf",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "وشاح حرير"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "حواف ملفوفة يدوياً وإطار مطبوع.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "عاجي",
+      "hex": "#F4EFE6"
+     },
+     {
+      "label": "قرميدي",
+      "hex": "#B5654A"
+     },
+     {
+      "label": "كحلي",
+      "hex": "#1F2A44"
+     }
+    ],
+    "price": {
+     "minor": 14900,
+     "currency": "SAR",
+     "formatted": "149.00 ر.س"
+    }
+   },
+   "acetate-sunglasses": {
+    "id": "acetate-sunglasses",
+    "name": "نظارة شمسية أسيتات",
+    "url": "/dune-and-co-demo/p/acetate-sunglasses",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "نظارة شمسية أسيتات"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "تخفيض −20%"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إطار دائري وعدسات تحجب الأشعة فوق البنفسجية.",
+    "compare_at": {
+     "minor": 24900,
+     "currency": "SAR",
+     "formatted": "249.00 ر.س"
+    },
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "بني فاتح",
+      "hex": "#C19A6B"
+     }
+    ],
+    "price": {
+     "minor": 19900,
+     "currency": "SAR",
+     "formatted": "199.00 ر.س"
+    }
+   },
+   "leather-card-holder": {
+    "id": "leather-card-holder",
+    "name": "حافظة بطاقات جلد",
+    "url": "/dune-and-co-demo/p/leather-card-holder",
+    "image": {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "حافظة بطاقات جلد"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "أربع فتحات وجيب أوسط.",
+    "brand": "Dune & Co.",
+    "swatches": [
+     {
+      "label": "أسود",
+      "hex": "#1C1C1C"
+     },
+     {
+      "label": "جملي",
+      "hex": "#B58B5A"
+     },
+     {
+      "label": "عنابي",
+      "hex": "#6D2432"
+     }
+    ],
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "89.00 ر.س"
+    }
+   }
+  },
+  "total": 47,
+  "next_page_url": null,
+  "facets": [
+   {
+    "id": "size",
+    "label": "المقاس",
+    "kind": "size",
+    "options": [
+     {
+      "value": "XS",
+      "label": "XS",
+      "count": 16,
+      "available": true
+     },
+     {
+      "value": "S",
+      "label": "S",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "M",
+      "label": "M",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "L",
+      "label": "L",
+      "count": 23,
+      "available": true
+     },
+     {
+      "value": "XL",
+      "label": "XL",
+      "count": 22,
+      "available": true
+     },
+     {
+      "value": "30",
+      "label": "30",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "32",
+      "label": "32",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "34",
+      "label": "34",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "36",
+      "label": "36",
+      "count": 5,
+      "available": true
+     },
+     {
+      "value": "38",
+      "label": "38",
+      "count": 5,
+      "available": true
+     },
+     {
+      "value": "56",
+      "label": "56",
+      "count": 7,
+      "available": true
+     },
+     {
+      "value": "58",
+      "label": "58",
+      "count": 7,
+      "available": true
+     },
+     {
+      "value": "60",
+      "label": "60",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "62",
+      "label": "62",
+      "count": 1,
+      "available": true
+     },
+     {
+      "value": "52",
+      "label": "52",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "54",
+      "label": "54",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "40",
+      "label": "40",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "41",
+      "label": "41",
+      "count": 6,
+      "available": true
+     },
+     {
+      "value": "42",
+      "label": "42",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "43",
+      "label": "43",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "44",
+      "label": "44",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "45",
+      "label": "45",
+      "count": 2,
+      "available": true
+     },
+     {
+      "value": "37",
+      "label": "37",
+      "count": 4,
+      "available": true
+     },
+     {
+      "value": "39",
+      "label": "39",
+      "count": 4,
+      "available": true
+     },
+     {
+      "value": "OS",
+      "label": "OS",
+      "count": 10,
+      "available": true
+     }
+    ]
+   },
+   {
+    "id": "colour",
+    "label": "اللون",
+    "kind": "swatch",
+    "options": [
+     {
+      "value": "black",
+      "label": "أسود",
+      "swatch": "#1C1C1C",
+      "count": 29
+     },
+     {
+      "value": "blush",
+      "label": "وردي باهت",
+      "swatch": "#E6C9C3",
+      "count": 4
+     },
+     {
+      "value": "burgundy",
+      "label": "عنابي",
+      "swatch": "#6D2432",
+      "count": 5
+     },
+     {
+      "value": "camel",
+      "label": "جملي",
+      "swatch": "#B58B5A",
+      "count": 8
+     },
+     {
+      "value": "charcoal",
+      "label": "فحمي",
+      "swatch": "#3A3A3C",
+      "count": 5
+     },
+     {
+      "value": "cream",
+      "label": "كريمي",
+      "swatch": "#F2E8D5",
+      "count": 5
+     },
+     {
+      "value": "denim",
+      "label": "أزرق دينم",
+      "swatch": "#5B7FA3",
+      "count": 2
+     },
+     {
+      "value": "forest",
+      "label": "أخضر غابي",
+      "swatch": "#2F4F3E",
+      "count": 2
+     },
+     {
+      "value": "ivory",
+      "label": "عاجي",
+      "swatch": "#F4EFE6",
+      "count": 6
+     },
+     {
+      "value": "navy",
+      "label": "كحلي",
+      "swatch": "#1F2A44",
+      "count": 9
+     },
+     {
+      "value": "olive",
+      "label": "زيتي",
+      "swatch": "#6B705C",
+      "count": 9
+     },
+     {
+      "value": "sage",
+      "label": "أخضر فاتح",
+      "swatch": "#9CAF88",
+      "count": 1
+     },
+     {
+      "value": "sand",
+      "label": "رملي",
+      "swatch": "#D8C3A5",
+      "count": 10
+     },
+     {
+      "value": "sky",
+      "label": "سماوي",
+      "swatch": "#A9C7DD",
+      "count": 4
+     },
+     {
+      "value": "stone",
+      "label": "رمادي حجري",
+      "swatch": "#BDB8AD",
+      "count": 5
+     },
+     {
+      "value": "tan",
+      "label": "بني فاتح",
+      "swatch": "#C19A6B",
+      "count": 8
+     },
+     {
+      "value": "terracotta",
+      "label": "قرميدي",
+      "swatch": "#B5654A",
+      "count": 3
+     },
+     {
+      "value": "white",
+      "label": "أبيض",
+      "swatch": "#FFFFFF",
+      "count": 9
+     }
+    ]
+   },
+   {
+    "id": "brand",
+    "label": "العلامة",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "Dune & Co.",
+      "label": "Dune & Co.",
+      "count": 47
+     }
+    ]
+   },
+   {
+    "id": "on_sale",
+    "label": "تخفيضات",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "تخفيضات",
+      "count": 10
+     }
+    ]
+   },
+   {
+    "id": "in_stock",
+    "label": "متوفر فقط",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "متوفر فقط"
+     }
+    ]
+   }
+  ]
+ },
+ "features": {
+  "announcement": {
+   "text": "شحن مجاني فوق 200 ر.س · إرجاع خلال 14 يوماً",
+   "icon": "truck"
+  },
+  "featured": [
+   "relaxed-linen-shirt",
+   "wide-leg-trousers",
+   "straight-leg-jeans",
+   "organic-cotton-tee",
+   "linen-camp-collar-shirt",
+   "crew-neck-tee",
+   "cotton-blend-thobe",
+   "classic-open-abaya"
+  ],
+  "wishlist": true,
+  "bnpl": {
+   "providers": [
+    "tabby",
+    "tamara"
+   ],
+   "instalments": 4
+  }
+ },
+ "customer": {
+  "name": "نورة",
+  "has_passkey": true,
+  "wishlist": [
+   "relaxed-linen-shirt",
+   "wide-leg-trousers"
+  ]
+ },
+ "endpoints": {
+  "cart": "/dune-and-co-demo/cart",
+  "quote": "/dune-and-co-demo/quote",
+  "place": "/dune-and-co-demo/order",
+  "track": "/dune-and-co-demo/track",
+  "coupon": "/dune-and-co-demo/coupon",
+  "otp": "/dune-and-co-demo/otp",
+  "account": "/dune-and-co-demo/account",
+  "search": "/dune-and-co-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "item",
+  "item": {
+   "id": "relaxed-linen-shirt",
+   "name": "قميص كتان واسع",
+   "brand": "ديون آند كو",
+   "description": "كتان خفيف بياقة ناعمة وكتف منسدل.",
+   "gallery": [
+    {
+     "src": "../../_kit/img/placeholder-4x5.svg",
+     "alt": "قميص كتان واسع"
+    }
+   ],
+   "price": {
+    "minor": 13900,
+    "currency": "SAR",
+    "formatted": "139.00 ر.س"
+   },
+   "compare_at": {
+    "minor": 19900,
+    "currency": "SAR",
+    "formatted": "199.00 ر.س"
+   },
+   "saving_label": "وفّر 60.00 ر.س",
+   "badges": [
+    {
+     "kind": "sale",
+     "label": "تخفيض −30%"
+    }
+   ],
+   "option_groups": [
+    {
+     "id": "colour",
+     "label": "اللون",
+     "kind": "swatch",
+     "required": true,
+     "min": 1,
+     "max": 1,
+     "selected_label": "رملي",
+     "options": [
+      {
+       "id": "sand",
+       "label": "رملي",
+       "swatch": "#D8C3A5",
+       "available": true,
+       "selected": true
+      },
+      {
+       "id": "ivory",
+       "label": "عاجي",
+       "swatch": "#F4EFE6",
+       "available": true
+      },
+      {
+       "id": "olive",
+       "label": "زيتي",
+       "swatch": "#6B705C",
+       "available": true
+      }
+     ]
+    },
+    {
+     "id": "size",
+     "label": "المقاس",
+     "kind": "size",
+     "required": true,
+     "min": 1,
+     "max": 1,
+     "selected_label": "M",
+     "help_url": "/dune-and-co-demo/size-guide",
+     "options": [
+      {
+       "id": "XS",
+       "label": "XS",
+       "available": false,
+       "stock_label": "نفدت الكمية"
+      },
+      {
+       "id": "S",
+       "label": "S",
+       "available": true
+      },
+      {
+       "id": "M",
+       "label": "M",
+       "available": true,
+       "stock_label": "بقيت قطعتان",
+       "selected": true
+      },
+      {
+       "id": "L",
+       "label": "L",
+       "available": true
+      },
+      {
+       "id": "XL",
+       "label": "XL",
+       "available": true
+      }
+     ]
+    }
+   ],
+   "quantity": {
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "value": 1
+   },
+   "stock_note": "بقيت قطعتان فقط بمقاس M",
+   "info_rows": [
+    {
+     "icon": "truck",
+     "label": "يصل بحلول الثلاثاء 6 أكتوبر",
+     "sub": "إلى الرياض 12611 · تغيير"
+    },
+    {
+     "icon": "rotate-ccw",
+     "label": "إرجاع مجاني خلال 14 يوماً",
+     "sub": "غير ملبوس ومع البطاقات",
+     "url": "/dune-and-co-demo/returns"
+    },
+    {
+     "icon": "store",
+     "label": "الاستلام من المتجر",
+     "sub": "العليا مول · جاهز غداً"
+    }
+   ],
+   "details": [
+    {
+     "title": "الوصف",
+     "html": "<p>كتان خفيف بياقة ناعمة وكتف منسدل.</p>"
+    },
+    {
+     "title": "الخامة والعناية",
+     "html": "<p>كتان 100٪</p><p>غسيل آلي بماء بارد 30° م. يُكوى وهو رطب.</p>"
+    },
+    {
+     "title": "المقاس والقَصّة",
+     "html": "<p>قصّة واسعة مريحة. اختاري مقاساً أصغر لقصّة أقرب للجسم.</p>"
+    }
+   ],
+   "bnpl_label": "أو 4 دفعات بقيمة 34.75 ر.س مع تابي أو تمارا",
+   "size_guide_url": "/dune-and-co-demo/size-guide",
+   "related": [
+    "wide-leg-trousers",
+    "leather-loafers",
+    "leather-tote"
+   ],
+   "add_label": "أضف إلى الحقيبة · 139.00 ر.س"
+  }
+ }
+}

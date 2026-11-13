@@ -1,0 +1,1174 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ============================================================
+   Fusion marketplace — mk-checkout.css (L3 T3-1)
+   Bag page styles ONLY. Never edit mk.css — this file is linked
+   from bag.blade.php (and later T3-2+ checkout pages). Tokens:
+   all colors/radii come from the --mk-* custom properties so
+   dark mode ([data-mk-theme="dark"]) is automatic. RTL: logical
+   properties only. Touch targets ≥ 44px.
+   ============================================================ */
+
+.mk-bag-title {
+  font-size: 22px;
+  margin-block: 20px 12px;
+}
+
+/* ---------- per-store section card ---------- */
+.mk-bag-store {
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r-lg);
+  box-shadow: var(--mk-shadow-sm);
+  padding: 16px;
+  margin-block-end: 16px;
+}
+
+.mk-bag-store__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-block-end: 8px;
+}
+
+.mk-bag-store__name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.mk-bag-eta {
+  white-space: nowrap;
+}
+
+/* ---------- lines ---------- */
+.mk-bag-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mk-bag-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 10px;
+  border-block-end: 1px solid var(--mk-line);
+}
+
+.mk-bag-line:last-child {
+  border-block-end: 0;
+}
+
+.mk-bag-line__img {
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--mk-r);
+  object-fit: cover;
+  flex: none;
+}
+
+.mk-bag-line__body {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.mk-bag-line__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mk-bag-line__note {
+  color: var(--mk-ink-2);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mk-bag-line__price {
+  color: var(--mk-ink-2);
+  font-size: 13px;
+  margin-block-start: 2px;
+}
+
+/* ---------- qty stepper (≥44px targets) ---------- */
+.mk-bag-step {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--mk-surface-2);
+  border-radius: 999px;
+  flex: none;
+}
+
+.mk-bag-step__btn {
+  inline-size: 44px;
+  block-size: 44px;
+  border: 0;
+  background: none;
+  color: var(--mk-ink);
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.mk-bag-step__btn:active {
+  background: var(--mk-primary-soft);
+  color: var(--mk-primary);
+}
+
+.mk-bag-step__qty {
+  min-inline-size: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ---------- min-order meter ---------- */
+.mk-bag-meter {
+  margin-block: 12px 4px;
+}
+
+.mk-bag-meter__bar {
+  block-size: 6px;
+  border-radius: 999px;
+  background: var(--mk-surface-2);
+  overflow: hidden;
+}
+
+.mk-bag-meter__fill {
+  block-size: 100%;
+  border-radius: 999px;
+  background: var(--mk-primary);
+  transition: width var(--mk-t-comp) var(--mk-ease);
+}
+
+.mk-bag-meter__fill.is-met {
+  background: var(--mk-cta);
+}
+
+.mk-bag-meter__hint {
+  color: var(--mk-ink-2);
+  font-size: 12px;
+  margin-block-start: 6px;
+}
+
+/* ---------- fee / subtotal rows ---------- */
+.mk-bag-rows {
+  margin: 12px 0 0;
+}
+
+.mk-bag-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 4px;
+  font-size: 14px;
+}
+
+.mk-bag-row dt {
+  color: var(--mk-ink-2);
+}
+
+.mk-bag-row dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.mk-bag-row--total {
+  border-block-start: 1px dashed var(--mk-line);
+  margin-block-start: 4px;
+  padding-block-start: 8px;
+  font-size: 15px;
+}
+
+/* ---------- global sticky bar ---------- */
+.mk-bag-sticky {
+  position: sticky;
+  inset-block-end: calc(64px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r-lg);
+  box-shadow: var(--mk-shadow-md);
+  padding: 12px 16px;
+  margin-block: 16px 8px;
+}
+
+.mk-bag-sticky__count {
+  color: var(--mk-ink-2);
+  font-size: 12px;
+}
+
+.mk-bag-sticky__total {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.mk-bag-sticky__cta {
+  min-block-size: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 24px;
+}
+
+/* ---------- quoting skeleton shimmer ---------- */
+#mk-bag.is-quoting [data-bag-fee],
+#mk-bag.is-quoting [data-bag-eta-text],
+#mk-bag.is-quoting [data-bag-subtotal],
+#mk-bag.is-quoting [data-bag-store-total],
+#mk-bag.is-quoting [data-bag-grand] {
+  color: transparent;
+  background: linear-gradient(90deg, var(--mk-surface-2) 25%, var(--mk-line) 50%, var(--mk-surface-2) 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  animation: mk-bag-shimmer 1.1s linear infinite;
+  min-inline-size: 48px;
+  display: inline-block;
+}
+
+@keyframes mk-bag-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #mk-bag.is-quoting [data-bag-fee],
+  #mk-bag.is-quoting [data-bag-eta-text],
+  #mk-bag.is-quoting [data-bag-subtotal],
+  #mk-bag.is-quoting [data-bag-store-total],
+  #mk-bag.is-quoting [data-bag-grand] {
+    animation: none;
+  }
+}
+
+/* ============ T3-2: fulfillment modes + slot picker ============ */
+.mk-bag-fulfil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0 4px;
+  flex-wrap: wrap;
+}
+.mk-bag-modes {
+  display: inline-flex;
+  background: var(--mk-surface-2);
+  border-radius: 999px;
+  padding: 3px;
+}
+.mk-bag-mode {
+  border: 0;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--mk-ink-2);
+}
+.mk-bag-mode.is-on {
+  background: var(--mk-surface);
+  color: var(--mk-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+.mk-bag-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--mk-line);
+  background: var(--mk-surface);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.mk-bag-time__chev { opacity: 0.5; }
+
+.mk-slot-sheet { position: fixed; inset: 0; z-index: 80; }
+.mk-slot-sheet[hidden] { display: none; }
+.mk-slot-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.mk-slot-sheet__panel {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  max-height: 75vh;
+  overflow: auto;
+  background: var(--mk-surface);
+  border-radius: 16px 16px 0 0;
+  padding: 16px;
+}
+.mk-slot-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.mk-slot-sheet__head h2 { font-size: 1.05rem; margin: 0; }
+.mk-slot-sheet__x {
+  border: 0;
+  background: var(--mk-surface-2);
+  border-radius: 999px;
+  inline-size: 30px;
+  block-size: 30px;
+  cursor: pointer;
+}
+.mk-slot-asap {
+  display: block;
+  inline-size: 100%;
+  text-align: start;
+  border: 1px solid var(--mk-line);
+  background: var(--mk-surface);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.mk-slot-asap:disabled { opacity: 0.55; cursor: not-allowed; font-weight: 400; }
+.mk-slot-days {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+.mk-slot-day {
+  border: 1px solid var(--mk-line);
+  background: var(--mk-surface);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.mk-slot-day.is-on {
+  background: var(--mk-ink);
+  color: var(--mk-surface);
+  border-color: var(--mk-ink);
+}
+.mk-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 8px;
+}
+.mk-slot {
+  border: 1px solid var(--mk-line);
+  background: var(--mk-surface);
+  border-radius: 8px;
+  padding: 8px 0;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.mk-slot:hover { border-color: var(--mk-ink); }
+.mk-slot-empty {
+  color: var(--mk-ink-2);
+  font-size: 0.9rem;
+  padding: 8px 0;
+}
+
+/* ---- T3-3: checkout extras (tips / cutlery / donation) ---- */
+.mk-bag-tip { margin: 10px 0 4px; }
+.mk-bag-tip__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.mk-bag-tip__chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mk-tip-chip {
+  border: 1px solid var(--mk-line);
+  background: var(--mk-surface);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mk-tip-chip.is-on {
+  background: var(--mk-ink);
+  color: var(--mk-surface);
+  border-color: var(--mk-ink);
+}
+.mk-tip-custom { display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; }
+.mk-tip-custom input {
+  inline-size: 84px;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.9rem;
+}
+.mk-bag-extras {
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mk-bag-cutlery {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.mk-bag-cutlery input { margin-top: 3px; accent-color: var(--mk-ink); }
+.mk-bag-cutlery__name { display: block; font-weight: 600; font-size: 0.95rem; }
+.mk-bag-cutlery__hint { display: block; color: var(--mk-ink-2); font-size: 0.8rem; }
+.mk-bag-donate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px dashed var(--mk-line);
+  background: transparent;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: start;
+}
+.mk-bag-donate.is-on {
+  border-style: solid;
+  border-color: var(--mk-ink);
+}
+.mk-bag-donate__label { font-weight: 600; }
+.mk-bag-donate__amt { color: var(--mk-ink-2); white-space: nowrap; }
+.mk-bag-donate.is-on .mk-bag-donate__amt { color: inherit; font-weight: 600; }
+
+/* ============================================================
+   T3-4 — /fusion/checkout + /fusion/checkout/done
+   ============================================================ */
+.mk-co-block,
+.mk-co-store,
+.mk-co-done-card {
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.mk-co-h2 { font-size: 1rem; font-weight: 700; margin: 0 0 10px; }
+.mk-co-field { display: block; margin-bottom: 10px; }
+.mk-co-field > span {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--mk-ink-2);
+  margin-bottom: 4px;
+}
+.mk-co-field input {
+  width: 100%;
+  border: 1px solid var(--mk-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  background: transparent;
+  color: inherit;
+}
+.mk-co-field input:focus { outline: 2px solid var(--mk-ink); outline-offset: 1px; }
+.mk-co-hint { color: var(--mk-ink-2); font-size: 0.8rem; margin: 4px 0 0; }
+.mk-co-store__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mk-co-store__name { font-weight: 700; }
+.mk-co-store__meta { color: var(--mk-ink-2); font-size: 0.85rem; margin: 6px 0 10px; }
+.mk-co-store__meta b { color: var(--mk-ink); }
+.mk-co-feewarn { color: #b45309; }
+.mk-co-pay { display: grid; gap: 8px; }
+.mk-co-pm {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid var(--mk-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.mk-co-pm:has(input:checked) { border-color: var(--mk-ink); }
+.mk-co-pm input { margin-top: 3px; accent-color: var(--mk-ink); }
+.mk-co-pm b { display: block; font-size: 0.92rem; }
+.mk-co-pm small { color: var(--mk-ink-2); font-size: 0.78rem; }
+.mk-co-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+.mk-co-settle { margin: 16px 0 90px; }
+.mk-co-settle__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mk-co-settle__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+.mk-co-settle__row.is-failed { border-color: #fecaca; }
+.mk-co-settle__row .mk-co-state { color: var(--mk-ink-2); }
+.mk-co-settle__done { display: inline-block; margin-top: 12px; }
+.mk-btn--sm { padding: 6px 14px; font-size: 0.85rem; }
+.mk-co-done-card__row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mk-co-state { font-size: 0.85rem; color: var(--mk-ink-2); }
+.mk-co-state.is-paid { color: #15803d; font-weight: 700; }
+.mk-co-state.is-due { color: #b45309; font-weight: 600; }
+.mk-co-track { font-size: 0.85rem; margin-inline-start: auto; }
+
+/* ============================================================
+   T3-5 — multi-order tracking (/fusion/orders/track). Tokens
+   only (--mk-*), logical properties (RTL), dark-mode automatic.
+   ============================================================ */
+.mk-tr-card {
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r-lg);
+  box-shadow: var(--mk-shadow-sm);
+  padding: 16px;
+  margin-block-end: 16px;
+}
+.mk-tr-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-block: 10px 12px;
+}
+.mk-tr-badge {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: var(--mk-surface-2);
+  color: var(--mk-ink-2);
+}
+.mk-tr-badge.is-pending { background: var(--mk-primary-soft); color: var(--mk-primary); }
+.mk-tr-badge.is-preparing { background: rgba(245, 166, 35, .14); color: #b45309; }
+.mk-tr-badge.is-ready { background: rgba(23, 163, 74, .12); color: var(--mk-cta); }
+.mk-tr-badge.is-completed { background: rgba(23, 163, 74, .12); color: var(--mk-cta); }
+.mk-tr-badge.is-cancelled { background: rgba(228, 0, 43, .1); color: var(--mk-primary); }
+.mk-tr-title { font-weight: 700; font-size: 15px; }
+.mk-tr-desc { color: var(--mk-ink-2); font-size: 0.85rem; margin-block-start: 2px; }
+.mk-tr-eta { color: var(--mk-cta); font-size: 0.82rem; font-weight: 600; margin-block-start: 4px; }
+
+.mk-tr-steps {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  counter-reset: trstep;
+}
+.mk-tr-steps li {
+  font-size: 0.72rem;
+  color: var(--mk-ink-2);
+  text-align: center;
+  padding-block-start: 10px;
+  position: relative;
+}
+.mk-tr-steps li::before {
+  content: "";
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--mk-line);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 2px;
+}
+.mk-tr-steps li.is-done::before { background: var(--mk-cta); }
+.mk-tr-steps li.is-now { color: var(--mk-ink); font-weight: 700; }
+
+.mk-tr-driver {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r);
+  padding: 10px 12px;
+  margin-block-end: 12px;
+}
+.mk-tr-driver__ico { font-size: 20px; }
+.mk-tr-driver__body { flex: 1 1 auto; min-width: 0; }
+.mk-tr-driver__body b { display: block; font-size: 0.9rem; }
+.mk-tr-driver__body small { color: var(--mk-ink-2); font-size: 0.76rem; }
+
+.mk-tr-courier {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--mk-ink-2);
+  font-size: 0.85rem;
+  margin-block-end: 12px;
+}
+.mk-tr-courier a { color: var(--mk-primary); }
+
+.mk-tr-map {
+  height: 180px;
+  border-radius: var(--mk-r);
+  border: 1px solid var(--mk-line);
+  overflow: hidden;
+  margin-block-end: 12px;
+  background: var(--mk-surface-2);
+}
+
+/* ============================================================
+   P4 — crave bag + checkout.
+   Supersedes the .mk-bag-* / .mk-co-* Snoonu-pass rules above;
+   those are pruned once the rebuilt blades are confirmed to
+   reference none of them. Tokens live in mk.css.
+   ============================================================ */
+
+/* ---------- per-store bag section ---------- */
+.mk-bagstore {
+  border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line);
+  padding: 14px; display: grid; gap: 12px; margin-block-end: 14px;
+}
+.mk-bagstore__head { display: flex; align-items: center; gap: 10px; }
+.mk-bagstore__head img { inline-size: 40px; block-size: 40px; border-radius: 11px; object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-bagstore__head b { font-size: 14.5px; flex: 1; min-inline-size: 0; }
+.mk-bagstore__head small { display: block; font-size: 11.5px; color: var(--mk-ink-2); font-weight: 600; }
+.mk-bagstore__head a { color: inherit; text-decoration: none; }
+
+/* ---------- cart line ---------- */
+.mk-cartline { display: flex; gap: 11px; align-items: center; position: relative; }
+.mk-cartline img { inline-size: 64px; block-size: 64px; border-radius: var(--mk-r); object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-cartline__body { flex: 1; min-inline-size: 0; }
+.mk-cartline__body b { font-size: 13.5px; display: block; }
+/* The selection summary is what distinguishes two configurations of the same
+   item, so it must never be the thing that gets truncated away entirely. */
+.mk-cartline__sel {
+  font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; display: block;
+  margin-block-start: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mk-cartline__price { font-size: 13px; font-weight: 800; color: var(--mk-primary); font-variant-numeric: tabular-nums; margin-block-start: 3px; display: block; }
+.mk-cartline__actions { display: grid; gap: 4px; justify-items: center; flex: none; }
+.mk-cartline__actions button {
+  inline-size: 28px; block-size: 28px; border-radius: 50%; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink); display: grid; place-items: center; cursor: pointer;
+}
+.mk-cartline__actions output { font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mk-cartline.is-removing { animation: mk-lineout .3s var(--mk-ease) both; }
+@keyframes mk-lineout { to { opacity: 0; transform: translateX(40px); block-size: 0; } }
+
+/* ---------- tool cards (coupon / extras / note) ---------- */
+.mk-toolcard { border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 14px; display: grid; gap: 10px; }
+.mk-toolcard h3 { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0; }
+.mk-toolcard h3 .mk-ic { inline-size: 17px; block-size: 17px; color: var(--mk-primary); }
+
+.mk-couponfield {
+  display: flex; align-items: center; gap: 9px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); border-radius: 14px;
+  padding-block: 4px; padding-inline: 14px 6px;
+}
+.mk-couponfield .mk-ic { color: var(--mk-ink-3); flex: none; }
+.mk-couponfield input { flex: 1; min-inline-size: 0; background: none; border: 0; padding-block: 10px; color: var(--mk-ink); font: inherit; }
+.mk-couponfield input:focus-visible { outline: none; }
+.mk-couponfield button {
+  flex: none; padding: 8px 14px; border-radius: 999px; border: none;
+  background: var(--mk-primary); color: var(--mk-primary-ink); font: inherit; font-weight: 800; font-size: 12px; cursor: pointer;
+}
+.mk-couponmsg { font-size: 12.5px; font-weight: 700; margin: 0; }
+.mk-couponmsg.is-ok { color: var(--mk-primary); }
+.mk-couponmsg.is-bad { color: var(--mk-danger); }
+
+.mk-tipchips { display: flex; gap: 8px; }
+.mk-tipchips button {
+  flex: 1; padding: 10px 6px; border-radius: 13px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink-2); font: inherit; font-weight: 800; font-size: 13px; cursor: pointer;
+}
+.mk-tipchips button.is-on { background: var(--mk-cta-bg); color: var(--mk-cta-ink); border-color: transparent; }
+
+.mk-switchrow { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.mk-switchrow .lbl { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 9px; }
+.mk-switchrow .lbl .mk-ic { color: var(--mk-primary); }
+.mk-switchrow small { display: block; font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+.mk-switch {
+  inline-size: 46px; block-size: 27px; border-radius: 999px; flex: none; position: relative; cursor: pointer;
+  background: var(--mk-surface-2); border: 1px solid var(--mk-line-2);
+  transition: background var(--mk-t-micro) var(--mk-ease);
+}
+.mk-switch::after {
+  content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px;
+  inline-size: 21px; block-size: 21px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .3); transition: transform var(--mk-t-micro) var(--mk-ease);
+}
+.mk-switch.is-on { background: var(--mk-primary); }
+.mk-switch.is-on::after { transform: translateX(19px); }
+[dir="rtl"] .mk-switch.is-on::after { transform: translateX(-19px); }
+
+/* ---------- totals ---------- */
+.mk-totals { border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 15px; display: grid; gap: 9px; }
+.mk-totals__row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; color: var(--mk-ink-2); }
+.mk-totals__row b { color: var(--mk-ink); font-variant-numeric: tabular-nums; }
+.mk-totals__row--discount b { color: var(--mk-primary); }
+.mk-totals__row--grand { border-block-start: 1px dashed var(--mk-line-2); padding-block-start: 11px; font-size: 15px; font-weight: 800; color: var(--mk-ink); }
+.mk-totals__row--grand b { font-size: 17px; }
+/* Shown instead of a grand total when the bag mixes currencies — printing a
+   summed number there would be a lie. */
+.mk-totals__conflict { font-size: 12.5px; font-weight: 700; color: var(--mk-accent); }
+.mk-minwarn { font-size: 12px; color: var(--mk-accent); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+
+/* ---------- checkout: address ---------- */
+.mk-addrrow { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-block-end: 10px; }
+.mk-addrrow::-webkit-scrollbar { display: none; }
+.mk-addrcard {
+  flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 10px 14px;
+  border-radius: 14px; background: var(--mk-surface); border: 1px solid var(--mk-line);
+  color: var(--mk-ink); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; text-align: start;
+}
+.mk-addrcard--on { border-color: var(--mk-primary); background: color-mix(in srgb, var(--mk-primary) 8%, transparent); }
+.mk-addrcard .mk-ic { inline-size: 15px; block-size: 15px; color: var(--mk-primary); }
+.mk-addrmap { position: relative; block-size: 160px; border-radius: var(--mk-r-lg); overflow: hidden; background: var(--mk-surface); border: 1px solid var(--mk-line); margin-block-end: 10px; }
+.mk-georow { display: flex; gap: 8px; margin-block-start: 10px; }
+.mk-georow > * { flex: 1; justify-content: center; font-size: 12.5px; padding: 10px 8px; }
+
+/* ---------- checkout: fulfillment + slots ---------- */
+.mk-seg { display: flex; gap: 4px; padding: 4px; background: var(--mk-surface-2); border-radius: 999px; }
+.mk-seg button {
+  flex: 1; padding: 9px 12px; border-radius: 999px; border: none; background: none;
+  color: var(--mk-ink-2); font: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+  transition: background var(--mk-t-micro) var(--mk-ease), color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-seg button.is-on { background: var(--mk-cta-bg); color: var(--mk-cta-ink); }
+.mk-slotgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.mk-slotgrid button {
+  padding: 10px 8px; border-radius: 12px; background: var(--mk-surface); border: 1px solid var(--mk-line);
+  color: var(--mk-ink); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+}
+.mk-slotgrid button.is-on { border-color: var(--mk-primary); background: color-mix(in srgb, var(--mk-primary) 8%, transparent); }
+.mk-slotgrid button:disabled { opacity: .45; cursor: default; }
+
+/* ---------- checkout: payment ---------- */
+.mk-copay { display: grid; gap: 9px; }
+.mk-copay__row {
+  display: flex; align-items: center; gap: 12px; padding: 13px; border-radius: 14px;
+  background: var(--mk-surface); border: 1px solid var(--mk-line); cursor: pointer;
+  transition: border-color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-copay__row.is-on { border-color: var(--mk-primary); }
+.mk-copay__row input { position: absolute; opacity: 0; pointer-events: none; }
+.mk-copay__ic { inline-size: 40px; block-size: 40px; border-radius: 11px; background: var(--mk-surface-2); display: grid; place-items: center; flex: none; }
+.mk-copay__ic .mk-ic { color: var(--mk-primary); }
+.mk-copay__txt { flex: 1; min-inline-size: 0; }
+.mk-copay__txt b { font-size: 13.5px; display: block; }
+.mk-copay__txt small { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+/* Each store settles through its OWN gateways — this note makes that explicit
+   rather than letting the shopper assume one platform charge. */
+.mk-copay__note { font-size: 11px; color: var(--mk-ink-3); font-weight: 600; padding-block-start: 2px; }
+
+.mk-otpbox { display: flex; gap: 8px; justify-content: center; }
+.mk-otpbox input {
+  inline-size: 46px; block-size: 54px; text-align: center; font-size: 20px; font-weight: 800;
+  border-radius: 13px; background: var(--mk-surface); border: 1px solid var(--mk-line-2);
+  color: var(--mk-ink); font-variant-numeric: tabular-nums; box-sizing: border-box;
+}
+.mk-terms { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--mk-ink-2); font-weight: 600; padding: 4px 2px; }
+.mk-terms input { inline-size: 19px; block-size: 19px; accent-color: var(--mk-primary); padding: 0; flex: none; }
+
+/* Sticky place-order bar — clears the tabbar like .mk-pcta does. */
+.mk-placebar {
+  position: sticky; inset-block-end: calc(84px + env(safe-area-inset-bottom)); z-index: 20;
+  display: flex; gap: 12px; align-items: center;
+  margin-inline: -16px; padding: 12px 16px 16px;
+  background: linear-gradient(to top, var(--mk-bg) 72%, transparent);
+}
+@media (min-width: 900px) {
+  .mk-placebar { inset-block-end: 0; padding-block-end: calc(16px + env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-cartline, .mk-switch, .mk-switch::after, .mk-seg button, .mk-copay__row {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- P4 bag: remaining element classes ---------- */
+.mk-bag__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 8px 12px; }
+.mk-bag__clear { background: none; border: none; color: var(--mk-ink-2); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 2px; }
+.mk-bag__clear:hover { color: var(--mk-danger); }
+.mk-bag-empty { display: grid; justify-items: center; gap: 12px; padding: 44px 20px; text-align: center; color: var(--mk-ink-2); }
+.mk-empty__art { inline-size: 76px; block-size: 76px; stroke: var(--mk-ink-3); fill: none; stroke-width: 2; }
+
+.mk-bagstore__logo { inline-size: 40px; block-size: 40px; border-radius: 11px; object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-bagstore__id { display: flex; align-items: center; gap: 10px; flex: 1; min-inline-size: 0; color: inherit; text-decoration: none; }
+.mk-bagstore__name { font-size: 14.5px; font-weight: 800; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-bagstore__meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11.5px; color: var(--mk-ink-2); font-weight: 600; margin-block-start: 2px; }
+.mk-bagstore__dot { inline-size: 3px; block-size: 3px; border-radius: 50%; background: currentColor; opacity: .55; flex: none; }
+.mk-bagstore__lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+
+.mk-cartline__img { inline-size: 64px; block-size: 64px; border-radius: var(--mk-r); object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-cartline__name { font-size: 13.5px; font-weight: 800; display: block; }
+.mk-cartline__note { font-size: 11.5px; color: var(--mk-ink-2); font-weight: 600; display: block; margin-block-start: 2px; font-style: italic; }
+.mk-cartline__del { background: none; border: none; color: var(--mk-ink-3); cursor: pointer; padding: 4px; display: grid; place-items: center; }
+.mk-cartline__del:hover { color: var(--mk-danger); }
+/* Swipe-to-remove underlay: sits BEHIND the line and is only exposed as the
+   line translates away on touch. The line therefore needs its own opaque
+   background and a stacking context — without them the red panel shows at rest
+   and covers the qty stepper. */
+.mk-cartline__swipe {
+  position: absolute; inset-block: 0; inset-inline-end: 0; inline-size: 76px;
+  border-radius: var(--mk-r); background: var(--mk-danger); color: #fff;
+  display: grid; place-items: center; z-index: 0;
+  /* A parent's background paints BELOW every child, including a z-index:0 one,
+     so the line's own background cannot occlude this. Gate it on the
+     .is-swiping class the pointer handler sets instead. */
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--mk-t-micro) var(--mk-ease);
+}
+.mk-cartline.is-swiping .mk-cartline__swipe { opacity: 1; pointer-events: auto; }
+.mk-cartline > :not(.mk-cartline__swipe) { position: relative; z-index: 1; }
+.mk-cartline {
+  background: var(--mk-elev);
+  transition: transform var(--mk-t-micro) var(--mk-ease);
+}
+
+.mk-switchrow__lbl { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 9px; }
+.mk-switchrow__lbl .mk-ic { color: var(--mk-primary); }
+.mk-switchrow__lbl small { display: block; font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+
+.mk-totals--bag { margin-block-start: 14px; }
+.mk-minwarn--bag { margin-block-start: 4px; }
+.mk-minibtn {
+  flex: none; padding: 8px 14px; border-radius: 999px; border: none;
+  background: var(--mk-primary); color: var(--mk-primary-ink);
+  font: inherit; font-weight: 800; font-size: 12px; cursor: pointer;
+}
+.mk-minibtn--ghost { background: var(--mk-surface-2); color: var(--mk-ink-2); }
+
+/* ---------- P4 checkout: settle list + notes ---------- */
+/* Shown after `place` when at least one store needs an online payment: each
+   store settles through its OWN gateway, so this is a list of per-store
+   actions rather than one platform charge. */
+.mk-cosettle { margin-block-start: 14px; }
+.mk-cosettle__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.mk-cosettle__row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 13px;
+  border-radius: 14px; background: var(--mk-surface); border: 1px solid var(--mk-line);
+}
+.mk-cosettle__row b { flex: 1; min-inline-size: 0; font-size: 13.5px; }
+.mk-cosettle__state { font-size: 11.5px; font-weight: 700; color: var(--mk-ink-3); }
+.mk-cosettle__state.is-ok { color: var(--mk-primary); }
+.mk-cosettle__state.is-bad { color: var(--mk-danger); }
+.mk-cosettle__track { font-size: 12.5px; font-weight: 700; color: var(--mk-primary); text-decoration: none; }
+.mk-conote { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; margin: 0; }
+
+/* One wide code input, not six digit boxes — the OTP length isn't fixed here. */
+.mk-otpbox { display: flex; gap: 8px; }
+.mk-otpbox input {
+  flex: 1; inline-size: auto; block-size: auto; padding: 12px 14px;
+  font-size: 17px; letter-spacing: .28em; text-align: center;
+}
+
+/* ============================================================
+   P5 — confirmed / track / orders
+   ============================================================ */
+
+/* ---------- confirmed ---------- */
+.mk-confirm { display: grid; justify-items: center; text-align: center; padding: 24px 4px; position: relative; overflow: hidden; }
+.mk-confirm__art { position: relative; inline-size: 230px; block-size: 190px; margin-block-end: 8px; }
+.mk-confirm__title { font-family: var(--mk-font-display); font-size: 32px; font-weight: 600; letter-spacing: -.01em; margin: 6px 0 0; }
+.mk-confirm__sub { font-size: 13.5px; color: var(--mk-ink-2); margin-block-start: 8px; line-height: 1.5; }
+.mk-confirm__codes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 16px 0 4px; }
+.mk-confirm__code {
+  padding: 9px 15px; border-radius: 13px; background: var(--mk-surface);
+  border: 1px dashed var(--mk-line-2); font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums;
+}
+.mk-confirm__code small { color: var(--mk-ink-3); font-weight: 700; margin-inline-end: 6px; }
+.mk-confirm__actions { display: grid; gap: 10px; inline-size: 100%; margin-block-start: 18px; }
+.mk-confetti { position: absolute; inset: 0; pointer-events: none; }
+.mk-confetti i { position: absolute; inset-block-start: -12px; inline-size: 8px; block-size: 13px; border-radius: 3px; animation: mk-conf 2.4s ease-in forwards; }
+@keyframes mk-conf { to { transform: translateY(120vh) rotate(720deg); opacity: .2; } }
+/* Celebration is decoration: never animate it for a reduced-motion reader. */
+@media (prefers-reduced-motion: reduce) { .mk-confetti { display: none; } }
+
+/* ---------- track ---------- */
+.mk-track { display: grid; gap: 15px; border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 16px; }
+.mk-track__tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-block: 2px 12px; }
+.mk-track__tabs::-webkit-scrollbar { display: none; }
+.mk-track__tab {
+  flex: none; display: flex; align-items: center; gap: 9px; padding: 9px 13px;
+  border-radius: 14px; background: var(--mk-surface); border: 1px solid var(--mk-line);
+  color: var(--mk-ink); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+}
+.mk-track__tab img { inline-size: 26px; block-size: 26px; border-radius: 8px; object-fit: cover; }
+.mk-track__tab.is-on { border-color: var(--mk-primary); background: color-mix(in srgb, var(--mk-primary) 8%, transparent); }
+.mk-track__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.mk-track__label { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 700; }
+.mk-track__top b { font-size: 16px; font-variant-numeric: tabular-nums; }
+.mk-track__eta { text-align: end; }
+.mk-track__eta b { color: var(--mk-primary); }
+
+.mk-timeline { list-style: none; display: grid; gap: 2px; margin: 0; padding: 0; }
+.mk-timeline__step { display: flex; gap: 13px; position: relative; padding-block-end: 18px; }
+.mk-timeline__step:last-child { padding-block-end: 0; }
+.mk-timeline__step::before {
+  content: ""; position: absolute; inset-inline-start: 12px; inset-block: 26px 0;
+  inline-size: 2px; background: var(--mk-line-2);
+}
+.mk-timeline__step:last-child::before { display: none; }
+.mk-timeline__dot {
+  inline-size: 26px; block-size: 26px; border-radius: 50%; border: 2px solid var(--mk-line-2);
+  display: grid; place-items: center; flex: none; background: var(--mk-surface); z-index: 1;
+  transition: background .3s var(--mk-ease), border-color .3s var(--mk-ease);
+}
+.mk-timeline__dot .mk-ic { inline-size: 13px; block-size: 13px; opacity: 0; }
+.mk-timeline__step.is-done .mk-timeline__dot { background: var(--mk-primary); border-color: var(--mk-primary); color: var(--mk-primary-ink); }
+.mk-timeline__step.is-done .mk-timeline__dot .mk-ic { opacity: 1; }
+.mk-timeline__step.is-done::before { background: var(--mk-primary); }
+.mk-timeline__step.is-now .mk-timeline__dot { border-color: var(--mk-primary); color: var(--mk-primary); }
+.mk-timeline__step.is-now .mk-timeline__dot::after {
+  content: ""; inline-size: 10px; block-size: 10px; border-radius: 50%;
+  background: var(--mk-primary); animation: mk-pulse 1.4s infinite;
+}
+@keyframes mk-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: .5; } }
+.mk-timeline__txt b { font-size: 13.5px; display: block; }
+.mk-timeline__txt small { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+
+.mk-courier { display: flex; align-items: center; gap: 11px; border-block-start: 1px dashed var(--mk-line-2); padding-block-start: 14px; }
+.mk-courier__ic { inline-size: 44px; block-size: 44px; border-radius: 50%; background: var(--mk-surface-2); display: grid; place-items: center; flex: none; object-fit: cover; }
+.mk-courier__txt { flex: 1; min-inline-size: 0; }
+.mk-courier__txt b { font-size: 14px; display: block; }
+.mk-courier__txt small { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+.mk-courier__actions { display: flex; gap: 8px; flex: none; }
+.mk-courier__actions a {
+  inline-size: 40px; block-size: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--mk-surface); border: 1px solid var(--mk-line); color: var(--mk-primary); text-decoration: none;
+}
+/* Only rendered when driver lat/lng actually arrive (they are withheld unless
+   the order is out_for_delivery — see TrackController::feedPayload). */
+.mk-trackmap { block-size: 200px; border-radius: var(--mk-r-lg); overflow: hidden; background: var(--mk-surface); border: 1px solid var(--mk-line); }
+.mk-tracketa { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--mk-ink-2); font-weight: 700; }
+.mk-tracketa .mk-ic { color: var(--mk-accent); inline-size: 16px; block-size: 16px; }
+
+/* ---------- feedback: NPS + google review ---------- */
+.mk-nps { border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 15px; margin-block-start: 14px; display: grid; gap: 11px; text-align: center; }
+.mk-nps p { font-size: 13.5px; font-weight: 700; margin: 0; }
+.mk-nps__scale { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+.mk-nps__btn {
+  inline-size: 28px; block-size: 28px; border-radius: 9px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink-2);
+  font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+}
+.mk-nps__btn.is-on { background: var(--mk-primary); color: var(--mk-primary-ink); border-color: transparent; }
+.mk-greview {
+  display: flex; align-items: center; gap: 10px; padding: 13px 15px;
+  border-radius: var(--mk-r-lg); background: var(--mk-surface); border: 1px solid var(--mk-line);
+  margin-block-start: 12px; font-size: 13px; font-weight: 700; color: var(--mk-ink); text-decoration: none;
+}
+.mk-greview span { flex: 1; }
+
+/* ---------- orders history ---------- */
+.mk-orderrow { border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 14px; display: grid; gap: 10px; }
+.mk-orderrow__head { display: flex; align-items: center; gap: 10px; }
+.mk-orderrow__head img { inline-size: 38px; block-size: 38px; border-radius: 11px; object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-orderrow__head b { flex: 1; min-inline-size: 0; font-size: 14px; }
+.mk-orderrow__items { font-size: 12.5px; color: var(--mk-ink-2); font-weight: 600; line-height: 1.5; }
+.mk-orderrow__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-block-start: 1px dashed var(--mk-line-2); padding-block-start: 10px; }
+.mk-orderstatus { font-size: 11.5px; font-weight: 800; padding: 5px 10px; border-radius: 999px; background: var(--mk-surface-2); color: var(--mk-ink-2); }
+.mk-orderstatus.is-done { background: var(--mk-primary-soft); color: var(--mk-primary); }
+.mk-orderstatus.is-cancelled { background: color-mix(in srgb, var(--mk-danger) 12%, transparent); color: var(--mk-danger); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-timeline__dot, .mk-timeline__step.is-now .mk-timeline__dot::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- P5.1 confirmation art + confetti ---------- */
+/* The blade sets only custom properties on each bit (no inline styles), and
+   builds NO confetti DOM at all under prefers-reduced-motion. */
+.mk-confetti i {
+  inset-inline-start: var(--mk-cf-x, 50%);
+  animation-delay: var(--mk-cf-delay, 0s);
+  transform: rotate(var(--mk-cf-rot, 0deg));
+  background: var(--mk-primary);
+}
+/* The blade stamps --mk-cf-i (0–4) as a palette index, but CSS cannot branch on
+   a custom property's VALUE without style queries, so colour by position — same
+   five-colour spread, no reliance on the index. */
+.mk-confetti i:nth-child(5n + 1) { background: var(--mk-primary); }
+.mk-confetti i:nth-child(5n + 2) { background: var(--mk-accent); }
+.mk-confetti i:nth-child(5n + 3) { background: var(--mk-primary-hi); }
+.mk-confetti i:nth-child(5n + 4) { background: var(--mk-star); }
+.mk-confetti i:nth-child(5n + 5) { background: var(--mk-primary-deep); }
+.mk-confirm__doodles { position: absolute; inset: 0; stroke: var(--mk-primary); fill: none; stroke-width: 2; }
+.mk-confirm__bd { opacity: 0; animation: mk-bdpop .5s var(--mk-spring) forwards; }
+.mk-confirm__bd:nth-child(2) { animation-delay: .15s; }
+.mk-confirm__bd:nth-child(3) { animation-delay: .3s; }
+.mk-confirm__bd:nth-child(4) { animation-delay: .45s; }
+.mk-confirm__bd:nth-child(5) { animation-delay: .55s; }
+@keyframes mk-bdpop { from { opacity: 0; transform: scale(.5); } to { opacity: 1; transform: none; } }
+.mk-confirm__box { position: absolute; inset: 14% 12%; }
+.mk-confirm__boxbody, .mk-confirm__flap { fill: var(--mk-surface-2); stroke: var(--mk-line-2); stroke-width: 2; }
+.mk-confirm__boxfront { fill: var(--mk-surface); stroke: var(--mk-line-2); stroke-width: 2; }
+.mk-confirm__badge circle { fill: var(--mk-primary); }
+.mk-confirm__check { stroke: var(--mk-primary-ink); stroke-width: 4; fill: none; stroke-dasharray: 1; stroke-dashoffset: 1; animation: mk-drawcheck .5s var(--mk-ease) forwards .5s; }
+@keyframes mk-drawcheck { to { stroke-dashoffset: 0; } }
+.mk-confirm__orders { display: grid; gap: 10px; inline-size: 100%; margin-block-start: 16px; }
+.mk-confirm__row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 13px; text-align: start;
+  border-radius: 14px; background: var(--mk-surface); border: 1px solid var(--mk-line);
+}
+.mk-confirm__row b { flex: 1; min-inline-size: 0; font-size: 13.5px; }
+@media (prefers-reduced-motion: reduce) {
+  .mk-confirm__bd, .mk-confirm__check { animation: none !important; opacity: 1; stroke-dashoffset: 0; }
+}
+
+/* ---------- P5.4 orders page ---------- */
+.mk-orderrow__logo { inline-size: 38px; block-size: 38px; border-radius: 11px; object-fit: cover; flex: none; background: var(--mk-surface-2); }
+.mk-orderrow__id { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mk-orderrow__chev { color: var(--mk-ink-3); flex: none; }
+.mk-orderrow--link { color: inherit; text-decoration: none; }
+.mk-orderstatus--completed, .mk-orderstatus.is-paid { background: var(--mk-primary-soft); color: var(--mk-primary); }
+.mk-orderstatus--cancelled { background: color-mix(in srgb, var(--mk-danger) 12%, transparent); color: var(--mk-danger); }
+.mk-orderstatus--unpaid, .mk-orderstatus.is-due { background: color-mix(in srgb, var(--mk-accent) 14%, transparent); color: var(--mk-accent); }
+.mk-orderstatus--pending, .mk-orderstatus--preparing, .mk-orderstatus--ready { background: var(--mk-surface-2); color: var(--mk-ink-2); }
+/* Guest section: orders this DEVICE holds tokens for. Never a server lookup —
+   a phone/order-number endpoint would enumerate other people's orders. */
+.mk-orders__device { display: grid; gap: 10px; margin-block-start: 18px; }
+.mk-orders__devicehint { font-size: 12px; color: var(--mk-ink-3); font-weight: 600; margin: 0; }
+.mk-orders__error { font-size: 12.5px; font-weight: 700; color: var(--mk-danger); }
+
+/* ---------- P5.2 track: remaining element classes ---------- */
+.mk-track__desc { font-size: 12.5px; color: var(--mk-ink-2); font-weight: 600; margin: 0; }
+.mk-track__desc--meta { color: var(--mk-ink-3); font-size: 11.5px; }
+.mk-track__tabname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-inline-size: 12ch; }
+.mk-track__tabnum { color: var(--mk-ink-3); font-variant-numeric: tabular-nums; }
+
+/* ---------- P8.1 account: me card + anchor-based segmented control ---------- */
+.mk-me { display: flex; align-items: center; gap: 12px; }
+.mk-me__avatar {
+  inline-size: 54px; block-size: 54px; border-radius: 50%; flex: none;
+  background: var(--mk-surface-2); display: grid; place-items: center;
+  font-size: 20px; font-weight: 800; color: var(--mk-ink-2); object-fit: cover;
+}
+.mk-me__txt { flex: 1; min-inline-size: 0; }
+.mk-me__txt b { display: block; font-size: 16px; font-weight: 800; }
+.mk-me__txt small { display: block; font-size: 12.5px; color: var(--mk-ink-2); font-weight: 600; }
+/* The language pills are real anchors (no-JS, right-clickable), so they need the
+   link styling killed and the same padding the button variant gets. */
+a.mk-seg__btn { text-decoration: none; color: inherit; }
+.mk-seg .mk-seg__btn {
+  flex: 1; text-align: center; padding: 9px 12px; border-radius: 999px;
+  font-weight: 700; font-size: 13px; color: var(--mk-ink-2);
+}
+.mk-seg .mk-seg__btn.is-active { background: var(--mk-cta-bg); color: var(--mk-cta-ink); }
+
+/* ---------- P9.2 wallet card + statement ---------- */
+.mk-wallet { border-radius: var(--mk-r-lg); background: var(--mk-grad); color: var(--mk-primary-ink); padding: 18px; display: grid; gap: 12px; position: relative; overflow: hidden; }
+.mk-wallet::after { content: ""; position: absolute; inset-inline-end: -30px; inset-block-start: -40px; inline-size: 140px; block-size: 140px; border-radius: 50%; background: rgba(255, 255, 255, .16); }
+.mk-wallet__hero { position: relative; z-index: 1; }
+.mk-wallet__lbl { font-size: 11.5px; font-weight: 700; opacity: .85; }
+.mk-wallet__amt { font-family: var(--mk-font-display); font-size: 34px; font-weight: 600; line-height: 1.05; }
+/* Each currency is a SEPARATE balance — these are pills, never summed. */
+.mk-wallet__others { display: flex; gap: 6px; flex-wrap: wrap; position: relative; z-index: 1; }
+.mk-wallet__others span { padding: 5px 10px; border-radius: 999px; background: rgba(255, 255, 255, .22); font-size: 11.5px; font-weight: 800; }
+.mk-wallet__acts { display: flex; gap: 8px; position: relative; z-index: 1; }
+.mk-wallet__acts button { padding: 8px 15px; border-radius: 999px; border: none; background: rgba(255, 255, 255, .94); color: var(--mk-primary-deep); font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+.mk-wallet__history { display: grid; gap: 8px; }
+.mk-wallet__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mk-wallet__row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 13px; background: var(--mk-surface); border: 1px solid var(--mk-line); }
+.mk-wallet__row b { flex: 1; min-inline-size: 0; font-size: 13px; font-weight: 700; }
+.mk-wallet__row small { display: block; font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+.mk-wallet__rowamt { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 13px; }
+.mk-wallet__row.is-in .mk-wallet__rowamt { color: var(--mk-primary); }
+.mk-wallet__row.is-out .mk-wallet__rowamt { color: var(--mk-ink-2); }
+.mk-co__fusion { align-items: flex-start; }
+.mk-co__fusion small { display: block; font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+.mk-co__credit { align-items: flex-start; }
+.mk-co__credit small { display: block; font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+
+/* ============================================================
+   Crave/demo parity — PARITY.md B1 + C1
+   ============================================================ */
+
+/* B1: the demo's vertical trailing stepper. mk.css's .mk-qty is a horizontal
+   pill (right for the product CTA); inside a cart line it must stack
+   + / count / − in a column instead. */
+.mk-cartline__actions .mk-qty {
+  display: grid; gap: 4px; justify-items: center;
+  background: none; border: none; padding: 0;
+}
+.mk-cartline__actions .mk-qty button {
+  inline-size: 28px; block-size: 28px; border-radius: 50%;
+  background: var(--mk-surface); border: 1px solid var(--mk-line);
+  color: var(--mk-ink); display: grid; place-items: center; cursor: pointer;
+}
+.mk-cartline__actions .mk-qty output { min-inline-size: 0; }
+
+/* C1: decorative address-map preview (demo look). Pure CSS/SVG — deliberately
+   NOT a maps API: it illustrates "this is where the pin goes", nothing more. */
+.mk-comap {
+  position: relative; block-size: 120px; border-radius: var(--mk-r);
+  overflow: hidden; margin-block-end: 10px;
+  background:
+    linear-gradient(var(--mk-line) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, var(--mk-line) 1px, transparent 1px) 0 0 / 44px 44px,
+    var(--mk-surface-2);
+}
+.mk-comap::before, .mk-comap::after {
+  content: ""; position: absolute; border-radius: 6px; background: var(--mk-surface);
+}
+.mk-comap::before { inline-size: 52px; block-size: 26px; inset-block-start: 18px; inset-inline-start: 12%; }
+.mk-comap::after { inline-size: 34px; block-size: 34px; inset-block-end: 14px; inset-inline-end: 14%; }
+.mk-comap__pin {
+  position: absolute; inset-inline-start: 50%; inset-block-start: 42%;
+  transform: translate(-50%, -100%); inline-size: 26px; block-size: 26px;
+  color: var(--mk-primary); z-index: 1;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .35));
+}
+[dir="rtl"] .mk-comap__pin { transform: translate(50%, -100%); }
+.mk-comap__pin svg { inline-size: 100%; block-size: 100%; fill: currentColor; stroke: none; }
+.mk-comap__dot {
+  position: absolute; inset-inline-start: 50%; inset-block-start: 42%;
+  transform: translateX(-50%); inline-size: 14px; block-size: 5px; border-radius: 50%;
+  background: color-mix(in srgb, var(--mk-primary) 45%, transparent);
+}
+[dir="rtl"] .mk-comap__dot { transform: translateX(50%); }
+
+/* Dine-in (fusion-parity-2): third mode pill fits the existing flex row; the
+   table field only shows for dinein. */
+.mk-bag-table {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--mk-line); background: var(--mk-elev);
+  border-radius: 12px; padding: 4px 12px; margin-block-start: 8px;
+  color: var(--mk-ink-2);
+}
+.mk-bag-table input {
+  flex: 1; min-inline-size: 0; border: none; background: none;
+  color: var(--mk-ink); font: inherit; font-size: 13.5px; font-weight: 600;
+  padding: 8px 0; outline: none;
+}
+.mk-bag-table input::placeholder { color: var(--mk-ink-3); }
+.mk-bag-table:focus-within { border-color: var(--mk-primary); }

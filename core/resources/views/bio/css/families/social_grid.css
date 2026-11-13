@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* social_grid family — big avatar, a wall of branded social tiles, then a couple of buttons (LinkMe). */
+.fam-social_grid .bio-in{padding:52px 22px 0;text-align:center}
+.fam-social_grid .bio-avatar{width:104px;height:104px;font-size:44px;border-radius:calc(var(--radius,20px) + 4px)}
+.fam-social_grid .bio-name{font-size:21px}
+.fam-social_grid .bio-blocks{text-align:start}
+
+/* the socials block becomes a 4-up wall of colour tiles */
+.fam-social_grid .bio-socials{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:8px 0 18px}
+.fam-social_grid .bio-socials a{width:auto;height:auto;aspect-ratio:1;border-radius:18px;color:#fff}
+.fam-social_grid .bio-socials svg{width:22px;height:22px;fill:#fff}
+.fam-social_grid .bio-soc--instagram{background:linear-gradient(140deg,#f58529,#dd2a7b 60%,#8134af)}
+.fam-social_grid .bio-soc--tiktok{background:#111;border:1px solid #333}
+.fam-social_grid .bio-soc--whatsapp{background:#25d366}
+.fam-social_grid .bio-soc--snapchat{background:#fffc00;color:#111}
+.fam-social_grid .bio-soc--snapchat svg{fill:#111}
+.fam-social_grid .bio-soc--x,.fam-social_grid .bio-soc--twitter{background:#000}
+.fam-social_grid .bio-soc--facebook{background:#1877f2}
+.fam-social_grid .bio-soc--youtube{background:#ff0000}
+.fam-social_grid .bio-soc--maps{background:#ff5c39}
+.fam-social_grid .bio-soc--phone{background:#5865f2}
+.fam-social_grid .bio-soc--pinterest{background:#e60023}
+.fam-social_grid .bio-soc--link{background:color-mix(in srgb,var(--accent,#3aa3ff) 80%,#000)}

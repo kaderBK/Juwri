@@ -1,0 +1,52 @@
+<style>
+.sfb { --sfb-accent: #e4572e; }
+.sfb { --sfb-a: var(--tc-primary, var(--sfb-accent)); --sfb-on: var(--tc-on-primary, #fff); --sfb-ink: var(--mb-ink, inherit); box-sizing: border-box; max-width: 760px; margin-inline: auto; padding: 20px 16px; color: var(--sfb-ink); font-family: inherit; line-height: 1.5; }
+.sfb *, .sfb *::before, .sfb *::after { box-sizing: border-box; }
+.sfb img { max-width: 100%; height: auto; display: block; }
+.sfb-eyebrow { margin: 0 0 6px; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sfb-a); text-align: center; }
+.sfb-title { margin: 0 0 10px; font-size: clamp(1.35rem, 4vw, 1.9rem); font-weight: 800; line-height: 1.2; text-align: center; }
+.sfb-text { margin: 0 0 12px; font-size: 1rem; opacity: .85; text-align: center; }
+.sfb-fine { margin: 8px 0 0; font-size: .8rem; opacity: .65; text-align: center; }
+.sfb-actions { display: flex; justify-content: center; margin: 12px 0 4px; }
+.sfb-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 22px; border-radius: 999px; background: var(--sfb-a); color: var(--sfb-on); font-weight: 700; text-decoration: none; border: 2px solid var(--sfb-a); }
+.sfb-btn:hover { filter: brightness(1.08); }
+.sfb-btn--ghost { background: transparent; color: var(--sfb-a); }
+.sfb-promo { display: grid; overflow: hidden; border-radius: 20px; background: var(--sfb-a); color: var(--sfb-on); }
+.sfb-promo__media img { width: 100%; aspect-ratio: 3 / 1; object-fit: cover; }
+.sfb-promo__body { padding: 18px 20px 20px; text-align: center; }
+.sfb-promo__title { margin: 0 0 6px; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 800; line-height: 1.2; }
+.sfb-promo__text { margin: 0; opacity: .92; }
+.sfb-split { display: grid; gap: 18px; align-items: center; }
+@media (min-width: 640px) { .sfb-split { grid-template-columns: 1fr 1fr; } }
+.sfb-split__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; }
+.sfb-split__title { margin: 0 0 8px; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 800; }
+.sfb-split__text { margin: 0; opacity: .85; }
+.sfb-gallery__track, .sfb-quotes__track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.sfb-gallery__slide { flex: 0 0 78%; margin: 0; scroll-snap-align: start; }
+@media (min-width: 640px) { .sfb-gallery__slide { flex-basis: 40%; } }
+.sfb-gallery__slide img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; }
+.sfb-gallery__slide figcaption { margin-top: 6px; font-size: .9rem; font-weight: 600; }
+.sfb-gallery__nav { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; }
+.sfb-gallery__nav button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid currentColor; background: transparent; color: inherit; font-size: 1.2rem; cursor: pointer; }
+.sfb-hours { list-style: none; margin: 0 auto 12px; padding: 14px 18px; max-width: 420px; border-radius: 18px; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+.sfb-hours li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed color-mix(in srgb, currentColor 20%, transparent); }
+.sfb-hours li:last-child { border-bottom: 0; }
+.sfb-hours__day { font-weight: 700; }
+.sfb-faq { display: grid; gap: 10px; }
+.sfb-faq__item { border-radius: 14px; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); overflow: hidden; }
+.sfb-faq__q { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; padding: 12px 16px; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-align: start; cursor: pointer; }
+.sfb-faq__q::after { content: '+'; font-size: 1.3rem; color: var(--sfb-a); }
+.sfb-faq__item[data-mb-open] .sfb-faq__q::after { content: '−'; }
+.sfb-faq__a { padding: 0 16px 14px; opacity: .85; }
+.sfb-coupon { max-width: 460px; margin: 0 auto; padding: 22px 20px; border-radius: 20px; border: 2px dashed var(--sfb-a); text-align: center; }
+.sfb-coupon__code { display: inline-block; margin: 0 0 8px; padding: 6px 16px; border-radius: 10px; background: var(--sfb-a); color: var(--sfb-on); font-size: 1.4rem; font-weight: 800; letter-spacing: .12em; }
+.sfb-coupon__text { margin: 0; font-weight: 600; }
+.sfb-quote { flex: 0 0 85%; margin: 0; scroll-snap-align: start; padding: 18px; border-radius: 18px; background: color-mix(in srgb, var(--sfb-a) 10%, transparent); }
+@media (min-width: 640px) { .sfb-quote { flex-basis: 46%; } }
+.sfb-quote p { margin: 0 0 10px; font-size: 1.05rem; }
+.sfb-quote cite { font-style: normal; font-weight: 700; color: var(--sfb-a); }
+</style>
+<div class="sfb">
+    <section class="sfb-promo" data-mb-reveal="up"><div class="sfb-promo__media"><img src="/assets/builder/templates/_shared/banner.svg" alt loading="lazy"></div><div class="sfb-promo__body"><h2 class="sfb-promo__title">Two burgers, one price</h2><p class="sfb-promo__text">This week only at {{store.name}} — order online and pick up in 15 minutes.</p></div></section>
+    <div class="sfb-actions"><a class="sfb-btn" href="%7B%7Bstore.url%7D%7D">Order now</a></div>
+</div>

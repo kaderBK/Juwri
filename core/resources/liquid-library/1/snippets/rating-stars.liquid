@@ -1,0 +1,15 @@
+{%- comment -%}
+  Star rating (library v1): a five-star bar filled to the average (drawn by
+  CSS and filled from the inline-start edge, so it mirrors in RTL), the
+  number and the review count. Renders nothing for an unrated item.
+  Params: rating (number 0-5), count (int).
+{%- endcomment -%}
+{%- if count > 0 -%}
+{%- assign pct = rating | times: 20 | round -%}
+{%- assign shown = rating | round: 1 -%}
+<span class="mbs-rating-stars" role="img" aria-label="{{ 'Rated {rating} out of 5' | t | replace: '{rating}', shown | escape }}">
+  <span class="mbs-rating-stars__bar" aria-hidden="true"><span class="mbs-rating-stars__fill" style="--mbs-r: {{ pct }}%"></span></span>
+  <b class="mbs-rating-stars__num" aria-hidden="true">{{ shown }}</b>
+  <span class="mbs-rating-stars__count" aria-hidden="true">(<bdi>{{ count }}</bdi>)</span>
+</span>
+{%- endif -%}

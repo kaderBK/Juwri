@@ -1,0 +1,23 @@
+{
+  "slug": "story_card",
+  "starter": "social_grid",
+  "name": "Story Card",
+  "family": "story_card",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(160deg,#ff7a59,#ff4f7e)",
+    "--ink": "#ffffff",
+    "--muted": "rgba(255,255,255,.85)",
+    "--card": "#ffffff",
+    "--accent": "#ff4f7e",
+    "--accent-ink": "#ffffff",
+    "--radius": "26px",
+    "--shadow": "0 16px 40px rgba(120,20,50,.3)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

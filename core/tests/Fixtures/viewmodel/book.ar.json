@@ -1,0 +1,2210 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "sidra-salon-demo",
+            "name": "Sidra Salon",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Sidra Salon"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Sidra Salon"
+            },
+            "tagline": "Hair, nails and spa in Al Malqa",
+            "locale": "ar",
+            "dir": "rtl",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/sidra-salon-demo?lang=en"
+                },
+                {
+                    "code": "ar",
+                    "name": "ar",
+                    "url": "/sidra-salon-demo?lang=ar"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "service",
+            "store_type": "services",
+            "status": {
+                "open": true,
+                "label": "مفتوح · يُغلق 9:00 م",
+                "next_change_at": "2026-10-04T21:00:00+03:00",
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966550100105",
+                "whatsapp": "966550100105",
+                "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=Anas%20Ibn%20Malik%20Rd%2C%20Al%20Malqa%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": false,
+            "hours": [
+                {
+                    "days": [
+                        "Mo"
+                    ],
+                    "opens": "10:00",
+                    "closes": "21:00"
+                },
+                {
+                    "days": [
+                        "Tu"
+                    ],
+                    "opens": "10:00",
+                    "closes": "21:00"
+                },
+                {
+                    "days": [
+                        "We"
+                    ],
+                    "opens": "10:00",
+                    "closes": "21:00"
+                },
+                {
+                    "days": [
+                        "Th"
+                    ],
+                    "opens": "10:00",
+                    "closes": "21:00"
+                },
+                {
+                    "days": [
+                        "Fr"
+                    ],
+                    "opens": "14:00",
+                    "closes": "22:00"
+                },
+                {
+                    "days": [
+                        "Su"
+                    ],
+                    "opens": "10:00",
+                    "closes": "21:00"
+                }
+            ]
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Sidra Salon — Main",
+                "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "appointment",
+                    "label": "موعد",
+                    "needs_address": false,
+                    "needs_slot": true
+                },
+                {
+                    "key": "at_home",
+                    "label": "في المنزل",
+                    "needs_address": true,
+                    "needs_slot": true
+                }
+            ],
+            "selected_order_type": "appointment",
+            "table": null,
+            "room": null,
+            "schedule_ahead": true,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": false,
+                "order_types": [],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "book",
+            "settings": {
+                "colors.primary": "#2F6B5E",
+                "colors.background": "#F6F7F4",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#1C2420",
+                "colors.accent": "#C9A36A",
+                "layout.radius": "soft",
+                "layout.density": "cozy",
+                "fonts.pair": "jakarta",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#7FC8B5",
+                "colors_dark.background": "#0F1412",
+                "colors_dark.surface": "#18201D",
+                "colors_dark.text": "#ECF2EF",
+                "colors_dark.accent": "#D9B97E",
+                "layout.card": "list",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "cover",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": false,
+                "menu.show_allergens": false,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "category_nav",
+                "featured",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "featured_title": "Popular",
+                "search_placeholder": "Search the menu"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "الشعر",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}"
+                    ],
+                    "count": 5
+                },
+                {
+                    "id": "{id:9}",
+                    "name": "الصبغات",
+                    "item_ids": [
+                        "{id:10}",
+                        "{id:11}",
+                        "{id:12}"
+                    ],
+                    "count": 3
+                },
+                {
+                    "id": "{id:13}",
+                    "name": "الأظافر",
+                    "item_ids": [
+                        "{id:14}",
+                        "{id:15}",
+                        "{id:16}",
+                        "{id:17}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:18}",
+                    "name": "العناية بالوجه",
+                    "item_ids": [
+                        "{id:19}",
+                        "{id:20}",
+                        "{id:21}"
+                    ],
+                    "count": 3
+                },
+                {
+                    "id": "{id:22}",
+                    "name": "المساج",
+                    "item_ids": [
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}"
+                    ],
+                    "count": 3
+                },
+                {
+                    "id": "{id:26}",
+                    "name": "المكياج",
+                    "item_ids": [
+                        "{id:27}",
+                        "{id:28}"
+                    ],
+                    "count": 2
+                },
+                {
+                    "id": "{id:29}",
+                    "name": "الباقات",
+                    "item_ids": [
+                        "{id:30}",
+                        "{id:31}",
+                        "{id:32}"
+                    ],
+                    "count": 3
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "قص وسشوار",
+                    "url": "/sidra-salon-demo#item-{id:4}",
+                    "short": "استشارة وقص وسشوار نهائي.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "قص وسشوار"
+                    },
+                    "from_price": {
+                        "minor": 12000,
+                        "currency": "SAR",
+                        "formatted": "120.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 45
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "سشوار",
+                    "url": "/sidra-salon-demo#item-{id:5}",
+                    "short": "غسيل وسشوار وتصفيف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "سشوار"
+                    },
+                    "from_price": {
+                        "minor": 7000,
+                        "currency": "SAR",
+                        "formatted": "70.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 30
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "علاج تنعيم بالكيراتين",
+                    "url": "/sidra-salon-demo#item-{id:6}",
+                    "short": "شعر لامع وخالٍ من التجعد حتى ثلاثة أشهر.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "علاج تنعيم بالكيراتين"
+                    },
+                    "from_price": {
+                        "minor": 45000,
+                        "currency": "SAR",
+                        "formatted": "450.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 150
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "تسريحة مناسبات",
+                    "url": "/sidra-salon-demo#item-{id:7}",
+                    "short": "تسريحة مرفوعة أو تموجات لمناسبتك.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تسريحة مناسبات"
+                    },
+                    "price": {
+                        "minor": 20000,
+                        "currency": "SAR",
+                        "formatted": "200.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 60
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "قص شعر للأطفال",
+                    "url": "/sidra-salon-demo#item-{id:8}",
+                    "short": "للأطفال دون 12 سنة مع غسيل.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "قص شعر للأطفال"
+                    },
+                    "price": {
+                        "minor": 6000,
+                        "currency": "SAR",
+                        "formatted": "60.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 30
+                },
+                "{id:10}": {
+                    "id": "{id:10}",
+                    "name": "صبغ الجذور",
+                    "url": "/sidra-salon-demo#item-{id:10}",
+                    "short": "تغطية الجذور بدرجة مطابقة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "صبغ الجذور"
+                    },
+                    "price": {
+                        "minor": 22000,
+                        "currency": "SAR",
+                        "formatted": "220.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 90
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "صبغة شعر كاملة",
+                    "url": "/sidra-salon-demo#item-{id:11}",
+                    "short": "صبغة كاملة بلمسة لمعان.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "صبغة شعر كاملة"
+                    },
+                    "from_price": {
+                        "minor": 38000,
+                        "currency": "SAR",
+                        "formatted": "380.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 150
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "بالياج",
+                    "url": "/sidra-salon-demo#item-{id:12}",
+                    "short": "هايلايت مرسوم يدوياً بإطلالة مشمسة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "بالياج"
+                    },
+                    "from_price": {
+                        "minor": 65000,
+                        "currency": "SAR",
+                        "formatted": "650.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        },
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 210
+                },
+                "{id:14}": {
+                    "id": "{id:14}",
+                    "name": "مانيكير كلاسيك",
+                    "url": "/sidra-salon-demo#item-{id:14}",
+                    "short": "تشكيل وعناية بالجلد وطلاء.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مانيكير كلاسيك"
+                    },
+                    "price": {
+                        "minor": 7000,
+                        "currency": "SAR",
+                        "formatted": "70.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 40
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "مانيكير جل",
+                    "url": "/sidra-salon-demo#item-{id:15}",
+                    "short": "لون جل يدوم طويلاً بلمعان عالٍ.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مانيكير جل"
+                    },
+                    "price": {
+                        "minor": 11000,
+                        "currency": "SAR",
+                        "formatted": "110.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 55
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "باديكير كلاسيك",
+                    "url": "/sidra-salon-demo#item-{id:16}",
+                    "short": "نقع وتقشير وتشكيل وطلاء.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "باديكير كلاسيك"
+                    },
+                    "price": {
+                        "minor": 9000,
+                        "currency": "SAR",
+                        "formatted": "90.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 50
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "باديكير جل",
+                    "url": "/sidra-salon-demo#item-{id:17}",
+                    "short": "باديكير مع لون جل يدوم طويلاً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "باديكير جل"
+                    },
+                    "price": {
+                        "minor": 13000,
+                        "currency": "SAR",
+                        "formatted": "130.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 65
+                },
+                "{id:19}": {
+                    "id": "{id:19}",
+                    "name": "تنظيف بشرة كلاسيكي",
+                    "url": "/sidra-salon-demo#item-{id:19}",
+                    "short": "تنظيف وتقشير واستخراج الشوائب وقناع.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تنظيف بشرة كلاسيكي"
+                    },
+                    "price": {
+                        "minor": 22000,
+                        "currency": "SAR",
+                        "formatted": "220.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 60
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "جلسة نضارة وترطيب",
+                    "url": "/sidra-salon-demo#item-{id:20}",
+                    "short": "ترطيب عميق للبشرة الباهتة والمرهقة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "جلسة نضارة وترطيب"
+                    },
+                    "price": {
+                        "minor": 26000,
+                        "currency": "SAR",
+                        "formatted": "260.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 60
+                },
+                "{id:21}": {
+                    "id": "{id:21}",
+                    "name": "تنظيف الحواجب بالخيط",
+                    "url": "/sidra-salon-demo#item-{id:21}",
+                    "short": "حواجب مرتبة ومحددة خلال دقائق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تنظيف الحواجب بالخيط"
+                    },
+                    "price": {
+                        "minor": 3000,
+                        "currency": "SAR",
+                        "formatted": "30.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 15
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "مساج استرخاء",
+                    "url": "/sidra-salon-demo#item-{id:23}",
+                    "short": "مساج للجسم كاملاً بزيوت دافئة.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مساج استرخاء"
+                    },
+                    "from_price": {
+                        "minor": 25000,
+                        "currency": "SAR",
+                        "formatted": "250.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "duration_min": 60
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "مساج بالأحجار الساخنة",
+                    "url": "/sidra-salon-demo#item-{id:24}",
+                    "short": "أحجار دافئة تخفف توتر العضلات العميق.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مساج بالأحجار الساخنة"
+                    },
+                    "price": {
+                        "minor": 28000,
+                        "currency": "SAR",
+                        "formatted": "280.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 75
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "مساج الظهر والكتفين",
+                    "url": "/sidra-salon-demo#item-{id:25}",
+                    "short": "جلسة مركّزة لعضلات أرهقها الجلوس.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مساج الظهر والكتفين"
+                    },
+                    "price": {
+                        "minor": 14000,
+                        "currency": "SAR",
+                        "formatted": "140.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 30
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "مكياج سهرة",
+                    "url": "/sidra-salon-demo#item-{id:27}",
+                    "short": "مكياج يدوم طويلاً للعشاء والمناسبات.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "مكياج سهرة"
+                    },
+                    "price": {
+                        "minor": 28000,
+                        "currency": "SAR",
+                        "formatted": "280.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 60
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "تجربة مكياج العروس",
+                    "url": "/sidra-salon-demo#item-{id:28}",
+                    "short": "جرّبي إطلالتك قبل يوم الزفاف.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "تجربة مكياج العروس"
+                    },
+                    "price": {
+                        "minor": 45000,
+                        "currency": "SAR",
+                        "formatted": "450.00 ⁨⃁⁩"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 90
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "باقة العروس",
+                    "url": "/sidra-salon-demo#item-{id:30}",
+                    "short": "شعر ومكياج ومانيكير وتنظيف بشرة ليوم الاستعداد.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "باقة العروس"
+                    },
+                    "price": {
+                        "minor": 120000,
+                        "currency": "SAR",
+                        "formatted": "1,200.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 240
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "باقة اليوم المشرق",
+                    "url": "/sidra-salon-demo#item-{id:31}",
+                    "short": "تنظيف بشرة ومانيكير جل وسشوار.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "باقة اليوم المشرق"
+                    },
+                    "price": {
+                        "minor": 65000,
+                        "currency": "SAR",
+                        "formatted": "650.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "جديد"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 180
+                },
+                "{id:32}": {
+                    "id": "{id:32}",
+                    "name": "باقة مانيكير وباديكير",
+                    "url": "/sidra-salon-demo#item-{id:32}",
+                    "short": "مانيكير وباديكير كلاسيك معاً.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "باقة مانيكير وباديكير"
+                    },
+                    "price": {
+                        "minor": 19000,
+                        "currency": "SAR",
+                        "formatted": "190.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "duration_min": 90
+                }
+            },
+            "total": 23
+        },
+        "features": {
+            "featured": [
+                "{id:4}",
+                "{id:12}",
+                "{id:15}",
+                "{id:23}",
+                "{id:30}",
+                "{id:32}"
+            ]
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/sidra-salon-demo",
+            "cart": "/sidra-salon-demo#cart",
+            "quote": "/sidra-salon-demo/quote",
+            "track": "/sidra-salon-demo#track",
+            "place": "/{store}/send-order",
+            "coupon": "/{store}/coupon",
+            "slots": "/{store}/schedule-slots",
+            "order_lookup": "/{store}/order-lookup"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "after"
+            },
+            "tax": {
+                "mode": "exclusive",
+                "rate": 15,
+                "label": "VAT"
+            }
+        },
+        "i18n": {
+            "add_more": "أضف المزيد",
+            "nothing_in_your_order_yet": "لا شيء في طلبك بعد",
+            "total_to_pay": "المبلغ المستحق",
+            "store_closed": "المتجر مغلق",
+            "ordering_is_paused": "الطلب متوقف مؤقتًا",
+            "waiting_for_connection": "في انتظار الاتصال",
+            "youre_offline": "أنت غير متصل بالإنترنت",
+            "prices_changed_while_you_were_offline": "تغيّرت الأسعار أثناء عدم اتصالك بالإنترنت.",
+            "please_confirm_your_order_again": "يرجى تأكيد طلبك مرة أخرى",
+            "couldnt_update_total_retry": "تعذّر تحديث الإجمالي — أعد المحاولة",
+            "sold_out": "نفد من المخزون",
+            "free": "مجاني",
+            "added_to_your_order": "تمت الإضافة إلى طلبك",
+            "removed_from_your_order": "تمت إزالته من طلبك",
+            "sending_your_order": "جارٍ إرسال طلبك",
+            "needs_your_confirmation": "يحتاج إلى تأكيدك",
+            "order_placed": "تم تقديم الطلب",
+            "order_expired": "انتهت صلاحية الطلب",
+            "could_not_place_the_order": "تعذّر إرسال الطلب",
+            "connect_to_place_this_order": "اتصل بالإنترنت لإتمام الطلب",
+            "offline_prices_may_change": "بدون اتصال: قد تتغيّر الأسعار",
+            "some_items_are_no_longer_available": "بعض العناصر لم تعد متوفرة",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "تمت إزالة الطلبات المنتظرة لأن الطلب دون اتصال تم إيقافه.",
+            "still_there_starting_over_in_n_seconds": "هل ما زلت هنا؟ سنبدأ من جديد خلال :n ثانية",
+            "incorrect_pin": "رمز PIN غير صحيح",
+            "too_many_attempts_wait_a_moment": "محاولات كثيرة. انتظر قليلاً.",
+            "device_setup_pin": "رمز إعداد الجهاز PIN",
+            "enter_the_staff_pin": "أدخل رمز الموظفين",
+            "count_of_total_digits_entered": "تم إدخال :count من :total أرقام",
+            "starting_over_in_seconds_s": "إعادة البدء خلال :seconds ث",
+            "continue": "متابعة",
+            "exit_kiosk": "إنهاء وضع الطلب الذاتي",
+            "connection_lost_pay_at_the_counter_to_order_now": "انقطع الاتصال — ادفع عند الكاونتر لتطلب الآن",
+            "ordering_is_paused_until_the_connection_returns": "الطلب متوقف حتى يعود الاتصال"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "قص وسشوار",
+                    "description": "استشارة وقص وسشوار نهائي.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:1}",
+                            "alt": "قص وسشوار"
+                        }
+                    ],
+                    "price": {
+                        "minor": 12000,
+                        "currency": "SAR",
+                        "formatted": "120.00 ⁨⃁⁩"
+                    },
+                    "from_price": {
+                        "minor": 12000,
+                        "currency": "SAR",
+                        "formatted": "120.00 ⁨⃁⁩"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "الأكثر طلباً"
+                        }
+                    ],
+                    "option_groups": [
+                        {
+                            "id": "{id:33}",
+                            "label": "طول الشعر",
+                            "kind": "radio",
+                            "required": true,
+                            "min": 1,
+                            "max": 1,
+                            "rule_label": "مطلوب · اختر 1",
+                            "options": [
+                                {
+                                    "id": "{id:34}",
+                                    "label": "قصير",
+                                    "price_delta": {
+                                        "minor": 0,
+                                        "currency": "SAR",
+                                        "formatted": "0.00 ⁨⃁⁩"
+                                    },
+                                    "selected": true
+                                },
+                                {
+                                    "id": "{id:35}",
+                                    "label": "متوسط",
+                                    "price_delta": {
+                                        "minor": 2000,
+                                        "currency": "SAR",
+                                        "formatted": "20.00 ⁨⃁⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:36}",
+                                    "label": "طويل",
+                                    "price_delta": {
+                                        "minor": 4000,
+                                        "currency": "SAR",
+                                        "formatted": "40.00 ⁨⃁⁩"
+                                    }
+                                }
+                            ],
+                            "selected_label": "قصير"
+                        },
+                        {
+                            "id": "{id:37}",
+                            "label": "إضافات",
+                            "kind": "checkbox",
+                            "required": false,
+                            "min": 0,
+                            "max": 2,
+                            "rule_label": "اختياري · اختر حتى 2",
+                            "options": [
+                                {
+                                    "id": "{id:38}",
+                                    "label": "ترطيب عميق",
+                                    "price_delta": {
+                                        "minor": 4000,
+                                        "currency": "SAR",
+                                        "formatted": "40.00 ⁨⃁⁩"
+                                    }
+                                },
+                                {
+                                    "id": "{id:39}",
+                                    "label": "مساج فروة الرأس",
+                                    "price_delta": {
+                                        "minor": 3000,
+                                        "currency": "SAR",
+                                        "formatted": "30.00 ⁨⃁⁩"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "add_label": "إضافة · 120.00 ⁨⃁⁩"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "قص وسشوار",
+                            "qty": 2,
+                            "line_total": {
+                                "minor": 32000,
+                                "currency": "SAR",
+                                "formatted": "320.00 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "قص وسشوار"
+                            },
+                            "choices_label": "قصير · ترطيب عميق"
+                        },
+                        {
+                            "id": "ln_2",
+                            "item_id": "{id:7}",
+                            "name": "تسريحة مناسبات",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 20000,
+                                "currency": "SAR",
+                                "formatted": "200.00 ⁨⃁⁩"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "تسريحة مناسبات"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "المجموع الفرعي",
+                            "amount": {
+                                "minor": 52000,
+                                "currency": "SAR",
+                                "formatted": "520.00 ⁨⃁⁩"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "tax",
+                            "label": "VAT 15%",
+                            "amount": {
+                                "minor": 7800,
+                                "currency": "SAR",
+                                "formatted": "78.00 ⁨⃁⁩"
+                            },
+                            "kind": "tax"
+                        }
+                    ],
+                    "total": {
+                        "minor": 59800,
+                        "currency": "SAR",
+                        "formatted": "598.00 ⁨⃁⁩"
+                    },
+                    "total_label": "الإجمالي",
+                    "cta_label": "الانتقال إلى الدفع · 598.00 ⁨⃁⁩"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "slots": {
+                        "title": "أكتوبر 2026",
+                        "days": [
+                            {
+                                "id": "2026-10-04",
+                                "label": "أحد",
+                                "sub": "4",
+                                "state": "selected"
+                            },
+                            {
+                                "id": "2026-10-05",
+                                "label": "اثنين",
+                                "sub": "5",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-06",
+                                "label": "ثلاثاء",
+                                "sub": "6",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-07",
+                                "label": "أربعاء",
+                                "sub": "7",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-08",
+                                "label": "خميس",
+                                "sub": "8",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-09",
+                                "label": "جمعة",
+                                "sub": "9",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-10",
+                                "label": "سبت",
+                                "sub": "10",
+                                "state": "closed"
+                            }
+                        ],
+                        "groups": [
+                            {
+                                "label": "بعد الظهر",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T12:30",
+                                        "label": "12:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T12:45",
+                                        "label": "12:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:00",
+                                        "label": "1:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:15",
+                                        "label": "1:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:30",
+                                        "label": "1:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:45",
+                                        "label": "1:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:00",
+                                        "label": "2:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:15",
+                                        "label": "2:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:30",
+                                        "label": "2:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:45",
+                                        "label": "2:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:00",
+                                        "label": "3:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:15",
+                                        "label": "3:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:30",
+                                        "label": "3:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:45",
+                                        "label": "3:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:00",
+                                        "label": "4:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:15",
+                                        "label": "4:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:30",
+                                        "label": "4:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:45",
+                                        "label": "4:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "المساء",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T17:00",
+                                        "label": "5:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:15",
+                                        "label": "5:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:30",
+                                        "label": "5:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:45",
+                                        "label": "5:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:00",
+                                        "label": "6:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:15",
+                                        "label": "6:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:30",
+                                        "label": "6:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:45",
+                                        "label": "6:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:00",
+                                        "label": "7:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:15",
+                                        "label": "7:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:30",
+                                        "label": "7:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:45",
+                                        "label": "7:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:00",
+                                        "label": "8:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:15",
+                                        "label": "8:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:30",
+                                        "label": "8:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:45",
+                                        "label": "8:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timezone_note": "الأوقات معروضة بتوقيت Asia/Riyadh"
+                    },
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الكاونتر",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "قص وسشوار",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "قص وسشوار"
+                                },
+                                "choices_label": "قصير · ترطيب عميق"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:7}",
+                                "name": "تسريحة مناسبات",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 20000,
+                                    "currency": "SAR",
+                                    "formatted": "200.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "تسريحة مناسبات"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 52000,
+                                    "currency": "SAR",
+                                    "formatted": "520.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 7800,
+                                    "currency": "SAR",
+                                    "formatted": "78.00 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 59800,
+                            "currency": "SAR",
+                            "formatted": "598.00 ⁨⃁⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · 598.00 ⁨⃁⁩"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/sidra-salon-demo",
+                "cart": "/sidra-salon-demo#cart",
+                "quote": "/sidra-salon-demo/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "تم تقديم الطلب",
+                    "heading": "الطلب رقم {order_no}",
+                    "steps": [
+                        {
+                            "label": "محجوز",
+                            "sub": "12:00 م",
+                            "state": "current"
+                        },
+                        {
+                            "label": "مؤكّد",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "مكتملة",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "قص وسشوار",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "قص وسشوار"
+                                },
+                                "choices_label": "Short · ترطيب عميق"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:7}",
+                                "name": "تسريحة مناسبات",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 20000,
+                                    "currency": "SAR",
+                                    "formatted": "200.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "تسريحة مناسبات"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 52000,
+                                    "currency": "SAR",
+                                    "formatted": "520.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 7800,
+                                    "currency": "SAR",
+                                    "formatted": "78.00 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 59800,
+                            "currency": "SAR",
+                            "formatted": "598.00 ⁨⃁⁩"
+                        },
+                        "total_label": "الإجمالي · الدفع عند الكاونتر"
+                    },
+                    "paid_label": "الدفع عند الكاونتر",
+                    "actions": [
+                        {
+                            "label": "اتصل بالمتجر",
+                            "url": "tel:966550100105",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "واتساب",
+                            "url": "https://wa.me/966550100105",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ]
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "appointment",
+                        "label": "موعد",
+                        "needs_address": false,
+                        "needs_slot": true
+                    }
+                ],
+                "selected_order_type": "appointment",
+                "table": null,
+                "room": null,
+                "schedule_ahead": true,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "appointment"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": false,
+                    "order_types": [],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/sidra-salon-demo",
+                "cart": "/sidra-salon-demo#cart",
+                "quote": "/sidra-salon-demo/quote",
+                "track": "/sidra-salon-demo#track",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/sidra-salon-demo/kiosk/reset",
+                "kiosk_start": "/sidra-salon-demo/kiosk",
+                "kiosk_exit": "/sidra-salon-demo/kiosk/exit",
+                "kiosk_setup": "/sidra-salon-demo/kiosk/setup"
+            }
+        },
+        "time": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "step_label": "الخطوة 2 من 3",
+                    "summary_rows": [
+                        {
+                            "icon": "calendar",
+                            "label": "قص وسشوار",
+                            "sub": "45 د"
+                        }
+                    ],
+                    "slots": {
+                        "title": "أكتوبر 2026",
+                        "days": [
+                            {
+                                "id": "2026-10-04",
+                                "label": "أحد",
+                                "sub": "4",
+                                "state": "selected"
+                            },
+                            {
+                                "id": "2026-10-05",
+                                "label": "اثنين",
+                                "sub": "5",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-06",
+                                "label": "ثلاثاء",
+                                "sub": "6",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-07",
+                                "label": "أربعاء",
+                                "sub": "7",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-08",
+                                "label": "خميس",
+                                "sub": "8",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-09",
+                                "label": "جمعة",
+                                "sub": "9",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-10",
+                                "label": "سبت",
+                                "sub": "10",
+                                "state": "closed"
+                            }
+                        ],
+                        "groups": [
+                            {
+                                "label": "بعد الظهر",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T12:30",
+                                        "label": "12:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T12:45",
+                                        "label": "12:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:00",
+                                        "label": "1:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:15",
+                                        "label": "1:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:30",
+                                        "label": "1:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:45",
+                                        "label": "1:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:00",
+                                        "label": "2:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:15",
+                                        "label": "2:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:30",
+                                        "label": "2:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:45",
+                                        "label": "2:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:00",
+                                        "label": "3:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:15",
+                                        "label": "3:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:30",
+                                        "label": "3:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:45",
+                                        "label": "3:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:00",
+                                        "label": "4:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:15",
+                                        "label": "4:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:30",
+                                        "label": "4:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:45",
+                                        "label": "4:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "المساء",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T17:00",
+                                        "label": "5:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:15",
+                                        "label": "5:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:30",
+                                        "label": "5:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:45",
+                                        "label": "5:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:00",
+                                        "label": "6:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:15",
+                                        "label": "6:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:30",
+                                        "label": "6:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:45",
+                                        "label": "6:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:00",
+                                        "label": "7:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:15",
+                                        "label": "7:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:30",
+                                        "label": "7:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:45",
+                                        "label": "7:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:00",
+                                        "label": "8:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:15",
+                                        "label": "8:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:30",
+                                        "label": "8:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:45",
+                                        "label": "8:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timezone_note": "الأوقات معروضة بتوقيت Asia/Riyadh"
+                    },
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "الدفع عند الكاونتر",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "الاسم",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "رقم الجوال (لتحديثات الطلب)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "قص وسشوار",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "قص وسشوار"
+                                },
+                                "choices_label": "قصير · ترطيب عميق"
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 4800,
+                                    "currency": "SAR",
+                                    "formatted": "48.00 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 36800,
+                            "currency": "SAR",
+                            "formatted": "368.00 ⁨⃁⁩"
+                        },
+                        "total_label": "المبلغ المستحق"
+                    },
+                    "place_label": "تقديم الطلب · 368.00 ⁨⃁⁩"
+                }
+            }
+        },
+        "reschedule": {
+            "endpoints": {
+                "home": "/sidra-salon-demo",
+                "cart": "/sidra-salon-demo#cart",
+                "quote": "/sidra-salon-demo/quote",
+                "track": "/order/track/{track_token_2}",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup"
+            },
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "summary_rows": [
+                        {
+                            "icon": "calendar",
+                            "label": "أحد 4 أكتوبر · 3:30 م",
+                            "sub": "الأوقات معروضة بتوقيت Asia/Riyadh"
+                        },
+                        {
+                            "icon": "calendar",
+                            "label": "قص وسشوار"
+                        }
+                    ],
+                    "slots": {
+                        "title": "أكتوبر 2026",
+                        "days": [
+                            {
+                                "id": "2026-10-04",
+                                "label": "أحد",
+                                "sub": "4",
+                                "state": "selected"
+                            },
+                            {
+                                "id": "2026-10-05",
+                                "label": "اثنين",
+                                "sub": "5",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-06",
+                                "label": "ثلاثاء",
+                                "sub": "6",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-07",
+                                "label": "أربعاء",
+                                "sub": "7",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-08",
+                                "label": "خميس",
+                                "sub": "8",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-09",
+                                "label": "جمعة",
+                                "sub": "9",
+                                "state": "available"
+                            },
+                            {
+                                "id": "2026-10-10",
+                                "label": "سبت",
+                                "sub": "10",
+                                "state": "closed"
+                            }
+                        ],
+                        "groups": [
+                            {
+                                "label": "بعد الظهر",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T12:30",
+                                        "label": "12:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T12:45",
+                                        "label": "12:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:00",
+                                        "label": "1:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:15",
+                                        "label": "1:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:30",
+                                        "label": "1:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T13:45",
+                                        "label": "1:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:00",
+                                        "label": "2:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:15",
+                                        "label": "2:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:30",
+                                        "label": "2:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T14:45",
+                                        "label": "2:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:00",
+                                        "label": "3:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:15",
+                                        "label": "3:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:30",
+                                        "label": "3:30 م",
+                                        "state": "selected"
+                                    },
+                                    {
+                                        "id": "2026-10-04T15:45",
+                                        "label": "3:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:00",
+                                        "label": "4:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:15",
+                                        "label": "4:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:30",
+                                        "label": "4:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T16:45",
+                                        "label": "4:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            },
+                            {
+                                "label": "المساء",
+                                "slots": [
+                                    {
+                                        "id": "2026-10-04T17:00",
+                                        "label": "5:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:15",
+                                        "label": "5:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:30",
+                                        "label": "5:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T17:45",
+                                        "label": "5:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:00",
+                                        "label": "6:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:15",
+                                        "label": "6:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:30",
+                                        "label": "6:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T18:45",
+                                        "label": "6:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:00",
+                                        "label": "7:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:15",
+                                        "label": "7:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:30",
+                                        "label": "7:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T19:45",
+                                        "label": "7:45 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:00",
+                                        "label": "8:00 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:15",
+                                        "label": "8:15 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:30",
+                                        "label": "8:30 م",
+                                        "state": "available"
+                                    },
+                                    {
+                                        "id": "2026-10-04T20:45",
+                                        "label": "8:45 م",
+                                        "state": "available"
+                                    }
+                                ]
+                            }
+                        ],
+                        "timezone_note": "الأوقات معروضة بتوقيت Asia/Riyadh"
+                    },
+                    "payment_methods": [],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "قص وسشوار",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "قص وسشوار"
+                                },
+                                "choices_label": "Short · ترطيب عميق"
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "المجموع الفرعي",
+                                "amount": {
+                                    "minor": 32000,
+                                    "currency": "SAR",
+                                    "formatted": "320.00 ⁨⃁⁩"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 4800,
+                                    "currency": "SAR",
+                                    "formatted": "48.00 ⁨⃁⁩"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 36800,
+                            "currency": "SAR",
+                            "formatted": "368.00 ⁨⃁⁩"
+                        },
+                        "total_label": "الإجمالي"
+                    },
+                    "place_label": "تغيير الوقت"
+                }
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "sidra-salon-demo",
+                "name": "Sidra Salon",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Sidra Salon"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Sidra Salon"
+                },
+                "tagline": "Hair, nails and spa in Al Malqa",
+                "locale": "ar",
+                "dir": "rtl",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/sidra-salon-demo?lang=en"
+                    },
+                    {
+                        "code": "ar",
+                        "name": "ar",
+                        "url": "/sidra-salon-demo?lang=ar"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "service",
+                "store_type": "services",
+                "status": {
+                    "open": false,
+                    "label": "الطلب متوقف مؤقتًا",
+                    "next_change_at": "2026-10-04T21:00:00+03:00",
+                    "paused_reason": "الطلب متوقف مؤقتًا"
+                },
+                "contact": {
+                    "phone": "966550100105",
+                    "whatsapp": "966550100105",
+                    "address": "Anas Ibn Malik Rd, Al Malqa, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=Anas%20Ibn%20Malik%20Rd%2C%20Al%20Malqa%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": false,
+                "hours": [
+                    {
+                        "days": [
+                            "Mo"
+                        ],
+                        "opens": "10:00",
+                        "closes": "21:00"
+                    },
+                    {
+                        "days": [
+                            "Tu"
+                        ],
+                        "opens": "10:00",
+                        "closes": "21:00"
+                    },
+                    {
+                        "days": [
+                            "We"
+                        ],
+                        "opens": "10:00",
+                        "closes": "21:00"
+                    },
+                    {
+                        "days": [
+                            "Th"
+                        ],
+                        "opens": "10:00",
+                        "closes": "21:00"
+                    },
+                    {
+                        "days": [
+                            "Fr"
+                        ],
+                        "opens": "14:00",
+                        "closes": "22:00"
+                    },
+                    {
+                        "days": [
+                            "Su"
+                        ],
+                        "opens": "10:00",
+                        "closes": "21:00"
+                    }
+                ]
+            }
+        }
+    }
+}

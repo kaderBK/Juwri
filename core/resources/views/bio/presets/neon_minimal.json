@@ -1,0 +1,30 @@
+{
+  "slug": "neon_minimal",
+  "starter": "minimal",
+  "name": "Neon Minimal",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#0a0c10",
+    "--ink": "#e6edf3",
+    "--muted": "#a8b3bd",
+    "--card": "#0f1319",
+    "--btn-bg": "#0f1319",
+    "--btn-fg": "#e6edf3",
+    "--btn-border": "#2a3038",
+    "--accent": "#3aa3ff",
+    "--accent-ink": "#0a0c10",
+    "--icon-fg": "#3aa3ff",
+    "--avatar-bg": "#12161d",
+    "--radius": "10px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

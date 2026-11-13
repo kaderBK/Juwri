@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* room-list (B1c) */
+.mbs-room-list {
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  color: var(--tc-text, #111);
+}
+.mbs-room-list__title { margin: 0; font-family: var(--tf-heading, inherit); font-size: 1.5rem; }
+.mbs-room-list__sub { margin: var(--ts-gap-1, 6px) 0 0; max-inline-size: 60ch; color: var(--tc-text-muted, #6b7280); }
+.mbs-room-list__grid { display: grid; gap: var(--ts-gap-3, 16px); margin-block-start: var(--ts-gap-3, 16px); }
+.mbs-room-list__empty { margin: var(--ts-gap-3, 16px) 0 0; padding: var(--ts-gap-4, 24px); border-radius: var(--tr-card, 16px); background: var(--tc-surface, #f4f4f5); color: var(--tc-text-muted, #6b7280); text-align: center; }
+@media (min-width: 768px) {
+  .mbs-room-list--grid .mbs-room-list__grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .mbs-room-list--stack .mbs-card-room { flex-direction: row; }
+  .mbs-room-list--stack .mbs-card-room__media { flex: 0 0 44%; aspect-ratio: auto; min-block-size: 240px; }
+}

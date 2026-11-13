@@ -1,0 +1,35 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* faq - native details/summary disclosures */
+.mbs-faq {
+  max-inline-size: 760px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-faq__title { margin: 0 0 var(--ts-gap-3, 16px); font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.3rem; }
+.mbs-faq__list { display: grid; gap: var(--ts-gap-2, 10px); }
+.mbs-faq__item { border-radius: var(--tr-control, 12px); background: var(--tc-surface, #f4f4f5); }
+.mbs-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ts-gap-2, 10px);
+  min-block-size: 48px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border-radius: var(--tr-control, 12px);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.mbs-faq__q::-webkit-details-marker { display: none; }
+.mbs-faq__q:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+.mbs-faq__q .mbs-icon { flex: none; transform: rotate(90deg); transition: transform .2s; }
+.mbs-faq__item[open] > .mbs-faq__q .mbs-icon { transform: rotate(-90deg); }
+.mbs-faq__a { padding: 0 var(--ts-gap-3, 16px) var(--ts-gap-3, 16px); line-height: 1.6; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  .mbs-faq__q .mbs-icon { transition: none; }
+}

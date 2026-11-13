@@ -1,0 +1,27 @@
+{
+  "slug": "support_cards",
+  "starter": "minimal",
+  "name": "Support Cards",
+  "family": "store_rows",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#171320",
+    "--ink": "#f2eefa",
+    "--muted": "#a89cc4",
+    "--card": "#221b31",
+    "--btn-bg": "#221b31",
+    "--btn-fg": "#f2eefa",
+    "--btn-border": "#383050",
+    "--accent": "#8d6ae8",
+    "--accent-ink": "#ffffff",
+    "--avatar-bg": "#241d33",
+    "--radius": "16px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

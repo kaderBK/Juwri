@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests", ":semanticCommitsDisabled"],
+  "schedule": ["before 6am on monday"],
+  "timezone": "UTC",
+  "prConcurrentLimit": 5,
+  "labels": ["dependencies"],
+  "pinDigests": true,
+  "enabledManagers": ["composer", "npm", "github-actions"],
+  "minimumReleaseAge": "3 days",
+  "lockFileMaintenance": { "enabled": true, "schedule": ["before 6am on monday"] },
+  "packageRules": [
+    { "matchManagers": ["composer"], "matchUpdateTypes": ["minor", "patch"], "groupName": "composer minor and patch", "rangeStrategy": "update-lockfile" },
+    { "matchManagers": ["npm"], "matchUpdateTypes": ["minor", "patch"], "groupName": "npm minor and patch" },
+    { "matchManagers": ["github-actions"], "matchUpdateTypes": ["minor", "patch", "digest"], "groupName": "github actions minor and patch" },
+    { "matchUpdateTypes": ["major"], "dependencyDashboardApproval": true }
+  ],
+  "vulnerabilityAlerts": { "labels": ["security"], "schedule": ["at any time"] }
+}

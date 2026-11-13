@@ -1,0 +1,8 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--retro_diner .bio-name{font-family:'Bungee',sans-serif;color:#d92b2b;text-shadow:2px 2px 0 #1e1a16}
+.bio--retro_diner .bio-link:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #1e1a16}
+.bio--retro_diner .bio-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1e1a16}
+.bio--retro_diner .bio-link__icon{border:2.5px solid #1e1a16}
+.bio--retro_diner .bio-socials a{border:2.5px solid #1e1a16;box-shadow:3px 3px 0 #1e1a16;background:#fffdf6;color:#1e1a16}

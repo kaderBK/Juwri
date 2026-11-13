@@ -1,0 +1,44 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 6
+
+    # Isolate PHPStan's result cache to the per-checkout workspace. The two
+    # self-hosted Mac runners (mac-local / mac-local-2) run as the SAME user, so
+    # PHPStan's default cache in the shared system temp (sys_get_temp_dir()/phpstan)
+    # was shared between them: one runner's stored phar paths
+    # (…/actions-runner/_work/…/phpstan.phar/…stub) leaked into the other's run
+    # (…/actions-runner-2/_work/…), so better-reflection tried to read a stub file
+    # from a path that does not exist on that runner → intermittent
+    # "phar://…/standard_8.stub is not a file" internal errors (Static Analysis red
+    # on unrelated commits). A workspace-relative tmpDir gives each runner — and
+    # local dev — its own cache, resolved relative to this neon's dir (core/).
+    tmpDir: .phpstan-cache
+
+    # P1-13 13i: the Community code. An installed edition package adds its own paths and baseline through its own
+    # neon file (in the private repository: phpstan.neon includes this file + the package's).
+    paths:
+        - app
+
+    # P1-03: migrations live per module (Larastan reads them for model properties).
+    databaseMigrationsPath:
+        - database/migrations
+        - app/Core/Database/Migrations
+        - app/Modules/*/Database/Migrations
+
+    # Framework/generated code and heavy vendor-ish trees add noise without
+    # catching app bugs. Keep the scan on first-party application code.
+    excludePaths:
+        - app/**/*.blade.php
+        # P1-11: seeders and factories moved from database/ (never analysed) into the modules; keep them out of the scan.
+        - app/**/Database/Seeders/**
+        - app/**/Database/Factories/**
+
+    # Larastan needs the app booted to resolve container bindings, facades, etc.
+    # It auto-discovers bootstrap/app.php; nothing extra needed here.
+
+    # A fixed legacy finding must be removed from the baseline in the same PR;
+    # stale suppressions are failures, not permanent invisible debt.
+    reportUnmatchedIgnoredErrors: true

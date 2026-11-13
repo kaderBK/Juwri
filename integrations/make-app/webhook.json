@@ -1,0 +1,40 @@
+{
+  "name": "juwriWebhook",
+  "label": "juwri Webhook",
+  "connection": "juwri",
+  "type": "web",
+  "help": "Shared dedicated webhook. Each instant trigger attaches it subscribed to one event; anything needed to detach is saved in response.data.",
+  "parameters": [
+    {
+      "name": "event",
+      "type": "select",
+      "label": "Event",
+      "required": true,
+      "options": [
+        { "label": "New Order", "value": "order.created" },
+        { "label": "Order Status Changed", "value": "order.status_changed" },
+        { "label": "Order Paid", "value": "order.paid" },
+        { "label": "New Customer", "value": "customer.created" },
+        { "label": "New Reservation", "value": "reservation.created" },
+        { "label": "Refund Completed", "value": "refund.completed" }
+      ]
+    }
+  ],
+  "attach": {
+    "url": "{{baseUrl}}/api/v1/webhook-endpoints",
+    "method": "POST",
+    "body": {
+      "url": "{{webhook.url}}",
+      "events": ["{{parameters.event}}"]
+    },
+    "response": {
+      "data": {
+        "externalHookId": "{{body.id}}"
+      }
+    }
+  },
+  "detach": {
+    "url": "{{baseUrl}}/api/v1/webhook-endpoints/{{webhook.externalHookId}}",
+    "method": "DELETE"
+  }
+}

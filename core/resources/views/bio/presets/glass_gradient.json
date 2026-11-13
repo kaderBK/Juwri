@@ -1,0 +1,31 @@
+{
+  "slug": "glass_gradient",
+  "starter": "cafe",
+  "name": "Glass Gradient",
+  "family": "list",
+  "tier": "basic",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(165deg,#4338ca 0%,#7c3aed 45%,#db2777 100%)",
+    "--ink": "#ffffff",
+    "--muted": "rgba(255,255,255,.85)",
+    "--card": "rgba(255,255,255,.14)",
+    "--btn-bg": "rgba(255,255,255,.14)",
+    "--btn-fg": "#ffffff",
+    "--btn-border": "rgba(255,255,255,.3)",
+    "--accent": "#ffffff",
+    "--accent-ink": "#5b21b6",
+    "--avatar-bg": "rgba(255,255,255,.18)",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "16px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

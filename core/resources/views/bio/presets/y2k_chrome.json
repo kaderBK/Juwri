@@ -1,0 +1,31 @@
+{
+  "slug": "y2k_chrome",
+  "starter": "social_grid",
+  "name": "Y2K Chrome",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Unbounded", "weights": [500, 700]},
+    {"family": "Manrope", "weights": [400, 600, 700]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(165deg,#e9e9f2 0%,#cfd2e2 34%,#e7e2f0 62%,#c8cde0 100%)",
+    "--ink": "#2a2438",
+    "--muted": "#6d6785",
+    "--card": "linear-gradient(180deg,#fbfbfe,#e9e9f4)",
+    "--btn-bg": "linear-gradient(180deg,#fbfbfe,#e9e9f4)",
+    "--btn-fg": "#2a2438",
+    "--btn-border": "transparent",
+    "--accent": "#8347d6",
+    "--accent-ink": "#ffffff",
+    "--icon-bg": "transparent",
+    "--icon-fg": "#8347d6",
+    "--radius": "999px",
+    "--shadow": "0 6px 16px rgba(80,80,130,.25)",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Unbounded',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

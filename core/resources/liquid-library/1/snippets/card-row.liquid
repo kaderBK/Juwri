@@ -1,0 +1,28 @@
+{%- comment -%}
+  List-row card (library v1): text at the inline start, a square thumbnail
+  at the inline end (mirrors in RTL). With show_image false it is the
+  "text-only" menu card. Same hooks, params and shared parts as card-photo.
+  Params: item, allow_order, show_desc, show_rating, show_badges,
+  show_image, show_fav, catalog, eager.
+{%- endcomment -%}
+<article class="mbs-card-row{% if item.is_sold_out %} is-out{% endif %}{% unless show_image %} is-text{% endunless %}"{% if catalog %} data-mb-item="{{ item.id }}" data-mb-name="{{ item.name | escape }}" data-mb-price="{{ item.price }}" data-mb-rating="{{ item.rating }}"{% if item.is_popular %} data-mb-popular{% endif %}{% if item.is_vegan %} data-mb-veg{% endif %}{% if item.is_halal %} data-mb-halal{% endif %}{% if item.is_gluten_free %} data-mb-gf{% endif %}{% if item.is_daily_special %} data-mb-special{% endif %}{% endif %}>
+  <div class="mbs-card-row__body">
+    <h3 class="mbs-card-row__name"><a class="mbs-card-photo__link" href="?item={{ item.id }}" data-mb-open="{{ item.id }}">{{ item.name | escape }}</a></h3>
+    {%- if show_desc and item.description -%}<p class="mbs-card-row__desc">{{ item.description | escape }}</p>{%- endif -%}
+    {%- if show_badges -%}{%- render 'badges', item: item, offer: true -%}{%- endif -%}
+    {%- if show_rating -%}{%- render 'rating-stars', rating: item.rating, count: item.rating_count -%}{%- endif -%}
+    <div class="mbs-card-row__foot">
+      {%- render 'price', amount: item.price, original: item.original_price, from: item.has_variants -%}
+      {%- if item.is_sold_out -%}<span class="mbs-card-photo__out">{{ 'Sold out' | t }}</span>{%- endif -%}
+    </div>
+  </div>
+  <div class="mbs-card-row__side">
+    {%- if show_image and item.image -%}
+      {%- assign src = item.image | media_url: 'menu' -%}
+      {%- capture img_class -%}mbs-card-photo__img mbs-card-row__img{% if item.is_sold_out %} mbs-card-photo__img--out{% endif %}{%- endcapture -%}
+      {%- render 'media', src: src, alt: item.name, width: 240, height: 240, class: img_class, priority: eager, sizes: '112px' -%}
+    {%- endif -%}
+    {%- if show_fav -%}<button type="button" class="mbs-card-photo__fav mbs-card-row__fav" data-mb-fav="{{ item.id }}" aria-pressed="false" aria-label="{{ 'Save to favorites' | t }}: {{ item.name | escape }}">{%- render 'icon', name: 'heart', size: 16 -%}</button>{%- endif -%}
+    {%- if allow_order and item.is_sold_out == false -%}<button type="button" class="mbs-card-photo__add mbs-card-row__add" data-mb-add="{{ item.id }}" aria-label="{{ 'Add' | t }}: {{ item.name | escape }}"></button>{%- endif -%}
+  </div>
+</article>

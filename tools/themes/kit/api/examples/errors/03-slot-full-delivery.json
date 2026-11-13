@@ -1,0 +1,108 @@
+{
+  "operationId": "createOrder",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/orders",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://fresh-mart.example",
+      "Idempotency-Key": "01a0fb97-2208-74e0-b54a-d6858cf1b34c",
+      "X-Hold-Token": "hld_e482949322d38822b1a833bd8c30ce33"
+    },
+    "body": {
+      "order_type": "delivery",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019ee2f8-8b80-7c41-ace1-e47e281dc213",
+          "option_ids": [],
+          "qty": 2
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ef1fd-c280-78f5-ac68-e35b62b4070a",
+          "option_ids": [
+            "019fed0d-59ba-713e-8d04-7eb7d692e48e"
+          ],
+          "qty": 1,
+          "substitution": "019f4455-1a00-7e15-a4c7-6d8e2b0f3a31"
+        },
+        {
+          "line_id": "ln_3",
+          "item_id": "019f3fab-0380-73c2-89a4-21d8a38a1c3f",
+          "option_ids": [],
+          "qty": 1
+        },
+        {
+          "line_id": "ln_4",
+          "item_id": "019feb8b-4200-7e01-bb06-c6019e258487",
+          "option_ids": [],
+          "qty": 1
+        },
+        {
+          "line_id": "ln_5",
+          "item_id": "019e8646-1380-7aeb-91aa-3627eb8ec48e",
+          "option_ids": [],
+          "qty": 1
+        }
+      ],
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "line2": "Apt 4",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA",
+        "notes": "Gate code at the door"
+      },
+      "slot_id": "dslot_9f6c9fdc18",
+      "hold_id": "01a0fb94-5f00-7b54-bd80-b7164c57c7e1",
+      "substitution_preference": "019f4455-1a00-7e15-a4c7-6d8e2b0f3a31",
+      "payment_method_id": "card",
+      "quote_hash": "qh_608985453fcb65490228053a62c0628b",
+      "customer": {
+        "name": "Noura Al-Harbi",
+        "phone": "+966551234567",
+        "marketing_opt_in": false
+      },
+      "payment": {
+        "mode": "hosted",
+        "method_id": "card",
+        "return_url": "https://fresh-mart.example/checkout/return"
+      }
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:49:41 GMT"
+    },
+    "body": {
+      "message": "This delivery time is now full. Pick another time.",
+      "code": "slot_full",
+      "details": {
+        "next_free_slot": {
+          "id": "dslot_a68d5c6027",
+          "starts_at": "2026-10-02T14:00:00+03:00",
+          "ends_at": "2026-10-02T15:00:00+03:00",
+          "state": "available",
+          "capacity_remaining": 8,
+          "fee": {
+            "minor": 900,
+            "currency": "SAR",
+            "formatted": "SAR 9.00"
+          },
+          "display": {
+            "id": "dslot_a68d5c6027",
+            "label": "14:00 – 15:00",
+            "state": "available"
+          }
+        }
+      }
+    }
+  }
+}

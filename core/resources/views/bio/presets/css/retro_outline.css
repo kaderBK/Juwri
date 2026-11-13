@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--retro_outline .bio-link:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #191713;background:#ffd23e}
+.bio--retro_outline .bio-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #191713}
+.bio--retro_outline .bio-avatar{border:2.5px solid #191713}
+.bio--retro_outline .bio-name{font-family:'Archivo',sans-serif;font-weight:900}

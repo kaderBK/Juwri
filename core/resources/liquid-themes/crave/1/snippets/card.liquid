@@ -1,0 +1,42 @@
+{% comment %}
+  One menu item card. Carries data-mb-* so the commerce runtime can search /
+  filter / favourite it without any theme JS.
+{% endcomment %}
+<article class="cl-card{% if item.is_sold_out %} is-out{% endif %}"
+         data-mb-item="{{ item.id }}"
+         data-mb-open="{{ item.id }}"
+         data-mb-name="{{ item.name | escape }}"
+         data-mb-price="{{ item.price }}"
+         data-mb-rating="{{ item.rating }}"
+         {% if item.is_popular %}data-mb-popular{% endif %}
+         {% if item.is_vegan %}data-mb-veg{% endif %}
+         {% if item.is_halal %}data-mb-halal{% endif %}
+         {% if item.is_gluten_free %}data-mb-gf{% endif %}
+         {% if item.is_daily_special %}data-mb-special{% endif %}>
+  <div class="cl-card-media">
+    {% if item.image %}<img src="{{ item.image | media_url: 'menu' }}" alt="{{ item.name | escape }}" loading="lazy">{% endif %}
+    {% if item.is_popular %}<i class="cl-flag">{{ 'Popular' | t }}</i>{% endif %}
+    {% if item.is_daily_special %}<i class="cl-flag cl-flag-sp">{{ 'Special' | t }}</i>{% endif %}
+    <button class="cl-fav" type="button" data-mb-fav="{{ item.id }}" aria-label="{{ 'Favourite' | t }}" aria-pressed="false">♥</button>
+  </div>
+  <div class="cl-card-body">
+    <h3 class="cl-card-name">{{ item.name | escape }}</h3>
+    {% if item.rating > 0 %}<span class="cl-card-rate">★ {{ item.rating }}</span>{% endif %}
+    {% if item.description %}<p class="cl-card-desc">{{ item.description | escape }}</p>{% endif %}
+    <div class="cl-badges">
+      {% if item.is_vegan %}<em>{{ 'Vegan' | t }}</em>{% endif %}
+      {% if item.is_halal %}<em>{{ 'Halal' | t }}</em>{% endif %}
+      {% if item.is_gluten_free %}<em>{{ 'Gluten free' | t }}</em>{% endif %}
+    </div>
+    <div class="cl-card-foot">
+      <b class="cl-price" data-mb-money="{{ item.price }}">{{ item.price | money }}</b>
+      {% if flags.allow_order %}
+        {% if item.is_sold_out %}
+          <span class="cl-soldout">{{ 'Sold out' | t }}</span>
+        {% else %}
+          <button class="cl-add" type="button" data-mb-add="{{ item.id }}" aria-label="{{ 'Add' | t }} {{ item.name | escape }}">+</button>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</article>

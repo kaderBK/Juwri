@@ -1,0 +1,120 @@
+{
+    "name": "Hotel",
+    "description": "Understated luxury: a tall hero, rooms with amenities and nightly rates, reservations, the story of the house and a map.",
+    "vertical": "hotel",
+    "priority": "bookings",
+    "tokens": {
+        "colors.primary": "#1e3a5f",
+        "colors.background": "#faf8f3",
+        "colors.surface": "#ffffff",
+        "colors.text": "#1b2230",
+        "colors.accent": "#7d5f24",
+        "layout.radius": "soft",
+        "layout.density": "comfortable"
+    },
+    "font_pair": "fraunces-jakarta",
+    "translations": {
+        "ar": {
+            "name": "فندق",
+            "description": "فخامة هادئة: غلاف طويل، الغرف بمرافقها وأسعار الليلة، الحجوزات، قصة المكان والخريطة."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "centered",
+                    "sticky": true
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "image",
+                    "height": "l",
+                    "align": "center",
+                    "image_source": "cover",
+                    "overlay": 45
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "rooms"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog"
+                ]
+            },
+            "brand": {
+                "type": "brand-row",
+                "settings": {
+                    "show_status": false
+                }
+            },
+            "rooms": {
+                "type": "room-list",
+                "settings": {
+                    "layout": "grid",
+                    "show_amenities": true,
+                    "per_night": true
+                }
+            },
+            "reserve": {
+                "type": "reservation-cta",
+                "settings": {
+                    "show_waitlist": false
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": []
+            },
+            "about": {
+                "type": "about",
+                "settings": {
+                    "use_description": true,
+                    "layout": "image-start"
+                }
+            },
+            "loyalty": {
+                "type": "loyalty-card",
+                "settings": []
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "inverse"
+                }
+            }
+        },
+        "order": [
+            "header",
+            "hero",
+            "brand",
+            "rooms",
+            "reserve",
+            "offers",
+            "about",
+            "loyalty",
+            "reviews",
+            "location",
+            "footer"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

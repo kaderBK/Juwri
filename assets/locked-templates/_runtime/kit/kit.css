@@ -1,0 +1,49 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* juwri locked-template runtime styles (converted SaaS templates). */
+
+/* Arabic / RTL: the template face (Inter Tight) has no Arabic glyphs. */
+html[dir="rtl"] body {
+  font-family: "IBM Plex Sans Arabic", "Inter Tight", "Inter Tight Fallback", system-ui, sans-serif;
+}
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6 {
+  letter-spacing: 0;
+}
+
+/* The template CSS hides every reveal target up front ([data-ns-animate]{opacity:0})
+   expecting JS to animate it in. Only allow that when the head script confirmed JS
+   (html.lt-js); otherwise — no JS, reduced motion, editor preview — show everything. */
+html:not(.lt-js) [data-ns-animate],
+html:not(.lt-js) [data-text-reveal],
+html:not(.lt-js) [data-ns-avatar] {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Counters keep the surrounding type metrics while their digits roll. */
+[data-ns-number] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lead-form button after submit. */
+form[data-lt-form] button[disabled] {
+  cursor: default;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Icon slot hook: layout-neutral wrapper around the icon (library SVG or original). */
+.lt-icon {
+  display: contents;
+}

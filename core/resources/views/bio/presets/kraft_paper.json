@@ -1,0 +1,29 @@
+{
+  "slug": "kraft_paper",
+  "starter": "cafe",
+  "name": "Kraft Paper",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Fraunces", "weights": [400, 600]},
+    {"family": "Manrope", "weights": [400, 600, 700, 800]},
+    {"family": "Caveat", "weights": [600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#e3cda9",
+    "--ink": "#4a3620",
+    "--muted": "#8a6c47",
+    "--card": "#fbf6ea",
+    "--btn-border": "#4a3620",
+    "--btn-border-width": "1.5px",
+    "--accent": "#a4632a",
+    "--accent-ink": "#fbf6ea",
+    "--icon-bg": "#efe3c8",
+    "--icon-fg": "#a4632a",
+    "--radius": "6px",
+    "--shadow": "2.5px 2.5px 0 rgba(74,54,32,.35)",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Fraunces',Georgia,serif"
+  }
+}

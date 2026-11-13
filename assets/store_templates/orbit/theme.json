@@ -1,0 +1,115 @@
+{
+ "version": 2,
+ "presets": [
+  {
+   "id": "orbit",
+   "label": "Orbit",
+   "thumb": "assets/store_templates/orbit/presets/orbit.png",
+   "values": {
+    "colors.primary": "#f4633c",
+    "colors.background": "#ffffff",
+    "colors.surface": "#f5f6f7",
+    "colors.text": "#0f1115",
+    "colors.accent": "#22b573",
+    "layout.radius": "round"
+   }
+  },
+  {
+   "id": "eclipse",
+   "label": "Eclipse",
+   "thumb": "assets/store_templates/orbit/presets/eclipse.png",
+   "values": {
+    "colors.primary": "#ff7a3d",
+    "colors.background": "#0e1014",
+    "colors.surface": "#191c22",
+    "colors.text": "#eef0f4",
+    "colors.accent": "#22b573",
+    "layout.radius": "soft"
+   }
+  },
+  {
+   "id": "comet",
+   "label": "Comet",
+   "thumb": "assets/store_templates/orbit/presets/comet.png",
+   "values": {
+    "colors.primary": "#4c6ef5",
+    "colors.background": "#f4f6fb",
+    "colors.surface": "#ffffff",
+    "colors.text": "#0f1428",
+    "colors.accent": "#f59f00",
+    "layout.radius": "round"
+   }
+  }
+ ],
+ "settings": [
+  {
+   "include": "tokens",
+   "fields": {
+    "colors.primary": {
+     "default": "#f4633c"
+    },
+    "colors.background": {
+     "default": "#ffffff"
+    },
+    "colors.surface": {
+     "default": "#f5f6f7"
+    },
+    "colors.text": {
+     "default": "#0f1115"
+    },
+    "colors.accent": {
+     "default": "#22b573"
+    },
+    "layout.radius": {
+     "default": "round"
+    },
+    "layout.density": {
+     "default": "cozy"
+    }
+   }
+  },
+  {
+   "group": "Texts",
+   "fields": [
+    {
+     "id": "texts.featured_title",
+     "type": "text",
+     "label": "Offers rail title",
+     "default": "Daily special"
+    }
+   ]
+  },
+  {
+   "include": "splash",
+   "fields": {
+    "splash.title": {
+     "default": "Hungry? Order & Eat.",
+     "label": "Splash / hero title"
+    }
+   }
+  },
+  {
+   "include": "search"
+  },
+  {
+   "include": "share"
+  },
+  {
+   "group": "Brand row",
+   "fields": [
+    {
+     "id": "brand.show_follower_count",
+     "type": "toggle",
+     "label": "Show follower count",
+     "default": true
+    },
+    {
+     "id": "brand.show_cover",
+     "type": "toggle",
+     "label": "Show cover photo",
+     "default": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "juwri-theme-conformance",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "type": "module",
+  "description": "Browser half of the theme conformance gates (axe, keyboard, Lighthouse budgets, RTL snapshots). Chrome is driven with the puppeteer already in core/package.json; these are the only extra packages. devDependencies only, never shipped.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "job": "node browser-job.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.0",
+    "lighthouse": "^12.2.0",
+    "pixelmatch": "^6.0.0",
+    "pngjs": "^7.0.0"
+  }
+}

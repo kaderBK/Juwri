@@ -1,0 +1,46 @@
+# Nothing secret and nothing internal goes into the build context (and so never into an image layer).
+.git
+.github
+.gitignore
+.gitleaks.toml
+.mcp.json
+.idea
+.vscode
+.DS_Store
+
+# environment files: configuration comes from the container's environment at run time
+core/.env
+core/.env.*
+!core/.env.example
+docker/.env
+docker/*.env
+!docker/env.example
+
+# internal / non-runtime material
+rev
+AGENTS.md
+deploy
+distribution
+desktop
+driver-app
+mobile
+kiosk/node_modules
+integrations
+tools
+docs
+
+# dependencies are installed inside the image; local state never ships
+core/vendor
+core/node_modules
+core/storage/logs
+core/storage/framework/cache
+core/storage/framework/sessions
+core/storage/framework/views
+core/storage/framework/testing
+core/bootstrap/cache/*.php
+core/tests
+core/*/tests
+core/.phpunit.result.cache
+core/.phpunit.cache
+**/node_modules
+*.log

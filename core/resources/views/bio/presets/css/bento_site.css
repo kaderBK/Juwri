@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--bento_site .bio-block--menu .bio-link{background:linear-gradient(140deg,#3d6df2,#7a4df2);color:#fff;border:0}
+.bio--bento_site .bio-block--menu .bio-link__icon,.bio--bento_site .bio-block--menu .bio-link__arrow{color:#fff}
+.bio--bento_site .bio-link:hover{box-shadow:0 10px 22px rgba(20,25,40,.12)}

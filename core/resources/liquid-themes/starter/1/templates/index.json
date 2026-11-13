@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": { "heading": "" }
+    },
+    "menu": {
+      "type": "menu-grid"
+    }
+  },
+  "order": ["hero", "menu"]
+}

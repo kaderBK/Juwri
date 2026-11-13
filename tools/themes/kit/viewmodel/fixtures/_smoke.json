@@ -1,0 +1,17 @@
+{
+  "store": {"public_id": "st_demo", "slug": "demo", "name": "Demo", "locale": "en", "dir": "ltr",
+    "locales": [{"code": "en", "name": "English", "url": "/demo?lang=en"}, {"code": "ar", "name": "العربية", "url": "/demo?lang=ar"}],
+    "timezone": "Asia/Riyadh", "vertical_set": "food", "store_type": "restaurant",
+    "status": {"open": true, "label": "Open · closes 11 pm"}, "contact": {"phone": "+966 50 000 0000"},
+    "legal_links": [{"label": "Privacy", "url": "/demo/privacy"}], "powered_by": true},
+  "branch": {"current": {"public_id": "br_1", "name": "Olaya"}},
+  "context": {"order_types": [{"key": "delivery", "label": "Delivery", "needs_address": true, "needs_slot": false}], "selected_order_type": "delivery", "schedule_ahead": false},
+  "theme": {"slug": "table", "preset": "classic", "settings": {}, "sections": ["header", "catalog"], "texts": {}},
+  "catalog": {"categories": [{"id": "c1", "name": "Mains", "item_ids": ["i1"]}],
+    "items": {"i1": {"id": "i1", "name": "Dish", "url": "/demo/i/i1", "price": {"minor": 4500, "currency": "SAR", "formatted": "SAR 45.00"}, "badges": [], "sold_out": false, "has_required_choices": false}}},
+  "features": {},
+  "customer": null,
+  "endpoints": {"cart": "/c", "quote": "/q", "place": "/p", "track": "/t"},
+  "money": {"currency": {"code": "SAR", "symbol": "SAR", "exponent": 2, "symbol_position_effective": "before"}},
+  "i18n": {}
+}

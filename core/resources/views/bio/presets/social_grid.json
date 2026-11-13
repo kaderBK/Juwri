@@ -1,0 +1,26 @@
+{
+  "slug": "social_grid",
+  "starter": "social_grid",
+  "name": "Social Grid",
+  "family": "social_grid",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#0f1117",
+    "--ink": "#ffffff",
+    "--muted": "#8f95a8",
+    "--card": "#1b1f2a",
+    "--btn-bg": "#1b1f2a",
+    "--btn-fg": "#ffffff",
+    "--btn-border": "#2e3342",
+    "--accent": "#3aa3ff",
+    "--accent-ink": "#ffffff",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

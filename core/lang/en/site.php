@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'We use cookies',
+    'cookie.body' => 'Essential cookies keep :brand working. With your consent, we also use analytics cookies to understand how the site is used. No marketing cookies are set without your consent. [Privacy Policy](/privacy)',
+    'cookie.accept' => 'Accept analytics',
+    'cookie.reject' => 'Essential only',
+    'cookie.settings' => 'Cookie settings',
+    'cookie.settings.essential' => 'Essential (always on)',
+    'cookie.settings.analytics' => 'Analytics: helps us improve the site',
+    'cookie.settings.marketing' => 'Marketing: measures our campaigns',
+    'cookie.save' => 'Save choices',
+    'signup.accept' => 'I agree to the [Subscription Terms](/terms), the [Data Processing Addendum](/legal/dpa) and the [Acceptable Use Policy](/legal/aup).',
+    'signup.business' => 'I confirm I am signing up for a business, not as a consumer.',
+    'signup.privacy' => 'We use your details to run your account, as described in our [Privacy Policy](/privacy).',
+    'signup.marketing_optin' => 'Send me product news and tips by email (you can unsubscribe at any time).',
+    'checkout.accept' => 'By paying, you accept the [Subscription Terms](/terms). Plans renew automatically; cancel any time in Settings.',
+    'checkout.vat' => 'Prices exclude VAT where applicable.',
+    'pharmacy.gate' => 'Selling medicines is available only in the countries we have enabled. Upload your licence documents to publish. Prescription-only and controlled medicines are not allowed.',
+    'footer.legal' => 'Legal',
+    'footer.terms' => 'Subscription Terms',
+    'footer.privacy' => 'Privacy Policy',
+    'footer.dpa' => 'Data Processing Addendum',
+    'footer.aup' => 'Acceptable Use Policy',
+    'footer.sla' => 'Service Levels and Support',
+    'footer.subprocessors' => 'Sub-processors',
+    'footer.security' => 'Security',
+    'footer.free_reseller' => 'Free Reseller Terms',
+    'footer.status' => 'System status',
+    'footer.trademarks' => 'Trademark policy',
+    'footer.licensing' => 'Open-source licensing',
+    'footer.company' => 'JUWRI LTD · Company no. 14363043 · 128 City Road, London, EC1V 2NX, United Kingdom',
+    'footer.copyright' => '© 2026 JUWRI LTD. juwri is open source under the AGPL-3.0.',
+    'footer.powered' => 'Powered by juwri',
+    'footer.contact' => 'Contact',
+    'footer.language' => 'Language',
+    'legal.version' => 'Version :version · Effective :date',
+    'legal.updated' => 'Last updated :date · Plain-language summary — not legal advice',
+    'legal.translation_note' => 'This Arabic translation is provided for convenience. The English version is the binding one.',
+    'legal.changes' => 'We give at least 30 days\' notice of material changes to these documents.',
+    'legal.contact' => 'Questions: legal@juwri.com',
+    'mail.terms_changed.subject' => 'We\'re updating the juwri Terms on :date',
+    'mail.renewal.subject' => 'Your juwri plan renews on :date',
+    'mail.payment_failed.subject' => 'Action needed: payment for juwri failed',
+    'mail.suspension_warning.subject' => 'Your juwri services will pause in 7 days',
+    'mail.breach_notice.subject' => 'Important security notice about your juwri account',
+    'mail.export_window.subject' => 'Your data is available to export until :date',
+    'mail.reseller_winddown_reseller.subject' => 'Your reseller account needs renewal: your stores are at risk',
+    'mail.reseller_winddown_store.subject' => 'Changes to the platform that runs your store',
+    'signup.accept_required' => 'Please accept the Subscription Terms, the Data Processing Addendum and the Acceptable Use Policy to continue.',
+    'signup.business_required' => 'Please confirm that you are signing up for a business.',
+    'legal.reaccept.upcoming' => 'We are updating the :documents on :date. Please review the new version and accept it.',
+    'legal.reaccept.updated' => 'We have updated the :documents. Please review the new version and accept it.',
+    'legal.reaccept.accept' => 'I accept',
+    'legal.reaccept.done' => 'Thank you. Your acceptance has been recorded.',
+    'legal.english_only' => 'This document is published in English.',
+];

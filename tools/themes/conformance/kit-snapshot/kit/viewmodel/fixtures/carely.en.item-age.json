@@ -1,0 +1,1750 @@
+{
+ "store": {
+  "public_id": "st_shifa_pharmacy",
+  "slug": "shifa-pharmacy-demo",
+  "name": "Shifa Pharmacy",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "Shifa Pharmacy"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "Shifa Pharmacy"
+  },
+  "tagline": "Your neighbourhood pharmacy, online",
+  "locale": "en",
+  "dir": "ltr",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/shifa-pharmacy-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/shifa-pharmacy-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "retail",
+  "store_type": "pharmacy",
+  "status": {
+   "open": true,
+   "label": "Open · closes 11 pm",
+   "next_change_at": "2026-10-02T23:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0106",
+   "whatsapp": "+966 55 010 0106",
+   "address": "Al Olaya Street, Riyadh"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/shifa-pharmacy"
+   }
+  ],
+  "rating": {
+   "avg": 4.8,
+   "count": 962
+  },
+  "legal_links": [
+   {
+    "label": "Privacy",
+    "url": "/shifa-pharmacy-demo/privacy"
+   },
+   {
+    "label": "Terms",
+    "url": "/shifa-pharmacy-demo/terms"
+   },
+   {
+    "label": "Health data privacy notice",
+    "url": "/shifa-pharmacy-demo/health-privacy"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "Shifa Pharmacy Trading Co.",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-5678",
+    "label": "Commercial registration (CR)"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-6606",
+    "label": "VAT number"
+   },
+   "address": "Al Olaya Street, Riyadh 12611"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "Main branch",
+   "address": "Al Olaya Street, Riyadh"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "ship",
+    "label": "Shipping",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "pickup_slot",
+    "label": "Pickup slot",
+    "needs_address": false,
+    "needs_slot": true
+   }
+  ],
+  "selected_order_type": "ship",
+  "schedule_ahead": true,
+  "free_delivery_threshold": {
+   "minor": 10000,
+   "currency": "SAR",
+   "formatted": "SAR 100.00"
+  },
+  "refunds": {
+   "returns": false
+  }
+ },
+ "theme": {
+  "slug": "carely",
+  "preset": "clinic",
+  "settings": {
+   "colors.primary": "#146C4B",
+   "colors.background": "#FFFFFF",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#10231B",
+   "colors.accent": "#0E5A8A",
+   "layout.radius": "round",
+   "layout.density": "cozy",
+   "fonts.pair": "inter",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#5FD3A0",
+   "colors_dark.background": "#0B1411",
+   "colors_dark.surface": "#121E19",
+   "colors_dark.text": "#E8F1EC",
+   "colors_dark.accent": "#7CC4F2",
+   "layout.card": "grid",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "drawer",
+   "menu.show_descriptions": true,
+   "menu.show_calories": false,
+   "menu.show_allergens": false,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "otc_notice",
+   "age_gate",
+   "order_type",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "licence",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "announcement": "Free delivery over SAR 100 · Pick up the same day",
+   "hero_title": "Everyday health essentials",
+   "featured_title": "Everyday essentials",
+   "search_placeholder": "Search medicines, brands, ingredients"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "pain-relief",
+    "name": "Pain relief",
+    "item_ids": [
+     "paracetamol-500",
+     "ibuprofen-tablets",
+     "paracetamol-kids-suspension",
+     "diclofenac-gel",
+     "aspirin-dispersible",
+     "warming-back-patches"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Pain relief"
+    }
+   },
+   {
+    "id": "cold-flu",
+    "name": "Cold, flu & allergy",
+    "item_ids": [
+     "cold-flu-sachets",
+     "throat-lozenges",
+     "saline-nasal-spray",
+     "cough-syrup-dm",
+     "loratadine-allergy",
+     "vapour-rub"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Cold, flu & allergy"
+    }
+   },
+   {
+    "id": "vitamins",
+    "name": "Vitamins & wellbeing",
+    "item_ids": [
+     "vitamin-d3",
+     "vitamin-c-effervescent",
+     "multivitamin-adult",
+     "omega-3-softgels",
+     "calcium-d3-chewable",
+     "sleep-aid"
+    ],
+    "count": 6,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Vitamins & wellbeing"
+    }
+   },
+   {
+    "id": "skin-care",
+    "name": "Skin care",
+    "item_ids": [
+     "moisturising-cream",
+     "sunscreen-50",
+     "clotrimazole-cream",
+     "calamine-lotion",
+     "lip-balm"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Skin care"
+    }
+   },
+   {
+    "id": "baby",
+    "name": "Baby & child",
+    "item_ids": [
+     "nappy-cream",
+     "baby-wipes",
+     "baby-shampoo",
+     "baby-lotion",
+     "baby-oil"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby & child"
+    }
+   },
+   {
+    "id": "first-aid",
+    "name": "First aid",
+    "item_ids": [
+     "plasters-assorted",
+     "povidone-iodine",
+     "gauze-pads",
+     "digital-thermometer",
+     "oral-rehydration-salts"
+    ],
+    "count": 5,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "First aid"
+    }
+   },
+   {
+    "id": "oral-care",
+    "name": "Oral care",
+    "item_ids": [
+     "fluoride-toothpaste",
+     "soft-toothbrush",
+     "mouthwash-alcohol-free",
+     "dental-floss"
+    ],
+    "count": 4,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Oral care"
+    }
+   },
+   {
+    "id": "personal-care",
+    "name": "Personal care",
+    "item_ids": [
+     "hand-sanitiser",
+     "face-masks",
+     "deodorant-roll-on",
+     "anti-dandruff-shampoo"
+    ],
+    "count": 4,
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Personal care"
+    }
+   }
+  ],
+  "items": {
+   "paracetamol-500": {
+    "id": "paracetamol-500",
+    "name": "Paracetamol 500 mg tablets",
+    "url": "/shifa-pharmacy-demo/p/paracetamol-500",
+    "short": "For the relief of mild to moderate pain and fever.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Paracetamol 500 mg tablets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 650,
+     "currency": "SAR",
+     "formatted": "SAR 6.50"
+    },
+    "pack_label": "12 tablets · SAR 0.54 / tablet"
+   },
+   "ibuprofen-tablets": {
+    "id": "ibuprofen-tablets",
+    "name": "Ibuprofen tablets",
+    "url": "/shifa-pharmacy-demo/p/ibuprofen-tablets",
+    "short": "For the short-term relief of pain, inflammation and fever.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Ibuprofen tablets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 750,
+     "currency": "SAR",
+     "formatted": "SAR 7.50"
+    },
+    "pack_label": "12 tablets · SAR 0.63 / tablet"
+   },
+   "paracetamol-kids-suspension": {
+    "id": "paracetamol-kids-suspension",
+    "name": "Children's paracetamol suspension 120 mg/5 ml",
+    "url": "/shifa-pharmacy-demo/p/paracetamol-kids-suspension",
+    "short": "Strawberry-flavoured suspension for fever and mild pain in children.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Children's paracetamol suspension 120 mg/5 ml"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira Kids",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    },
+    "pack_label": "100 ml bottle · SAR 0.14 / ml"
+   },
+   "diclofenac-gel": {
+    "id": "diclofenac-gel",
+    "name": "Diclofenac 1% pain relief gel",
+    "url": "/shifa-pharmacy-demo/p/diclofenac-gel",
+    "short": "A gel for muscle and joint pain, sprains and strains.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Diclofenac 1% pain relief gel"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Voltix",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "SAR 21.00"
+    },
+    "pack_label": "50 g tube · SAR 0.42 / g"
+   },
+   "aspirin-dispersible": {
+    "id": "aspirin-dispersible",
+    "name": "Aspirin 300 mg dispersible tablets",
+    "url": "/shifa-pharmacy-demo/p/aspirin-dispersible",
+    "short": "Dissolve in water for fast relief of pain and fever.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Aspirin 300 mg dispersible tablets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "SAR 8.00"
+    },
+    "pack_label": "16 tablets · SAR 0.50 / tablet"
+   },
+   "warming-back-patches": {
+    "id": "warming-back-patches",
+    "name": "Warming back patches",
+    "url": "/shifa-pharmacy-demo/p/warming-back-patches",
+    "short": "Self-heating patches that give up to 8 hours of gentle warmth.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Warming back patches"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Thermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "SAR 17.00"
+    },
+    "pack_label": "5 patches · SAR 3.40 / patch"
+   },
+   "cold-flu-sachets": {
+    "id": "cold-flu-sachets",
+    "name": "Cold and flu hot lemon sachets",
+    "url": "/shifa-pharmacy-demo/p/cold-flu-sachets",
+    "short": "A hot drink for the relief of cold and flu symptoms.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Cold and flu hot lemon sachets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 1000,
+     "currency": "SAR",
+     "formatted": "SAR 10.00"
+    },
+    "pack_label": "5 sachets · SAR 2.00 / sachet"
+   },
+   "throat-lozenges": {
+    "id": "throat-lozenges",
+    "name": "Sore throat lozenges, honey and lemon",
+    "url": "/shifa-pharmacy-demo/p/throat-lozenges",
+    "short": "Antiseptic lozenges that soothe a sore throat.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sore throat lozenges, honey and lemon"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Soothex",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    },
+    "pack_label": "24 lozenges · SAR 0.58 / lozenge"
+   },
+   "saline-nasal-spray": {
+    "id": "saline-nasal-spray",
+    "name": "Saline nasal spray",
+    "url": "/shifa-pharmacy-demo/p/saline-nasal-spray",
+    "short": "An isotonic spray that helps clear a blocked nose.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Saline nasal spray"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Nasalia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "SAR 11.00"
+    },
+    "pack_label": "20 ml spray · SAR 0.55 / ml"
+   },
+   "cough-syrup-dm": {
+    "id": "cough-syrup-dm",
+    "name": "Dry cough syrup",
+    "url": "/shifa-pharmacy-demo/p/cough-syrup-dm",
+    "short": "A syrup to calm a dry, tickly cough.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dry cough syrup"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Medira",
+    "has_required_choices": false,
+    "age_restricted": true,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    },
+    "pack_label": "120 ml bottle · SAR 0.16 / ml"
+   },
+   "loratadine-allergy": {
+    "id": "loratadine-allergy",
+    "name": "Allergy relief tablets 10 mg",
+    "url": "/shifa-pharmacy-demo/p/loratadine-allergy",
+    "short": "Non-drowsy tablets for hay fever and other allergies.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Allergy relief tablets 10 mg"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Allerfree",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "from_price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    },
+    "pack_label": "10 tablets · SAR 1.20 / tablet"
+   },
+   "vapour-rub": {
+    "id": "vapour-rub",
+    "name": "Menthol vapour rub",
+    "url": "/shifa-pharmacy-demo/p/vapour-rub",
+    "short": "A warming rub for the chest and back during colds.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Menthol vapour rub"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Soothex",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1300,
+     "currency": "SAR",
+     "formatted": "SAR 13.00"
+    },
+    "pack_label": "50 g jar · SAR 0.26 / g"
+   },
+   "vitamin-d3": {
+    "id": "vitamin-d3",
+    "name": "Vitamin D3 softgel capsules",
+    "url": "/shifa-pharmacy-demo/p/vitamin-d3",
+    "short": "A daily vitamin D supplement in an easy-to-swallow softgel.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Vitamin D3 softgel capsules"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    },
+    "pack_label": "30 capsules · SAR 0.80 / capsule"
+   },
+   "vitamin-c-effervescent": {
+    "id": "vitamin-c-effervescent",
+    "name": "Vitamin C 1000 mg effervescent tablets",
+    "url": "/shifa-pharmacy-demo/p/vitamin-c-effervescent",
+    "short": "Orange-flavoured effervescent tablets.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Vitamin C 1000 mg effervescent tablets"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    },
+    "pack_label": "20 tablets · SAR 1.10 / tablet"
+   },
+   "multivitamin-adult": {
+    "id": "multivitamin-adult",
+    "name": "Multivitamin and mineral tablets for adults",
+    "url": "/shifa-pharmacy-demo/p/multivitamin-adult",
+    "short": "A daily multivitamin with essential minerals.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Multivitamin and mineral tablets for adults"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −16%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "SAR 38.00"
+    },
+    "from_price": {
+     "minor": 3200,
+     "currency": "SAR",
+     "formatted": "SAR 32.00"
+    },
+    "pack_label": "30 tablets · SAR 1.07 / tablet"
+   },
+   "omega-3-softgels": {
+    "id": "omega-3-softgels",
+    "name": "Omega-3 fish oil 1000 mg softgels",
+    "url": "/shifa-pharmacy-demo/p/omega-3-softgels",
+    "short": "Fish oil softgels with a mild lemon taste.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Omega-3 fish oil 1000 mg softgels"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Nordica",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 4900,
+     "currency": "SAR",
+     "formatted": "SAR 49.00"
+    },
+    "pack_label": "60 softgels · SAR 0.82 / softgel"
+   },
+   "calcium-d3-chewable": {
+    "id": "calcium-d3-chewable",
+    "name": "Calcium and vitamin D3 chewable tablets",
+    "url": "/shifa-pharmacy-demo/p/calcium-d3-chewable",
+    "short": "Chewable tablets with a fruity flavour.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Calcium and vitamin D3 chewable tablets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Vitalis",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 3800,
+     "currency": "SAR",
+     "formatted": "SAR 38.00"
+    },
+    "pack_label": "60 tablets · SAR 0.63 / tablet"
+   },
+   "sleep-aid": {
+    "id": "sleep-aid",
+    "name": "Night-time sleep aid tablets",
+    "url": "/shifa-pharmacy-demo/p/sleep-aid",
+    "short": "For the short-term relief of occasional sleeplessness.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Night-time sleep aid tablets"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Calmex",
+    "has_required_choices": false,
+    "age_restricted": true,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    },
+    "pack_label": "20 tablets · SAR 0.95 / tablet"
+   },
+   "moisturising-cream": {
+    "id": "moisturising-cream",
+    "name": "Daily moisturising cream",
+    "url": "/shifa-pharmacy-demo/p/moisturising-cream",
+    "short": "A light cream for dry skin on the face and body.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Daily moisturising cream"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    },
+    "pack_label": "250 g tub · SAR 0.10 / g"
+   },
+   "sunscreen-50": {
+    "id": "sunscreen-50",
+    "name": "Sunscreen lotion, protection factor 50",
+    "url": "/shifa-pharmacy-demo/p/sunscreen-50",
+    "short": "A water-resistant lotion for face and body.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sunscreen lotion, protection factor 50"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −21%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Solara",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "SAR 58.00"
+    },
+    "price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "SAR 46.00"
+    },
+    "pack_label": "100 ml bottle · SAR 0.46 / ml"
+   },
+   "clotrimazole-cream": {
+    "id": "clotrimazole-cream",
+    "name": "Antifungal cream 1%",
+    "url": "/shifa-pharmacy-demo/p/clotrimazole-cream",
+    "short": "A cream for fungal infections of the skin.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Antifungal cream 1%"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Mycofree",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "SAR 15.00"
+    },
+    "pack_label": "20 g tube · SAR 0.75 / g"
+   },
+   "calamine-lotion": {
+    "id": "calamine-lotion",
+    "name": "Calamine lotion",
+    "url": "/shifa-pharmacy-demo/p/calamine-lotion",
+    "short": "A cooling lotion for itchy skin and insect bites.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Calamine lotion"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    },
+    "pack_label": "100 ml bottle · SAR 0.09 / ml"
+   },
+   "lip-balm": {
+    "id": "lip-balm",
+    "name": "Lip balm, protection factor 15",
+    "url": "/shifa-pharmacy-demo/p/lip-balm",
+    "short": "A soft balm for dry, chapped lips.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lip balm, protection factor 15"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "SAR 8.00"
+    },
+    "pack_label": "4.5 g stick"
+   },
+   "nappy-cream": {
+    "id": "nappy-cream",
+    "name": "Nappy rash cream",
+    "url": "/shifa-pharmacy-demo/p/nappy-cream",
+    "short": "A protective zinc cream for nappy rash.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Nappy rash cream"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "SAR 17.00"
+    },
+    "pack_label": "100 g tube · SAR 0.17 / g"
+   },
+   "baby-wipes": {
+    "id": "baby-wipes",
+    "name": "Sensitive baby wipes",
+    "url": "/shifa-pharmacy-demo/p/baby-wipes",
+    "short": "Fragrance-free wipes for delicate skin.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sensitive baby wipes"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    },
+    "pack_label": "72 wipes · SAR 0.17 / wipe"
+   },
+   "baby-shampoo": {
+    "id": "baby-shampoo",
+    "name": "Tear-free baby shampoo",
+    "url": "/shifa-pharmacy-demo/p/baby-shampoo",
+    "short": "A mild shampoo for baby's hair and scalp.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Tear-free baby shampoo"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    },
+    "pack_label": "250 ml bottle · SAR 0.08 / ml"
+   },
+   "baby-lotion": {
+    "id": "baby-lotion",
+    "name": "Gentle baby lotion",
+    "url": "/shifa-pharmacy-demo/p/baby-lotion",
+    "short": "A light, quick-absorbing lotion for baby skin.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Gentle baby lotion"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −19%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 2600,
+     "currency": "SAR",
+     "formatted": "SAR 26.00"
+    },
+    "price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "SAR 21.00"
+    },
+    "pack_label": "300 ml bottle · SAR 0.07 / ml"
+   },
+   "baby-oil": {
+    "id": "baby-oil",
+    "name": "Baby massage oil",
+    "url": "/shifa-pharmacy-demo/p/baby-oil",
+    "short": "A soft oil for baby massage after the bath.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Baby massage oil"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Little Leaf",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    },
+    "pack_label": "200 ml bottle · SAR 0.08 / ml"
+   },
+   "plasters-assorted": {
+    "id": "plasters-assorted",
+    "name": "Adhesive plasters, assorted sizes",
+    "url": "/shifa-pharmacy-demo/p/plasters-assorted",
+    "short": "Breathable plasters in assorted sizes.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Adhesive plasters, assorted sizes"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "SAR 9.00"
+    },
+    "pack_label": "40 plasters · SAR 0.23 / plaster"
+   },
+   "povidone-iodine": {
+    "id": "povidone-iodine",
+    "name": "Antiseptic solution, povidone-iodine 10%",
+    "url": "/shifa-pharmacy-demo/p/povidone-iodine",
+    "short": "An antiseptic solution for cuts and grazes.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Antiseptic solution, povidone-iodine 10%"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    },
+    "pack_label": "100 ml bottle · SAR 0.12 / ml"
+   },
+   "gauze-pads": {
+    "id": "gauze-pads",
+    "name": "Sterile gauze pads",
+    "url": "/shifa-pharmacy-demo/p/gauze-pads",
+    "short": "Individually wrapped sterile pads, 10 x 10 cm.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sterile gauze pads"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "SAR 7.00"
+    },
+    "pack_label": "10 pads · SAR 0.70 / pad"
+   },
+   "digital-thermometer": {
+    "id": "digital-thermometer",
+    "name": "Digital thermometer",
+    "url": "/shifa-pharmacy-demo/p/digital-thermometer",
+    "short": "A fast, accurate thermometer with a flexible tip.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Digital thermometer"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 2500,
+     "currency": "SAR",
+     "formatted": "SAR 25.00"
+    },
+    "pack_label": "1 thermometer"
+   },
+   "oral-rehydration-salts": {
+    "id": "oral-rehydration-salts",
+    "name": "Oral rehydration salts",
+    "url": "/shifa-pharmacy-demo/p/oral-rehydration-salts",
+    "short": "Sachets that replace fluids and salts lost with diarrhoea.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Oral rehydration salts"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Hydrafix",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": false,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    },
+    "pack_label": "10 sachets · SAR 1.60 / sachet"
+   },
+   "fluoride-toothpaste": {
+    "id": "fluoride-toothpaste",
+    "name": "Fluoride toothpaste",
+    "url": "/shifa-pharmacy-demo/p/fluoride-toothpaste",
+    "short": "Daily toothpaste for cavity protection.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fluoride toothpaste"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "SAR 11.00"
+    },
+    "pack_label": "100 ml tube · SAR 0.11 / ml"
+   },
+   "soft-toothbrush": {
+    "id": "soft-toothbrush",
+    "name": "Soft toothbrush",
+    "url": "/shifa-pharmacy-demo/p/soft-toothbrush",
+    "short": "A soft-bristle toothbrush with a comfortable grip.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Soft toothbrush"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": true,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "from_price": {
+     "minor": 600,
+     "currency": "SAR",
+     "formatted": "SAR 6.00"
+    },
+    "pack_label": "1 toothbrush"
+   },
+   "mouthwash-alcohol-free": {
+    "id": "mouthwash-alcohol-free",
+    "name": "Alcohol-free antibacterial mouthwash",
+    "url": "/shifa-pharmacy-demo/p/mouthwash-alcohol-free",
+    "short": "A mint mouthwash that freshens breath.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Alcohol-free antibacterial mouthwash"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −18%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    },
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    },
+    "pack_label": "500 ml bottle · SAR 0.04 / ml"
+   },
+   "dental-floss": {
+    "id": "dental-floss",
+    "name": "Waxed dental floss",
+    "url": "/shifa-pharmacy-demo/p/dental-floss",
+    "short": "Mint-waxed floss that glides between teeth.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Waxed dental floss"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Brightly",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 700,
+     "currency": "SAR",
+     "formatted": "SAR 7.00"
+    },
+    "pack_label": "50 m reel · SAR 0.14 / m"
+   },
+   "hand-sanitiser": {
+    "id": "hand-sanitiser",
+    "name": "Hand sanitiser gel 70% alcohol",
+    "url": "/shifa-pharmacy-demo/p/hand-sanitiser",
+    "short": "Quick-drying gel that cleans hands without water.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Hand sanitiser gel 70% alcohol"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "SAR 12.00"
+    },
+    "pack_label": "250 ml bottle · SAR 0.05 / ml"
+   },
+   "face-masks": {
+    "id": "face-masks",
+    "name": "Disposable face masks",
+    "url": "/shifa-pharmacy-demo/p/face-masks",
+    "short": "Three-layer disposable masks with ear loops.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Disposable face masks"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Safeguard",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    },
+    "pack_label": "50 masks · SAR 0.38 / mask"
+   },
+   "deodorant-roll-on": {
+    "id": "deodorant-roll-on",
+    "name": "Roll-on deodorant, fragrance-free",
+    "url": "/shifa-pharmacy-demo/p/deodorant-roll-on",
+    "short": "A gentle roll-on for sensitive skin.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Roll-on deodorant, fragrance-free"
+    },
+    "badges": [],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "SAR 11.00"
+    },
+    "pack_label": "50 ml roll-on · SAR 0.22 / ml"
+   },
+   "anti-dandruff-shampoo": {
+    "id": "anti-dandruff-shampoo",
+    "name": "Anti-dandruff shampoo",
+    "url": "/shifa-pharmacy-demo/p/anti-dandruff-shampoo",
+    "short": "A daily shampoo that helps control dandruff.",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Anti-dandruff shampoo"
+    },
+    "badges": [
+     {
+      "kind": "sale",
+      "label": "Sale −20%"
+     }
+    ],
+    "sold_out": false,
+    "brand": "Dermia",
+    "has_required_choices": false,
+    "age_restricted": false,
+    "promo_allowed": true,
+    "compare_at": {
+     "minor": 3000,
+     "currency": "SAR",
+     "formatted": "SAR 30.00"
+    },
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    },
+    "pack_label": "200 ml bottle · SAR 0.12 / ml"
+   }
+  },
+  "total": 41,
+  "next_page_url": null,
+  "facets": [
+   {
+    "id": "form",
+    "label": "Form",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "tablet",
+      "label": "Tablet",
+      "count": 4
+     },
+     {
+      "value": "film-coated-tablet",
+      "label": "Film-coated tablet",
+      "count": 1
+     },
+     {
+      "value": "oral-suspension",
+      "label": "Oral suspension",
+      "count": 1
+     },
+     {
+      "value": "gel",
+      "label": "Gel",
+      "count": 2
+     },
+     {
+      "value": "dispersible-tablet",
+      "label": "Dispersible tablet",
+      "count": 1
+     },
+     {
+      "value": "patch",
+      "label": "Patch",
+      "count": 1
+     },
+     {
+      "value": "powder-for-oral-solution",
+      "label": "Powder for oral solution",
+      "count": 2
+     },
+     {
+      "value": "lozenge",
+      "label": "Lozenge",
+      "count": 1
+     },
+     {
+      "value": "nasal-spray",
+      "label": "Nasal spray",
+      "count": 1
+     },
+     {
+      "value": "oral-syrup",
+      "label": "Oral syrup",
+      "count": 1
+     },
+     {
+      "value": "ointment",
+      "label": "Ointment",
+      "count": 1
+     },
+     {
+      "value": "softgel-capsule",
+      "label": "Softgel capsule",
+      "count": 2
+     },
+     {
+      "value": "effervescent-tablet",
+      "label": "Effervescent tablet",
+      "count": 1
+     },
+     {
+      "value": "chewable-tablet",
+      "label": "Chewable tablet",
+      "count": 1
+     },
+     {
+      "value": "cream",
+      "label": "Cream",
+      "count": 3
+     },
+     {
+      "value": "lotion",
+      "label": "Lotion",
+      "count": 3
+     },
+     {
+      "value": "balm",
+      "label": "Balm",
+      "count": 1
+     },
+     {
+      "value": "wipes",
+      "label": "Wipes",
+      "count": 1
+     },
+     {
+      "value": "shampoo",
+      "label": "Shampoo",
+      "count": 2
+     },
+     {
+      "value": "oil",
+      "label": "Oil",
+      "count": 1
+     },
+     {
+      "value": "plaster",
+      "label": "Plaster",
+      "count": 1
+     },
+     {
+      "value": "cutaneous-solution",
+      "label": "Cutaneous solution",
+      "count": 1
+     },
+     {
+      "value": "dressing",
+      "label": "Dressing",
+      "count": 1
+     },
+     {
+      "value": "device",
+      "label": "Device",
+      "count": 1
+     },
+     {
+      "value": "toothpaste",
+      "label": "Toothpaste",
+      "count": 1
+     },
+     {
+      "value": "toothbrush",
+      "label": "Toothbrush",
+      "count": 1
+     },
+     {
+      "value": "mouthwash",
+      "label": "Mouthwash",
+      "count": 1
+     },
+     {
+      "value": "floss",
+      "label": "Floss",
+      "count": 1
+     },
+     {
+      "value": "mask",
+      "label": "Mask",
+      "count": 1
+     },
+     {
+      "value": "roll-on",
+      "label": "Roll-on",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "id": "brand",
+    "label": "Brand",
+    "kind": "checkbox",
+    "options": [
+     {
+      "value": "Medira",
+      "label": "Medira",
+      "count": 5
+     },
+     {
+      "value": "Medira Kids",
+      "label": "Medira Kids",
+      "count": 1
+     },
+     {
+      "value": "Voltix",
+      "label": "Voltix",
+      "count": 1
+     },
+     {
+      "value": "Thermia",
+      "label": "Thermia",
+      "count": 1
+     },
+     {
+      "value": "Soothex",
+      "label": "Soothex",
+      "count": 2
+     },
+     {
+      "value": "Nasalia",
+      "label": "Nasalia",
+      "count": 1
+     },
+     {
+      "value": "Allerfree",
+      "label": "Allerfree",
+      "count": 1
+     },
+     {
+      "value": "Vitalis",
+      "label": "Vitalis",
+      "count": 4
+     },
+     {
+      "value": "Nordica",
+      "label": "Nordica",
+      "count": 1
+     },
+     {
+      "value": "Calmex",
+      "label": "Calmex",
+      "count": 1
+     },
+     {
+      "value": "Dermia",
+      "label": "Dermia",
+      "count": 5
+     },
+     {
+      "value": "Solara",
+      "label": "Solara",
+      "count": 1
+     },
+     {
+      "value": "Mycofree",
+      "label": "Mycofree",
+      "count": 1
+     },
+     {
+      "value": "Little Leaf",
+      "label": "Little Leaf",
+      "count": 5
+     },
+     {
+      "value": "Safeguard",
+      "label": "Safeguard",
+      "count": 6
+     },
+     {
+      "value": "Hydrafix",
+      "label": "Hydrafix",
+      "count": 1
+     },
+     {
+      "value": "Brightly",
+      "label": "Brightly",
+      "count": 4
+     }
+    ]
+   },
+   {
+    "id": "age_restricted",
+    "label": "Age-restricted",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "18+ only",
+      "count": 2
+     }
+    ]
+   },
+   {
+    "id": "in_stock",
+    "label": "In stock",
+    "kind": "toggle",
+    "options": [
+     {
+      "value": "1",
+      "label": "In stock only"
+     }
+    ]
+   }
+  ]
+ },
+ "features": {
+  "announcement": {
+   "text": "Free delivery over SAR 100 · Pick up the same day",
+   "icon": "truck"
+  },
+  "featured": [
+   "vitamin-d3",
+   "moisturising-cream",
+   "nappy-cream",
+   "plasters-assorted",
+   "fluoride-toothpaste",
+   "hand-sanitiser"
+  ],
+  "pharmacy": {
+   "disclaimer": "We sell over-the-counter medicines and health products only. We do not supply prescription medicines. Read the label and leaflet before use, and ask a pharmacist if you are unsure.",
+   "entry_gate": true,
+   "min_age": 18,
+   "licence": {
+    "legal_name": "Shifa Pharmacy Trading Co.",
+    "number": "SAMPLE-0000-1234",
+    "country": "SA",
+    "regulator": "sa_moh",
+    "authority": "Ministry of Health, Saudi Arabia (sample)",
+    "pharmacist_in_charge": {
+     "name": "Dr. Layla Al-Amri (sample)",
+     "registration_no": "RN-SAMPLE-5521",
+     "registration_label": "SCFHS no."
+    },
+    "address": "Al Olaya Street, Riyadh 12611"
+   },
+   "analytics_off": true
+  }
+ },
+ "customer": {
+  "name": "Noura",
+  "has_passkey": true
+ },
+ "endpoints": {
+  "cart": "/shifa-pharmacy-demo/cart",
+  "quote": "/shifa-pharmacy-demo/quote",
+  "place": "/shifa-pharmacy-demo/order",
+  "track": "/shifa-pharmacy-demo/track",
+  "coupon": "/shifa-pharmacy-demo/coupon",
+  "otp": "/shifa-pharmacy-demo/otp",
+  "account": "/shifa-pharmacy-demo/account",
+  "search": "/shifa-pharmacy-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "SAR",
+   "exponent": 2,
+   "symbol_position_effective": "before"
+  },
+  "tax": {
+   "mode": "inclusive",
+   "rate": 15,
+   "label": "VAT"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "item",
+  "item": {
+   "id": "cough-syrup-dm",
+   "name": "Dry cough syrup",
+   "brand": "Medira",
+   "description": "A syrup to calm a dry, tickly cough.",
+   "gallery": [
+    {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Dry cough syrup"
+    }
+   ],
+   "price": {
+    "minor": 1900,
+    "currency": "SAR",
+    "formatted": "SAR 19.00"
+   },
+   "badges": [],
+   "option_groups": [],
+   "quantity": {
+    "min": 1,
+    "max": 1,
+    "step": 1,
+    "value": 1,
+    "limit_note": "Limit 1 pack per order"
+   },
+   "promo_allowed": false,
+   "sku": "COUGHSYRUPDM-15mg5ml-b120",
+   "gtin": "6281000000019",
+   "variants": [
+    {
+     "sku": "COUGHSYRUPDM-15mg5ml-b120",
+     "options": {
+      "strength": "15 mg/5 ml",
+      "pack": "b120"
+     },
+     "price": {
+      "minor": 1900,
+      "currency": "SAR",
+      "formatted": "SAR 19.00"
+     },
+     "stock": 30
+    }
+   ],
+   "add_label": "Add to bag · SAR 19.00",
+   "info_rows": [
+    {
+     "icon": "store",
+     "label": "Pick up today from 4 pm",
+     "sub": "Olaya branch · ready in 2 hours"
+    },
+    {
+     "icon": "truck",
+     "label": "Delivered by Sat 3 Oct",
+     "sub": "to Riyadh 12611 · Free over SAR 100"
+    }
+   ],
+   "unit": {
+    "label": "SAR 0.16 / ml"
+   },
+   "medicine": {
+    "active_ingredients": [
+     {
+      "name": "Dextromethorphan hydrobromide",
+      "strength": "15 mg/5 ml"
+     }
+    ],
+    "form": "Oral syrup",
+    "dosage": "Adults 18 years and over: 10 ml every 6 to 8 hours. Do not take more than 4 doses in 24 hours.",
+    "usage": "Relief of a dry cough.",
+    "pack_label": "120 ml bottle · SAR 0.16 / ml",
+    "strength_label": "15 mg/5 ml"
+   },
+   "warnings": [
+    "Not for use under 18 years.",
+    "May cause drowsiness. Do not drive or use machinery if affected.",
+    "Do not take with other cough or cold medicines, or with alcohol.",
+    "See a doctor if the cough lasts more than 7 days.",
+    "Keep out of the sight and reach of children."
+   ],
+   "leaflet": {
+    "url": "/shifa-pharmacy-demo/leaflets/cough-syrup-dm.pdf",
+    "size_label": "264 KB",
+    "type": "pdf"
+   },
+   "age": {
+    "min": 18,
+    "confirm_label": "I confirm I am 18 or over"
+   },
+   "details": [
+    {
+     "title": "Description",
+     "html": "<p>A syrup to calm a dry, tickly cough.</p>"
+    },
+    {
+     "title": "Storage",
+     "html": "<p>Store below 25 °C in a dry place, away from direct sunlight.</p>"
+    }
+   ],
+   "related": [
+    "vitamin-c-effervescent",
+    "multivitamin-adult",
+    "digital-thermometer",
+    "hand-sanitiser"
+   ]
+  }
+ }
+}

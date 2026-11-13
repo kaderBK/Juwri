@@ -1,0 +1,56 @@
+{%- comment -%}
+  About (library v1): an image beside rich text. The layout puts the image
+  at the inline start or end (logical — it flips with dir=rtl). With no
+  custom text the store's own description is used; with no image, text
+  and description the section renders nothing.
+{%- endcomment -%}
+{%- liquid
+  assign img = ''
+  if section.settings.image != ''
+    assign img = section.settings.image | media_url
+  endif
+  assign body = section.settings.body | strip
+  assign fallback = ''
+  if body == '' and section.settings.use_description
+    assign fallback = restaurant.description | strip
+  endif
+  assign heading = section.settings.heading | strip
+-%}
+{%- if img != '' or body != '' or fallback != '' -%}
+<section class="mbs-about mbs-about--{{ section.settings.layout | escape }}{% if img != '' %} has-media{% endif %}" aria-labelledby="mbs-about-{{ section.id | escape }}">
+  {%- if img != '' -%}
+  <div class="mbs-about__media">
+    {%- render 'media', src: img, alt: section.settings.image_alt, width: 960, height: 720, class: 'mbs-about__img', priority: false, sizes: '(min-width: 768px) 480px, 100vw' -%}
+  </div>
+  {%- endif -%}
+  <div class="mbs-about__text">
+    <h2 class="mbs-about__title" id="mbs-about-{{ section.id | escape }}">{%- if heading != '' -%}{{ heading | escape }}{%- else -%}{{ 'About us' | t }}{%- endif -%}</h2>
+    {%- if body != '' -%}
+      <div class="mbs-about__body">{{ section.settings.body }}</div>
+    {%- elsif fallback != '' -%}
+      <div class="mbs-about__body">{{ fallback | escape | newline_to_br }}</div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About",
+  "group": "content",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = About us)", "default": "" },
+    { "id": "body", "type": "richtext", "label": "Text", "default": "" },
+    { "id": "use_description", "type": "checkbox", "label": "Use the store description when the text is empty", "default": true },
+    { "id": "image", "type": "image_picker", "label": "Image", "default": "" },
+    { "id": "image_alt", "type": "text", "label": "Image description (for screen readers)", "default": "" },
+    { "id": "layout", "type": "select", "label": "Image position", "options": [
+      { "value": "image-start", "label": "Image first" },
+      { "value": "image-end", "label": "Image last" }
+    ], "default": "image-start" }
+  ],
+  "presets": [{ "name": "About" }]
+}
+{% endschema %}

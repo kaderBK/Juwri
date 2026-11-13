@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--vip_gold .bio-name{font-family:'Fraunces',serif;letter-spacing:.04em}
+.bio--vip_gold .bio-link{box-shadow:0 4px 14px rgba(202,163,83,.25),inset 0 1px 0 rgba(255,240,200,.5)}
+.bio--vip_gold .bio-block:not(:first-child) .bio-link{background:transparent;color:#e3c477;border:1px solid rgba(202,163,83,.55);box-shadow:none;font-weight:600}
+.bio--vip_gold .bio-block:not(:first-child) .bio-link__icon{color:#e3c477}
+.bio--vip_gold .bio-avatar{background:radial-gradient(circle at 35% 30%,#3a342a,#191611);border:1.5px solid #caa353;box-shadow:0 0 0 4px rgba(202,163,83,.12)}
+.bio--vip_gold .bio-socials a{color:#caa353;border:1px solid rgba(202,163,83,.4);background:transparent}

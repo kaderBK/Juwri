@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 230" role="img" aria-labelledby="juwri-term-title juwri-term-desc">
+  <title id="juwri-term-title">juwri quick start</title>
+  <desc id="juwri-term-desc">An animated terminal that types the four commands of a local development install and shows the development server starting.</desc>
+  <defs>
+    <clipPath id="jt-l1">
+      <rect x="36" y="64" width="0" height="26">
+        <animate attributeName="width" values="0;300;300;0" keyTimes="0;0.03;0.92;1" dur="12s" repeatCount="indefinite"/>
+      </rect>
+    </clipPath>
+    <clipPath id="jt-l2">
+      <rect x="36" y="94" width="0" height="26">
+        <animate attributeName="width" values="0;0;760;760;0" keyTimes="0;0.04;0.08;0.92;1" dur="12s" repeatCount="indefinite"/>
+      </rect>
+    </clipPath>
+    <clipPath id="jt-l3">
+      <rect x="36" y="124" width="0" height="26">
+        <animate attributeName="width" values="0;0;340;340;0" keyTimes="0;0.09;0.12;0.92;1" dur="12s" repeatCount="indefinite"/>
+      </rect>
+    </clipPath>
+    <clipPath id="jt-l4">
+      <rect x="36" y="154" width="0" height="26">
+        <animate attributeName="width" values="0;0;270;270;0" keyTimes="0;0.13;0.16;0.92;1" dur="12s" repeatCount="indefinite"/>
+      </rect>
+    </clipPath>
+    <clipPath id="jt-l5">
+      <rect x="36" y="184" width="0" height="26">
+        <animate attributeName="width" values="0;0;560;560;0" keyTimes="0;0.18;0.22;0.92;1" dur="12s" repeatCount="indefinite"/>
+      </rect>
+    </clipPath>
+  </defs>
+
+  <rect x="1" y="1" width="1198" height="228" rx="20" fill="#0A1410" stroke="#234034" stroke-width="2"/>
+  <path d="M21 44 H1179" stroke="#234034" stroke-width="1.5"/>
+  <circle cx="30" cy="22" r="6" fill="#F87171"/>
+  <circle cx="50" cy="22" r="6" fill="#FBBF24"/>
+  <circle cx="70" cy="22" r="6" fill="#5AD6AE"/>
+
+  <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <text x="600" y="27" text-anchor="middle" font-size="12.5" font-weight="600" fill="#9DB3A9">juwri · quick start</text>
+    <text x="1160" y="27" text-anchor="end" font-size="11.5" fill="#7E9C8C">bash</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="14">
+    <g clip-path="url(#jt-l1)">
+      <text x="40" y="84" fill="#E8F3ED"><tspan fill="#5AD6AE">$ </tspan>cd core</text>
+    </g>
+    <g clip-path="url(#jt-l2)">
+      <text x="40" y="114" fill="#E8F3ED"><tspan fill="#5AD6AE">$ </tspan>composer install &amp;&amp; cp .env.example .env &amp;&amp; php artisan key:generate</text>
+    </g>
+    <g clip-path="url(#jt-l3)">
+      <text x="40" y="144" fill="#E8F3ED"><tspan fill="#5AD6AE">$ </tspan>php artisan migrate --seed</text>
+    </g>
+    <g clip-path="url(#jt-l4)">
+      <text x="40" y="174" fill="#E8F3ED"><tspan fill="#5AD6AE">$ </tspan>php artisan serve</text>
+    </g>
+    <g clip-path="url(#jt-l5)">
+      <text x="40" y="204" fill="#8FE8C9">INFO  Server running on [http://127.0.0.1:8000]</text>
+      <rect x="455" y="190" width="9" height="16" fill="#5AD6AE">
+        <animate attributeName="opacity" values="1;1;0;0" dur="1s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+  </g>
+</svg>

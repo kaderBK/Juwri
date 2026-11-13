@@ -1,0 +1,129 @@
+{
+    "name": "Fine dining",
+    "description": "A quiet, dark editorial layout: tall hero, the story first, a text-only menu, reservations and reviews, and an inverse footer.",
+    "vertical": "restaurant",
+    "priority": "brand_story",
+    "tokens": {
+        "colors.primary": "#c9a45c",
+        "colors.background": "#14110f",
+        "colors.surface": "#1f1a17",
+        "colors.text": "#f3ece2",
+        "colors.accent": "#d8b878",
+        "layout.radius": "none",
+        "layout.density": "comfortable"
+    },
+    "font_pair": "fraunces-jakarta",
+    "translations": {
+        "ar": {
+            "name": "مطعم راقٍ",
+            "description": "تخطيط تحريري داكن وهادئ: غلاف طويل، القصة أولًا، منيو نصّي، الحجوزات والتقييمات، وتذييل معكوس."
+        }
+    },
+    "layout": {
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "centered",
+                    "sticky": true,
+                    "show_tagline": false,
+                    "logo_size": 56
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "image",
+                    "height": "l",
+                    "align": "center",
+                    "image_source": "cover",
+                    "overlay": 55
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "menu"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog"
+                ]
+            },
+            "about": {
+                "type": "about",
+                "settings": {
+                    "use_description": true,
+                    "layout": "image-end"
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "tabs",
+                    "sticky": true
+                }
+            },
+            "menu": {
+                "type": "menu-grid",
+                "settings": {
+                    "card": "text-only",
+                    "columns_mobile": 1,
+                    "columns_desktop": 2,
+                    "show_rating": false,
+                    "show_favorite": false
+                }
+            },
+            "reserve": {
+                "type": "reservation-cta",
+                "settings": {
+                    "show_waitlist": true
+                }
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "hours": {
+                "type": "hours",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": {
+                    "show_branches": true
+                }
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "inverse"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "pill"
+                }
+            }
+        },
+        "order": [
+            "header",
+            "hero",
+            "about",
+            "catnav",
+            "menu",
+            "reserve",
+            "reviews",
+            "hours",
+            "location",
+            "footer",
+            "cart-bar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

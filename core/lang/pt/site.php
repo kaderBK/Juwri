@@ -1,0 +1,65 @@
+<?php
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) JUWRI LTD
+
+/*
+ * P1-23 site copy (juwri-web-legal site-copy/website-text.md §1-4 + §7, keys verbatim; {x} placeholders as :x)
+ * plus the legal/consent UI lines. Flat dotted keys: __('site.cookie.title'). Inline [text](/path) links are
+ * rendered by Juwri\Core\Legal\LegalText::inline(). Keep every locale's keys aligned with lang/en/site.php.
+ */
+
+return [
+    'cookie.title' => 'Usamos cookies',
+    'cookie.body' => 'Os cookies essenciais mantêm o :brand a funcionar. Com o seu consentimento, também usamos cookies de análise para perceber como o site é utilizado. Não definimos cookies de marketing sem o seu consentimento. [Política de Privacidade](/privacy)',
+    'cookie.accept' => 'Aceitar análise',
+    'cookie.reject' => 'Apenas essenciais',
+    'cookie.settings' => 'Definições de cookies',
+    'cookie.settings.essential' => 'Essenciais (sempre ativos)',
+    'cookie.settings.analytics' => 'Análise: ajuda-nos a melhorar o site',
+    'cookie.settings.marketing' => 'Marketing: mede as nossas campanhas',
+    'cookie.save' => 'Guardar escolhas',
+    'signup.accept' => 'Concordo com os [Termos de Subscrição](/terms), o [Adenda de Tratamento de Dados](/legal/dpa) e a [Política de Utilização Aceitável](/legal/aup).',
+    'signup.business' => 'Confirmo que me registo para uma empresa e não como consumidor.',
+    'signup.privacy' => 'Usamos os seus dados para gerir a sua conta, conforme descrito na nossa [Política de Privacidade](/privacy).',
+    'signup.marketing_optin' => 'Enviem-me novidades e dicas do produto por e-mail (pode cancelar a subscrição a qualquer momento).',
+    'checkout.accept' => 'Ao pagar, aceita os [Termos de Subscrição](/terms). Os planos renovam-se automaticamente; pode cancelar a qualquer momento nas Definições.',
+    'checkout.vat' => 'Os preços não incluem IVA, quando aplicável.',
+    'pharmacy.gate' => 'A venda de medicamentos só está disponível nos países que ativámos. Carregue os documentos da sua licença para publicar. Não são permitidos medicamentos sujeitos a receita médica nem substâncias controladas.',
+    'footer.legal' => 'Jurídico',
+    'footer.terms' => 'Termos de Subscrição',
+    'footer.privacy' => 'Política de Privacidade',
+    'footer.dpa' => 'Adenda de Tratamento de Dados',
+    'footer.aup' => 'Política de Utilização Aceitável',
+    'footer.sla' => 'Níveis de Serviço e Suporte',
+    'footer.subprocessors' => 'Subcontratantes',
+    'footer.security' => 'Segurança',
+    'footer.free_reseller' => 'Termos do nível gratuito de revendedor',
+    'footer.status' => 'Estado do sistema',
+    'footer.trademarks' => 'Política de marcas',
+    'footer.licensing' => 'Licenciamento de código aberto',
+    'footer.company' => 'JUWRI LTD · N.º da empresa 14363043 · 128 City Road, London, EC1V 2NX, Reino Unido',
+    'footer.copyright' => '© 2026 JUWRI LTD. O juwri é de código aberto sob a licença AGPL-3.0.',
+    'footer.powered' => 'Com tecnologia juwri',
+    'footer.contact' => 'Contacto',
+    'footer.language' => 'Idioma',
+    'legal.version' => 'Versão :version · Em vigor desde :date',
+    'legal.updated' => 'Última atualização: :date · Resumo em linguagem simples — não é aconselhamento jurídico',
+    'legal.translation_note' => 'Esta tradução para árabe é fornecida por conveniência. A versão em inglês é a vinculativa.',
+    'legal.changes' => 'Avisamos com pelo menos 30 dias de antecedência sobre alterações relevantes a estes documentos.',
+    'legal.contact' => 'Questões: legal@juwri.com',
+    'mail.terms_changed.subject' => 'Vamos atualizar os Termos do juwri em :date',
+    'mail.renewal.subject' => 'O seu plano juwri renova-se em :date',
+    'mail.payment_failed.subject' => 'Ação necessária: o pagamento do juwri falhou',
+    'mail.suspension_warning.subject' => 'Os seus serviços juwri vão ser suspensos dentro de 7 dias',
+    'mail.breach_notice.subject' => 'Aviso de segurança importante sobre a sua conta juwri',
+    'mail.export_window.subject' => 'Os seus dados podem ser exportados até :date',
+    'mail.reseller_winddown_reseller.subject' => 'A sua conta de revendedor precisa de ser renovada: as suas lojas estão em risco',
+    'mail.reseller_winddown_store.subject' => 'Alterações à plataforma que gere a sua loja',
+    'signup.accept_required' => 'Aceite os Termos de Subscrição, a Adenda de Tratamento de Dados e a Política de Utilização Aceitável para continuar.',
+    'signup.business_required' => 'Confirme que se está a registar para uma empresa.',
+    'legal.reaccept.upcoming' => 'Vamos atualizar os seguintes documentos em :date: :documents. Leia a nova versão e aceite-a.',
+    'legal.reaccept.updated' => 'Atualizámos os seguintes documentos: :documents. Leia a nova versão e aceite-a.',
+    'legal.reaccept.accept' => 'Aceito',
+    'legal.reaccept.done' => 'Obrigado. A sua aceitação foi registada.',
+    'legal.english_only' => 'Este documento é publicado em inglês.',
+];

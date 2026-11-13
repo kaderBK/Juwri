@@ -1,0 +1,24 @@
+{
+    "name": "Studio Boutique",
+    "slug": "studio-boutique",
+    "version": "1",
+    "author": "juwri",
+    "description": "An editorial, monochrome boutique for fashion and lifestyle brands: tall hero, category tabs, a new-in rail and a portrait product grid with size and colour swatches.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "general",
+    "vertical": "goods",
+    "recipe": "clothing/default",
+    "tokens": {
+        "colors.primary": "#111111",
+        "colors.background": "#ffffff",
+        "colors.surface": "#f4f4f2",
+        "colors.text": "#111111",
+        "colors.accent": "#8a5a2b",
+        "layout.radius": "none",
+        "layout.density": "comfortable",
+        "fonts.pair": "syne-instrument"
+    }
+}

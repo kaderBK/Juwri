@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) JUWRI LTD
+# P6-167: every minute on the minute, like `* * * * *`. The service is oneshot, so a slow tick is never started twice.
+[Unit]
+Description=juwri scheduler, every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=1s
+Persistent=false
+Unit=juwri-scheduler.service
+
+[Install]
+WantedBy=timers.target

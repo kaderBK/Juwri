@@ -1,0 +1,164 @@
+{
+    "name": "Quick order",
+    "description": "Built for speed: no hero, sticky search and category tabs, a dense one-column list and a cart bar that is always one tap away.",
+    "vertical": "restaurant",
+    "priority": "fast_ordering",
+    "tokens": {
+        "colors.primary": "#c1121f",
+        "colors.background": "#ffffff",
+        "colors.surface": "#f5f5f4",
+        "colors.text": "#141414",
+        "colors.accent": "#9a3412",
+        "layout.radius": "pill",
+        "layout.density": "compact"
+    },
+    "font_pair": "inter",
+    "translations": {
+        "ar": {
+            "name": "طلب سريع",
+            "description": "مصمّم للسرعة: بلا غلاف، بحث وتبويبات تصنيفات ثابتة، قائمة مكثّفة بعمود واحد وشريط سلة على بعد لمسة دائمًا."
+        }
+    },
+    "layout": {
+        "sections": {
+            "announcement": {
+                "type": "announcement-bar",
+                "settings": {
+                    "source": "store",
+                    "tone": "primary",
+                    "dismissible": true
+                }
+            },
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "minimal",
+                    "sticky": true,
+                    "show_tagline": false,
+                    "logo_size": 36
+                }
+            },
+            "status": {
+                "type": "store-status",
+                "settings": {
+                    "show_today": true
+                }
+            },
+            "search": {
+                "type": "search-bar",
+                "settings": {
+                    "sticky": true
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "tabs",
+                    "sticky": true
+                }
+            },
+            "offers": {
+                "type": "offers-strip",
+                "settings": {
+                    "show_images": false
+                }
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "popular",
+                    "card": "compact",
+                    "limit": 8
+                }
+            },
+            "menu": {
+                "type": "menu-grid",
+                "settings": {
+                    "card": "list-row",
+                    "columns_mobile": 1,
+                    "columns_desktop": 2,
+                    "show_description": false,
+                    "show_rating": false
+                }
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "surface",
+                    "show_social": false
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "bar",
+                    "show_total": true,
+                    "above_tabbar": true
+                }
+            },
+            "tabbar": {
+                "type": "bottom-tabbar",
+                "settings": {
+                    "style": "bar",
+                    "show_labels": true
+                },
+                "blocks": {
+                    "tab-home": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "home"
+                        }
+                    },
+                    "tab-catalog": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "menu"
+                        }
+                    },
+                    "tab-search": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "search"
+                        }
+                    },
+                    "tab-cart": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    },
+                    "tab-profile": {
+                        "type": "tab",
+                        "settings": {
+                            "target": "profile"
+                        }
+                    }
+                },
+                "block_order": [
+                    "tab-home",
+                    "tab-catalog",
+                    "tab-search",
+                    "tab-cart",
+                    "tab-profile"
+                ]
+            }
+        },
+        "order": [
+            "announcement",
+            "header",
+            "status",
+            "search",
+            "catnav",
+            "offers",
+            "featured",
+            "menu",
+            "footer",
+            "cart-bar",
+            "tabbar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

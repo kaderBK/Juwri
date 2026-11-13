@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="juwri-vert-title juwri-vert-desc">
+  <title id="juwri-vert-title">One platform, eleven store verticals</title>
+  <desc id="juwri-vert-desc">Animated map of the store types grouped into food, goods, services and stays. A marker travels between the four groups, and the fulfilment modes are listed below.</desc>
+  <defs>
+    <linearGradient id="jv-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1410"/>
+      <stop offset="1" stop-color="#132B20"/>
+    </linearGradient>
+    <radialGradient id="jv-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5AD6AE" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#5AD6AE" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="jv-card"><rect x="0" y="0" width="1200" height="420" rx="24"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#jv-card)">
+    <rect width="1200" height="420" fill="url(#jv-bg)"/>
+    <ellipse cx="600" cy="210" rx="560" ry="200" fill="url(#jv-glow)"/>
+
+    <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+      <text x="48" y="48" font-size="11.5" font-weight="700" letter-spacing="3" fill="#5AD6AE">STORE VERTICALS · ONE CAPABILITY SET</text>
+      <text x="1152" y="48" text-anchor="end" font-size="11.5" font-weight="600" letter-spacing="1.6" fill="#7E9C8C">core/config/verticals.php</text>
+
+      <!-- column 1: food -->
+      <text x="60" y="92" font-size="12" font-weight="700" letter-spacing="2.4" fill="#8FE8C9">FOOD</text>
+      <rect x="60" y="106" width="250" height="220" rx="16" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+        <animate attributeName="stroke-opacity" values="0.2;0.95;0.2;0.2" keyTimes="0;0.08;0.2;1" dur="8s" begin="0s" repeatCount="indefinite"/>
+      </rect>
+      <g font-size="13" font-weight="600" fill="#E8F3ED">
+        <rect x="74" y="120" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="90" cy="135" r="4" fill="#5AD6AE"/><text x="104" y="140">Restaurant</text>
+        <rect x="74" y="154" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="90" cy="169" r="4" fill="#5AD6AE"/><text x="104" y="174">Café</text>
+      </g>
+
+      <!-- column 2: goods -->
+      <text x="350" y="92" font-size="12" font-weight="700" letter-spacing="2.4" fill="#8FE8C9">GOODS</text>
+      <rect x="350" y="106" width="250" height="220" rx="16" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+        <animate attributeName="stroke-opacity" values="0.2;0.95;0.2;0.2" keyTimes="0;0.08;0.2;1" dur="8s" begin="2s" repeatCount="indefinite"/>
+      </rect>
+      <g font-size="13" font-weight="600" fill="#E8F3ED">
+        <rect x="364" y="120" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="135" r="4" fill="#5AD6AE"/><text x="394" y="140">Retail store</text>
+        <rect x="364" y="154" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="169" r="4" fill="#5AD6AE"/><text x="394" y="174">Grocery</text>
+        <rect x="364" y="188" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="203" r="4" fill="#5AD6AE"/><text x="394" y="208">Clothing</text>
+        <rect x="364" y="222" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="237" r="4" fill="#5AD6AE"/><text x="394" y="242">Cosmetics</text>
+        <rect x="364" y="256" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="271" r="4" fill="#5AD6AE"/><text x="394" y="276">Car parts</text>
+        <rect x="364" y="290" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="380" cy="305" r="4" fill="#5AD6AE"/><text x="394" y="310">Pharmacy (OTC)</text>
+      </g>
+
+      <!-- column 3: services -->
+      <text x="640" y="92" font-size="12" font-weight="700" letter-spacing="2.4" fill="#8FE8C9">SERVICES</text>
+      <rect x="640" y="106" width="250" height="220" rx="16" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+        <animate attributeName="stroke-opacity" values="0.2;0.95;0.2;0.2" keyTimes="0;0.08;0.2;1" dur="8s" begin="4s" repeatCount="indefinite"/>
+      </rect>
+      <g font-size="13" font-weight="600" fill="#E8F3ED">
+        <rect x="654" y="120" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="670" cy="135" r="4" fill="#5AD6AE"/><text x="684" y="140">Laundry and services</text>
+        <rect x="654" y="154" width="222" height="30" rx="9" fill="#1C3327"/><circle cx="670" cy="169" r="4" fill="#5AD6AE"/><text x="684" y="174">Appointments</text>
+      </g>
+
+      <!-- column 4: stays -->
+      <text x="930" y="92" font-size="12" font-weight="700" letter-spacing="2.4" fill="#8FE8C9">STAYS</text>
+      <rect x="930" y="106" width="220" height="220" rx="16" fill="#14241C" stroke="#5AD6AE" stroke-opacity="0.2" stroke-width="2">
+        <animate attributeName="stroke-opacity" values="0.2;0.95;0.2;0.2" keyTimes="0;0.08;0.2;1" dur="8s" begin="6s" repeatCount="indefinite"/>
+      </rect>
+      <g font-size="13" font-weight="600" fill="#E8F3ED">
+        <rect x="944" y="120" width="192" height="30" rx="9" fill="#1C3327"/><circle cx="960" cy="135" r="4" fill="#5AD6AE"/><text x="974" y="140">Hotel</text>
+      </g>
+
+      <!-- travelling marker -->
+      <path d="M60 348 H1140" stroke="#2A4738" stroke-width="2" stroke-dasharray="5 10"/>
+      <circle r="5" fill="#5AD6AE">
+        <animateMotion path="M60 348 H1140" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;1;1;0" dur="8s" repeatCount="indefinite"/>
+      </circle>
+
+      <text x="48" y="388" font-size="12" fill="#9DB3A9">Fulfilment: dine-in · takeaway · delivery · room service · ship · pickup · appointment · in-store · at home</text>
+      <text x="1152" y="388" text-anchor="end" font-size="11" font-weight="700" letter-spacing="1.4" fill="#7E9C8C">NO SCHEMA FORK</text>
+    </g>
+  </g>
+</svg>

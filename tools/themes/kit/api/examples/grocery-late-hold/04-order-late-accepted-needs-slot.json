@@ -1,0 +1,204 @@
+{
+  "operationId": "getOrder",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/orders/trk_f4570b652cb4506a0fc2ac64",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 08:20:15 GMT"
+    },
+    "body": {
+      "order": {
+        "public_id": "01a0fb96-d000-72ee-be77-ffbe4167248a",
+        "number": "FM-50318",
+        "status": "pending_approval",
+        "track_token": "trk_f4570b652cb4506a0fc2ac64",
+        "track_url": "https://fresh-mart.example/track/trk_f4570b652cb4506a0fc2ac64"
+      },
+      "view": {
+        "number": "FM-50318",
+        "status": "pending_approval",
+        "status_label": "Waiting for the store",
+        "heading": "Order #FM-50318",
+        "steps": [
+          {
+            "label": "Placed",
+            "sub": "10:49 am",
+            "state": "done"
+          },
+          {
+            "label": "Waiting for the store",
+            "state": "current"
+          },
+          {
+            "label": "Picking",
+            "state": "todo"
+          },
+          {
+            "label": "On the way",
+            "state": "todo"
+          },
+          {
+            "label": "Delivered",
+            "state": "todo"
+          }
+        ],
+        "quote": {
+          "lines": [
+            {
+              "id": "ln_1",
+              "item_id": "019ee2f8-8b80-7c41-ace1-e47e281dc213",
+              "name": "Bananas",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Bananas"
+              },
+              "qty": 2,
+              "line_total": {
+                "minor": 1300,
+                "currency": "SAR",
+                "formatted": "SAR 13.00"
+              },
+              "unit_label": "1 kg · SAR 6.50 / kg"
+            },
+            {
+              "id": "ln_2",
+              "item_id": "019ef1fd-c280-78f5-ac68-e35b62b4070a",
+              "name": "Tomatoes on the vine",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Tomatoes on the vine"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 590,
+                "currency": "SAR",
+                "formatted": "SAR 5.90"
+              },
+              "unit_label": "500 g · by weight",
+              "estimate": true,
+              "note": "Estimated: you pay the actual weight, max SAR 6.49"
+            },
+            {
+              "id": "ln_3",
+              "item_id": "019f3fab-0380-73c2-89a4-21d8a38a1c3f",
+              "name": "Strawberries",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Strawberries"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 1495,
+                "currency": "SAR",
+                "formatted": "SAR 14.95"
+              },
+              "unit_label": "250 g"
+            },
+            {
+              "id": "ln_4",
+              "item_id": "019feb8b-4200-7e01-bb06-c6019e258487",
+              "name": "Full-fat milk",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Full-fat milk"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 1900,
+                "currency": "SAR",
+                "formatted": "SAR 19.00"
+              },
+              "unit_label": "2 L"
+            },
+            {
+              "id": "ln_5",
+              "item_id": "019e8646-1380-7aeb-91aa-3627eb8ec48e",
+              "name": "Sourdough loaf",
+              "thumb": {
+                "src": "https://media.example/img/placeholder-1x1.svg",
+                "alt": "Sourdough loaf"
+              },
+              "qty": 1,
+              "line_total": {
+                "minor": 1400,
+                "currency": "SAR",
+                "formatted": "SAR 14.00"
+              },
+              "unit_label": "800 g"
+            }
+          ],
+          "rows": [
+            {
+              "key": "subtotal",
+              "label": "Items (6)",
+              "amount": {
+                "minor": 6685,
+                "currency": "SAR",
+                "formatted": "SAR 66.85"
+              },
+              "kind": "subtotal"
+            },
+            {
+              "key": "delivery",
+              "label": "Delivery · 12:00 – 13:00",
+              "amount": {
+                "minor": 900,
+                "currency": "SAR",
+                "formatted": "SAR 9.00"
+              },
+              "kind": "delivery"
+            },
+            {
+              "key": "estimate_cap",
+              "label": "Weighed items can add up to",
+              "amount": {
+                "minor": 59,
+                "currency": "SAR",
+                "formatted": "SAR 0.59"
+              },
+              "kind": "estimate_cap",
+              "muted": true,
+              "informational": true
+            }
+          ],
+          "total": {
+            "minor": 7585,
+            "currency": "SAR",
+            "formatted": "SAR 75.85"
+          },
+          "total_label": "Estimated total",
+          "tax_note": "Includes VAT 15% (SAR 9.89).",
+          "substitution_preference": "Replace with similar (same price or cheaper)"
+        },
+        "paid_label": "Card hold · SAR 76.44 · the store will contact you about a new delivery slot"
+      },
+      "updated_at": "2026-10-02T11:19:58+03:00",
+      "payment": {
+        "mode": "hosted",
+        "status": "authorised",
+        "next_action": null,
+        "amount_now": {
+          "minor": 7644,
+          "currency": "SAR",
+          "formatted": "SAR 76.44"
+        },
+        "hold_amount": {
+          "minor": 7644,
+          "currency": "SAR",
+          "formatted": "SAR 76.44"
+        },
+        "authorisation_expires_at": "2026-10-09T11:05:10+03:00"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* classic_flat residual — Linktree-default pills lift with a deeper shadow on hover
+   (mirrors the .d17 artifact). All colours/radius come from tokens. */
+.bio--classic_flat .bio-link:hover{box-shadow:0 6px 16px rgba(20,60,50,.2)}

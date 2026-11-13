@@ -1,0 +1,1873 @@
+{
+    "home": {
+        "store": {
+            "public_id": "{id:1}",
+            "slug": "bloom-coffee-demo",
+            "name": "Bloom Coffee",
+            "logo": {
+                "src": "{app}/storage/store/logo/{file:1}",
+                "alt": "Bloom Coffee"
+            },
+            "cover": {
+                "src": "{app}/storage/store/cover/{file:1}",
+                "alt": "Bloom Coffee"
+            },
+            "tagline": "Order ahead, skip the line",
+            "locale": "en",
+            "dir": "ltr",
+            "locales": [
+                {
+                    "code": "en",
+                    "name": "English",
+                    "url": "/bloom-coffee-demo?lang=en"
+                }
+            ],
+            "timezone": "Asia/Riyadh",
+            "vertical_set": "food",
+            "store_type": "cafe",
+            "status": {
+                "open": true,
+                "label": "Open · closes 11:00 PM",
+                "next_change_at": "2026-10-04T23:00:00+03:00",
+                "paused_reason": null
+            },
+            "contact": {
+                "phone": "966550100102",
+                "whatsapp": "966550100102",
+                "address": "Olaya St, Al Olaya, Riyadh",
+                "map_url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+            },
+            "legal_links": [],
+            "powered_by": false,
+            "hours": [
+                {
+                    "days": [
+                        "Mo"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Tu"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "We"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Th"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Fr"
+                    ],
+                    "opens": "13:00",
+                    "closes": "23:30"
+                },
+                {
+                    "days": [
+                        "Sa"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                },
+                {
+                    "days": [
+                        "Su"
+                    ],
+                    "opens": "07:00",
+                    "closes": "23:00"
+                }
+            ]
+        },
+        "branch": {
+            "current": {
+                "public_id": "{id:2}",
+                "name": "Bloom Coffee — Main",
+                "address": "Olaya St, Al Olaya, Riyadh"
+            }
+        },
+        "context": {
+            "order_types": [
+                {
+                    "key": "dine_in",
+                    "label": "Dine-in",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "takeaway",
+                    "label": "Takeaway",
+                    "needs_address": false,
+                    "needs_slot": false
+                },
+                {
+                    "key": "delivery",
+                    "label": "Delivery",
+                    "needs_address": true,
+                    "needs_slot": false
+                }
+            ],
+            "selected_order_type": "takeaway",
+            "table": null,
+            "room": null,
+            "schedule_ahead": false,
+            "refunds": {
+                "weighed_difference": false,
+                "deposits": false,
+                "returns": false
+            },
+            "offline_queue": {
+                "enabled": true,
+                "order_types": [
+                    "dine_in",
+                    "takeaway"
+                ],
+                "expiry_min": 30
+            }
+        },
+        "theme": {
+            "slug": "brew",
+            "settings": {
+                "colors.primary": "#067655",
+                "colors.background": "#F7FAF8",
+                "colors.surface": "#FFFFFF",
+                "colors.text": "#152B1F",
+                "colors.accent": "#F2A93B",
+                "layout.radius": "pill",
+                "layout.density": "cozy",
+                "fonts.pair": "jakarta",
+                "scheme.mode": "auto",
+                "colors_dark.primary": "#4FD1A1",
+                "colors_dark.background": "#0F1713",
+                "colors_dark.surface": "#18221D",
+                "colors_dark.text": "#EEF5F0",
+                "colors_dark.accent": "#F5B85A",
+                "layout.card": "grid",
+                "layout.image_ratio": "1:1",
+                "layout.category_nav": "chips",
+                "layout.header": "compact",
+                "layout.desktop_cart": "panel",
+                "menu.show_descriptions": true,
+                "menu.show_calories": true,
+                "menu.show_allergens": true,
+                "splash.enabled": false,
+                "splash.style": "theme",
+                "splash.image": "",
+                "splash.title": "",
+                "splash.subtitle": "",
+                "splash.duration": 2300,
+                "splash.show_language_picker": false,
+                "splash.background": "",
+                "splash.background_image": "",
+                "splash.text_color": "",
+                "splash.frequency": "session",
+                "splash.cta_label": "",
+                "splash.animation": "pop",
+                "splash.logo_size": "m",
+                "splash.logo_shape": "rounded",
+                "search.enabled": true,
+                "share.fallback_button": false
+            },
+            "sections": [
+                "header",
+                "order_type",
+                "hero",
+                "reorder",
+                "category_nav",
+                "featured",
+                "catalog",
+                "info",
+                "footer",
+                "cart_bar"
+            ],
+            "texts": {
+                "hero_title": "Order ahead, skip the line",
+                "featured_title": "Popular",
+                "reorder_title": "Order again",
+                "search_placeholder": "Search the menu"
+            }
+        },
+        "catalog": {
+            "categories": [
+                {
+                    "id": "{id:3}",
+                    "name": "Coffee",
+                    "item_ids": [
+                        "{id:4}",
+                        "{id:5}",
+                        "{id:6}",
+                        "{id:7}",
+                        "{id:8}",
+                        "{id:9}",
+                        "{id:10}",
+                        "{id:11}",
+                        "{id:12}",
+                        "{id:13}"
+                    ],
+                    "count": 10
+                },
+                {
+                    "id": "{id:14}",
+                    "name": "Matcha",
+                    "item_ids": [
+                        "{id:15}",
+                        "{id:16}",
+                        "{id:17}",
+                        "{id:18}",
+                        "{id:19}",
+                        "{id:20}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:21}",
+                    "name": "Cold drinks",
+                    "item_ids": [
+                        "{id:22}",
+                        "{id:23}",
+                        "{id:24}",
+                        "{id:25}",
+                        "{id:26}",
+                        "{id:27}",
+                        "{id:28}"
+                    ],
+                    "count": 7
+                },
+                {
+                    "id": "{id:29}",
+                    "name": "Tea",
+                    "item_ids": [
+                        "{id:30}",
+                        "{id:31}",
+                        "{id:32}",
+                        "{id:33}"
+                    ],
+                    "count": 4
+                },
+                {
+                    "id": "{id:34}",
+                    "name": "Bakery",
+                    "item_ids": [
+                        "{id:35}",
+                        "{id:36}",
+                        "{id:37}",
+                        "{id:38}",
+                        "{id:39}",
+                        "{id:40}"
+                    ],
+                    "count": 6
+                },
+                {
+                    "id": "{id:41}",
+                    "name": "Desserts",
+                    "item_ids": [
+                        "{id:42}",
+                        "{id:43}",
+                        "{id:44}",
+                        "{id:45}",
+                        "{id:46}",
+                        "{id:47}"
+                    ],
+                    "count": 6
+                }
+            ],
+            "items": {
+                "{id:4}": {
+                    "id": "{id:4}",
+                    "name": "Espresso",
+                    "url": "/bloom-coffee-demo#item-{id:4}",
+                    "short": "A short, syrupy shot of our house blend.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Espresso"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 5
+                },
+                "{id:5}": {
+                    "id": "{id:5}",
+                    "name": "Double espresso",
+                    "url": "/bloom-coffee-demo#item-{id:5}",
+                    "short": "Two shots, bold and sweet.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Double espresso"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 10
+                },
+                "{id:6}": {
+                    "id": "{id:6}",
+                    "name": "Americano",
+                    "url": "/bloom-coffee-demo#item-{id:6}",
+                    "short": "Espresso lengthened with hot water.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Americano"
+                    },
+                    "from_price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 10
+                },
+                "{id:7}": {
+                    "id": "{id:7}",
+                    "name": "Cappuccino",
+                    "url": "/bloom-coffee-demo#item-{id:7}",
+                    "short": "Espresso, steamed milk, thick foam.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cappuccino"
+                    },
+                    "from_price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 17.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 120,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:8}": {
+                    "id": "{id:8}",
+                    "name": "Flat white",
+                    "url": "/bloom-coffee-demo#item-{id:8}",
+                    "short": "Velvety microfoam over a double shot.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Flat white"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:9}": {
+                    "id": "{id:9}",
+                    "name": "Latte",
+                    "url": "/bloom-coffee-demo#item-{id:9}",
+                    "short": "Smooth espresso with plenty of milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Latte"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 150,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:10}": {
+                    "id": "{id:10}",
+                    "name": "Cortado",
+                    "url": "/bloom-coffee-demo#item-{id:10}",
+                    "short": "Equal parts espresso and warm milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cortado"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 80,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:11}": {
+                    "id": "{id:11}",
+                    "name": "Mocha",
+                    "url": "/bloom-coffee-demo#item-{id:11}",
+                    "short": "Espresso, dark chocolate and steamed milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Mocha"
+                    },
+                    "from_price": {
+                        "minor": 2000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 20.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 230,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:12}": {
+                    "id": "{id:12}",
+                    "name": "Spanish latte",
+                    "url": "/bloom-coffee-demo#item-{id:12}",
+                    "short": "Espresso, milk and a swirl of condensed milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Spanish latte"
+                    },
+                    "from_price": {
+                        "minor": 2100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 21.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 240,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:13}": {
+                    "id": "{id:13}",
+                    "name": "V60 pour-over",
+                    "url": "/bloom-coffee-demo#item-{id:13}",
+                    "short": "Single-origin filter coffee, brewed by hand.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "V60 pour-over"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 24.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 5
+                },
+                "{id:15}": {
+                    "id": "{id:15}",
+                    "name": "Iced matcha latte",
+                    "url": "/bloom-coffee-demo#item-{id:15}",
+                    "short": "Ceremonial-grade matcha whisked to order, over ice.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Iced matcha latte"
+                    },
+                    "from_price": {
+                        "minor": 1700,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 17.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        },
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 140,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:16}": {
+                    "id": "{id:16}",
+                    "name": "Hot matcha latte",
+                    "url": "/bloom-coffee-demo#item-{id:16}",
+                    "short": "Whisked matcha with silky steamed milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Hot matcha latte"
+                    },
+                    "from_price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:17}": {
+                    "id": "{id:17}",
+                    "name": "Matcha espresso",
+                    "url": "/bloom-coffee-demo#item-{id:17}",
+                    "short": "Matcha and a shot of espresso over milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Matcha espresso"
+                    },
+                    "from_price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 150,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:18}": {
+                    "id": "{id:18}",
+                    "name": "Strawberry matcha",
+                    "url": "/bloom-coffee-demo#item-{id:18}",
+                    "short": "Strawberry purée, milk and matcha.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Strawberry matcha"
+                    },
+                    "from_price": {
+                        "minor": 2000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 20.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 190,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:19}": {
+                    "id": "{id:19}",
+                    "name": "Coconut matcha",
+                    "url": "/bloom-coffee-demo#item-{id:19}",
+                    "short": "Matcha over coconut water and milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Coconut matcha"
+                    },
+                    "from_price": {
+                        "minor": 1900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 19.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 160,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:20}": {
+                    "id": "{id:20}",
+                    "name": "Hojicha latte",
+                    "url": "/bloom-coffee-demo#item-{id:20}",
+                    "short": "Roasted green tea, nutty and low in caffeine.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Hojicha latte"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 140,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:22}": {
+                    "id": "{id:22}",
+                    "name": "Iced latte",
+                    "url": "/bloom-coffee-demo#item-{id:22}",
+                    "short": "Chilled espresso and milk over ice.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Iced latte"
+                    },
+                    "from_price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:23}": {
+                    "id": "{id:23}",
+                    "name": "Cold brew",
+                    "url": "/bloom-coffee-demo#item-{id:23}",
+                    "short": "Steeped 18 hours for a smooth finish.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cold brew"
+                    },
+                    "from_price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 10
+                },
+                "{id:24}": {
+                    "id": "{id:24}",
+                    "name": "Iced Spanish latte",
+                    "url": "/bloom-coffee-demo#item-{id:24}",
+                    "short": "Sweet, creamy and cold.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Iced Spanish latte"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 260,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:25}": {
+                    "id": "{id:25}",
+                    "name": "Lemon mint",
+                    "url": "/bloom-coffee-demo#item-{id:25}",
+                    "short": "Fresh lemon, mint and crushed ice.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Lemon mint"
+                    },
+                    "from_price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 110
+                },
+                "{id:26}": {
+                    "id": "{id:26}",
+                    "name": "Peach iced tea",
+                    "url": "/bloom-coffee-demo#item-{id:26}",
+                    "short": "Black tea, peach and a squeeze of lemon.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Peach iced tea"
+                    },
+                    "from_price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 90
+                },
+                "{id:27}": {
+                    "id": "{id:27}",
+                    "name": "Mango smoothie",
+                    "url": "/bloom-coffee-demo#item-{id:27}",
+                    "short": "Mango, yoghurt and a little honey.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Mango smoothie"
+                    },
+                    "from_price": {
+                        "minor": 1800,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 18.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 210,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:28}": {
+                    "id": "{id:28}",
+                    "name": "Sparkling water",
+                    "url": "/bloom-coffee-demo#item-{id:28}",
+                    "short": "330 ml bottle, served cold.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Sparkling water"
+                    },
+                    "price": {
+                        "minor": 600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 6.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:30}": {
+                    "id": "{id:30}",
+                    "name": "Moroccan mint tea",
+                    "url": "/bloom-coffee-demo#item-{id:30}",
+                    "short": "Gunpowder green tea with fresh mint, in a pot.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Moroccan mint tea"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 30
+                },
+                "{id:31}": {
+                    "id": "{id:31}",
+                    "name": "Karak",
+                    "url": "/bloom-coffee-demo#item-{id:31}",
+                    "short": "Strong tea, cardamom and evaporated milk.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Karak"
+                    },
+                    "from_price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 10.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": true,
+                    "calories": 130,
+                    "allergens": [
+                        "Dairy"
+                    ]
+                },
+                "{id:32}": {
+                    "id": "{id:32}",
+                    "name": "Chamomile",
+                    "url": "/bloom-coffee-demo#item-{id:32}",
+                    "short": "Calming dried flowers, caffeine-free.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Chamomile"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:33}": {
+                    "id": "{id:33}",
+                    "name": "Earl grey",
+                    "url": "/bloom-coffee-demo#item-{id:33}",
+                    "short": "Black tea scented with bergamot.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Earl grey"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 0
+                },
+                "{id:35}": {
+                    "id": "{id:35}",
+                    "name": "Butter croissant",
+                    "url": "/bloom-coffee-demo#item-{id:35}",
+                    "short": "Flaky layers, baked this morning.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Butter croissant"
+                    },
+                    "price": {
+                        "minor": 900,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 9.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 270,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy"
+                    ]
+                },
+                "{id:36}": {
+                    "id": "{id:36}",
+                    "name": "Almond croissant",
+                    "url": "/bloom-coffee-demo#item-{id:36}",
+                    "short": "Filled with almond cream, dusted with sugar.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Almond croissant"
+                    },
+                    "price": {
+                        "minor": 1400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 14.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        },
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 380,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Tree nuts",
+                        "Eggs"
+                    ]
+                },
+                "{id:37}": {
+                    "id": "{id:37}",
+                    "name": "Pain au chocolat",
+                    "url": "/bloom-coffee-demo#item-{id:37}",
+                    "short": "Two batons of dark chocolate in laminated dough.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Pain au chocolat"
+                    },
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 330,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy"
+                    ]
+                },
+                "{id:38}": {
+                    "id": "{id:38}",
+                    "name": "Cinnamon roll",
+                    "url": "/bloom-coffee-demo#item-{id:38}",
+                    "short": "Soft roll, cinnamon sugar and cream cheese glaze.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cinnamon roll"
+                    },
+                    "price": {
+                        "minor": 1500,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 15.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 420,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Eggs"
+                    ]
+                },
+                "{id:39}": {
+                    "id": "{id:39}",
+                    "name": "Zaatar manakish",
+                    "url": "/bloom-coffee-demo#item-{id:39}",
+                    "short": "Flatbread with zaatar and olive oil.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Zaatar manakish"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 290,
+                    "allergens": [
+                        "Gluten",
+                        "Sesame"
+                    ]
+                },
+                "{id:40}": {
+                    "id": "{id:40}",
+                    "name": "Cheese and thyme croissant",
+                    "url": "/bloom-coffee-demo#item-{id:40}",
+                    "short": "Savoury croissant with melted cheese.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Cheese and thyme croissant"
+                    },
+                    "price": {
+                        "minor": 1300,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 13.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 340,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy"
+                    ]
+                },
+                "{id:42}": {
+                    "id": "{id:42}",
+                    "name": "Matcha cookie",
+                    "url": "/bloom-coffee-demo#item-{id:42}",
+                    "short": "Chewy white chocolate and matcha cookie.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Matcha cookie"
+                    },
+                    "price": {
+                        "minor": 1100,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 11.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "sold_out",
+                            "label": "Sold out"
+                        },
+                        {
+                            "kind": "new",
+                            "label": "New"
+                        }
+                    ],
+                    "sold_out": true,
+                    "has_required_choices": false,
+                    "calories": 310,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Eggs"
+                    ]
+                },
+                "{id:43}": {
+                    "id": "{id:43}",
+                    "name": "Basque cheesecake",
+                    "url": "/bloom-coffee-demo#item-{id:43}",
+                    "short": "Burnt top, creamy centre.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Basque cheesecake"
+                    },
+                    "price": {
+                        "minor": 2400,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 24.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "popular",
+                            "label": "Popular"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 430,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Eggs"
+                    ]
+                },
+                "{id:44}": {
+                    "id": "{id:44}",
+                    "name": "Tiramisu cup",
+                    "url": "/bloom-coffee-demo#item-{id:44}",
+                    "short": "Mascarpone, espresso and cocoa.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Tiramisu cup"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 22.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 390,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Eggs"
+                    ]
+                },
+                "{id:45}": {
+                    "id": "{id:45}",
+                    "name": "Date and tahini cookie",
+                    "url": "/bloom-coffee-demo#item-{id:45}",
+                    "short": "Soft cookie with Sukkari dates and tahini.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Date and tahini cookie"
+                    },
+                    "price": {
+                        "minor": 1000,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 10.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "low_stock",
+                            "label": "Few left"
+                        }
+                    ],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 280,
+                    "allergens": [
+                        "Gluten",
+                        "Sesame",
+                        "Eggs"
+                    ]
+                },
+                "{id:46}": {
+                    "id": "{id:46}",
+                    "name": "Pistachio brownie",
+                    "url": "/bloom-coffee-demo#item-{id:46}",
+                    "short": "Fudgy brownie with roasted pistachio.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Pistachio brownie"
+                    },
+                    "price": {
+                        "minor": 1600,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 16.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 370,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Tree nuts",
+                        "Eggs"
+                    ]
+                },
+                "{id:47}": {
+                    "id": "{id:47}",
+                    "name": "Lotus cake slice",
+                    "url": "/bloom-coffee-demo#item-{id:47}",
+                    "short": "Biscuit spread layers and caramel crumbs.",
+                    "image": {
+                        "src": "{app}/storage/menu/{file:1}",
+                        "alt": "Lotus cake slice"
+                    },
+                    "price": {
+                        "minor": 2200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 22.00"
+                    },
+                    "badges": [],
+                    "sold_out": false,
+                    "has_required_choices": false,
+                    "calories": 450,
+                    "allergens": [
+                        "Gluten",
+                        "Dairy",
+                        "Eggs"
+                    ]
+                }
+            },
+            "total": 39
+        },
+        "features": {
+            "featured": [
+                "{id:7}",
+                "{id:8}",
+                "{id:12}",
+                "{id:15}",
+                "{id:22}",
+                "{id:31}",
+                "{id:35}",
+                "{id:36}"
+            ],
+            "line_note": {
+                "max_length": 20
+            }
+        },
+        "customer": null,
+        "endpoints": {
+            "home": "/bloom-coffee-demo",
+            "cart": "/bloom-coffee-demo#cart",
+            "quote": "/bloom-coffee-demo/quote",
+            "track": "/bloom-coffee-demo#track",
+            "place": "/{store}/send-order",
+            "coupon": "/{store}/coupon",
+            "slots": "/{store}/schedule-slots",
+            "order_lookup": "/{store}/order-lookup"
+        },
+        "money": {
+            "currency": {
+                "code": "SAR",
+                "symbol": "⃁",
+                "exponent": 2,
+                "symbol_position_effective": "before"
+            },
+            "tax": {
+                "mode": "exclusive",
+                "rate": 15,
+                "label": "VAT"
+            }
+        },
+        "i18n": {
+            "add_more": "Add more",
+            "nothing_in_your_order_yet": "Nothing in your order yet",
+            "total_to_pay": "Total to pay",
+            "store_closed": "Store closed",
+            "ordering_is_paused": "Ordering is paused",
+            "waiting_for_connection": "Waiting for connection",
+            "youre_offline": "You're offline",
+            "prices_changed_while_you_were_offline": "Prices changed while you were offline.",
+            "please_confirm_your_order_again": "Please confirm your order again",
+            "couldnt_update_total_retry": "Couldn't update total — Retry",
+            "sold_out": "Sold out",
+            "free": "Free",
+            "added_to_your_order": "Added to your order",
+            "removed_from_your_order": "Removed from your order",
+            "sending_your_order": "Sending your order",
+            "needs_your_confirmation": "Needs your confirmation",
+            "order_placed": "Order placed",
+            "order_expired": "Order expired",
+            "could_not_place_the_order": "Could not place the order",
+            "connect_to_place_this_order": "Connect to place this order",
+            "offline_prices_may_change": "Offline: prices may change",
+            "some_items_are_no_longer_available": "Some items are no longer available",
+            "waiting_orders_were_removed_because_offline_ordering_was_switched_off": "Waiting orders were removed because offline ordering was switched off.",
+            "still_there_starting_over_in_n_seconds": "Still there? Starting over in :n seconds",
+            "incorrect_pin": "Incorrect PIN",
+            "too_many_attempts_wait_a_moment": "Too many attempts. Wait a moment.",
+            "device_setup_pin": "Device setup PIN",
+            "enter_the_staff_pin": "Enter the staff PIN",
+            "count_of_total_digits_entered": ":count of :total digits entered",
+            "starting_over_in_seconds_s": "Starting over in :seconds s",
+            "continue": "Continue",
+            "exit_kiosk": "Exit kiosk",
+            "connection_lost_pay_at_the_counter_to_order_now": "Connection lost — pay at the counter to order now",
+            "ordering_is_paused_until_the_connection_returns": "Ordering is paused until the connection returns"
+        }
+    },
+    "pages": {
+        "item": {
+            "page": {
+                "kind": "item",
+                "item": {
+                    "id": "{id:4}",
+                    "name": "Espresso",
+                    "description": "A short, syrupy shot of our house blend.",
+                    "gallery": [
+                        {
+                            "src": "{app}/storage/menu/{file:1}",
+                            "alt": "Espresso"
+                        }
+                    ],
+                    "price": {
+                        "minor": 1200,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 12.00"
+                    },
+                    "badges": [
+                        {
+                            "kind": "vegan",
+                            "label": "Vegan"
+                        }
+                    ],
+                    "option_groups": [
+                        {
+                            "id": "{id:48}",
+                            "label": "Extras",
+                            "kind": "checkbox",
+                            "required": false,
+                            "min": 0,
+                            "max": 2,
+                            "rule_label": "Optional · Choose up to 2",
+                            "options": [
+                                {
+                                    "id": "{id:49}",
+                                    "label": "Extra espresso shot",
+                                    "price_delta": {
+                                        "minor": 400,
+                                        "currency": "SAR",
+                                        "formatted": "⁨⃁⁩ 4.00"
+                                    }
+                                },
+                                {
+                                    "id": "{id:50}",
+                                    "label": "Vanilla syrup",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "⁨⃁⁩ 3.00"
+                                    }
+                                },
+                                {
+                                    "id": "{id:51}",
+                                    "label": "Caramel syrup",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "⁨⃁⁩ 3.00"
+                                    }
+                                },
+                                {
+                                    "id": "{id:52}",
+                                    "label": "Cold foam",
+                                    "price_delta": {
+                                        "minor": 300,
+                                        "currency": "SAR",
+                                        "formatted": "⁨⃁⁩ 3.00"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "quantity": {
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "value": 1
+                    },
+                    "nutrition": [
+                        {
+                            "label": "Calories",
+                            "value": "5 kcal"
+                        }
+                    ],
+                    "add_label": "Add · ⁨⃁⁩ 12.00"
+                }
+            }
+        },
+        "cart": {
+            "page": {
+                "kind": "cart",
+                "cart": {
+                    "lines": [
+                        {
+                            "id": "ln_1",
+                            "item_id": "{id:4}",
+                            "name": "Espresso",
+                            "qty": 2,
+                            "line_total": {
+                                "minor": 3200,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 32.00"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "Espresso"
+                            },
+                            "choices_label": "Extra espresso shot"
+                        },
+                        {
+                            "id": "ln_2",
+                            "item_id": "{id:13}",
+                            "name": "V60 pour-over",
+                            "qty": 1,
+                            "line_total": {
+                                "minor": 2400,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 24.00"
+                            },
+                            "thumb": {
+                                "src": "{app}/storage/menu/{file:1}",
+                                "alt": "V60 pour-over"
+                            }
+                        }
+                    ],
+                    "rows": [
+                        {
+                            "key": "subtotal",
+                            "label": "Subtotal",
+                            "amount": {
+                                "minor": 5600,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 56.00"
+                            },
+                            "kind": "subtotal"
+                        },
+                        {
+                            "key": "tax",
+                            "label": "VAT 15%",
+                            "amount": {
+                                "minor": 840,
+                                "currency": "SAR",
+                                "formatted": "⁨⃁⁩ 8.40"
+                            },
+                            "kind": "tax"
+                        }
+                    ],
+                    "total": {
+                        "minor": 6440,
+                        "currency": "SAR",
+                        "formatted": "⁨⃁⁩ 64.40"
+                    },
+                    "total_label": "Total",
+                    "cta_label": "Go to checkout · ⁨⃁⁩ 64.40"
+                }
+            }
+        },
+        "checkout": {
+            "page": {
+                "kind": "checkout",
+                "checkout": {
+                    "payment_methods": [
+                        {
+                            "id": "cash",
+                            "label": "Pay at the counter",
+                            "icon": "banknote",
+                            "selected": true
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "name",
+                            "label": "Name",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "id": "mobile",
+                            "label": "Mobile (for order updates)",
+                            "type": "tel",
+                            "dir": "ltr",
+                            "required": true
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "Espresso",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 3200,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 32.00"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "Espresso"
+                                },
+                                "choices_label": "Extra espresso shot"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:13}",
+                                "name": "V60 pour-over",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 2400,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 24.00"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "V60 pour-over"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "Subtotal",
+                                "amount": {
+                                    "minor": 5600,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 56.00"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 840,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 8.40"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 6440,
+                            "currency": "SAR",
+                            "formatted": "⁨⃁⁩ 64.40"
+                        },
+                        "total_label": "Total to pay"
+                    },
+                    "place_label": "Place order · ⁨⃁⁩ 64.40"
+                }
+            }
+        },
+        "track": {
+            "endpoints": {
+                "home": "/bloom-coffee-demo",
+                "cart": "/bloom-coffee-demo#cart",
+                "quote": "/bloom-coffee-demo/quote",
+                "track": "/order/track/{track_token}",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup"
+            },
+            "page": {
+                "kind": "track",
+                "order": {
+                    "number": "{order_no}",
+                    "status": "new",
+                    "status_label": "Order placed",
+                    "heading": "Order no. {order_no}",
+                    "steps": [
+                        {
+                            "label": "Order placed",
+                            "sub": "12:00 PM",
+                            "state": "current"
+                        },
+                        {
+                            "label": "Preparing",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "Ready",
+                            "state": "todo"
+                        },
+                        {
+                            "label": "Completed",
+                            "state": "todo"
+                        }
+                    ],
+                    "quote": {
+                        "lines": [
+                            {
+                                "id": "ln_1",
+                                "item_id": "{id:4}",
+                                "name": "Espresso",
+                                "qty": 2,
+                                "line_total": {
+                                    "minor": 3200,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 32.00"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "Espresso"
+                                },
+                                "choices_label": "Extra espresso shot"
+                            },
+                            {
+                                "id": "ln_2",
+                                "item_id": "{id:13}",
+                                "name": "V60 pour-over",
+                                "qty": 1,
+                                "line_total": {
+                                    "minor": 2400,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 24.00"
+                                },
+                                "thumb": {
+                                    "src": "{app}/storage/menu/{file:1}",
+                                    "alt": "V60 pour-over"
+                                }
+                            }
+                        ],
+                        "rows": [
+                            {
+                                "key": "subtotal",
+                                "label": "Subtotal",
+                                "amount": {
+                                    "minor": 5600,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 56.00"
+                                },
+                                "kind": "subtotal"
+                            },
+                            {
+                                "key": "tax",
+                                "label": "VAT 15%",
+                                "amount": {
+                                    "minor": 840,
+                                    "currency": "SAR",
+                                    "formatted": "⁨⃁⁩ 8.40"
+                                },
+                                "kind": "tax"
+                            }
+                        ],
+                        "total": {
+                            "minor": 6440,
+                            "currency": "SAR",
+                            "formatted": "⁨⃁⁩ 64.40"
+                        },
+                        "total_label": "Total · Pay at the counter"
+                    },
+                    "paid_label": "Pay at the counter",
+                    "actions": [
+                        {
+                            "label": "Call store",
+                            "url": "tel:966550100102",
+                            "kind": "secondary",
+                            "icon": "phone"
+                        },
+                        {
+                            "label": "WhatsApp",
+                            "url": "https://wa.me/966550100102",
+                            "kind": "secondary",
+                            "icon": "message-circle"
+                        }
+                    ],
+                    "location": {
+                        "icon": "map-pin",
+                        "label": "Bloom Coffee",
+                        "sub": "Olaya St, Al Olaya, Riyadh",
+                        "url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+                    }
+                }
+            }
+        },
+        "kiosk": {
+            "context": {
+                "order_types": [
+                    {
+                        "key": "dine_in",
+                        "label": "Dine-in",
+                        "needs_address": false,
+                        "needs_slot": false
+                    },
+                    {
+                        "key": "takeaway",
+                        "label": "Takeaway",
+                        "needs_address": false,
+                        "needs_slot": false
+                    }
+                ],
+                "selected_order_type": "takeaway",
+                "table": null,
+                "room": null,
+                "schedule_ahead": false,
+                "kiosk": {
+                    "on": true,
+                    "idle_seconds": 60,
+                    "show_identity": false,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "print": {
+                        "auto": false,
+                        "width": 48
+                    }
+                },
+                "refunds": {
+                    "weighed_difference": false,
+                    "deposits": false,
+                    "returns": false
+                },
+                "offline_queue": {
+                    "enabled": true,
+                    "order_types": [
+                        "dine_in",
+                        "takeaway"
+                    ],
+                    "expiry_min": 30
+                }
+            },
+            "endpoints": {
+                "home": "/bloom-coffee-demo",
+                "cart": "/bloom-coffee-demo#cart",
+                "quote": "/bloom-coffee-demo/quote",
+                "track": "/bloom-coffee-demo#track",
+                "place": "/{store}/send-order",
+                "coupon": "/{store}/coupon",
+                "slots": "/{store}/schedule-slots",
+                "order_lookup": "/{store}/order-lookup",
+                "kiosk_reset": "/bloom-coffee-demo/kiosk/reset",
+                "kiosk_start": "/bloom-coffee-demo/kiosk",
+                "kiosk_exit": "/bloom-coffee-demo/kiosk/exit",
+                "kiosk_setup": "/bloom-coffee-demo/kiosk/setup"
+            }
+        },
+        "closed": {
+            "store": {
+                "public_id": "{id:1}",
+                "slug": "bloom-coffee-demo",
+                "name": "Bloom Coffee",
+                "logo": {
+                    "src": "{app}/storage/store/logo/{file:1}",
+                    "alt": "Bloom Coffee"
+                },
+                "cover": {
+                    "src": "{app}/storage/store/cover/{file:1}",
+                    "alt": "Bloom Coffee"
+                },
+                "tagline": "Order ahead, skip the line",
+                "locale": "en",
+                "dir": "ltr",
+                "locales": [
+                    {
+                        "code": "en",
+                        "name": "English",
+                        "url": "/bloom-coffee-demo?lang=en"
+                    }
+                ],
+                "timezone": "Asia/Riyadh",
+                "vertical_set": "food",
+                "store_type": "cafe",
+                "status": {
+                    "open": false,
+                    "label": "Ordering is paused",
+                    "next_change_at": "2026-10-04T23:00:00+03:00",
+                    "paused_reason": "Ordering is paused"
+                },
+                "contact": {
+                    "phone": "966550100102",
+                    "whatsapp": "966550100102",
+                    "address": "Olaya St, Al Olaya, Riyadh",
+                    "map_url": "https://www.google.com/maps/search/?api=1&query=Olaya%20St%2C%20Al%20Olaya%2C%20Riyadh"
+                },
+                "legal_links": [],
+                "powered_by": false,
+                "hours": [
+                    {
+                        "days": [
+                            "Mo"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Tu"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "We"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Th"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Fr"
+                        ],
+                        "opens": "13:00",
+                        "closes": "23:30"
+                    },
+                    {
+                        "days": [
+                            "Sa"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    },
+                    {
+                        "days": [
+                            "Su"
+                        ],
+                        "opens": "07:00",
+                        "closes": "23:00"
+                    }
+                ]
+            }
+        }
+    }
+}

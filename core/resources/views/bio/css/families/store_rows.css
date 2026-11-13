@@ -1,0 +1,24 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* store_rows family — creator storefront (Stan / Throne). Left-aligned header, product rows
+   with a thumbnail and a price chip; menu_item / link blocks become product cards. */
+.fam-store_rows .bio-in{padding:46px 20px 0;text-align:start}
+.fam-store_rows .bio-storehead{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+.fam-store_rows .bio-avatar--sm{width:62px;height:62px;margin:0;font-size:26px}
+.fam-store_rows .bio-storehead__name{font-family:var(--font-display,inherit);font-size:17px;font-weight:700;margin:0}
+.fam-store_rows .bio-storehead__sub{font-size:11.5px;color:var(--muted,#8a8378);margin:1px 0 0}
+.fam-store_rows .bio-storehead__bio{font-size:12.5px;color:var(--muted,#8a8378);margin:10px 0 16px;line-height:1.55}
+.fam-store_rows .bio-blocks{margin-top:2px}
+
+/* product rows */
+.fam-store_rows .bio-link{gap:13px;padding:12px;border-radius:var(--radius,16px)}
+.fam-store_rows .bio-link__icon{width:58px;height:58px;border-radius:12px;font-size:24px;
+  background:var(--thumb-bg,color-mix(in srgb,var(--accent,#e8a76c) 30%,var(--card,#fff)))}
+.fam-store_rows .bio-link__icon svg{width:26px;height:26px}
+.fam-store_rows .bio-link__label{font-size:13.5px;font-weight:700;line-height:1.25}
+.fam-store_rows .bio-link__sub{font-size:11px}
+.fam-store_rows .bio-link__arrow{display:none}
+.fam-store_rows .bio-link__price{font-size:12.5px;border-radius:999px;padding:6px 12px}
+
+.fam-store_rows .bio-socials{margin-top:16px;justify-content:flex-start}

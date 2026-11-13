@@ -1,0 +1,361 @@
+{
+    "add_category": {
+        "envelope": [],
+        "data": {
+            "id": "int",
+            "name": "string"
+        }
+    },
+    "add_menu_item": {
+        "envelope": [],
+        "data": {
+            "id": "int",
+            "name": "string",
+            "price": "float"
+        }
+    },
+    "add_variant": {
+        "envelope": [],
+        "data": {
+            "active": "bool",
+            "barcode": "null",
+            "id": "int",
+            "options": "string",
+            "price": "int",
+            "sku": "null",
+            "stock_qty": "null"
+        }
+    },
+    "create_coupon": {
+        "envelope": [],
+        "data": {
+            "code": "string",
+            "expiry_at": "null",
+            "id": "int",
+            "limit": "int",
+            "min_order_amount": "null",
+            "type": "string",
+            "used": "int",
+            "value": "int"
+        }
+    },
+    "delete_category": {
+        "envelope": [],
+        "data": {
+            "deleted": "bool",
+            "id": "int"
+        }
+    },
+    "delete_coupon": {
+        "envelope": [],
+        "data": {
+            "deleted": "bool",
+            "id": "int"
+        }
+    },
+    "delete_menu_item": {
+        "envelope": [],
+        "data": {
+            "deleted": "bool",
+            "id": "int"
+        }
+    },
+    "delete_variant": {
+        "envelope": [],
+        "data": {
+            "deleted": "bool",
+            "id": "int"
+        }
+    },
+    "get_analytics": {
+        "envelope": [],
+        "data": {
+            "orders_count": "int",
+            "period_days": "int",
+            "revenue": "int",
+            "store_id": "int"
+        }
+    },
+    "get_customer": {
+        "envelope": [],
+        "data": {
+            "created_at": "string",
+            "email": "string",
+            "id": "int",
+            "last_order_at": "null",
+            "name": "string",
+            "orders_count": "int",
+            "phone": "string",
+            "tags": "null",
+            "total_spent": "int"
+        }
+    },
+    "get_menu": {
+        "envelope": [],
+        "data": [
+            {
+                "id": "int",
+                "items": [
+                    {
+                        "active": "bool",
+                        "id": "int",
+                        "name": "string",
+                        "price": "int"
+                    }
+                ],
+                "name": "string"
+            }
+        ]
+    },
+    "get_order": {
+        "envelope": [],
+        "data": {
+            "created_at": "string",
+            "customer_name": "string",
+            "id": "int",
+            "is_paid": "bool",
+            "items": [
+                {
+                    "item_id": "int",
+                    "name": "string",
+                    "note": "null",
+                    "price": "int",
+                    "quantity": "int"
+                }
+            ],
+            "phone": "string",
+            "status": "string",
+            "table_number": "null",
+            "total": "int",
+            "type": "string"
+        }
+    },
+    "get_restaurant_settings": {
+        "envelope": [],
+        "data": {
+            "address": "string",
+            "business_hours": "null",
+            "currency": "bool",
+            "id": "int",
+            "name": "string",
+            "ordering": {
+                "delivery_charge": "int",
+                "online_ordering_enabled": "bool"
+            },
+            "phone": "string",
+            "store_type": "string",
+            "vertical": {
+                "capabilities": {
+                    "age_gate": "bool",
+                    "expiry": "bool",
+                    "fitment": "bool",
+                    "service": "bool",
+                    "variant_goods": "bool"
+                },
+                "label": "string"
+            }
+        }
+    },
+    "list_brands": {
+        "envelope": [],
+        "data": []
+    },
+    "list_categories": {
+        "envelope": [],
+        "data": [
+            {
+                "active": "bool",
+                "id": "int",
+                "items_count": "int",
+                "name": "string",
+                "position": "int"
+            }
+        ]
+    },
+    "list_coupons": {
+        "envelope": [],
+        "data": [
+            {
+                "code": "string",
+                "expiry_at": "null",
+                "id": "int",
+                "limit": "int",
+                "min_order_amount": "null",
+                "type": "string",
+                "used": "int",
+                "value": "int"
+            }
+        ]
+    },
+    "list_customers": {
+        "envelope": [],
+        "data": [
+            {
+                "email": "string",
+                "id": "int",
+                "last_order_at": "null",
+                "name": "string",
+                "orders_count": "int",
+                "phone": "string",
+                "total_spent": "int"
+            }
+        ]
+    },
+    "list_expiring_items": {
+        "envelope": [],
+        "data": {
+            "expired": [],
+            "expiring_soon": []
+        }
+    },
+    "list_fitments": {
+        "envelope": [],
+        "data": []
+    },
+    "list_orders": {
+        "envelope": [],
+        "data": [
+            {
+                "created_at": "string",
+                "customer_name": "string",
+                "id": "int",
+                "status": "string",
+                "table_number": "null",
+                "total": "int",
+                "type": "string"
+            }
+        ]
+    },
+    "list_restaurants": {
+        "envelope": [],
+        "data": [
+            {
+                "id": "int",
+                "slug": "string",
+                "store_type": "string",
+                "title": "string",
+                "vertical": {
+                    "capabilities": {
+                        "age_gate": "bool",
+                        "expiry": "bool",
+                        "fitment": "bool",
+                        "service": "bool",
+                        "variant_goods": "bool"
+                    },
+                    "label": "string"
+                }
+            }
+        ]
+    },
+    "list_shipments": {
+        "envelope": [],
+        "data": []
+    },
+    "list_variants": {
+        "envelope": [],
+        "data": [
+            {
+                "barcode": "null",
+                "id": "int",
+                "options": "string",
+                "price": "int",
+                "sku": "null",
+                "stock_qty": "null"
+            }
+        ]
+    },
+    "sales_report": {
+        "envelope": [],
+        "data": {
+            "orders": {
+                "by_status": {
+                    "preparing": "int"
+                },
+                "by_type": {
+                    "takeaway": "int"
+                },
+                "paid": "int",
+                "total": "int"
+            },
+            "range": {
+                "from": "string",
+                "to": "string"
+            },
+            "revenue": {
+                "avg_order_value": "int",
+                "counted": "int",
+                "gross": "int",
+                "paid": "int"
+            },
+            "top_items": [
+                {
+                    "item_id": "int",
+                    "name": "string",
+                    "quantity": "int"
+                }
+            ]
+        }
+    },
+    "set_item_availability": {
+        "envelope": [],
+        "data": {
+            "available": "bool",
+            "id": "int",
+            "is_sold_out": "bool"
+        }
+    },
+    "update_business_hours": {
+        "envelope": [],
+        "data": {
+            "business_hours": "string",
+            "id": "int"
+        }
+    },
+    "update_category": {
+        "envelope": [],
+        "data": {
+            "id": "int",
+            "name": "string"
+        }
+    },
+    "update_coupon": {
+        "envelope": [],
+        "data": {
+            "code": "string",
+            "expiry_at": "null",
+            "id": "int",
+            "limit": "int",
+            "min_order_amount": "null",
+            "type": "string",
+            "used": "int",
+            "value": "int"
+        }
+    },
+    "update_menu_item": {
+        "envelope": [],
+        "data": {
+            "id": "int",
+            "name": "string",
+            "price": "int"
+        }
+    },
+    "update_order_status": {
+        "envelope": [],
+        "data": {
+            "id": "int",
+            "status": "string"
+        }
+    },
+    "update_variant": {
+        "envelope": [],
+        "data": {
+            "active": "bool",
+            "barcode": "null",
+            "id": "int",
+            "options": "string",
+            "price": "int",
+            "sku": "null",
+            "stock_qty": "null"
+        }
+    }
+}

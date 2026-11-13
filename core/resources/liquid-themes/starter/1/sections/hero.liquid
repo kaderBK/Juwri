@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="{{ 'css/style.css' | theme_asset }}">
+
+{% comment %}
+  Vertical-aware hero: no hardcoded menu/dish copy — the CTA reads the vocab
+  catalog word, so a goods store says "Catalog" and a services store says
+  "Services". The header's dir attribute mirrors localization.direction so a
+  per-component RTL override is available even where a shared ancestor
+  hasn't set it (the CSS itself uses logical properties throughout).
+{% endcomment %}
+<header class="st-hero" dir="{{ localization.direction }}">
+  {% if restaurant.logo %}
+    <img class="st-logo" src="{{ restaurant.logo | media_url: 'logo' }}" alt="{{ restaurant.title | escape }}">
+  {% endif %}
+  <h1>{% if section.settings.heading != '' %}{{ section.settings.heading | escape }}{% else %}{{ restaurant.title | escape }}{% endif %}</h1>
+  {% if restaurant.sub_title %}<p>{{ restaurant.sub_title | escape }}</p>{% endif %}
+  {% if table %}<p class="st-table">{{ 'Table' | t }} {{ table.table_no | escape }}</p>{% endif %}
+  {% unless menu.is_empty %}<a class="st-hero-cta" href="#st-catalog">{{ vocab.catalog }}</a>{% endunless %}
+</header>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Custom heading (blank = restaurant name)", "default": "" },
+    { "id": "accent", "type": "color", "label": "Accent colour", "default": "#3fd463" }
+  ]
+}
+{% endschema %}

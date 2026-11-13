@@ -1,0 +1,12 @@
+{%- comment -%}
+  Open / closed pill from the `hours` global (library v1). Renders nothing
+  when the store has no hours to judge by (state 'unknown').
+  Params: hours (HoursDrop), detail (bool: add "closes at / opens at").
+{%- endcomment -%}
+{%- if hours.manual_closed -%}
+<span class="mbs-open-badge is-closed"><i class="mbs-open-badge__dot" aria-hidden="true"></i>{{ 'Temporarily closed' | t }}</span>
+{%- elsif hours.state == 'open' -%}
+<span class="mbs-open-badge is-open"><i class="mbs-open-badge__dot" aria-hidden="true"></i>{{ 'Open now' | t }}{% if detail and hours.closes_at %}<span class="mbs-open-badge__meta">{{ 'Closes at' | t }} <bdi>{{ hours.closes_at | escape }}</bdi></span>{% endif %}</span>
+{%- elsif hours.state == 'closed' -%}
+<span class="mbs-open-badge is-closed"><i class="mbs-open-badge__dot" aria-hidden="true"></i>{{ 'Closed now' | t }}{% if detail and hours.opens_at %}<span class="mbs-open-badge__meta">{{ 'Opens at' | t }} <bdi>{{ hours.opens_at | escape }}</bdi></span>{% endif %}</span>
+{%- endif -%}

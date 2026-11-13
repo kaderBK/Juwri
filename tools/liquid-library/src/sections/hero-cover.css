@@ -1,0 +1,80 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* hero-cover — heights are capped clamps, never a full-viewport hero */
+.mbs-hero-cover {
+  --mbs-hero-h: clamp(260px, 42vh, 420px);
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  background: var(--tc-surface, #f4f4f5);
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-hero-cover--s { --mbs-hero-h: clamp(200px, 30vh, 300px); }
+.mbs-hero-cover--l { --mbs-hero-h: clamp(320px, 60vh, 560px); }
+.mbs-hero-cover__media { position: relative; }
+.mbs-hero-cover__img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.mbs-hero-cover__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--ts-gap-2, 10px);
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  max-inline-size: 1200px;
+  box-sizing: border-box;
+}
+.mbs-hero-cover--align-center .mbs-hero-cover__content { align-items: center; text-align: center; margin-inline: auto; }
+.mbs-hero-cover--align-start .mbs-hero-cover__content { align-items: flex-start; text-align: start; }
+.mbs-hero-cover__logo { inline-size: 72px; block-size: 72px; border-radius: var(--tr-pill, 999px); object-fit: cover; }
+.mbs-hero-cover__title { margin: 0; font-family: var(--tf-heading, var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif)); font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1.15; }
+.mbs-hero-cover__sub { margin: 0; max-inline-size: 42ch; font-size: 1rem; opacity: .85; }
+.mbs-hero-cover__table {
+  margin: 0;
+  padding: 4px var(--ts-gap-3, 16px);
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .08);
+  font-size: .85rem;
+  font-weight: 600;
+}
+.mbs-hero-cover__ctas { display: flex; flex-wrap: wrap; gap: var(--ts-gap-2, 10px); margin-block-start: var(--ts-gap-1, 6px); }
+.mbs-hero-cover__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 48px;
+  padding-inline: var(--ts-gap-4, 24px);
+  border: 2px solid var(--tc-primary, #3fd463);
+  border-radius: var(--tr-control, 12px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mbs-hero-cover__cta.is-secondary { background: transparent; color: inherit; border-color: currentColor; }
+.mbs-hero-cover__cta:focus-visible { outline: 3px solid var(--tc-accent, #f59e0b); outline-offset: 2px; }
+
+/* image: text over the photo */
+.mbs-hero-cover--image.has-media { min-block-size: var(--mbs-hero-h); color: var(--tc-on-overlay, #fff); background: var(--tc-text, #111); }
+.mbs-hero-cover--image.has-media > * { grid-area: 1 / 1; }
+.mbs-hero-cover--image.has-media .mbs-hero-cover__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--tc-overlay-rgb, 0, 0, 0), var(--mbs-overlay, .4));
+}
+.mbs-hero-cover--image.has-media .mbs-hero-cover__content { position: relative; inline-size: 100%; }
+.mbs-hero-cover--image.has-media .mbs-hero-cover__cta.is-secondary { color: var(--tc-on-overlay, #fff); }
+
+/* split: image beside the text (stacked on phones) */
+.mbs-hero-cover--split.has-media .mbs-hero-cover__media { block-size: calc(var(--mbs-hero-h) * .7); }
+@media (min-width: 768px) {
+  .mbs-hero-cover--split.has-media { grid-template-columns: 1fr 1fr; min-block-size: var(--mbs-hero-h); }
+  .mbs-hero-cover--split.has-media .mbs-hero-cover__media { block-size: auto; order: 2; }
+}
+
+/* minimal-text */
+.mbs-hero-cover--minimal-text { background: var(--tc-background, #fff); }
+.mbs-hero-cover--minimal-text .mbs-hero-cover__content { padding-block: var(--ts-gap-4, 24px); }

@@ -1,0 +1,33 @@
+{
+  "slug": "soft_gradient",
+  "starter": "cafe",
+  "name": "Soft Gradient",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "linear-gradient(175deg,#c7b9ff 0%,#f6b8d0 60%,#ffd9c0 100%)",
+    "--ink": "#3c2a55",
+    "--muted": "#5f4a7d",
+    "--card": "rgba(255,255,255,.92)",
+    "--btn-bg": "rgba(255,255,255,.92)",
+    "--btn-fg": "#3c2a55",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#8a74a8",
+    "--accent-ink": "#ffffff",
+    "--avatar-bg": "#ffffff",
+    "--avatar-shadow": "0 6px 18px rgba(120,90,180,.25)",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "16px",
+    "--shadow": "0 4px 12px rgba(120,90,180,.18)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

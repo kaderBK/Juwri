@@ -1,0 +1,33 @@
+{
+  "slug": "classic_flat",
+  "starter": "restaurant_essential",
+  "name": "Classic Flat",
+  "family": "list",
+  "tier": "basic",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]}
+  ],
+  "tokens": {
+    "--bg": "#9cd6c8",
+    "--ink": "#123c32",
+    "--muted": "#2c5a4e",
+    "--card": "#ffffff",
+    "--btn-bg": "#ffffff",
+    "--btn-fg": "#123c32",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#0f7d5a",
+    "--accent-ink": "#ffffff",
+    "--avatar-bg": "#ffffff",
+    "--avatar-shadow": "0 4px 14px rgba(20,60,50,.18)",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "999px",
+    "--shadow": "0 2px 8px rgba(20,60,50,.12)",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

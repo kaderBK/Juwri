@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* photo_hero family — full-width cover fading into the page, id overlapping, stacked blocks below. */
+.fam-photo_hero .bio-hero{height:250px;position:relative;display:grid;place-items:center;
+  background-color:color-mix(in srgb,var(--accent,#e2603a) 40%,var(--bg,#101014));
+  background-size:cover;background-position:center;background-repeat:no-repeat}
+.fam-photo_hero .bio-hero__ill{width:112px;height:112px}
+.fam-photo_hero .bio-heroid{position:relative;margin-top:-40px;text-align:center;padding:0 22px;z-index:2}
+.fam-photo_hero .bio-avatar--hero{display:none} /* cover_card preset re-enables it via residual */
+.fam-photo_hero .bio-name{font-size:21px}
+.fam-photo_hero .bio-tagline{margin-bottom:16px}
+.fam-photo_hero .bio-in--hero{padding:2px 22px 0}
+.fam-photo_hero .bio-blocks{text-align:start}
+/* the first link reads as the primary CTA */
+.fam-photo_hero .bio-block:first-child .bio-link{background:var(--accent,#e2603a);color:var(--accent-ink,#fff);border-color:transparent}
+.fam-photo_hero .bio-block:first-child .bio-link__icon{color:var(--accent-ink,#fff)}
+.fam-photo_hero .bio-block:first-child .bio-link__arrow{color:var(--accent-ink,#fff)}
+.fam-photo_hero .bio-socials{margin-top:14px}

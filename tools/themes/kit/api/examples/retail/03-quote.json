@@ -1,0 +1,175 @@
+{
+  "operationId": "quoteCart",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/quote",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_dune_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "order_type": "ship",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+          "variant_id": "019fa718-1080-763e-a69c-9f701d44ac3b",
+          "qty": 1
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+          "variant_id": "019ea63e-e400-7902-af49-16aadc649da7",
+          "qty": 1
+        }
+      ],
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA"
+      },
+      "shipping_method_id": "01a01863-f880-702d-b8e8-df65791001f2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:45:58 GMT"
+    },
+    "body": {
+      "quote": {
+        "lines": [
+          {
+            "id": "ln_1",
+            "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+            "name": "Relaxed linen shirt",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-4x5.svg",
+              "alt": "Relaxed linen shirt"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 13900,
+              "currency": "SAR",
+              "formatted": "SAR 139.00"
+            },
+            "brand": "Dune & Co.",
+            "compare_at": {
+              "minor": 19900,
+              "currency": "SAR",
+              "formatted": "SAR 199.00"
+            },
+            "choices_label": "Sand · M",
+            "unit_label": "Qty 1"
+          },
+          {
+            "id": "ln_2",
+            "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+            "name": "Wide-leg trousers",
+            "thumb": {
+              "src": "https://media.example/img/placeholder-4x5.svg",
+              "alt": "Wide-leg trousers"
+            },
+            "qty": 1,
+            "line_total": {
+              "minor": 22900,
+              "currency": "SAR",
+              "formatted": "SAR 229.00"
+            },
+            "brand": "Dune & Co.",
+            "choices_label": "Navy · M",
+            "unit_label": "Qty 1"
+          }
+        ],
+        "rows": [
+          {
+            "key": "subtotal",
+            "label": "Items (2)",
+            "amount": {
+              "minor": 36800,
+              "currency": "SAR",
+              "formatted": "SAR 368.00"
+            },
+            "kind": "subtotal"
+          },
+          {
+            "key": "shipping",
+            "label": "Shipping · Standard",
+            "amount": {
+              "minor": 0,
+              "currency": "SAR",
+              "formatted": "SAR 0.00"
+            },
+            "amount_label": "Free",
+            "kind": "delivery"
+          },
+          {
+            "key": "saving",
+            "label": "You save",
+            "amount": {
+              "minor": 6000,
+              "currency": "SAR",
+              "formatted": "SAR 60.00"
+            },
+            "kind": "discount",
+            "muted": true,
+            "informational": true
+          }
+        ],
+        "total": {
+          "minor": 36800,
+          "currency": "SAR",
+          "formatted": "SAR 368.00"
+        },
+        "total_label": "Total",
+        "tax_note": "Includes VAT 15% (SAR 48.00). 14-day returns."
+      },
+      "quote_hash": "qh_af7bb448d796e2bf2be64c0fd407cd98",
+      "expires_at": "2026-10-02T09:50:58+03:00",
+      "payment_methods": [
+        {
+          "id": "card",
+          "label": "Card",
+          "sub": "Visa, Mastercard, mada",
+          "selected": true,
+          "icon": "credit-card"
+        },
+        {
+          "id": "apple_pay",
+          "label": "Apple Pay",
+          "icon": "apple"
+        },
+        {
+          "id": "bnpl",
+          "label": "Pay in 4 · Tabby or Tamara",
+          "sub": "4 × SAR 92.00, no interest",
+          "kind": "bnpl",
+          "icon": "calendar-clock"
+        },
+        {
+          "id": "cod",
+          "label": "Cash on delivery",
+          "sub": "+ SAR 10.00 fee",
+          "amount": {
+            "minor": 1000,
+            "currency": "SAR",
+            "formatted": "SAR 10.00"
+          },
+          "amount_label": "+ SAR 10.00",
+          "icon": "banknote"
+        }
+      ],
+      "warnings": [],
+      "requires": [],
+      "payment_modes": [
+        "pay_later",
+        "hosted"
+      ]
+    }
+  }
+}

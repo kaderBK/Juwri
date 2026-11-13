@@ -1,0 +1,478 @@
+{
+    "list_restaurant": [
+        {
+            "name": "search_menu",
+            "description": "Search the menu by name/description with optional vegan/halal/max_price filters.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string"
+                    },
+                    "filters": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "query"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "get_item",
+            "description": "Full details for one menu item (variants, extras).",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "item_id": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "item_id"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "validate_cart",
+            "description": "Server-side price + availability check for a cart. Pass an optional coupon_code to preview the server-priced discount (returns discount, coupon_applied, coupon_message, and the discounted total). Store credit is NOT previewed here — it is applied at order time for an identified customer.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "item_id": {
+                                    "type": "integer"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "variation": {
+                                    "type": "integer"
+                                },
+                                "extras": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "item_id",
+                                "quantity"
+                            ]
+                        }
+                    },
+                    "coupon_code": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "items"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "create_order",
+            "description": "Place an UNPAID order using one of THIS store's fulfillment modes — the `type` enum lists what this store offers (e.g. takeaway/on-table for a restaurant, ship/pickup_slot/in_store for a shop, pickup_slot/appointment for a service). Omit `type` to use the store's default. Customer pays on arrival or on delivery. Pass an optional coupon_code to apply an owner discount (server-priced; returns discount + coupon_applied). Store credit: only spent when the merchant has enabled agent credit-spend AND the diner is identified by their verified sender phone; the amount used is returned as wallet_applied (server-decided — you cannot force it). Optional scheduled_at (\"YYYY-MM-DD HH:MM\", store local time) requests a pre-order for later; it is validated against the store's scheduling rules and rejected if invalid.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "item_id": {
+                                    "type": "integer"
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "variation": {
+                                    "type": "integer"
+                                },
+                                "extras": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "item_id",
+                                "quantity"
+                            ]
+                        }
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "on-table",
+                            "takeaway",
+                            "delivery",
+                            "room_service"
+                        ]
+                    },
+                    "customer_name": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string",
+                        "description": "Shipping/delivery address, required for ship/delivery modes"
+                    },
+                    "coupon_code": {
+                        "type": "string"
+                    },
+                    "scheduled_at": {
+                        "type": "string",
+                        "description": "Optional pre-order time, YYYY-MM-DD HH:MM local"
+                    }
+                },
+                "required": [
+                    "items"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": false,
+                "destructiveHint": false,
+                "idempotentHint": false
+            }
+        },
+        {
+            "name": "order_status",
+            "description": "Status of an order by its track token.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "track_token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "track_token"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "restaurant_info",
+            "description": "Restaurant name, order types, and payment info.",
+            "inputSchema": {
+                "type": "object",
+                "properties": []
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "order_history",
+            "description": "A returning customer's recent orders at this restaurant, matched by their phone number.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10
+                    }
+                },
+                "required": [
+                    "phone"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "store_credit_balance",
+            "description": "A returning customer's store-credit (wallet) balance at this restaurant, matched by phone. Account-bound — safe to read out to a diner who gave their phone. Returns found + balance + currency. Read only: you cannot SPEND credit here — a diner pays with credit on the storefront or customer app.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "phone"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "reorder_last",
+            "description": "Rebuild the customer's most recent order as a cart draft (\"the usual\"); skips sold-out/removed items. Feed the returned items to validate_cart.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "phone"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "order_eta",
+            "description": "Current estimated prep wait (minutes) based on live kitchen load — use it to set expectations when placing an order.",
+            "inputSchema": {
+                "type": "object",
+                "properties": []
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "suggest_upsell",
+            "description": "Recommend up to 3 add-on items for a cart in progress. Returns [{item_id, name, price}] — active, in-stock items from THIS restaurant, cheapest-first, excluding anything already in the cart. Prices are server-sourced (never invent them). Use this AFTER the customer has chosen items, to offer complementary add-ons before checkout; use search_menu instead when the customer is looking for something specific by keyword. Pass the current cart item_ids so they are not re-suggested. Returns an empty array when nothing suitable is available.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "cart_item_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "item_ids already in the cart, so they are excluded from suggestions"
+                    }
+                }
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "dietary_answer",
+            "description": "Answer whether ONE menu item satisfies a dietary tag (e.g. vegan, halal, vegetarian, gluten_free), using ONLY the item's structured dietary data. Returns the string \"yes\", \"no\", or \"unknown\". Returns \"unknown\" when the item has no data for that tag OR the item_id is not found — in that case tell the customer you're not sure and to check with staff; never guess from the name or description. Use this instead of inferring dietary suitability yourself.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "item_id": {
+                        "type": "integer"
+                    },
+                    "tag": {
+                        "type": "string",
+                        "description": "dietary tag key, e.g. vegan / halal / vegetarian / gluten_free"
+                    }
+                },
+                "required": [
+                    "item_id",
+                    "tag"
+                ]
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        },
+        {
+            "name": "hotel_availability",
+            "description": "Room-type availability and nightly price for a date range, when this venue is a hotel/guesthouse with online booking enabled. Args: check_in, check_out (\"YYYY-MM-DD\", default tonight → tomorrow). Returns {enabled, online_booking:\"off|request|instant\", check_in, check_out, nights, currency, room_types:[{id,name,base_rate,available,nightly_total}]}. enabled=false means this store is not a bookable hotel — do not offer rooms. Read-only: it never holds or books a room (booking happens on the venue's site).",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "check_in": {
+                        "type": "string"
+                    },
+                    "check_out": {
+                        "type": "string"
+                    }
+                },
+                "required": []
+            },
+            "annotations": {
+                "readOnlyHint": true
+            }
+        }
+    ],
+    "create_order_type_enum_retail": {
+        "type": "string",
+        "enum": [
+            "ship",
+            "pickup_slot",
+            "in_store"
+        ]
+    },
+    "initialize": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {
+                "tools": {
+                    "listChanged": false
+                }
+            },
+            "serverInfo": {
+                "name": "juwri-storefront-mcp",
+                "version": "1.0.0"
+            }
+        }
+    },
+    "call": {
+        "search_menu": {
+            "envelope": [],
+            "data": [
+                {
+                    "calories": "null",
+                    "id": "int",
+                    "is_halal": "bool",
+                    "is_vegan": "bool",
+                    "name": "string",
+                    "price": "int",
+                    "sold_out": "bool"
+                }
+            ]
+        },
+        "get_item": {
+            "envelope": [],
+            "data": {
+                "description": "null",
+                "extras": [],
+                "id": "int",
+                "name": "string",
+                "price": "int",
+                "sold_out": "bool",
+                "variants": []
+            }
+        },
+        "validate_cart": {
+            "envelope": [],
+            "data": {
+                "confirmation": "string",
+                "coupon_applied": "bool",
+                "coupon_message": "null",
+                "discount": "int",
+                "lines": [
+                    {
+                        "item_id": "int",
+                        "line_total": "int",
+                        "name": "string",
+                        "quantity": "int"
+                    }
+                ],
+                "needs_confirmation": "bool",
+                "problems": [],
+                "subtotal": "int",
+                "tax": "int",
+                "total": "int"
+            }
+        },
+        "restaurant_info": {
+            "envelope": [],
+            "data": {
+                "address": "string",
+                "id": "int",
+                "name": "string",
+                "order_types": [
+                    "string"
+                ],
+                "payment": "string",
+                "phone": "string",
+                "store_type": "string"
+            }
+        },
+        "order_status": {
+            "envelope": [],
+            "data": {
+                "text": "null"
+            }
+        },
+        "order_history": {
+            "envelope": [],
+            "data": []
+        },
+        "store_credit_balance": {
+            "envelope": [],
+            "data": {
+                "balance": "int",
+                "found": "bool"
+            }
+        },
+        "reorder_last": {
+            "envelope": [],
+            "data": {
+                "found": "bool",
+                "items": []
+            }
+        },
+        "order_eta": {
+            "envelope": [],
+            "data": {
+                "eta_minutes": "int",
+                "kitchen_load": "int"
+            }
+        },
+        "suggest_upsell": {
+            "envelope": [],
+            "data": []
+        },
+        "dietary_answer": {
+            "envelope": [],
+            "data": "string"
+        },
+        "hotel_availability": {
+            "envelope": [],
+            "data": {
+                "enabled": "bool",
+                "reason": "string"
+            }
+        },
+        "create_order": {
+            "envelope": [],
+            "data": {
+                "continue_url": "string",
+                "coupon_applied": "bool",
+                "discount": "int",
+                "eta_range": "null",
+                "ok": "bool",
+                "order_id": "int",
+                "scheduled_at": "null",
+                "total": "int",
+                "track_token": "string",
+                "track_url": "string",
+                "wallet_applied": "int"
+            }
+        },
+        "nope": {
+            "envelope": {
+                "isError": "bool"
+            },
+            "data": {
+                "text": "Unknown tool."
+            }
+        }
+    }
+}

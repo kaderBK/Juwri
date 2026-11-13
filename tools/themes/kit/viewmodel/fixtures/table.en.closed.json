@@ -1,0 +1,1534 @@
+{
+ "store": {
+  "public_id": "st_saffron_house",
+  "slug": "saffron-house-demo",
+  "name": "Saffron House",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "Saffron House"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "Saffron House"
+  },
+  "tagline": "Charcoal grills & mezze since 1998",
+  "locale": "en",
+  "dir": "ltr",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/saffron-house-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/saffron-house-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "food",
+  "store_type": "restaurant",
+  "status": {
+   "open": false,
+   "label": "Closed · opens 1 pm",
+   "next_change_at": "2026-10-02T13:00:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0101",
+   "whatsapp": "+966 55 010 0101",
+   "address": "Al Olaya, King Fahd Rd, Riyadh"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/saffron-house"
+   }
+  ],
+  "rating": {
+   "avg": 4.7,
+   "count": 1280
+  },
+  "legal_links": [
+   {
+    "label": "Privacy",
+    "url": "/saffron-house-demo/privacy"
+   },
+   {
+    "label": "Terms",
+    "url": "/saffron-house-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "Saffron House Restaurants Co.",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-1101",
+    "label": "Commercial registration (CR)"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-1101",
+    "label": "VAT number"
+   },
+   "address": "King Fahd Road, Al Olaya, Riyadh 12212"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_main",
+   "name": "Main branch",
+   "address": "Al Olaya, King Fahd Rd, Riyadh"
+  }
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "delivery",
+    "label": "Delivery",
+    "needs_address": true,
+    "needs_slot": false
+   },
+   {
+    "key": "takeaway",
+    "label": "Takeaway",
+    "needs_address": false,
+    "needs_slot": false
+   },
+   {
+    "key": "dine_in",
+    "label": "Dine in",
+    "needs_address": false,
+    "needs_slot": false
+   }
+  ],
+  "selected_order_type": "delivery",
+  "schedule_ahead": false,
+  "table": null,
+  "min_order": {
+   "minor": 5000,
+   "currency": "SAR",
+   "formatted": "SAR 50.00"
+  }
+ },
+ "theme": {
+  "slug": "table",
+  "preset": "classic",
+  "settings": {
+   "colors.primary": "#B4331A",
+   "colors.background": "#FAF6F0",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#1F1A17",
+   "colors.accent": "#E8A33D",
+   "layout.radius": "round",
+   "layout.density": "cozy",
+   "fonts.pair": "fraunces-jakarta",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#F07A52",
+   "colors_dark.background": "#141210",
+   "colors_dark.surface": "#1E1B18",
+   "colors_dark.text": "#F6F1EA",
+   "colors_dark.accent": "#F2B65A",
+   "layout.card": "list",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "cover",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": true,
+   "menu.show_allergens": true,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "hero",
+   "offers",
+   "search",
+   "category_nav",
+   "featured",
+   "catalog",
+   "reservations",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "featured_title": "Today's specials",
+   "search_placeholder": "Search the menu"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "mezze",
+    "name": "Mezze",
+    "item_ids": [
+     "hummus",
+     "moutabal",
+     "labneh-with-olive-oil",
+     "stuffed-vine-leaves",
+     "falafel-8-pcs",
+     "kibbeh-4-pcs",
+     "cheese-sambousek-6-pcs",
+     "muhammara",
+     "mixed-mezze-platter"
+    ],
+    "count": 9
+   },
+   {
+    "id": "salads-soups",
+    "name": "Salads & soups",
+    "item_ids": [
+     "fattoush-bowl",
+     "tabbouleh",
+     "rocket-and-halloumi-salad",
+     "arabic-salad",
+     "lentil-soup",
+     "chicken-freekeh-soup"
+    ],
+    "count": 6
+   },
+   {
+    "id": "grills",
+    "name": "Grills",
+    "item_ids": [
+     "mixed-grill-platter",
+     "chicken-shish-tawook",
+     "kofta-kebab",
+     "lamb-chops",
+     "lamb-tikka",
+     "half-charcoal-chicken",
+     "grilled-hammour",
+     "grilled-prawns",
+     "beef-fillet-skewers"
+    ],
+    "count": 9
+   },
+   {
+    "id": "rice-mains",
+    "name": "Rice & mains",
+    "item_ids": [
+     "lamb-ouzi",
+     "chicken-kabsa",
+     "lamb-kabsa",
+     "chicken-mandi",
+     "lamb-mandi",
+     "maqluba",
+     "fish-sayadieh"
+    ],
+    "count": 7
+   },
+   {
+    "id": "wraps",
+    "name": "Wraps & sandwiches",
+    "item_ids": [
+     "chicken-shawarma-wrap",
+     "beef-shawarma-wrap",
+     "falafel-wrap",
+     "kofta-saj-wrap",
+     "halloumi-saj",
+     "shish-tawook-sandwich"
+    ],
+    "count": 6
+   },
+   {
+    "id": "desserts",
+    "name": "Desserts",
+    "item_ids": [
+     "kunafa",
+     "umm-ali",
+     "assorted-baklava",
+     "basbousa",
+     "muhallabia",
+     "luqaimat"
+    ],
+    "count": 6
+   },
+   {
+    "id": "drinks",
+    "name": "Drinks",
+    "item_ids": [
+     "mint-lemonade",
+     "fresh-orange-juice",
+     "pomegranate-juice",
+     "jallab",
+     "laban-ayran",
+     "karak-tea",
+     "arabic-coffee-pot",
+     "sparkling-water",
+     "still-water"
+    ],
+    "count": 9
+   }
+  ],
+  "items": {
+   "hummus": {
+    "id": "hummus",
+    "name": "Hummus",
+    "url": "/saffron-house-demo/item/hummus",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Hummus"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Chickpea and tahini dip, olive oil, paprika.",
+    "calories": 310,
+    "allergens": [
+     "Sesame"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "moutabal": {
+    "id": "moutabal",
+    "name": "Moutabal",
+    "url": "/saffron-house-demo/item/moutabal",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Moutabal"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Smoked aubergine, tahini and lemon.",
+    "calories": 260,
+    "allergens": [
+     "Sesame"
+    ],
+    "from_price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "SAR 20.00"
+    }
+   },
+   "labneh-with-olive-oil": {
+    "id": "labneh-with-olive-oil",
+    "name": "Labneh with olive oil",
+    "url": "/saffron-house-demo/item/labneh-with-olive-oil",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Labneh with olive oil"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Strained yoghurt, mint and cold-pressed oil.",
+    "calories": 220,
+    "allergens": [
+     "Dairy"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "stuffed-vine-leaves": {
+    "id": "stuffed-vine-leaves",
+    "name": "Stuffed vine leaves",
+    "url": "/saffron-house-demo/item/stuffed-vine-leaves",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Stuffed vine leaves"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Rice, herbs and lemon, rolled by hand.",
+    "calories": 280,
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "falafel-8-pcs": {
+    "id": "falafel-8-pcs",
+    "name": "Falafel (8 pcs)",
+    "url": "/saffron-house-demo/item/falafel-8-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Falafel (8 pcs)"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Crisp outside, green inside, with tahini sauce.",
+    "calories": 420,
+    "allergens": [
+     "Sesame"
+    ],
+    "price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "SAR 19.00"
+    }
+   },
+   "kibbeh-4-pcs": {
+    "id": "kibbeh-4-pcs",
+    "name": "Kibbeh (4 pcs)",
+    "url": "/saffron-house-demo/item/kibbeh-4-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Kibbeh (4 pcs)"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fried bulgur shells filled with spiced lamb.",
+    "calories": 480,
+    "allergens": [
+     "Gluten",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "SAR 28.00"
+    }
+   },
+   "cheese-sambousek-6-pcs": {
+    "id": "cheese-sambousek-6-pcs",
+    "name": "Cheese sambousek (6 pcs)",
+    "url": "/saffron-house-demo/item/cheese-sambousek-6-pcs",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Cheese sambousek (6 pcs)"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Golden pastry parcels with melted cheese.",
+    "calories": 450,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    }
+   },
+   "muhammara": {
+    "id": "muhammara",
+    "name": "Muhammara",
+    "url": "/saffron-house-demo/item/muhammara",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Muhammara"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Roasted red pepper, walnut and pomegranate molasses.",
+    "calories": 290,
+    "allergens": [
+     "Tree nuts",
+     "Gluten"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "SAR 20.00"
+    }
+   },
+   "mixed-mezze-platter": {
+    "id": "mixed-mezze-platter",
+    "name": "Mixed mezze platter",
+    "url": "/saffron-house-demo/item/mixed-mezze-platter",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mixed mezze platter"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Hummus, moutabal, tabbouleh, falafel and kibbeh.",
+    "calories": 980,
+    "allergens": [
+     "Sesame",
+     "Gluten",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "SAR 58.00"
+    }
+   },
+   "fattoush-bowl": {
+    "id": "fattoush-bowl",
+    "name": "Fattoush bowl",
+    "url": "/saffron-house-demo/item/fattoush-bowl",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fattoush bowl"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Sumac, crisp pita, radish and pomegranate.",
+    "calories": 240,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 3200,
+     "currency": "SAR",
+     "formatted": "SAR 32.00"
+    }
+   },
+   "tabbouleh": {
+    "id": "tabbouleh",
+    "name": "Tabbouleh",
+    "url": "/saffron-house-demo/item/tabbouleh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Tabbouleh"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Parsley, tomato, bulgur and lemon.",
+    "calories": 190,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "SAR 28.00"
+    }
+   },
+   "rocket-and-halloumi-salad": {
+    "id": "rocket-and-halloumi-salad",
+    "name": "Rocket and halloumi salad",
+    "url": "/saffron-house-demo/item/rocket-and-halloumi-salad",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Rocket and halloumi salad"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Grilled halloumi, rocket, cherry tomato, balsamic.",
+    "calories": 380,
+    "allergens": [
+     "Dairy"
+    ],
+    "price": {
+     "minor": 3400,
+     "currency": "SAR",
+     "formatted": "SAR 34.00"
+    }
+   },
+   "arabic-salad": {
+    "id": "arabic-salad",
+    "name": "Arabic salad",
+    "url": "/saffron-house-demo/item/arabic-salad",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Arabic salad"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cucumber, tomato, onion and mint.",
+    "calories": 90,
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "lentil-soup": {
+    "id": "lentil-soup",
+    "name": "Lentil soup",
+    "url": "/saffron-house-demo/item/lentil-soup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lentil soup"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Red lentils, cumin and lemon, with croutons.",
+    "calories": 210,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "chicken-freekeh-soup": {
+    "id": "chicken-freekeh-soup",
+    "name": "Chicken freekeh soup",
+    "url": "/saffron-house-demo/item/chicken-freekeh-soup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken freekeh soup"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Smoked green wheat, chicken and herbs.",
+    "calories": 260,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "mixed-grill-platter": {
+    "id": "mixed-grill-platter",
+    "name": "Mixed grill platter",
+    "url": "/saffron-house-demo/item/mixed-grill-platter",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mixed grill platter"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Shish tawook, kofta and lamb tikka with garlic sauce and saj bread.",
+    "calories": 920,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "from_price": {
+     "minor": 6800,
+     "currency": "SAR",
+     "formatted": "SAR 68.00"
+    }
+   },
+   "chicken-shish-tawook": {
+    "id": "chicken-shish-tawook",
+    "name": "Chicken shish tawook",
+    "url": "/saffron-house-demo/item/chicken-shish-tawook",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken shish tawook"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Yoghurt and lemon marinade, grilled over charcoal.",
+    "calories": 640,
+    "allergens": [
+     "Dairy"
+    ],
+    "from_price": {
+     "minor": 4200,
+     "currency": "SAR",
+     "formatted": "SAR 42.00"
+    }
+   },
+   "kofta-kebab": {
+    "id": "kofta-kebab",
+    "name": "Kofta kebab",
+    "url": "/saffron-house-demo/item/kofta-kebab",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Kofta kebab"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Minced lamb with parsley and onion, tahini on the side.",
+    "calories": 710,
+    "allergens": [
+     "Sesame"
+    ],
+    "from_price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "SAR 46.00"
+    }
+   },
+   "lamb-chops": {
+    "id": "lamb-chops",
+    "name": "Lamb chops",
+    "url": "/saffron-house-demo/item/lamb-chops",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb chops"
+    },
+    "badges": [
+     {
+      "kind": "sold_out",
+      "label": "Sold out"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": false,
+    "short": "Four chops, rosemary salt, grilled tomato.",
+    "calories": 820,
+    "price": {
+     "minor": 9500,
+     "currency": "SAR",
+     "formatted": "SAR 95.00"
+    }
+   },
+   "lamb-tikka": {
+    "id": "lamb-tikka",
+    "name": "Lamb tikka",
+    "url": "/saffron-house-demo/item/lamb-tikka",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb tikka"
+    },
+    "badges": [
+     {
+      "kind": "spicy",
+      "label": "Spicy"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Cubes of lamb in a smoky spice rub.",
+    "calories": 690,
+    "allergens": [
+     "Dairy"
+    ],
+    "from_price": {
+     "minor": 5800,
+     "currency": "SAR",
+     "formatted": "SAR 58.00"
+    }
+   },
+   "half-charcoal-chicken": {
+    "id": "half-charcoal-chicken",
+    "name": "Half charcoal chicken",
+    "url": "/saffron-house-demo/item/half-charcoal-chicken",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Half charcoal chicken"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "Low stock"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Garlic and lemon marinade, with fries and pickles.",
+    "calories": 780,
+    "price": {
+     "minor": 4400,
+     "currency": "SAR",
+     "formatted": "SAR 44.00"
+    }
+   },
+   "grilled-hammour": {
+    "id": "grilled-hammour",
+    "name": "Grilled hammour",
+    "url": "/saffron-house-demo/item/grilled-hammour",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Grilled hammour"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Local hammour with chermoula and lemon.",
+    "calories": 520,
+    "allergens": [
+     "Fish"
+    ],
+    "from_price": {
+     "minor": 7200,
+     "currency": "SAR",
+     "formatted": "SAR 72.00"
+    }
+   },
+   "grilled-prawns": {
+    "id": "grilled-prawns",
+    "name": "Grilled prawns",
+    "url": "/saffron-house-demo/item/grilled-prawns",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Grilled prawns"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Jumbo prawns with garlic butter and herbs.",
+    "calories": 430,
+    "allergens": [
+     "Shellfish",
+     "Dairy"
+    ],
+    "from_price": {
+     "minor": 7800,
+     "currency": "SAR",
+     "formatted": "SAR 78.00"
+    }
+   },
+   "beef-fillet-skewers": {
+    "id": "beef-fillet-skewers",
+    "name": "Beef fillet skewers",
+    "url": "/saffron-house-demo/item/beef-fillet-skewers",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Beef fillet skewers"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Tender beef cubes, pepper and onion skewered.",
+    "calories": 610,
+    "from_price": {
+     "minor": 6400,
+     "currency": "SAR",
+     "formatted": "SAR 64.00"
+    }
+   },
+   "lamb-ouzi": {
+    "id": "lamb-ouzi",
+    "name": "Lamb ouzi",
+    "url": "/saffron-house-demo/item/lamb-ouzi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb ouzi"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Slow-roasted, 6 hrs, wrapped in spiced rice and pastry.",
+    "calories": 1080,
+    "allergens": [
+     "Gluten",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 8900,
+     "currency": "SAR",
+     "formatted": "SAR 89.00"
+    }
+   },
+   "chicken-kabsa": {
+    "id": "chicken-kabsa",
+    "name": "Chicken kabsa",
+    "url": "/saffron-house-demo/item/chicken-kabsa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken kabsa"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Spiced rice, tomato sauce, roasted chicken, raisins.",
+    "calories": 860,
+    "allergens": [
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 4600,
+     "currency": "SAR",
+     "formatted": "SAR 46.00"
+    }
+   },
+   "lamb-kabsa": {
+    "id": "lamb-kabsa",
+    "name": "Lamb kabsa",
+    "url": "/saffron-house-demo/item/lamb-kabsa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb kabsa"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Tender lamb over baharat rice with daqqus on the side.",
+    "calories": 990,
+    "allergens": [
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 6200,
+     "currency": "SAR",
+     "formatted": "SAR 62.00"
+    }
+   },
+   "chicken-mandi": {
+    "id": "chicken-mandi",
+    "name": "Chicken mandi",
+    "url": "/saffron-house-demo/item/chicken-mandi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken mandi"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Smoked in a pit oven, served on fragrant rice.",
+    "calories": 830,
+    "price": {
+     "minor": 4800,
+     "currency": "SAR",
+     "formatted": "SAR 48.00"
+    }
+   },
+   "lamb-mandi": {
+    "id": "lamb-mandi",
+    "name": "Lamb mandi",
+    "url": "/saffron-house-demo/item/lamb-mandi",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Lamb mandi"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fall-off-the-bone lamb on long-grain rice.",
+    "calories": 1020,
+    "price": {
+     "minor": 6600,
+     "currency": "SAR",
+     "formatted": "SAR 66.00"
+    }
+   },
+   "maqluba": {
+    "id": "maqluba",
+    "name": "Maqluba",
+    "url": "/saffron-house-demo/item/maqluba",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Maqluba"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Upside-down rice with aubergine, cauliflower and chicken.",
+    "calories": 790,
+    "allergens": [
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 5200,
+     "currency": "SAR",
+     "formatted": "SAR 52.00"
+    }
+   },
+   "fish-sayadieh": {
+    "id": "fish-sayadieh",
+    "name": "Fish sayadieh",
+    "url": "/saffron-house-demo/item/fish-sayadieh",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fish sayadieh"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fried fish on caramelised onion rice, tahini sauce.",
+    "calories": 740,
+    "allergens": [
+     "Fish",
+     "Sesame"
+    ],
+    "price": {
+     "minor": 5600,
+     "currency": "SAR",
+     "formatted": "SAR 56.00"
+    }
+   },
+   "chicken-shawarma-wrap": {
+    "id": "chicken-shawarma-wrap",
+    "name": "Chicken shawarma wrap",
+    "url": "/saffron-house-demo/item/chicken-shawarma-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Chicken shawarma wrap"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Garlic sauce, pickles and fries inside.",
+    "calories": 540,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    }
+   },
+   "beef-shawarma-wrap": {
+    "id": "beef-shawarma-wrap",
+    "name": "Beef shawarma wrap",
+    "url": "/saffron-house-demo/item/beef-shawarma-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Beef shawarma wrap"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Tahini, tomato and parsley on thin saj.",
+    "calories": 590,
+    "allergens": [
+     "Gluten",
+     "Sesame"
+    ],
+    "price": {
+     "minor": 2600,
+     "currency": "SAR",
+     "formatted": "SAR 26.00"
+    }
+   },
+   "falafel-wrap": {
+    "id": "falafel-wrap",
+    "name": "Falafel wrap",
+    "url": "/saffron-house-demo/item/falafel-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Falafel wrap"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Falafel, pickled turnip and tahini.",
+    "calories": 470,
+    "allergens": [
+     "Gluten",
+     "Sesame"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "kofta-saj-wrap": {
+    "id": "kofta-saj-wrap",
+    "name": "Kofta saj wrap",
+    "url": "/saffron-house-demo/item/kofta-saj-wrap",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Kofta saj wrap"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Grilled kofta, onion and sumac on hot saj.",
+    "calories": 620,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "halloumi-saj": {
+    "id": "halloumi-saj",
+    "name": "Halloumi saj",
+    "url": "/saffron-house-demo/item/halloumi-saj",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Halloumi saj"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Grilled halloumi, tomato and mint.",
+    "calories": 480,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "SAR 20.00"
+    }
+   },
+   "shish-tawook-sandwich": {
+    "id": "shish-tawook-sandwich",
+    "name": "Shish tawook sandwich",
+    "url": "/saffron-house-demo/item/shish-tawook-sandwich",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Shish tawook sandwich"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Charcoal chicken, garlic sauce and pickles in a roll.",
+    "calories": 560,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "kunafa": {
+    "id": "kunafa",
+    "name": "Kunafa",
+    "url": "/saffron-house-demo/item/kunafa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Kunafa"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Warm cheese kunafa, orange blossom syrup, pistachio.",
+    "calories": 520,
+    "allergens": [
+     "Gluten",
+     "Dairy",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "SAR 22.00"
+    }
+   },
+   "umm-ali": {
+    "id": "umm-ali",
+    "name": "Umm Ali",
+    "url": "/saffron-house-demo/item/umm-ali",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Umm Ali"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Baked pastry, milk, nuts and raisins.",
+    "calories": 490,
+    "allergens": [
+     "Gluten",
+     "Dairy",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "SAR 20.00"
+    }
+   },
+   "assorted-baklava": {
+    "id": "assorted-baklava",
+    "name": "Assorted baklava",
+    "url": "/saffron-house-demo/item/assorted-baklava",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Assorted baklava"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Six pieces: pistachio, walnut and cashew.",
+    "calories": 560,
+    "allergens": [
+     "Gluten",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 2800,
+     "currency": "SAR",
+     "formatted": "SAR 28.00"
+    }
+   },
+   "basbousa": {
+    "id": "basbousa",
+    "name": "Basbousa",
+    "url": "/saffron-house-demo/item/basbousa",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Basbousa"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Semolina cake soaked in rose syrup.",
+    "calories": 380,
+    "allergens": [
+     "Gluten",
+     "Dairy"
+    ],
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "muhallabia": {
+    "id": "muhallabia",
+    "name": "Muhallabia",
+    "url": "/saffron-house-demo/item/muhallabia",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Muhallabia"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Milk pudding with rose water and crushed pistachio.",
+    "calories": 300,
+    "allergens": [
+     "Dairy",
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "luqaimat": {
+    "id": "luqaimat",
+    "name": "Luqaimat",
+    "url": "/saffron-house-demo/item/luqaimat",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Luqaimat"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "New"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Fried dough balls with date syrup.",
+    "calories": 430,
+    "allergens": [
+     "Gluten"
+    ],
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "mint-lemonade": {
+    "id": "mint-lemonade",
+    "name": "Mint lemonade",
+    "url": "/saffron-house-demo/item/mint-lemonade",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Mint lemonade"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "Popular"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Fresh lemon, mint and crushed ice.",
+    "calories": 120,
+    "from_price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "fresh-orange-juice": {
+    "id": "fresh-orange-juice",
+    "name": "Fresh orange juice",
+    "url": "/saffron-house-demo/item/fresh-orange-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Fresh orange juice"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "Squeezed to order, no sugar added.",
+    "calories": 150,
+    "from_price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "SAR 16.00"
+    }
+   },
+   "pomegranate-juice": {
+    "id": "pomegranate-juice",
+    "name": "Pomegranate juice",
+    "url": "/saffron-house-demo/item/pomegranate-juice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Pomegranate juice"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Cold-pressed pomegranate.",
+    "calories": 160,
+    "price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "SAR 18.00"
+    }
+   },
+   "jallab": {
+    "id": "jallab",
+    "name": "Jallab",
+    "url": "/saffron-house-demo/item/jallab",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Jallab"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Date, grape molasses and rose water, with pine nuts.",
+    "calories": 170,
+    "allergens": [
+     "Tree nuts"
+    ],
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "SAR 14.00"
+    }
+   },
+   "laban-ayran": {
+    "id": "laban-ayran",
+    "name": "Laban ayran",
+    "url": "/saffron-house-demo/item/laban-ayran",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Laban ayran"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Salted yoghurt drink, chilled.",
+    "calories": 90,
+    "allergens": [
+     "Dairy"
+    ],
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "SAR 8.00"
+    }
+   },
+   "karak-tea": {
+    "id": "karak-tea",
+    "name": "Karak tea",
+    "url": "/saffron-house-demo/item/karak-tea",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Karak tea"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Strong tea, cardamom and evaporated milk.",
+    "calories": 130,
+    "allergens": [
+     "Dairy"
+    ],
+    "price": {
+     "minor": 800,
+     "currency": "SAR",
+     "formatted": "SAR 8.00"
+    }
+   },
+   "arabic-coffee-pot": {
+    "id": "arabic-coffee-pot",
+    "name": "Arabic coffee pot",
+    "url": "/saffron-house-demo/item/arabic-coffee-pot",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Arabic coffee pot"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "Light roast with cardamom and saffron, serves 3.",
+    "calories": 15,
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "SAR 24.00"
+    }
+   },
+   "sparkling-water": {
+    "id": "sparkling-water",
+    "name": "Sparkling water",
+    "url": "/saffron-house-demo/item/sparkling-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Sparkling water"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "330 ml bottle.",
+    "calories": 0,
+    "price": {
+     "minor": 600,
+     "currency": "SAR",
+     "formatted": "SAR 6.00"
+    }
+   },
+   "still-water": {
+    "id": "still-water",
+    "name": "Still water",
+    "url": "/saffron-house-demo/item/still-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "Still water"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "500 ml bottle.",
+    "calories": 0,
+    "price": {
+     "minor": 300,
+     "currency": "SAR",
+     "formatted": "SAR 3.00"
+    }
+   }
+  }
+ },
+ "features": {
+  "offers": [
+   {
+    "id": "off_sweet",
+    "title": "Free dessert on orders over SAR 150",
+    "code": "SWEET"
+   },
+   {
+    "id": "off_family",
+    "title": "Family feast at a special price"
+   }
+  ],
+  "featured": [
+   "hummus",
+   "falafel-8-pcs",
+   "mixed-mezze-platter",
+   "fattoush-bowl",
+   "mixed-grill-platter",
+   "chicken-shish-tawook"
+  ],
+  "reservations": {
+   "table": true,
+   "waitlist": false
+  }
+ },
+ "customer": null,
+ "endpoints": {
+  "cart": "/saffron-house-demo/cart",
+  "quote": "/saffron-house-demo/quote",
+  "place": "/saffron-house-demo/order",
+  "track": "/saffron-house-demo/track",
+  "coupon": "/saffron-house-demo/coupon",
+  "otp": "/saffron-house-demo/otp",
+  "account": "/saffron-house-demo/account",
+  "search": "/saffron-house-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "SAR",
+   "exponent": 2,
+   "symbol_position_effective": "before"
+  },
+  "tax": {
+   "mode": "exclusive",
+   "rate": 15,
+   "label": "VAT"
+  }
+ },
+ "i18n": {}
+}

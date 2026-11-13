@@ -1,0 +1,90 @@
+{%- comment -%}
+  Service list (library v1, B1c) — services and laundry. One row per service
+  (card-service snippet): turnaround, "From" price, pricing unit ("per kg")
+  and a Book button. Booking is the commerce runtime v2 slot flow: Book adds
+  the service to the cart and checkout asks for a time (required for service
+  stores), so the section only explains that step — it needs no JS itself.
+  Any store can use it; an empty store gets an empty state.
+{%- endcomment -%}
+{%- liquid
+  assign want = section.settings.category | append: ''
+  assign total = 0
+  for category in menu.categories
+    assign cid = category.id | append: ''
+    if want == '' or want == cid
+      assign n = category.items | size
+      assign total = total | plus: n
+    endif
+  endfor
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = vocab.catalog
+  endif
+  assign h = section.settings.heading_level | default: 'h2'
+  assign h_group = 'h3'
+  assign h_card = 'h4'
+  if h == 'h3'
+    assign h_group = 'h4'
+    assign h_card = 'h5'
+  endif
+  unless section.settings.show_category_titles
+    assign h_card = h_group
+  endunless
+  assign booking = false
+  if flags.allow_order and features.service or flags.allow_order and flags.scheduling
+    assign booking = true
+  endif
+-%}
+<section class="mbs-service-list mbs-service-list--{{ section.settings.layout | escape }}" aria-labelledby="mbs-sl-{{ section.id | escape }}" data-mb-catalog>
+  <div class="mbs-service-list__head">
+    <{{ h }} class="mbs-service-list__title" id="mbs-sl-{{ section.id | escape }}">{{ heading | escape }}</{{ h }}>
+    {%- if section.settings.show_booking_note and booking and total > 0 -%}
+    <p class="mbs-service-list__note">{%- render 'icon', name: 'clock', size: 16 -%}<span>{{ 'Pick a time at checkout' | t }}</span></p>
+    {%- endif -%}
+  </div>
+  {%- if total > 0 -%}
+    {%- for category in menu.categories -%}
+      {%- assign cid = category.id | append: '' -%}
+      {%- assign n = category.items | size -%}
+      {%- if n > 0 and want == '' or n > 0 and want == cid -%}
+      <div class="mbs-service-list__group" data-mb-cat>
+        {%- if section.settings.show_category_titles -%}<{{ h_group }} class="mbs-service-list__group-title">{{ category.name | escape }}</{{ h_group }}>{%- endif -%}
+        <div class="mbs-service-list__items">
+          {%- for item in category.items -%}
+            {%- render 'card-service', item: item, heading_tag: h_card, show_desc: section.settings.show_description, show_image: section.settings.show_images, flags: flags, vocab: vocab -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- endif -%}
+    {%- endfor -%}
+    <p class="mbs-service-list__empty" data-mb-empty hidden>{{ 'No matches found' | t }}</p>
+  {%- else -%}
+    <p class="mbs-service-list__empty">{{ 'Nothing here yet' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Service list",
+  "group": "catalogue",
+  "verticals": ["services"],
+  "max_per_page": 2,
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Heading (blank = your catalogue word, e.g. Services)", "default": "" },
+    { "id": "heading_level", "type": "select", "label": "Heading level", "options": [
+      { "value": "h2", "label": "H2 (main section)" },
+      { "value": "h3", "label": "H3 (sub-section)" }
+    ], "default": "h2" },
+    { "id": "category", "type": "category", "label": "Only this category (blank = all)", "default": "" },
+    { "id": "layout", "type": "select", "label": "Layout", "options": [
+      { "value": "list", "label": "List" },
+      { "value": "grid", "label": "Two columns on wide screens" }
+    ], "default": "list" },
+    { "id": "show_category_titles", "type": "checkbox", "label": "Show category titles", "default": true },
+    { "id": "show_description", "type": "checkbox", "label": "Show descriptions", "default": true },
+    { "id": "show_images", "type": "checkbox", "label": "Show images", "default": false },
+    { "id": "show_booking_note", "type": "checkbox", "label": "Explain that a time is picked at checkout", "default": true }
+  ],
+  "presets": [{ "name": "Service list" }]
+}
+{% endschema %}

@@ -1,0 +1,1702 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   crave — dark app-style menu template
+   Charcoal surfaces · vivid green accent · white pill CTAs ·
+   floating tab bar · full RTL via logical properties.
+   ═══════════════════════════════════════════════════════════ */
+
+.crave{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is crave's own
+     value, kept as the var() fallback so a store that customized nothing —
+     or a render with no token include — is byte-identical to today. */
+  --bg:var(--tc-background, #15171a);
+  --bg-deep:#101214;                 /* darker chrome; derived bg-700 differs, keep literal */
+  --elev:#1c1f23;
+  --card:var(--tc-surface, #22262b);
+  --card-2:#2a2f35;
+  --stroke:rgba(255,255,255,.07);
+  --stroke-2:rgba(255,255,255,.12);
+  /* ink */
+  --ink:var(--tc-text, #f4f6f5);
+  --ink-2:#adb6ba;
+  --ink-3:#8a949c;
+  /* brand — crave's design accent is the green (the customizer PRIMARY role) */
+  --green:var(--tc-primary, #3fd463);
+  --green-hi:#8bf0a2;                 /* hand-tuned highlight; derived primary-300 differs, keep */
+  --green-deep:#1d9e44;              /* hand-tuned deep; derived primary-600 differs, keep */
+  --green-ink:#0e2d18;
+  --green-grad:linear-gradient(118deg,#98f2ab 0%,#3fd463 42%,#1fa74b 100%);
+  /* semantic status colours — NOT the customizer accent (ratings, spice,
+     discount/availability badges vs. errors/cancelled); intentionally literal */
+  --orange:#ffb02e;
+  --red:#ff6259;
+  /* cta — crave's CTAs are deliberately white pills, not a role fill */
+  --cta-bg:#ffffff;
+  --cta-ink:#111315;
+  /* radius — card + pill follow the layout.radius scale; img/sheet stay
+     literal (control-radius at "pill" would circle images / reshape sheets) */
+  --r-card:var(--tr-card, 18px);
+  --r-img:14px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:26px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* fonts — follow the self-hosted pair (WI-T2); pair "none" emits no --tf-*,
+     so these degrade to crave's own stacks. Both --tf-* stacks already end in
+     the pair's Arabic face, so RTL (--font-ar) can share --tf-body safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal',  'Saudi Riyal', "Plus Jakarta Sans",system-ui,sans-serif);
+  --font-display:var(--tf-heading, 'Saudi Riyal',  'Saudi Riyal', "Fraunces",Georgia,serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal',  'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+/* ── page chrome: the app owns the whole viewport ────────── */
+html:has(.crave), body:has(.crave){height:100%;background:var(--bg-deep, #101214)}
+body:has(.crave){margin:0;overflow:hidden}
+/* the layout's floating WhatsApp widget clashes with the tab bar — crave has its own WhatsApp entry */
+body:has(.crave) #whatsapp-chat-widget{display:none}
+.crave, .crave *{margin:0;padding:0;box-sizing:border-box}
+.crave{
+  font-family:var(--font-ui);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  isolation:isolate;overflow:clip;
+  margin-inline:auto;width:100%;
+}
+[dir="rtl"] .crave, [dir="rtl"] .crave input, [dir="rtl"] .crave button, [dir="rtl"] .crave textarea{font-family:var(--font-ar)}
+/* desktop: centered phone-column against ambient backdrop */
+@media (min-width:861px){
+  body:has(.crave){
+    background:
+      radial-gradient(52rem 30rem at 74% 10%,rgba(63,212,99,.075),transparent 60%),
+      radial-gradient(40rem 26rem at 12% 90%,rgba(255,176,46,.05),transparent 60%),
+      #0c0d0e;
+  }
+  .crave{
+    max-width:430px;top:2dvh;bottom:2dvh;left:0;right:0;
+    border-radius:34px;border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 44px 90px -30px rgba(0,0,0,.85);
+  }
+}
+/* :where() keeps these resets at zero specificity so every
+   single-class component rule (.cta, .rail-card, .iconbtn …) wins */
+:where(.crave) img{display:block;max-width:100%}
+:where(.crave) button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:where(.crave) a{color:inherit}
+.crave input,.crave textarea,.crave select{
+  font:inherit;color:var(--ink);background:var(--card);
+  border:1px solid var(--stroke);border-radius:14px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+.crave input::placeholder,.crave textarea::placeholder{color:var(--ink-3)}
+.crave input:focus,.crave textarea:focus,.crave select:focus{border-color:var(--green);background:var(--elev)}
+.crave ::-webkit-scrollbar{display:none}
+.crave [hidden]{display:none !important}
+
+/* icons */
+.crave .ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.crave .ic-xs{width:15px;height:15px}
+
+/* ── views ───────────────────────────────────────────────── */
+.cv-views{position:relative;flex:1;min-height:0}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0}
+.tail-space{height:118px}
+.tail-space.tall{height:40px}
+.page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 16px}
+.page-head h1{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.page-head.sub{justify-content:flex-start;gap:14px}
+
+/* ── splash ──────────────────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--bg);
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:66px 30px 0;overflow:hidden;
+  transition:opacity .45s var(--ease),visibility 0s linear .45s;
+}
+.splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.splash-title{
+  font-family:var(--font-display);font-weight:560;font-size:52px;line-height:1.06;
+  letter-spacing:-.015em;position:relative;z-index:2;
+}
+[dir="rtl"] .splash-title{font-family:var(--font-ar);font-weight:700}
+.st-line{display:flex;align-items:center;gap:14px;opacity:0;transform:translateY(26px);animation:st-in .7s var(--ease) forwards}
+.st-line:nth-child(2){animation-delay:.12s}
+.st-line:nth-child(3){animation-delay:.24s}
+@keyframes st-in{to{opacity:1;transform:none}}
+.st-accent{color:var(--green-hi)}
+.st-badge{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--stroke-2);flex:none;rotate:-6deg;background:var(--card)}
+.st-badge img{width:100%;height:100%;object-fit:cover}
+.st-rings{display:flex;flex:none}
+.st-rings i{width:32px;height:32px;border:2.5px solid var(--orange);border-radius:50%;margin-inline-start:-14px;opacity:.85}
+.st-rings i:first-child{margin-inline-start:0}
+.splash-hero{position:absolute;inset-inline:0;bottom:-40px;height:56%;z-index:1}
+.splash-blob{
+  position:absolute;inset-inline-start:-18%;bottom:-22%;width:130%;height:110%;
+  background:var(--green-grad);border-radius:46% 54% 40% 60%/58% 46% 54% 42%;
+  animation:blob-drift 9s ease-in-out infinite alternate;
+}
+@keyframes blob-drift{to{border-radius:52% 48% 56% 44%/44% 58% 42% 56%;transform:rotate(3deg) scale(1.03)}}
+.splash-dish{
+  position:absolute;inset-inline-start:50%;bottom:-11%;width:97%;aspect-ratio:1;object-fit:cover;
+  border-radius:50%;transform:translateX(-50%);
+  box-shadow:0 30px 60px -18px rgba(0,0,0,.6);
+  animation:dish-rise 1s var(--ease-pop) .35s backwards;
+}
+[dir="rtl"] .splash-dish{transform:translateX(50%)}
+@keyframes dish-rise{from{transform:translateX(-50%) translateY(70px) rotate(-8deg);opacity:0}}
+.splash-chip{position:absolute;width:64px;height:64px;object-fit:cover;border-radius:18px;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+.chip-a{inset-inline-start:8%;bottom:52%;rotate:-14deg;animation:chip-float 4s ease-in-out infinite alternate}
+.chip-b{inset-inline-end:7%;bottom:44%;rotate:11deg;animation:chip-float 4.6s ease-in-out .4s infinite alternate-reverse}
+@keyframes chip-float{to{translate:0 -14px}}
+.splash-doodles .dd{position:absolute;width:34px;height:34px;stroke:var(--ink);stroke-width:1.6;fill:none;opacity:.5}
+.dd-1{top:34px;inset-inline-end:38px;animation:dd-spin 14s linear infinite}
+.dd-2{top:190px;inset-inline-end:18%}
+.dd-3{top:38%;inset-inline-start:26px;width:16px;height:16px;stroke:var(--green)}
+.dd-4{top:30%;inset-inline-end:8%;stroke:var(--orange)}
+@keyframes dd-spin{to{rotate:360deg}}
+.splash-skip{
+  position:absolute;top:16px;inset-inline-end:20px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.09);backdrop-filter:blur(8px);
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+
+/* ── home top ────────────────────────────────────────────── */
+.home-top{display:flex;align-items:center;gap:11px;padding:14px 2px 4px}
+.avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;border:1.5px solid var(--stroke-2);flex:none;background:var(--card);display:grid;place-items:center;color:var(--ink-2);font-weight:800;font-size:17px;cursor:pointer;padding:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar .ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8}
+.avatar--me{background:var(--green-grad);color:var(--green-ink);border-color:transparent}
+.loc{flex:1;min-width:0;text-align:start}
+.loc-label{display:block;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.loc-value{display:flex;align-items:center;gap:5px;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden}
+.loc-value b{overflow:hidden;text-overflow:ellipsis}
+.loc-value .ic{width:15px;height:15px;color:var(--green)}
+.iconbtn{
+  position:relative;width:44px;height:44px;flex:none;border-radius:50%;
+  background:var(--card);border:1px solid var(--stroke);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn .dot{position:absolute;top:10px;inset-inline-end:11px;width:7px;height:7px;border-radius:50%;background:var(--red);outline:2.5px solid var(--card)}
+.iconbtn.solid{background:var(--card-2);border:0}
+.iconbtn.wa{background:var(--green);color:var(--green-ink);border:0}
+/* compact icon button — matches the sort pill height when grouped in a head row */
+.iconbtn.sm{width:38px;height:38px}
+.iconbtn.sm .ic{width:19px;height:19px}
+/* grid header: keep the sort + layout controls together on the trailing edge */
+.head-tools{display:flex;align-items:center;gap:8px}
+
+.status-strip{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 2px 2px;margin-block-end:14px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.open-chip{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink-2)}
+.open-chip i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(63,212,99,.5);animation:cv-pulse 2.2s infinite}
+.open-chip.closed i{background:var(--red);animation:none}
+@keyframes cv-pulse{70%{box-shadow:0 0 0 7px transparent}}
+.viewers{display:inline-flex;align-items:center;gap:5px}
+.viewers b{color:var(--ink-2)}
+
+/* search */
+.searchrow{display:flex;gap:10px;padding-top:12px}
+.search{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:0 18px;height:50px;color:var(--ink-3);
+  transition:border-color var(--t-fast);
+}
+.search:focus-within{border-color:var(--stroke-2)}
+.search input{background:none;border:0;padding:0;height:100%;font-size:14.5px}
+.search input:focus{background:none}
+.filterbtn{
+  position:relative;width:50px;height:50px;border-radius:var(--r-pill);flex:none;
+  background:var(--card);border:1px solid var(--stroke);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.filterbtn:active{transform:scale(.9)}
+.filterbtn .dot{position:absolute;top:9px;inset-inline-end:10px;width:8px;height:8px;border-radius:50%;background:var(--green);outline:2.5px solid var(--bg)}
+
+/* SEARCH-RUN: the searchrow bar is now a button opening a full-screen overlay */
+.search{width:100%;cursor:pointer;text-align:start;font:inherit}
+.search .search-ph{flex:1;min-width:0;color:var(--ink-3);font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-searchlayer{
+  position:absolute;inset:0;z-index:85;display:flex;flex-direction:column;
+  background:var(--bg);opacity:0;transform:translateY(10px);
+  transition:opacity .24s var(--ease),transform .24s var(--ease);pointer-events:none;
+}
+.cv-searchlayer.is-open{opacity:1;transform:none;pointer-events:auto}
+.cv-searchlayer[hidden]{display:none}
+.cv-sl-top{display:flex;align-items:center;gap:10px;padding:calc(14px + env(safe-area-inset-top)) 18px 12px}
+.cv-sl-field{
+  flex:1;display:flex;align-items:center;gap:10px;color:var(--ink-3);
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:0 16px;height:48px;
+}
+.cv-sl-field .ic{flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.cv-sl-field input{flex:1;min-width:0;background:none;border:0;padding:0;height:100%;font:inherit;font-size:15px;color:var(--ink)}
+.cv-sl-cancel{background:none;border:0;color:var(--ink-2);font:inherit;font-weight:600;font-size:14px;padding:6px;cursor:pointer;flex:none}
+.cv-sl-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 14px 120px}
+.cv-sl-row{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
+  padding:9px 8px;border-radius:16px;color:inherit;text-decoration:none;
+  animation:cvsl-in .28s var(--ease) backwards;
+}
+.cv-sl-row:active{background:var(--card)}
+.cv-sl-row img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none;background:var(--card)}
+.cv-sl-row>div{flex:1;min-width:0}
+.cv-sl-row b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-sl-row small{display:block;color:var(--ink-2);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.cv-sl-row .price{font-weight:700;font-size:14px;flex:none;color:var(--ink)}
+.cv-sl-none{display:flex;flex-direction:column;align-items:center;gap:14px;padding:64px 24px;color:var(--ink-3);text-align:center}
+.cv-sl-none .empty-art{width:64px;height:64px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+@keyframes cvsl-in{from{opacity:0;transform:translateY(8px)}}
+
+/* banners */
+.banners{position:relative;margin-top:18px}
+.banners:empty{display:none}
+.banner-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:20px}
+.banner{
+  position:relative;flex:0 0 88%;scroll-snap-align:start;
+  border-radius:20px;overflow:hidden;height:132px;
+  display:flex;align-items:center;color:var(--green-ink);
+  text-align:start;text-decoration:none;
+}
+.banner.alt{color:#3a2200}
+.banner-bg{position:absolute;inset:0;background:var(--green-grad)}
+.banner.alt .banner-bg{background:linear-gradient(118deg,#ffd58a,#ffb02e 55%,#f09000)}
+.banner-copy{position:relative;z-index:2;padding-inline-start:20px;max-width:56%}
+.banner-kicker{font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;opacity:.75;display:block}
+.banner-title{font-size:20px;font-weight:800;line-height:1.12;letter-spacing:-.01em;margin:3px 0 10px;display:block;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.banner-btn{display:inline-block;padding:8px 15px;border-radius:var(--r-pill);background:#111315;color:#fff;font-size:12px;font-weight:700}
+.banner-img{
+  position:absolute;inset-inline-end:-34px;top:50%;translate:0 -50%;
+  width:172px;height:172px;object-fit:cover;border-radius:50%;
+  box-shadow:0 18px 40px rgba(0,0,0,.35);
+  transition:transform .6s var(--ease);
+}
+.banner:hover .banner-img{transform:rotate(7deg) scale(1.04)}
+.banner-dots{display:flex;justify-content:center;gap:6px;padding-top:12px}
+.banner-dots i{width:6px;height:6px;border-radius:var(--r-pill);background:var(--card-2);transition:all .3s var(--ease)}
+.banner-dots i.is-on{width:20px;background:var(--green)}
+
+/* section heads */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 24px) 2px 13px}
+.section-head h2{font-size:17.5px;font-weight:800;letter-spacing:-.015em;display:flex;align-items:center;gap:7px}
+/* menu title now sits above the categories; its own head has no tools, and the grid's
+   tools-only head aligns those controls to the end (no title to space-between with). */
+.cv-menu-head{padding-bottom:10px}
+/* Tools-only head: sort + layout hold the trailing edge. The diet filter, when
+   the store has one, takes the leading edge via its own auto margin — so the row
+   still ends flush when there is no filter to balance it against. */
+.grid-tools-head{justify-content:flex-end;padding-top:6px}
+.grid-tools-head .filterbtn{margin-inline-end:auto}
+.flame{color:var(--orange)}
+.sortbtn{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink-3);padding:6px 10px;border-radius:var(--r-pill);background:var(--card);border:1px solid var(--stroke)}
+
+/* rails */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 6px}
+.rail-card{
+  flex:0 0 148px;width:148px;min-width:0;scroll-snap-align:start;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:9px;position:relative;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.rail-card:active{transform:scale(.96)}
+.rail-card img{width:100%;aspect-ratio:1.15;object-fit:cover;border-radius:var(--r-img);background:var(--card-2)}
+.rail-card b{display:block;font-size:13px;font-weight:700;margin:8px 2px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-card .price{font-size:12.5px;color:var(--green);font-weight:700;padding:0 2px}
+.rail-card .off{position:absolute;top:16px;inset-inline-start:16px;background:var(--orange);color:#3a2200;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+
+/* chips */
+.chips{display:flex;gap:9px;overflow-x:auto;padding:20px 2px 4px;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 78%,transparent)}
+.chip{
+  flex:none;display:flex;align-items:center;gap:7px;
+  padding:10px 17px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);
+  font-size:13.5px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.chip:active{transform:scale(.94)}
+.chip.is-on{background:var(--cta-bg);border-color:var(--cta-bg);color:var(--cta-ink);font-weight:700}
+.chip-img{width:22px;height:22px;border-radius:50%;object-fit:cover;flex:none;background:var(--card-2)}
+
+/* secondary sub-category chips — revealed under the active parent */
+.subchips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;position:sticky;top:52px;z-index:4;background:linear-gradient(var(--bg) 82%,transparent);animation:subrow-in .28s var(--ease)}
+.subchips[hidden]{display:none}
+.subgroup{display:flex;gap:8px}
+.subgroup[hidden]{display:none}
+.subchip{
+  flex:none;display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--r-pill);
+  background:transparent;border:1px solid var(--stroke);
+  font-size:12.5px;font-weight:600;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.subchip:active{transform:scale(.94)}
+.subchip.is-on{background:var(--card-2);border-color:var(--ink-3);color:var(--ink)}
+.subchip .chip-img{width:18px;height:18px}
+@keyframes subrow-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* product grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:8px}
+.grid.is-list{grid-template-columns:1fr}
+.card{
+  position:relative;background:var(--card);border:1px solid var(--stroke);
+  border-radius:var(--r-card);padding:9px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast),opacity .3s;
+  animation:card-in .5s var(--ease) backwards;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.card:active{transform:scale(.965)}
+.card.is-unavailable{opacity:.4;pointer-events:none}
+.card-imgwrap{display:block;position:relative;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.08;background:var(--card-2)}
+.grid.is-list .card{display:grid;grid-template-columns:104px 1fr;gap:12px;align-items:center}
+.grid.is-list .card-imgwrap{aspect-ratio:1}
+/* compact thumbnail can't fit corner badges + heart without overlap (esp. RTL) — drop badges, keep the heart */
+.grid.is-list .card-badges{display:none}
+.card-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-imgwrap img{transform:scale(1.06)}
+.card-fav{
+  position:absolute;top:7px;inset-inline-end:7px;width:31px;height:31px;border-radius:50%;
+  background:rgba(16,18,20,.55);backdrop-filter:blur(6px);
+  display:grid;place-items:center;color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop);z-index:2;
+}
+.card-fav:active{transform:scale(.82)}
+.card-fav .ic{width:15px;height:15px}
+.card-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.card-badges{position:absolute;top:8px;inset-inline-start:8px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;z-index:2}
+.badge-pop{background:var(--orange);color:#3a2200;font-size:10px;font-weight:800;padding:3px 8px;border-radius:var(--r-pill)}
+.badge-veg{width:17px;height:17px;border-radius:5px;background:rgba(16,18,20,.6);display:grid;place-items:center}
+.badge-veg i{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.badge-veg.nv i{background:var(--red)}
+.card-soldout{
+  position:absolute;inset:0;background:rgba(16,18,20,.62);backdrop-filter:blur(2px) grayscale(1);
+  display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;z-index:3;
+}
+.card-name{display:block;font-size:14px;font-weight:700;margin:9px 2px 1px;line-height:1.3}
+.card-meta{display:flex;align-items:center;gap:8px;padding:1px 2px 3px;font-size:11.5px;color:var(--ink-3)}
+.card-meta .star{color:var(--orange);display:inline-flex;align-items:center;gap:3px;font-weight:700}
+.card-meta .star .ic{width:11px;height:11px;fill:currentColor}
+.spice{letter-spacing:-2px;font-size:10.5px}
+.card-foot{display:flex;align-items:flex-end;justify-content:space-between;padding:2px 2px 3px}
+.card-from{font-size:10px;color:var(--ink-3);font-weight:600;display:block}
+.card-price{font-size:15.5px;font-weight:800;color:var(--ink);display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+/* Happy-hour "was" stacks ABOVE the live price (not inline beside it, which stole width). */
+.card-price s{margin-inline-end:0 !important;font-size:11px;line-height:1.2}
+/* Happy-hour ribbon bonded to the thumbnail bottom (imgwrap clips it to the
+   rounded corners) — moved off the price row where it crowded the price. */
+.card-imgwrap .hh-badge{position:absolute;bottom:0;inset-inline:0;z-index:2;background:#f59e0b;color:#1b1b1b;font-size:10px;font-weight:800;letter-spacing:.02em;text-align:center;padding:5px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-add{
+  width:34px;height:34px;border-radius:12px;flex:none;
+  background:var(--green);color:var(--green-ink);
+  display:grid;place-items:center;
+  box-shadow:0 6px 16px -6px rgba(63,212,99,.55);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.card-add:active{transform:scale(.85)}
+.card-add .ic{width:17px;height:17px;stroke-width:2.2}
+.avail-badge{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(16,18,20,.7);color:var(--orange);font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill);z-index:2}
+
+/* skeletons */
+.sk .card-imgwrap,.sk-line{position:relative;overflow:hidden;background:var(--card-2)}
+.sk-line{height:13px;border-radius:7px;margin:9px 2px 6px}
+.sk-line.short{width:55%;margin-top:2px}
+.sk .card-imgwrap::after,.sk-line::after{
+  content:"";position:absolute;inset:0;translate:-100% 0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  animation:shimmer 1.3s infinite;
+}
+@keyframes shimmer{to{translate:100% 0}}
+
+/* empty states */
+.grid-empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.7}
+
+/* ── product view ────────────────────────────────────────── */
+.view[data-view="product"] .view-scroll{padding:0}
+.p-hero{position:relative}
+.p-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;aspect-ratio:1.12;background:var(--elev)}
+.p-gallery img{flex:0 0 100%;scroll-snap-align:start;object-fit:cover;width:100%;height:100%}
+.p-gallery-dots{position:absolute;bottom:34px;left:50%;translate:-50% 0;display:flex;gap:5px;z-index:4}
+.p-gallery-dots :is(i,button){width:6px;height:6px;padding:0;border:0;border-radius:var(--r-pill);background:rgba(255,255,255,.45);transition:all .3s var(--ease);cursor:pointer}
+.p-gallery-dots :is(i,button).is-on{width:18px;background:#fff}
+/* prev/next arrows — for pointer users who can't swipe the gallery. Hidden on
+   touch (no hover), shown on hover-capable pointers. */
+.gal-nav{position:absolute;top:calc(50% - 20px);z-index:4;width:40px;height:40px;border-radius:50%;display:none;place-items:center;
+  background:rgba(15,15,17,.55);color:#fff;border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.gal-nav .ic{width:20px;height:20px}
+.gal-nav.prev{inset-inline-start:12px}
+.gal-nav.next{inset-inline-end:12px}
+.gal-nav:hover{background:rgba(15,15,17,.78)}
+.gal-nav:active{transform:scale(.9)}
+[dir="rtl"] .gal-nav .ic{transform:scaleX(-1)}
+@media (hover:hover) and (pointer:fine){.gal-nav:not([hidden]){display:grid}}
+.p-hero::after{content:"";position:absolute;inset-inline:0;bottom:-1px;height:70px;background:linear-gradient(transparent,var(--bg));pointer-events:none;z-index:1}
+.fab{
+  position:absolute;top:14px;width:42px;height:42px;border-radius:50%;z-index:4;
+  background:rgba(16,18,20,.55);backdrop-filter:blur(8px);color:#fff;
+  display:grid;place-items:center;border:1px solid rgba(255,255,255,.08);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+.fab.back{inset-inline-start:16px}
+[dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+.fab.fav{inset-inline-end:16px}
+.fab.fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+.fab.inline{position:static;background:var(--card);border:1px solid var(--stroke);color:var(--ink);flex:none}
+.p-stock{
+  position:absolute;bottom:56px;inset-inline-start:16px;z-index:3;
+  background:var(--orange);color:#3a2200;font-size:11px;font-weight:800;
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.p-body{padding:2px 20px 0;position:relative;z-index:2;margin-top:-14px}
+.p-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.p-title{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.p-price{text-align:end}
+.p-price b{font-size:21px;font-weight:800;color:var(--green)}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px;padding:13px 0 4px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;color:var(--ink-2);
+  background:var(--card);border:1px solid var(--stroke);
+  padding:7px 12px;border-radius:var(--r-pill);
+}
+.meta-chip .ic{width:14px;height:14px}
+.meta-chip.star{color:var(--orange)}
+.meta-chip.star .ic{fill:currentColor}
+.meta-chip.kcal{color:var(--green-hi)}
+.p-desc{padding:12px 0 2px;font-size:14px;line-height:1.6;color:var(--ink-2);max-width:62ch}
+.p-desc b{color:var(--ink);font-weight:700;display:block;margin-bottom:4px;font-size:14.5px}
+.p-allergens{display:flex;flex-wrap:wrap;gap:7px;padding:10px 0 2px}
+.allergen{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--orange);
+  background:rgba(255,176,46,.09);border:1px solid rgba(255,176,46,.25);
+  padding:5px 11px;border-radius:var(--r-pill);
+}
+.allergen img{width:14px;height:14px;border-radius:3px;object-fit:cover}
+.p-groups{display:grid;gap:16px;padding:18px 0 2px}
+.opt-group{background:var(--elev);border:1px solid var(--stroke);border-radius:var(--r-card);padding:15px}
+.opt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;gap:8px}
+.opt-head b{font-size:14.5px;font-weight:700}
+.opt-req{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--green);background:rgba(63,212,99,.1);padding:3px 9px;border-radius:var(--r-pill);white-space:nowrap}
+.opt-req.optional{color:var(--ink-3);background:var(--card)}
+/* a required group the guest still owes when they hit Add to Cart: ring + shake +
+   flip its badge red so it's obvious WHERE to choose (was a fleeting toast only). */
+.opt-group.needs-pick{border-color:var(--red);box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 24%,transparent);animation:needs-pick-shake .5s var(--ease)}
+.opt-group.needs-pick .opt-req{color:#fff;background:var(--red)}
+@keyframes needs-pick-shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.opt-list{display:grid;gap:4px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:9px 6px;border-radius:12px;
+  transition:background var(--t-fast);cursor:pointer;
+}
+.opt:active{background:var(--card)}
+.opt-thumb{width:36px;height:36px;border-radius:9px;object-fit:cover;flex:none;background:var(--card)}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:50%;
+  border:2px solid var(--stroke-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.opt-ctl.box{border-radius:7px}
+.opt.is-on .opt-ctl{border-color:var(--green);background:var(--green)}
+.opt-ctl svg{width:11px;height:11px;stroke:var(--green-ink);stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-name{flex:1;font-size:14px;font-weight:600;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink)}
+.opt-price{font-size:13px;font-weight:700;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--green)}
+
+/* rate this dish */
+.rate-row{display:flex;align-items:center;gap:8px;padding:16px 0 0;flex-wrap:wrap}
+.rate-row>span{font-size:13px;font-weight:600;color:var(--ink-2)}
+.rate-stars{display:flex;gap:4px}
+.rate-stars button{width:34px;height:34px;display:grid;place-items:center;color:var(--ink-3);transition:transform var(--t-fast) var(--ease-pop)}
+.rate-stars button:active{transform:scale(.8)}
+.rate-stars button .ic{width:20px;height:20px}
+.rate-stars button.is-on{color:var(--orange)}
+.rate-stars button.is-on .ic{fill:currentColor}
+.rate-thanks{font-size:12.5px;color:var(--green);font-weight:700}
+
+/* bottom cta bar */
+.p-cta{
+  flex:none;display:flex;gap:12px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--bg) 30%);
+  position:relative;z-index:6;
+}
+.qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:5px;
+}
+.qty-btn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--ink-2);transition:all var(--t-fast) var(--ease-pop)}
+.qty-btn:active{transform:scale(.82);background:var(--card-2)}
+.qty output{min-width:30px;text-align:center;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.cta{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  background:var(--cta-bg);color:var(--cta-ink);
+  font-size:15.5px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+  box-shadow:0 10px 26px -10px rgba(255,255,255,.25);
+  position:relative;overflow:hidden;
+}
+.cta:active{transform:scale(.97)}
+.cta b{font-weight:800;opacity:.55}
+.cta.wide{width:100%}
+.cta:disabled{opacity:.45;box-shadow:none}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(17,19,21,.2);border-top-color:var(--cta-ink);
+  animation:cv-spin .7s linear infinite;
+}
+/* footer CTAs on root views must clear the floating tab bar */
+.view[data-view="cart"] .p-cta{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+/* product-page "View cart" shortcut beside Add to Cart (revealed once bag > 0) */
+.cta-view-cart{flex:none;position:relative;width:54px;height:54px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.cta-view-cart[hidden]{display:none}
+.cta-view-cart:active{transform:scale(.9)}
+.cta-view-cart .ic{width:23px;height:23px}
+.pvc-badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--cta-bg);color:var(--cta-ink);font-size:11px;font-weight:800;font-style:normal;display:grid;place-items:center;outline:2px solid var(--bg)}
+@keyframes cv-spin{to{rotate:360deg}}
+
+/* ── cart ────────────────────────────────────────────────── */
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:10px;overflow:hidden;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.removing{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.cart-item img{width:76px;height:76px;object-fit:cover;border-radius:var(--r-img);background:var(--card-2)}
+/* image + name are tappable (reopen the product) — reset the button chrome */
+.ci-im{position:relative;width:76px;height:76px;border-radius:var(--r-img);overflow:hidden;background:var(--card-2);padding:0;border:0;cursor:pointer;align-self:start}
+.ci-im img{width:100%;height:100%;display:block}
+.ci-hh{position:absolute;inset-inline:0;bottom:0;font-size:8.5px;font-weight:800;text-align:center;padding:2px 3px;background:var(--green);color:var(--green-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-name{display:block;background:none;border:0;padding:0;text-align:start;cursor:pointer;color:inherit;font-family:inherit;font-size:14px;font-weight:700;line-height:1.25}
+.ci-opts{font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.45}
+.ci-price{font-size:14px;font-weight:800;color:var(--green);margin-top:5px}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3)}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3)}
+/* Side column: remove tucked top-right, a HORIZONTAL stepper at the bottom —
+   the old vertical +/qty/−/trash stack left the card tall with dead space. */
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;align-self:stretch}
+.ci-side .qty{flex-direction:row;padding:3px}
+/* 32px is the tap-target floor — the icons stay small, only the hit area grows */
+.ci-side .qty-btn{width:32px;height:32px}
+.ci-side .qty output{font-size:13px;min-width:0;padding:2px 0}
+.ci-remove{color:var(--ink-3);width:30px;height:30px;display:grid;place-items:center;border-radius:50%}
+.ci-remove:active{color:var(--red)}
+
+.cart-tools{display:grid;gap:16px;padding-top:18px}
+.cart-tools h3,.cv-h3{font-size:14.5px;font-weight:800;margin-bottom:11px;letter-spacing:-.01em;display:block}
+
+.seg{display:flex;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--ink-3);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:16px;height:16px}
+.seg button.is-on{background:var(--cta-bg);color:var(--cta-ink)}
+.seg.mini{padding:3px}
+.seg.mini button{padding:7px 13px;flex:none}
+
+/* The shared home order-type bar ships deliberately theme-neutral (a grey track
+   with generic pills), which reads as a foreign control on this theme. Dress it
+   as crave's own `.seg`: card track, hairline stroke, pill radius, CTA fill on
+   the pressed chip. ID-scoped because the partial's own rules are ID-scoped too
+   — a class selector here would lose to them. Full width, like every other
+   block in the scroll column, rather than the partial's inline-flex hug. */
+#mbOrderType{padding:14px 0 2px}
+#mbOrderType .mbt-seg{
+  display:flex;width:100%;gap:3px;padding:4px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);
+}
+#mbOrderType .mbt-chip{
+  flex:1;padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:700;color:var(--ink-3);opacity:1;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast) var(--ease);
+}
+#mbOrderType .mbt-chip[aria-pressed="true"]{background:var(--cta-bg);color:var(--cta-ink)}
+
+/* Catering lives in a sheet here, so the shared form's own page-section padding
+   (3rem, centred, 720px) would open a mostly-empty panel. The sheet supplies the
+   frame; the form only supplies the fields. */
+#cvCateringSheet .tp-catering{padding:0;max-width:none}
+/* The form's own inline styles hold the centring; these only set the type. */
+#cvCateringSheet .tp-catering h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em}
+#cvCateringSheet .tp-catering>p{font-size:13px;color:var(--ink-3)}
+#cvCateringSheet .tp-catering input,
+#cvCateringSheet .tp-catering textarea{
+  background:var(--card);border:1px solid var(--stroke);border-radius:12px;
+  color:var(--ink);font:inherit;font-size:14px;padding:12px 14px;
+}
+#cvCateringSheet .tp-catering label{font-size:12px;font-weight:600;color:var(--ink-3)}
+#cvCateringSheet .tp-catering button[type=submit]{
+  background:var(--cta-bg);color:var(--cta-ink);border-radius:var(--r-pill);
+  font-weight:800;font-size:14px;padding:14px;
+}
+/* The native datetime-local calendar indicator is a dark glyph, invisible on the
+   dark field. Invert it so it reads (WebKit only ships the button). */
+#cvCateringSheet .tp-catering input[type=date]::-webkit-calendar-picker-indicator,
+#cvCateringSheet .tp-catering input[type=datetime-local]::-webkit-calendar-picker-indicator{
+  filter:invert(1);opacity:.7;cursor:pointer;
+}
+/* Explicit close button (top corner of the sheet), restyled off the grab-bar
+   base it borrows for its close wiring. Generic so any sheet can carry one. */
+.sheet .sheet-x{
+  position:absolute;inset-block-start:12px;inset-inline-end:14px;
+  width:34px;height:34px;margin:0;border-radius:50%;border:0;
+  background:var(--card-2);color:var(--ink-2);display:grid;place-items:center;
+  cursor:pointer;z-index:2;
+}
+.sheet .sheet-x .ic{width:18px;height:18px}
+.sheet .sheet-x:active{transform:scale(.9)}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--green)}
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.when-time{width:auto;flex:1;min-width:0;padding:11px 14px;border-radius:var(--r-pill);font-size:13.5px;color-scheme:dark}
+/* make native date/time pickers legible + easy to tap in the dark UI */
+.crave input[type="datetime-local"],.crave input[type="date"],.crave input[type="time"]{color-scheme:dark;min-height:48px}
+.crave input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.crave input[type="date"]::-webkit-calendar-picker-indicator,
+.crave input[type="time"]::-webkit-calendar-picker-indicator{
+  filter:invert(1);opacity:.9;cursor:pointer;width:20px;height:20px;padding:3px;margin-inline-start:4px;
+  border-radius:6px;background:var(--elev);
+}
+.crave input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+.crave input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.crave input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1;background:var(--card-2)}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--card);border:1px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px;padding-inline-start:15px}
+.coupon-field .ic{color:var(--green);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:13.5px}
+.coupon-field input:focus{background:none}
+.coupon-field.is-applied{border-color:var(--green);border-style:solid}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--card-2);font-size:12.5px;font-weight:700;
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+.coupon-msg{font-size:12px;padding:7px 6px 0;color:var(--green)}
+.coupon-msg.err{color:var(--red)}
+
+.ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:9px}
+.ordernote textarea{resize:none;font-size:13.5px}
+
+/* ── checkout order summary ── */
+.ck-items{background:var(--elev);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px;display:grid;gap:11px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.ck-edit{padding:0}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px;background:var(--card-2)}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--green);text-align:end}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+.totals{background:var(--elev);border:1px solid var(--stroke);border-radius:var(--r-card);padding:15px;display:grid;gap:9px}
+.tr-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.tr-row b{font-weight:600;font-variant-numeric:tabular-nums}
+.tr-row.disc{color:var(--green)}
+.tr-row.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:15px}
+.tr-row.grand b{font-weight:800;font-size:17px}
+.minorder{font-size:12.5px;color:var(--orange);display:flex;gap:7px;align-items:center;padding:0 4px}
+.err-box{font-size:13px;color:var(--red);background:rgba(255,98,89,.08);border:1px solid rgba(255,98,89,.3);border-radius:12px;padding:10px 14px}
+
+.waiter-row{display:flex;gap:10px}
+.waiter-row .ghostbtn{flex:1;justify-content:center}
+.ghostbtn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 18px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);text-decoration:none;justify-content:center;
+}
+.ghostbtn:active{transform:scale(.96)}
+.ghostbtn.sm{padding:8px 14px;font-size:12.5px}
+.linkbtn{font-size:13px;font-weight:600;color:var(--green);padding:10px 2px 0;text-align:start}
+
+/* ── checkout ────────────────────────────────────────────── */
+.cv-block{padding-top:16px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.field-label{display:block;font-size:12px;font-weight:700;color:var(--ink-3);margin:10px 0 7px;letter-spacing:.02em}
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1.5px solid var(--stroke);border-radius:16px;
+  padding:13px 15px;transition:all var(--t-fast) var(--ease);text-align:start;width:100%;
+}
+.pm.is-on{border-color:var(--green);background:rgba(63,212,99,.06)}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--card-2);display:grid;place-items:center;color:var(--ink-2)}
+.pm.is-on .pm-ic{background:var(--green);color:var(--green-ink)}
+.pm b{flex:1;font-size:14px;font-weight:700}
+.pm small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast);flex:none}
+.pm.is-on .pm-radio{border-color:var(--green)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:14px;
+  background:var(--card);border:1.5px solid var(--stroke);
+  font-size:13.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--green);color:var(--green);background:rgba(63,212,99,.07)}
+.terms{display:flex;gap:10px;align-items:flex-start;padding:16px 2px 0;font-size:12.5px;color:var(--ink-3);cursor:pointer}
+.terms input{width:17px;height:17px;accent-color:var(--green);margin-top:1px;flex:none}
+
+/* ── confirmed ───────────────────────────────────────────── */
+.view-center{justify-content:center}
+.confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:6px}
+.box-art{position:relative;width:230px;height:200px;margin-bottom:6px}
+.cbox{position:absolute;inset:0;margin:auto;width:180px;height:154px;overflow:visible;animation:box-pop .7s var(--ease-pop) .1s backwards}
+@keyframes box-pop{0%{transform:scale(.3) rotate(-10deg);opacity:0}}
+.box-body{fill:#2ec358}
+.box-front{fill:#1d9e44}
+.flap{fill:#8bf0a2}
+.check-badge circle{fill:var(--green);stroke:var(--bg);stroke-width:6}
+.check-badge{animation:box-pop .6s var(--ease-pop) .45s backwards}
+.check{stroke:var(--green-ink);stroke-width:6;fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:cv-draw .5s var(--ease) .75s forwards}
+@keyframes cv-draw{to{stroke-dashoffset:0}}
+.box-doodles{position:absolute;inset:-12px;color:var(--ink);opacity:.75;animation:dd-breathe 3.4s ease-in-out infinite alternate}
+.box-doodles .bd{stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
+.bd-star{fill:var(--orange);stroke:none}
+@keyframes dd-breathe{to{transform:scale(1.05) rotate(2deg)}}
+.confirm-title{font-size:27px;font-weight:800;letter-spacing:-.02em}
+.confirm-sub{font-size:13.5px;color:var(--ink-3);line-height:1.65}
+.confirm-code{
+  font-size:12.5px;font-weight:700;color:var(--green-hi);
+  background:rgba(63,212,99,.08);border:1px dashed rgba(63,212,99,.4);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .cta{max-width:280px;text-decoration:none}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.confirm-actions .ghostbtn{width:100%;max-width:280px}
+.confirm-actions .ghostbtn .ic{width:17px;height:17px}
+.confirm-actions .ghostbtn:hover{background:var(--card-2)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#3fd463);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track page (shared card look) ───────────────────────── */
+.track-card{background:var(--elev);border:1px solid var(--stroke);border-radius:var(--r-card);padding:17px;display:grid;gap:16px}
+.track-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tk-label{font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.02em;margin-bottom:2px}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--green)}
+.timeline{list-style:none;display:grid;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--stroke-2);background:var(--elev);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:var(--green-ink);stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--stroke-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--green);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--green);background:var(--green)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{box-shadow:0 0 0 0 rgba(63,212,99,.5);animation:cv-pulse 2s infinite}
+.tl-copy b{font-size:14px;font-weight:700;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--ink-3)}
+.tl.cancelled .tl-node{border-color:var(--red);background:var(--red)}
+.order-lines{display:grid;gap:8px}
+.order-line{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:var(--ink-2)}
+.order-line b{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+.order-line small{display:block;color:var(--ink-3);font-size:11.5px}
+
+/* NPS */
+.nps{margin-top:16px;background:var(--elev);border:1px solid var(--stroke);border-radius:var(--r-card);padding:16px;text-align:center;font-size:13.5px;color:var(--ink-2)}
+.nps-row{display:flex;justify-content:center;gap:6px;padding-top:12px;flex-wrap:wrap}
+.nps-row button{font-size:13px;font-weight:700;min-width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--stroke);transition:transform var(--t-fast) var(--ease-pop)}
+.nps-row button:active{transform:scale(.85)}
+.nps-row button.is-on{border-color:var(--green);background:rgba(63,212,99,.1)}
+.nps-thanks{padding-top:10px;color:var(--green);font-weight:700}
+
+/* ── profile ─────────────────────────────────────────────── */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px}
+.me-avatar{width:52px;height:52px;border-radius:50%;background:var(--green-grad);color:var(--green-ink);display:grid;place-items:center;font-weight:800;font-size:19px;flex:none}
+.me-card>div{flex:1;min-width:0}
+.me-card b{font-size:16px;font-weight:800}
+.pref{padding-top:22px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;gap:10px;flex-wrap:wrap}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink-2)}
+/* Consecutive order blocks (active / past) ran into each other — 22px of top
+   padding is a heading's breathing room, not a separation between two lists. */
+.orders-block{padding-top:22px}
+.orders-block+.orders-block{margin-top:18px;padding-top:30px;border-top:1px solid var(--stroke)}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:12px 14px;
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;text-decoration:none;
+}
+.order-row .ic{color:var(--green)}
+.order-row>div{flex:1;min-width:0}
+.order-row b{font-size:13.5px;font-weight:700;display:block}
+.order-row small{font-size:11.5px;color:var(--ink-3)}
+.order-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:rgba(63,212,99,.1);color:var(--green);white-space:nowrap}
+.row-status{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap;flex:none}
+.row-status.ok{background:rgba(63,212,99,.12);color:var(--green)}
+.orders-empty{font-size:13px;color:var(--ink-3);padding:6px 2px}
+.wa-line{
+  display:flex;align-items:center;gap:11px;margin-top:22px;
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;
+  padding:14px 15px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:700;
+}
+.wa-line .ic:first-child{color:var(--green)}
+.wa-line span{flex:1}
+.wa-line .arr{color:var(--ink-3)}
+[dir="rtl"] .wa-line .arr{transform:scaleX(-1)}
+/* Share row is a <button> reusing .wa-line — reset the UA button box so it
+   matches the anchor rows exactly (full width, inherited font, start-aligned). */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+.biz-card{margin-top:14px;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-card);padding:15px;display:grid;gap:9px;font-size:13.5px;color:var(--ink-2)}
+.biz-card span{display:flex;align-items:center;gap:9px}
+.biz-card .ic{width:16px;height:16px;color:var(--green)}
+.demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.7}
+
+/* ── tabbar ──────────────────────────────────────────────── */
+.tabbar{
+  position:absolute;inset-inline:18px;bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-around;align-items:center;
+  background:rgba(28,31,35,.86);backdrop-filter:blur(18px);
+  border:1px solid var(--stroke-2);border-radius:var(--r-pill);
+  padding:8px 10px;
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.65);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.tabbar.is-hidden{transform:translateY(120%);opacity:0;pointer-events:none}
+.tab{display:grid;justify-items:center;gap:3px;color:var(--ink-3);min-width:0;flex:1 1 0;transition:color var(--t-fast)}
+.tab .tab-label{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab-pill{
+  position:relative;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;
+  transition:background var(--t-fast) var(--ease),color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.tab:active .tab-pill{transform:scale(.86)}
+/* Only the active tab is named. The pill already carries the icon, and five
+   labels across a pill-width bar left every one of them truncated; collapsing
+   the inactive ones (height, not visibility, so the bar does not jump) gives the
+   current tab room for its full word. */
+.tab-label{font-size:10px;font-weight:700;letter-spacing:.01em}
+.tab:not(.is-on) .tab-label{height:0;opacity:0;overflow:hidden;pointer-events:none}
+.tab.is-on{color:var(--ink)}
+.tab.is-on .tab-pill{background:var(--cta-bg);color:var(--cta-ink)}
+.badge{
+  position:absolute;top:-1px;inset-inline-end:-3px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--green);color:var(--green-ink);
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid #1c1f23;
+  transition:transform .25s var(--ease-pop);
+}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+
+/* ── sheets / scrim / toast ──────────────────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(8,9,10,.6);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--elev);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-top:1px solid var(--stroke-2);
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:82%;overflow-y:auto;
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--stroke-2);margin:6px auto 16px}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px}
+.sheet h4{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.03em;text-transform:uppercase;margin:16px 0 10px}
+.sheet-sub{font-size:13px;color:var(--ink-3);margin-bottom:14px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--card);border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:600;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--green);color:var(--green);background:rgba(63,212,99,.07)}
+.spice-scale{display:flex;gap:8px}
+.spice-scale button{
+  flex:1;padding:10px 4px;border-radius:14px;font-size:13px;font-weight:700;
+  background:var(--card);border:1.5px solid var(--stroke);color:var(--ink-2);
+  transition:all var(--t-fast);
+}
+.spice-scale button.is-on{border-color:var(--orange);color:var(--orange);background:rgba(255,176,46,.07)}
+.sheet-actions{display:flex;gap:10px;padding-top:22px}
+.sheet-actions .cta{height:50px}
+.branch-list{display:grid;gap:8px}
+.branch-row{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--card);border:1.5px solid var(--stroke);border-radius:16px;padding:13px 15px;
+  transition:border-color var(--t-fast);text-decoration:none;width:100%;
+}
+.branch-row.is-on{border-color:var(--green)}
+.branch-row .ic{color:var(--green)}
+.branch-row b{flex:1;font-size:14px;font-weight:700}
+.branch-row b small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.branch-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);flex:none}
+.branch-row.is-on .branch-check{border-color:var(--green);background:var(--green)}
+.auth-form{display:grid;gap:11px;padding-bottom:8px}
+.auth-tabs{display:flex;background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-pill);padding:4px;gap:3px;margin-bottom:6px}
+.auth-tabs button{flex:1;padding:9px;border-radius:var(--r-pill);font-size:13px;font-weight:700;color:var(--ink-3)}
+.auth-tabs button.is-on{background:var(--cta-bg);color:var(--cta-ink)}
+.otp-boxes{display:flex;gap:10px;justify-content:center}
+.otp-boxes input{width:56px;height:60px;text-align:center;font-size:23px;font-weight:800;border-radius:16px}
+
+.toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--card-2);border:1px solid var(--stroke-2);
+  color:var(--ink);font-size:13px;font-weight:600;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;overflow:hidden;text-overflow:ellipsis;
+}
+.toast.is-on{opacity:1;translate:-50% 0}
+.toast .ic{width:16px;height:16px;color:var(--green)}
+
+/* fly-to-cart */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(0,0,0,.5);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] .crave :is(.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate;text-align:right}
+[dir="rtl"] .crave :is(.opt-price,.meta-chip,.card-price,.ci-price,.ci-was,.ci-unit,.p-price b,.card-meta,.tr-row b,.confirm-code,.cta b,.rail-card .off,.rail-card .price,.banner-title b,.order-line b,.track-top b){direction:ltr;unicode-bidi:isolate}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] .crave :is(.ci-price){text-align:right}
+
+/* ── loyalty card (profile) ──────────────────────────────── */
+.loyalty{
+  margin-top:16px;padding:18px 16px;border-radius:var(--r-card);
+  background:var(--card);border:1px solid var(--stroke);text-align:center;
+}
+.loyalty-head{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:800}
+.loyalty-head .ic{width:18px;height:18px;color:var(--green);fill:none;stroke:var(--green)}
+.loyalty-num{font-family:var(--font-display);font-size:34px;font-weight:600;color:var(--green);line-height:1.05;margin:6px 0 2px}
+.loyalty-sub{font-size:11.5px;color:var(--ink-3);margin-bottom:12px}
+.stamp-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:14px}
+.stamp-dot{
+  width:30px;height:30px;border-radius:50%;border:2px solid var(--stroke-2);
+  display:flex;align-items:center;justify-content:center;transition:all var(--t-fast) var(--ease);
+}
+.stamp-dot .ic{width:14px;height:14px;fill:none;stroke:var(--ink-3)}
+.stamp-dot.is-on{border-color:var(--green);background:var(--green)}
+.stamp-dot.is-on .ic{fill:var(--green-ink);stroke:var(--green-ink)}
+.loyalty-bar{height:8px;border-radius:var(--r-pill);background:var(--stroke-2);overflow:hidden;margin-bottom:14px}
+.loyalty-bar i{display:block;height:100%;width:0;background:var(--green-grad);border-radius:var(--r-pill);transition:width .6s var(--ease)}
+.loyalty-ok{color:var(--green);font-weight:700;font-size:13px;margin-top:6px}
+
+/* ── google-review prompt (confirmed) ────────────────────── */
+.greview{
+  display:flex;align-items:center;gap:12px;width:100%;max-width:320px;margin:18px auto 0;
+  padding:13px 15px;border-radius:var(--r-card);text-decoration:none;
+  background:rgba(255,176,46,.09);border:1px solid rgba(255,176,46,.28);color:var(--ink);
+}
+.greview-star{font-size:22px;line-height:1}
+.greview-copy{flex:1;min-width:0;text-align:start}
+.greview-copy b{display:block;font-size:14px;font-weight:800}
+.greview-copy small{font-size:11.5px;color:var(--ink-2)}
+.greview .arr{color:var(--orange)}
+
+/* ── reservation / waitlist sheets ───────────────────────── */
+.sheet-form input,.sheet-form textarea{
+  width:100%;background:var(--elev);border:1px solid var(--stroke-2);border-radius:var(--r-img);
+  color:var(--ink);font:inherit;font-size:14px;padding:12px 13px;margin-bottom:2px;
+}
+.sheet-form textarea{resize:vertical;min-height:52px}
+.sheet-form input:focus,.sheet-form textarea:focus{outline:none;border-color:var(--green)}
+.sheet-done{text-align:center;padding:18px 0 8px}
+.sheet-done-emoji{font-size:44px;line-height:1;display:block;margin-bottom:8px}
+.sheet-done b{font-size:17px;font-weight:800;display:block;margin-bottom:4px}
+.sheet-done p{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.sheet-done p.muted{color:var(--ink-3);font-size:12px}
+
+/* ── reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .crave *,.crave *::before,.crave *::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .confetti{display:none}
+}
+
+/* direction:ltr (number guard) flips the badge's own logical inset — pin it physically in RTL */
+[dir="rtl"] .rail-card .off{left:auto;right:16px}
+
+/* ═══════════════════════════════════════════════════════════
+   theme-pack-blade features (F1–F7)
+   ═══════════════════════════════════════════════════════════ */
+
+/* F2 · brand / follow row */
+.brand-row{display:flex;align-items:center;gap:12px;padding:2px 20px 10px}
+.brand-logo{width:56px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:var(--card);display:grid;place-items:center;border:1.5px solid var(--stroke-2)}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+/* B7 · story ring — the brand logo gets the theme story gradient when stories exist */
+.brand-logo--live{background:var(--green-grad);border-color:transparent;padding:2.5px;cursor:pointer}
+.brand-logo--live img{border-radius:11px}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = an actual badge: a filled brand seal with a white check, sitting
+   inline after the store name (title + aria-label carry the accessible name). */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--green)}
+.verified-badge .vb-seal-check{fill:#fff}
+.followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--cta-bg);color:var(--cta-ink);font-size:13px;font-weight:700;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.followbtn:active{transform:scale(.94)}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--card);color:var(--ink-2);border:1.5px solid var(--stroke-2)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+/* B5 · scale-pop on follow */
+@keyframes followbtnPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.followbtn--pop{animation:followbtnPop .25s var(--ease-pop,ease)}
+@media (prefers-reduced-motion:reduce){.followbtn--pop{animation:none}}
+/* B6 · following sheet notifications row */
+.follow-sheet-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 4px;font-weight:600}
+.cta.danger{background:var(--red,#e5484d);color:#fff}
+.cta.ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--stroke-2)}
+/* B8 · about sheet */
+.about-rating{font-weight:800;font-size:16px;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
+.about-star{color:#f5a623}
+.about-list{display:flex;flex-direction:column;gap:2px}
+.about-row{display:flex;align-items:center;gap:10px;padding:11px 4px;color:var(--ink);text-decoration:none;font-weight:600}
+.about-row .ic{flex:none;opacity:.7}
+.about-reviews{margin-top:12px;border-top:1px solid var(--stroke-2);padding-top:10px;display:flex;flex-direction:column;gap:10px}
+.about-review-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.about-review p{margin:4px 0 0;color:var(--ink-2);font-size:13px;line-height:1.4}
+
+/* F3 · stories rail + viewer */
+.stories-rail{display:flex;gap:14px;overflow-x:auto;padding:4px 20px 14px;scrollbar-width:none}
+.stories-rail::-webkit-scrollbar{display:none}
+.story-bubble{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px}
+.sb-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:var(--green-grad);display:grid;place-items:center}
+.sb-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg)}
+.story-bubble small{font-size:11px;color:var(--ink-2);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-viewer{position:absolute;inset:0;z-index:90;background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.story-viewer.is-open{opacity:1}
+.sv-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.sv-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.sv-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.sv-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.sv-close .ic{width:20px;height:20px}
+.sv-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.sv-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sv-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.sv-nav.prev{inset-inline-start:0}
+.sv-nav.next{inset-inline-end:0}
+.sv-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.sv-caption{color:#fff;font-size:17px;font-weight:700;line-height:1.3;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.sv-cta{height:50px}
+
+/* F1 · meal-plan CTA + sheet */
+.mealplan-cta{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:rgba(63,212,99,.06);border:1.5px solid rgba(63,212,99,.28);border-radius:16px;padding:13px 15px;transition:transform var(--t-fast) var(--ease-pop)}
+.mealplan-cta:active{transform:scale(.98)}
+.mealplan-cta .mp-ic{width:38px;height:38px;border-radius:11px;background:rgba(63,212,99,.12);display:grid;place-items:center;color:var(--green);flex:none}
+.mealplan-cta .mp-copy{flex:1}
+.mealplan-cta .mp-copy b{display:block;font-size:14px;font-weight:700}
+.mealplan-cta .mp-copy small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.mealplan-cta .arr{color:var(--ink-3)}
+.seg.mini{display:flex;gap:6px;flex-wrap:wrap}
+.seg.mini button{padding:8px 14px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke);font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.seg.mini button.is-on{border-color:var(--green);color:var(--green);background:rgba(63,212,99,.07)}
+#cvMealPlanSheet input[type="date"]{width:100%}
+
+/* F4 · branch map */
+.sheet-tall{max-height:88%}
+.branchmap{width:100%;height:240px;border-radius:16px;overflow:hidden;background:var(--card);margin-bottom:8px}
+.branchmap .leaflet-container{height:100%;background:var(--card);font:inherit}
+.branch-dist{font-size:12px;font-weight:700;color:var(--green);flex:none}
+.nearest-branch-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:10px 15px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke-2);font-size:13px;font-weight:700;color:var(--ink-2)}
+.nearest-branch-btn .ic{color:var(--green)}
+.geo-attrib{font-size:10.5px;color:var(--ink-3);margin:6px 2px 0}
+
+/* F5 · address autocomplete */
+.addr-field{position:relative}
+.addr-field input{padding-inline-end:46px}
+.uselocbtn{position:absolute;top:0;inset-inline-end:0;height:100%;width:44px;display:grid;place-items:center;color:var(--green)}
+.uselocbtn.is-loading{opacity:.5;animation:cv-spin 1s linear infinite}
+@keyframes cv-spin{to{transform:rotate(360deg)}}
+.addr-suggest{position:absolute;top:calc(100% + 6px);inset-inline:0;z-index:12;background:var(--elev);border:1px solid var(--stroke-2);border-radius:14px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.4);max-height:230px;overflow-y:auto}
+.addr-opt{display:block;width:100%;text-align:start;padding:11px 15px;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--stroke)}
+.addr-opt:last-child{border-bottom:0}
+.addr-opt:active,.addr-opt:hover{background:var(--card)}
+/* saved addresses (logged-in diners) */
+.saved-addrs{display:grid;gap:8px;margin-bottom:10px}
+.saved-addr{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:10px 12px;border:1.5px solid var(--stroke-2);border-radius:14px;background:var(--elev);color:var(--ink);cursor:pointer}
+.saved-addr .ic{flex:none;color:var(--ink-2)}
+.saved-addr .sa-text{min-width:0;display:grid;gap:1px}
+.saved-addr .sa-text b{font-size:13px;font-weight:700}
+.saved-addr .sa-text small{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.saved-addr.is-on{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.saved-addr.is-on .ic{color:var(--green)}
+
+/* F6 · rich reviews */
+.p-reviews{padding:6px 20px 0}
+.rv-head{display:flex;gap:18px;background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:16px;margin-bottom:12px}
+.rv-avg{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;min-width:78px}
+.rv-avg b{font-size:32px;font-weight:800;line-height:1}
+.rv-avg small{font-size:11px;color:var(--ink-3);margin-top:4px}
+.stars-mini{color:var(--orange);font-size:13px;letter-spacing:1px}
+.stars-mini .s-dim{color:var(--stroke-2)}
+.rv-dist{flex:1;display:flex;flex-direction:column;gap:5px;justify-content:center}
+.rv-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.rv-bar em{font-style:normal;width:10px;text-align:end}
+.rv-bar i{flex:1;height:6px;border-radius:3px;background:var(--card-2);overflow:hidden}
+.rv-bar i s{display:block;height:100%;background:var(--orange);border-radius:3px}
+.rv-bar b{width:20px;text-align:end;font-weight:700}
+.rv-filters{display:flex;gap:8px;margin-bottom:12px}
+.rv-filters button{padding:7px 14px;border-radius:var(--r-pill);background:var(--card);border:1.5px solid var(--stroke);font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.rv-filters button.is-on{border-color:var(--green);color:var(--green);background:rgba(63,212,99,.07)}
+.rv-list{display:grid;gap:12px}
+.rv-item{background:var(--card);border:1px solid var(--stroke);border-radius:14px;padding:13px 15px}
+.rv-item-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rv-item-top b{font-size:13.5px;font-weight:700}
+.rv-verified{font-size:10.5px;font-weight:800;color:var(--green);background:rgba(63,212,99,.1);padding:2px 8px;border-radius:var(--r-pill)}
+.rv-item p{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:6px}
+.rv-photos{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.rv-photos img{width:66px;height:66px;border-radius:11px;object-fit:cover;border:1px solid var(--stroke)}
+.rv-empty{font-size:13px;color:var(--ink-3);text-align:center;padding:22px 0}
+.rv-stars{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.rv-stars button{color:var(--stroke-2);transition:transform var(--t-fast) var(--ease-pop)}
+.rv-stars button .ic{width:34px;height:34px}
+.rv-stars button:active{transform:scale(1.2)}
+.rv-stars button.is-on{color:var(--orange)}
+#cvReviewSheet textarea{width:100%;margin-top:12px}
+
+/* F7 · OTP checkout gate */
+.otp-boxes.otp-6{gap:8px}
+.otp-boxes.otp-6 input{width:46px;height:56px;font-size:21px}
+#cvCheckoutOtpSheet .cta{margin-top:16px}
+
+/* misc */
+.cv-noscroll{overflow:hidden}
+
+/* ── agent-chat FAB clearance ──────────────────────────────────────────────
+   The shared "Chat & order" FAB (store_templates/partials/agent-chat.blade.php)
+   is fixed to the viewport and would sit on top of .tabbar (bottom 14px + 80px
+   tall — the tabs carry a label under the pill). It renders outside this theme's
+   root element, so the offset must be declared on :root — this stylesheet only
+   loads on this theme, so the scoping still holds. Measured clearance: 95px. */
+:root { --agent-fab-offset: calc(88px + env(safe-area-inset-bottom, 0px)); }
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+/* Combo lines (cv-combo-group) carry no thumbnail, so they drop the 40px image
+   column the normal cart row leads with — otherwise the name is crushed into
+   that 40px cell and the ×n/price float across an empty 1fr track. */
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--card-2);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ci-side .qty-btn,.ci-remove{position:relative}
+.ci-side .qty-btn::after{content:"";position:absolute;inset:-6px -4px}
+.ci-remove::after{content:"";position:absolute;inset:-4px -7px}
+
+/* ── keyboard focus (a11y) ────────────────────────────────
+   crave was the only one of the 17 templates shipping NO :focus-visible rule —
+   its own polish row stayed at `~`. Tabbing the flagship gave no visible focus
+   at all. One brand-green ring for everything interactive; the outline follows
+   each control's own radius, so round icon buttons ring as circles. Inputs
+   already tint their border on focus, so they stay outline-free rather than
+   carrying two competing indicators. */
+.crave a:focus-visible,
+.crave button:focus-visible,
+.crave [tabindex]:focus-visible,
+.crave .card:focus-visible,
+.crave .chip:focus-visible,
+.crave .tab:focus-visible,
+.crave .banner:focus-visible,
+.crave summary:focus-visible{outline:2px solid var(--green-hi);outline-offset:2px}
+.crave input:focus-visible,
+.crave textarea:focus-visible,
+.crave select:focus-visible{outline:none}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.minibtn,.splash-skip,.loc,.followbtn,.sortbtn,.ghostbtn.sm{min-height:44px}
+.fab.back,.fab.fav,.filterbtn{inline-size:44px;block-size:44px}
+.qty-btn{position:relative}
+.qty-btn::after{content:"";position:absolute;inset:-6px -2px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* Last group under the floor: rating stars, NPS 0–10, category/diet chips and
+   language-menu rows. Rows of stars/NPS sit close together, so those grow only
+   on the block axis; the rest are text rows that take a min-height. */
+.nps-row button{position:relative}
+.nps-row button::after{content:"";position:absolute;inset:-4px -1px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, crave skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Elevated dark chip, green coins icon. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--elev);border:1px solid var(--stroke-2);color:var(--ink-2);
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--green)}
+
+/* ── notification-center panel — crave skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--elev,#1c1f23);--nb-surface-2:var(--card-2,#2a2f35);--nb-line:var(--stroke-2,rgba(255,255,255,.12));--nb-ink:var(--ink,#f4f6f5);--nb-muted:var(--ink-2,#adb6ba);--nb-accent:var(--green,#3fd463)}
+
+/* ═══════════════════════════════════════════════════════════
+   CC run — cover image + subtitle (append layer, .cv-* only)
+   Concept 1 hero band · 2 splash subtitle · 3 cover-backed
+   splash · phase-2 collapsing header. Every rule is theme-token
+   driven (falls back to crave's literals) and RTL-safe (logical
+   props). Nothing here restyles an existing selector in place —
+   a store with no cover / the toggle off renders the old markup
+   untouched. --bg/--card/--ink/--green already resolve from the
+   customizer --tc-* layer, so the scrim tracks the active preset
+   (Daylight light included), not hardcoded black.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Concept 1: cover hero band ───────────────────────────── */
+.cv-cover{
+  position:relative;isolation:isolate;overflow:visible;
+  margin:-6px -20px 0;padding:0 20px;min-block-size:150px;
+}
+.cv-cover-media{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--card)}
+.cv-cover-img{width:100%;height:100%;object-fit:cover;display:block}
+.cv-cover-scrim{
+  position:absolute;inset:0;
+  /* top tint = chrome legibility over any photo (theme-neutral);
+     bottom fade = blends into the page bg so the brand row melts in. */
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.16) 30%, rgba(0,0,0,0) 48%),
+    linear-gradient(180deg, transparent 30%, var(--bg) 96%);
+}
+/* Strong enough top darkening that the white chrome (branch selector included)
+   reads over a BRIGHT cover — a bare .30 tint vanished on a white-checkered
+   diner ceiling. Theme-independent: it's about the photo, not the page bg.
+   Also drop the chrome below the status bar / notch on real devices. */
+.cv-cover .home-top{
+  position:relative;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6);
+  padding-block-start:calc(14px + env(safe-area-inset-top, 0px));
+}
+/* The branch selector + Open-Now moved OUT of the top chrome into .cv-metarow
+   under the brand row. The chrome now holds only the avatar + round buttons, so
+   push the buttons to the trailing edge (the branch no longer stretches the row). */
+.home-top .avatar{margin-inline-end:auto}
+/* every round button in the chrome (lang, catering #cvCateringBtn, notif) gets
+   a frosted backdrop so it reads over the photo — select the class, not a list.
+   The blur + border carry legibility at this low fill (owner-set 13%). */
+.cv-cover .home-top .iconbtn{
+  background:rgb(16 18 22 / 13%);border-color:rgba(255,255,255,.16);color:#fff;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.cv-cover .home-top .iconbtn .dot{outline-color:rgba(20,23,28,.9)}
+/* Reserve-a-Table button — sits beside the search pill on the search row. */
+.reserve-btn{
+  flex:none;display:inline-flex;align-items:center;gap:7px;height:50px;
+  padding:0 16px;border-radius:var(--r-pill);border:0;
+  background:var(--green);color:var(--green-ink);font-weight:700;font-size:13.5px;
+  white-space:nowrap;transition:transform var(--t-fast) var(--ease-pop);
+}
+.reserve-btn:active{transform:scale(.95)}
+.reserve-btn .ic{width:19px;height:19px;stroke:currentColor}
+@media (max-width:360px){.reserve-btn{padding:0 14px}.reserve-btn-label{display:none}}
+/* branch selector + open/closed status — their own row under the brand row. */
+.cv-metarow{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:2px 20px 10px}
+.cv-metarow .loc{flex:0 0 auto;min-width:0;width:100%}
+.cv-metarow #cvBranchBtn{
+  width:100%;
+  background:var(--card);border:1px solid var(--stroke);
+  border-radius:12px;padding:6px 12px;
+}
+.cv-metarow .status-strip{margin-inline-start:0;padding:0;width:100%;flex:0 0 auto;flex-wrap:nowrap}
+/* brand row lifts over the cover edge; logo grows + cuts out of the page bg. */
+.brand-row--hero{position:relative;z-index:2;margin-block-start:-30px;padding-block-end:14px}
+.brand-row--hero .brand-logo{
+  width:76px;height:76px;border-radius:18px;
+  border:3px solid var(--bg);box-shadow:0 6px 18px rgba(0,0,0,.5);
+}
+.brand-row--hero .brand-name{font-size:17px}
+.cv-tagline{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+  margin-block-start:3px;font-size:12px;line-height:1.35;color:var(--ink-2);
+  overflow:hidden;max-width:100%;
+}
+
+/* ── Concept 2: splash subtitle ───────────────────────────── */
+.splash-sub{
+  position:relative;z-index:2;margin-block-start:14px;max-width:24ch;
+  font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);line-height:1.7;font-weight:600;
+}
+[dir="rtl"] .splash-sub{letter-spacing:normal;text-transform:none}
+
+/* ── Concept 3: cover-backed splash ───────────────────────── */
+.cv-splash-cover{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:blur(9px) brightness(.38) saturate(1.1);transform:scale(1.12);
+  z-index:0;pointer-events:none;
+}
+
+/* ── Phase-2: collapsing header ───────────────────────────── */
+/* overlays the home view (sibling of .view-scroll) so it never scrolls; JS adds
+   .is-on when the cover band leaves the scroll container. */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;
+  padding:calc(8px + env(safe-area-inset-top,0px)) 18px 8px;
+  background:var(--elev);
+  background:color-mix(in srgb, var(--bg) 86%, transparent);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-block-end:1px solid var(--stroke-2);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease),opacity .28s var(--ease);
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{
+  width:30px;height:30px;border-radius:9px;overflow:hidden;flex:none;
+  background:var(--card);border:1px solid var(--stroke-2);
+}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-name{flex:1;min-width:0;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* zero-footprint marker that tells the collapsing header when the sticky menu
+   region has reached the top (see mountCondensedHeader). */
+.cv-menu-sentinel{display:block;block-size:1px;inline-size:1px;pointer-events:none}
+/* the condensed bar carries the same top-chrome buttons; compact them a touch. */
+.cv-condensed-actions{display:flex;align-items:center;gap:6px;flex:none}
+.cv-condensed-actions .iconbtn{width:38px;height:38px}
+.cv-condensed-actions .iconbtn .ic{width:19px;height:19px}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — crave skin  (L0.6 REFERENCE / copy-adapt template)
+   ───────────────────────────────────────────────────────────
+   Every lane theme mirrors these two moving parts:
+     1) the theme marks its brand/meta-row element with
+        data-mb-hotel-chip-slot  (crave: on .cv-metarow) — the shared partial
+        mounts the room chip there natively;
+     2) this block maps the shared --mbh-* token contract onto the theme's own
+        tokens, then gives each relocated layer surface the theme's native look.
+   Scoped under .crave so crave's tokens (--card/--ink/--green/--r-sheet…) resolve
+   once the layer elements are relocated into the theme root. The only opaque
+   surface is the hub — a modal legitimately paints one; the chip and the checkout
+   controls stay translucent / borderless so they never fight the theme.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Token contract → crave's real tokens. This mapping is the heart of the skin;
+   a lane theme copies it and swaps the right-hand side for its own var names. */
+.crave #mbHotelChip,
+.crave #mbHotelOrderCtrls,
+.crave #mbHotelBook,
+.crave #mbHotelHub{
+  --mbh-surface:var(--elev);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--green);
+  --mbh-on-accent:var(--green-ink);
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: its own row under the branch + status meta row (the row was too
+   crowded with the branch button + Open-Now inline). cv-metarow wraps; the chip
+   breaks to a fresh line and stays a compact, start-aligned pill. ── */
+.crave .cv-metarow{flex-wrap:wrap}
+.crave #mbHotelChip{
+  flex:1 1 100%;inline-size:100%;max-inline-size:none;justify-content:flex-start;
+  margin:10px 0 0;padding:9px 13px;gap:9px;
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink-2);
+  border-radius:var(--r-lg);font-size:13px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.crave #mbHotelChip:active{transform:scale(.95)}
+.crave #mbHotelChip .mb-hotel-roomchip__ic{color:var(--green)}
+.crave #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: crave's own bottom sheet (elev surface, r-sheet corners, grab + x) ── */
+/* Confine to crave's phone frame: #crave is a fixed, clipped, non-scrolling frame,
+   so positioning the sheet + scrim against it (absolute, not viewport-fixed) keeps
+   them inside the mock frame on desktop instead of spanning the whole window, while
+   still sharing #crave's stacking context so z-index clears the dock. */
+.crave #mbHotelHubScrim{position:absolute;background:rgba(8,9,10,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.crave #mbHotelHub{
+  position:absolute;
+  background:var(--elev);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.crave #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.crave #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.crave #mbHotelHub .mb-hotel-hub__x{
+  background:var(--card-2);color:var(--ink-2);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.crave #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.crave #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.crave #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.crave #mbHotelHub .mb-hotel-card summary,
+.crave #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.crave #mbHotelHub .mb-hotel-info-link{background:var(--card);border-color:var(--stroke);color:var(--ink)}
+.crave #mbHotelHub .mb-hotel-info-link:hover{background:var(--elev-2,var(--card));border-color:var(--green)}
+.crave #mbHotelHub .mb-hotel-info-link__ic{color:var(--green)}
+/* service form controls → crave inputs / green CTA */
+.crave #mbHotelHub .mb-hotel-field{
+  background:var(--card);border:1px solid var(--stroke);color:var(--ink);border-radius:12px;
+}
+.crave #mbHotelHub .mb-hotel-btn{
+  background:var(--green);color:var(--green-ink);border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → crave tender rows ── */
+.crave #mbHotelOrderCtrls{margin:0}
+.crave #mbHotelSched,
+.crave #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.crave #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.crave #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.crave #mbHotelSched input[type="radio"]{accent-color:var(--green)}
+.crave #mbHotelSched .mb-hotel-field{
+  background:var(--card);border:1.5px solid var(--stroke);color:var(--ink);border-radius:14px;
+}
+.crave #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → crave's .terms checkbox row (drop the emoji chip, plain toggle) */
+.crave #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.crave #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.crave #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.crave #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.crave #mbHotelCharge input[type="checkbox"]{accent-color:var(--green)}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for crave. Surface,
+   ink, border and radius come from crave tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.crave .mb-paypending{
+  --pp-surface:var(--card,#22262b);
+  --pp-ink:var(--ink,#f4f6f5);
+  --pp-muted:var(--ink-2,#adb6ba);
+  --pp-border:var(--stroke-2,rgba(255,255,255,.12));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,18px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.crave .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.crave .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.crave .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.crave .mb-paypending-txn:empty{display:none}
+.crave .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.crave .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.crave .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.crave .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.crave .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* ═══════════════ PERF-LITE ▸ reversible ▸ added 2026-08-27 ═══════════════
+   Idle GPU/CPU fix (same convention as ember/vivid). crave's cover splash stays
+   up until the visitor taps, and while it waits it animates a drifting blob, two
+   floating chips and a spinning doodle — all behind/over glass — so the GPU
+   spins the whole time the cover is shown. Pausing them keeps the cover's
+   composition (just static) and stops the idle spike; also pauses the box
+   doodles and orphaned skeleton shimmers.
+   LEFT running: loading spinners (.cta .spinner, .uselocbtn.is-loading) and the
+   live order-tracking node (.tl.now .tl-node).
+   REVERT: set  data-mbfx="full"  on <html>, OR delete to the END marker. */
+html:not([data-mbfx="full"]) .splash-blob,
+html:not([data-mbfx="full"]) .splash-chip,
+html:not([data-mbfx="full"]) .splash-doodles .dd,
+html:not([data-mbfx="full"]) .open-chip i,
+html:not([data-mbfx="full"]) .box-doodles,
+html:not([data-mbfx="full"]) .sk .card-imgwrap::after,
+html:not([data-mbfx="full"]) .sk-line::after{
+  animation: none !important;
+}
+/* ═══════════════ PERF-LITE END ═══════════════ */
+
+/* ── Address map picker + device-data (shared engines, crave-skinned) ───── */
+.cv-mapbtn{margin-top:8px}
+.map-sheet h2{margin-bottom:12px}
+.map-sheet .map-canvas{position:relative;height:min(52vh,360px);border-radius:16px;overflow:hidden;background:var(--card-2);border:1px solid var(--stroke)}
+.map-sheet .map-canvas .leaflet-container{width:100%;height:100%;font:inherit;background:var(--card-2)}
+.map-sheet .map-preview{margin:12px 4px 0;font-size:13px;line-height:1.4;color:var(--ink-2);min-height:18px;text-align:center}
+.map-sheet .sheet-actions{padding-top:16px}
+/* centre pin (engine injects .mb-map-pin) */
+.mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--green,#3fd463);border:2px solid #fff}
+.mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#fff}
+/* clear-saved-data row */
+.device-data{margin:18px 4px 0;text-align:center}
+.cv-cleardata{display:inline-flex;align-items:center;gap:7px;color:var(--ink-3);font-size:12.5px}
+.cv-cleardata .ic{width:15px;height:15px}
+.cv-cleardata:active{color:var(--red,#ff5a5f)}
+.device-data-hint{margin:6px auto 0;max-width:34ch;font-size:11px;line-height:1.45;color:var(--ink-3)}
+
+/* P4-16: "Load more" under the grid of a very large catalogue */
+.cv-more { display: flex; justify-content: center; padding-block: 16px 8px; }
+.cv-more[hidden] { display: none; }
+.cv-more{min-block-size:72px;align-items:center}
+.cv-more.is-idle{visibility:hidden}

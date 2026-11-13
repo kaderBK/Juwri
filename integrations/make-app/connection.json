@@ -1,0 +1,39 @@
+{
+  "name": "juwri",
+  "label": "juwri",
+  "type": "apikey",
+  "help": "Mint an API token under Developers → API tokens. Grant `webhooks:write` for triggers; add `orders:write`, `menu:write` and `customers:read` for actions and searches.",
+  "parameters": [
+    {
+      "name": "api_base_url",
+      "type": "url",
+      "label": "API base URL",
+      "required": true,
+      "default": "https://app.juwri.example",
+      "help": "Your juwri site root (do NOT include /api/v1)."
+    },
+    {
+      "name": "api_key",
+      "type": "text",
+      "label": "API token",
+      "required": true
+    }
+  ],
+  "communication": {
+    "url": "{{parameters.api_base_url}}/api/v1/me",
+    "method": "GET",
+    "headers": {
+      "Authorization": "Bearer {{parameters.api_key}}",
+      "Accept": "application/json"
+    },
+    "response": {
+      "metadata": {
+        "type": "text",
+        "value": "{{body.store_name}}"
+      },
+      "error": {
+        "message": "[{{statusCode}}] {{body.message}}"
+      }
+    }
+  }
+}

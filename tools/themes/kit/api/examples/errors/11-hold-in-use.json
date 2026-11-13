@@ -1,0 +1,26 @@
+{
+  "operationId": "releaseHold",
+  "request": {
+    "method": "DELETE",
+    "path": "/api/v1/storefront/holds/01a0fb94-5f00-7b54-bd80-b7164c57c7e1",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_freshmart_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Origin": "https://fresh-mart.example",
+      "X-Hold-Token": "hld_e482949322d38822b1a833bd8c30ce33"
+    }
+  },
+  "response": {
+    "status": 409,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 07:50:30 GMT"
+    },
+    "body": {
+      "message": "This time is held for an order that is waiting for payment. Finish or cancel the payment first.",
+      "code": "hold_in_use"
+    }
+  }
+}

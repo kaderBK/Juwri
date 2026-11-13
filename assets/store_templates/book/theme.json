@@ -1,0 +1,446 @@
+{
+  "version": 2,
+  "texts": {
+    "localized": true
+  },
+  "presets": [
+    {
+      "id": "calm",
+      "label": "Calm",
+      "thumb": "assets/store_templates/book/presets/calm.png",
+      "values": {
+        "colors.primary": "#2F6B5E",
+        "colors.background": "#F6F7F4",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#1C2420",
+        "colors.accent": "#C9A36A",
+        "colors_dark.primary": "#7FC8B5",
+        "colors_dark.background": "#0F1412",
+        "colors_dark.surface": "#18201D",
+        "colors_dark.text": "#ECF2EF",
+        "colors_dark.accent": "#D9B97E",
+        "scheme.mode": "light"
+      }
+    },
+    {
+      "id": "bright",
+      "label": "Bright",
+      "thumb": "assets/store_templates/book/presets/bright.png",
+      "values": {
+        "colors.primary": "#1D4ED8",
+        "colors.background": "#FFFFFF",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#0F172A",
+        "colors.accent": "#F59E0B",
+        "colors_dark.primary": "#7FA6FF",
+        "colors_dark.background": "#0B1020",
+        "colors_dark.surface": "#141A2B",
+        "colors_dark.text": "#EEF2FA",
+        "colors_dark.accent": "#FBBF24",
+        "scheme.mode": "light",
+        "layout.radius": "round",
+        "fonts.pair": "inter"
+      }
+    },
+    {
+      "id": "clinic",
+      "label": "Clinic",
+      "thumb": "assets/store_templates/book/presets/clinic.png",
+      "values": {
+        "colors.primary": "#0E7490",
+        "colors.background": "#F7FAFB",
+        "colors.surface": "#FFFFFF",
+        "colors.text": "#10232B",
+        "colors.accent": "#7C3AED",
+        "colors_dark.primary": "#5CC8E0",
+        "colors_dark.background": "#0B1417",
+        "colors_dark.surface": "#132024",
+        "colors_dark.text": "#E9F3F6",
+        "colors_dark.accent": "#B49CFF",
+        "scheme.mode": "light",
+        "fonts.pair": "geist-inter",
+        "layout.radius": "soft",
+        "layout.card": "list"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#2F6B5E"
+        },
+        "colors.background": {
+          "default": "#F6F7F4"
+        },
+        "colors.surface": {
+          "default": "#FFFFFF"
+        },
+        "colors.text": {
+          "default": "#1C2420"
+        },
+        "colors.accent": {
+          "default": "#C9A36A"
+        },
+        "layout.radius": {
+          "default": "soft"
+        },
+        "layout.density": {
+          "default": "cozy"
+        },
+        "fonts.pair": {
+          "default": "jakarta"
+        }
+      }
+    },
+    {
+      "group": "Appearance",
+      "icon": "contrast",
+      "fields": [
+        {
+          "id": "scheme.mode",
+          "type": "select",
+          "label": "Colour scheme",
+          "options": [
+            "light",
+            "dark",
+            "auto"
+          ],
+          "option_labels": {
+            "light": "Light",
+            "dark": "Dark",
+            "auto": "Follow the device"
+          },
+          "default": "auto",
+          "help": "Auto follows the visitor's phone or computer setting."
+        },
+        {
+          "id": "colors_dark.primary",
+          "type": "color",
+          "label": "Brand colour (dark)",
+          "default": "#7FC8B5",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.background",
+          "type": "color",
+          "label": "Background (dark)",
+          "default": "#0F1412",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.surface",
+          "type": "color",
+          "label": "Card surface (dark)",
+          "default": "#18201D",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.text",
+          "type": "color",
+          "label": "Text colour (dark)",
+          "default": "#ECF2EF",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        },
+        {
+          "id": "colors_dark.accent",
+          "type": "color",
+          "label": "Accent colour (dark)",
+          "default": "#D9B97E",
+          "visible_if": {
+            "scheme.mode": [
+              "dark",
+              "auto"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "group": "Layout",
+      "icon": "layout",
+      "fields": [
+        {
+          "id": "layout.card",
+          "type": "select",
+          "label": "Item card",
+          "options": [
+            "list",
+            "grid",
+            "compact"
+          ],
+          "option_labels": {
+            "list": "List",
+            "grid": "Grid",
+            "compact": "Compact (no image)"
+          },
+          "default": "list"
+        },
+        {
+          "id": "layout.image_ratio",
+          "type": "select",
+          "label": "Image shape",
+          "options": [
+            "1:1",
+            "4:3",
+            "16:9",
+            "4:5",
+            "3:4"
+          ],
+          "option_labels": {
+            "1:1": "Square",
+            "4:3": "4:3",
+            "16:9": "16:9",
+            "4:5": "Portrait 4:5",
+            "3:4": "Portrait 3:4"
+          },
+          "default": "1:1"
+        },
+        {
+          "id": "layout.category_nav",
+          "type": "select",
+          "label": "Categories",
+          "options": [
+            "chips",
+            "tabs"
+          ],
+          "option_labels": {
+            "chips": "Chips",
+            "tabs": "Tabs"
+          },
+          "default": "chips"
+        },
+        {
+          "id": "layout.header",
+          "type": "select",
+          "label": "Header",
+          "options": [
+            "cover",
+            "compact"
+          ],
+          "option_labels": {
+            "cover": "Cover image",
+            "compact": "Compact"
+          },
+          "default": "cover"
+        },
+        {
+          "id": "layout.desktop_cart",
+          "type": "select",
+          "label": "Cart on desktop",
+          "options": [
+            "panel",
+            "drawer"
+          ],
+          "option_labels": {
+            "panel": "Side panel",
+            "drawer": "Drawer"
+          },
+          "default": "panel"
+        }
+      ]
+    },
+    {
+      "group": "Content",
+      "icon": "list",
+      "fields": [
+        {
+          "id": "menu.show_descriptions",
+          "type": "toggle",
+          "label": "Show item descriptions",
+          "default": true
+        },
+        {
+          "id": "menu.show_calories",
+          "type": "toggle",
+          "label": "Show calories",
+          "default": false
+        },
+        {
+          "id": "menu.show_allergens",
+          "type": "toggle",
+          "label": "Show allergens",
+          "default": false
+        }
+      ]
+    },
+    {
+      "group": "Texts",
+      "icon": "type",
+      "fields": [
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Tagline",
+          "default": ""
+        },
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Popular"
+        },
+        {
+          "id": "texts.policy_note",
+          "type": "text",
+          "label": "Booking policy note",
+          "default": ""
+        },
+        {
+          "id": "texts.footer_note",
+          "type": "text",
+          "label": "Footer note",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "include": "splash",
+      "fields": {
+        "splash.enabled": {
+          "default": false
+        }
+      }
+    },
+    {
+      "include": "search"
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "header",
+      "label": "Header",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "announcement",
+      "label": "Announcement bar",
+      "default": false,
+      "toggleable": true,
+      "orderable": false
+    },
+    {
+      "id": "order_type",
+      "label": "Order type",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "hero",
+      "label": "Hero",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "offers",
+      "label": "Offers",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "search",
+      "label": "Search",
+      "default": false,
+      "toggleable": true,
+      "orderable": false
+    },
+    {
+      "id": "category_nav",
+      "label": "Categories",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "featured",
+      "label": "Featured",
+      "default": true,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "catalog",
+      "label": "Catalog",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "custom_blocks",
+      "label": "Custom blocks",
+      "default": false,
+      "toggleable": true,
+      "orderable": true
+    },
+    {
+      "id": "info",
+      "label": "Store info",
+      "default": true,
+      "toggleable": false,
+      "orderable": true
+    },
+    {
+      "id": "footer",
+      "label": "Footer",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    },
+    {
+      "id": "cart_bar",
+      "label": "Cart bar",
+      "default": true,
+      "toggleable": false,
+      "orderable": false
+    }
+  ]
+}

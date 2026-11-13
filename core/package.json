@@ -1,0 +1,16 @@
+{
+    "private": true,
+    "license": "AGPL-3.0-only",
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "test:e2e": "node tests/e2e/run.js",
+        "test:money": "node tests/e2e/lib/mb-money.test.js",
+        "test:js": "node --test tests/js/storefront/*.test.mjs tests/js/pos/*.test.mjs"
+    },
+    "devDependencies": {
+        "playwright": "^1.63.0",
+        "puppeteer": "^24.43.1"
+    }
+}

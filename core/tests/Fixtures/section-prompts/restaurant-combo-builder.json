@@ -1,0 +1,6 @@
+{
+  "id": "restaurant-combo-builder",
+  "request": "A horizontal combo builder rail with step chips: pick a main, a side and a drink from the menu, each step showing item cards; every card opens the item and can be added to the cart when ordering is on.",
+  "verticals": ["restaurant", "cafe"],
+  "type": "combo-builder"
+}

@@ -1,0 +1,1359 @@
+{
+ "store": {
+  "public_id": "st_bloom_coffee",
+  "slug": "bloom-coffee-demo",
+  "name": "بلوم للقهوة",
+  "logo": {
+   "src": "../../_kit/img/placeholder-1x1.svg",
+   "alt": "بلوم للقهوة"
+  },
+  "cover": {
+   "src": "../../_kit/img/placeholder-16x9.svg",
+   "alt": "بلوم للقهوة"
+  },
+  "tagline": "اطلب مسبقاً وتجاوز الطابور",
+  "locale": "ar",
+  "dir": "rtl",
+  "locales": [
+   {
+    "code": "en",
+    "name": "English",
+    "url": "/bloom-coffee-demo?lang=en"
+   },
+   {
+    "code": "ar",
+    "name": "العربية",
+    "url": "/bloom-coffee-demo?lang=ar"
+   }
+  ],
+  "timezone": "Asia/Riyadh",
+  "vertical_set": "food",
+  "store_type": "cafe",
+  "status": {
+   "open": true,
+   "label": "مفتوح · يغلق 11:30 م",
+   "next_change_at": "2026-10-02T23:30:00+03:00",
+   "paused_reason": null
+  },
+  "contact": {
+   "phone": "+966 55 010 0102",
+   "whatsapp": "+966 55 010 0102",
+   "address": "شارع العليا، حي العليا، الرياض"
+  },
+  "social": [
+   {
+    "network": "instagram",
+    "url": "https://instagram.com/bloom-coffee"
+   }
+  ],
+  "rating": {
+   "avg": 4.8,
+   "count": 612
+  },
+  "legal_links": [
+   {
+    "label": "الخصوصية",
+    "url": "/bloom-coffee-demo/privacy"
+   },
+   {
+    "label": "الشروط",
+    "url": "/bloom-coffee-demo/terms"
+   }
+  ],
+  "powered_by": true,
+  "identity": {
+   "legal_name": "مؤسسة بلوم للقهوة التجارية",
+   "commercial_registration": {
+    "number": "SAMPLE-CR-0000-2202",
+    "label": "السجل التجاري"
+   },
+   "tax_registration": {
+    "number": "SAMPLE-VAT-0000-2202",
+    "label": "الرقم الضريبي"
+   },
+   "address": "شارع العليا، حي العليا، الرياض 12213"
+  }
+ },
+ "branch": {
+  "current": {
+   "public_id": "br_olaya",
+   "name": "فرع العليا",
+   "address": "شارع العليا، حي العليا، الرياض"
+  },
+  "switchable": [
+   {
+    "public_id": "br_olaya",
+    "name": "فرع العليا",
+    "url": "/bloom-coffee-demo?branch=br_olaya"
+   },
+   {
+    "public_id": "br_malqa",
+    "name": "فرع الملقا",
+    "url": "/bloom-coffee-demo?branch=br_malqa"
+   }
+  ]
+ },
+ "context": {
+  "order_types": [
+   {
+    "key": "takeaway",
+    "label": "استلام",
+    "needs_address": false,
+    "needs_slot": false
+   },
+   {
+    "key": "dine_in",
+    "label": "في المطعم",
+    "needs_address": false,
+    "needs_slot": false
+   },
+   {
+    "key": "delivery",
+    "label": "توصيل",
+    "needs_address": true,
+    "needs_slot": false
+   }
+  ],
+  "selected_order_type": "takeaway",
+  "schedule_ahead": false,
+  "prep_time_min": 8
+ },
+ "theme": {
+  "slug": "brew",
+  "preset": "matcha",
+  "settings": {
+   "colors.primary": "#067655",
+   "colors.background": "#F7FAF8",
+   "colors.surface": "#FFFFFF",
+   "colors.text": "#152B1F",
+   "colors.accent": "#F2A93B",
+   "layout.radius": "pill",
+   "layout.density": "cozy",
+   "fonts.pair": "jakarta",
+   "scheme.mode": "light",
+   "colors_dark.primary": "#4FD1A1",
+   "colors_dark.background": "#0F1713",
+   "colors_dark.surface": "#18221D",
+   "colors_dark.text": "#EEF5F0",
+   "colors_dark.accent": "#F5B85A",
+   "layout.card": "grid",
+   "layout.image_ratio": "1:1",
+   "layout.category_nav": "chips",
+   "layout.header": "compact",
+   "layout.desktop_cart": "panel",
+   "menu.show_descriptions": true,
+   "menu.show_calories": true,
+   "menu.show_allergens": true,
+   "splash.enabled": false
+  },
+  "sections": [
+   "header",
+   "order_type",
+   "hero",
+   "reorder",
+   "category_nav",
+   "featured",
+   "catalog",
+   "info",
+   "footer",
+   "cart_bar"
+  ],
+  "texts": {
+   "hero_title": "اطلب مسبقاً وتجاوز الطابور",
+   "featured_title": "الأكثر طلباً",
+   "reorder_title": "اطلب مجدداً",
+   "search_placeholder": "ابحث عن مشروب أو طعام"
+  }
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "coffee",
+    "name": "القهوة",
+    "item_ids": [
+     "espresso",
+     "double-espresso",
+     "americano",
+     "cappuccino",
+     "flat-white",
+     "latte",
+     "cortado",
+     "mocha",
+     "spanish-latte",
+     "v60-pour-over"
+    ],
+    "count": 10
+   },
+   {
+    "id": "matcha",
+    "name": "الماتشا",
+    "item_ids": [
+     "iced-matcha-latte",
+     "hot-matcha-latte",
+     "matcha-espresso",
+     "strawberry-matcha",
+     "coconut-matcha",
+     "hojicha-latte"
+    ],
+    "count": 6
+   },
+   {
+    "id": "cold",
+    "name": "المشروبات الباردة",
+    "item_ids": [
+     "iced-latte",
+     "cold-brew",
+     "iced-spanish-latte",
+     "lemon-mint",
+     "peach-iced-tea",
+     "mango-smoothie",
+     "sparkling-water"
+    ],
+    "count": 7
+   },
+   {
+    "id": "tea",
+    "name": "الشاي",
+    "item_ids": [
+     "moroccan-mint-tea",
+     "karak",
+     "chamomile",
+     "earl-grey"
+    ],
+    "count": 4
+   },
+   {
+    "id": "bakery",
+    "name": "المخبوزات",
+    "item_ids": [
+     "butter-croissant",
+     "almond-croissant",
+     "pain-au-chocolat",
+     "cinnamon-roll",
+     "zaatar-manakish",
+     "cheese-and-thyme-croissant"
+    ],
+    "count": 6
+   },
+   {
+    "id": "desserts",
+    "name": "الحلويات",
+    "item_ids": [
+     "matcha-cookie",
+     "basque-cheesecake",
+     "tiramisu-cup",
+     "date-and-tahini-cookie",
+     "pistachio-brownie",
+     "lotus-cake-slice"
+    ],
+    "count": 6
+   }
+  ],
+  "items": {
+   "espresso": {
+    "id": "espresso",
+    "name": "إسبريسو",
+    "url": "/bloom-coffee-demo/item/espresso",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "إسبريسو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "جرعة قصيرة كثيفة من خلطتنا الخاصة.",
+    "calories": 5,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "double-espresso": {
+    "id": "double-espresso",
+    "name": "إسبريسو مزدوج",
+    "url": "/bloom-coffee-demo/item/double-espresso",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "إسبريسو مزدوج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "جرعتان بنكهة قوية وحلوة.",
+    "calories": 10,
+    "price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "15.00 ر.س"
+    }
+   },
+   "americano": {
+    "id": "americano",
+    "name": "أمريكانو",
+    "url": "/bloom-coffee-demo/item/americano",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "أمريكانو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو مخفف بالماء الساخن.",
+    "calories": 10,
+    "from_price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "cappuccino": {
+    "id": "cappuccino",
+    "name": "كابتشينو",
+    "url": "/bloom-coffee-demo/item/cappuccino",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كابتشينو"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو وحليب مبخّر ورغوة كثيفة.",
+    "calories": 120,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "17.00 ر.س"
+    }
+   },
+   "flat-white": {
+    "id": "flat-white",
+    "name": "فلات وايت",
+    "url": "/bloom-coffee-demo/item/flat-white",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "فلات وايت"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "رغوة ناعمة فوق جرعة مزدوجة.",
+    "calories": 130,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "latte": {
+    "id": "latte",
+    "name": "لاتيه",
+    "url": "/bloom-coffee-demo/item/latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لاتيه"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو ناعم مع الكثير من الحليب.",
+    "calories": 150,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "cortado": {
+    "id": "cortado",
+    "name": "كورتادو",
+    "url": "/bloom-coffee-demo/item/cortado",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كورتادو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو وحليب دافئ بأجزاء متساوية.",
+    "calories": 80,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "mocha": {
+    "id": "mocha",
+    "name": "موكا",
+    "url": "/bloom-coffee-demo/item/mocha",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "موكا"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو وشوكولاتة داكنة وحليب مبخّر.",
+    "calories": 230,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "spanish-latte": {
+    "id": "spanish-latte",
+    "name": "سبانش لاتيه",
+    "url": "/bloom-coffee-demo/item/spanish-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سبانش لاتيه"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو وحليب مع لمسة حليب مكثّف.",
+    "calories": 240,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 2100,
+     "currency": "SAR",
+     "formatted": "21.00 ر.س"
+    }
+   },
+   "v60-pour-over": {
+    "id": "v60-pour-over",
+    "name": "في 60 مقطّرة",
+    "url": "/bloom-coffee-demo/item/v60-pour-over",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "في 60 مقطّرة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "قهوة مقطّرة من أصل واحد تُحضّر يدوياً.",
+    "calories": 5,
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "iced-matcha-latte": {
+    "id": "iced-matcha-latte",
+    "name": "لاتيه ماتشا مثلج",
+    "url": "/bloom-coffee-demo/item/iced-matcha-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لاتيه ماتشا مثلج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ماتشا فاخرة تُخفق عند الطلب فوق الثلج.",
+    "calories": 140,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1700,
+     "currency": "SAR",
+     "formatted": "17.00 ر.س"
+    }
+   },
+   "hot-matcha-latte": {
+    "id": "hot-matcha-latte",
+    "name": "لاتيه ماتشا ساخن",
+    "url": "/bloom-coffee-demo/item/hot-matcha-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لاتيه ماتشا ساخن"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ماتشا مخفوقة مع حليب مبخّر ناعم.",
+    "calories": 130,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "15.00 ر.س"
+    }
+   },
+   "matcha-espresso": {
+    "id": "matcha-espresso",
+    "name": "ماتشا إسبريسو",
+    "url": "/bloom-coffee-demo/item/matcha-espresso",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ماتشا إسبريسو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ماتشا مع جرعة إسبريسو فوق الحليب.",
+    "calories": 150,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "strawberry-matcha": {
+    "id": "strawberry-matcha",
+    "name": "ماتشا بالفراولة",
+    "url": "/bloom-coffee-demo/item/strawberry-matcha",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ماتشا بالفراولة"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "هريس الفراولة والحليب والماتشا.",
+    "calories": 190,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 2000,
+     "currency": "SAR",
+     "formatted": "20.00 ر.س"
+    }
+   },
+   "coconut-matcha": {
+    "id": "coconut-matcha",
+    "name": "ماتشا بجوز الهند",
+    "url": "/bloom-coffee-demo/item/coconut-matcha",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ماتشا بجوز الهند"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ماتشا فوق ماء جوز الهند والحليب.",
+    "calories": 160,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1900,
+     "currency": "SAR",
+     "formatted": "19.00 ر.س"
+    }
+   },
+   "hojicha-latte": {
+    "id": "hojicha-latte",
+    "name": "لاتيه هوجيتشا",
+    "url": "/bloom-coffee-demo/item/hojicha-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لاتيه هوجيتشا"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "شاي أخضر محمّص بنكهة المكسرات وكافيين أقل.",
+    "calories": 140,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "iced-latte": {
+    "id": "iced-latte",
+    "name": "لاتيه مثلج",
+    "url": "/bloom-coffee-demo/item/iced-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "لاتيه مثلج"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "إسبريسو وحليب بارد فوق الثلج.",
+    "calories": 130,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "cold-brew": {
+    "id": "cold-brew",
+    "name": "كولد برو",
+    "url": "/bloom-coffee-demo/item/cold-brew",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كولد برو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "منقوع 18 ساعة لمذاق ناعم.",
+    "calories": 10,
+    "from_price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "15.00 ر.س"
+    }
+   },
+   "iced-spanish-latte": {
+    "id": "iced-spanish-latte",
+    "name": "سبانش لاتيه مثلج",
+    "url": "/bloom-coffee-demo/item/iced-spanish-latte",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سبانش لاتيه مثلج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "حلو وكريمي وبارد.",
+    "calories": 260,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "lemon-mint": {
+    "id": "lemon-mint",
+    "name": "ليمون بالنعناع",
+    "url": "/bloom-coffee-demo/item/lemon-mint",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "ليمون بالنعناع"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "ليمون طازج ونعناع وثلج مجروش.",
+    "calories": 110,
+    "from_price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "peach-iced-tea": {
+    "id": "peach-iced-tea",
+    "name": "شاي مثلج بالخوخ",
+    "url": "/bloom-coffee-demo/item/peach-iced-tea",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شاي مثلج بالخوخ"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "شاي أسود وخوخ وعصرة ليمون.",
+    "calories": 90,
+    "from_price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    }
+   },
+   "mango-smoothie": {
+    "id": "mango-smoothie",
+    "name": "سموذي المانجو",
+    "url": "/bloom-coffee-demo/item/mango-smoothie",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سموذي المانجو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "مانجو وزبادي وقليل من العسل.",
+    "calories": 210,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1800,
+     "currency": "SAR",
+     "formatted": "18.00 ر.س"
+    }
+   },
+   "sparkling-water": {
+    "id": "sparkling-water",
+    "name": "مياه فوّارة",
+    "url": "/bloom-coffee-demo/item/sparkling-water",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مياه فوّارة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "عبوة 330 مل مقدّمة باردة.",
+    "calories": 0,
+    "price": {
+     "minor": 600,
+     "currency": "SAR",
+     "formatted": "6.00 ر.س"
+    }
+   },
+   "moroccan-mint-tea": {
+    "id": "moroccan-mint-tea",
+    "name": "شاي مغربي بالنعناع",
+    "url": "/bloom-coffee-demo/item/moroccan-mint-tea",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شاي مغربي بالنعناع"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "شاي أخضر بالنعناع الطازج يُقدَّم في إبريق.",
+    "calories": 30,
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "karak": {
+    "id": "karak",
+    "name": "شاي كرك",
+    "url": "/bloom-coffee-demo/item/karak",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شاي كرك"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": true,
+    "short": "شاي قوي بالهيل والحليب المبخّر.",
+    "calories": 130,
+    "allergens": [
+     "الحليب ومشتقاته"
+    ],
+    "from_price": {
+     "minor": 1000,
+     "currency": "SAR",
+     "formatted": "10.00 ر.س"
+    }
+   },
+   "chamomile": {
+    "id": "chamomile",
+    "name": "بابونج",
+    "url": "/bloom-coffee-demo/item/chamomile",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "بابونج"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "أزهار مجففة مهدّئة بدون كافيين.",
+    "calories": 0,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "earl-grey": {
+    "id": "earl-grey",
+    "name": "إيرل جراي",
+    "url": "/bloom-coffee-demo/item/earl-grey",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "إيرل جراي"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "شاي أسود معطّر بالبرغموت.",
+    "calories": 0,
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "butter-croissant": {
+    "id": "butter-croissant",
+    "name": "كرواسون بالزبدة",
+    "url": "/bloom-coffee-demo/item/butter-croissant",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كرواسون بالزبدة"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "طبقات هشة مخبوزة هذا الصباح.",
+    "calories": 270,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 900,
+     "currency": "SAR",
+     "formatted": "9.00 ر.س"
+    }
+   },
+   "almond-croissant": {
+    "id": "almond-croissant",
+    "name": "كرواسون باللوز",
+    "url": "/bloom-coffee-demo/item/almond-croissant",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كرواسون باللوز"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     },
+     {
+      "kind": "new",
+      "label": "جديد"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "محشو بكريمة اللوز ومرشوش بالسكر.",
+    "calories": 380,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "المكسرات",
+     "البيض"
+    ],
+    "price": {
+     "minor": 1400,
+     "currency": "SAR",
+     "formatted": "14.00 ر.س"
+    }
+   },
+   "pain-au-chocolat": {
+    "id": "pain-au-chocolat",
+    "name": "كرواسون بالشوكولاتة",
+    "url": "/bloom-coffee-demo/item/pain-au-chocolat",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كرواسون بالشوكولاتة"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "قطعتا شوكولاتة داكنة داخل عجينة هشة.",
+    "calories": 330,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 1200,
+     "currency": "SAR",
+     "formatted": "12.00 ر.س"
+    }
+   },
+   "cinnamon-roll": {
+    "id": "cinnamon-roll",
+    "name": "سينابون",
+    "url": "/bloom-coffee-demo/item/cinnamon-roll",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "سينابون"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "لفة طرية بالقرفة والسكر وكريمة الجبن.",
+    "calories": 420,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "price": {
+     "minor": 1500,
+     "currency": "SAR",
+     "formatted": "15.00 ر.س"
+    }
+   },
+   "zaatar-manakish": {
+    "id": "zaatar-manakish",
+    "name": "مناقيش زعتر",
+    "url": "/bloom-coffee-demo/item/zaatar-manakish",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "مناقيش زعتر"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "خبز مسطح بالزعتر وزيت الزيتون.",
+    "calories": 290,
+    "allergens": [
+     "الغلوتين",
+     "السمسم"
+    ],
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    }
+   },
+   "cheese-and-thyme-croissant": {
+    "id": "cheese-and-thyme-croissant",
+    "name": "كرواسون بالجبنة والزعتر",
+    "url": "/bloom-coffee-demo/item/cheese-and-thyme-croissant",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كرواسون بالجبنة والزعتر"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كرواسون مالح بالجبنة الذائبة والزعتر.",
+    "calories": 340,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته"
+    ],
+    "price": {
+     "minor": 1300,
+     "currency": "SAR",
+     "formatted": "13.00 ر.س"
+    }
+   },
+   "matcha-cookie": {
+    "id": "matcha-cookie",
+    "name": "كوكيز الماتشا",
+    "url": "/bloom-coffee-demo/item/matcha-cookie",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كوكيز الماتشا"
+    },
+    "badges": [
+     {
+      "kind": "new",
+      "label": "جديد"
+     },
+     {
+      "kind": "sold_out",
+      "label": "نفدت الكمية"
+     }
+    ],
+    "sold_out": true,
+    "has_required_choices": false,
+    "short": "كوكيز طري بالشوكولاتة البيضاء والماتشا.",
+    "calories": 310,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "price": {
+     "minor": 1100,
+     "currency": "SAR",
+     "formatted": "11.00 ر.س"
+    }
+   },
+   "basque-cheesecake": {
+    "id": "basque-cheesecake",
+    "name": "تشيز كيك باسك",
+    "url": "/bloom-coffee-demo/item/basque-cheesecake",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "تشيز كيك باسك"
+    },
+    "badges": [
+     {
+      "kind": "popular",
+      "label": "الأكثر طلباً"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "وجه محروق وقلب كريمي.",
+    "calories": 430,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "price": {
+     "minor": 2400,
+     "currency": "SAR",
+     "formatted": "24.00 ر.س"
+    }
+   },
+   "tiramisu-cup": {
+    "id": "tiramisu-cup",
+    "name": "كوب تيراميسو",
+    "url": "/bloom-coffee-demo/item/tiramisu-cup",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كوب تيراميسو"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "ماسكاربوني وإسبريسو وكاكاو.",
+    "calories": 390,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   },
+   "date-and-tahini-cookie": {
+    "id": "date-and-tahini-cookie",
+    "name": "كوكيز التمر والطحينة",
+    "url": "/bloom-coffee-demo/item/date-and-tahini-cookie",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "كوكيز التمر والطحينة"
+    },
+    "badges": [
+     {
+      "kind": "low_stock",
+      "label": "كمية محدودة"
+     }
+    ],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "كوكيز طري بتمر السكري والطحينة.",
+    "calories": 280,
+    "allergens": [
+     "الغلوتين",
+     "السمسم",
+     "البيض"
+    ],
+    "price": {
+     "minor": 1000,
+     "currency": "SAR",
+     "formatted": "10.00 ر.س"
+    }
+   },
+   "pistachio-brownie": {
+    "id": "pistachio-brownie",
+    "name": "براوني الفستق",
+    "url": "/bloom-coffee-demo/item/pistachio-brownie",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "براوني الفستق"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "براوني كثيف بالفستق المحمص.",
+    "calories": 370,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "المكسرات",
+     "البيض"
+    ],
+    "price": {
+     "minor": 1600,
+     "currency": "SAR",
+     "formatted": "16.00 ر.س"
+    }
+   },
+   "lotus-cake-slice": {
+    "id": "lotus-cake-slice",
+    "name": "شريحة كيك اللوتس",
+    "url": "/bloom-coffee-demo/item/lotus-cake-slice",
+    "image": {
+     "src": "../../_kit/img/placeholder-1x1.svg",
+     "alt": "شريحة كيك اللوتس"
+    },
+    "badges": [],
+    "sold_out": false,
+    "has_required_choices": false,
+    "short": "طبقات كريمة اللوتس وفتات الكراميل.",
+    "calories": 450,
+    "allergens": [
+     "الغلوتين",
+     "الحليب ومشتقاته",
+     "البيض"
+    ],
+    "price": {
+     "minor": 2200,
+     "currency": "SAR",
+     "formatted": "22.00 ر.س"
+    }
+   }
+  }
+ },
+ "features": {
+  "featured": [
+   "cappuccino",
+   "flat-white",
+   "spanish-latte",
+   "iced-matcha-latte",
+   "iced-latte",
+   "karak"
+  ]
+ },
+ "customer": {
+  "name": "نورة",
+  "has_passkey": false,
+  "loyalty_points": 240,
+  "recent_items": [
+   {
+    "item_id": "flat-white",
+    "label": "فلات وايت",
+    "reorder_url": "/bloom-coffee-demo/reorder/flat-white",
+    "choices_label": "وسط · كامل الدسم"
+   },
+   {
+    "item_id": "iced-latte",
+    "label": "لاتيه مثلج",
+    "reorder_url": "/bloom-coffee-demo/reorder/iced-latte",
+    "choices_label": "وسط · كامل الدسم"
+   },
+   {
+    "item_id": "espresso",
+    "label": "إسبريسو",
+    "reorder_url": "/bloom-coffee-demo/reorder/espresso"
+   }
+  ]
+ },
+ "endpoints": {
+  "cart": "/bloom-coffee-demo/cart",
+  "quote": "/bloom-coffee-demo/quote",
+  "place": "/bloom-coffee-demo/order",
+  "track": "/bloom-coffee-demo/track",
+  "coupon": "/bloom-coffee-demo/coupon",
+  "otp": "/bloom-coffee-demo/otp",
+  "account": "/bloom-coffee-demo/account",
+  "search": "/bloom-coffee-demo/search"
+ },
+ "money": {
+  "currency": {
+   "code": "SAR",
+   "symbol": "ر.س",
+   "exponent": 2,
+   "symbol_position_effective": "after"
+  },
+  "tax": {
+   "mode": "exclusive",
+   "rate": 15,
+   "label": "ضريبة القيمة المضافة"
+  }
+ },
+ "i18n": {},
+ "page": {
+  "kind": "checkout",
+  "checkout": {
+   "delivery_methods": [
+    {
+     "id": "asap",
+     "label": "في أقرب وقت",
+     "sub": "جاهز نحو 9:52 ص",
+     "selected": true
+    },
+    {
+     "id": "schedule",
+     "label": "جدولة",
+     "sub": "اختر وقتاً"
+    }
+   ],
+   "fields": [
+    {
+     "id": "cup_name",
+     "label": "الاسم على الطلب",
+     "value": "نورة",
+     "type": "text",
+     "required": true,
+     "help": "يُكتب على الكوب"
+    },
+    {
+     "id": "mobile",
+     "label": "الجوال (لتحديثات الطلب)",
+     "value": "+966 55 123 4567",
+     "type": "tel",
+     "dir": "ltr",
+     "required": true
+    }
+   ],
+   "payment_methods": [
+    {
+     "id": "apple_pay",
+     "label": "Apple Pay",
+     "sub": "الأسرع",
+     "selected": true,
+     "icon": "apple"
+    },
+    {
+     "id": "card",
+     "label": "بطاقة",
+     "sub": "فيزا، ماستركارد، مدى",
+     "icon": "credit-card"
+    },
+    {
+     "id": "counter",
+     "label": "الدفع عند الكاونتر",
+     "sub": "نقداً أو بالبطاقة عند الاستلام",
+     "icon": "store"
+    }
+   ],
+   "quote": {
+    "lines": [
+     {
+      "id": "ln_1",
+      "item_id": "iced-matcha-latte",
+      "name": "لاتيه ماتشا مثلج",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-1x1.svg",
+       "alt": "لاتيه ماتشا مثلج"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 2500,
+       "currency": "SAR",
+       "formatted": "25.00 ر.س"
+      },
+      "choices_label": "وسط · كامل الدسم · خفيفة · جرعة ماتشا إضافية · «نورة»"
+     },
+     {
+      "id": "ln_2",
+      "item_id": "butter-croissant",
+      "name": "كرواسون بالزبدة",
+      "thumb": {
+       "src": "../../_kit/img/placeholder-1x1.svg",
+       "alt": "كرواسون بالزبدة"
+      },
+      "qty": 1,
+      "line_total": {
+       "minor": 900,
+       "currency": "SAR",
+       "formatted": "9.00 ر.س"
+      },
+      "choices_label": "مسخّن"
+     }
+    ],
+    "rows": [
+     {
+      "key": "subtotal",
+      "label": "المجموع الفرعي · صنفان",
+      "amount": {
+       "minor": 3400,
+       "currency": "SAR",
+       "formatted": "34.00 ر.س"
+      },
+      "kind": "subtotal"
+     },
+     {
+      "key": "vat",
+      "label": "ضريبة القيمة المضافة 15%",
+      "amount": {
+       "minor": 510,
+       "currency": "SAR",
+       "formatted": "5.10 ر.س"
+      },
+      "kind": "tax"
+     }
+    ],
+    "total": {
+     "minor": 3910,
+     "currency": "SAR",
+     "formatted": "39.10 ر.س"
+    },
+    "total_label": "المبلغ المطلوب"
+   },
+   "place_label": "ادفع عبر Apple Pay · 39.10 ر.س"
+  }
+ }
+}

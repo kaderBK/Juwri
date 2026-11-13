@@ -1,0 +1,45 @@
+{
+    "label": "Pizzeria",
+    "categories": [
+        {
+            "name": "Pizzas",
+            "name_ar": "بيتزا",
+            "items": [
+                {"name": "Margherita", "name_ar": "مارغريتا", "description": "Tomato, mozzarella and basil.", "description_ar": "طماطم وموزاريلا وريحان.", "price": 9.00, "vegan": false, "popular": true},
+                {"name": "Pepperoni", "name_ar": "بيبروني", "description": "Classic spicy pepperoni and cheese.", "description_ar": "بيبروني حار وجبنة كلاسيكية.", "price": 11.00, "popular": true},
+                {"name": "Quattro Formaggi", "name_ar": "أربعة أجبان", "description": "A blend of four cheeses.", "description_ar": "مزيج من أربعة أجبان.", "price": 12.50},
+                {"name": "Veggie Garden", "name_ar": "خضار الحديقة", "description": "Peppers, mushrooms, onion, olives.", "description_ar": "فلفل وفطر وبصل وزيتون.", "price": 11.50},
+                {"name": "Diavola", "name_ar": "ديافولا", "description": "Spicy salami with chili flakes.", "description_ar": "سلامي حار مع رقائق الفلفل.", "price": 12.00}
+            ]
+        },
+        {
+            "name": "Pasta",
+            "name_ar": "معكرونة",
+            "items": [
+                {"name": "Spaghetti Bolognese", "name_ar": "سباغيتي بولونيز", "description": "Slow-cooked beef ragu.", "description_ar": "راغو لحم مطهو ببطء.", "price": 10.50, "popular": true},
+                {"name": "Penne Arrabbiata", "name_ar": "بيني أرابياتا", "description": "Garlicky tomato with a kick.", "description_ar": "طماطم بالثوم مع لسعة حار.", "price": 9.50, "vegan": true},
+                {"name": "Fettuccine Alfredo", "name_ar": "فيتوتشيني ألفريدو", "description": "Creamy parmesan sauce.", "description_ar": "صلصة بارميزان كريمية.", "price": 11.00},
+                {"name": "Pesto Linguine", "name_ar": "لينغويني بيستو", "description": "Basil pesto and pine nuts.", "description_ar": "بيستو الريحان وحبوب الصنوبر.", "price": 11.00}
+            ]
+        },
+        {
+            "name": "Starters",
+            "name_ar": "مقبلات",
+            "items": [
+                {"name": "Garlic Bread", "name_ar": "خبز بالثوم", "description": "Warm bread with garlic butter.", "description_ar": "خبز دافئ مع زبدة الثوم.", "price": 4.50, "vegan": true},
+                {"name": "Bruschetta", "name_ar": "بروشيتا", "description": "Toasted bread, tomato and basil.", "description_ar": "خبز محمص وطماطم وريحان.", "price": 5.50, "vegan": true},
+                {"name": "Caprese Salad", "name_ar": "سلطة كابريزي", "description": "Mozzarella, tomato, olive oil.", "description_ar": "موزاريلا وطماطم وزيت زيتون.", "price": 6.50},
+                {"name": "Fried Calamari", "name_ar": "كاليماري مقلي", "description": "Crispy squid with lemon aioli.", "description_ar": "حبار مقرمش مع صلصة الليمون.", "price": 7.50}
+            ]
+        },
+        {
+            "name": "Desserts",
+            "name_ar": "حلويات",
+            "items": [
+                {"name": "Tiramisu", "name_ar": "تيراميسو", "description": "Coffee-soaked layers and mascarpone.", "description_ar": "طبقات منقوعة بالقهوة والماسكاربوني.", "price": 5.50, "popular": true},
+                {"name": "Panna Cotta", "name_ar": "بانا كوتا", "description": "Silky vanilla cream with berries.", "description_ar": "كريمة فانيلا ناعمة مع التوت.", "price": 5.00},
+                {"name": "Cannoli", "name_ar": "كانولي", "description": "Crisp shells with sweet ricotta.", "description_ar": "قشور مقرمشة مع ريكوتا حلوة.", "price": 4.50}
+            ]
+        }
+    ]
+}

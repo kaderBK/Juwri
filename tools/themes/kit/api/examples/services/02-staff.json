@@ -1,0 +1,92 @@
+{
+  "operationId": "getBookingStaff",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/booking/staff",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:32:10 GMT"
+    },
+    "body": {
+      "staff": [
+        {
+          "id": "019ed498-2000-71f5-ae20-debce6e349f7",
+          "name": "Maha",
+          "role": "Senior stylist",
+          "photo": {
+            "src": "https://media.example/img/placeholder-1x1.svg",
+            "alt": "Maha"
+          },
+          "service_ids": [
+            "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+            "019fb3c1-0800-7ead-8509-4e4a0900b788",
+            "019fc77e-be00-77da-9f84-6b4858089ed4",
+            "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+            "019fe589-2c00-7463-853d-56d20532e3bb",
+            "019f9c5d-7b80-701b-ad13-993c8e046a49",
+            "019faa50-0a00-7f1d-84b5-87ed3b68886b",
+            "019fab62-b280-71f1-803c-570445c0e2b0",
+            "019ebfc7-c180-790b-b11a-4ffa137bd321",
+            "019fb955-4100-7648-a0d3-8af308dd3d1c"
+          ]
+        },
+        {
+          "id": "019ec449-5200-727a-a25a-1a736f3f33d9",
+          "name": "Lina",
+          "role": "Stylist",
+          "photo": {
+            "src": "https://media.example/img/placeholder-1x1.svg",
+            "alt": "Lina"
+          },
+          "service_ids": [
+            "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+            "019fb3c1-0800-7ead-8509-4e4a0900b788",
+            "019fc77e-be00-77da-9f84-6b4858089ed4",
+            "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+            "019e8457-b100-7636-ac74-350ed86ff236",
+            "019eac77-e880-7848-a337-677140941d9b",
+            "019fab62-b280-71f1-803c-570445c0e2b0",
+            "019ebfc7-c180-790b-b11a-4ffa137bd321",
+            "019fb955-4100-7648-a0d3-8af308dd3d1c"
+          ]
+        },
+        {
+          "id": "019fae9a-ac00-74ce-9097-b86a1ad9bc1e",
+          "name": "Sara",
+          "role": "Colourist",
+          "photo": {
+            "src": "https://media.example/img/placeholder-1x1.svg",
+            "alt": "Sara"
+          },
+          "service_ids": [
+            "019ed72b-4e00-76d8-a0e0-611df411c074",
+            "019fea0a-bc80-7cd0-9dd9-ac860044b3f4",
+            "019fb3c1-0800-7ead-8509-4e4a0900b788",
+            "019fc77e-be00-77da-9f84-6b4858089ed4",
+            "01a00bbb-0100-7cc4-8551-362a8f139b0b",
+            "019fe589-2c00-7463-853d-56d20532e3bb",
+            "019f9c5d-7b80-701b-ad13-993c8e046a49",
+            "019faa50-0a00-7f1d-84b5-87ed3b68886b"
+          ]
+        }
+      ],
+      "any_staff": true
+    }
+  }
+}

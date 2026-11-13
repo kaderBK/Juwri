@@ -1,0 +1,892 @@
+{
+    "Juwri\\Core\\Models\\Store": {
+        "table": "stores",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int",
+            "is_verified": "boolean",
+            "mk_enabled": "boolean",
+            "mk_lat": "float",
+            "mk_lng": "float",
+            "mk_zone_ids": "array",
+            "mk_delivery_modes": "array",
+            "mk_featured": "boolean",
+            "mk_reviewed_at": "datetime",
+            "settings": "array",
+            "mk_min_order": "Juwri\\Core\\Money\\Casts\\MinorMoney:mk_min_order_minor",
+            "mk_min_order_minor": "integer"
+        },
+        "hidden": [
+            "settings"
+        ],
+        "sluggable": {
+            "slug": {
+                "source": "title"
+            }
+        },
+        "relations": {
+            "account": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Account",
+                "sql": "select * from \"accounts\" where \"accounts\".\"id\" is null",
+                "eager": []
+            },
+            "branches": {
+                "type": "HasMany",
+                "related": "Juwri\\Core\\Models\\Branch",
+                "sql": "select * from \"branches\" where \"branches\".\"store_id\" is null and \"branches\".\"store_id\" is not null order by \"position\" asc",
+                "eager": []
+            },
+            "cuisines": {
+                "type": "BelongsToMany",
+                "related": "App\\Models\\Cuisine",
+                "sql": "select * from \"cuisines\" inner join \"cuisine_store\" on \"cuisines\".\"id\" = \"cuisine_store\".\"cuisine_id\" where \"cuisine_store\".\"store_id\" is null",
+                "eager": []
+            },
+            "follows": {
+                "type": "HasMany",
+                "related": "App\\Models\\StoreFollow",
+                "sql": "select * from \"store_follows\" where \"store_follows\".\"store_id\" is null and \"store_follows\".\"store_id\" is not null",
+                "eager": []
+            },
+            "hotelStays": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Hotel\\Models\\HotelStay",
+                "sql": "select * from \"hotel_stays\" where \"hotel_stays\".\"store_id\" is null and \"hotel_stays\".\"store_id\" is not null",
+                "eager": []
+            },
+            "image_menus": {
+                "type": "HasMany",
+                "related": "App\\Models\\ImageMenu",
+                "sql": "select * from \"image_menus\" where \"image_menus\".\"store_id\" is null and \"image_menus\".\"store_id\" is not null order by \"position\" asc",
+                "eager": []
+            },
+            "menu_categories": {
+                "type": "HasMany",
+                "related": "App\\Models\\MenuCategory",
+                "sql": "select * from \"categories\" where \"categories\".\"store_id\" is null and \"categories\".\"store_id\" is not null and \"active\" = ? and \"parent\" is null order by \"position\" asc",
+                "eager": [
+                    "subcategories"
+                ]
+            },
+            "menu_categories_with_items": {
+                "type": "HasMany",
+                "related": "App\\Models\\MenuCategory",
+                "sql": "select * from \"categories\" where \"categories\".\"store_id\" is null and \"categories\".\"store_id\" is not null and \"active\" = ? and \"parent\" is null order by \"position\" asc",
+                "eager": [
+                    "subcategories",
+                    "subcategories.menus",
+                    "menus"
+                ]
+            },
+            "mkCity": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\City",
+                "sql": "select * from \"cities\" where \"cities\".\"id\" is null",
+                "eager": []
+            },
+            "serviceRequests": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Hotel\\Models\\ServiceRequest",
+                "sql": "select * from \"service_requests\" where \"service_requests\".\"store_id\" is null and \"service_requests\".\"store_id\" is not null",
+                "eager": []
+            },
+            "storeReviews": {
+                "type": "HasMany",
+                "related": "App\\Models\\StoreReview",
+                "sql": "select * from \"store_reviews\" where \"store_reviews\".\"store_id\" is null and \"store_reviews\".\"store_id\" is not null",
+                "eager": []
+            },
+            "tables": {
+                "type": "HasMany",
+                "related": "App\\Models\\StoreTable",
+                "sql": "select * from \"store_tables\" where \"store_tables\".\"store_id\" is null and \"store_tables\".\"store_id\" is not null",
+                "eager": []
+            },
+            "user": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\User",
+                "sql": "select * from \"users\" where \"users\".\"id\" is null",
+                "eager": []
+            },
+            "views": {
+                "type": "HasMany",
+                "related": "App\\Models\\StoreView",
+                "sql": "select * from \"store_page_views\" where \"store_page_views\".\"store_id\" is null and \"store_page_views\".\"store_id\" is not null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Payments\\Models\\Transaction": {
+        "table": "transaction",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "product_name",
+            "product_id",
+            "user_id",
+            "store_id",
+            "status",
+            "amount",
+            "base_amount",
+            "currency_code",
+            "payment_id",
+            "transaction_gatway",
+            "transaction_method",
+            "transaction_description",
+            "transaction_ip",
+            "frequency",
+            "billing",
+            "taxes_ids",
+            "details",
+            "coupon",
+            "featured",
+            "urgent",
+            "highlight",
+            "invoice_number",
+            "credited_at"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "coupon": "object",
+            "billing": "object",
+            "details": "object",
+            "credited_at": "datetime",
+            "voided_at": "datetime",
+            "amount": "Juwri\\Core\\Money\\Casts\\MinorMoney:amount_minor",
+            "amount_minor": "integer",
+            "base_amount": "Juwri\\Core\\Money\\Casts\\MinorMoney:base_amount_minor",
+            "base_amount_minor": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "claimOrder": {
+                "type": "BelongsTo",
+                "related": "App\\Models\\Order",
+                "sql": "select * from \"orders\" where \"orders\".\"id\" is null",
+                "eager": []
+            },
+            "store": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Store",
+                "sql": "select * from \"stores\" where \"stores\".\"id\" is null",
+                "eager": []
+            },
+            "user": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\User",
+                "sql": "select * from \"users\" where \"users\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Core\\Models\\PlatformSetting": {
+        "table": "platform_settings",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "name",
+            "value"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [
+            "value"
+        ],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Modules\\Content\\Models\\Blog": {
+        "table": "blog_posts",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "author",
+            "title",
+            "slug",
+            "locale",
+            "translation_group",
+            "description",
+            "meta_description",
+            "image",
+            "tags",
+            "status"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": {
+            "slug": {
+                "source": "title"
+            }
+        },
+        "relations": {
+            "categories": {
+                "type": "BelongsToMany",
+                "related": "Juwri\\Modules\\Content\\Models\\BlogCategory",
+                "sql": "select * from \"blog_categories\" inner join \"blog_category_post\" on \"blog_categories\".\"id\" = \"blog_category_post\".\"category_id\" where \"blog_category_post\".\"blog_id\" is null",
+                "eager": []
+            },
+            "comments": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Content\\Models\\BlogComment",
+                "sql": "select * from \"blog_comments\" where \"blog_comments\".\"blog_id\" is null and \"blog_comments\".\"blog_id\" is not null",
+                "eager": []
+            },
+            "user": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\User",
+                "sql": "select * from \"users\" where \"users\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Tables\\Models\\WaiterCall": {
+        "table": "waiter_calls",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "store": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Store",
+                "sql": "select * from \"stores\" where \"stores\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Content\\Models\\Testimonial": {
+        "table": "testimonials",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "name",
+            "designation",
+            "content",
+            "image",
+            "translations"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "translations": "object"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Modules\\Fiscal\\Models\\Tax": {
+        "table": "taxes",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "internal_name",
+            "name",
+            "description",
+            "value",
+            "value_type",
+            "type",
+            "billing_type",
+            "countries"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "value_amount": "Juwri\\Core\\Money\\Casts\\MinorMoney:value_amount_minor",
+            "value_amount_minor": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "country": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Country",
+                "sql": "select * from \"countries\" where \"countries\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Marketing\\Models\\Subscriber": {
+        "table": "newsletter_subscribers",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "email",
+            "joined"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Core\\Models\\Notification": {
+        "table": "platform_notifications",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "title",
+            "type",
+            "link",
+            "status"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Modules\\Content\\Models\\BlogCategory": {
+        "table": "blog_categories",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "title",
+            "slug",
+            "position",
+            "active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": {
+            "slug": {
+                "source": "title"
+            }
+        },
+        "relations": {
+            "blogs": {
+                "type": "BelongsToMany",
+                "related": "Juwri\\Modules\\Content\\Models\\Blog",
+                "sql": "select * from \"blog_posts\" inner join \"blog_category_post\" on \"blog_posts\".\"id\" = \"blog_category_post\".\"blog_id\" where \"blog_category_post\".\"category_id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Content\\Models\\Adsense": {
+        "table": "ad_slots",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "provider_name",
+            "slug",
+            "code",
+            "status"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "App\\Models\\StoreView": {
+        "table": "store_page_views",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "store_id",
+            "ip",
+            "date",
+            "device",
+            "lang",
+            "source",
+            "dwell_ms",
+            "exit_section"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "store": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Store",
+                "sql": "select * from \"stores\" where \"stores\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "App\\Models\\Upgrade": {
+        "table": "upgrades",
+        "key": "upgrade_id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "sub_id",
+            "user_id",
+            "pay_mode",
+            "interval",
+            "upgrade_lasttime",
+            "upgrade_expires",
+            "unique_id",
+            "status",
+            "grace_until",
+            "retry_count",
+            "last_retry_at"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "upgrade_id": "int",
+            "grace_until": "datetime",
+            "last_retry_at": "datetime",
+            "retry_count": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "user": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\User",
+                "sql": "select * from \"users\" where \"users\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Content\\Models\\Page": {
+        "table": "pages",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "title",
+            "content",
+            "slug",
+            "type",
+            "translation_lang",
+            "active",
+            "builder",
+            "design_json"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "design_json": "array"
+        },
+        "hidden": [],
+        "sluggable": {
+            "slug": {
+                "source": "title"
+            }
+        },
+        "relations": {
+            "language": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Language",
+                "sql": "select * from \"languages\" where \"languages\".\"code\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Payments\\Models\\PaymentGateway": {
+        "table": "payment_gateways",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "payment_install",
+            "payment_title",
+            "payment_folder"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "payment_install": "boolean"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Modules\\Ordering\\Models\\OrderItemExtra": {
+        "table": "order_item_extras",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int",
+            "price": "Juwri\\Core\\Money\\Casts\\MinorMoney:price_minor",
+            "price_minor": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "extra": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Modules\\Menu\\Models\\MenuExtra",
+                "sql": "select * from \"modifiers\" where \"modifiers\".\"id\" is null and \"modifiers\".\"kind\" = ?",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Core\\Models\\Language": {
+        "table": "languages",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "name",
+            "code",
+            "direction",
+            "active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "App\\Models\\ImageMenu": {
+        "table": "image_menus",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "App\\Models\\Coupon": {
+        "table": "coupons",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "code",
+            "percentage",
+            "limit",
+            "used",
+            "expiry_at",
+            "coupon_type",
+            "user_id",
+            "applies_interval",
+            "first_period_only",
+            "issuer_scope",
+            "reseller_id",
+            "applies_to",
+            "min_order_amount",
+            "per_customer_limit",
+            "branch_id",
+            "buy_scope",
+            "buy_id",
+            "buy_qty",
+            "get_id",
+            "get_qty",
+            "get_discount_percent"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "expiry_at": "datetime",
+            "min_order_amount": "Juwri\\Core\\Money\\Casts\\MinorMoney:min_order_amount_minor,store",
+            "min_order_amount_minor": "integer",
+            "amount_off": "Juwri\\Core\\Money\\Casts\\MinorMoney:amount_minor",
+            "amount_minor": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "Juwri\\Modules\\Content\\Models\\BlogComment": {
+        "table": "blog_comments",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "user_id",
+            "blog_id",
+            "name",
+            "email",
+            "comment",
+            "parent",
+            "active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "blog": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Modules\\Content\\Models\\Blog",
+                "sql": "select * from \"blog_posts\" where \"blog_posts\".\"id\" is null",
+                "eager": []
+            },
+            "replies": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Content\\Models\\BlogComment",
+                "sql": "select * from \"blog_comments\" where \"blog_comments\".\"parent\" is null and \"blog_comments\".\"parent\" is not null",
+                "eager": []
+            },
+            "user": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\User",
+                "sql": "select * from \"users\" where \"users\".\"id\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Content\\Models\\Faq": {
+        "table": "faq_entries",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "faq_title",
+            "faq_content",
+            "translation_lang",
+            "active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "language": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Language",
+                "sql": "select * from \"languages\" where \"languages\".\"code\" is null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Core\\Models\\Country": {
+        "table": "countries",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": true,
+        "fillable": [
+            "code",
+            "name",
+            "capital",
+            "continent",
+            "continent_code",
+            "phone",
+            "currency",
+            "symbol",
+            "alpha_3",
+            "default_locale",
+            "locales",
+            "tax_profile",
+            "payment_providers",
+            "mk_active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "locales": "array",
+            "tax_profile": "array",
+            "payment_providers": "array",
+            "mk_active": "boolean"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "cities": {
+                "type": "HasMany",
+                "related": "Juwri\\Core\\Models\\City",
+                "sql": "select * from \"cities\" where \"cities\".\"country_id\" is null and \"cities\".\"country_id\" is not null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Menu\\Models\\Allergy": {
+        "table": "allergies",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [
+            "store_id",
+            "title",
+            "image",
+            "translations",
+            "position",
+            "active"
+        ],
+        "guarded": [
+            "*"
+        ],
+        "casts": {
+            "id": "int",
+            "translations": "object"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": []
+    },
+    "App\\Models\\StoreTable": {
+        "table": "store_tables",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int",
+            "status_changed_at": "datetime",
+            "verify_code_rotated_at": "datetime"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "activeStay": {
+                "type": "HasOne",
+                "related": "Juwri\\Modules\\Hotel\\Models\\HotelStay",
+                "sql": "select * from \"hotel_stays\" where \"hotel_stays\".\"table_id\" is null and \"hotel_stays\".\"table_id\" is not null and \"status\" = ?",
+                "eager": []
+            },
+            "branch": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Branch",
+                "sql": "select * from \"branches\" where \"branches\".\"id\" is null",
+                "eager": []
+            },
+            "mergeGroupsLed": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Tables\\Models\\TableMergeGroup",
+                "sql": "select * from \"table_merge_groups\" where \"table_merge_groups\".\"primary_table_id\" is null and \"table_merge_groups\".\"primary_table_id\" is not null",
+                "eager": []
+            },
+            "mergeMemberships": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Tables\\Models\\TableMergeMember",
+                "sql": "select * from \"table_merge_members\" where \"table_merge_members\".\"table_id\" is null and \"table_merge_members\".\"table_id\" is not null",
+                "eager": []
+            },
+            "roomType": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Modules\\Hotel\\Models\\RoomType",
+                "sql": "select * from \"room_types\" where \"room_types\".\"id\" is null",
+                "eager": []
+            },
+            "stays": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Hotel\\Models\\HotelStay",
+                "sql": "select * from \"hotel_stays\" where \"hotel_stays\".\"table_id\" is null and \"hotel_stays\".\"table_id\" is not null",
+                "eager": []
+            },
+            "store": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Core\\Models\\Store",
+                "sql": "select * from \"stores\" where \"stores\".\"id\" is null",
+                "eager": []
+            },
+            "tableSessions": {
+                "type": "HasMany",
+                "related": "Juwri\\Modules\\Tables\\Models\\TableSession",
+                "sql": "select * from \"table_sessions\" where \"table_sessions\".\"table_id\" is null and \"table_sessions\".\"table_id\" is not null",
+                "eager": []
+            }
+        }
+    },
+    "Juwri\\Modules\\Menu\\Models\\MenuVariant": {
+        "table": "menu_variants",
+        "key": "id",
+        "incrementing": true,
+        "timestamps": false,
+        "fillable": [],
+        "guarded": [],
+        "casts": {
+            "id": "int",
+            "options": "object",
+            "stock_qty": "integer",
+            "compare_at_minor": "integer",
+            "low_stock_threshold": "integer",
+            "price": "Juwri\\Core\\Money\\Casts\\MinorMoney:price_minor",
+            "price_minor": "integer"
+        },
+        "hidden": [],
+        "sluggable": null,
+        "relations": {
+            "menu": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Modules\\Menu\\Models\\Menu",
+                "sql": "select * from \"items\" where \"items\".\"id\" is null and \"items\".\"deleted_at\" is null",
+                "eager": []
+            }
+        }
+    }
+}

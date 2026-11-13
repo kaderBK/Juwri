@@ -1,0 +1,58 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — account: sign-in tabs, profile, saved addresses, orders */
+.mb-account { display: grid; gap: 12px; }
+.mb-account form { display: grid; gap: 8px; }
+.mb-account-rich { padding-block-end: var(--ts-gap-2, 10px); }
+.mb-acct-greet { margin: 0; color: var(--tc-text-muted, #6b7280); }
+.mb-acct-greet b { color: var(--tc-text, #111); }
+.mb-acct-tabs { display: flex; gap: 6px; }
+.mb-acct-tabs button { flex: 1; padding-inline: 8px; }
+.mb-acct-row { display: flex; gap: 8px; }
+.mb-acct-row .mb-place { flex: none; inline-size: auto; }
+.mb-acct-orders { display: grid; gap: 8px; padding-block-start: 12px; border-block-start: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .1); }
+.mb-acct-order-list,
+.mb-addr-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.mb-acct-order a {
+  display: flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-inline: 12px;
+  border-radius: var(--tr-control, 12px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .05);
+  color: inherit;
+  font-size: .9rem;
+  text-decoration: none;
+}
+.mb-acct-sec { display: block; margin-block-start: 8px; font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.05rem; }
+.mb-acct-empty { margin: 0; color: var(--tc-text-muted, #6b7280); }
+.mb-addr {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px);
+  min-block-size: 52px;
+  padding-block: 4px;
+  padding-inline: 12px 4px;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .12);
+  border-radius: var(--tr-control, 12px);
+}
+.mb-addr span { flex: 1; font-size: .9rem; }
+.mb-addr-default {
+  padding: 2px 8px;
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .14);
+  color: var(--tc-primary-700, var(--tc-primary, #2fb150));
+  font-size: .72rem;
+  font-style: normal;
+  font-weight: 700;
+}
+.mb-addr-form { padding-block-start: 4px; }
+.mb-addr-def { display: flex; align-items: center; gap: 8px; min-block-size: 44px; font-size: .9rem; }
+.mb-addr-def input { inline-size: 20px; block-size: 20px; margin: 0; accent-color: var(--tc-primary, #3fd463); }
+.mb-logout-btn { margin-block-start: 8px; border: 1px solid var(--tc-danger, #b42318); background: transparent; color: var(--tc-danger, #b42318); }
+.mb-logout-btn:hover { background: rgba(var(--tc-danger-rgb, 180, 35, 24), .08); }
+
+/* fitment (car parts) selects the runtime adds to a [data-mb-fitment] form */
+.mb-fit-field { display: grid; gap: 4px; font-size: .85rem; font-weight: 600; }
+.mb-fit-status { margin: 0; font-size: .9rem; color: var(--tc-text-muted, #6b7280); }

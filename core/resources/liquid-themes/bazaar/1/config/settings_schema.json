@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Brand",
+    "settings": [
+      { "id": "accent_color", "type": "color", "label": "Accent colour", "default": "#1f6feb" }
+    ]
+  },
+  {
+    "name": "Catalog",
+    "settings": [
+      { "id": "show_ratings", "type": "checkbox", "label": "Show star ratings on product cards", "default": true }
+    ]
+  }
+]

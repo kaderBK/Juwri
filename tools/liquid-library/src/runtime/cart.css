@@ -1,0 +1,58 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — cart lines, checkout form, tips, slot picker, totals */
+.mb-cart { display: grid; gap: var(--ts-gap-3, 16px); }
+.mb-cart-empty { margin: 0; padding-block: var(--ts-gap-4, 24px); text-align: center; color: var(--tc-text-muted, #6b7280); }
+.mb-cart-lines { display: grid; gap: var(--ts-gap-2, 10px); margin: 0; padding: 0; list-style: none; }
+.mb-cart-line {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-gap-2, 10px);
+  padding-block-end: var(--ts-gap-2, 10px);
+  border-block-end: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .08);
+}
+.mb-cl-name { flex: 1; min-inline-size: 0; font-weight: 600; }
+.mb-cl-opts { display: block; font-size: .8rem; font-style: normal; font-weight: 400; color: var(--tc-text-muted, #6b7280); }
+.mb-cl-qty { display: inline-flex; align-items: center; gap: 2px; font-weight: 700; }
+.mb-cart-line .mb-cl-qty button { background: rgba(var(--tc-text-rgb, 17, 17, 17), .06); }
+.mb-cl-price { min-inline-size: 64px; font-weight: 700; text-align: end; }
+.mb-checkout { display: grid; gap: var(--ts-gap-2, 10px); }
+.mb-checkout textarea { min-block-size: 88px; resize: vertical; }
+.mb-ot-seg { display: flex; gap: 4px; padding: 4px; border-radius: var(--tr-pill, 999px); background: rgba(var(--tc-text-rgb, 17, 17, 17), .06); }
+.mb-ot-seg button { flex: 1; border-color: transparent; }
+.mb-ot-seg .is-on { background: var(--tc-background, #fff); }
+.mb-coupon { display: flex; gap: var(--ts-gap-1, 6px); }
+.mb-coupon .mb-field { flex: 1; }
+.mb-tip { display: grid; gap: 6px; }
+.mb-tip-label { font-size: .9rem; font-weight: 700; }
+.mb-tip-opts { display: flex; flex-wrap: wrap; gap: var(--ts-gap-1, 6px); }
+.mb-tip-opts button { flex: 1 1 60px; }
+.mb-tip-custom { max-inline-size: 180px; }
+.mb-totals {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: var(--tr-control, 12px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .04);
+}
+.mb-tr { display: flex; justify-content: space-between; gap: 12px; font-size: .95rem; }
+.mb-tr b { font-weight: 600; }
+.mb-tr-total { padding-block-start: 6px; border-block-start: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .1); font-size: 1.1rem; }
+.mb-tr-total b { font-weight: 800; }
+.mb-cart-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.mb-cart-actions .mb-ghost { flex: 1; }
+
+/* booking / scheduling slot picker */
+.mb-slots { display: grid; gap: 8px; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.mb-slot-days,
+.mb-slot-times { display: flex; gap: 6px; padding-block: 2px; }
+.mb-slot-days { overflow-x: auto; scrollbar-width: none; }
+.mb-slot-times { flex-wrap: wrap; }
+.mb-slot,
+.mb-slot-day { flex: none; white-space: nowrap; }
+.mb-slot:disabled { opacity: .45; text-decoration: line-through; cursor: not-allowed; }
+.mb-slots-loading,
+.mb-slots-empty { margin: 0; font-size: .9rem; color: var(--tc-text-muted, #6b7280); }
+.mb-slots-loading { animation: mb-cart-pulse 1s ease-in-out infinite alternate; }
+@keyframes mb-cart-pulse { to { opacity: .35; } }

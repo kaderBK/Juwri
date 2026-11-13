@@ -1,0 +1,24 @@
+{
+    "name": "Studio Stay",
+    "slug": "studio-stay",
+    "version": "1",
+    "author": "juwri",
+    "description": "Understated luxury for hotels and guest houses: a tall hero, rooms with amenities and nightly rates, reservations, the story of the house and a map.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "general",
+    "vertical": "stays",
+    "recipe": "hotel/default",
+    "tokens": {
+        "colors.primary": "#1e3a5f",
+        "colors.background": "#faf8f3",
+        "colors.surface": "#ffffff",
+        "colors.text": "#1b2230",
+        "colors.accent": "#7d5f24",
+        "layout.radius": "soft",
+        "layout.density": "comfortable",
+        "fonts.pair": "fraunces-jakarta"
+    }
+}

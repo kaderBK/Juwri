@@ -1,0 +1,41 @@
+{% comment %}
+  One product card — the commerce runtime's binding contract:
+  data-mb-open   deep-links to the product view (P8-3 SPA router)
+  data-mb-add    adds the item to cart
+  data-mb-fav    toggles the wishlist
+  data-mb-money  keeps the price node in sync on a currency switch
+  No food-only fields here (no vegan/halal/gluten-free) — goods and services
+  items don't carry them; "Popular" and "Featured" are vertical-neutral.
+  render is scope-isolated: item / flags / vocab must be passed in by the
+  caller, they are not inherited from the page globals.
+{% endcomment %}
+<article class="bz-card{% if item.is_sold_out %} is-out{% endif %}"
+         data-mb-item="{{ item.id }}"
+         data-mb-open="{{ item.id }}"
+         data-mb-name="{{ item.name | escape }}"
+         data-mb-price="{{ item.price }}"
+         data-mb-rating="{{ item.rating }}"
+         {% if item.is_popular %}data-mb-popular{% endif %}
+         {% if item.is_daily_special %}data-mb-special{% endif %}>
+  <div class="bz-card-media">
+    {% if item.image %}<img src="{{ item.image | media_url: 'menu' }}" alt="{{ item.name | escape }}" loading="lazy">{% endif %}
+    {% if item.is_popular %}<i class="bz-flag">{{ 'Popular' | t }}</i>{% endif %}
+    {% if item.is_daily_special %}<i class="bz-flag bz-flag-ft">{{ 'Featured' | t }}</i>{% endif %}
+    <button class="bz-fav" type="button" data-mb-fav="{{ item.id }}" aria-label="{{ 'Favourite' | t }}" aria-pressed="false">♥</button>
+  </div>
+  <div class="bz-card-body">
+    <h3 class="bz-card-name">{{ item.name | escape }}</h3>
+    {% if item.rating > 0 %}<span class="bz-card-rate">★ {{ item.rating }}</span>{% endif %}
+    {% if item.description %}<p class="bz-card-desc">{{ item.description | escape }}</p>{% endif %}
+    <div class="bz-card-foot">
+      <b class="bz-price" data-mb-money="{{ item.price }}">{{ item.price | money }}</b>
+      {% if flags.allow_order %}
+        {% if item.is_sold_out %}
+          <span class="bz-oos">{{ 'Out of stock' | t }}</span>
+        {% else %}
+          <button class="bz-add" type="button" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart }} — {{ item.name | escape }}">{{ vocab.add_to_cart }}</button>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</article>

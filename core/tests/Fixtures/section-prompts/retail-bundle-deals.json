@@ -1,0 +1,6 @@
+{
+  "id": "retail-bundle-deals",
+  "request": "Bundle deals for a grocery store: owner-defined bundles (title, short description, badge text) followed by a swipeable rail of products on offer with their prices and an add button.",
+  "verticals": ["retail", "grocery"],
+  "type": "bundle-deals"
+}

@@ -1,0 +1,103 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*!
+ * mb-builder runtime CSS — paired with mb-builder.js.
+ * Loaded from 'self' (no nonce needed) on html-mode builder public pages.
+ * Everything is scoped under .mb-doc and uses low specificity so an operator's
+ * own scoped <style> can override it. Motion is gated behind prefers-reduced-motion.
+ *
+ * Reveal contract: the element is VISIBLE by default. mb-builder.js adds the
+ * `.mb-reveal` class only after it runs, so a no-JS / old browser never hides
+ * content. Once armed, `.mb-in` (added by IntersectionObserver, or immediately
+ * under reduced-motion) brings it in.
+ */
+
+/* ---- reveal ---------------------------------------------------------------- */
+.mb-doc .mb-reveal {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.mb-doc .mb-reveal[data-mb-reveal="up"]    { transform: translateY(24px); }
+.mb-doc .mb-reveal[data-mb-reveal="left"]  { transform: translateX(-24px); }
+.mb-doc .mb-reveal[data-mb-reveal="right"] { transform: translateX(24px); }
+.mb-doc .mb-reveal[data-mb-reveal="zoom"]  { transform: scale(0.94); }
+.mb-doc .mb-reveal[data-mb-reveal="fade"]  { transform: none; }
+.mb-doc .mb-reveal.mb-in { opacity: 1; transform: none; }
+
+/* ---- carousel -------------------------------------------------------------- */
+.mb-doc [data-mb-carousel-track] {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.mb-doc [data-mb-carousel-track]::-webkit-scrollbar { display: none; }
+.mb-doc [data-mb-carousel-track] > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+.mb-doc [data-mb-carousel-dots] {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+.mb-doc .mb-carousel-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.32;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.mb-doc .mb-carousel-dot[aria-current="true"] { opacity: 1; transform: scale(1.25); }
+
+/* ---- rotate (hero word rotator) ------------------------------------------- */
+.mb-doc [data-mb-rotate] {
+  display: inline-grid;
+  vertical-align: bottom;
+}
+.mb-doc [data-mb-rotate-item] {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+.mb-doc [data-mb-rotate-item].mb-rotate-on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ---- accordion / tabs: minimal affordances (operator styles the rest) ------ */
+.mb-doc [data-mb-accordion-trigger] { cursor: pointer; }
+.mb-doc [data-mb-tab] { cursor: pointer; }
+.mb-doc [data-mb-accordion-panel][hidden],
+.mb-doc [data-mb-tabpanel][hidden] { display: none; }
+
+/* ---- curated form ---------------------------------------------------------- */
+.mb-doc .mb-form-thanks {
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  color: inherit;
+  font: 500 15px/1.5 inherit;
+}
+.mb-doc [data-mb-form-success][hidden] { display: none; }
+
+/* ---- honour reduced motion ------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .mb-doc .mb-reveal,
+  .mb-doc [data-mb-rotate-item],
+  .mb-doc .mb-carousel-dot { transition: none; }
+  .mb-doc .mb-reveal { opacity: 1; transform: none; }
+}

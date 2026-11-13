@@ -1,0 +1,23 @@
+{
+    "status": 200,
+    "body": {
+        "api_version": "int",
+        "app_id": "string",
+        "enabled": "bool",
+        "handoff_ttl_seconds": "int",
+        "links": {
+            "forgot_password": "string",
+            "login": "string",
+            "register": "string"
+        },
+        "versions": {
+            "ios": {
+                "latest_version": "string",
+                "min_version": "string",
+                "store_url": "string",
+                "update_available": "bool",
+                "update_required": "bool"
+            }
+        }
+    }
+}

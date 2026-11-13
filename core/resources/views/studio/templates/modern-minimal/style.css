@@ -1,0 +1,69 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* Modern Minimal — sans, whitespace, single centered column. Logical properties
+   only (RTL). System font stacks: standalone, print-faithful. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --sans: 'Helvetica Neue', Helvetica, Arial, 'Segoe UI', sans-serif;
+}
+
+html, body { background: #777; }
+
+.sheet {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    width: var(--page-w);
+    min-height: var(--page-h);
+    margin-inline: auto;
+    padding: 16mm 18mm;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, .35);
+}
+
+.inner { max-inline-size: 128mm; margin-inline: auto; }
+
+/* ---- header ---- */
+.menu-header { text-align: center; margin-block-end: 12mm; }
+.restaurant-name { font-size: 20pt; font-weight: 300; letter-spacing: .32em; text-transform: uppercase; color: var(--accent); }
+.tagline { font-size: 9pt; letter-spacing: .12em; opacity: .6; margin-block-start: 2.5mm; text-transform: uppercase; }
+.menu-header .rule { width: 12mm; height: 2px; background: var(--accent); margin: 5mm auto 0; }
+
+/* ---- categories ---- */
+.category { break-inside: avoid; margin-block-end: 9mm; }
+.category-name {
+    font-size: 9.5pt; font-weight: 600; letter-spacing: .28em; text-transform: lowercase;
+    color: var(--accent); margin-block-end: 4mm;
+}
+
+/* ---- items ---- */
+.item { break-inside: avoid; margin-block-end: 4mm; }
+.item-line { display: flex; align-items: baseline; gap: 4mm; justify-content: space-between; }
+.item-name { font-size: 10.5pt; font-weight: 500; }
+.item-price { font-size: 10.5pt; font-weight: 300; white-space: nowrap; }
+.item-desc { font-size: 8.5pt; opacity: .6; margin-block-start: 1mm; line-height: 1.5; max-inline-size: 100mm; }
+.item-tags { margin-block-start: 1mm; }
+.tag {
+    display: inline-block; font-size: 6.5pt; letter-spacing: .14em; text-transform: uppercase;
+    opacity: .55; margin-inline-end: 2.4mm;
+}
+.item-variants, .item-extras { font-size: 8.5pt; opacity: .65; margin-block-start: 1mm; }
+
+/* ---- footer ---- */
+.menu-footer { text-align: center; font-size: 8pt; letter-spacing: .1em; opacity: .55; margin-block-start: 10mm; }
+
+/* ---- aspects ---- */
+.aspect-a4     { --page-w: 210mm; --page-h: 297mm; }
+.aspect-letter { --page-w: 8.5in; --page-h: 11in; }
+.aspect-square { --page-w: 210mm; --page-h: 210mm; }
+.aspect-story  { --page-w: 180mm; --page-h: 320mm; }
+
+/* ---- print ---- */
+@media print {
+    html, body { background: none; }
+    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; }
+    .category, .item { break-inside: avoid; }
+}
+@page { margin: 0; }

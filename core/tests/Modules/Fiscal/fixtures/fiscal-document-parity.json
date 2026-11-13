@@ -1,0 +1,358 @@
+{
+    "_before": "2026-10-14 (P6-176): `zatca` re-recorded: every ZATCA invoice now carries the UBL-mandatory cac:AccountingCustomerParty (empty on simplified documents) and credit notes put cac:BillingReference before the ICV/PIH references; hashes follow. Amounts unchanged. Earlier: 2026-10-13 (P6-99): `zatca` and `jofotara_eta` re-recorded for per-line fiscal documents: one InvoiceLine per order item with its VAT category/percent, line VAT + RoundingAmount, TaxSubtotal per category, a second SAR TaxTotal, AllowanceTotalAmount; JoFotara/ETA carry the item lines (ETA taxableItems). Totals and VAT of these orders are unchanged (no fees, tips or discounts). Earlier: 2026-10-13 (P6-87): `zatca` re-recorded for the ZATCA spec fixes: the invoice hash now keeps the ICV and PIH references (only ext:UBLExtensions, cac:Signature and the QR reference are excluded), the root declares xmlns:ext and has no empty UBLExtensions placeholder, signed documents carry the full XAdES block + embedded QR + cac:Signature (masked), and QR tag 6 is the base64 text of the hash. Totals, tax, lines unchanged; `jofotara_eta` unchanged. Earlier: 2026-10-02 (coordinator item 3): `zatca` re-recorded ONLY for the ZATCA issue time, now pinned to KSA local time (AST, BR-KSA-70): IssueTime 09:30:15 (server UTC, no suffix) -> 12:30:15, QR tag 3 '2026-10-02T09:30:15+00:00' -> '2026-10-02T12:30:15', and the invoice hashes / PIH / tag 6 derived from them. Totals, tax, lines and every other byte unchanged; `jofotara_eta` unchanged since the pre-refactor recording. The order-snapshot tax fix (item 1) changes none of these orders (no snapshot differs from the live price) - see FiscalOrderSnapshotTaxTest.",
+    "zatca": {
+        "ctx_plain": {
+            "seller": "Riyadh Diner",
+            "vat": "300000000000003",
+            "cr": "1010101010",
+            "total": 0,
+            "tax": 0,
+            "issued": "2026-10-02T09:30:15+00:00",
+            "currency": "SAR",
+            "extra": []
+        },
+        "ctx_items": {
+            "seller": "Riyadh Diner",
+            "vat": "300000000000003",
+            "cr": "1010101010",
+            "total": 108.96,
+            "tax": 14.21,
+            "issued": "2026-10-02T09:30:15+00:00",
+            "currency": "SAR",
+            "extra": []
+        },
+        "doc1": {
+            "country": "SA",
+            "type": "simplified",
+            "status": "queued",
+            "number": "SIM-000001",
+            "seq": 1,
+            "counter": 1,
+            "uuid": "00000000-0000-4000-8000-000000000009",
+            "device": "EGS-1",
+            "hash": "iVtSy1uB6VUsCNwA+7hKj5W/+RHdl+CGp3NUOeS3vu4=",
+            "previous_hash": null,
+            "currency": "SAR",
+            "total_minor": 0,
+            "tax_total_minor": 0,
+            "has_order": true,
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\">\n  <cbc:ProfileID>reporting:1.0</cbc:ProfileID>\n  <cbc:ID>SIM-000001</cbc:ID>\n  <cbc:UUID>00000000-0000-4000-8000-000000000009</cbc:UUID>\n  <cbc:IssueDate>2026-10-02</cbc:IssueDate>\n  <cbc:IssueTime>12:30:15</cbc:IssueTime>\n  <cbc:InvoiceTypeCode name=\"0200000\">388</cbc:InvoiceTypeCode>\n  <cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode>\n  <cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode>\n  <cac:AdditionalDocumentReference>\n    <cbc:ID>ICV</cbc:ID>\n    <cbc:UUID>1</cbc:UUID>\n  </cac:AdditionalDocumentReference>\n  <cac:AdditionalDocumentReference>\n    <cbc:ID>PIH</cbc:ID>\n    <cac:Attachment>\n      <cbc:EmbeddedDocumentBinaryObject mimeCode=\"text/plain\">NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==</cbc:EmbeddedDocumentBinaryObject>\n    </cac:Attachment>\n  </cac:AdditionalDocumentReference>\n  <cac:AccountingSupplierParty>\n    <cac:Party>\n      <cac:PartyIdentification>\n        <cbc:ID schemeID=\"CRN\">1010101010</cbc:ID>\n      </cac:PartyIdentification>\n      <cac:PartyTaxScheme>\n        <cbc:CompanyID>300000000000003</cbc:CompanyID>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:PartyTaxScheme>\n      <cac:PartyLegalEntity>\n        <cbc:RegistrationName>Riyadh Diner</cbc:RegistrationName>\n      </cac:PartyLegalEntity>\n    </cac:Party>\n  </cac:AccountingSupplierParty>\n  <cac:AccountingCustomerParty/>\n  <cac:PaymentMeans>\n    <cbc:PaymentMeansCode>1</cbc:PaymentMeansCode>\n  </cac:PaymentMeans>\n  <cac:TaxTotal>\n    <cbc:TaxAmount currencyID=\"SAR\">0.00</cbc:TaxAmount>\n    <cac:TaxSubtotal>\n      <cbc:TaxableAmount currencyID=\"SAR\">0.00</cbc:TaxableAmount>\n      <cbc:TaxAmount currencyID=\"SAR\">0.00</cbc:TaxAmount>\n      <cac:TaxCategory>\n        <cbc:ID>O</cbc:ID>\n        <cbc:Percent>0.00</cbc:Percent>\n        <cbc:TaxExemptionReasonCode>VATEX-SA-OOS</cbc:TaxExemptionReasonCode>\n        <cbc:TaxExemptionReason>Not subject to VAT</cbc:TaxExemptionReason>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:TaxCategory>\n    </cac:TaxSubtotal>\n  </cac:TaxTotal>\n  <cac:TaxTotal>\n    <cbc:TaxAmount currencyID=\"SAR\">0.00</cbc:TaxAmount>\n  </cac:TaxTotal>\n  <cac:LegalMonetaryTotal>\n    <cbc:LineExtensionAmount currencyID=\"SAR\">0.00</cbc:LineExtensionAmount>\n    <cbc:TaxExclusiveAmount currencyID=\"SAR\">0.00</cbc:TaxExclusiveAmount>\n    <cbc:TaxInclusiveAmount currencyID=\"SAR\">0.00</cbc:TaxInclusiveAmount>\n    <cbc:AllowanceTotalAmount currencyID=\"SAR\">0.00</cbc:AllowanceTotalAmount>\n    <cbc:PayableAmount currencyID=\"SAR\">0.00</cbc:PayableAmount>\n  </cac:LegalMonetaryTotal>\n  <cac:InvoiceLine>\n    <cbc:ID>1</cbc:ID>\n    <cbc:InvoicedQuantity unitCode=\"PCE\">1</cbc:InvoicedQuantity>\n    <cbc:LineExtensionAmount currencyID=\"SAR\">0.00</cbc:LineExtensionAmount>\n    <cac:TaxTotal>\n      <cbc:TaxAmount currencyID=\"SAR\">0.00</cbc:TaxAmount>\n      <cbc:RoundingAmount currencyID=\"SAR\">0.00</cbc:RoundingAmount>\n    </cac:TaxTotal>\n    <cac:Item>\n      <cbc:Name>Order</cbc:Name>\n      <cac:ClassifiedTaxCategory>\n        <cbc:ID>O</cbc:ID>\n        <cbc:Percent>0.00</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:ClassifiedTaxCategory>\n    </cac:Item>\n    <cac:Price>\n      <cbc:PriceAmount currencyID=\"SAR\">0.00</cbc:PriceAmount>\n    </cac:Price>\n  </cac:InvoiceLine>\n</Invoice>\n",
+            "payload_sha256": "7f445ad2bd3f73a0765dde7c48296e203d4946ce80c67af3f6f5d304a832770e",
+            "authority_response": {
+                "tlv": "AQxSaXlhZGggRGluZXICDzMwMDAwMDAwMDAwMDAwMwMTMjAyNi0xMC0wMlQxMjozMDoxNQQEMC4wMAUEMC4wMA==",
+                "tags": 5,
+                "tlv_tags": {
+                    "1": "Uml5YWRoIERpbmVy",
+                    "2": "MzAwMDAwMDAwMDAwMDAz",
+                    "3": "MjAyNi0xMC0wMlQxMjozMDoxNQ==",
+                    "4": "MC4wMA==",
+                    "5": "MC4wMA=="
+                }
+            }
+        },
+        "doc2": {
+            "country": "SA",
+            "type": "simplified",
+            "status": "queued",
+            "number": "SIM-000002",
+            "seq": 2,
+            "counter": 2,
+            "uuid": "00000000-0000-4000-8000-000000000011",
+            "device": "EGS-1",
+            "hash": "w7TdXuqA7+QAMFXF8wf2LQO4BtJGgveBzpy1G2IRQGA=",
+            "previous_hash": "iVtSy1uB6VUsCNwA+7hKj5W/+RHdl+CGp3NUOeS3vu4=",
+            "currency": "SAR",
+            "total_minor": 10896,
+            "tax_total_minor": 1421,
+            "has_order": true,
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\">\n  <cbc:ProfileID>reporting:1.0</cbc:ProfileID>\n  <cbc:ID>SIM-000002</cbc:ID>\n  <cbc:UUID>00000000-0000-4000-8000-000000000011</cbc:UUID>\n  <cbc:IssueDate>2026-10-02</cbc:IssueDate>\n  <cbc:IssueTime>12:30:15</cbc:IssueTime>\n  <cbc:InvoiceTypeCode name=\"0200000\">388</cbc:InvoiceTypeCode>\n  <cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode>\n  <cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode>\n  <cac:AdditionalDocumentReference>\n    <cbc:ID>ICV</cbc:ID>\n    <cbc:UUID>2</cbc:UUID>\n  </cac:AdditionalDocumentReference>\n  <cac:AdditionalDocumentReference>\n    <cbc:ID>PIH</cbc:ID>\n    <cac:Attachment>\n      <cbc:EmbeddedDocumentBinaryObject mimeCode=\"text/plain\">iVtSy1uB6VUsCNwA+7hKj5W/+RHdl+CGp3NUOeS3vu4=</cbc:EmbeddedDocumentBinaryObject>\n    </cac:Attachment>\n  </cac:AdditionalDocumentReference>\n  <cac:AccountingSupplierParty>\n    <cac:Party>\n      <cac:PartyIdentification>\n        <cbc:ID schemeID=\"CRN\">1010101010</cbc:ID>\n      </cac:PartyIdentification>\n      <cac:PartyTaxScheme>\n        <cbc:CompanyID>300000000000003</cbc:CompanyID>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:PartyTaxScheme>\n      <cac:PartyLegalEntity>\n        <cbc:RegistrationName>Riyadh Diner</cbc:RegistrationName>\n      </cac:PartyLegalEntity>\n    </cac:Party>\n  </cac:AccountingSupplierParty>\n  <cac:AccountingCustomerParty/>\n  <cac:PaymentMeans>\n    <cbc:PaymentMeansCode>1</cbc:PaymentMeansCode>\n  </cac:PaymentMeans>\n  <cac:TaxTotal>\n    <cbc:TaxAmount currencyID=\"SAR\">14.21</cbc:TaxAmount>\n    <cac:TaxSubtotal>\n      <cbc:TaxableAmount currencyID=\"SAR\">94.75</cbc:TaxableAmount>\n      <cbc:TaxAmount currencyID=\"SAR\">14.21</cbc:TaxAmount>\n      <cac:TaxCategory>\n        <cbc:ID>S</cbc:ID>\n        <cbc:Percent>15.00</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:TaxCategory>\n    </cac:TaxSubtotal>\n  </cac:TaxTotal>\n  <cac:TaxTotal>\n    <cbc:TaxAmount currencyID=\"SAR\">14.21</cbc:TaxAmount>\n  </cac:TaxTotal>\n  <cac:LegalMonetaryTotal>\n    <cbc:LineExtensionAmount currencyID=\"SAR\">94.75</cbc:LineExtensionAmount>\n    <cbc:TaxExclusiveAmount currencyID=\"SAR\">94.75</cbc:TaxExclusiveAmount>\n    <cbc:TaxInclusiveAmount currencyID=\"SAR\">108.96</cbc:TaxInclusiveAmount>\n    <cbc:AllowanceTotalAmount currencyID=\"SAR\">0.00</cbc:AllowanceTotalAmount>\n    <cbc:PayableAmount currencyID=\"SAR\">108.96</cbc:PayableAmount>\n  </cac:LegalMonetaryTotal>\n  <cac:InvoiceLine>\n    <cbc:ID>1</cbc:ID>\n    <cbc:InvoicedQuantity unitCode=\"PCE\">2</cbc:InvoicedQuantity>\n    <cbc:LineExtensionAmount currencyID=\"SAR\">85.00</cbc:LineExtensionAmount>\n    <cac:TaxTotal>\n      <cbc:TaxAmount currencyID=\"SAR\">12.75</cbc:TaxAmount>\n      <cbc:RoundingAmount currencyID=\"SAR\">97.75</cbc:RoundingAmount>\n    </cac:TaxTotal>\n    <cac:Item>\n      <cbc:Name>Kabsa</cbc:Name>\n      <cac:ClassifiedTaxCategory>\n        <cbc:ID>S</cbc:ID>\n        <cbc:Percent>15.00</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:ClassifiedTaxCategory>\n    </cac:Item>\n    <cac:Price>\n      <cbc:PriceAmount currencyID=\"SAR\">42.50</cbc:PriceAmount>\n    </cac:Price>\n  </cac:InvoiceLine>\n  <cac:InvoiceLine>\n    <cbc:ID>2</cbc:ID>\n    <cbc:InvoicedQuantity unitCode=\"PCE\">3</cbc:InvoicedQuantity>\n    <cbc:LineExtensionAmount currencyID=\"SAR\">9.75</cbc:LineExtensionAmount>\n    <cac:TaxTotal>\n      <cbc:TaxAmount currencyID=\"SAR\">1.46</cbc:TaxAmount>\n      <cbc:RoundingAmount currencyID=\"SAR\">11.21</cbc:RoundingAmount>\n    </cac:TaxTotal>\n    <cac:Item>\n      <cbc:Name>Tea</cbc:Name>\n      <cac:ClassifiedTaxCategory>\n        <cbc:ID>S</cbc:ID>\n        <cbc:Percent>15.00</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:ClassifiedTaxCategory>\n    </cac:Item>\n    <cac:Price>\n      <cbc:PriceAmount currencyID=\"SAR\">3.25</cbc:PriceAmount>\n    </cac:Price>\n  </cac:InvoiceLine>\n</Invoice>\n",
+            "payload_sha256": "05fda3cbd3f81daec9d34c4db0e1ad6f7c19f9dc5d0a5240b88c3417033b6c57",
+            "authority_response": {
+                "tlv": "AQxSaXlhZGggRGluZXICDzMwMDAwMDAwMDAwMDAwMwMTMjAyNi0xMC0wMlQxMjozMDoxNQQGMTA4Ljk2BQUxNC4yMQ==",
+                "tags": 5,
+                "tlv_tags": {
+                    "1": "Uml5YWRoIERpbmVy",
+                    "2": "MzAwMDAwMDAwMDAwMDAz",
+                    "3": "MjAyNi0xMC0wMlQxMjozMDoxNQ==",
+                    "4": "MTA4Ljk2",
+                    "5": "MTQuMjE="
+                }
+            }
+        },
+        "ctx_after_doc": {
+            "seller": "Riyadh Diner",
+            "vat": "300000000000003",
+            "cr": "1010101010",
+            "total": 108.96,
+            "tax": 14.21,
+            "issued": "2026-10-02T09:30:15+00:00",
+            "currency": "SAR",
+            "extra": {
+                "tlv": "AQxSaXlhZGggRGluZXICDzMwMDAwMDAwMDAwMDAwMwMTMjAyNi0xMC0wMlQxMjozMDoxNQQGMTA4Ljk2BQUxNC4yMQ==",
+                "number": "SIM-000002"
+            }
+        },
+        "doc_production": {
+            "country": "SA",
+            "type": "simplified",
+            "status": "accepted",
+            "number": "SIM-000003",
+            "seq": 3,
+            "counter": 1,
+            "uuid": "00000000-0000-4000-8000-000000000015",
+            "device": "EGS-2",
+            "hash": "1Oqbc+blOLl0vNbl5uVXPDJoF6H6prwGOpp9zWOLLwE=",
+            "previous_hash": null,
+            "currency": "SAR",
+            "total_minor": 7015,
+            "tax_total_minor": 915,
+            "has_order": true,
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\" xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\" xmlns:ext=\"urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2\"><ext:UBLExtensions>MASKED</ext:UBLExtensions><cbc:ProfileID>reporting:1.0</cbc:ProfileID><cbc:ID>SIM-000003</cbc:ID><cbc:UUID>00000000-0000-4000-8000-000000000015</cbc:UUID><cbc:IssueDate>2026-10-02</cbc:IssueDate><cbc:IssueTime>12:30:15</cbc:IssueTime><cbc:InvoiceTypeCode name=\"0200000\">388</cbc:InvoiceTypeCode><cbc:DocumentCurrencyCode>SAR</cbc:DocumentCurrencyCode><cbc:TaxCurrencyCode>SAR</cbc:TaxCurrencyCode><cac:AdditionalDocumentReference><cbc:ID>ICV</cbc:ID><cbc:UUID>1</cbc:UUID></cac:AdditionalDocumentReference><cac:AdditionalDocumentReference><cbc:ID>PIH</cbc:ID><cac:Attachment><cbc:EmbeddedDocumentBinaryObject mimeCode=\"text/plain\">NWZlY2ViNjZmZmM4NmYzOGQ5NTI3ODZjNmQ2OTZjNzljMmRiYzIzOWRkNGU5MWI0NjcyOWQ3M2EyN2ZiNTdlOQ==</cbc:EmbeddedDocumentBinaryObject></cac:Attachment></cac:AdditionalDocumentReference><cac:AdditionalDocumentReference><cbc:ID xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">QR</cbc:ID><cac:Attachment xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\"><cbc:EmbeddedDocumentBinaryObject xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\" mimeCode=\"text/plain\">MASKED</cbc:EmbeddedDocumentBinaryObject></cac:Attachment></cac:AdditionalDocumentReference><cac:Signature><cbc:ID xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">urn:oasis:names:specification:ubl:signature:Invoice</cbc:ID><cbc:SignatureMethod xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">urn:oasis:names:specification:ubl:dsig:enveloped:xades</cbc:SignatureMethod></cac:Signature><cac:AccountingSupplierParty><cac:Party><cac:PartyIdentification><cbc:ID schemeID=\"CRN\">1010101010</cbc:ID></cac:PartyIdentification><cac:PartyTaxScheme><cbc:CompanyID>300000000000003</cbc:CompanyID><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:PartyTaxScheme><cac:PartyLegalEntity><cbc:RegistrationName>Riyadh Diner</cbc:RegistrationName></cac:PartyLegalEntity></cac:Party></cac:AccountingSupplierParty><cac:AccountingCustomerParty/><cac:PaymentMeans><cbc:PaymentMeansCode>1</cbc:PaymentMeansCode></cac:PaymentMeans><cac:TaxTotal><cbc:TaxAmount currencyID=\"SAR\">9.15</cbc:TaxAmount><cac:TaxSubtotal><cbc:TaxableAmount currencyID=\"SAR\">61.00</cbc:TaxableAmount><cbc:TaxAmount currencyID=\"SAR\">9.15</cbc:TaxAmount><cac:TaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>15.00</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:TaxCategory></cac:TaxSubtotal></cac:TaxTotal><cac:TaxTotal><cbc:TaxAmount currencyID=\"SAR\">9.15</cbc:TaxAmount></cac:TaxTotal><cac:LegalMonetaryTotal><cbc:LineExtensionAmount currencyID=\"SAR\">61.00</cbc:LineExtensionAmount><cbc:TaxExclusiveAmount currencyID=\"SAR\">61.00</cbc:TaxExclusiveAmount><cbc:TaxInclusiveAmount currencyID=\"SAR\">70.15</cbc:TaxInclusiveAmount><cbc:AllowanceTotalAmount currencyID=\"SAR\">0.00</cbc:AllowanceTotalAmount><cbc:PayableAmount currencyID=\"SAR\">70.15</cbc:PayableAmount></cac:LegalMonetaryTotal><cac:InvoiceLine><cbc:ID>1</cbc:ID><cbc:InvoicedQuantity unitCode=\"PCE\">1</cbc:InvoicedQuantity><cbc:LineExtensionAmount currencyID=\"SAR\">61.00</cbc:LineExtensionAmount><cac:TaxTotal><cbc:TaxAmount currencyID=\"SAR\">9.15</cbc:TaxAmount><cbc:RoundingAmount currencyID=\"SAR\">70.15</cbc:RoundingAmount></cac:TaxTotal><cac:Item><cbc:Name>Mandi</cbc:Name><cac:ClassifiedTaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>15.00</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:ClassifiedTaxCategory></cac:Item><cac:Price><cbc:PriceAmount currencyID=\"SAR\">61.00</cbc:PriceAmount></cac:Price></cac:InvoiceLine></Invoice>\n",
+            "payload_sha256": "7c706cc96ba39f402ab6fb8987196c45fc8800a9f59e0fd3e49fc3ad2a93d0fc",
+            "authority_response": {
+                "tags": 9,
+                "reportingStatus": "REPORTED",
+                "validationResults": {
+                    "status": "PASS"
+                },
+                "tlv_tags": {
+                    "1": "Uml5YWRoIERpbmVy",
+                    "2": "MzAwMDAwMDAwMDAwMDAz",
+                    "3": "MjAyNi0xMC0wMlQxMjozMDoxNQ==",
+                    "4": "NzAuMTU=",
+                    "5": "OS4xNQ==",
+                    "6": "MU9xYmMrYmxPTGwwdk5ibDV1VlhQREpvRjZINnByd0dPcHA5eldPTEx3RT0=",
+                    "7": "TUFTS0VE",
+                    "8": "TUFTS0VE",
+                    "9": ""
+                }
+            }
+        }
+    },
+    "jofotara_eta": {
+        "jo_ctx": {
+            "seller": "Amman Grill",
+            "vat": "12345678",
+            "cr": null,
+            "total": 14.79,
+            "tax": 2.04,
+            "issued": "2026-10-02T09:30:15+00:00",
+            "currency": "JOD",
+            "extra": []
+        },
+        "jo_doc": {
+            "country": "JO",
+            "type": "simplified",
+            "status": "accepted",
+            "number": "SIM-000001",
+            "seq": 1,
+            "counter": 1,
+            "uuid": "00000000-0000-4000-8000-000000000017",
+            "device": "default",
+            "hash": "V1dNsAtMuoV0Pfjxch4vqKj8uLhwCBUo3EjccnpjpOg=",
+            "previous_hash": null,
+            "currency": "JOD",
+            "total_minor": 14790,
+            "tax_total_minor": 2040,
+            "has_order": true,
+            "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Invoice>\n  <cbc:ID>SIM-000001</cbc:ID>\n  <cbc:UUID>00000000-0000-4000-8000-000000000017</cbc:UUID>\n  <cbc:IssueDate>2026-10-02</cbc:IssueDate>\n  <cbc:InvoiceTypeCode>012</cbc:InvoiceTypeCode>\n  <cbc:DocumentCurrencyCode>JOD</cbc:DocumentCurrencyCode>\n  <cbc:SellerName>Amman Grill</cbc:SellerName>\n  <cbc:SellerTaxNumber>12345678</cbc:SellerTaxNumber>\n  <cac:TaxSubtotal>\n    <cbc:TaxableAmount>12.750</cbc:TaxableAmount>\n    <cbc:TaxAmount>2.040</cbc:TaxAmount>\n    <cbc:TaxCategory>S</cbc:TaxCategory>\n    <cbc:Percent>16.00</cbc:Percent>\n  </cac:TaxSubtotal>\n  <cbc:LineExtensionAmount>12.750</cbc:LineExtensionAmount>\n  <cbc:AllowanceTotalAmount>0.000</cbc:AllowanceTotalAmount>\n  <cbc:TaxExclusiveAmount>12.750</cbc:TaxExclusiveAmount>\n  <cbc:TaxAmount>2.040</cbc:TaxAmount>\n  <cbc:TaxInclusiveAmount>14.790</cbc:TaxInclusiveAmount>\n  <cbc:PayableAmount>14.790</cbc:PayableAmount>\n  <cac:InvoiceLine>\n    <cbc:ID>1</cbc:ID>\n    <cbc:Name>Mansaf</cbc:Name>\n    <cbc:InvoicedQuantity>1</cbc:InvoicedQuantity>\n    <cbc:PriceAmount>12.750</cbc:PriceAmount>\n    <cbc:LineExtensionAmount>12.750</cbc:LineExtensionAmount>\n    <cbc:TaxCategory>S</cbc:TaxCategory>\n    <cbc:Percent>16.00</cbc:Percent>\n    <cbc:TaxAmount>2.040</cbc:TaxAmount>\n    <cbc:RoundingAmount>14.790</cbc:RoundingAmount>\n  </cac:InvoiceLine>\n</Invoice>\n",
+            "payload_sha256": "57574db00b4cba85743df8f1721e2fa8a8fcb8b870081528dc48dc727a63a4e8",
+            "authority_response": {
+                "envelope": {
+                    "invoiceType": "012",
+                    "invoiceNumber": "SIM-000001",
+                    "uuid": "00000000-0000-4000-8000-000000000017",
+                    "issueDate": "2026-10-02",
+                    "currency": "JOD",
+                    "activityNumber": "a",
+                    "seller": {
+                        "name": "Amman Grill",
+                        "taxNumber": "12345678"
+                    },
+                    "totals": {
+                        "lineExtension": "12.750",
+                        "allowanceTotal": "0.000",
+                        "taxExclusive": "12.750",
+                        "taxAmount": "2.040",
+                        "taxInclusive": "14.790",
+                        "payableRounding": "0.000",
+                        "payable": "14.790"
+                    },
+                    "taxSubtotals": [
+                        {
+                            "category": "S",
+                            "percent": "16.00",
+                            "taxable": "12.750",
+                            "taxAmount": "2.040"
+                        }
+                    ],
+                    "lines": [
+                        {
+                            "description": "Mansaf",
+                            "quantity": 1,
+                            "unitPrice": "12.750",
+                            "discount": "0.000",
+                            "net": "12.750",
+                            "taxCategory": "S",
+                            "taxPercent": "16.00",
+                            "taxAmount": "2.040"
+                        }
+                    ],
+                    "invoice": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPEludm9pY2U+CiAgPGNiYzpJRD5TSU0tMDAwMDAxPC9jYmM6SUQ+CiAgPGNiYzpVVUlEPjAwMDAwMDAwLTAwMDAtNDAwMC04MDAwLTAwMDAwMDAwMDAxNzwvY2JjOlVVSUQ+CiAgPGNiYzpJc3N1ZURhdGU+MjAyNi0xMC0wMjwvY2JjOklzc3VlRGF0ZT4KICA8Y2JjOkludm9pY2VUeXBlQ29kZT4wMTI8L2NiYzpJbnZvaWNlVHlwZUNvZGU+CiAgPGNiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT5KT0Q8L2NiYzpEb2N1bWVudEN1cnJlbmN5Q29kZT4KICA8Y2JjOlNlbGxlck5hbWU+QW1tYW4gR3JpbGw8L2NiYzpTZWxsZXJOYW1lPgogIDxjYmM6U2VsbGVyVGF4TnVtYmVyPjEyMzQ1Njc4PC9jYmM6U2VsbGVyVGF4TnVtYmVyPgogIDxjYWM6VGF4U3VidG90YWw+CiAgICA8Y2JjOlRheGFibGVBbW91bnQ+MTIuNzUwPC9jYmM6VGF4YWJsZUFtb3VudD4KICAgIDxjYmM6VGF4QW1vdW50PjIuMDQwPC9jYmM6VGF4QW1vdW50PgogICAgPGNiYzpUYXhDYXRlZ29yeT5TPC9jYmM6VGF4Q2F0ZWdvcnk+CiAgICA8Y2JjOlBlcmNlbnQ+MTYuMDA8L2NiYzpQZXJjZW50PgogIDwvY2FjOlRheFN1YnRvdGFsPgogIDxjYmM6TGluZUV4dGVuc2lvbkFtb3VudD4xMi43NTA8L2NiYzpMaW5lRXh0ZW5zaW9uQW1vdW50PgogIDxjYmM6QWxsb3dhbmNlVG90YWxBbW91bnQ+MC4wMDA8L2NiYzpBbGxvd2FuY2VUb3RhbEFtb3VudD4KICA8Y2JjOlRheEV4Y2x1c2l2ZUFtb3VudD4xMi43NTA8L2NiYzpUYXhFeGNsdXNpdmVBbW91bnQ+CiAgPGNiYzpUYXhBbW91bnQ+Mi4wNDA8L2NiYzpUYXhBbW91bnQ+CiAgPGNiYzpUYXhJbmNsdXNpdmVBbW91bnQ+MTQuNzkwPC9jYmM6VGF4SW5jbHVzaXZlQW1vdW50PgogIDxjYmM6UGF5YWJsZUFtb3VudD4xNC43OTA8L2NiYzpQYXlhYmxlQW1vdW50PgogIDxjYWM6SW52b2ljZUxpbmU+CiAgICA8Y2JjOklEPjE8L2NiYzpJRD4KICAgIDxjYmM6TmFtZT5NYW5zYWY8L2NiYzpOYW1lPgogICAgPGNiYzpJbnZvaWNlZFF1YW50aXR5PjE8L2NiYzpJbnZvaWNlZFF1YW50aXR5PgogICAgPGNiYzpQcmljZUFtb3VudD4xMi43NTA8L2NiYzpQcmljZUFtb3VudD4KICAgIDxjYmM6TGluZUV4dGVuc2lvbkFtb3VudD4xMi43NTA8L2NiYzpMaW5lRXh0ZW5zaW9uQW1vdW50PgogICAgPGNiYzpUYXhDYXRlZ29yeT5TPC9jYmM6VGF4Q2F0ZWdvcnk+CiAgICA8Y2JjOlBlcmNlbnQ+MTYuMDA8L2NiYzpQZXJjZW50PgogICAgPGNiYzpUYXhBbW91bnQ+Mi4wNDA8L2NiYzpUYXhBbW91bnQ+CiAgICA8Y2JjOlJvdW5kaW5nQW1vdW50PjE0Ljc5MDwvY2JjOlJvdW5kaW5nQW1vdW50PgogIDwvY2FjOkludm9pY2VMaW5lPgo8L0ludm9pY2U+Cg=="
+                },
+                "EINV_STATUS": "SUBMITTED",
+                "EINV_NUM": "SIM-000001",
+                "istd_qr": "ISTD-QR:U0lNLTAwMDAwMXwwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMTc=",
+                "registration_number": "REG-a8f0da59"
+            }
+        },
+        "eg_doc": {
+            "country": "EG",
+            "type": "simplified",
+            "status": "accepted",
+            "number": "SIM-000001",
+            "seq": 1,
+            "counter": 1,
+            "uuid": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+            "device": "POS-1",
+            "hash": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+            "previous_hash": null,
+            "currency": "EGP",
+            "total_minor": 12540,
+            "tax_total_minor": 1540,
+            "has_order": true,
+            "payload": "{\"header\":{\"dateTimeIssued\":\"2026-10-02T09:30:15Z\",\"receiptNumber\":\"SIM-000001\",\"uuid\":\"9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60\",\"previousUUID\":\"\",\"referenceOldUUID\":\"\",\"currency\":\"EGP\"},\"documentType\":{\"receiptType\":\"s\",\"typeVersion\":\"1.2\"},\"seller\":{\"rin\":\"123456789\",\"companyTradeName\":\"Cairo Eats\",\"branchCode\":\"0\",\"deviceSerialNumber\":\"POS-1\"},\"itemData\":[{\"description\":\"Koshari\",\"quantity\":2,\"unitPrice\":\"55.00\",\"totalSale\":\"110.00\",\"commercialDiscountData\":[],\"netSale\":\"110.00\",\"taxableItems\":[{\"taxType\":\"T1\",\"amount\":\"15.40\",\"subType\":\"V009\",\"rate\":14}],\"total\":\"125.40\"}],\"totalSales\":\"110.00\",\"totalCommercialDiscount\":\"0.00\",\"netAmount\":\"110.00\",\"extraReceiptDiscountData\":[],\"roundingAmount\":\"0.00\",\"totalAmount\":\"125.40\",\"taxTotals\":[{\"taxType\":\"T1\",\"amount\":\"15.40\"}]}",
+            "payload_sha256": "f89925926d62f9ab6438ab2d930d86d810f1f869d083ab78063a0853bbab3a6f",
+            "authority_response": {
+                "receipt": {
+                    "header": {
+                        "dateTimeIssued": "2026-10-02T09:30:15Z",
+                        "receiptNumber": "SIM-000001",
+                        "uuid": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+                        "previousUUID": "",
+                        "referenceOldUUID": "",
+                        "currency": "EGP"
+                    },
+                    "documentType": {
+                        "receiptType": "s",
+                        "typeVersion": "1.2"
+                    },
+                    "seller": {
+                        "rin": "123456789",
+                        "companyTradeName": "Cairo Eats",
+                        "branchCode": "0",
+                        "deviceSerialNumber": "POS-1"
+                    },
+                    "itemData": [
+                        {
+                            "description": "Koshari",
+                            "quantity": 2,
+                            "unitPrice": "55.00",
+                            "totalSale": "110.00",
+                            "commercialDiscountData": [],
+                            "netSale": "110.00",
+                            "taxableItems": [
+                                {
+                                    "taxType": "T1",
+                                    "amount": "15.40",
+                                    "subType": "V009",
+                                    "rate": 14
+                                }
+                            ],
+                            "total": "125.40"
+                        }
+                    ],
+                    "totalSales": "110.00",
+                    "totalCommercialDiscount": "0.00",
+                    "netAmount": "110.00",
+                    "extraReceiptDiscountData": [],
+                    "roundingAmount": "0.00",
+                    "totalAmount": "125.40",
+                    "taxTotals": [
+                        {
+                            "taxType": "T1",
+                            "amount": "15.40"
+                        }
+                    ]
+                },
+                "submissionId": "SUB-5e338c44",
+                "lookup_url": "https://preprod.eta.gov.eg/documents/9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60/share",
+                "submission_id": "SUB-5e338c44"
+            }
+        },
+        "eg_return": {
+            "country": "EG",
+            "type": "credit_note",
+            "status": "accepted",
+            "number": "CN-000001",
+            "seq": 1,
+            "counter": 2,
+            "uuid": "4b88785d180e296ed613ff00757ee78b8dd964607cc70f98562253627b8f38ce",
+            "device": "POS-1",
+            "hash": "4b88785d180e296ed613ff00757ee78b8dd964607cc70f98562253627b8f38ce",
+            "previous_hash": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+            "currency": "EGP",
+            "total_minor": 6270,
+            "tax_total_minor": 770,
+            "has_order": true,
+            "payload": "{\"header\":{\"dateTimeIssued\":\"2026-10-02T09:30:15Z\",\"receiptNumber\":\"CN-000001\",\"uuid\":\"4b88785d180e296ed613ff00757ee78b8dd964607cc70f98562253627b8f38ce\",\"previousUUID\":\"9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60\",\"referenceOldUUID\":\"9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60\",\"currency\":\"EGP\"},\"documentType\":{\"receiptType\":\"r\",\"typeVersion\":\"1.0\"},\"seller\":{\"rin\":\"123456789\",\"companyTradeName\":\"Cairo Eats\",\"branchCode\":\"0\",\"deviceSerialNumber\":\"POS-1\"},\"itemData\":[{\"description\":\"Koshari\",\"quantity\":1,\"unitPrice\":\"55.00\",\"totalSale\":\"55.00\",\"commercialDiscountData\":[],\"netSale\":\"55.00\",\"taxableItems\":[{\"taxType\":\"T1\",\"amount\":\"7.70\",\"subType\":\"V009\",\"rate\":14}],\"total\":\"62.70\"}],\"totalSales\":\"55.00\",\"totalCommercialDiscount\":\"0.00\",\"netAmount\":\"55.00\",\"extraReceiptDiscountData\":[],\"roundingAmount\":\"0.00\",\"totalAmount\":\"62.70\",\"taxTotals\":[{\"taxType\":\"T1\",\"amount\":\"7.70\"}]}",
+            "payload_sha256": "aa2b95df8f44639487d17c9e20322fddd75e95817cc46c4880977ea3c7c89bad",
+            "authority_response": {
+                "receipt": {
+                    "header": {
+                        "dateTimeIssued": "2026-10-02T09:30:15Z",
+                        "receiptNumber": "CN-000001",
+                        "uuid": "4b88785d180e296ed613ff00757ee78b8dd964607cc70f98562253627b8f38ce",
+                        "previousUUID": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+                        "referenceOldUUID": "9e0cac6dffbf518136bcb4fec635f017f270fd27d3699b72fe79e172b4af3c60",
+                        "currency": "EGP"
+                    },
+                    "documentType": {
+                        "receiptType": "r",
+                        "typeVersion": "1.0"
+                    },
+                    "seller": {
+                        "rin": "123456789",
+                        "companyTradeName": "Cairo Eats",
+                        "branchCode": "0",
+                        "deviceSerialNumber": "POS-1"
+                    },
+                    "itemData": [
+                        {
+                            "description": "Koshari",
+                            "quantity": 1,
+                            "unitPrice": "55.00",
+                            "totalSale": "55.00",
+                            "commercialDiscountData": [],
+                            "netSale": "55.00",
+                            "taxableItems": [
+                                {
+                                    "taxType": "T1",
+                                    "amount": "7.70",
+                                    "subType": "V009",
+                                    "rate": 14
+                                }
+                            ],
+                            "total": "62.70"
+                        }
+                    ],
+                    "totalSales": "55.00",
+                    "totalCommercialDiscount": "0.00",
+                    "netAmount": "55.00",
+                    "extraReceiptDiscountData": [],
+                    "roundingAmount": "0.00",
+                    "totalAmount": "62.70",
+                    "taxTotals": [
+                        {
+                            "taxType": "T1",
+                            "amount": "7.70"
+                        }
+                    ]
+                },
+                "submissionId": "SUB-e42a6326",
+                "lookup_url": "https://preprod.eta.gov.eg/documents/4b88785d180e296ed613ff00757ee78b8dd964607cc70f98562253627b8f38ce/share",
+                "submission_id": "SUB-e42a6326"
+            }
+        }
+    }
+}

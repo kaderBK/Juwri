@@ -1,0 +1,310 @@
+{
+ "$schema_note": "Juwri theme tokens v1. Customizer roles (primary, background, surface, text, accent) map 1:1 to colors.* in theme.json; the other colour keys are theme tokens (--x-*) derived in theme.css. Checked by tools/contrast.py (contract §8).",
+ "theme": "book",
+ "vertical_set": "services (new Community `services` store type: salon, barber, spa, clinic visits, repair, cleaning; laundry when the ee module is on)",
+ "default_preset": "calm",
+ "scheme_default": "auto",
+ "customizer_roles": [
+  "primary",
+  "background",
+  "surface",
+  "text",
+  "accent"
+ ],
+ "presets": {
+  "calm": {
+   "label": {
+    "en": "Calm",
+    "ar": "هادئ"
+   },
+   "source": "bookla",
+   "default_scheme": "light",
+   "layout_overrides": {},
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#2F6B5E",
+    "background": "#F6F7F4",
+    "surface": "#FFFFFF",
+    "surface_2": "#ECEFEA",
+    "text": "#1C2420",
+    "muted": "#56615B",
+    "border": "#E1E6E0",
+    "border_strong": "#848E88",
+    "accent": "#C9A36A"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#7FC8B5",
+    "background": "#0F1412",
+    "surface": "#18201D",
+    "surface_2": "#222B27",
+    "text": "#ECF2EF",
+    "muted": "#A3B0AA",
+    "border": "#2B3530",
+    "border_strong": "#6F7C76",
+    "accent": "#D9B97E"
+   }
+  },
+  "bright": {
+   "label": {
+    "en": "Bright",
+    "ar": "مشرق"
+   },
+   "source": "bookla (repair / cleaning)",
+   "default_scheme": "light",
+   "layout_overrides": {
+    "layout.radius": "round",
+    "fonts.pair": "inter"
+   },
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#1D4ED8",
+    "background": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surface_2": "#F1F4F9",
+    "text": "#0F172A",
+    "muted": "#556070",
+    "border": "#E3E8EF",
+    "border_strong": "#808A99",
+    "accent": "#F59E0B"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#7FA6FF",
+    "background": "#0B1020",
+    "surface": "#141A2B",
+    "surface_2": "#1D2438",
+    "text": "#EEF2FA",
+    "muted": "#A4AEC2",
+    "border": "#283149",
+    "border_strong": "#6E7A93",
+    "accent": "#FBBF24"
+   }
+  },
+  "clinic": {
+   "label": {
+    "en": "Clinic",
+    "ar": "عيادة"
+   },
+   "source": "new (clinic / care)",
+   "default_scheme": "light",
+   "layout_overrides": {
+    "fonts.pair": "geist-inter",
+    "layout.radius": "soft",
+    "layout.card": "list"
+   },
+   "light": {
+    "danger": "#B42318",
+    "success": "#1A6B3C",
+    "warning": "#8A5A00",
+    "primary": "#0E7490",
+    "background": "#F7FAFB",
+    "surface": "#FFFFFF",
+    "surface_2": "#EDF3F5",
+    "text": "#10232B",
+    "muted": "#526570",
+    "border": "#DFE8EB",
+    "border_strong": "#7F9099",
+    "accent": "#7C3AED"
+   },
+   "dark": {
+    "danger": "#FF8A7A",
+    "success": "#5FCB8C",
+    "warning": "#F2C14E",
+    "primary": "#5CC8E0",
+    "background": "#0B1417",
+    "surface": "#132024",
+    "surface_2": "#1B2A2F",
+    "text": "#E9F3F6",
+    "muted": "#9FB3BA",
+    "border": "#26363C",
+    "border_strong": "#6A7E85",
+    "accent": "#B49CFF"
+   }
+  }
+ },
+ "color_usage": {
+  "primary": "CTA fill (book, continue, confirm), selected slot, selected day, selected staff ring, focus ring, links",
+  "accent": "badge FILL only (Popular, New, Offer); label in on-accent. Never text, never the only signal",
+  "surface_2": "input fill, unavailable day/slot fill, skeletons, segmented control track",
+  "muted": "durations, staff role, descriptions, placeholder (passes 4.5:1)",
+  "border": "card hairline, dividers (decorative)",
+  "border_strong": "input outlines, available slot outline, radio/checkbox outlines (3:1 non-text)",
+  "danger/success/warning": "status text + icons (Confirmed, Cancelled, Few slots left); fills use 12% tint with the text colour on top"
+ },
+ "typography": {
+  "font_pair": "jakarta",
+  "heading": "Plus Jakarta Sans 700/800 (Latin) → IBM Plex Sans Arabic 700",
+  "body": "Plus Jakarta Sans (Latin) → IBM Plex Sans Arabic",
+  "weights": {
+   "body": 400,
+   "strong": 600,
+   "heading": 800
+  },
+  "scale_px": {
+   "xs": 12,
+   "sm": 14,
+   "base": 16,
+   "lg": 18,
+   "xl": 20,
+   "2xl": 24,
+   "3xl": 30,
+   "4xl": 38,
+   "5xl": 48
+  },
+  "roles": {
+   "store_name": {
+    "phone": "3xl/heading/700",
+    "desktop": "5xl/heading/700"
+   },
+   "category_title": {
+    "phone": "2xl/heading/700",
+    "desktop": "3xl/heading/700"
+   },
+   "item_name": {
+    "phone": "lg/body/600",
+    "desktop": "lg/body/600"
+   },
+   "item_desc": {
+    "phone": "sm/body/400 muted, 2-line clamp",
+    "desktop": "sm/body/400 muted, 2-line clamp"
+   },
+   "price": {
+    "phone": "base/body/600 tabular-nums",
+    "desktop": "base/body/600 tabular-nums"
+   },
+   "sheet_title": {
+    "phone": "2xl/heading/700",
+    "desktop": "3xl/heading/700"
+   },
+   "total": {
+    "phone": "xl/body/700 tabular-nums",
+    "desktop": "xl/body/700 tabular-nums"
+   },
+   "label": {
+    "phone": "sm/body/600",
+    "desktop": "sm/body/600"
+   },
+   "meta": {
+    "phone": "xs/body/400 muted (min 12px, never smaller)",
+    "desktop": "xs/body/400 muted"
+   }
+  },
+  "line_height": {
+   "latin": {
+    "tight": 1.15,
+    "base": 1.5
+   },
+   "arabic": {
+    "tight": 1.4,
+    "base": 1.7
+   }
+  },
+  "rules": [
+   "no letter-spacing on Arabic",
+   "no uppercase transforms",
+   "times are tabular-nums and use the store's 12/24 h setting; in Arabic the digits stay Latin unless the store picks Arabic-Indic",
+   "duration always next to price (\"45 min · SAR 120.00\")",
+   "min body 16px on inputs (iOS zoom)"
+  ]
+ },
+ "radius": {
+  "customizer": "layout.radius",
+  "default": "soft",
+  "values_px": {
+   "card": 10,
+   "control": 8,
+   "chip": 999,
+   "sheet_top": 24,
+   "image": 10,
+   "slot": 10
+  },
+  "note": "card/control follow core Tokens RADIUS_SCALE for the default 'soft' (10/8); the .pen designs drew 12-14/10, build uses the core scale"
+ },
+ "spacing": {
+  "customizer": "layout.density",
+  "default": "cozy",
+  "grid_px": 4,
+  "scale_px": {
+   "1": 4,
+   "2": 8,
+   "3": 12,
+   "4": 16,
+   "5": 20,
+   "6": 24,
+   "8": 32,
+   "10": 40,
+   "12": 48,
+   "16": 64
+  },
+  "gutter": {
+   "phone": 16,
+   "desktop": 32
+  },
+  "max_content_px": 1120,
+  "section_gap": {
+   "phone": 32,
+   "desktop": 56
+  }
+ },
+ "sizes": {
+  "target_primary": 44,
+  "target_chip": 32,
+  "header_phone": 56,
+  "category_bar": 52,
+  "cart_bar": 64,
+  "service_thumb": 64,
+  "staff_avatar": 56,
+  "day_cell": 44,
+  "slot_height": 48,
+  "icon": 20,
+  "icon_small": 16,
+  "scroll_padding_note": "scroll-padding-top = header + category_bar; scroll-padding-bottom = booking bar + 16 (WCAG 2.4.11)"
+ },
+ "elevation": {
+  "card": "0 1px 2px rgb(0 0 0 / .06)",
+  "raised": "0 6px 20px rgb(0 0 0 / .10)",
+  "sheet": "0 -8px 32px rgb(0 0 0 / .18)",
+  "dark_note": "dark scheme uses surface steps (surface → surface_2) instead of shadows"
+ },
+ "motion": {
+  "fast_ms": 120,
+  "base_ms": 200,
+  "slow_ms": 320,
+  "ease": "cubic-bezier(.2,.8,.2,1)",
+  "ease_exit": "cubic-bezier(.4,0,1,1)",
+  "patterns": {
+   "sheet_open": "translateY(100%)→0, slow, ease",
+   "slot_select": "fill colour, fast",
+   "step_change": "cross-fade, base (no slide when reduced motion)",
+   "skeleton": "opacity pulse 1.2s"
+  },
+  "reduced_motion": "all transforms off; opacity fades ≤ fast only"
+ },
+ "breakpoints_px": {
+  "phone": 0,
+  "tablet": 768,
+  "desktop": 1080,
+  "wide": 1440
+ },
+ "layout": {
+  "card_default": "list",
+  "image_ratio_default": "1:1",
+  "category_nav_default": "chips",
+  "header_default": "cover",
+  "desktop_cart_default": "panel",
+  "order_type_default": "appointment",
+  "grid": "phone 1 col service list, desktop 2 col list + booking panel",
+  "desktop": "service list (categories as chips on top) | booking panel 400 (sticky): chosen services, staff, date, slot, total",
+  "services_flow": "pick service(s) → staff (or Any) → day strip + slot grid → details (+ address for on-site) → pay or pay at visit → confirmation with add-to-calendar; manage booking (reschedule / cancel within policy)",
+  "laundry_flow": "ee only: per-item and per-kg lines, pickup slot + delivery slot, weight estimate + cap (same rule as basket)"
+ }
+}

@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+.bio--honey_hive .bio-avatar{background:#f5c93c;box-shadow:0 5px 0 rgba(61,49,22,.15)}
+.bio--honey_hive .bio-link:hover{border-color:#f5c93c;box-shadow:0 5px 0 #f5c93c;transform:translateY(-2px)}
+.bio--honey_hive .bio-link__icon{background:none;color:#3d3116}
+.bio--honey_hive .bio-socials a{border:1.5px solid #ecd9a0}

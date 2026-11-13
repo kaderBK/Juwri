@@ -1,0 +1,32 @@
+{
+  "slug": "classic_dark",
+  "starter": "restaurant_essential",
+  "name": "Classic Dark",
+  "family": "list",
+  "tier": "basic",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#161618",
+    "--ink": "#ffffff",
+    "--muted": "#9c9ca4",
+    "--card": "transparent",
+    "--btn-bg": "transparent",
+    "--btn-fg": "#ffffff",
+    "--btn-border": "#48484f",
+    "--btn-border-width": "1.5px",
+    "--accent": "#ffffff",
+    "--accent-ink": "#161618",
+    "--avatar-bg": "#242428",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "12px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

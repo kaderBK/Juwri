@@ -1,0 +1,24 @@
+{
+    "name": "Studio Market",
+    "slug": "studio-market",
+    "version": "1",
+    "author": "juwri",
+    "description": "A fast grocery and convenience shop: sticky search, promo banners, image category tiles, deals and a dense product grid with filters, sort and stock badges.",
+    "min_platform_version": "2.0",
+    "source": "liquid",
+    "library": "1",
+    "commerce_runtime": "v2",
+    "category": "general",
+    "vertical": "goods",
+    "recipe": "retail/grocery",
+    "tokens": {
+        "colors.primary": "#1f7a3f",
+        "colors.background": "#f5f8f4",
+        "colors.surface": "#ffffff",
+        "colors.text": "#14261a",
+        "colors.accent": "#a3410a",
+        "layout.radius": "soft",
+        "layout.density": "compact",
+        "fonts.pair": "inter"
+    }
+}

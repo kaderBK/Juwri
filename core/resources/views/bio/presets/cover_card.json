@@ -1,0 +1,32 @@
+{
+  "slug": "cover_card",
+  "starter": "social_grid",
+  "name": "Cover Card",
+  "family": "photo_hero",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700]}
+  ],
+  "tokens": {
+    "--bg": "#eef0f4",
+    "--ink": "#22242c",
+    "--muted": "#7b8090",
+    "--card": "#f2f4f7",
+    "--btn-bg": "#f2f4f7",
+    "--btn-fg": "#22242c",
+    "--btn-border": "transparent",
+    "--btn-border-width": "0px",
+    "--accent": "#2a7050",
+    "--accent-ink": "#ffffff",
+    "--avatar-bg": "#e8f3ec",
+    "--icon-display": "none",
+    "--arrow-display": "none",
+    "--link-justify": "center",
+    "--link-text-align": "center",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif"
+  }
+}

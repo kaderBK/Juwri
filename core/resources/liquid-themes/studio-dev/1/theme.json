@@ -1,0 +1,11 @@
+{
+  "name": "Studio Dev",
+  "slug": "studio-dev",
+  "version": "1.0.0",
+  "author": "juwri",
+  "description": "Developer reference theme for the Theme Studio section library v1: every library section in a sensible order. Uses commerce runtime v2. Not a marketplace theme.",
+  "min_platform_version": "2.0",
+  "source": "liquid",
+  "library": "1",
+  "commerce_runtime": "v2"
+}

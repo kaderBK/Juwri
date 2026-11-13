@@ -1,0 +1,65 @@
+{
+  "$comment": "Zap template intents for the juwri Zapier app. The `juwri` side of every template references a real operation key in this package (validated by test/templates.test.js). The other app's key is descriptive — set the exact partner step when authoring the templates in the Zapier Partner dashboard after publish.",
+  "templates": [
+    {
+      "title": "Post new juwri orders to Slack",
+      "description": "When a new order is placed in juwri, post a message to a Slack channel.",
+      "trigger": { "app": "juwri", "key": "order_created" },
+      "action": { "app": "slack", "key": "channel_message" }
+    },
+    {
+      "title": "Log new juwri orders to a Google Sheet",
+      "description": "When a new order is placed in juwri, add a row to a Google Sheets spreadsheet.",
+      "trigger": { "app": "juwri", "key": "order_created" },
+      "action": { "app": "google-sheets", "key": "create_spreadsheet_row" }
+    },
+    {
+      "title": "Record paid juwri orders in QuickBooks",
+      "description": "When an order is marked paid in juwri, create a sales receipt in QuickBooks Online.",
+      "trigger": { "app": "juwri", "key": "order_paid" },
+      "action": { "app": "quickbooks", "key": "create_sales_receipt" }
+    },
+    {
+      "title": "Text customers when their order status changes",
+      "description": "When an order changes status in juwri, send an SMS with Twilio.",
+      "trigger": { "app": "juwri", "key": "order_status_changed" },
+      "action": { "app": "twilio", "key": "send_sms" }
+    },
+    {
+      "title": "Add new juwri customers to Mailchimp",
+      "description": "When a new customer is created in juwri, add or update a Mailchimp subscriber.",
+      "trigger": { "app": "juwri", "key": "customer_created" },
+      "action": { "app": "mailchimp", "key": "add_subscriber" }
+    },
+    {
+      "title": "Save new juwri customers to Google Contacts",
+      "description": "When a new customer is created in juwri, create a Google Contact.",
+      "trigger": { "app": "juwri", "key": "customer_created" },
+      "action": { "app": "google-contacts", "key": "create_contact" }
+    },
+    {
+      "title": "Put new juwri reservations on Google Calendar",
+      "description": "When a new reservation is created in juwri, create a detailed Google Calendar event.",
+      "trigger": { "app": "juwri", "key": "reservation_created" },
+      "action": { "app": "google-calendar", "key": "create_detailed_event" }
+    },
+    {
+      "title": "Alert finance in Slack on juwri refunds",
+      "description": "When a refund is completed in juwri, post a message to a Slack channel.",
+      "trigger": { "app": "juwri", "key": "refund_completed" },
+      "action": { "app": "slack", "key": "channel_message" }
+    },
+    {
+      "title": "Create juwri menu items from a Google Sheet",
+      "description": "When a new row is added to a Google Sheet, create a menu item in juwri.",
+      "trigger": { "app": "google-sheets", "key": "new_spreadsheet_row" },
+      "action": { "app": "juwri", "key": "create_menu_item" }
+    },
+    {
+      "title": "Turn Typeform responses into juwri customers",
+      "description": "When a Typeform entry is submitted, create a customer in juwri.",
+      "trigger": { "app": "typeform", "key": "new_entry" },
+      "action": { "app": "juwri", "key": "create_customer" }
+    }
+  ]
+}

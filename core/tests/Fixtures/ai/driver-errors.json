@@ -1,0 +1,120 @@
+{
+    "mimo": {
+        "http_500": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 500: upstream boom",
+            "retryable": true,
+            "provider": "mimo"
+        },
+        "http_503": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 503: {\"error\":{\"message\":\"overloaded\"}}",
+            "retryable": true,
+            "provider": "mimo"
+        },
+        "http_429": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 429: {\"error\":{\"message\":\"slow down\"}}",
+            "retryable": true,
+            "provider": "mimo"
+        },
+        "http_400": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 400: {\"error\":{\"message\":\"bad request\"}}",
+            "retryable": false,
+            "provider": "mimo"
+        },
+        "http_401": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 401: {\"error\":{\"message\":\"bad key\"}}",
+            "retryable": false,
+            "provider": "mimo"
+        },
+        "http_402": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] HTTP 402: {\"error\":{\"message\":\"no credits\"}}",
+            "retryable": false,
+            "provider": "mimo"
+        },
+        "connection": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] connection error: cURL error 28: timed out",
+            "retryable": true,
+            "provider": "mimo"
+        },
+        "empty_answer": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] returned no content.",
+            "retryable": true,
+            "provider": "mimo"
+        },
+        "not_json_body": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [mimo] returned no content.",
+            "retryable": true,
+            "provider": "mimo"
+        }
+    },
+    "anthropic": {
+        "http_500": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 500: upstream boom",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "http_503": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 503: {\"error\":{\"message\":\"overloaded\"}}",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "http_429": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 429: {\"error\":{\"message\":\"slow down\"}}",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "http_400": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 400: {\"error\":{\"message\":\"bad request\"}}",
+            "retryable": false,
+            "provider": "anthropic"
+        },
+        "http_401": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 401: {\"error\":{\"message\":\"bad key\"}}",
+            "retryable": false,
+            "provider": "anthropic"
+        },
+        "http_402": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] HTTP 402: {\"error\":{\"message\":\"no credits\"}}",
+            "retryable": false,
+            "provider": "anthropic"
+        },
+        "connection": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] connection error: cURL error 28: timed out",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "empty_answer": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] returned no content.",
+            "retryable": true,
+            "provider": "anthropic"
+        },
+        "not_json_body": {
+            "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+            "message": "Provider [anthropic] returned no content.",
+            "retryable": true,
+            "provider": "anthropic"
+        }
+    },
+    "unconfigured": {
+        "class": "Juwri\\Modules\\Ai\\Services\\AiProviderException",
+        "message": "Provider [mimo] has no API key configured.",
+        "retryable": false,
+        "provider": "mimo"
+    }
+}

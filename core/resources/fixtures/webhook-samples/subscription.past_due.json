@@ -1,0 +1,12 @@
+{
+    "id": "msg_h2K9xW3qLp8RtY5vN0aBcDe7",
+    "event": "subscription.past_due",
+    "created_at": "2026-07-08T14:03:11+00:00",
+    "data": {
+        "subscription_id": 220,
+        "user_id": 51,
+        "plan_id": 4,
+        "status": "past_due",
+        "ends_at": "2026-08-01T00:00:00+00:00"
+    }
+}

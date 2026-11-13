@@ -1,0 +1,32 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner app — hide the web controls a native bridge component replaces
+ * (server item S5, rev/mobile-app/BRIDGE.md). Loaded only inside the app.
+ *
+ * Keyed off the attributes @hotwired/hotwire-native-bridge sets on <html> once
+ * the native shell has attached: data-bridge-platform="ios|android" and
+ * data-bridge-components="form menu button …" (the components the SHELL
+ * registered). Until then — or in a shell without the component — nothing is
+ * hidden, so the web control keeps working.
+ */
+
+/* form: the native nav-bar Save/Submit replaces the web submit button. */
+html[data-bridge-components~="form"] [data-controller~="bridge--form"] [data-bridge--form-target~="submit"] {
+  display: none !important;
+}
+
+/* button: the native nav-bar button replaces the web element itself. */
+html[data-bridge-components~="button"] [data-controller~="bridge--button"] {
+  display: none !important;
+}
+
+/* menu: nothing to hide — the web trigger stays and opens the native sheet.
+   Any extra web-only chrome around a replaced control (a sticky action bar, a
+   "⋯" hint) opts in with data-bridge-hide="<component> …". */
+html[data-bridge-components~="form"] [data-bridge-hide~="form"],
+html[data-bridge-components~="menu"] [data-bridge-hide~="menu"],
+html[data-bridge-components~="button"] [data-bridge-hide~="button"] {
+  display: none !important;
+}

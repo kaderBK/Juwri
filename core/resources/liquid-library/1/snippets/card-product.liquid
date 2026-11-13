@@ -1,0 +1,102 @@
+{%- comment -%}
+  Product card (library v1, B1c) for goods stores. Commerce runtime hooks:
+  data-mb-item / data-mb-name / data-mb-price / data-mb-rating (search, sort,
+  fitment), data-mb-open on the title link (product view with the v2 variant
+  matrix), data-mb-add (only when the store takes orders), data-mb-fav
+  (wishlist) and the stock badge (data-mb-stock).
+  Variants: the price reads "From <lowest>" when variant prices differ and
+  the distinct option values ("S", "M", "Black"…) show as an options hint.
+  Params: item (ItemDrop), heading_tag ('h3'), show_desc, show_variants,
+  show_sku, show_wishlist, show_expiry (bools).
+{%- endcomment -%}
+{%- liquid
+  assign tag = heading_tag | default: 'h3'
+  assign out = false
+  if item.is_sold_out or item.stock_status == 'out'
+    assign out = true
+  endif
+
+  assign min_price = item.price
+  assign max_price = item.price
+  assign seen = '|'
+  assign value_count = 0
+  if item.has_variants
+    for v in item.variants
+      if forloop.first
+        assign min_price = v.price
+        assign max_price = v.price
+      else
+        if v.price < min_price
+          assign min_price = v.price
+        endif
+        if v.price > max_price
+          assign max_price = v.price
+        endif
+      endif
+    endfor
+    for pos in (0..2)
+      for v in item.variants
+        assign parts = v.name | split: ' · '
+        for raw in parts offset: pos limit: 1
+          assign part = raw | strip
+          assign key = '|' | append: part | append: '|'
+          unless part == 'Option' or part == '' or seen contains key
+            assign seen = seen | append: part | append: '|'
+            assign value_count = value_count | plus: 1
+          endunless
+        endfor
+      endfor
+    endfor
+  endif
+  assign from = false
+  if min_price != max_price
+    assign from = true
+  endif
+  assign values = seen | remove_first: '|' | split: '|'
+  assign variant_count = item.variants | size
+-%}
+<article class="mbs-card-product{% if out %} is-out{% endif %}" data-mb-item="{{ item.id }}" data-mb-name="{{ item.name | escape }}" data-mb-price="{{ min_price }}" data-mb-rating="{{ item.rating }}"{% if item.is_daily_special %} data-mb-special{% endif %}>
+  <div class="mbs-card-product__media">
+    {%- if item.image -%}
+      {%- assign img = item.image | media_url: 'menu' -%}
+      {%- render 'media', src: img, alt: item.name, width: 600, height: 600, class: 'mbs-card-product__img', priority: false, sizes: '(min-width: 960px) 280px, 50vw' -%}
+    {%- endif -%}
+    <div class="mbs-card-product__flags">
+      {%- if item.on_offer -%}<span class="mbs-card-product__flag is-offer">-<bdi>{{ item.discount_percent }}</bdi>%</span>{%- endif -%}
+      {%- if item.age_restricted -%}<span class="mbs-card-product__flag is-age">{{ 'Age-restricted' | t }}</span>{%- endif -%}
+      {%- render 'stock-badge', item: item -%}
+    </div>
+    {%- if show_wishlist -%}
+    <button type="button" class="mbs-card-product__fav" data-mb-fav="{{ item.id }}" aria-pressed="false" aria-label="{{ 'Save' | t }}: {{ item.name | escape }}">{%- render 'icon', name: 'heart', size: 20 -%}</button>
+    {%- endif -%}
+  </div>
+  <div class="mbs-card-product__body">
+    <{{ tag }} class="mbs-card-product__name"><a class="mbs-card-product__link" href="?item={{ item.id }}" data-mb-open="{{ item.id }}">{{ item.name | escape }}</a></{{ tag }}>
+    {%- if show_desc and item.description -%}<p class="mbs-card-product__desc">{{ item.description | strip_html | truncate: 90 | escape }}</p>{%- endif -%}
+    {%- if show_variants and item.has_variants -%}
+      {%- if value_count > 0 -%}
+      <ul class="mbs-card-product__options" role="list" aria-label="{{ 'Options' | t }}">
+        {%- for value in values limit: 5 -%}<li class="mbs-card-product__option">{{ value | escape }}</li>{%- endfor -%}
+        {%- if value_count > 5 -%}<li class="mbs-card-product__option is-more">+<bdi>{{ value_count | minus: 5 }}</bdi></li>{%- endif -%}
+      </ul>
+      {%- else -%}
+      <p class="mbs-card-product__hint">{{ ':count options' | t | replace: ':count', variant_count }}</p>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if show_sku and item.sku -%}<p class="mbs-card-product__meta">{{ 'SKU' | t }} <bdi>{{ item.sku | escape }}</bdi></p>{%- endif -%}
+    {%- if show_expiry and item.expiry_date -%}<p class="mbs-card-product__meta">{{ 'Best before' | t }} <bdi><time datetime="{{ item.expiry_date | escape }}">{{ item.expiry_date | escape }}</time></bdi></p>{%- endif -%}
+    <div class="mbs-card-product__foot">
+      <p class="mbs-card-product__price">
+        {%- if from -%}<span class="mbs-card-product__from">{{ 'From' | t }}</span> {% endif -%}
+        <bdi data-mb-money="{{ min_price }}">{{ min_price | money }}</bdi>
+        {%- if item.pricing_unit == 'kg' %} <span class="mbs-card-product__unit">{{ 'per kg' | t }}</span>{%- endif -%}
+        {%- if item.on_offer and from == false %} <s class="mbs-card-product__was"><bdi data-mb-money="{{ item.original_price }}">{{ item.original_price | money }}</bdi></s>{%- endif -%}
+      </p>
+      {%- if flags.allow_order -%}
+      <button type="button" class="mbs-card-product__add" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}"{% if out %} disabled{% endif %}>
+        {%- if out -%}{{ 'Out of stock' | t }}{%- else -%}{{ vocab.add_to_cart | escape }}{%- endif -%}
+      </button>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

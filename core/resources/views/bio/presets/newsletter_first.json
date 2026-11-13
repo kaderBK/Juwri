@@ -1,0 +1,28 @@
+{
+  "slug": "newsletter_first",
+  "starter": "cafe",
+  "name": "Newsletter First",
+  "family": "list",
+  "tier": "pro",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Poppins", "weights": [400, 500, 600, 700, 800]},
+    {"family": "IBM Plex Mono", "weights": [400, 500]}
+  ],
+  "tokens": {
+    "--bg": "#f7f4ef",
+    "--ink": "#2b2823",
+    "--muted": "#8a8375",
+    "--card": "#ffffff",
+    "--btn-border": "#e8e2d6",
+    "--accent": "#c2410c",
+    "--accent-ink": "#ffffff",
+    "--icon-fg": "#c2410c",
+    "--avatar-bg": "#ffffff",
+    "--radius": "14px",
+    "--shadow": "none",
+    "--font-body": "'Poppins',sans-serif",
+    "--font-display": "'Poppins',sans-serif",
+    "--font-mono": "'IBM Plex Mono',monospace"
+  }
+}

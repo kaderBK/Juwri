@@ -1,0 +1,103 @@
+{%- comment -%}
+  Image with text (library v1): one or more rows of image + heading + rich
+  text + optional button. Media position start / end / alternate is
+  logical (flips under dir=rtl). A row with no image, heading or text is
+  skipped; with no such row the section renders nothing. Buttons only
+  accept secure web links, site paths or #anchors.
+{%- endcomment -%}
+{%- liquid
+  assign shown = 0
+  for block in section.blocks
+    if block.type == 'row'
+      if block.settings.image != '' or block.settings.heading != '' or block.settings.text != ''
+        assign shown = shown | plus: 1
+      endif
+    endif
+  endfor
+  assign hx = 'h2'
+  if section.settings.heading != ''
+    assign hx = 'h3'
+  endif
+-%}
+{%- if shown > 0 -%}
+<section class="mbs-image-with-text mbs-image-with-text--{{ section.settings.media_position | escape }}"{% if section.settings.heading != '' %} aria-labelledby="mbs-iwt-{{ section.id | escape }}"{% endif %}>
+  {%- if section.settings.heading != '' -%}
+  <h2 class="mbs-image-with-text__title" id="mbs-iwt-{{ section.id | escape }}">{{ section.settings.heading | escape }}</h2>
+  {%- endif -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'row' -%}
+    {%- if block.settings.image != '' or block.settings.heading != '' or block.settings.text != '' -%}
+    {%- liquid
+      assign img = ''
+      if block.settings.image != ''
+        assign img = block.settings.image | media_url
+      endif
+      assign url = block.settings.button_url | strip
+      assign label = block.settings.button_label | strip
+      assign url_head = url | slice: 0, 8 | downcase
+      assign url_head7 = url | slice: 0, 7 | downcase
+      assign url_first = url | slice: 0, 1
+      assign url_second = url | slice: 1, 1
+      assign url_len = url | size
+      assign ok = false
+      if label != ''
+        if url_head == 'https://' or url_head7 == 'http://'
+          assign ok = true
+        elsif url_first == '/' and url_second != '/'
+          assign ok = true
+        elsif url_first == '#' and url_len > 1
+          assign ok = true
+        endif
+      endif
+    -%}
+    <div class="mbs-image-with-text__row{% if img != '' %} has-media{% endif %}">
+      {%- if img != '' -%}
+      <div class="mbs-image-with-text__media">
+        {%- render 'media', src: img, alt: block.settings.image_alt, width: 960, height: 720, class: 'mbs-image-with-text__img', priority: false, sizes: '(min-width: 768px) 480px, 100vw' -%}
+      </div>
+      {%- endif -%}
+      <div class="mbs-image-with-text__text">
+        {%- if block.settings.heading != '' -%}<{{ hx }} class="mbs-image-with-text__heading">{{ block.settings.heading | escape }}</{{ hx }}>{%- endif -%}
+        {%- if block.settings.text != '' -%}<div class="mbs-image-with-text__body">{{ block.settings.text }}</div>{%- endif -%}
+        {%- if ok -%}<a class="mbs-image-with-text__cta" href="{{ url | escape }}">{{ label | escape }}</a>{%- endif -%}
+      </div>
+    </div>
+    {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Image with text",
+  "group": "content",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "heading", "type": "text", "label": "Section heading (optional)", "default": "" },
+    { "id": "media_position", "type": "select", "label": "Image position", "options": [
+      { "value": "start", "label": "Image first" },
+      { "value": "end", "label": "Image last" },
+      { "value": "alternate", "label": "Alternate" }
+    ], "default": "alternate" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "limit": 6,
+      "settings": [
+        { "id": "image", "type": "image_picker", "label": "Image", "default": "" },
+        { "id": "image_alt", "type": "text", "label": "Image description (for screen readers)", "default": "" },
+        { "id": "heading", "type": "text", "label": "Heading", "default": "" },
+        { "id": "text", "type": "richtext", "label": "Text", "default": "" },
+        { "id": "button_label", "type": "text", "label": "Button label", "default": "" },
+        { "id": "button_url", "type": "url", "label": "Button link", "default": "" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Image with text", "blocks": [ { "type": "row" }, { "type": "row" } ] }
+  ]
+}
+{% endschema %}

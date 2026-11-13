@@ -1,0 +1,300 @@
+# ----------------------------------------------------------------------
+# 0. MAINTENANCE FALLBACK (P6-112) - works even when PHP itself is broken
+# ----------------------------------------------------------------------
+# Static, branded, multi-language page (rebuilt by `php artisan juwri:maintenance-page`).
+# Apache shows it when it has to generate a 503 itself, e.g. PHP-FPM / LSAPI down or unreachable (P6-133 smoke: verified
+# with Apache + PHP-FPM). An EMPTY 500 that PHP-FPM itself returns (fatal error, display_errors off) is passed through as-is;
+# serving the page for that needs `ProxyErrorOverride On` in the vhost, which cannot be set from .htaccess.
+ErrorDocument 503 /maintenance.html
+ErrorDocument 500 /maintenance.html
+# Planned downtime without PHP: create the file `maintenance.flag` next to this .htaccess (`touch maintenance.flag`),
+# delete it to go live. Every request then answers 503 + Retry-After + maintenance.html. For a per-visitor
+# bypass use `php artisan down --secret=...` instead (see deploy/MAINTENANCE.md).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # OpenLiteSpeed opt-in (P6-155): OLS ignores `Header` here and cannot set Retry-After from a rewrite rule, so when
+    # deploy/ols/maintenance.php has been copied to the web root, LiteSpeed servers answer the flag through it
+    # (503 + Retry-After + page). Without that file, or on Apache, the rule below applies. See deploy/OLS-VHOST.md.
+    RewriteCond %{SERVER_SOFTWARE} LiteSpeed
+    RewriteCond %{DOCUMENT_ROOT}/maintenance.flag -f
+    RewriteCond %{DOCUMENT_ROOT}/maintenance.php -f
+    RewriteCond %{REQUEST_URI} !^/maintenance\.(html|php)$
+    RewriteRule ^ maintenance.php [L]
+    RewriteCond %{DOCUMENT_ROOT}/maintenance.flag -f
+    RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+    RewriteRule ^ - [R=503,L,E=JUWRI_MAINT:1]
+</IfModule>
+<IfModule mod_headers.c>
+    Header always set Retry-After "300" env=JUWRI_MAINT
+    Header always set Retry-After "300" env=REDIRECT_JUWRI_MAINT
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 1. SECURITY HEADERS & OPTIONS
+# ----------------------------------------------------------------------
+# Prevent directory listings (Security Best Practice)
+Options -Indexes
+# /integrations is both an app route and a package directory on disk. Without this mod_dir answers
+# /integrations with a 301 to /integrations/ before the rewrite below can hand it to the app (P6-133 smoke).
+# Safe: directories have no index file and listings are off, so a bare directory URL is a 403 either way.
+<IfModule mod_dir.c>
+    DirectorySlash Off
+</IfModule>
+
+# Hide Apache version info
+ServerSignature Off
+
+# P6-147: every header below is ALSO sent by the app (Juwri\Core\Http\Middleware\AddSecurityHeaders) with
+# the same value, because OpenLiteSpeed ignores `Header` here. Change both together. `always`: PHP-FPM/CGI
+# headers land in Apache's "always" table, so a plain `Header set` added a second copy (P6-147 smoke).
+<IfModule mod_headers.c>
+    # Clickjacking: X-Frame-Options / CSP frame-ancestors come from the app ONLY (AddSecurityHeaders), because the
+    # storefront menu must stay embeddable in the owner's own site. A blanket header here blocked that embed on
+    # Apache (P6-147); a static file has nothing to frame.
+    # Protects against MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    # Enable XSS Filter in browser
+    Header always set X-XSS-Protection "1; mode=block"
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # P6-147: unused powerful features off (same value as AddSecurityHeaders::BASELINE)
+    Header always set Permissions-Policy "accelerometer=(), gyroscope=(), magnetometer=(), midi=(), browsing-topics=()"
+    # HSTS: force HTTPS for a year (only sent on HTTPS responses, so safe to set unconditionally)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTPS} == 'on'"
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 1b. STATIC ASSET CACHING & COMPRESSION (PageSpeed: efficient cache lifetimes)
+# ----------------------------------------------------------------------
+# Static asset URLs are cache-busted with ?v={appinfo.version} in the templates,
+# so a deploy (which bumps the version) changes the URL and defeats any stale
+# cache. That makes a long max-age safe. Fixes the "Cache-Control: None" audit
+# (swiper/gsap/bootstrap/images were served with no caching headers at all).
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml \
+        application/javascript application/x-javascript application/json \
+        image/svg+xml application/rss+xml application/xml \
+        font/ttf font/otf application/vnd.ms-fontobject
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 1 year"
+    ExpiresByType application/javascript    "access plus 1 year"
+    ExpiresByType text/javascript           "access plus 1 year"
+    ExpiresByType image/webp                "access plus 1 year"
+    ExpiresByType image/avif                "access plus 1 year"
+    ExpiresByType image/png                 "access plus 1 year"
+    ExpiresByType image/jpeg                "access plus 1 year"
+    ExpiresByType image/gif                 "access plus 1 year"
+    ExpiresByType image/svg+xml             "access plus 1 year"
+    ExpiresByType image/x-icon              "access plus 1 year"
+    ExpiresByType font/woff2                "access plus 1 year"
+    ExpiresByType font/woff                 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # SVG is active content: if opened directly (not via <img>) it must not run script from our origin
+    <FilesMatch "\.svg$">
+        Header set X-Content-Type-Options "nosniff"
+        Header set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    </FilesMatch>
+    <FilesMatch "\.(css|js|mjs|webp|avif|png|jpe?g|gif|svg|ico|woff2?|ttf|otf|eot)$">
+        Header set Cache-Control "public, max-age=31536000"
+        Header unset Pragma
+    </FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 2. BOT BLOCKING
+# ----------------------------------------------------------------------
+# Cleaned up duplicates from original list
+# P6-147: the same list is enforced app-side by Juwri\Core\Http\Middleware\BlockBadBots (OpenLiteSpeed ignores
+# SetEnvIf/Require). Change both together.
+SetEnvIfNoCase User-Agent "Yandex" spammer=yes
+SetEnvIfNoCase User-Agent "DTS Agent" spammer=yes
+SetEnvIfNoCase User-Agent "SemrushBot" spammer=yes
+SetEnvIfNoCase User-Agent "Pcore" spammer=yes
+SetEnvIfNoCase User-Agent "MJ12bot" spammer=yes
+SetEnvIfNoCase User-Agent "AhrefsBot" spammer=yes
+SetEnvIfNoCase User-Agent "DotBot" spammer=yes
+SetEnvIfNoCase User-Agent "Screaming" spammer=yes
+SetEnvIfNoCase User-Agent "MegaIndex" spammer=yes
+SetEnvIfNoCase User-Agent "spbot" spammer=yes
+SetEnvIfNoCase User-Agent "Owlin" spammer=yes
+SetEnvIfNoCase User-Agent "Flamingo_SearchEngine" spammer=yes
+SetEnvIfNoCase User-Agent "GPTBot" spammer=yes
+
+<Limit GET PUT POST>
+    # Apache 2.4 Syntax (Replaces Order deny,allow)
+    <RequireAll>
+        Require all granted
+        Require not env spammer
+    </RequireAll>
+</Limit>
+
+# P6-151: never serve the host-check token or counter, even where mod_rewrite is off.
+<FilesMatch "^juwri-check\.(token|attempts)$">
+    Require all denied
+</FilesMatch>
+
+# ----------------------------------------------------------------------
+# 3. CORE ROUTING & FILE PROTECTION
+# ----------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # PROD CPU (2026-09-17): meta-externalads is Facebook's ADS crawler, which
+    # re-scrapes og:image URLs forever. Since the July media loss left ~half the
+    # live menu images missing, it was 304,415 of 377,887 requests (81%) in a
+    # single 6h window on the upstream production host, essentially all 404s, and 18,253 of
+    # the 19,967 POSTs to /csp-report. It indexes nothing we surface anywhere.
+    # NOTE: this is NOT facebookexternalhit — that one renders the link previews
+    # people see when they share a menu on Facebook/Messenger/WhatsApp and MUST
+    # keep working. Match the ads crawler by name only.
+    RewriteCond %{HTTP_USER_AGENT} meta-externalads [NC]
+    RewriteRule ^ - [F,L]
+
+    # Redirect Trailing Slashes If Not A Folder
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Block access to Dotfiles (e.g., .env, .git) but allow .well-known (for SSL)
+    RewriteRule ^\.env - [F,L]
+    RewriteRule ^\.git - [F,L]
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteRule (^\.|/\.) - [F]
+
+    # P0-7: the Laravel app lives in core/ and is reached only through the
+    # repo-root front controller (index.php). Deny direct web access to the
+    # app source, config, secrets, storage and vendor under core/. Static
+    # plugin assets (core/plugins/<id>/assets/) stay served — they are the
+    # only public path under core/.
+    RewriteRule ^core/(app|bootstrap|config|database|lang|resources|routes|tests|storage|vendor|node_modules)(/|$) - [F,L]
+    RewriteRule ^core/(\.env(\..*)?|composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml|server\.php|README\.md|\.env\.example)$ - [F,L]
+    RewriteCond %{REQUEST_URI} !^/core/plugins/[^/]+/assets/
+    RewriteRule ^core/plugins/.+\.(php|json|lock|env)$ - [F,L]
+
+    # INTEGRATIONS-PACK F0-9: the repo root is the docroot and the front
+    # controller only takes over for paths that are NOT a real file/dir, so the
+    # top-level integrations/ package sources (.js/.ts/.json) and the rev/
+    # working docs would otherwise be fetchable directly. Deny the three package dirs and rev/ outright.
+    RewriteRule ^(integrations/(make-app|n8n-nodes-juwri|zapier-app)|rev)(/|$) - [F,L]
+    # BUT /integrations, /integrations/odoo, /integrations/switch, /integrations/deliverect and
+    # /integrations/docs/<slug> are real app routes that share the prefix (P6-133 smoke: the old
+    # blanket ^integrations deny returned 403 for all of them on Apache/LiteSpeed). So only paths
+    # that exist on disk under integrations/ are denied; everything else goes to the front controller.
+    # The bare /integrations URL is also an existing directory, so it is sent to index.php explicitly
+    # (otherwise mod_dir would redirect/403 it before the app sees it).
+    # (Guarded by DocRootExposureTest and the Apache smoke check.)
+    RewriteRule ^rev(/|$) - [F,L]
+    # P6-173: the Composer vendor/ folder lives in core/ (denied above). If someone uploads one to the web root, it
+    # must not be served either (vendor/autoload.php, vendor/composer/installed.json and package sources).
+    RewriteRule ^vendor(/|$) - [F,L]
+    RewriteRule ^integrations/?$ index.php [L]
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^integrations/. - [F,L]
+
+    # P6-133: the two <Files>/<FilesMatch> blocks below only work on Apache and LiteSpeed Enterprise.
+    # OpenLiteSpeed reads only the rewrite rules of .htaccess, so there backup.sql, *.log, composer.json,
+    # *.md ... under the docroot were served. Same list as rewrite rules, for existing files only (so an
+    # app route that merely ends in .json is not touched). Harmless duplicates on Apache.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule (^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])|~)$ - [F,L]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule \.(config\.js|md|gitignore|gitattributes|lock|json)$ - [F,L]
+
+    # P6-151: the pre-install host check (juwri-check.php). Its token and attempt counter are never served (also denied
+    # below without mod_rewrite); the probe URL lets the page test that rewrites work.
+    RewriteRule ^juwri-check\.(token|attempts)$ - [F,L]
+    RewriteRule ^juwri-check-rewrite-probe$ juwri-check.php?juwri_probe=1 [L]
+
+    # Block sensitive config/readme files
+    <FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])|~)$">
+        Require all denied
+    </FilesMatch>
+
+    # Original specific file block (Modernized)
+    <Files ~ "\.(config\.js|md|gitignore|gitattributes|lock|json)$">
+        Require all denied
+    </Files>
+
+    # P6-78: uploads under /storage/ are never executed or served as pages. A PHP extension anywhere in
+    # the name counts (evil.php.jpg): AddHandler-style hosts (cPanel/LiteSpeed) execute every .php segment.
+    RewriteRule ^storage/.*\.(php[0-9]*|phtml|phar|pht|phps)(\.|$) - [F,NC,L]
+    RewriteRule ^storage/.*\.(html?|xhtml|shtml|xml|js|mjs)$ - [F,NC,L]
+
+    # P6-147: an existing uploaded SVG is served by the app (ServePublicSvg) so it always carries the sandbox
+    # CSP + nosniff. The <FilesMatch "\.svg$"> header above works on Apache only; OpenLiteSpeed ignores it and
+    # served user SVGs with no CSP. Rewrite rules work on both. (assets/ and plugin SVGs stay static.)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^storage/.+\.svg$ index.php [NC,L]
+
+    # PROD CPU (2026-09-17): a missing file under /storage/ is dead media, not a
+    # route. The July media loss left ~half the live menu images 404, and
+    # crawlers retry them relentlessly: 256,288 missing-image requests in 6h.
+    # Without this rule each one falls through to index.php and boots the entire
+    # framework just to render a 404 — that alone held the box at 163-197% of its
+    # 400% CloudLinux CPU limit, with 188 throttle faults in 7h (baseline: 31 in
+    # 24h). The response was always a 404; answer it from Apache for free.
+    # Real files still serve statically via the -f check, exactly as before.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^storage/ - [R=404,L]
+
+    # Send Requests To Front Controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 4. PHP SETTINGS (SAFE DEFAULTS)
+# ----------------------------------------------------------------------
+# NOTE: These settings have been lowered to prevent Denial of Service (DoS).
+# If you edit these via cPanel "MultiPHP INI Editor", cPanel may overwrite this block.
+
+<IfModule php8_module>
+   php_flag display_errors Off
+   # TIME: 60 seconds is standard. 600s (10 mins) allows attacks to hang your server.
+   php_value max_execution_time 60
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   # MEMORY: 256M is sufficient for 99% of apps. 2048M is dangerous for shared hosting.
+   php_value memory_limit 512M
+   php_value post_max_size 64M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/opt/alt/php83/var/lib/php/session"
+   # UPLOAD: 64M is usually plenty. 1GB opens you to disk-filling attacks.
+   php_value upload_max_filesize 64M
+   php_flag zlib.output_compression Off
+</IfModule>
+
+<IfModule lsapi_module>
+   # Litespeed copies of the safe settings above
+   php_flag display_errors Off
+   php_value max_execution_time 60
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 512M
+   php_value post_max_size 64M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/opt/alt/php83/var/lib/php/session"
+   php_value upload_max_filesize 64M
+   php_flag zlib.output_compression Off
+</IfModule>
+
+# Set the “ea-php83” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php83 .php .php8 .phtml
+</IfModule>

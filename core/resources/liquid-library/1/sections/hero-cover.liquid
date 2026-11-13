@@ -1,0 +1,159 @@
+{%- comment -%}
+  Hero cover (library v1). Variants: image (text over a cover image), split
+  (image beside text) and minimal-text (no image). Height S/M/L is a capped
+  clamp — never a full-viewport hero. The hero image is the page's LCP
+  candidate, so it alone loads eagerly with fetchpriority=high.
+  Image source: the store cover, the first banner, or a custom image.
+  CTA blocks: target "catalog" jumps to a section id (default "menu"),
+  "cart" opens the cart (ordering stores only), "link" goes to a URL.
+{%- endcomment -%}
+{%- liquid
+  assign variant = section.settings.variant
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = restaurant.title
+  endif
+  assign subheading = section.settings.subheading | strip
+  if subheading == ''
+    assign subheading = restaurant.sub_title | strip
+  endif
+
+  assign img = ''
+  if variant != 'minimal-text'
+    if section.settings.image_source == 'custom'
+      assign custom = section.settings.image | strip
+      assign custom_head = custom | slice: 0, 8 | downcase
+      if custom_head == 'https://'
+        assign img = custom
+      elsif custom != ''
+        assign img = custom | media_url: 'cover'
+      endif
+    elsif section.settings.image_source == 'banner'
+      assign first_banner = banners | first
+      if first_banner and first_banner.image_url
+        assign img = first_banner.image_url
+      endif
+    elsif restaurant.cover
+      assign img = restaurant.cover | media_url: 'cover'
+    endif
+  endif
+  assign overlay = section.settings.overlay | default: 40
+-%}
+<section class="mbs-hero-cover mbs-hero-cover--{{ variant | escape }} mbs-hero-cover--{{ section.settings.height | escape }}{% if img != '' %} has-media{% endif %} mbs-hero-cover--align-{{ section.settings.align | escape }}" style="--mbs-overlay: {{ overlay | divided_by: 100.0 }}" aria-labelledby="mbs-hero-{{ section.id | escape }}">
+  {%- if img != '' -%}
+  <div class="mbs-hero-cover__media">
+    {%- render 'media', src: img, alt: '', width: 1600, height: 900, class: 'mbs-hero-cover__img', priority: true, sizes: '(min-width: 960px) 960px, 100vw' -%}
+  </div>
+  {%- endif -%}
+  <div class="mbs-hero-cover__content">
+    {%- if section.settings.show_logo and restaurant.logo -%}
+      {%- assign logo_url = restaurant.logo | media_url: 'logo' -%}
+      {%- render 'media', src: logo_url, alt: restaurant.title, width: 96, height: 96, class: 'mbs-hero-cover__logo', priority: false, sizes: '' -%}
+    {%- endif -%}
+    <h1 class="mbs-hero-cover__title" id="mbs-hero-{{ section.id | escape }}">{{ heading | escape }}</h1>
+    {%- if subheading != '' -%}<p class="mbs-hero-cover__sub">{{ subheading | escape }}</p>{%- endif -%}
+    {%- if table -%}<p class="mbs-hero-cover__table">{{ 'Table' | t }} <bdi>{{ table.table_no | escape }}</bdi></p>{%- endif -%}
+    {%- assign cta_count = section.blocks | size -%}
+    {%- if cta_count > 0 -%}
+    <div class="mbs-hero-cover__ctas">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'cta' -%}
+          {%- liquid
+            assign label = block.settings.label | strip
+            assign target = block.settings.target
+            assign style = 'primary'
+            if forloop.index > 1
+              assign style = 'secondary'
+            endif
+          -%}
+          {%- if target == 'cart' -%}
+            {%- if flags.allow_order -%}
+              <button type="button" class="mbs-hero-cover__cta is-{{ style }}" data-mb-open-cart>{% if label != '' %}{{ label | escape }}{% else %}{{ 'View cart' | t }}{% endif %}</button>
+            {%- endif -%}
+          {%- elsif target == 'link' -%}
+            {%- liquid
+              assign url = block.settings.url | strip
+              assign url_head = url | slice: 0, 8 | downcase
+              assign url_first = url | slice: 0, 1
+              assign url_second = url | slice: 1, 1
+              assign url_len = url | size
+              assign ok = false
+              if url_head == 'https://'
+                assign ok = true
+              elsif url_first == '/' and url_second != '/'
+                assign ok = true
+              elsif url_first == '#' and url_len > 1
+                assign ok = true
+              endif
+            -%}
+            {%- if ok and label != '' -%}
+              <a class="mbs-hero-cover__cta is-{{ style }}" href="{{ url | escape }}">{{ label | escape }}</a>
+            {%- endif -%}
+          {%- else -%}
+            {%- unless menu.is_empty -%}
+              {%- assign anchor = block.settings.anchor | strip | url_encode -%}
+              {%- if anchor == '' -%}{%- assign anchor = 'menu' -%}{%- endif -%}
+              <a class="mbs-hero-cover__cta is-{{ style }}" href="#mb-section-{{ anchor }}">{% if label != '' %}{{ label | escape }}{% else %}{{ vocab.catalog | escape }}{% endif %}</a>
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero cover",
+  "group": "hero",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "variant", "type": "select", "label": "Style", "options": [
+      { "value": "image", "label": "Text over image" },
+      { "value": "split", "label": "Image beside text" },
+      { "value": "minimal-text", "label": "Text only" }
+    ], "default": "image" },
+    { "id": "height", "type": "select", "label": "Height", "options": [
+      { "value": "s", "label": "Small" },
+      { "value": "m", "label": "Medium" },
+      { "value": "l", "label": "Large" }
+    ], "default": "m" },
+    { "id": "align", "type": "select", "label": "Text alignment", "options": [
+      { "value": "start", "label": "Start" },
+      { "value": "center", "label": "Center" }
+    ], "default": "center" },
+    { "id": "image_source", "type": "select", "label": "Image", "options": [
+      { "value": "cover", "label": "Store cover photo" },
+      { "value": "banner", "label": "First banner" },
+      { "value": "custom", "label": "Custom image" }
+    ], "default": "cover" },
+    { "id": "image", "type": "image_picker", "label": "Custom image", "default": "" },
+    { "id": "overlay", "type": "range", "label": "Image darkening", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 40 },
+    { "id": "show_logo", "type": "checkbox", "label": "Show logo", "default": false },
+    { "id": "heading", "type": "text", "label": "Heading (blank = store name)", "default": "" },
+    { "id": "subheading", "type": "textarea", "label": "Subheading (blank = tagline)", "default": "" }
+  ],
+  "blocks": [
+    {
+      "type": "cta",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        { "id": "label", "type": "text", "label": "Label (blank = automatic)", "default": "" },
+        { "id": "target", "type": "select", "label": "Action", "options": [
+          { "value": "catalog", "label": "Jump to a section" },
+          { "value": "cart", "label": "Open the cart" },
+          { "value": "link", "label": "Link" }
+        ], "default": "catalog" },
+        { "id": "anchor", "type": "text", "label": "Section id to jump to", "default": "menu" },
+        { "id": "url", "type": "text", "label": "Link (https:// or /path)", "default": "" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Hero cover", "blocks": [ { "type": "cta", "settings": { "target": "catalog" } }, { "type": "cta", "settings": { "target": "cart" } } ] }
+  ]
+}
+{% endschema %}

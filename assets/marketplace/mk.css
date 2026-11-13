@@ -1,0 +1,1405 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ============================================================
+   Fusion marketplace — mk.css (Snoonu-language redesign, v8)
+   Token block below is the ONLY place raw hex is allowed.
+   Design language: warm canvas, borderless white cards, big
+   radii, pill-everything, on-image badges/ETA, red pill CTAs,
+   springy micro-motion. Light + dark via [data-mk-theme="dark"],
+   RTL-native (logical properties only).
+   Bump ?v on every edit + sync SW precache.
+   ============================================================ */
+
+/* ---------- type: Google Fonts CDN (Plus Jakarta Sans, Fraunces,
+   IBM Plex Sans Arabic) loaded from layout.blade.php <link>.
+   Crave-language pass: vendored Inter retired. ---------- */
+
+:root {
+  /* crave dark — DEFAULT theme */
+  --mk-bg: #15171a;
+  --mk-bg-deep: #101214;
+  --mk-surface: #22262b;      /* cards, inputs, chips */
+  --mk-surface-2: #2a2f35;    /* nested/hover surface */
+  --mk-elev: #1c1f23;         /* sheets, option groups, totals */
+  --mk-ink: #f4f6f5;
+  --mk-ink-2: #adb6ba;
+  --mk-ink-3: #8a949c;
+  --mk-primary: #3fd463;
+  --mk-primary-hi: #8bf0a2;
+  --mk-primary-deep: #1d9e44;
+  --mk-primary-ink: #0e2d18;  /* text on primary */
+  --mk-primary-soft: rgba(63, 212, 99, .12);
+  --mk-grad: linear-gradient(118deg, #98f2ab 0%, #3fd463 42%, #1fa74b 100%);
+  --mk-accent: #ffb02e;
+  --mk-accent-ink: #3c2600;
+  --mk-danger: #ff6259;
+  --mk-cta: #3fd463;          /* positive-info green (open, fee met, free) */
+  --mk-cta-bg: #ffffff;       /* crave white-pill CTA */
+  --mk-cta-ink: #111315;
+  --mk-star: #ffb02e;
+  --mk-line: rgba(255, 255, 255, .07);
+  --mk-line-2: rgba(255, 255, 255, .12);
+  --mk-scrim: rgba(6, 8, 9, .62);
+  --mk-glass: rgba(28, 31, 35, .86);
+  --mk-r: 18px;
+  --mk-r-lg: 20px;
+  --mk-r-sheet: 26px;
+  --mk-shadow-sm: 0 10px 30px -18px rgba(0, 0, 0, .7);
+  --mk-shadow-md: 0 18px 40px -12px rgba(0, 0, 0, .65);
+  --mk-shadow-cta: 0 10px 26px -10px rgba(255, 255, 255, .22);
+  --mk-shadow-add: 0 6px 16px -6px rgba(63, 212, 99, .55);
+  --mk-shadow-sheet: 0 -18px 50px rgba(0, 0, 0, .5);
+  --mk-ease: cubic-bezier(.32, .72, .24, 1);
+  --mk-spring: cubic-bezier(.34, 1.45, .5, 1);
+  --mk-t-micro: 170ms;
+  --mk-t-comp: 250ms;
+  --mk-t-sheet: 380ms;
+  --mk-font: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mk-font-display: 'Fraunces', Georgia, serif;
+}
+
+[data-mk-theme="dark"] {
+  /* explicit dark = same as :root default (attr present after toggle) */
+  --mk-bg: #15171a;
+}
+
+[data-mk-theme="light"] {
+  --mk-bg: #f7f6f2;
+  --mk-bg-deep: #efede8;
+  --mk-surface: #ffffff;
+  --mk-surface-2: #f1efe9;
+  --mk-elev: #ffffff;
+  --mk-ink: #161a18;
+  --mk-ink-2: #5d6660;
+  --mk-ink-3: #8b948e;
+  --mk-primary: #1fae4b;
+  --mk-primary-hi: #0d7c33;
+  --mk-primary-deep: #0f8c3a;
+  --mk-primary-ink: #ffffff;
+  --mk-primary-soft: rgba(31, 174, 75, .10);
+  --mk-grad: linear-gradient(118deg, #4fd876 0%, #22b653 46%, #0f8c3a 100%);
+  --mk-accent: #f59a0b;
+  --mk-danger: #e0463c;
+  --mk-cta: #0f8c3a;
+  --mk-cta-bg: #14171a;
+  --mk-cta-ink: #ffffff;
+  --mk-star: #f59a0b;
+  --mk-line: rgba(18, 22, 20, .08);
+  --mk-line-2: rgba(18, 22, 20, .14);
+  --mk-scrim: rgba(20, 23, 21, .42);
+  --mk-glass: rgba(255, 255, 255, .88);
+  --mk-shadow-sm: 0 10px 30px -18px rgba(24, 30, 26, .28);
+  --mk-shadow-md: 0 18px 40px -14px rgba(24, 30, 26, .28);
+  --mk-shadow-cta: 0 12px 26px -12px rgba(20, 23, 26, .45);
+  --mk-shadow-add: 0 6px 16px -6px rgba(31, 174, 75, .5);
+  --mk-shadow-sheet: 0 -18px 50px rgba(24, 30, 26, .25);
+}
+
+/* RTL font swap (crave parity) */
+[dir="rtl"] .mk-body, [dir="rtl"] .mk-body input, [dir="rtl"] .mk-body button,
+[dir="rtl"] .mk-body textarea, [dir="rtl"] .mk-body select { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; }
+
+/* ---------- base ---------- */
+.mk-body {
+  margin: 0;
+  background: var(--mk-bg);
+  color: var(--mk-ink);
+  font-family: var(--mk-font);
+  font-size: 15px;
+  line-height: 1.45;
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+  padding-block-end: calc(92px + env(safe-area-inset-bottom));
+}
+@media (min-width: 900px) { .mk-body { padding-block-end: 0; } }
+
+.mk-container { max-width: 1200px; margin-inline: auto; padding-inline: 16px; }
+
+.mk-hidden { display: none !important; }
+
+/* ---------- motion primitives ---------- */
+/* Staggered fade-up: mk-core.js stamps .mk-anim on sections/cards and adds
+   .in when they enter the viewport; --i is the stagger index.
+   X3: the hidden initial state is gated on html.mk-js (stamped inline in
+   layout <head>) — without JS the content simply renders; the animation is an
+   enhancement, never the thing standing between the shopper and the page. */
+.mk-js .mk-anim { opacity: 0; transform: translateY(14px); }
+.mk-anim.in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .45s var(--mk-ease), transform .5s var(--mk-spring);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+/* Press-scale for anything tappable (cards, chips, pills, buttons). */
+.mk-press { transition: transform var(--mk-t-micro) var(--mk-spring); }
+.mk-press:active { transform: scale(.965); }
+@keyframes mk-pop { 0% { transform: scale(1); } 45% { transform: scale(1.28); } 100% { transform: scale(1); } }
+.mk-pop { animation: mk-pop .35s var(--mk-spring); }
+@keyframes mk-bump { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.mk-bump { animation: mk-bump .32s var(--mk-spring); }
+
+/* ---------- top app bar ---------- */
+.mk-topbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  background: var(--mk-bg);
+  padding-block-start: env(safe-area-inset-top);
+  transition: box-shadow var(--mk-t-comp) var(--mk-ease), background var(--mk-t-comp) var(--mk-ease);
+}
+.mk-topbar.is-scrolled { background: var(--mk-surface); box-shadow: 0 1px 0 var(--mk-line), var(--mk-shadow-sm); }
+.mk-topbar__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+.mk-brand { font-family: var(--mk-font-display); font-weight: 600; font-size: 23px; color: var(--mk-ink); text-decoration: none; letter-spacing: -.02em; }
+.mk-brand__dot { color: var(--mk-primary); }
+
+/* Two-line "Deliver to / City ⌄" address chip. */
+.mk-citychip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 6px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--mk-ink);
+  cursor: pointer;
+  line-height: 1.15;
+  text-align: start;
+}
+.mk-citychip .lbl { font-size: 11px; font-weight: 600; color: var(--mk-ink-2); }
+.mk-citychip .val { font-size: 15px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px; }
+.mk-citychip .val::after { content: "▾"; font-size: 10px; color: var(--mk-primary); }
+.mk-citychip:hover .val { color: var(--mk-primary); }
+.mk-topbar__spacer { flex: 1; }
+.mk-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--mk-surface);
+  color: var(--mk-ink);
+  cursor: pointer;
+  font-size: 19px;
+  box-shadow: var(--mk-shadow-sm);
+}
+.mk-iconbtn:hover { background: var(--mk-surface-2); }
+
+/* Home search pill (links to the search page). */
+.mk-searchlink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  border-radius: 999px;
+  background: var(--mk-surface);
+  color: var(--mk-ink-2);
+  text-decoration: none;
+  padding-inline: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: var(--mk-shadow-sm);
+  margin-block: 4px 6px;
+}
+.mk-searchlink:hover { color: var(--mk-ink); box-shadow: var(--mk-shadow-md); }
+
+/* ---------- bottom tab bar: crave floating pill (mobile) ---------- */
+.mk-tabbar {
+  position: fixed;
+  inset-inline: 16px;
+  inset-block-end: calc(14px + env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--mk-glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--mk-line);
+  border-radius: 999px;
+  padding: 8px 10px;
+  box-shadow: var(--mk-shadow-md);
+  transition: transform .35s var(--mk-ease), background var(--mk-t-comp) var(--mk-ease);
+}
+.mk-tabbar.is-hidden { transform: translateY(140%); }
+.mk-tabbar a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 8px;
+  text-decoration: none;
+  color: var(--mk-ink-3);
+  font-size: 10px;
+  font-weight: 800;
+  transition: color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-tabbar .ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  line-height: 1;
+  transition: transform var(--mk-t-micro) var(--mk-spring), background var(--mk-t-micro) var(--mk-ease);
+}
+.mk-tabbar .ico svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.mk-tabbar a[aria-current="page"] { color: var(--mk-ink); }
+.mk-tabbar a[aria-current="page"] .ico { background: var(--mk-cta-bg); color: var(--mk-cta-ink); }
+.mk-tabbar a:active .ico { transform: scale(.9); }
+.mk-tabbar .mk-tab-badge {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 2px;
+  min-width: 19px;
+  height: 19px;
+  border-radius: 10px;
+  background: var(--mk-primary);
+  color: var(--mk-primary-ink);
+  font-size: 10.5px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding-inline: 5px;
+  border: 2px solid var(--mk-bg);
+}
+.mk-tab-badge[hidden] { display: none; }
+
+/* ---------- desktop nav ---------- */
+/* The tabbar and the topbar nav are the same links from one partial; exactly
+   one of the pair is ever displayed, so the a11y tree never sees two navs
+   named "Main" and the bag badge is only visible in one place at a time. */
+.mk-topnav { display: none; }
+@media (min-width: 900px) {
+  .mk-tabbar { display: none; }
+  .mk-topnav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-inline-start: 10px;
+  }
+  .mk-topnav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 40px;
+    padding-inline: 12px;
+    border-radius: 999px;
+    color: var(--mk-ink-2);
+    font-weight: 700;
+    font-size: 13.5px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .17s ease, background-color .17s ease;
+  }
+  .mk-topnav a:hover { color: var(--mk-ink); background: var(--mk-surface-2); }
+  .mk-topnav a[aria-current="page"] { color: var(--mk-ink); background: var(--mk-surface-2); }
+  .mk-topnav .ico { position: relative; display: inline-grid; place-items: center; }
+  .mk-topnav .ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .mk-topnav .mk-tab-badge {
+    position: absolute;
+    top: -6px;
+    inset-inline-end: -8px;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 10px;
+    background: var(--mk-primary);
+    color: var(--mk-primary-ink);
+    font-size: 10px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+    padding-inline: 4px;
+    border: 2px solid var(--mk-bg);
+  }
+  /* Narrow desktops: the labels are the first thing to go, not the links. */
+  @media (max-width: 1150px) {
+    .mk-topnav a { font-size: 0; gap: 0; padding-inline: 9px; }
+    .mk-topnav .ico svg { width: 20px; height: 20px; }
+  }
+}
+
+/* ---------- cart bar ---------- */
+.mk-cartbar {
+  position: fixed;
+  inset-inline: 16px;
+  inset-block-end: calc(86px + env(safe-area-inset-bottom));
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--mk-primary);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  min-height: 54px;
+  padding-inline: 22px;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: var(--mk-shadow-md);
+  cursor: pointer;
+  inline-size: calc(100% - 32px);
+  animation: mk-cartbar-in .45s var(--mk-spring);
+}
+@keyframes mk-cartbar-in { from { transform: translateY(24px); opacity: 0; } }
+@media (min-width: 900px) {
+  .mk-cartbar { inset-inline: auto; inset-inline-end: 24px; inset-block-end: 24px; inline-size: auto; min-inline-size: 280px; }
+}
+.mk-cartbar__count {
+  background: rgba(255, 255, 255, .28);
+  border-radius: 999px;
+  min-inline-size: 26px;
+  block-size: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding-inline: 8px;
+}
+
+/* ---------- store card ---------- */
+.mk-storegrid { display: grid; gap: 18px; grid-template-columns: 1fr; padding-block: 16px; }
+@media (min-width: 640px) { .mk-storegrid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .mk-storegrid { grid-template-columns: repeat(3, 1fr); } }
+
+.mk-storecard {
+  display: block;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--mk-ink);
+  box-shadow: var(--mk-shadow-sm);
+  transition: transform var(--mk-t-comp) var(--mk-spring), box-shadow var(--mk-t-comp) var(--mk-ease);
+}
+.mk-storecard:hover { transform: translateY(-3px); box-shadow: var(--mk-shadow-md); }
+.mk-storecard:active { transform: scale(.975); }
+.mk-storecard__media { position: relative; }
+.mk-storecard__cover { aspect-ratio: 2.1 / 1; background: var(--mk-surface-2); object-fit: cover; inline-size: 100%; display: block; transition: transform .5s var(--mk-ease); }
+.mk-storecard:hover .mk-storecard__cover { transform: scale(1.05); }
+.mk-storecard__media { overflow: hidden; }
+.mk-storecard__badges { position: absolute; inset-block-start: 10px; inset-inline-start: 10px; display: flex; gap: 6px; }
+
+/* On-image badge pills. */
+.mk-badge {
+  display: inline-flex; align-items: center;
+  border-radius: 999px; padding: 5px 10px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: .02em; color: #fff;
+  background: rgba(10, 12, 11, .55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.mk-badge--accent { background: var(--mk-accent); color: var(--mk-accent-ink); }
+.mk-badge--ok { background: var(--mk-primary); color: var(--mk-primary-ink); }
+
+/* On-image ETA pill (bottom corner). */
+.mk-etapill {
+  position: absolute; inset-block-end: 10px; inset-inline-end: 10px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--mk-surface); color: var(--mk-ink);
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 12px; font-weight: 800;
+  box-shadow: var(--mk-shadow-sm);
+}
+
+/* Floating heart button. */
+.mk-heart {
+  position: absolute; inset-block-start: 8px; inset-inline-end: 8px;
+  inline-size: 36px; block-size: 36px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: rgba(10, 12, 11, .45); color: #fff;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform var(--mk-t-micro) var(--mk-spring);
+}
+.mk-heart svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.mk-heart:active { transform: scale(1.2); }
+.mk-heart.is-on { color: var(--mk-danger); }
+.mk-heart.is-on svg { fill: var(--mk-danger); }
+
+/* Demo anatomy: the logo hangs off the media's bottom edge; the body is a
+   tight grid of title → meta (star · min · modes) → promo line. */
+.mk-storecard__body { display: grid; gap: 6px; padding: 22px 14px 13px; position: relative; align-content: start; }
+/* Anchored to the BODY (the media clips its overflow for the cover zoom, so a
+   child of the media would lose its hanging half): 28px up into the image,
+   16px into the body — the demo's straddle. */
+.mk-storecard__logo {
+  position: absolute;
+  inset-block-start: -28px;
+  inset-inline-start: 14px;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 12px;
+  border: 2.5px solid var(--mk-surface);
+  background: var(--mk-surface);
+  object-fit: cover;
+  box-shadow: var(--mk-shadow-sm);
+  z-index: 2;
+}
+.mk-storecard__title { display: flex; align-items: center; gap: 6px; font-size: 15.5px; font-weight: 800; margin: 0; letter-spacing: -.01em; }
+.mk-storecard__verified { color: var(--mk-primary); flex: none; display: inline-flex; }
+.mk-storecard__verified .mk-ic { inline-size: 15px; block-size: 15px; fill: var(--mk-primary); stroke: var(--mk-surface); }
+.mk-storecard__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--mk-ink-2); font-size: 12px; font-weight: 600; }
+.mk-storecard__meta .star { color: var(--mk-star); font-weight: 800; display: inline-flex; align-items: center; gap: 3px; }
+.mk-storecard__meta .dotsep { inline-size: 3px; block-size: 3px; border-radius: 50%; background: var(--mk-ink-3); }
+.mk-storecard__promo { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: var(--mk-primary); }
+.mk-storecard__promo .mk-ic { color: var(--mk-primary); }
+.mk-storecard__closed { position: absolute; inset: 0; background: var(--mk-scrim); display: grid; place-items: center; z-index: 2; }
+.mk-storecard__closed b { padding: 8px 16px; border-radius: 999px; background: var(--mk-surface); border: 1px solid var(--mk-line-2); font-size: 12.5px; }
+.mk-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--mk-surface-2);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.mk-pill--star { color: var(--mk-star); background: transparent; padding-inline: 0; font-size: 13px; }
+
+/* ---------- home sections (T2-1) ---------- */
+.mk-pagehead { font-size: 24px; font-weight: 800; letter-spacing: -.02em; margin: 18px 0 2px; }
+.mk-pagesub { color: var(--mk-ink-2); margin: 0 0 10px; font-size: 13px; }
+.mk-section { margin-block: 24px; }
+.mk-section__head { display: flex; align-items: center; justify-content: space-between; margin-block-end: 12px; }
+.mk-section__head h2 { font-size: 19px; font-weight: 800; letter-spacing: -.015em; margin: 0; }
+.mk-section__head a { color: var(--mk-primary); font-weight: 700; font-size: 13px; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.mk-hscroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(80%, 320px);
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-block-end: 10px;
+  scrollbar-width: none;
+}
+.mk-hscroll::-webkit-scrollbar { display: none; }
+.mk-hscroll > .mk-storecard { scroll-snap-align: start; }
+.mk-banner { display: block; border-radius: var(--mk-r-lg); overflow: hidden; box-shadow: var(--mk-shadow-sm); }
+.mk-banner img { inline-size: 100%; display: block; aspect-ratio: 21 / 7; object-fit: cover; }
+
+/* ---------- search (T2-2) ---------- */
+.mk-search__bar { position: sticky; inset-block-start: 60px; z-index: 30; padding-block: 12px; background: var(--mk-bg); }
+.mk-search__input {
+  inline-size: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 999px;
+  background: var(--mk-surface);
+  color: var(--mk-ink);
+  padding-inline: 20px;
+  font-size: 15px;
+  box-shadow: var(--mk-shadow-sm);
+}
+.mk-search__input:focus { outline: 2px solid var(--mk-primary); outline-offset: 1px; }
+.mk-search__h { font-size: 15px; font-weight: 800; color: var(--mk-ink); margin: 20px 0 10px; }
+.mk-chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
+.mk-chip {
+  min-height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: var(--mk-surface);
+  color: var(--mk-ink);
+  padding-inline: 18px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--mk-shadow-sm);
+  transition: transform var(--mk-t-micro) var(--mk-spring), color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-chip:hover { color: var(--mk-primary); }
+.mk-chip:active { transform: scale(.95); }
+.mk-srow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  background: var(--mk-surface);
+  border: none;
+  border-radius: var(--mk-r);
+  padding: 10px 14px;
+  margin-block-end: 10px;
+  text-decoration: none;
+  color: var(--mk-ink);
+  box-shadow: var(--mk-shadow-sm);
+  transition: transform var(--mk-t-micro) var(--mk-spring), box-shadow var(--mk-t-comp) var(--mk-ease);
+}
+.mk-srow:hover { box-shadow: var(--mk-shadow-md); }
+.mk-srow:active { transform: scale(.98); }
+.mk-srow img, .mk-srow__ph { inline-size: 64px; block-size: 64px; border-radius: 14px; object-fit: cover; background: var(--mk-surface-2); flex: none; }
+.mk-srow__name { font-weight: 700; }
+/* P4: search item groups open with a store head — logo chip + bold title,
+   visually a header, not another result row. */
+.mk-srow--grouphead { min-height: 54px; background: none; box-shadow: none; margin-block: 14px 6px; padding-inline: 2px; }
+.mk-srow--grouphead img { inline-size: 34px; block-size: 34px; border-radius: 10px; }
+.mk-srow--grouphead .mk-srow__name { font-size: 15.5px; font-weight: 800; letter-spacing: -.01em; }
+.mk-srow__name em { color: var(--mk-ink-2); font-style: normal; font-size: 12px; }
+.mk-srow__price { margin-inline-start: auto; font-weight: 800; color: var(--mk-ink); }
+
+/* Price-pill variant ("12.5 +") used on store menu rows. */
+.mk-pricepill {
+  margin-inline-start: auto;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--mk-surface-2); color: var(--mk-ink);
+  border-radius: 999px; padding: 9px 8px 9px 16px;
+  font-weight: 800; font-size: 14px; flex: none;
+}
+[dir="rtl"] .mk-pricepill { padding: 9px 16px 9px 8px; }
+.mk-pricepill .plus {
+  inline-size: 28px; block-size: 28px; border-radius: 50%;
+  background: var(--mk-surface); color: var(--mk-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; box-shadow: var(--mk-shadow-sm);
+}
+.mk-oldprice { color: var(--mk-ink-2); text-decoration: line-through; font-size: 12px; font-weight: 600; }
+
+/* ---------- store page (P3 — crave anatomy) ----------
+   Hero is full-bleed against .mk-container's 16px inset; the logo overlaps it
+   by -46px exactly as the demo. Every offset is logical so RTL mirrors free. */
+.mk-store__hero { margin-inline: -16px; position: relative; block-size: 190px; }
+.mk-store__cover { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; background: var(--mk-surface-2); }
+.mk-store__hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--mk-bg) 2%, transparent 55%);
+}
+
+/* Floating round glass controls over the cover (back / info / favourite). */
+.mk-fab {
+  position: absolute; inset-block-start: calc(12px + env(safe-area-inset-top));
+  inline-size: 42px; block-size: 42px; border-radius: 50%;
+  background: var(--mk-glass); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid var(--mk-line); color: var(--mk-ink);
+  display: grid; place-items: center; z-index: 5; cursor: pointer;
+}
+.mk-fab--back { inset-inline-start: 14px; }
+.mk-fab--fav { inset-inline-end: 14px; }
+.mk-fab--info { inset-inline-end: 64px; }
+.mk-fab .mk-ic { inline-size: 20px; block-size: 20px; }
+/* The back chevron is direction-aware: it must point "backwards" in RTL too. */
+[dir="rtl"] .mk-ic--flipx { transform: scaleX(-1); }
+.mk-fab--fav.is-on { color: var(--mk-danger); }
+.mk-fab--fav.is-on .mk-ic { fill: var(--mk-danger); }
+
+.mk-store__head {
+  position: relative; z-index: 2; margin-block-start: -46px;
+  display: flex; align-items: flex-end; gap: 12px; padding-inline: 2px;
+}
+.mk-store__logo { inline-size: 74px; block-size: 74px; border-radius: var(--mk-r); border: 3px solid var(--mk-bg); background: var(--mk-surface); object-fit: cover; flex: none; box-shadow: var(--mk-shadow-sm); }
+.mk-store__headtxt { flex: 1; min-inline-size: 0; padding-block-end: 4px; }
+.mk-store__head h1 { display: flex; align-items: center; gap: 7px; font-size: 21px; font-weight: 800; letter-spacing: -.02em; margin: 0; }
+.mk-store__verified { color: var(--mk-primary); flex: none; display: inline-flex; }
+.mk-store__verified .mk-ic { inline-size: 15px; block-size: 15px; fill: var(--mk-primary); stroke: var(--mk-bg); }
+.mk-store__sub { font-size: 12.5px; color: var(--mk-ink-2); font-weight: 600; margin: 2px 0 0; }
+
+.mk-followbtn {
+  flex: none; padding: 9px 16px; border-radius: 999px; border: 1px solid transparent;
+  background: var(--mk-cta-bg); color: var(--mk-cta-ink);
+  font: inherit; font-weight: 800; font-size: 13px; margin-block-end: 6px; cursor: pointer;
+  transition: background var(--mk-t-micro) var(--mk-ease), color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-followbtn.is-on { background: var(--mk-surface); color: var(--mk-ink-2); border-color: var(--mk-line-2); }
+
+.mk-store__pills { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-block: 12px 4px; }
+.mk-store__pills::-webkit-scrollbar { display: none; }
+.mk-store__pills .mk-pill { flex: none; background: var(--mk-surface); border: 1px solid var(--mk-line); border-radius: 14px; box-shadow: none; }
+/* P3 item 4: <button> pills inherited the UA's buttontext color (black), so
+   the Info + rating pills sat dark-on-dark next to the <span> pills. */
+.mk-store__pills button.mk-pill { cursor: pointer; min-height: 34px; font: inherit; font-size: 12px; font-weight: 700; color: var(--mk-ink); }
+.mk-store__pills .mk-ic { inline-size: 15px; block-size: 15px; color: var(--mk-primary); }
+.mk-store__pills .mk-ic--star { color: var(--mk-star); }
+.mk-store__pills small { color: var(--mk-ink-3); font-weight: 600; }
+
+/* Reserve / Waitlist / Review / Chat — only rendered when the store enables
+   the feature, and each one opens a sheet holding a REAL form. */
+.mk-store__actions { display: flex; gap: 8px; padding-block: 8px 2px; }
+.mk-store__actions button {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 11px 6px; border-radius: 14px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink);
+  font: inherit; font-weight: 700; font-size: 12.5px; cursor: pointer;
+}
+.mk-store__actions .mk-ic { inline-size: 17px; block-size: 17px; color: var(--mk-primary); }
+
+/* Sticky category tabs with animated red underline (scrollspy). */
+.mk-cattabs {
+  position: sticky; inset-block-start: 60px; z-index: 30;
+  display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+  background: var(--mk-bg); padding-block: 8px; margin-block: 6px;
+}
+.mk-cattabs::-webkit-scrollbar { display: none; }
+.mk-cattabs a {
+  position: relative; white-space: nowrap; text-decoration: none;
+  color: var(--mk-ink-2); font-weight: 700; font-size: 14px;
+  padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center;
+  transition: color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-cattabs a::after {
+  content: ""; position: absolute; inset-inline: 14px; inset-block-end: 4px;
+  block-size: 3px; border-radius: 999px; background: var(--mk-primary);
+  transform: scaleX(0); transition: transform var(--mk-t-comp) var(--mk-spring);
+}
+.mk-cattabs a.is-active { color: var(--mk-ink); }
+.mk-cattabs a.is-active::after { transform: scaleX(1); }
+
+.mk-closedbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  background: var(--mk-primary-soft); color: var(--mk-primary);
+  border-radius: var(--mk-r); padding: 14px 16px; margin-block: 14px;
+}
+.mk-closedbar span { color: var(--mk-ink-2); flex: 1; min-inline-size: 180px; }
+.mk-minbar { background: var(--mk-surface); box-shadow: var(--mk-shadow-sm); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; display: inline-block; margin-block: 8px; }
+/* Offers rail — dashed "coupon" cards; the copy button writes the real code
+   to the clipboard so it can be pasted at the bag's per-store coupon field. */
+.mk-offers { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-block: 10px 4px; }
+.mk-offers::-webkit-scrollbar { display: none; }
+.mk-offer {
+  flex: none; display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border-radius: 14px; min-inline-size: 200px;
+  border: 1.5px dashed color-mix(in srgb, var(--mk-primary) 55%, transparent);
+  background: color-mix(in srgb, var(--mk-primary) 7%, transparent);
+}
+.mk-offer .mk-ic { color: var(--mk-primary); flex: none; }
+.mk-offer__body b { font-size: 13px; display: block; }
+.mk-offer__body small { font-size: 11px; color: var(--mk-ink-2); display: block; }
+.mk-offer__copy {
+  margin-inline-start: auto; flex: none; padding: 6px 11px; border-radius: 999px;
+  background: var(--mk-primary); color: var(--mk-primary-ink); border: none;
+  font: inherit; font-size: 11px; font-weight: 800; cursor: pointer;
+}
+.mk-hscroll--offers { grid-auto-columns: max-content; }
+
+/* Loyalty card — stamps or points. The CONFIG is server-rendered; the live
+   balance arrives from the auth:customer loyalty endpoint, so a signed-out
+   shopper sees the programme and a sign-in CTA, never a fake balance. */
+.mk-loyalty {
+  margin-block: 12px 4px; border-radius: var(--mk-r-lg); padding: 16px;
+  background: var(--mk-grad); color: var(--mk-primary-ink);
+  position: relative; overflow: hidden;
+}
+.mk-loyalty::after {
+  content: ""; position: absolute; inset-inline-end: -30px; inset-block-start: -40px;
+  inline-size: 140px; block-size: 140px; border-radius: 50%; background: rgba(255, 255, 255, .16);
+}
+.mk-loyalty__top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.mk-loyalty__top b { font-size: 14.5px; font-weight: 800; }
+.mk-loyalty__pts { font-family: var(--mk-font-display); font-size: 34px; font-weight: 600; line-height: 1; margin-block-start: 6px; position: relative; z-index: 1; }
+.mk-loyalty__sub { font-size: 11.5px; font-weight: 700; opacity: .85; position: relative; z-index: 1; }
+.mk-stamps { display: flex; gap: 7px; margin-block-start: 12px; position: relative; z-index: 1; }
+.mk-stamp { inline-size: 30px; block-size: 30px; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, .55); display: grid; place-items: center; }
+.mk-stamp.is-on { background: rgba(255, 255, 255, .92); border-style: solid; color: var(--mk-primary-deep); }
+.mk-stamp .mk-ic { inline-size: 15px; block-size: 15px; }
+.mk-loyalty__cta {
+  position: relative; z-index: 1; margin-block-start: 12px; padding: 8px 15px;
+  border-radius: 999px; background: rgba(255, 255, 255, .94); color: var(--mk-primary-deep);
+  border: none; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+}
+button.mk-srow { inline-size: 100%; text-align: start; font: inherit; cursor: pointer; }
+button.mk-srow:disabled { opacity: .5; cursor: default; }
+
+/* ---------- bottom sheet (generic) ---------- */
+.mk-sheet { position: fixed; inset: 0; z-index: 70; background: rgba(12, 12, 18, .5); display: flex; align-items: flex-end; animation: mk-fade var(--mk-t-comp) var(--mk-ease); }
+.mk-sheet[hidden] { display: none; }
+@keyframes mk-fade { from { opacity: 0; } }
+.mk-sheet__panel {
+  background: var(--mk-surface); color: var(--mk-ink);
+  inline-size: 100%; max-block-size: 88vh; overflow-y: auto;
+  border-radius: 24px 24px 0 0;
+  padding: 10px 20px calc(20px + env(safe-area-inset-bottom));
+  box-shadow: var(--mk-shadow-sheet);
+  animation: mk-sheet-up var(--mk-t-sheet) var(--mk-spring);
+}
+@keyframes mk-sheet-up { from { transform: translateY(48px); opacity: .4; } }
+@media (min-width: 768px) { .mk-sheet { align-items: center; justify-content: center; } .mk-sheet__panel { max-inline-size: 480px; border-radius: 24px; } }
+.mk-sheet__grab { inline-size: 44px; block-size: 5px; border-radius: 999px; background: var(--mk-line); margin: 6px auto 14px; }
+.mk-sheet__panel img { inline-size: 100%; border-radius: var(--mk-r); aspect-ratio: 16 / 9; object-fit: cover; margin-block-end: 10px; }
+.mk-sheet__panel img[hidden] { display: none; }
+.mk-sheet__panel textarea { inline-size: 100%; border: none; border-radius: var(--mk-r); background: var(--mk-surface-2); color: var(--mk-ink); padding: 12px 16px; font: inherit; }
+.mk-sheet__panel textarea:focus { outline: 2px solid var(--mk-primary); }
+.mk-sheet__foot { display: flex; align-items: center; gap: 14px; margin-block-start: 16px; }
+.mk-sheet__foot .mk-btn { flex: 1; }
+.mk-stepper { display: inline-flex; align-items: center; gap: 4px; border: none; background: var(--mk-surface-2); border-radius: 999px; }
+.mk-stepper button { inline-size: 44px; block-size: 44px; border: none; background: transparent; color: var(--mk-ink); font-size: 20px; font-weight: 800; cursor: pointer; border-radius: 50%; transition: transform var(--mk-t-micro) var(--mk-spring); }
+.mk-stepper button:active { transform: scale(.85); }
+.mk-stepper span { min-inline-size: 24px; text-align: center; font-weight: 800; }
+.mk-stars__row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-block: 3px; }
+.mk-stars__bar { flex: 1; block-size: 6px; border-radius: 999px; background: var(--mk-surface-2); overflow: hidden; }
+.mk-stars__bar i { display: block; block-size: 100%; background: var(--mk-star); border-radius: 999px; transition: inline-size .6s var(--mk-ease); }
+.mk-hours { inline-size: 100%; font-size: 14px; }
+.mk-hours td { padding: 4px 0; }
+.mk-hours td:last-child { text-align: end; color: var(--mk-ink-2); }
+
+/* ---------- home v2: big title / segmented / circles / promo ---------- */
+.mk-pagehead--big { font-size: 32px; margin-block-start: 14px; }
+
+.mk-seg { display: inline-flex; gap: 6px; background: var(--mk-surface); border-radius: 999px; padding: 5px; box-shadow: var(--mk-shadow-sm); margin-block: 6px 4px; }
+.mk-seg__btn {
+  border: none; cursor: pointer; border-radius: 999px;
+  min-height: 42px; padding-inline: 18px;
+  background: transparent; color: var(--mk-ink-2);
+  font-weight: 700; font-size: 14px; font-family: inherit;
+  transition: background var(--mk-t-comp) var(--mk-ease), color var(--mk-t-comp) var(--mk-ease), transform var(--mk-t-micro) var(--mk-spring);
+}
+.mk-seg__btn:active { transform: scale(.95); }
+.mk-seg__btn.is-active { background: var(--mk-ink); color: var(--mk-bg); }
+
+.mk-circles {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 76px;
+  gap: 14px; overflow-x: auto; scrollbar-width: none;
+  padding-block: 10px 6px; margin-inline: -16px; padding-inline: 16px;
+}
+.mk-circles::-webkit-scrollbar { display: none; }
+.mk-circle { display: flex; flex-direction: column; align-items: center; gap: 7px; text-decoration: none; color: var(--mk-ink); }
+.mk-circle__img {
+  inline-size: 68px; block-size: 68px; border-radius: 50%;
+  background: var(--mk-surface); box-shadow: var(--mk-shadow-sm);
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 800; color: var(--mk-primary);
+  transition: transform var(--mk-t-comp) var(--mk-spring), box-shadow var(--mk-t-comp) var(--mk-ease);
+}
+.mk-circle:hover .mk-circle__img { transform: scale(1.06); box-shadow: var(--mk-shadow-md); }
+.mk-circle__img img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.mk-circle__lbl { font-size: 12px; font-weight: 700; text-align: center; line-height: 1.2; }
+
+.mk-chiprow--filters { margin-block: 8px 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.mk-chiprow--filters::-webkit-scrollbar { display: none; }
+/* Demo chip active state: crave white-pill CTA tokens (dark ink pill in light). */
+.mk-chip.is-active { background: var(--mk-cta-bg); color: var(--mk-cta-ink); }
+.mk-chip .mk-ic { inline-size: 15px; block-size: 15px; vertical-align: -2px; }
+
+.mk-promo {
+  position: relative; display: flex; align-items: center; gap: 14px;
+  border-radius: var(--mk-r-lg); padding: 22px 20px;
+  background: linear-gradient(115deg, var(--mk-primary), var(--mk-accent));
+  color: #fff; text-decoration: none; overflow: hidden;
+  box-shadow: var(--mk-shadow-md);
+}
+.mk-promo strong { font-size: 20px; font-weight: 800; letter-spacing: -.01em; flex: 1; }
+.mk-promo__flare { font-size: 30px; }
+.mk-promo__cta {
+  background: #fff; color: var(--mk-primary);
+  border-radius: 999px; padding: 10px 20px;
+  font-weight: 800; font-size: 13px; white-space: nowrap;
+  box-shadow: var(--mk-shadow-sm);
+}
+.mk-promo::after {
+  content: ""; position: absolute; inset-block-start: -60%; inset-inline-end: -10%;
+  inline-size: 55%; aspect-ratio: 1; border-radius: 50%;
+  background: rgba(255, 255, 255, .14);
+}
+
+/* Cover fallback: no image → brand gradient, never a flat white box. */
+.mk-storecard__cover { background: linear-gradient(115deg, var(--mk-primary-soft), var(--mk-surface-2)); }
+
+/* ---------- states ---------- */
+.mk-empty, .mk-error {
+  text-align: center;
+  padding: 56px 24px;
+  color: var(--mk-ink-2);
+}
+.mk-empty .big, .mk-error .big { font-size: 46px; display: block; margin-block-end: 12px; }
+.mk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding-inline: 26px;
+  border: none;
+  border-radius: 999px;
+  background: var(--mk-primary);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--mk-t-micro) var(--mk-spring), filter var(--mk-t-micro) var(--mk-ease);
+}
+.mk-btn:hover { filter: brightness(1.06); }
+.mk-btn:active { transform: scale(.97); }
+.mk-btn--ghost { background: var(--mk-surface-2); color: var(--mk-ink); }
+
+/* skeleton shimmer */
+.mk-skel {
+  background: var(--mk-surface-2);
+  border-radius: var(--mk-r);
+  position: relative;
+  overflow: hidden;
+}
+.mk-skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
+  animation: mk-shimmer 1.4s infinite;
+}
+[data-mk-theme="dark"] .mk-skel::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .06), transparent);
+}
+@keyframes mk-shimmer { to { transform: translateX(100%); } }
+
+/* toast */
+.mk-toast {
+  position: fixed;
+  inset-inline: 16px;
+  inset-block-end: calc(76px + env(safe-area-inset-bottom));
+  z-index: 60;
+  background: var(--mk-ink);
+  color: var(--mk-bg);
+  border-radius: 999px;
+  padding: 13px 20px;
+  font-weight: 700;
+  box-shadow: var(--mk-shadow-md);
+  animation: mk-toast-in .4s var(--mk-spring);
+}
+@media (min-width: 900px) { .mk-toast { inset-inline: auto; inset-inline-end: 24px; max-inline-size: 380px; } }
+@keyframes mk-toast-in { from { transform: translateY(16px) scale(.95); opacity: 0; } }
+
+/* install prompt chip */
+.mk-install {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: var(--mk-primary-soft);
+  color: var(--mk-primary);
+  border: none;
+  border-radius: 999px;
+  min-height: 44px;
+  padding-inline: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.mk-install.is-available { display: inline-flex; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-anim { opacity: 1 !important; transform: none !important; }
+  .mk-storecard, .mk-toast, .mk-skel::after, .mk-sheet, .mk-sheet__panel,
+  .mk-cartbar, .mk-press, .mk-pop, .mk-bump, .mk-heart, .mk-chip,
+  .mk-stepper button, .mk-tabbar .ico, .mk-btn, .mk-srow {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   P3 — item cards, product page, option groups, reviews
+   ============================================================ */
+
+/* Inline SVG icon base. Every icon in the crave language is a stroked
+   24-viewBox path; fills are opted into per-component. */
+.mk-ic { inline-size: 18px; block-size: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.mk-ic--xs { inline-size: 15px; block-size: 15px; }
+
+/* ---------- two-tier category chips ---------- */
+.mk-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-block: 8px; }
+.mk-chips::-webkit-scrollbar { display: none; }
+.mk-chips button {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 15px; border-radius: 999px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink-2);
+  font: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+  transition: background var(--mk-t-micro) var(--mk-ease), color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-chips button.is-on { background: var(--mk-cta-bg); color: var(--mk-cta-ink); border-color: transparent; }
+.mk-chips--sub { padding-block-start: 0; }
+.mk-chips--sub button { padding: 7px 13px; font-size: 12.5px; }
+
+/* ---------- item grid / card ---------- */
+.mk-sectionhead { display: flex; align-items: center; justify-content: space-between; padding: 16px 2px 10px; }
+.mk-sectionhead h2 { font-size: 17.5px; font-weight: 800; letter-spacing: -.015em; margin: 0; }
+
+.mk-igrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-block: 2px; }
+.mk-igrid.is-list { grid-template-columns: 1fr; }
+@media (min-width: 700px) { .mk-igrid { grid-template-columns: repeat(3, 1fr); } .mk-igrid.is-list { grid-template-columns: 1fr; } }
+@media (min-width: 1000px) { .mk-igrid { grid-template-columns: repeat(4, 1fr); } .mk-igrid.is-list { grid-template-columns: 1fr; } }
+
+.mk-icard {
+  position: relative; display: flex; flex-direction: column; inline-size: 100%;
+  border-radius: var(--mk-r-lg); background: var(--mk-surface); border: 1px solid var(--mk-line);
+  overflow: hidden; text-align: start; color: inherit; text-decoration: none;
+  transition: transform var(--mk-t-micro) var(--mk-ease);
+}
+.mk-icard:active { transform: scale(.97); }
+.mk-icard__media { position: relative; display: block; flex: none; aspect-ratio: 1.08; overflow: hidden; background: var(--mk-surface-2); }
+.mk-icard__media img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform .5s var(--mk-ease); }
+.mk-icard:hover .mk-icard__media img { transform: scale(1.06); }
+.mk-icard__heart {
+  position: absolute; inset-block-start: 8px; inset-inline-end: 8px;
+  inline-size: 32px; block-size: 32px; border-radius: 50%; border: none;
+  background: rgba(10, 12, 11, .45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  display: grid; place-items: center; color: #fff; cursor: pointer; z-index: 3;
+}
+.mk-icard__heart .mk-ic { inline-size: 16px; block-size: 16px; }
+.mk-icard__heart.is-on { color: var(--mk-danger); }
+.mk-icard__heart.is-on .mk-ic { fill: var(--mk-danger); }
+.mk-icard__badges { position: absolute; inset-block-start: 8px; inset-inline-start: 8px; display: flex; gap: 5px; z-index: 2; }
+.mk-icard__body { display: grid; flex: 1; padding: 11px 12px 12px; gap: 5px; align-content: start; }
+.mk-icard__name { font-size: 13.5px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.mk-icard__meta { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--mk-ink-2); font-weight: 600; }
+.mk-icard__meta .star { color: var(--mk-star); font-weight: 800; }
+.mk-icard__foot { display: flex; align-items: center; justify-content: space-between; margin-block-start: 2px; }
+.mk-price { font-size: 14.5px; font-weight: 800; color: var(--mk-primary); font-variant-numeric: tabular-nums; }
+.mk-price small { font-size: 11px; font-weight: 700; }
+.mk-addbtn {
+  inline-size: 34px; block-size: 34px; border-radius: 50%; border: none;
+  background: var(--mk-primary); color: var(--mk-primary-ink);
+  display: grid; place-items: center; box-shadow: var(--mk-shadow-add); cursor: pointer;
+  transition: transform var(--mk-t-micro) var(--mk-spring);
+}
+.mk-addbtn:active { transform: scale(.85); }
+.mk-addbtn .mk-ic { stroke-width: 2.2; }
+.mk-soldout { position: absolute; inset: 0; background: var(--mk-scrim); display: grid; place-items: center; z-index: 4; }
+.mk-soldout b { padding: 7px 14px; border-radius: 999px; background: var(--mk-surface); font-size: 12px; }
+.mk-igrid.is-list .mk-icard { flex-direction: row; align-items: center; gap: 12px; padding: 10px; }
+.mk-igrid.is-list .mk-icard__media { inline-size: 96px; aspect-ratio: 1; border-radius: var(--mk-r); }
+.mk-igrid.is-list .mk-icard__badges, .mk-igrid.is-list .mk-icard__heart { display: none; }
+.mk-igrid.is-list .mk-icard__body { flex: 1; padding: 0; }
+
+/* ---------- product page ---------- */
+.mk-p__hero { position: relative; margin-inline: -16px; block-size: 300px; }
+.mk-p__gallery { display: flex; block-size: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.mk-p__gallery::-webkit-scrollbar { display: none; }
+.mk-p__gallery img { flex: none; inline-size: 100%; block-size: 100%; object-fit: cover; scroll-snap-align: center; background: var(--mk-surface-2); }
+.mk-p__dots { position: absolute; inset-block-end: 14px; inset-inline-start: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 3; }
+.mk-p__dots i { inline-size: 6px; block-size: 6px; border-radius: 50%; background: rgba(255, 255, 255, .5); transition: inline-size var(--mk-t-micro) var(--mk-ease); }
+.mk-p__dots i.is-on { background: #fff; inline-size: 16px; border-radius: 4px; }
+.mk-p__hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, var(--mk-bg) 0%, transparent 30%); }
+.mk-p__stock { position: absolute; inset-block-end: 18px; inset-inline-start: 20px; z-index: 3; padding: 6px 12px; border-radius: 999px; background: var(--mk-accent); color: var(--mk-accent-ink); font-size: 11.5px; font-weight: 800; }
+.mk-p__body { display: grid; gap: 14px; padding-block-start: 4px; }
+.mk-p__titlerow { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.mk-p__title { font-size: 22px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin: 0; }
+.mk-p__price { font-size: 20px; font-weight: 800; color: var(--mk-primary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mk-p__chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.mk-p__chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: var(--mk-surface); border: 1px solid var(--mk-line); font-size: 12px; font-weight: 700; }
+/* A chip may be an <a> (e.g. "back to store"); kill the UA link styling so it
+   reads as a chip, not a blue underlined link. */
+a.mk-p__chip { color: inherit; text-decoration: none; }
+.mk-p__chip .mk-ic--star { color: var(--mk-star); }
+.mk-p__desc { font-size: 13.5px; line-height: 1.55; color: var(--mk-ink-2); margin: 0; }
+.mk-allergens { display: flex; gap: 6px; flex-wrap: wrap; }
+.mk-allergen { padding: 6px 11px; border-radius: 999px; background: color-mix(in srgb, var(--mk-danger) 10%, transparent); color: var(--mk-danger); font-size: 11px; font-weight: 800; }
+
+/* Choice groups + extras. `is-invalid` is stamped by mk-store.js when a
+   required group is unsatisfied on an add attempt — the server rejects the
+   same case, this is only the fast local echo. */
+.mk-optgroup { border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); padding: 14px; display: grid; gap: 10px; }
+.mk-optgroup.is-invalid { border-color: var(--mk-danger); }
+.mk-optgroup__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mk-optgroup__head b { font-size: 14px; font-weight: 800; }
+.mk-optgroup__req { font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; background: color-mix(in srgb, var(--mk-primary) 14%, transparent); color: var(--mk-primary); }
+.mk-optgroup__req.is-optional { background: var(--mk-surface-2); color: var(--mk-ink-2); }
+.mk-opt { display: flex; align-items: center; gap: 11px; padding: 10px 11px; border-radius: 13px; background: var(--mk-surface); border: 1px solid var(--mk-line); cursor: pointer; transition: border-color var(--mk-t-micro) var(--mk-ease); }
+.mk-opt.is-on { border-color: var(--mk-primary); }
+.mk-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.mk-opt img { inline-size: 38px; block-size: 38px; border-radius: 10px; object-fit: cover; flex: none; }
+.mk-opt__txt { flex: 1; min-inline-size: 0; }
+.mk-opt__txt b { font-size: 13px; font-weight: 700; display: block; }
+.mk-opt__txt small { font-size: 11.5px; color: var(--mk-ink-3); font-weight: 600; }
+.mk-opt__delta { font-size: 12.5px; font-weight: 800; color: var(--mk-primary); font-variant-numeric: tabular-nums; }
+.mk-optmark { inline-size: 22px; block-size: 22px; border-radius: 50%; border: 2px solid var(--mk-line-2); display: grid; place-items: center; flex: none; transition: background var(--mk-t-micro) var(--mk-ease), border-color var(--mk-t-micro) var(--mk-ease); }
+.mk-optmark--sq { border-radius: 7px; }
+.mk-opt.is-on .mk-optmark { background: var(--mk-primary); border-color: var(--mk-primary); color: var(--mk-primary-ink); }
+.mk-optmark .mk-ic { inline-size: 13px; block-size: 13px; stroke-width: 3; opacity: 0; }
+.mk-opt.is-on .mk-optmark .mk-ic { opacity: 1; }
+.mk-opt:has(input:focus-visible) { outline: 2px solid var(--mk-primary); outline-offset: 2px; }
+
+/* ---------- reviews ---------- */
+.mk-rateinline { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: var(--mk-r-lg); background: var(--mk-elev); border: 1px solid var(--mk-line); }
+.mk-rateinline b { font-size: 13.5px; flex: 1; }
+.mk-starsin { display: inline-flex; gap: 4px; }
+.mk-starsin button { background: none; border: none; padding: 0; cursor: pointer; color: var(--mk-line-2); transition: transform var(--mk-t-micro) var(--mk-spring), color var(--mk-t-micro) var(--mk-ease); }
+.mk-starsin button.is-on { color: var(--mk-star); }
+.mk-starsin button:active { transform: scale(1.25); }
+.mk-starsin .mk-ic { fill: currentColor; stroke: none; inline-size: 20px; block-size: 20px; }
+.mk-reviews { display: grid; gap: 10px; }
+.mk-review { border-radius: var(--mk-r-lg); background: var(--mk-surface); border: 1px solid var(--mk-line); padding: 13px; display: grid; gap: 7px; }
+.mk-review__top { display: flex; align-items: center; gap: 9px; }
+.mk-review__top img { inline-size: 32px; block-size: 32px; border-radius: 50%; object-fit: cover; }
+.mk-review__top b { font-size: 13px; flex: 1; }
+.mk-review__top .star { color: var(--mk-star); font-size: 12px; font-weight: 800; }
+.mk-review p { font-size: 12.5px; color: var(--mk-ink-2); line-height: 1.5; margin: 0; }
+
+/* ---------- sticky add-to-bag bar (product) ---------- */
+/* Sticks ABOVE the bottom tabbar, not under it. The demo had no tabbar on its
+   product screen; the real shell does, and at inset-block-end:0 the tabbar
+   (z-40) covers this bar (z-20) completely — the primary CTA becomes
+   untappable. Clear the tabbar's height on the widths where it is shown. */
+.mk-pcta {
+  position: sticky; inset-block-end: calc(84px + env(safe-area-inset-bottom)); z-index: 20;
+  display: flex; gap: 12px; align-items: center;
+  margin-inline: -16px; padding: 12px 16px 16px;
+  background: linear-gradient(to top, var(--mk-bg) 72%, transparent);
+}
+@media (min-width: 900px) {
+  .mk-pcta { inset-block-end: 0; padding-block-end: calc(16px + env(safe-area-inset-bottom)); }
+}
+.mk-qty { display: flex; align-items: center; gap: 4px; background: var(--mk-surface); border: 1px solid var(--mk-line); border-radius: 999px; padding: 5px; }
+.mk-qty button { inline-size: 36px; block-size: 36px; border-radius: 50%; border: none; display: grid; place-items: center; background: var(--mk-surface-2); color: var(--mk-ink); cursor: pointer; }
+.mk-qty output { min-inline-size: 34px; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mk-cta {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 18px; border-radius: 999px; border: none;
+  background: var(--mk-cta-bg); color: var(--mk-cta-ink);
+  font: inherit; font-weight: 800; font-size: 15px; box-shadow: var(--mk-shadow-cta);
+  cursor: pointer; transition: transform var(--mk-t-micro) var(--mk-ease);
+}
+.mk-cta:active { transform: scale(.97); }
+.mk-cta:disabled { opacity: .55; cursor: default; transform: none; }
+.mk-cta b { font-variant-numeric: tabular-nums; }
+.mk-cta--wide { inline-size: 100%; }
+.mk-spinner { inline-size: 18px; block-size: 18px; border: 2.5px solid color-mix(in srgb, var(--mk-cta-ink) 25%, transparent); border-top-color: var(--mk-cta-ink); border-radius: 50%; animation: mk-spin .7s linear infinite; }
+@keyframes mk-spin { to { transform: rotate(1turn); } }
+
+/* ---------- sheet forms (reserve / waitlist / review) ---------- */
+.mk-form { display: grid; gap: 12px; }
+.mk-field { display: grid; gap: 6px; }
+.mk-field label { font-size: 12.5px; font-weight: 700; color: var(--mk-ink-2); }
+.mk-field input, .mk-field select, .mk-field textarea {
+  /* Form controls default to content-box, so inline-size:100% + padding +
+     border overflows the container and gives the whole page a horizontal
+     scrollbar. Border-box is the fix, and it must be explicit — mk.css
+     carries no global reset. */
+  box-sizing: border-box;
+  inline-size: 100%; padding: 12px 14px; border-radius: 13px;
+  background: var(--mk-surface); border: 1px solid var(--mk-line); color: var(--mk-ink);
+  font: inherit; font-size: 14px;
+}
+.mk-field input:focus-visible, .mk-field select:focus-visible, .mk-field textarea:focus-visible { outline: 2px solid var(--mk-primary); outline-offset: 1px; }
+.mk-field__err { font-size: 12px; font-weight: 700; color: var(--mk-danger); }
+.mk-formrow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mk-result { border-radius: var(--mk-r-lg); background: var(--mk-primary-soft); color: var(--mk-primary); padding: 16px; text-align: center; font-weight: 700; }
+.mk-result .big { display: block; font-family: var(--mk-font-display); font-size: 40px; line-height: 1; margin-block-end: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-icard, .mk-icard__media img, .mk-cta, .mk-addbtn, .mk-opt, .mk-optmark, .mk-starsin button {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Agent-chat FAB (P3.5 store chat, reused from the post_template partial).
+   The partial positions itself against --agent-fab-offset; the marketplace
+   shell has a bottom tabbar, so lift it clear of that instead of letting it
+   sit on top of the nav. */
+.mk-body { --agent-fab-offset: 76px; }
+@media (min-width: 900px) { .mk-body { --agent-fab-offset: 0px; } }
+
+/* The bag/product CTAs are anchors as often as buttons; kill UA link styling
+   so an <a class="mk-cta"> doesn't render underlined blue text. */
+a.mk-cta, a.mk-btn, a.mk-minibtn { text-decoration: none; }
+
+/* The HTML `hidden` attribute only sets `display:none` from the UA stylesheet,
+   so ANY author rule with a `display` (flex/grid/block) silently defeats it —
+   the node stays visible while every script believes it is hidden. The bag's
+   min-order warning shipped as a bare warning triangle for exactly this reason.
+   Make `hidden` authoritative for the whole marketplace. */
+.mk-body [hidden] { display: none !important; }
+
+/* ---------- P5.3 post-delivery feedback (rating + NPS + google review) ---------- */
+.mk-fb { display: grid; gap: 12px; margin-block-start: 14px; }
+.mk-nps__ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--mk-ink-3); font-weight: 700; }
+
+/* ============================================================
+   P6.2 — stories rail + fullscreen viewer
+   ============================================================ */
+.mk-stories { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 12px 2px 4px; }
+.mk-stories::-webkit-scrollbar { display: none; }
+.mk-stories__item {
+  flex: none; inline-size: 64px; display: grid; gap: 6px; justify-items: center;
+  background: none; border: none; padding: 0; cursor: pointer; color: inherit; font: inherit;
+}
+/* P4 item 1: the demo ships a global border-box reset; mk.css doesn't. Both
+   the ring (60 + 3px padding each side) and the logo (100% + 2px border)
+   therefore rendered OUTSIDE their demo boxes, and the logo overflowed the
+   gradient ring into a thin crescent. Border-box on both restores the demo's
+   3px gradient band + 2px bg gap all the way round. */
+.mk-stories__ring { position: relative; box-sizing: border-box; inline-size: 60px; block-size: 60px; border-radius: 50%; padding: 3px; background: var(--mk-grad); }
+/* P3 item 8: initial behind the logo — visible only when the img 404-removed. */
+.mk-stories__initial {
+  position: absolute; inset: 3px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--mk-surface-2); color: var(--mk-primary);
+  font-size: 20px; font-weight: 800; border: 2px solid var(--mk-bg);
+}
+.mk-stories__img { position: relative; z-index: 1; }
+/* Seen state is client-side only (localStorage, keyed per story id) — no server
+   table, so a new story re-rings the store automatically. Muted GREEN, not the
+   demo's 12%-white line: on the dark canvas that gray read as "ring missing". */
+.mk-stories__ring.is-seen { background: color-mix(in srgb, var(--mk-primary) 35%, var(--mk-surface-2)); }
+.mk-stories__img { box-sizing: border-box; inline-size: 100%; block-size: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--mk-bg); background: var(--mk-surface-2); }
+.mk-stories__name {
+  font-size: 10.5px; font-weight: 700; color: var(--mk-ink-2); max-inline-size: 64px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.mk-storyview { position: fixed; inset: 0; z-index: 90; background: #000; display: flex; flex-direction: column; }
+.mk-storyview__bars { display: flex; gap: 4px; padding: calc(10px + env(safe-area-inset-top)) 12px 6px; }
+/* mk-stories.js sets --mk-p (0–100) on the bar itself; filling a ::after from
+   the inline start means RTL mirrors for free and there is no timer/animation
+   to desync from the JS clock. */
+.mk-storyview__bar { position: relative; flex: 1; block-size: 3px; border-radius: 999px; background: rgba(255, 255, 255, .3); overflow: hidden; }
+.mk-storyview__bar::after {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+  inline-size: calc(var(--mk-p, 0) * 1%); background: #fff;
+}
+.mk-storyview__bar.is-done::after { inline-size: 100%; }
+.mk-storyview__head { display: flex; align-items: center; gap: 10px; padding: 6px 14px 10px; color: #fff; }
+.mk-storyview__head img { inline-size: 32px; block-size: 32px; border-radius: 50%; object-fit: cover; }
+.mk-storyview__head b { flex: 1; min-inline-size: 0; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-storyview__close { background: none; border: none; color: #fff; font-size: 22px; line-height: 1; cursor: pointer; padding: 4px 8px; }
+.mk-storyview__media { flex: 1; min-block-size: 0; display: grid; place-items: center; overflow: hidden; }
+.mk-storyview__media img, .mk-storyview__media video { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
+.mk-storyview__cta {
+  margin: 0 auto calc(20px + env(safe-area-inset-bottom)); padding: 12px 24px; border-radius: 999px;
+  background: #fff; color: #14171a; font-weight: 800; font-size: 14px; text-decoration: none;
+}
+/* Nav zones are SEMANTIC (prev/next), so CSS owns the direction flip and the JS
+   deliberately does not flip clicks. Keyboard and swipe are physical and are
+   inverted in JS instead. */
+.mk-storyview__nav {
+  position: absolute; inset-block: 0; inline-size: 32%; z-index: 2;
+  background: none; border: none; cursor: pointer; opacity: 0;
+}
+.mk-storyview__nav--prev { inset-inline-start: 0; }
+.mk-storyview__nav--next { inset-inline-end: 0; }
+.mk-storyview__avatar { inline-size: 32px; block-size: 32px; border-radius: 50%; object-fit: cover; flex: none; }
+.mk-storyview__store { color: #fff; text-decoration: none; flex: 1; min-inline-size: 0; font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-storyview__caption { color: #fff; text-align: center; font-size: 13.5px; font-weight: 600; padding: 10px 20px; text-shadow: 0 2px 12px rgba(0, 0, 0, .6); }
+/* Scroll lock while the viewer owns the screen. */
+html.mk-storyview-open, html.mk-storyview-open body { overflow: hidden; }
+
+/* ============================================================
+   Crave/demo parity — PARITY.md X + H rows (home & shell)
+   ============================================================ */
+
+/* X4 topbar: avatar → (brand ≥900px) → deliver-to → theme. */
+.mk-avatar {
+  inline-size: 44px; block-size: 44px; border-radius: 50%; flex: none;
+  border: 2px solid var(--mk-line-2); background: var(--mk-surface);
+  display: grid; place-items: center; color: var(--mk-ink); text-decoration: none;
+}
+.mk-avatar .mk-ic { inline-size: 20px; block-size: 20px; }
+/* The tabbar (with its Home link) exists below 900px — the wordmark is the
+   desktop-only home affordance, exactly like the demo phone has none. */
+@media (max-width: 899.98px) { .mk-brand { display: none; } }
+.mk-citychip .val::after { content: none; }
+.mk-citychip .val .mk-ic { inline-size: 17px; block-size: 17px; color: var(--mk-primary); }
+.mk-citychip .val .mk-ic--xs { inline-size: 13px; block-size: 13px; color: var(--mk-ink-3); }
+.mk-iconbtn { border: 1px solid var(--mk-line); box-shadow: none; }
+.mk-iconbtn .mk-ic { inline-size: 20px; block-size: 20px; }
+/* Topbar language picker — globe + current-locale code opens a menu. */
+.mk-langpick { position: relative; }
+.mk-langbtn { inline-size: auto; padding-inline: 12px; gap: 6px; border-radius: 999px; text-decoration: none; }
+.mk-langbtn .mk-ic { inline-size: 17px; block-size: 17px; }
+.mk-langbtn b { font-size: 11.5px; font-weight: 800; letter-spacing: .04em; }
+.mk-langmenu {
+  position: absolute; inset-block-start: calc(100% + 8px); inset-inline-end: 0; z-index: 60;
+  min-inline-size: 190px; max-block-size: 60vh; overflow-y: auto;
+  background: var(--mk-surface); border: 1px solid var(--mk-line);
+  border-radius: var(--mk-r); padding: 6px; box-shadow: var(--mk-shadow-md);
+  animation: mk-langmenu-in .18s var(--mk-ease);
+}
+@keyframes mk-langmenu-in { from { opacity: 0; transform: translateY(-6px); } }
+.mk-langmenu[hidden] { display: none; }
+.mk-langmenu__item {
+  display: flex; align-items: center; gap: 10px; min-height: 42px;
+  padding-inline: 12px; border-radius: 11px; text-decoration: none;
+  color: var(--mk-ink); font-weight: 600; font-size: 14px;
+  transition: background var(--mk-t-micro) var(--mk-ease);
+}
+.mk-langmenu__item:hover { background: var(--mk-surface-2); }
+.mk-langmenu__item.is-on { color: var(--mk-primary); font-weight: 800; }
+.mk-langmenu__code {
+  inline-size: 30px; flex: none; font-size: 11px; font-weight: 800; letter-spacing: .04em;
+  color: var(--mk-ink-3); text-align: center;
+}
+.mk-langmenu__item.is-on .mk-langmenu__code { color: var(--mk-primary); }
+.mk-langmenu__name { flex: 1; min-inline-size: 0; }
+.mk-langmenu__item .mk-ic { color: var(--mk-primary); flex: none; }
+/* Theme button shows the icon of the mode a tap will LEAVE (demo behavior:
+   moon in dark, sun in light). Default (attr absent) is dark. */
+.mk-ic--sun { display: none; }
+[data-mk-theme="light"] .mk-ic--sun { display: block; }
+[data-mk-theme="light"] .mk-ic--moon { display: none; }
+
+/* H1 status strip. */
+.mk-statusstrip { display: flex; align-items: center; gap: 10px; padding: 8px 2px 2px; flex-wrap: wrap; }
+.mk-openchip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 700; color: var(--mk-primary);
+  background: var(--mk-primary-soft); border-radius: 999px; padding: 6px 12px;
+}
+.mk-openchip i { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--mk-primary); animation: mk-pulse 1.6s infinite; }
+@keyframes mk-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mk-primary) 45%, transparent); } 60% { box-shadow: 0 0 0 6px transparent; } }
+.mk-viewers { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--mk-ink-2); }
+.mk-viewers b { color: var(--mk-ink); }
+
+/* H2 search row: pill + round filter button.
+   P4: renamed .mk-search → .mk-searchpill. The SEARCH PAGE's wrapper div is
+   `.mk-search` (T2-2) and this pill styling was swallowing that whole page
+   into one giant flex ellipse — the "search page has no style" report. */
+.mk-searchrow { display: flex; gap: 10px; padding: 12px 0 4px; }
+.mk-searchpill {
+  flex: 1; display: flex; align-items: center; gap: 10px; min-height: 48px;
+  background: var(--mk-surface); border: 1px solid var(--mk-line);
+  border-radius: 999px; padding-inline: 16px;
+  color: var(--mk-ink-3); text-decoration: none; font-size: 15px; font-weight: 500;
+  transition: border-color var(--mk-t-micro) var(--mk-ease);
+}
+.mk-searchpill:hover { border-color: var(--mk-primary); color: var(--mk-ink-2); }
+.mk-searchpill .mk-ic { color: var(--mk-ink-3); }
+.mk-searchpill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-filterbtn {
+  position: relative; inline-size: 48px; block-size: 48px; border-radius: 50%; flex: none;
+  background: var(--mk-surface); border: 1px solid var(--mk-line); color: var(--mk-ink);
+  display: grid; place-items: center; cursor: pointer;
+}
+.mk-filterbtn .dot { position: absolute; inset-block-start: 9px; inset-inline-end: 10px; inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--mk-primary); border: 2px solid var(--mk-bg); }
+
+/* H9 mode seg: demo pill — white CTA pill on the active side, SVG icons. */
+.mk-seg--mode { display: flex; inline-size: 100%; border: 1px solid var(--mk-line); box-shadow: none; padding: 4px; gap: 4px; margin-block: 10px 2px; }
+.mk-seg--mode .mk-seg__btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; font-size: 13.5px; font-weight: 700; }
+.mk-seg--mode .mk-seg__btn .mk-ic { inline-size: 17px; block-size: 17px; }
+.mk-seg--mode .mk-seg__btn.is-active { background: var(--mk-cta-bg); color: var(--mk-cta-ink); box-shadow: var(--mk-shadow-sm); }
+
+/* H-circles: demo ring geometry (66px, hairline ring). */
+.mk-circle__img { inline-size: 66px; block-size: 66px; border: 2px solid var(--mk-line); box-shadow: none; }
+.mk-circle:active .mk-circle__img { transform: scale(.92); }
+.mk-circle__lbl { font-size: 11.5px; color: var(--mk-ink-2); }
+
+/* H5 banner carousel. */
+.mk-banners { position: relative; margin: 10px 0 4px; }
+.mk-banners__track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px; scrollbar-width: none; }
+.mk-banners__track::-webkit-scrollbar { display: none; }
+.mk-bannerslide {
+  flex: none; inline-size: 88%; scroll-snap-align: center;
+  border-radius: var(--mk-r); overflow: hidden; position: relative;
+  min-block-size: 128px; display: flex; align-items: center;
+  padding: 18px 20px; color: var(--mk-primary-ink); text-decoration: none;
+}
+@media (min-width: 700px) { .mk-bannerslide { inline-size: 60%; } }
+@media (min-width: 1024px) { .mk-bannerslide { inline-size: 40%; } }
+.mk-bannerslide--img { padding: 0; min-block-size: 0; }
+.mk-bannerslide--img img { inline-size: 100%; display: block; aspect-ratio: 21 / 7; object-fit: cover; }
+.mk-bannerslide--grad-g { background: var(--mk-grad); }
+.mk-bannerslide--grad-o { background: linear-gradient(118deg, #ffd58a 0%, #ffb02e 46%, #e08900 100%); color: #3c2600; }
+.mk-bannerslide--grad-k { background: linear-gradient(118deg, #2a2f35 0%, #15171a 100%); color: #f4f6f5; border: 1px solid var(--mk-line-2); }
+.mk-bannerslide__txt { position: relative; z-index: 1; max-inline-size: 78%; display: grid; gap: 4px; justify-items: start; }
+.mk-bannerslide__kick { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.mk-bannerslide__txt strong { font-size: 19px; font-weight: 800; letter-spacing: -.01em; line-height: 1.15; }
+.mk-bannerslide__cta { display: inline-flex; margin-block-start: 4px; padding: 7px 14px; border-radius: 999px; background: rgba(255, 255, 255, .9); color: #14171a; font-size: 12.5px; font-weight: 800; }
+.mk-bannerslide--grad-k .mk-bannerslide__cta { background: var(--mk-primary); color: var(--mk-primary-ink); }
+.mk-banners__dots { display: flex; gap: 5px; justify-content: center; padding: 10px 0 0; }
+.mk-banners__dots i { inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--mk-line-2); transition: all var(--mk-t-micro) var(--mk-ease); }
+.mk-banners__dots i.is-on { inline-size: 18px; border-radius: 4px; background: var(--mk-primary); }
+
+/* H7 section heads: flame accent + green "see all"/sort action. */
+.mk-sectionhead .mk-flame { color: var(--mk-accent); display: inline-flex; }
+.mk-sectionhead .mk-flame .mk-ic { fill: currentColor; stroke: none; }
+.mk-seeall { border: none; background: none; padding: 6px 2px; font: inherit; font-size: 13px; font-weight: 700; color: var(--mk-primary); cursor: pointer; }
+
+/* H6 grid empty state. */
+.mk-gridempty { display: grid; justify-items: center; gap: 12px; padding: 44px 20px; color: var(--mk-ink-2); text-align: center; font-size: 14px; }
+.mk-gridempty__art { inline-size: 64px; block-size: 64px; fill: none; stroke: var(--mk-ink-3); stroke-width: 2; stroke-linecap: round; }
+.mk-ghostbtn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 11px 18px;
+  border-radius: 999px; border: 1px solid var(--mk-line-2);
+  font: inherit; font-weight: 700; font-size: 13.5px; color: var(--mk-ink);
+  background: var(--mk-surface); cursor: pointer;
+}
+
+/* H2 filter sheet bits. */
+.mk-sheethead { font-size: 17px; font-weight: 800; margin: 0 0 12px; letter-spacing: -.015em; }
+.mk-filtergroup { display: grid; gap: 8px; margin-block-end: 14px; }
+.mk-filtergroup > b { font-size: 12.5px; font-weight: 800; color: var(--mk-ink-2); text-transform: uppercase; letter-spacing: .04em; }
+
+/* H5 splash — first visit per session; brand art only. */
+.mk-splash {
+  position: fixed; inset: 0; z-index: 95; overflow: hidden;
+  background: var(--mk-bg); display: grid; align-content: center; gap: 10px;
+  padding: 24px; text-align: start;
+  transition: opacity .5s var(--mk-ease), visibility .5s;
+}
+.mk-splash.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+.mk-splash__title { font-family: var(--mk-font-display); font-weight: 560; font-size: clamp(40px, 9vw, 52px); line-height: 1.07; letter-spacing: -.015em; margin: 0; display: grid; gap: 2px; position: relative; z-index: 1; }
+.mk-splash__title .accent { color: var(--mk-primary); }
+.mk-splash__rings { display: inline-flex; gap: 6px; vertical-align: middle; }
+.mk-splash__rings i { inline-size: 20px; block-size: 20px; border-radius: 50%; border: 2.5px solid var(--mk-primary); opacity: .9; }
+.mk-splash__rings i:nth-child(2) { opacity: .55; }
+.mk-splash__rings i:nth-child(3) { opacity: .3; }
+.mk-splash__blob {
+  position: absolute; inset-inline: -60px; inset-block-end: -160px; block-size: 380px;
+  border-radius: 48% 52% 46% 54% / 58% 44% 56% 42%;
+  background: var(--mk-grad); opacity: .9;
+  animation: mk-blob 9s ease-in-out infinite alternate;
+}
+@keyframes mk-blob { to { border-radius: 54% 46% 52% 48% / 44% 58% 42% 56%; transform: rotate(4deg); } }
+.mk-splash__skip {
+  position: absolute; inset-block-start: calc(24px + env(safe-area-inset-top)); inset-inline-end: 22px; z-index: 2;
+  padding: 9px 18px; border-radius: 999px; background: var(--mk-surface);
+  border: 1px solid var(--mk-line); color: var(--mk-ink);
+  font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer;
+}
+.mk-splash__doodles { position: absolute; inset: 0; pointer-events: none; opacity: .35; }
+.mk-splash__doodles svg { position: absolute; inline-size: 38px; block-size: 38px; stroke: var(--mk-ink-3); fill: none; stroke-width: 2; stroke-linecap: round; }
+.mk-splash__doodles .dd-1 { inset-block-start: 14%; inset-inline-start: 10%; }
+.mk-splash__doodles .dd-2 { inset-block-start: 24%; inset-inline-end: 14%; }
+.mk-splash__doodles .dd-3 { inset-block-end: 40%; inset-inline-end: 8%; }
+
+/* P3 item 5 — Fusion assistant FAB + chat sheet (demo's green sparkle). */
+.mk-aifab {
+  position: fixed; inset-inline-end: 18px;
+  inset-block-end: calc(96px + env(safe-area-inset-bottom));
+  z-index: 46; inline-size: 54px; block-size: 54px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: var(--mk-grad); color: var(--mk-primary-ink);
+  display: grid; place-items: center; box-shadow: var(--mk-shadow-add);
+}
+@media (min-width: 900px) { .mk-aifab { inset-block-end: 24px; inset-inline-end: 90px; } }
+.mk-aifab svg { inline-size: 26px; block-size: 26px; fill: currentColor; }
+.mk-ai__panel { display: grid; grid-template-rows: auto auto 1fr auto; max-block-size: 78vh; }
+.mk-ai__log { display: grid; gap: 8px; align-content: start; overflow-y: auto; min-block-size: 180px; max-block-size: 46vh; padding-block: 4px 10px; }
+.mk-ai__msg { max-inline-size: 85%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.45; }
+.mk-ai__msg--bot { justify-self: start; background: var(--mk-elev); border: 1px solid var(--mk-line); border-start-start-radius: 6px; }
+.mk-ai__msg--me { justify-self: end; background: var(--mk-primary); color: var(--mk-primary-ink); border-start-end-radius: 6px; font-weight: 600; }
+.mk-ai__msg--event { justify-self: start; background: var(--mk-primary-soft); color: var(--mk-primary); font-size: 12px; font-weight: 700; padding: 6px 12px; }
+.mk-ai__form { display: flex; gap: 8px; padding-block-start: 6px; }
+.mk-ai__form input {
+  box-sizing: border-box; flex: 1; min-inline-size: 0; min-height: 46px;
+  border: 1px solid var(--mk-line); background: var(--mk-elev); color: var(--mk-ink);
+  border-radius: 999px; padding-inline: 16px; font: inherit; font-size: 14px;
+}
+.mk-ai__form input:focus-visible { outline: 2px solid var(--mk-primary); outline-offset: 1px; }
+.mk-ai__send {
+  inline-size: 46px; block-size: 46px; border-radius: 50%; border: none; flex: none;
+  background: var(--mk-cta-bg); color: var(--mk-cta-ink); cursor: pointer;
+  display: grid; place-items: center; box-shadow: var(--mk-shadow-cta);
+}
+.mk-ai__send svg { inline-size: 20px; block-size: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+[dir="rtl"] .mk-ai__send svg { transform: scaleX(-1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-openchip i, .mk-splash__blob { animation: none !important; }
+  .mk-splash { transition: none !important; }
+}

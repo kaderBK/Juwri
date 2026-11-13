@@ -1,0 +1,178 @@
+{
+  "version": 2,
+  "presets": [
+    {
+      "id": "banquet",
+      "label": "Banquet",
+      "thumb": "assets/store_templates/feast/presets/banquet.png",
+      "values": {
+        "colors.primary": "#ff5a3c",
+        "colors.background": "#eef0f4",
+        "colors.surface": "#ffffff",
+        "colors.text": "#14161c",
+        "colors.accent": "#ff8a3d",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "harvest",
+      "label": "Harvest",
+      "thumb": "assets/store_templates/feast/presets/harvest.png",
+      "values": {
+        "colors.primary": "#e0803c",
+        "colors.background": "#f6f1e8",
+        "colors.surface": "#ffffff",
+        "colors.text": "#241a10",
+        "colors.accent": "#c9a227",
+        "layout.radius": "round"
+      }
+    },
+    {
+      "id": "supper",
+      "label": "Supper",
+      "thumb": "assets/store_templates/feast/presets/supper.png",
+      "values": {
+        "colors.primary": "#ff6a4a",
+        "colors.background": "#12131a",
+        "colors.surface": "#1c1e28",
+        "colors.text": "#eef0f4",
+        "colors.accent": "#ff8a3d",
+        "layout.radius": "soft"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "include": "tokens",
+      "fields": {
+        "colors.primary": {
+          "default": "#ff5a3c"
+        },
+        "colors.background": {
+          "default": "#eef0f4"
+        },
+        "colors.surface": {
+          "default": "#ffffff"
+        },
+        "colors.text": {
+          "default": "#14161c"
+        },
+        "colors.accent": {
+          "default": "#ff8a3d"
+        },
+        "layout.radius": {
+          "default": "round"
+        },
+        "layout.density": {
+          "default": "cozy"
+        }
+      }
+    },
+    {
+      "group": "Texts",
+      "fields": [
+        {
+          "id": "texts.hero_title",
+          "type": "text",
+          "label": "Hero title",
+          "default": ""
+        },
+        {
+          "id": "texts.hero_subtitle",
+          "type": "text",
+          "label": "Hero subtitle",
+          "default": ""
+        },
+        {
+          "id": "texts.menu_title",
+          "type": "text",
+          "label": "Menu section title",
+          "default": "Menu"
+        },
+        {
+          "id": "texts.featured_title",
+          "type": "text",
+          "label": "Featured section title",
+          "default": "Featured"
+        },
+        {
+          "id": "texts.add_to_cart",
+          "type": "text",
+          "label": "Add-to-cart button",
+          "default": "Add to cart"
+        },
+        {
+          "id": "texts.cart_button",
+          "type": "text",
+          "label": "View-cart button",
+          "default": "View cart"
+        },
+        {
+          "id": "texts.checkout_button",
+          "type": "text",
+          "label": "Checkout button",
+          "default": "Checkout"
+        },
+        {
+          "id": "texts.view_menu",
+          "type": "text",
+          "label": "View-menu button",
+          "default": "View Menu"
+        },
+        {
+          "id": "texts.delivery",
+          "type": "text",
+          "label": "Delivery label",
+          "default": "Delivery"
+        },
+        {
+          "id": "texts.pickup",
+          "type": "text",
+          "label": "Pickup label",
+          "default": "Pickup"
+        },
+        {
+          "id": "texts.follow_label",
+          "type": "text",
+          "label": "Follow button",
+          "default": "Follow"
+        }
+      ]
+    },
+    {
+      "group": "Brand row",
+      "fields": [
+        {
+          "id": "brand.show_follower_count",
+          "type": "toggle",
+          "label": "Show follower count",
+          "default": true
+        }
+      ]
+    },
+    {
+      "include": "splash"
+    },
+    {
+      "include": "search",
+      "fields": {
+        "texts.search_placeholder": {
+          "default": "Search the menu",
+          "label": "Search box placeholder"
+        }
+      }
+    },
+    {
+      "include": "share"
+    }
+  ],
+  "sections": [
+    {
+      "id": "brand_row",
+      "label": "Brand & follow row",
+      "toggleable": true,
+      "default": true,
+      "orderable": false
+    }
+  ]
+}

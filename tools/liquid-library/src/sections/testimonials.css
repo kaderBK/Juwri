@@ -1,0 +1,33 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* testimonials - owner-written quotes; grid or a swipe row */
+.mbs-testimonials {
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-testimonials__title { margin: 0 0 var(--ts-gap-3, 16px); font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.3rem; }
+.mbs-testimonials__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--ts-gap-3, 16px); margin: 0; padding: 0; list-style: none; }
+.mbs-testimonials--carousel .mbs-testimonials__list { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(260px, 80%); overflow-x: auto; scroll-snap-type: inline mandatory; padding-block-end: var(--ts-gap-2, 10px); }
+.mbs-testimonials--carousel .mbs-testimonials__item { scroll-snap-align: start; }
+.mbs-testimonials__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-gap-2, 10px);
+  block-size: 100%;
+  margin: 0;
+  padding: var(--ts-gap-3, 16px);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-surface, #f4f4f5);
+  box-sizing: border-box;
+}
+.mbs-testimonials__stars { display: flex; gap: 2px; margin: 0; color: var(--tc-accent, #f59e0b); }
+.mbs-testimonials__stars .mbs-icon { fill: currentColor; }
+.mbs-testimonials__quote { flex: 1; margin: 0; font-size: 1.02rem; line-height: 1.55; }
+.mbs-testimonials__quote p { margin: 0; }
+.mbs-testimonials__by { display: grid; gap: 2px; font-size: .9rem; }
+.mbs-testimonials__detail { color: var(--tc-text-muted, #6b7280); }

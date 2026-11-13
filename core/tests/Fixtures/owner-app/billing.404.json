@@ -1,0 +1,18 @@
+{
+    "status": 404,
+    "body": {
+        "exception": "string",
+        "file": "string",
+        "line": "int",
+        "message": "string",
+        "trace": {
+            "list_of": {
+                "class": "string",
+                "file": "string",
+                "function": "string",
+                "line": "int",
+                "type": "string"
+            }
+        }
+    }
+}

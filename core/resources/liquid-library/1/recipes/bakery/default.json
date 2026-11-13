@@ -1,0 +1,149 @@
+{
+    "name": "Bakery",
+    "description": "Story-led and generous: the bakery's story next to a magazine-style menu of bakes, plus catering for big orders.",
+    "vertical": "bakery",
+    "priority": "brand_story",
+    "tokens": {
+        "colors.primary": "#9d2f4a",
+        "colors.background": "#fff8ef",
+        "colors.surface": "#ffffff",
+        "colors.text": "#3a2418",
+        "colors.accent": "#855210",
+        "layout.radius": "round",
+        "layout.density": "comfortable"
+    },
+    "font_pair": "fraunces-jakarta",
+    "translations": {
+        "ar": {
+            "name": "مخبز",
+            "description": "يقوده السرد وبمساحات سخية: قصة المخبز بجانب منيو بأسلوب المجلات للمخبوزات، مع خدمة التموين للطلبات الكبيرة."
+        }
+    },
+    "layout": {
+        "sections": {
+            "announcement": {
+                "type": "announcement-bar",
+                "settings": {
+                    "source": "store",
+                    "tone": "accent"
+                }
+            },
+            "header": {
+                "type": "header",
+                "settings": {
+                    "variant": "centered",
+                    "sticky": true
+                }
+            },
+            "hero": {
+                "type": "hero-cover",
+                "settings": {
+                    "variant": "image",
+                    "height": "m",
+                    "align": "center",
+                    "image_source": "cover",
+                    "overlay": 35
+                },
+                "blocks": {
+                    "cta-catalog": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "catalog",
+                            "anchor": "menu"
+                        }
+                    },
+                    "cta-cart": {
+                        "type": "cta",
+                        "settings": {
+                            "target": "cart"
+                        }
+                    }
+                },
+                "block_order": [
+                    "cta-catalog",
+                    "cta-cart"
+                ]
+            },
+            "brand": {
+                "type": "brand-row",
+                "settings": []
+            },
+            "about": {
+                "type": "about",
+                "settings": {
+                    "use_description": true,
+                    "layout": "image-start"
+                }
+            },
+            "catnav": {
+                "type": "category-nav",
+                "settings": {
+                    "variant": "chips",
+                    "sticky": true
+                }
+            },
+            "featured": {
+                "type": "featured-rail",
+                "settings": {
+                    "source": "popular",
+                    "card": "photo-card"
+                }
+            },
+            "menu": {
+                "type": "menu-grid",
+                "settings": {
+                    "card": "magazine",
+                    "columns_mobile": 1,
+                    "columns_desktop": 3
+                }
+            },
+            "catering": {
+                "type": "catering-cta",
+                "settings": []
+            },
+            "reviews": {
+                "type": "reviews",
+                "settings": []
+            },
+            "hours": {
+                "type": "hours",
+                "settings": []
+            },
+            "location": {
+                "type": "location",
+                "settings": []
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "tone": "primary"
+                }
+            },
+            "cart-bar": {
+                "type": "floating-cart",
+                "settings": {
+                    "style": "pill"
+                }
+            }
+        },
+        "order": [
+            "announcement",
+            "header",
+            "hero",
+            "brand",
+            "about",
+            "catnav",
+            "featured",
+            "menu",
+            "catering",
+            "reviews",
+            "hours",
+            "location",
+            "footer",
+            "cart-bar"
+        ],
+        "theme": {
+            "settings": {}
+        }
+    }
+}

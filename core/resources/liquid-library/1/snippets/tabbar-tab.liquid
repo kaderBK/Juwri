@@ -1,0 +1,64 @@
+{%- comment -%}
+  One bottom-tabbar tab (library v1). Router targets (home / cart / favs /
+  profile) are data-mb-tab buttons the commerce runtime drives — their views
+  live in the header section. "catalog" and "search" scroll to a section id
+  (the #mb-section-<id> wrapper); "view" opens a custom runtime view.
+  Params: target, label, anchor, view, vocab, allow_order, first (bool).
+{%- endcomment -%}
+{%- liquid
+  assign text = label | strip
+  if text == ''
+    case target
+      when 'home'
+        assign text = 'Home' | t
+      when 'catalog'
+        assign text = vocab.catalog
+      when 'search'
+        assign text = 'Search' | t
+      when 'cart'
+        assign text = 'Cart' | t
+      when 'favs'
+        assign text = 'Favorites' | t
+      when 'profile'
+        assign text = 'Account' | t
+      else
+        assign text = view
+    endcase
+  endif
+  assign icon_name = 'arrow'
+  case target
+    when 'home'
+      assign icon_name = 'home'
+    when 'catalog'
+      assign icon_name = 'menu'
+    when 'search'
+      assign icon_name = 'search'
+    when 'cart'
+      assign icon_name = 'cart'
+    when 'favs'
+      assign icon_name = 'heart'
+    when 'profile'
+      assign icon_name = 'user'
+  endcase
+  assign dest = anchor | strip | url_encode
+  if dest == ''
+    if target == 'search'
+      assign dest = 'search'
+    else
+      assign dest = 'menu'
+    endif
+  endif
+  assign view_name = view | strip | url_encode
+-%}
+{%- if target == 'cart' and allow_order != true -%}
+{%- elsif target == 'view' and view_name == '' -%}
+{%- elsif target == 'catalog' or target == 'search' -%}
+<li class="mbs-bottom-tabbar__item"><a class="mbs-bottom-tabbar__tab" href="#mb-section-{{ dest }}">{%- render 'icon', name: icon_name, size: 22 -%}<span class="mbs-bottom-tabbar__label">{{ text | escape }}</span></a></li>
+{%- elsif target == 'view' -%}
+<li class="mbs-bottom-tabbar__item"><button type="button" class="mbs-bottom-tabbar__tab" data-mb-go="{{ view_name }}">{%- render 'icon', name: icon_name, size: 22 -%}<span class="mbs-bottom-tabbar__label">{{ text | escape }}</span></button></li>
+{%- else -%}
+<li class="mbs-bottom-tabbar__item"><button type="button" class="mbs-bottom-tabbar__tab{% if target == 'home' %} is-on{% endif %}" data-mb-tab="{{ target | escape }}">
+  <span class="mbs-bottom-tabbar__icon">{%- render 'icon', name: icon_name, size: 22 -%}{%- if target == 'cart' -%}<span class="mbs-bottom-tabbar__badge" data-mb-cart-count data-mb-hide-empty hidden>0</span>{%- endif -%}</span>
+  <span class="mbs-bottom-tabbar__label">{{ text | escape }}</span>
+</button></li>
+{%- endif -%}

@@ -1,0 +1,12 @@
+{
+  "key": "restaurant_essential",
+  "name": "Restaurant essentials",
+  "sections": {"hours": true, "socials": true, "capture": false, "map": true, "whatsapp": true, "reviews": true},
+  "blocks": [
+    {"type": "menu", "label": "See our menu", "priority": 100, "config": {"prefill": "menu"}},
+    {"type": "featured_dish", "label": "Featured", "priority": 80, "requires": "menu_items", "config": {"title": "Featured"}},
+    {"type": "reservation", "label": "Book a table", "priority": 70, "requires": "reservations", "config": {}},
+    {"type": "link", "label": "Buy a gift card", "priority": 50, "requires": "gift_cards", "config": {"prefill": "giftcard"}},
+    {"type": "reviews", "label": "Guest reviews", "priority": 40, "requires": "reviews", "config": {"source": "live"}}
+  ]
+}

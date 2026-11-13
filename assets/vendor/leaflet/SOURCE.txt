@@ -1,0 +1,11 @@
+Leaflet 1.9.4 (BSD-2-Clause, LICENSE) and Leaflet.markercluster 1.5.3 (MIT, markercluster/LICENSE).
+Files are the official npm release files, unmodified (byte-compared, WI-05e):
+
+  leaflet@1.9.4  integrity sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==
+    dist/leaflet.js, dist/leaflet.css, dist/images/{layers,layers-2x,marker-icon,marker-icon-2x,marker-shadow}.png
+  leaflet.markercluster@1.5.3  integrity sha512-vPTw/Bndq7eQHjLBVlWpnGeLa3t+3zGiuM7fJwCkiMFq+nmRuG3RI3f7f4N4TDX7T4NpbAXpR2+NTRSEGfCSeA==
+    dist/leaflet.markercluster.js, dist/MarkerCluster.css, dist/MarkerCluster.Default.css (served from markercluster/)
+
+This is the only Leaflet copy in the repo. Storefront themes (store_templates/*), the shared map
+picker, marketplace pages, owner marketplace settings and the admin delivery/zone editors all load
+it from here (the 19 identical per-theme copies were removed in WI-05e).

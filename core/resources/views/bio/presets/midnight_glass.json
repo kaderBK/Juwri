@@ -1,0 +1,29 @@
+{
+  "slug": "midnight_glass",
+  "starter": "delivery_late_night",
+  "name": "Midnight Glass",
+  "family": "list",
+  "tier": "basic",
+  "rtl_native": false,
+  "fonts": [
+    {"family": "Manrope", "weights": [400, 600, 700, 800]},
+    {"family": "Unbounded", "weights": [500, 700]}
+  ],
+  "tokens": {
+    "--bg": "#0b0710",
+    "--ink": "#f4effa",
+    "--muted": "#bfb3d6",
+    "--card": "rgba(255,255,255,.06)",
+    "--btn-bg": "rgba(255,255,255,.055)",
+    "--btn-fg": "#f4effa",
+    "--btn-border": "rgba(255,255,255,.13)",
+    "--accent": "#ffb26b",
+    "--accent-ink": "#160d20",
+    "--icon-bg": "linear-gradient(135deg,rgba(255,122,41,.35),rgba(147,66,245,.35))",
+    "--icon-fg": "#ffb26b",
+    "--radius": "18px",
+    "--shadow": "0 8px 24px rgba(0,0,0,.4)",
+    "--font-body": "'Manrope',sans-serif",
+    "--font-display": "'Unbounded',sans-serif"
+  }
+}

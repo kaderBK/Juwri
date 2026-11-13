@@ -1,0 +1,4 @@
+# Compliance-guide defs (SEO W5.2/W5.3).
+# One PHP file per guide; filename = URL slug (guides/{slug}).
+# Each returns per-locale content blocks (en required; ar where bilingual) +
+# a top-level country code for the closing CTA. See App\Services\GuideDefs.

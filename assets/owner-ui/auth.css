@@ -1,0 +1,333 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Owner UI kit — sign-in / sign-up pages (<x-ui.auth>, WI-16b).
+ * Kit tokens only (tokens.css); controls come from components.css
+ * (.ui-field, .ui-btn, .ui-check, .ui-banner) and the language / theme
+ * buttons reuse the top-bar styles in layout.css.
+ */
+
+.ui-auth-body {
+  margin: 0;
+  min-block-size: 100vh;
+  background: var(--ui-bg);
+  color: var(--ui-ink);
+  font-family: var(--ui-font);
+  font-size: var(--ui-fs-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ui-auth {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-block-size: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .ui-auth { grid-template-columns: minmax(360px, 5fr) 7fr; }
+}
+
+/* ── Brand panel (wide screens only) ─────────────────────────────── */
+.ui-auth__brand {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--ui-space-8);
+  padding: var(--ui-space-12);
+  background:
+    radial-gradient(120% 80% at 0% 100%, color-mix(in srgb, var(--ui-accent) 55%, transparent), transparent 60%),
+    linear-gradient(160deg, color-mix(in srgb, var(--ui-accent) 85%, #0b0b10), #121215);
+  color: #fff;
+}
+
+@media (min-width: 1024px) {
+  .ui-auth__brand { display: flex; position: sticky; inset-block-start: 0; block-size: 100vh; box-sizing: border-box; }
+}
+
+.ui-auth__logo {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  font-family: var(--ui-font-display);
+  font-size: 22px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ui-auth__logo img { max-block-size: 40px; inline-size: auto; }
+
+.ui-auth__promise {
+  margin: 0 0 var(--ui-space-8);
+  max-inline-size: 18ch;
+  font-family: var(--ui-font-display);
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.ui-auth__points {
+  display: grid;
+  gap: var(--ui-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-auth__points li {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--ui-fs-lead);
+}
+
+.ui-auth__points svg { flex-shrink: 0; }
+
+.ui-auth__legal {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--ui-fs-caption);
+}
+
+/* ── Form column ─────────────────────────────────────────────────── */
+.ui-auth__side {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  padding: var(--ui-space-5) var(--ui-space-4);
+}
+
+@media (min-width: 768px) {
+  .ui-auth__side { padding: var(--ui-space-6) var(--ui-space-12); }
+}
+
+.ui-auth__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-4);
+}
+
+.ui-auth__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-space-2);
+  color: var(--ui-ink-2);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.ui-auth__back:hover { color: var(--ui-ink); }
+
+.ui-auth__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-1);
+}
+
+.ui-auth__main {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ui-space-8);
+}
+
+.ui-auth__card {
+  inline-size: 100%;
+  max-inline-size: 420px;
+}
+
+.ui-auth__mark {
+  display: inline-flex;
+  align-items: center;
+  margin-block-end: var(--ui-space-6);
+  color: var(--ui-ink);
+  font-family: var(--ui-font-display);
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ui-auth__mark img { max-block-size: 34px; inline-size: auto; }
+
+@media (min-width: 1024px) {
+  .ui-auth__mark { display: none; }
+}
+
+.ui-auth__title {
+  margin: 0 0 var(--ui-space-2);
+  font-family: var(--ui-font-display);
+  font-size: var(--ui-fs-title);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.ui-auth__sub {
+  margin: 0 0 var(--ui-space-6);
+  color: var(--ui-ink-2);
+}
+
+.ui-auth__flash { margin-block-end: var(--ui-space-4); }
+
+.ui-auth__form {
+  display: grid;
+  gap: var(--ui-space-4);
+}
+
+.ui-auth__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-space-2);
+}
+
+.ui-auth__link {
+  color: var(--ui-accent-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ui-auth__link:hover { text-decoration: underline; }
+
+.ui-auth__error {
+  margin: 0;
+  color: var(--ui-danger);
+  font-size: var(--ui-fs-caption);
+}
+
+.ui-auth__terms a { color: var(--ui-accent-text); }
+
+/* P1-23: sign-up legal block — acceptance, business confirmation, product-news opt-in, privacy line. */
+.ui-auth__terms { display: grid; gap: var(--ui-space-2, 8px); }
+.ui-auth__privacy {
+  margin: 0;
+  color: var(--ui-ink-2);
+  font-size: var(--ui-fs-caption);
+}
+
+.ui-auth__foot {
+  margin-block-start: var(--ui-space-6);
+  color: var(--ui-ink-2);
+  text-align: center;
+}
+
+.ui-auth__foot a,
+.ui-auth__foot .ui-auth__linkbtn {
+  color: var(--ui-accent-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ui-auth__foot form { display: inline; }
+
+.ui-auth__linkbtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ui-auth__linkbtn:hover,
+.ui-auth__foot a:hover { text-decoration: underline; }
+
+.ui-auth__legal--side {
+  color: var(--ui-ink-3);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .ui-auth__legal--side { display: none; }
+}
+
+/* ── Social sign-in ──────────────────────────────────────────────── */
+.ui-auth__social {
+  display: grid;
+  gap: var(--ui-space-2);
+  margin-block-end: var(--ui-space-5);
+}
+
+.ui-auth__or {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  margin-block-end: var(--ui-space-5);
+  color: var(--ui-ink-3);
+  font-size: var(--ui-fs-caption);
+}
+
+.ui-auth__or::before,
+.ui-auth__or::after {
+  content: "";
+  flex: 1;
+  border-block-start: 1px solid var(--ui-line);
+}
+
+/* ── Illustration + staff store picker ───────────────────────────── */
+.ui-auth__illus {
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--ui-space-5);
+  color: var(--ui-accent-text);
+}
+
+.ui-auth__hint {
+  margin: 0 0 var(--ui-space-4);
+  color: var(--ui-ink-2);
+  text-align: center;
+}
+
+.ui-auth__picker {
+  display: grid;
+  gap: var(--ui-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-auth__pick {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-space-3);
+  padding: var(--ui-space-3) var(--ui-space-4);
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-tile);
+  background: var(--ui-surface);
+  color: var(--ui-ink);
+  text-decoration: none;
+}
+
+.ui-auth__pick:hover { border-color: var(--ui-accent); }
+.ui-auth__pick:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+
+.ui-auth__pick-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--ui-r-input);
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent-text);
+  font-weight: 700;
+}
+
+.ui-auth__pick-text {
+  display: grid;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ui-auth__pick-text strong,
+.ui-auth__pick-text span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-auth__pick-text span { color: var(--ui-ink-3); font-size: var(--ui-fs-caption); }

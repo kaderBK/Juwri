@@ -1,0 +1,115 @@
+{%- comment -%}
+  Featured rail (library v1): a horizontal, scroll-snapping row of item
+  cards from one source — popular items, today's specials, items on offer,
+  one category, or items the owner picked (in pick order). The heading
+  defaults to the source's name. Hidden when the source has no items.
+  Rail cards open / add like catalogue cards but are not part of the
+  runtime's search + filter (no data-mb-item), so the rail stays stable.
+{%- endcomment -%}
+{%- liquid
+  assign source = section.settings.source
+  assign max_items = section.settings.limit | plus: 0 | at_least: 2 | at_most: 24
+  assign want_cat = section.settings.category | url_encode
+  assign list = ''
+  assign default_heading = ''
+  case source
+    when 'specials'
+      assign list = menu.items | where: 'is_daily_special', true
+      assign default_heading = "Today's specials" | t
+    when 'offers'
+      assign list = offers
+      assign default_heading = 'Offers' | t
+    when 'category'
+      for category in menu.categories
+        assign cat_key = category.id | url_encode
+        if cat_key == want_cat
+          assign list = category.items
+          assign default_heading = category.name
+        endif
+      endfor
+    when 'picked'
+      assign default_heading = 'Our picks' | t
+    else
+      assign list = menu.items | where: 'is_popular', true
+      assign default_heading = 'Popular' | t
+  endcase
+  assign count = 0
+  if source == 'picked'
+    for pick in section.settings.items
+      assign pick_id = pick | url_encode
+      for it in menu.items
+        assign it_key = it.id | url_encode
+        if it_key == pick_id
+          assign count = count | plus: 1
+        endif
+      endfor
+    endfor
+  elsif list != ''
+    assign count = list | size
+  endif
+  assign heading = section.settings.heading | strip
+  if heading == ''
+    assign heading = default_heading
+  endif
+  assign card = section.settings.card
+-%}
+{%- if count > 0 -%}
+<section class="mbs-featured-rail" aria-labelledby="mbs-rail-{{ section.id | escape }}">
+  <h2 class="mbs-featured-rail__title" id="mbs-rail-{{ section.id | escape }}">{{ heading | escape }}</h2>
+  <ul class="mbs-featured-rail__track mbs-featured-rail__track--{{ card | escape }}" role="list">
+    {%- assign shown = 0 -%}
+    {%- if source == 'picked' -%}
+      {%- for pick in section.settings.items -%}
+        {%- assign pick_id = pick | url_encode -%}
+        {%- for item in menu.items -%}
+          {%- assign item_key = item.id | url_encode -%}
+          {%- if item_key == pick_id and shown < max_items -%}
+            {%- assign eager = false -%}{%- if section.settings.eager_first and shown == 0 -%}{%- assign eager = true -%}{%- endif -%}
+            <li class="mbs-featured-rail__slot">
+              {%- if card == 'compact' -%}{%- render 'card-compact', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: section.settings.show_rating, show_badges: true, show_image: true, show_fav: false, catalog: false, eager: eager -%}
+              {%- else -%}{%- render 'card-photo', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: section.settings.show_rating, show_badges: true, show_image: true, show_fav: false, catalog: false, eager: eager -%}{%- endif -%}
+            </li>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for item in list limit: max_items -%}
+        {%- assign eager = false -%}{%- if section.settings.eager_first and forloop.first -%}{%- assign eager = true -%}{%- endif -%}
+        <li class="mbs-featured-rail__slot">
+          {%- if card == 'compact' -%}{%- render 'card-compact', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: section.settings.show_rating, show_badges: true, show_image: true, show_fav: false, catalog: false, eager: eager -%}
+          {%- else -%}{%- render 'card-photo', item: item, allow_order: flags.allow_order, show_desc: false, show_rating: section.settings.show_rating, show_badges: true, show_image: true, show_fav: false, catalog: false, eager: eager -%}{%- endif -%}
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured rail",
+  "group": "catalogue",
+  "verticals": ["all"],
+  "settings": [
+    { "id": "source", "type": "select", "label": "Show", "options": [
+      { "value": "popular", "label": "Popular items" },
+      { "value": "specials", "label": "Today's specials" },
+      { "value": "offers", "label": "Items on offer" },
+      { "value": "category", "label": "One category" },
+      { "value": "picked", "label": "Items I pick" }
+    ], "default": "popular" },
+    { "id": "category", "type": "category", "label": "Category (for \"One category\")", "default": "" },
+    { "id": "items", "type": "item_list", "label": "Items (for \"Items I pick\")", "max": 12, "default": [] },
+    { "id": "heading", "type": "text", "label": "Heading (blank = automatic)", "default": "" },
+    { "id": "card", "type": "select", "label": "Card style", "options": [
+      { "value": "photo-card", "label": "Photo card" },
+      { "value": "compact", "label": "Compact tile" }
+    ], "default": "photo-card" },
+    { "id": "limit", "type": "range", "label": "Maximum items", "min": 2, "max": 24, "step": 1, "default": 10 },
+    { "id": "show_rating", "type": "checkbox", "label": "Show ratings", "default": false },
+    { "id": "eager_first", "type": "checkbox", "label": "Load the first image immediately (section near the top)", "default": false }
+  ],
+  "presets": [{ "name": "Featured rail" }]
+}
+{% endschema %}

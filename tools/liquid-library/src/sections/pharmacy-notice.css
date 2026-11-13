@@ -1,0 +1,34 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* pharmacy-notice (B1c) */
+.mbs-pharmacy-notice {
+  display: grid;
+  gap: var(--ts-gap-2, 10px);
+  inline-size: min(1200px, calc(100% - 2 * var(--ts-gap-3, 16px)));
+  margin: var(--ts-gap-2, 10px) auto;
+  padding: var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  border-radius: var(--tr-card, 16px);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .1);
+  border: 1px solid rgba(var(--tc-primary-rgb, 63, 212, 99), .3);
+  color: var(--tc-text, #111);
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.mbs-pharmacy-notice--subtle { background: var(--tc-surface, #f4f4f5); border-color: transparent; }
+.mbs-pharmacy-notice__row { display: flex; align-items: flex-start; gap: var(--ts-gap-2, 10px); }
+.mbs-pharmacy-notice__icon { flex: none; color: var(--tc-primary-700, #15803d); }
+.mbs-pharmacy-notice__text { margin: 0; }
+.mbs-pharmacy-notice__badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-inline-size: 22px;
+  padding: 1px 6px;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-text, #111);
+  color: var(--tc-background, #fff);
+  font-size: .7rem;
+  font-weight: 700;
+}

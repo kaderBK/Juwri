@@ -1,0 +1,14 @@
+# UI strings a help article names that belong to an Enterprise-edition screen.
+#
+# The articles ship in every build; the screens they describe do not. Without an edition package the
+# label is on no dashboard and the route is not registered, so the article check skips that string
+# here. With an edition package installed this list is not read at all: the screen is there and the
+# article is checked exactly as it is written.
+#
+# Format: <article>.md | <label or route URI>
+
+coupons.md | wallet/redeem
+marketplace-listing.md | List my store on the marketplace
+marketplace-listing.md | Marketplace Settings
+support-and-feedback.md | Open ticket
+wallet.md | Request withdrawal

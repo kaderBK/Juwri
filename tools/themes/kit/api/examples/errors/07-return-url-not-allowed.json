@@ -1,0 +1,63 @@
+{
+  "operationId": "createOrder",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/storefront/orders",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_dune_write_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Content-Type": "application/json",
+      "Origin": "https://dune-and-co.example",
+      "Idempotency-Key": "01a0fb5d-0320-709a-8e41-2b336468d5c2"
+    },
+    "body": {
+      "order_type": "ship",
+      "lines": [
+        {
+          "line_id": "ln_1",
+          "item_id": "019fb72f-f000-7353-8c3b-9f7d5e1620c6",
+          "variant_id": "019fa718-1080-763e-a69c-9f701d44ac3b",
+          "qty": 1
+        },
+        {
+          "line_id": "ln_2",
+          "item_id": "019ed8ab-d380-7c35-b059-e61d2459d573",
+          "variant_id": "019ea63e-e400-7902-af49-16aadc649da7",
+          "qty": 1
+        }
+      ],
+      "address": {
+        "line1": "Al Olaya, King Fahd Rd, Bldg 12",
+        "city": "Riyadh",
+        "postal_code": "12611",
+        "country": "SA"
+      },
+      "shipping_method_id": "01a01863-f880-702d-b8e8-df65791001f2",
+      "quote_hash": "qh_af7bb448d796e2bf2be64c0fd407cd98",
+      "customer": {
+        "name": "Noura Al-Harbi",
+        "phone": "+966551234567",
+        "email": "noura@example.com",
+        "marketing_opt_in": false
+      },
+      "payment": {
+        "mode": "hosted",
+        "method_id": "card",
+        "return_url": "https://other-site.example/checkout/return"
+      }
+    }
+  },
+  "response": {
+    "status": 422,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:46:12 GMT"
+    },
+    "body": {
+      "message": "The return_url origin is not in this token's allowed origins.",
+      "code": "return_url_not_allowed"
+    }
+  }
+}

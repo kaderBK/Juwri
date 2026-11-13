@@ -1,0 +1,92 @@
+{
+  "operationId": "getBookingDays",
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/storefront/booking/days",
+    "headers": {
+      "X-Storefront-Token": "sfx_demo_sidra_read_0001",
+      "Accept": "application/json",
+      "Accept-Language": "en"
+    },
+    "query": {
+      "service_ids": [
+        "019ed72b-4e00-76d8-a0e0-611df411c074"
+      ],
+      "option_ids": [
+        "019f9e03-278b-717b-b9e2-b16615441e71",
+        "019f9b12-2514-7941-a496-bb4c8e05f95a"
+      ],
+      "staff_id": "019ed498-2000-71f5-ae20-debce6e349f7",
+      "from": "2026-10-02",
+      "days": 5
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+      "Date": "Fri, 02 Oct 2026 06:33:02 GMT"
+    },
+    "body": {
+      "timezone": "Asia/Riyadh",
+      "days": [
+        {
+          "date": "2026-10-02",
+          "state": "available",
+          "first_slot_at": "2026-10-02T16:30:00+03:00",
+          "display": {
+            "id": "d_fri",
+            "label": "Fri",
+            "sub": "2",
+            "state": "available"
+          }
+        },
+        {
+          "date": "2026-10-03",
+          "state": "closed",
+          "first_slot_at": null,
+          "display": {
+            "id": "d_sat",
+            "label": "Sat",
+            "sub": "3",
+            "state": "closed"
+          }
+        },
+        {
+          "date": "2026-10-04",
+          "state": "available",
+          "first_slot_at": "2026-10-04T13:00:00+03:00",
+          "display": {
+            "id": "d_sun",
+            "label": "Sun",
+            "sub": "4",
+            "state": "available"
+          }
+        },
+        {
+          "date": "2026-10-05",
+          "state": "available",
+          "first_slot_at": "2026-10-05T13:00:00+03:00",
+          "display": {
+            "id": "d_mon",
+            "label": "Mon",
+            "sub": "5",
+            "state": "available"
+          }
+        },
+        {
+          "date": "2026-10-06",
+          "state": "available",
+          "first_slot_at": "2026-10-06T13:00:00+03:00",
+          "display": {
+            "id": "d_tue",
+            "label": "Tue",
+            "sub": "6",
+            "state": "available"
+          }
+        }
+      ]
+    }
+  }
+}

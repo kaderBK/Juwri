@@ -1,0 +1,7 @@
+{
+  "path-to-signatures": ".github/cla/signatures.json",
+  "path-to-document": "blob/main/CLA-INDIVIDUAL.md",
+  "branch": "main",
+  "allowlist": "dependabot[bot],github-actions[bot]",
+  "lock-pullrequest-after-merge": false
+}

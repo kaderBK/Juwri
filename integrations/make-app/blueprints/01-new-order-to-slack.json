@@ -1,0 +1,26 @@
+{
+  "name": "juwri → Slack: new order alert",
+  "description": "When a new order is placed in juwri, post a message to a Slack channel.",
+  "flow": [
+    {
+      "id": 1,
+      "module": "juwri:watchOrderCreated",
+      "version": 1,
+      "parameters": {},
+      "mapper": {},
+      "metadata": { "designer": { "x": 0, "y": 0 } }
+    },
+    {
+      "id": 2,
+      "module": "slack:CreateMessage",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "channel": "#orders",
+        "text": "New order #{{1.data.order_id}} — {{1.data.type}} — {{1.data.total}} {{1.data.currency}}"
+      },
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    }
+  ],
+  "metadata": { "instant": true }
+}

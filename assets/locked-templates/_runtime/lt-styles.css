@@ -1,0 +1,68 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/*
+ * Locked-template element styles (App\Services\LockedTemplates\Styles).
+ *
+ * The page never ships a <style> element (CSP: nonce-only, and the full-page cache
+ * can't keep a nonce). Each styled element instead carries its validated values as
+ * CSS custom properties in its own style attribute, plus a `data-lt-sty` list naming
+ * which of the rules below apply. !important so user choices win over the template's
+ * utility classes (layered or not); the runtime's inline animation opacity/transform are never touched.
+ */
+
+/* ---- text */
+[data-lt-sty~="fs"] { font-size: var(--lt-fs) !important; }
+[data-lt-sty~="fw"] { font-weight: var(--lt-fw) !important; }
+[data-lt-sty~="c"] { color: var(--lt-c) !important; }
+.dark [data-lt-sty~="cd"] { color: var(--lt-cd) !important; }
+[data-lt-sty~="ta"] { text-align: var(--lt-ta) !important; }
+[data-lt-sty~="lh"] { line-height: var(--lt-lh) !important; }
+[data-lt-sty~="ls"] { letter-spacing: var(--lt-ls) !important; }
+/* A coloured heading keeps its colour on gradient-clipped template text. */
+[data-lt-sty~="c"],
+.dark [data-lt-sty~="cd"] { -webkit-text-fill-color: currentColor; }
+
+/* ---- images */
+img[data-lt-sty~="crop"] {
+  aspect-ratio: var(--lt-ar) !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+img[data-lt-sty~="crop"],
+img[data-lt-sty~="zoom"] { object-position: var(--lt-op, 50% 50%) !important; }
+img[data-lt-sty~="zoom"] {
+  scale: var(--lt-z);
+  transform-origin: var(--lt-op, 50% 50%);
+  clip-path: var(--lt-clip);
+}
+img[data-lt-sty~="filter"] { filter: var(--lt-filter) !important; }
+img[data-lt-sty~="w"] { width: var(--lt-w) !important; max-width: 100% !important; height: auto !important; }
+img[data-lt-sty~="crop"][data-lt-sty~="w"] { height: auto !important; }
+img[data-lt-sty~="al"] { display: block !important; margin-left: var(--lt-ml) !important; margin-right: var(--lt-mr) !important; }
+img[data-lt-sty~="rad"] { border-radius: var(--lt-rad) !important; }
+
+/* ---- icons (the hook span is display:contents; style what it wraps) */
+[data-lt-sty~="isz"] > svg { width: var(--lt-isz) !important; height: var(--lt-isz) !important; }
+[data-lt-sty~="isz"] > :not(svg) { font-size: var(--lt-isz) !important; }
+[data-lt-sty~="ic"] > * { color: var(--lt-ic) !important; }
+.dark [data-lt-sty~="icd"] > * { color: var(--lt-icd) !important; }
+/* Template SVGs often hard-code their paint (stroke="#1A1A1C"): recolour it too. */
+[data-lt-sty~="ic"] > svg[stroke]:not([stroke="none"]),
+[data-lt-sty~="ic"] > svg [stroke]:not([stroke="none"]) { stroke: var(--lt-ic) !important; }
+[data-lt-sty~="ic"] > svg[fill]:not([fill="none"]),
+[data-lt-sty~="ic"] > svg [fill]:not([fill="none"]) { fill: var(--lt-ic) !important; }
+.dark [data-lt-sty~="icd"] > svg[stroke]:not([stroke="none"]),
+.dark [data-lt-sty~="icd"] > svg [stroke]:not([stroke="none"]) { stroke: var(--lt-icd) !important; }
+.dark [data-lt-sty~="icd"] > svg[fill]:not([fill="none"]),
+.dark [data-lt-sty~="icd"] > svg [fill]:not([fill="none"]) { fill: var(--lt-icd) !important; }
+
+/* ---- sections */
+[data-lt-sty~="bg"] { background-color: var(--lt-bg) !important; }
+.dark [data-lt-sty~="bgd"] { background-color: var(--lt-bgd) !important; }
+[data-lt-sty~="pt"] { padding-top: var(--lt-pt) !important; }
+[data-lt-sty~="pb"] { padding-bottom: var(--lt-pb) !important; }
+
+/* ---- inline formatting inside text slots (template's own links/marks untouched) */
+[data-lt-t] mark:not([class]) { padding: 0 0.12em; border-radius: 0.18em; color: inherit; }
+[data-lt-t] a[href]:not([data-lt-a]):not([class]) { color: inherit; text-decoration: underline; text-underline-offset: 0.18em; }

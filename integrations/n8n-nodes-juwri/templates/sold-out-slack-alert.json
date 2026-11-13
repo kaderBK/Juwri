@@ -1,0 +1,56 @@
+{
+  "name": "juwri: Sold-out sync → Slack alert",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Sold-out sync → Slack\n\n1. Connect your **juwri API** credential.\n2. Connect **Slack** and choose the channel.\n3. Fires on every menu change; posts a message so staff and other systems stay in sync.",
+        "height": 220,
+        "width": 320
+      },
+      "id": "note-1",
+      "name": "Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [340, 120]
+    },
+    {
+      "parameters": {
+        "events": ["menu.updated"]
+      },
+      "id": "trigger-1",
+      "name": "On menu update",
+      "type": "n8n-nodes-juwri.juwriTrigger",
+      "typeVersion": 1,
+      "position": [720, 300],
+      "webhookId": "juwri-sold-out-slack",
+      "credentials": {
+        "juwriApi": { "id": "1", "name": "juwri account" }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "text": "=Menu {{ $json.data.change }}: {{ $json.data.entity }} #{{ $json.data.id }} (restaurant {{ $json.data.restaurant_id }})",
+        "otherOptions": {}
+      },
+      "id": "slack-1",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [980, 300],
+      "credentials": {
+        "slackApi": { "id": "5", "name": "Slack account" }
+      }
+    }
+  ],
+  "connections": {
+    "On menu update": {
+      "main": [[{ "node": "Post to Slack", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "meta": { "templateId": "juwri-sold-out-slack" },
+  "tags": [{ "name": "juwri" }]
+}

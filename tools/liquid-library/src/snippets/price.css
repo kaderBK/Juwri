@@ -1,0 +1,10 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* price snippet */
+.mbs-price { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; }
+.mbs-price__from { font-size: .75rem; color: var(--tc-text-muted, #6b7280); }
+.mbs-price__now { font-weight: 700; color: var(--tc-text, #111); }
+.mbs-price.is-offer .mbs-price__now { color: var(--tc-danger, #b42318); }
+.mbs-price__was { font-size: .8rem; color: var(--tc-text-muted, #6b7280); }
+.mbs-price__sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

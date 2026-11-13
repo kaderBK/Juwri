@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* loyalty-card - a card around the platform widget(s) */
+.mbs-loyalty-card {
+  max-inline-size: 760px;
+  margin-inline: auto;
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  box-sizing: border-box;
+  color: var(--tc-text, #111);
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+}
+.mbs-loyalty-card__card {
+  display: grid;
+  justify-items: center;
+  gap: var(--ts-gap-2, 10px);
+  padding: var(--ts-gap-4, 24px) var(--ts-gap-3, 16px);
+  border-radius: var(--tr-card, 16px);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .1);
+  text-align: center;
+}
+.mbs-loyalty-card__card > .mbs-icon { color: var(--tc-primary-700, #1f8a3b); }
+.mbs-loyalty-card__title { margin: 0; font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.3rem; }
+.mbs-loyalty-card__text { margin: 0; max-inline-size: 48ch; color: var(--tc-text-muted, #6b7280); }
+.mbs-loyalty-card__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ts-gap-2, 10px); margin-block-start: var(--ts-gap-1, 6px); }

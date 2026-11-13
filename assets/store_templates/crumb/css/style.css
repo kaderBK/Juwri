@@ -1,0 +1,2088 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* ═══════════════════════════════════════════════════════════
+   crumb — warm bakery-marketplace post_template · demo stylesheet
+   cream + caramel · brown header block · Nunito Sans
+   ═══════════════════════════════════════════════════════════ */
+
+:root{
+  /* surfaces — role colours flow from the Customizer v2 token layer
+     (theme-tokens.blade.php); the literal after each comma is crumb's own
+     value, kept as the var() fallback so a store that customized nothing —
+     or a render with no token include — is byte-identical to today. */
+  --cream:var(--tc-background, #FCFAF7);
+  --paper:var(--tc-surface, #FFFFFF);
+  --beige:#F2EAE0;                        /* hand-tuned warm surface tint; derived bg-shades differ, keep literal */
+  --beige-2:#EAE0D2;
+  --stroke:rgba(36,26,16,.08);
+  --stroke-2:rgba(36,26,16,.14);
+  /* ink */
+  --ink:var(--tc-text, #241A10);
+  --ink-2:#6F6257;                        /* hand-tuned; derived text-muted differs, keep literal */
+  --ink-3:#9A8D80;
+  /* brand — crumb's caramel is the customizer PRIMARY role; it also reads the
+     store's legacy colour, so the token wins first, then the legacy
+     --theme-color-1, then crumb's own literal (Customizer v2 rule 4). */
+  --brown:var(--tc-primary, var(--theme-color-1,#8B5A2B));
+  --brown-deep:var(--theme-color-0_8,#6E4620);   /* hand-tuned deep; derived primary-600/700 differ, keep legacy chain */
+  --brown-soft:var(--theme-color-0_1,rgba(139,90,43,.1));
+  --brown-grad:linear-gradient(135deg,var(--theme-color-0_9,#9A6633) 0%,var(--theme-color-1,#8B5A2B) 55%,var(--theme-color-0_8,#6E4620) 100%);
+  /* semantic / decorative status colours — NOT the customizer accent (star
+     ratings, promo & notification badges, availability vs. errors);
+     intentionally literal, matching the crave flagship's orange/red decision */
+  --gold:#F5A623;
+  --green:#3DA35D;
+  --red:#D9503F;
+  /* radius — pill follows the layout.radius scale; card stays literal because
+     crumb's 20px ≠ the scale's "round" card of 18px, and img/sheet/head are
+     hand-tuned (control-radius would reshape them) */
+  --r-card:20px;
+  --r-img:14px;
+  --r-pill:var(--tr-pill, 999px);
+  --r-sheet:28px;
+  --r-head:30px;
+  /* motion */
+  --ease:cubic-bezier(.32,.72,.24,1);
+  --ease-pop:cubic-bezier(.34,1.45,.5,1);
+  --t-fast:170ms;
+  --t-view:340ms;
+  /* z scale */
+  --z-nav:30; --z-overlay:35; --z-scrim:40; --z-sheet:50; --z-toast:60; --z-fly:70; --z-splash:80;
+  /* type — crumb sets a single body face (headings differ by weight, not by
+     family), so the self-hosted pair's body stack drives it; pair "none" emits
+     no --tf-*, so this degrades to crumb's own stack. --tf-body already ends in
+     the pair's Arabic face, so RTL (--font-ar) can share it safely. */
+  --font-ui:var(--tf-body, 'Saudi Riyal', "Nunito Sans",system-ui,sans-serif);
+  --font-ar:var(--tf-body, 'Saudi Riyal', "IBM Plex Sans Arabic",system-ui,sans-serif);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--font-ui);
+  background:#171009;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+[dir="rtl"] body, [dir="rtl"] input, [dir="rtl"] button, [dir="rtl"] textarea{font-family:var(--font-ar)}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,textarea,select{
+  font:inherit;color:var(--ink);background:var(--paper);
+  border:1px solid var(--stroke);border-radius:14px;
+  padding:13px 15px;width:100%;outline:none;
+  transition:border-color var(--t-fast) var(--ease),background var(--t-fast) var(--ease);
+}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+input:focus,textarea:focus,select:focus{border-color:var(--brown)}
+::-webkit-scrollbar{display:none}
+
+/* icons */
+.ic{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-xs{width:15px;height:15px}
+.star-f{fill:var(--gold);stroke:var(--gold);stroke-width:1}
+
+/* ── app shell (full-viewport, centred on desktop) ─────── */
+.app{
+  position:fixed;inset:0;margin:0 auto;
+  width:100%;max-width:520px;
+  background:var(--cream);
+  display:flex;flex-direction:column;isolation:isolate;
+  overflow:clip;
+  box-shadow:0 0 90px -30px rgba(0,0,0,.4);
+}
+@media (min-width:521px){ body{background:#171009} }
+.views{position:relative;flex:1;min-height:0}
+
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--cream);
+  visibility:hidden;pointer-events:none;
+  transform:translateX(26%);opacity:0;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease),visibility 0s linear var(--t-view);
+  z-index:1;
+}
+[dir="rtl"] .view{transform:translateX(-26%)}
+.view.is-active{
+  visibility:visible;pointer-events:auto;
+  transform:none;opacity:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+  z-index:2;
+}
+.view.is-under{
+  visibility:visible;transform:translateX(-9%) scale(.985);opacity:.55;z-index:1;
+  transition:transform var(--t-view) var(--ease),opacity var(--t-view) var(--ease);
+}
+[dir="rtl"] .view.is-under{transform:translateX(9%) scale(.985)}
+.view-dark{background:#17100B}
+
+.view-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 20px 0;scroll-behavior:smooth}
+.view-scroll.flush{padding:0}
+.view-scroll.noscroll{overflow:hidden;display:flex;flex-direction:column}
+.tail-space{height:118px}
+.tail-space.tall{height:40px}
+.body-pad{padding:0 20px}
+
+.page-head{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 14px}
+.page-head h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.page-head.sub{justify-content:flex-start;gap:13px}
+.page-head.sub h1{flex:1}
+.page-head.sub.pad{padding:14px 20px 6px}
+
+.round-btn{
+  width:42px;height:42px;flex:none;border-radius:50%;
+  background:var(--paper);border:1px solid var(--stroke);
+  display:grid;place-items:center;color:var(--ink);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.round-btn:active{transform:scale(.88)}
+.round-btn.beige{background:var(--beige);border-color:transparent;color:var(--brown)}
+[dir="rtl"] .round-btn[data-back] .ic, [dir="rtl"] .fab.back .ic{transform:scaleX(-1)}
+
+.sub-label{font-size:11.5px;color:var(--ink-3);font-weight:600;letter-spacing:.01em}
+.sub-label.light{color:rgba(255,255,255,.72)}
+
+/* ── splash ───────────────────────────────────────────── */
+.splash{
+  position:absolute;inset:0;z-index:var(--z-splash);
+  background:var(--brown-grad);color:#fff;
+  display:flex;flex-direction:column;align-items:center;
+  padding:110px 30px 0;overflow:hidden;
+  transition:opacity .45s var(--ease),visibility 0s linear .45s;
+}
+.splash.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.splash-mark{display:grid;justify-items:center;gap:10px;z-index:2}
+.splash-ring{
+  width:92px;height:92px;border-radius:50%;overflow:hidden;
+  border:3px solid rgba(255,255,255,.5);box-shadow:0 18px 40px rgba(0,0,0,.35);
+  animation:sp-pop .8s var(--ease-pop) backwards;
+}
+.splash-ring img{width:100%;height:100%;object-fit:cover}
+.splash-word{font-size:54px;font-weight:900;letter-spacing:-.03em;animation:sp-rise .7s var(--ease) .15s backwards}
+.splash-word span{color:#FFD9A0}
+.splash-tag{font-size:14px;color:rgba(255,255,255,.85);font-weight:600;animation:sp-rise .7s var(--ease) .3s backwards}
+@keyframes sp-pop{from{transform:scale(.3) rotate(-14deg);opacity:0}}
+@keyframes sp-rise{from{transform:translateY(22px);opacity:0}}
+.splash-cake{
+  position:absolute;bottom:-8%;left:50%;transform:translateX(-50%);
+  width:118%;max-width:none;aspect-ratio:1.1;object-fit:cover;border-radius:50% 50% 0 0;
+  box-shadow:0 -20px 60px rgba(0,0,0,.35);
+  animation:cake-rise 1s var(--ease-pop) .35s backwards;
+}
+@keyframes cake-rise{from{transform:translateX(-50%) translateY(90px);opacity:0}}
+.splash-crumbs i{
+  position:absolute;width:7px;height:7px;border-radius:2px;background:rgba(255,255,255,.35);
+  animation:crumb-float 4.2s ease-in-out infinite alternate;
+}
+.splash-crumbs i:nth-child(1){top:14%;left:12%;rotate:20deg}
+.splash-crumbs i:nth-child(2){top:24%;right:14%;animation-delay:.5s;width:5px;height:5px}
+.splash-crumbs i:nth-child(3){top:44%;left:20%;animation-delay:1s;rotate:45deg}
+.splash-crumbs i:nth-child(4){top:38%;right:24%;animation-delay:1.4s}
+.splash-crumbs i:nth-child(5){top:10%;right:38%;animation-delay:.8s;width:4px;height:4px}
+.splash-crumbs i:nth-child(6){top:52%;right:10%;animation-delay:.2s;rotate:70deg}
+@keyframes crumb-float{to{translate:0 -16px;rotate:120deg}}
+.splash-skip{
+  position:absolute;top:18px;inset-inline-end:22px;z-index:3;
+  padding:9px 18px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.16);backdrop-filter:blur(8px);
+  font-size:13px;font-weight:700;color:#fff;
+}
+
+/* ── brown header block (signature) ──────────────────── */
+.brown-head{
+  background:var(--brown-grad);color:#fff;
+  border-radius:0 0 var(--r-head) var(--r-head);
+  padding:10px 20px 20px;
+  box-shadow:0 14px 30px -18px rgba(110,70,32,.55);
+  animation:head-settle .7s var(--ease-pop) backwards;
+  position:relative;z-index:3;
+}
+@keyframes head-settle{from{transform:translateY(-46px);border-radius:0 0 60px 60px;opacity:.4}}
+.bh-top{display:flex;align-items:center;gap:10px}
+.bh-loc{flex:1;min-width:0;text-align:start}
+.bh-loc-label{display:block;font-size:11px;color:rgba(255,255,255,.66);font-weight:700;letter-spacing:.04em}
+.bh-loc-value{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;margin-top:2px}
+.bh-loc-value b{min-width:0;max-width:100%;unicode-bidi:plaintext;text-align:start;white-space:normal;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow-wrap:anywhere;line-height:1.25}
+.bh-loc-value .chev{opacity:.7}
+.bh-icon{
+  position:relative;width:42px;height:42px;flex:none;border-radius:50%;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.bh-icon:active{transform:scale(.88)}
+.bh-icon .dot{position:absolute;top:9px;inset-inline-end:11px;width:7px;height:7px;border-radius:50%;background:var(--gold);outline:2px solid var(--brown)}
+.bh-icon .badge{
+  position:absolute;top:-4px;inset-inline-end:-4px;
+  min-width:19px;height:19px;border-radius:var(--r-pill);
+  background:var(--gold);color:#3A2200;
+  font-size:10.5px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 5px;
+  outline:2.5px solid #815427;
+  transition:transform .25s var(--ease-pop);
+}
+.badge.bump{animation:badge-bump .45s var(--ease-pop)}
+@keyframes badge-bump{40%{transform:scale(1.45)}}
+.bh-search{display:flex;gap:0;margin-top:16px}
+.bh-search-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--paper);border-radius:var(--r-pill) 0 0 var(--r-pill);
+  padding:0 18px;height:50px;color:var(--ink-3);
+  font-size:14px;font-weight:600;text-align:start;
+}
+[dir="rtl"] .bh-search-field{border-radius:0 var(--r-pill) var(--r-pill) 0}
+.bh-search-field .ic{color:var(--brown)}
+.bh-filter{
+  width:52px;height:50px;flex:none;border-radius:0 var(--r-pill) var(--r-pill) 0;
+  background:var(--brown-deep);color:#fff;display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+[dir="rtl"] .bh-filter{border-radius:var(--r-pill) 0 0 var(--r-pill)}
+.bh-filter:active{transform:scale(.92)}
+.bh-filter.solid{border-radius:16px;background:var(--brown)}
+
+/* ── section heads / see all ─────────────────────────── */
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:var(--ts-gap-4, 22px) 0 12px}
+.section-head h2{font-size:17px;font-weight:800;letter-spacing:-.015em}
+/* inline-flex + min-height keeps the label where it was but lifts the hit area to 32px */
+.seeall{font-size:12.5px;font-weight:700;color:var(--brown);padding:4px 2px;display:inline-flex;align-items:center;min-height:32px}
+.seeall.danger{color:var(--red)}
+/* Full-width "See All" below the home grid (soiree parity). Reuses featSeeAll's
+   toggle: .is-open swaps the label to "See Less" and points the arrow up. */
+.menu-more{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  margin-top:16px;padding:13px;border-radius:var(--r-pill);
+  background:var(--paper);border:1px solid var(--stroke-2);color:var(--ink);
+  font-size:13.5px;font-weight:800;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast) var(--ease)}
+.menu-more[hidden]{display:none}
+.menu-more .ic{width:16px;height:16px;transition:transform var(--t-fast) var(--ease)}
+.menu-more.is-open .ic{transform:rotate(-90deg)}
+.menu-more:active{transform:scale(.98)}
+[dir="rtl"] .menu-more .ic{transform:scaleX(-1)}
+[dir="rtl"] .menu-more.is-open .ic{transform:scaleX(-1) rotate(-90deg)}
+@media (hover:hover) and (pointer:fine){.menu-more:hover{background:var(--beige)}}
+
+/* ── offer banner ─────────────────────────────────────── */
+.offer-banner{
+  position:relative;display:block;width:100%;height:150px;
+  border-radius:var(--r-card);overflow:hidden;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.offer-banner:active{transform:scale(.98)}
+.offer-banner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.offer-banner:hover>img{transform:scale(1.05)}
+.ob-shade{position:absolute;inset:0;background:linear-gradient(92deg,rgba(36,20,6,.78) 8%,rgba(36,20,6,.35) 55%,rgba(36,20,6,.05))}
+[dir="rtl"] .ob-shade{background:linear-gradient(268deg,rgba(36,20,6,.78) 8%,rgba(36,20,6,.35) 55%,rgba(36,20,6,.05))}
+.ob-copy{position:relative;z-index:2;display:grid;gap:2px;padding:18px 20px;color:#fff;justify-items:start}
+.ob-copy small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#FFD9A0}
+.ob-copy b{font-size:17px;font-weight:800}
+.ob-big{font-size:13px;font-weight:700;opacity:.9}
+.ob-big em{font-style:normal;font-size:22px;font-weight:900;color:var(--gold)}
+.ob-btn{
+  margin-top:7px;display:inline-block;padding:8px 16px;border-radius:var(--r-pill);
+  background:var(--brown);color:#fff;font-size:12px;font-weight:800;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,.6);
+}
+.ob-play{
+  position:absolute;top:12px;inset-inline-end:12px;z-index:2;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.2);backdrop-filter:blur(6px);
+  display:grid;place-items:center;
+}
+.ob-play svg{width:16px;height:16px;fill:#fff}
+
+/* ── category tiles ───────────────────────────────────── */
+.cat-row{display:flex;align-items:flex-start;gap:8px;overflow-x:auto;padding:2px 0 6px}
+.cat-tile{
+  flex:none;display:grid;justify-items:center;gap:7px;width:68px;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.cat-tile:active{transform:scale(.92)}
+.cat-tile i{
+  width:60px;height:60px;border-radius:50%;background:var(--beige);
+  display:grid;place-items:center;font-size:26px;font-style:normal;
+  border:1.5px solid transparent;
+  transition:all var(--t-fast) var(--ease);
+}
+.cat-tile span{font-size:11px;font-weight:700;color:var(--ink-2);width:76px;text-align:center;line-height:1.25;overflow-wrap:break-word;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.cat-tile.is-on i{background:var(--brown);border-color:var(--brown)}
+.cat-tile.is-on span{color:var(--brown);font-weight:800}
+
+/* ── featured cards ───────────────────────────────────── */
+/* minmax(0,1fr), not 1fr: the auto minimum of a plain 1fr track is the card's
+   min-content, and .fcard-name is white-space:nowrap — a long bake name then
+   pushes both columns past the grid and the 2nd card is clipped off-screen. */
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding-top:4px}
+.fcard{
+  position:relative;background:var(--paper);border:1px solid var(--stroke);
+  border-radius:var(--r-card);padding:9px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast);
+  animation:card-in .5s var(--ease) backwards;
+  box-shadow:0 6px 18px -12px rgba(110,70,32,.25);
+}
+@keyframes card-in{from{opacity:0;transform:translateY(18px)}}
+.fcard:active{transform:scale(.965)}
+/* display:block is load-bearing — this is a <span>, and aspect-ratio is ignored
+   on a non-replaced INLINE box: the img then sized itself off its own intrinsic
+   ratio and the card's trailing spans (name/sub/foot) fell outside the button's
+   height, clipping the name and overlapping the next grid row. */
+.fcard-imgwrap{display:block;position:relative;border-radius:var(--r-img);overflow:hidden;aspect-ratio:1.06}
+.fcard-imgwrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.fcard:hover .fcard-imgwrap img{transform:scale(1.06)}
+.fcard-rate{
+  position:absolute;top:8px;inset-inline-start:8px;
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.92);border-radius:var(--r-pill);
+  padding:4px 9px;font-size:11px;font-weight:800;color:#241A10;
+}
+.fcard-rate .ic{width:11px;height:11px}
+.fcard-fav{
+  position:absolute;top:8px;inset-inline-end:8px;width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.92);display:grid;place-items:center;color:var(--brown);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fcard-fav:active{transform:scale(.8)}
+.fcard-fav .ic{width:15px;height:15px}
+.fcard-fav.is-on .ic{fill:var(--red);stroke:var(--red)}
+/* Both image badges live in one bottom-left column so a card that is BOTH a daily
+   special AND on Happy Hour stacks them instead of overlapping on a narrow grid. */
+.fcard-badges{
+  position:absolute;bottom:8px;inset-inline-start:8px;inset-inline-end:8px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:5px;z-index:2;pointer-events:none;
+}
+.fcard-special{
+  max-width:100%;
+  background:var(--gold);color:#3A2200;font-size:9.5px;font-weight:800;
+  letter-spacing:.03em;text-transform:uppercase;
+  padding:4px 9px;border-radius:var(--r-pill);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.fcard-sale{
+  max-width:100%;
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--brown);color:#fff;font-size:9.5px;font-weight:800;
+  letter-spacing:.02em;padding:4px 9px 4px 7px;border-radius:var(--r-pill);
+  box-shadow:0 4px 12px -6px rgba(0,0,0,.5);
+  white-space:nowrap;overflow:hidden;
+}
+.fcard-sale .ic{width:12px;height:12px;flex:none;stroke:currentColor;stroke-width:2;fill:none}
+.fcard-name{display:block;font-size:13.5px;font-weight:800;margin:9px 2px 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fcard-sub{display:block;font-size:11px;color:var(--ink-3);font-weight:600;padding:0 2px}
+.fcard-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding:6px 2px 2px}
+/* was-price + current price stack vertically (was on top) so a discounted card
+   keeps its width for the name/add button instead of overflowing the row. */
+.fcard-pricewrap{display:flex;flex-direction:column;line-height:1.12;min-width:0}
+.fcard-was{font-size:11px;font-weight:400;opacity:.55}
+.fcard-price{font-size:15px;font-weight:800;color:var(--brown)}
+.fcard-add{
+  width:30px;height:30px;border-radius:10px;flex:none;
+  background:var(--brown);color:#fff;display:grid;place-items:center;
+  box-shadow:0 6px 14px -6px rgba(110,70,32,.6);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fcard-add:active{transform:scale(.82)}
+.fcard-add .ic{width:15px;height:15px;stroke-width:2.2}
+
+/* empty states */
+.empty{display:grid;place-items:center;gap:12px;text-align:center;padding:44px 30px;color:var(--ink-3);font-size:14px}
+.empty-art{width:76px;height:76px;stroke:var(--ink-3);fill:none;stroke-width:2;opacity:.65}
+
+/* ── search overlay ───────────────────────────────────── */
+.search-overlay{
+  position:absolute;inset:0;z-index:var(--z-overlay);
+  background:var(--cream);padding:14px 20px 0;
+  display:flex;flex-direction:column;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .28s var(--ease),transform .28s var(--ease);
+  overflow-y:auto;
+}
+.search-overlay.is-open{opacity:1;transform:none}
+.so-bar{display:flex;gap:10px;align-items:center;flex:none}
+.so-field{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-pill);
+  padding:0 8px 0 16px;height:50px;color:var(--ink-3);
+}
+[dir="rtl"] .so-field{padding:0 16px 0 8px}
+.so-field.cream{background:var(--paper);border-color:var(--beige-2)}
+.so-field.slim{height:46px;margin:6px 0 12px}
+.so-field:focus-within{border-color:var(--brown)}
+.so-field .ic{color:var(--brown)}
+.so-field input{background:none;border:0;padding:0;height:100%;font-size:14px;font-weight:600}
+/* the theme ships its own ⊗ — drop the UA's search clear so they don't stack */
+.so-field input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.so-clear{flex:none;width:34px;height:34px;border-radius:50%;color:var(--ink-3);font-size:19px;display:grid;place-items:center}
+.so-clear:active{color:var(--ink)}
+.so-label{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--ink-3);padding:18px 2px 10px;flex:none}
+.so-recent{display:flex;flex-wrap:wrap;gap:8px;flex:none}
+.so-recent button{
+  padding:8px 15px;border-radius:var(--r-pill);background:var(--beige);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.so-recent button:active{transform:scale(.93)}
+.so-results{display:grid;gap:8px;padding:16px 0 30px}
+.so-row{
+  display:flex;align-items:center;gap:12px;text-align:start;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;padding:9px;
+  animation:card-in .35s var(--ease) backwards;
+}
+.so-row img{width:52px;height:52px;border-radius:12px;object-fit:cover}
+.so-row>div{flex:1;min-width:0}
+.so-row b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.so-row small{font-size:11px;color:var(--ink-3);font-weight:600}
+.so-row .price{font-size:13.5px;font-weight:800;color:var(--brown)}
+.so-empty{text-align:center;color:var(--ink-3);font-size:13.5px;padding:30px 10px}
+
+/* ── explore / map (branch picker) ────────────────────── */
+.ex-top{display:flex;gap:10px;padding:12px 20px;flex:none;align-items:center}
+.mapwrap{position:relative;flex:1;min-height:0;overflow:hidden}
+.map-art{position:absolute;inset:0;width:100%;height:100%}
+.map-art .road{stroke:#fff;stroke-width:13;fill:none}
+.map-art .road.thin{stroke-width:6}
+.map-art .park{fill:#E3EBD8}
+.map-art .water{fill:#DCE7EA}
+.map-art .mlabel{fill:#B4A695;font-size:10px;font-weight:600;font-family:var(--font-ui);letter-spacing:.04em}
+.map-pins{position:absolute;inset:0}
+.mpin{
+  position:absolute;display:grid;justify-items:center;gap:5px;translate:-50% -50%;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.mpin:active{transform:scale(.9)}
+.mpin.drop{animation:pin-drop .65s var(--ease-pop) backwards}
+@keyframes pin-drop{
+  0%{transform:translateY(-36px);opacity:0}
+  60%{transform:translateY(4px);opacity:1}
+  100%{transform:translateY(0)}
+}
+.mpin img{
+  width:52px;height:52px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--paper);box-shadow:0 10px 22px -8px rgba(36,26,16,.45);
+  transition:border-color var(--t-fast);
+}
+.mpin.is-on img{border-color:var(--brown)}
+.mpin .dist{
+  background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-pill);
+  padding:3px 9px;font-size:10.5px;font-weight:800;color:var(--ink);
+  box-shadow:0 6px 14px -6px rgba(36,26,16,.3);
+}
+.mpin.is-on .dist{background:var(--brown);color:#fff;border-color:var(--brown)}
+.me-pin{position:absolute;left:50%;top:52%;translate:-50% -90%;pointer-events:none}
+.me-pin svg{width:38px;height:38px;fill:var(--brown);stroke:var(--brown-deep);stroke-width:1;filter:drop-shadow(0 8px 10px rgba(36,26,16,.35));animation:pin-drop .6s var(--ease-pop) .2s backwards}
+.me-pin i{position:absolute;left:50%;bottom:-4px;translate:-50% 0;width:26px;height:8px;border-radius:50%;background:rgba(139,90,43,.3);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}}
+
+.branch-cards{
+  flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:14px 20px calc(110px + env(safe-area-inset-bottom));
+  margin-top:-70px;position:relative;z-index:2;
+}
+.bcard{
+  flex:0 0 88%;scroll-snap-align:start;text-align:start;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:var(--r-card);
+  padding:15px 16px;display:grid;gap:6px;
+  box-shadow:0 20px 40px -18px rgba(36,26,16,.35);
+  transition:border-color var(--t-fast);
+}
+.bcard.is-on{border-color:var(--brown)}
+.bcard-top{display:flex;align-items:center;gap:8px}
+.bcard-top b{flex:1;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcard-rate{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800}
+.bcard-rate .ic{width:12px;height:12px}
+.bcard-rate small{color:var(--ink-3);font-weight:600}
+.bcard-tags{font-size:11.5px;color:var(--ink-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcard-addr{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-3);font-weight:600}
+.bcard-addr .ic{width:13px;height:13px;color:var(--brown)}
+.bcard-meta{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);font-weight:700;padding-top:2px}
+.bcard-meta i{font-style:normal;color:var(--ink-3)}
+.bcard-meta .free{color:var(--green)}
+.bcard-pick{
+  margin-top:6px;justify-self:start;
+  padding:7px 14px;border-radius:var(--r-pill);
+  background:var(--beige);color:var(--brown);font-size:11.5px;font-weight:800;
+  transition:all var(--t-fast);
+}
+.bcard.is-on .bcard-pick{background:var(--brown);color:#fff}
+
+/* ── product view ─────────────────────────────────────── */
+.p-hero{position:relative;aspect-ratio:1.02;background:var(--beige)}
+.p-hero>img{width:100%;height:100%;object-fit:cover;transition:opacity .3s var(--ease)}
+.p-hero>img.swap{animation:img-swap .4s var(--ease)}
+@keyframes img-swap{from{opacity:.2;transform:scale(1.04)}}
+.fab{
+  position:absolute;top:14px;width:40px;height:40px;border-radius:50%;z-index:4;
+  background:rgba(255,255,255,.92);color:#241A10;
+  display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(36,26,16,.35);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.fab:active{transform:scale(.88)}
+.fab.back{inset-inline-start:16px}
+.fab.dark{background:rgba(20,14,8,.5);color:#fff;backdrop-filter:blur(8px)}
+.p-hero-actions{position:absolute;top:14px;inset-inline-end:16px;display:flex;gap:9px;z-index:4}
+.p-hero-actions .fab{position:static}
+.fab.is-on .ic{fill:var(--red);stroke:var(--red)}
+.p-thumbs{
+  position:absolute;inset-inline:14px;bottom:14px;z-index:3;
+  display:flex;gap:8px;overflow-x:auto;padding:2px;
+}
+.p-thumb{
+  position:relative;flex:none;width:52px;height:52px;border-radius:12px;overflow:hidden;
+  border:2px solid rgba(255,255,255,.75);box-shadow:0 8px 18px -8px rgba(36,26,16,.5);
+  transition:transform var(--t-fast) var(--ease-pop),border-color var(--t-fast);
+}
+.p-thumb:active{transform:scale(.9)}
+.p-thumb img{width:100%;height:100%;object-fit:cover}
+.p-thumb.is-on{border-color:var(--gold)}
+.p-thumb .more{
+  position:absolute;inset:0;background:rgba(36,20,6,.55);color:#fff;
+  display:grid;place-items:center;font-size:13px;font-weight:800;
+}
+.p-body{padding:18px 20px 0;background:var(--cream);border-radius:26px 26px 0 0;margin-top:-24px;position:relative;z-index:2}
+.p-eyebrow-row{display:flex;align-items:center;justify-content:space-between}
+.p-eyebrow{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.p-rate{display:inline-flex;align-items:center;gap:5px;font-size:13.5px;font-weight:800}
+.p-rate .ic{width:15px;height:15px}
+.p-title{font-size:24px;font-weight:900;letter-spacing:-.02em;line-height:1.15;padding-top:4px;display:flex;align-items:center;gap:9px}
+.stock-dot{width:9px;height:9px;flex:none;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(61,163,93,.18)}
+.stock-dot.out{background:var(--red);box-shadow:0 0 0 3px rgba(217,80,63,.15)}
+
+.seller-row{
+  display:flex;align-items:center;gap:11px;margin-top:14px;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;padding:10px 12px;
+}
+.seller-row img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.seller-row>div{flex:1;min-width:0}
+.seller-row b{display:block;font-size:13.5px;font-weight:800}
+.seller-row small{font-size:11px;color:var(--ink-3);font-weight:600}
+.seller-act{
+  width:38px;height:38px;flex:none;border-radius:50%;
+  background:var(--beige);color:var(--brown);display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.seller-act:active{transform:scale(.85)}
+.seller-act .ic{width:17px;height:17px}
+
+.p-meta{display:flex;flex-wrap:wrap;gap:7px;padding:13px 0 2px}
+.meta-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:700;color:var(--ink-2);
+  background:var(--beige);padding:7px 12px;border-radius:var(--r-pill);
+}
+.meta-chip .ic{width:13px;height:13px;color:var(--brown)}
+.meta-chip.warn{color:#9C6A12;background:rgba(245,166,35,.14)}
+
+.p-desc-block{padding-top:16px}
+.p-desc-block h3,.p-weight-block h3,.p-extras-block h3,.p-qty-row h3{font-size:14.5px;font-weight:800;letter-spacing:-.01em;margin-bottom:9px}
+.p-desc{font-size:13.5px;line-height:1.65;color:var(--ink-2)}
+.p-desc.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.readmore{font-size:12.5px;font-weight:800;color:var(--brown);padding:6px 0 0}
+
+.p-weight-block{padding-top:18px}
+.wchips{display:flex;gap:8px;overflow-x:auto;padding:2px}
+.wchip{
+  flex:none;padding:11px 17px;border-radius:var(--r-pill);
+  background:var(--beige);color:var(--ink-2);
+  font-size:13px;font-weight:800;
+  border:1.5px solid transparent;
+  transition:all var(--t-fast) var(--ease);
+}
+.wchip.is-on{background:var(--brown);color:#fff;animation:chip-pop .35s var(--ease-pop)}
+@keyframes chip-pop{45%{transform:scale(1.12)}}
+.wchip:active{transform:scale(.93)}
+
+.p-extras-block{padding-top:18px}
+.opt-list{display:grid;gap:2px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:10px 6px;border-radius:12px;
+  transition:background var(--t-fast);cursor:pointer;
+}
+.opt:active{background:var(--beige)}
+.opt-ctl{
+  width:21px;height:21px;flex:none;border-radius:7px;
+  border:2px solid var(--stroke-2);display:grid;place-items:center;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.opt.is-on .opt-ctl{border-color:var(--brown);background:var(--brown)}
+.opt-ctl svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transform:scale(.4);transition:all var(--t-fast) var(--ease-pop)}
+.opt.is-on .opt-ctl svg{opacity:1;transform:none}
+.opt-name{flex:1;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.opt.is-on .opt-name{color:var(--ink)}
+.opt-price{font-size:12.5px;font-weight:800;color:var(--ink-3)}
+.opt.is-on .opt-price{color:var(--brown)}
+/* Extras carry a thumbnail (paid add-ons read better with a picture). The image
+   sits between the tick and the name; rows without an image stay text-only. */
+.opt-img{width:40px;height:40px;flex:none;border-radius:10px;object-fit:cover;
+  background:var(--beige);box-shadow:inset 0 0 0 1px var(--stroke)}
+.opt--img{padding:8px 8px 8px 6px}
+.opt-list.has-imgs{gap:6px}
+
+.p-qty-row{display:flex;align-items:center;justify-content:space-between;padding-top:18px}
+.p-qty-row h3{margin:0}
+.qty{
+  display:flex;align-items:center;gap:2px;flex:none;
+  background:var(--beige);border-radius:var(--r-pill);padding:4px;
+}
+.qty-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--brown);transition:all var(--t-fast) var(--ease-pop)}
+.qty-btn:active{transform:scale(.82);background:var(--beige-2)}
+.qty output{min-width:32px;text-align:center;font-weight:800;font-size:14.5px;font-variant-numeric:tabular-nums}
+
+.p-reviews-row{
+  display:flex;align-items:center;gap:11px;width:100%;margin-top:18px;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;
+  padding:13px 14px;text-align:start;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.p-reviews-row:active{transform:scale(.98)}
+.prr-star{width:36px;height:36px;flex:none;border-radius:50%;background:rgba(245,166,35,.15);display:grid;place-items:center}
+.prr-star .ic{width:17px;height:17px}
+.p-reviews-row b{flex:1;font-size:13.5px;font-weight:800}
+.prr-avg{font-size:14px;font-weight:800;color:var(--brown)}
+/* inline product quick-rate stars */
+.rate-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:13.5px;font-weight:800}
+.rate-row .rate-label{flex:1 1 auto;min-width:0}
+.rate-stars{display:flex;gap:0;flex:none;color:var(--gold)}
+.rate-stars button{padding:7px;background:none;border:0;cursor:pointer;line-height:0}
+.rate-stars button .ic{width:23px;height:23px;fill:none;stroke:currentColor;opacity:.4;transition:opacity var(--t-fast) var(--ease),fill var(--t-fast) var(--ease)}
+.rate-stars button.is-on .ic{fill:currentColor;stroke:currentColor;opacity:1}
+.arr{color:var(--ink-3)}
+[dir="rtl"] .arr{transform:scaleX(-1)}
+
+/* bottom cta bar */
+.p-cta{
+  flex:none;display:flex;gap:14px;align-items:center;
+  padding:12px 20px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--cream) 30%);
+  position:relative;z-index:6;
+}
+.p-total{flex:none;display:grid;gap:1px}
+.p-total small{font-size:11px;color:var(--ink-3);font-weight:700}
+.p-total b{font-size:21px;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.cta{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  background:var(--brown);color:#fff;
+  font-size:15px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  transition:transform var(--t-fast) var(--ease-pop),box-shadow var(--t-fast),background var(--t-fast);
+  box-shadow:0 14px 28px -12px rgba(110,70,32,.65);
+  position:relative;overflow:hidden;
+}
+.cta:active{transform:scale(.97);background:var(--brown-deep)}
+.cta b{font-weight:800;opacity:.75}
+.cta.wide{width:100%}
+.cta.danger{background:var(--red);box-shadow:0 14px 28px -12px rgba(217,80,63,.55)}
+.cta:disabled{opacity:.45;box-shadow:none}
+.cta .spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{rotate:360deg}}
+/* direct "go to cart" button beside Add to Cart on the product footer; a
+   card/outline pill (not the solid-brown cta) so it reads as the secondary
+   action, with an accent count badge. Toggled visible by script.js only
+   once the cart holds something. */
+.p-cart-jump{
+  flex:none;position:relative;width:54px;height:54px;border-radius:var(--r-pill);
+  background:var(--beige);border:1.5px solid var(--stroke-2);color:var(--brown);
+  display:grid;place-items:center;
+  transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast);
+}
+.p-cart-jump:active{transform:scale(.94);background:var(--stroke-2)}
+.p-cart-jump[hidden]{display:none}
+.p-cart-jump .ic{width:22px;height:22px}
+.p-cart-jump-count{
+  position:absolute;top:-5px;inset-inline-end:-5px;
+  min-width:20px;height:20px;padding:0 5px;border-radius:var(--r-pill);
+  background:var(--gold);color:#fff;
+  font-size:11px;font-weight:800;line-height:20px;text-align:center;
+  font-variant-numeric:tabular-nums;font-style:normal;
+}
+.ghost-cta{
+  flex:1;height:54px;border-radius:var(--r-pill);
+  background:transparent;border:1.5px solid var(--stroke-2);color:var(--ink);
+  font-size:15px;font-weight:800;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.ghost-cta:active{transform:scale(.96);background:var(--beige)}
+.ghost-cta.sm{height:46px;font-size:13px}
+.p-cta.duo{gap:12px}
+.minibtn{
+  flex:none;padding:9px 16px;border-radius:var(--r-pill);
+  background:var(--beige);font-size:12px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast);
+}
+.minibtn:active{transform:scale(.94)}
+.minibtn.brown{background:var(--brown);color:#fff}
+.minibtn.cream{background:var(--cream);color:var(--ink)}
+
+/* ── reviews view ─────────────────────────────────────── */
+.rv-google{
+  display:flex;align-items:center;gap:11px;
+  background:rgba(245,166,35,.12);border:1px dashed rgba(245,166,35,.5);
+  border-radius:16px;padding:12px 14px;margin-bottom:14px;
+  animation:card-in .4s var(--ease);
+}
+.rv-google span{font-size:22px}
+.rv-google p{flex:1;font-size:12px;color:var(--ink-2);line-height:1.5}
+.rv-google b{font-size:13px;color:var(--ink)}
+.rv-summary{display:flex;gap:20px;align-items:center;padding:4px 2px 16px}
+.rv-score{display:grid;justify-items:center;gap:4px;flex:none}
+.rv-score b{font-size:44px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.rv-score small{font-size:11px;color:var(--ink-3);font-weight:700}
+.rv-stars{display:flex;gap:2px}
+.rv-stars .ic{width:14px;height:14px}
+.rv-stars .ic.dim{fill:var(--beige-2);stroke:var(--beige-2)}
+.rv-bars{flex:1;display:grid;gap:5px}
+.rv-bar{display:grid;grid-template-columns:10px 1fr 26px;align-items:center;gap:8px;font-size:10.5px;font-weight:800;color:var(--ink-3)}
+.rv-bar .track{height:6px;border-radius:var(--r-pill);background:var(--beige);overflow:hidden}
+.rv-bar .track i{display:block;height:100%;border-radius:inherit;background:var(--gold);transform-origin:left;animation:bar-grow .8s var(--ease) backwards}
+[dir="rtl"] .rv-bar .track i{transform-origin:right}
+@keyframes bar-grow{from{transform:scaleX(0)}}
+.rv-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px}
+.rvc{
+  flex:none;display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--beige);font-size:12.5px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.rvc:active{transform:scale(.94)}
+.rvc.is-dark,.rvc.is-on{background:var(--ink);color:var(--paper)}
+.rv-list{display:grid;gap:12px}
+.rv-card{
+  background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:14px 15px;display:grid;gap:9px;
+  animation:card-in .4s var(--ease) backwards;
+}
+.rv-head{display:flex;align-items:center;gap:10px}
+.rv-head img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.rv-head>div{flex:1}
+.rv-head b{display:block;font-size:13.5px;font-weight:800}
+.rv-head small{font-size:11px;color:var(--ink-3);font-weight:600}
+.rv-vrf{font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--green);background:rgba(61,163,93,.1);padding:3px 8px;border-radius:var(--r-pill)}
+.rv-body{font-size:13px;line-height:1.6;color:var(--ink-2)}
+.rv-photos{display:flex;gap:8px}
+.rv-photos img{width:74px;height:74px;border-radius:12px;object-fit:cover}
+.rv-foot{display:flex;align-items:center;gap:6px}
+.rv-foot .rv-stars .ic{width:13px;height:13px}
+.rv-foot b{font-size:12.5px;font-weight:800;margin-inline-start:2px}
+
+/* ── write review view ────────────────────────────────── */
+.wr-summary{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:12px;
+}
+.wr-summary img{width:64px;height:64px;border-radius:14px;object-fit:cover}
+.wr-summary>div{flex:1;min-width:0}
+.wr-summary b{display:block;font-size:14px;font-weight:800}
+.wr-price{color:var(--brown);font-size:13.5px;padding-top:2px}
+.wr-q{text-align:center;font-size:21px;font-weight:900;letter-spacing:-.02em;padding:28px 0 4px}
+.wr-sub{text-align:center;font-size:12.5px;color:var(--ink-3);font-weight:600}
+.wr-stars{display:flex;justify-content:center;gap:10px;padding:16px 0 6px}
+.wr-star{width:46px;height:46px;display:grid;place-items:center;transition:transform var(--t-fast) var(--ease-pop)}
+.wr-star svg{width:40px;height:40px;fill:var(--beige-2);stroke:var(--beige-2);stroke-width:1;transition:fill var(--t-fast),stroke var(--t-fast)}
+.wr-star.is-on svg{fill:var(--gold);stroke:var(--gold)}
+.wr-star.pop{animation:star-pop .45s var(--ease-pop)}
+@keyframes star-pop{45%{transform:scale(1.35) rotate(8deg)}}
+.wr-label{font-size:14.5px;font-weight:800;padding:18px 0 9px}
+#wrText{resize:none;font-size:13.5px}
+.wr-photo{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  font-size:13px;font-weight:800;color:var(--brown);padding:6px 2px;
+}
+.wr-photo .ic{width:18px;height:18px}
+.wr-photos{display:flex;gap:8px;padding-top:8px}
+.wr-photos img{width:64px;height:64px;border-radius:12px;object-fit:cover;animation:card-in .35s var(--ease)}
+
+/* ── location picker ──────────────────────────────────── */
+.loc-layout{background:var(--cream)}
+.loc-pad{padding:4px 20px 0;flex:1;min-height:0;overflow-y:auto}
+.use-current{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:15px 4px;text-align:start;
+  font-size:13.5px;font-weight:800;color:var(--brown);
+  border-bottom:1px solid var(--stroke);
+}
+.use-current .ic{width:18px;height:18px}
+.loc-results{display:grid;padding-bottom:14px}
+.loc-row{
+  display:flex;align-items:center;gap:12px;padding:12px 2px;text-align:start;
+  border-bottom:1px solid var(--stroke);
+  animation:card-in .3s var(--ease) backwards;
+}
+.loc-row:last-child{border-bottom:0}
+/* FIX-3c — saved account-address chips above the address input */
+.saved-addrs{display:grid;gap:8px;padding:10px 0 4px}
+.saved-addr{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
+  padding:11px 12px;border:1px solid var(--stroke);border-radius:16px;background:var(--paper);
+  animation:card-in .3s var(--ease) backwards;
+}
+.saved-addr.is-on{border-color:var(--brown);background:var(--brown-soft)}
+.saved-addr .sa-text{flex:1;min-width:0}
+.saved-addr b{display:block;font-size:13.5px;font-weight:800}
+.saved-addr small{font-size:11.5px;color:var(--ink-3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.loc-ic{width:38px;height:38px;flex:none;border-radius:50%;background:var(--beige);color:var(--brown);display:grid;place-items:center}
+.loc-ic .ic{width:17px;height:17px}
+.loc-row>div{flex:1;min-width:0}
+.loc-row b{display:block;font-size:13.5px;font-weight:800}
+.loc-row small{font-size:11.5px;color:var(--ink-3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+
+/* mock iOS keyboard */
+.kb{
+  flex:none;background:#E4DDD3;padding:8px 4px calc(10px + env(safe-area-inset-bottom));
+  display:grid;gap:8px;user-select:none;
+  animation:kb-up .45s var(--ease) backwards;
+}
+@keyframes kb-up{from{transform:translateY(100%)}}
+.kb-row{display:flex;justify-content:center;gap:5px;padding:0 3px}
+.kb-key{
+  flex:1;max-width:36px;height:42px;border-radius:6px;
+  background:#FFFFFF;box-shadow:0 1.5px 0 #B4AA9C;
+  font-size:16px;font-weight:600;color:#241A10;
+  display:grid;place-items:center;
+  transition:transform 80ms var(--ease),background 80ms;
+}
+.kb-key:active{transform:scale(.92);background:#F2EAE0}
+.kb-key.fn{max-width:46px;background:#CFC6B9;font-size:12px}
+.kb-key.mini{max-width:44px;background:#CFC6B9;font-size:12.5px;font-weight:700}
+.kb-key.space{max-width:none;flex:4}
+.kb-key.ret{max-width:82px;flex:2;font-size:12.5px;font-weight:700;background:#CFC6B9}
+.kb-key.shift.is-on{background:#241A10;color:#fff}
+.kb-key svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── story / reel ─────────────────────────────────────── */
+.story{position:absolute;inset:0;overflow:hidden;background:#17100B}
+.story-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:story-zoom 9s linear infinite alternate}
+@keyframes story-zoom{to{transform:scale(1.12)}}
+.story-shade{position:absolute;inset-inline:0;height:34%;pointer-events:none}
+.story-shade.top{top:0;background:linear-gradient(rgba(10,6,3,.7),transparent)}
+.story-shade.bot{bottom:0;background:linear-gradient(transparent,rgba(10,6,3,.82))}
+.story-prog{
+  position:absolute;top:70px;inset-inline-end:22px;width:4px;height:132px;
+  border-radius:var(--r-pill);background:rgba(255,255,255,.25);overflow:hidden;
+}
+.story-prog i{display:block;width:100%;height:100%;border-radius:inherit;background:#fff;transform:scaleY(0);transform-origin:top}
+.story-time{
+  position:absolute;top:212px;inset-inline-end:12px;
+  font-size:10.5px;font-weight:800;color:#fff;opacity:.85;
+  font-variant-numeric:tabular-nums;
+}
+.story-rail{
+  position:absolute;inset-inline-end:14px;bottom:130px;
+  display:grid;gap:14px;justify-items:center;
+}
+.srail-btn{
+  display:grid;justify-items:center;gap:3px;color:#fff;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.srail-btn:active{transform:scale(.85)}
+.srail-btn .ic{width:26px;height:26px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.srail-btn small{font-size:10px;font-weight:800}
+.srail-btn.liked .ic{fill:var(--red);stroke:var(--red)}
+.story-foot{
+  position:absolute;inset-inline:16px;bottom:calc(22px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:11px;
+  background:rgba(20,13,7,.5);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:10px 12px;color:#fff;
+}
+.story-thumb{width:46px;height:46px;border-radius:12px;object-fit:cover;flex:none}
+.story-copy{flex:1;min-width:0}
+.story-copy b{display:block;font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.story-copy small{font-size:10.5px;opacity:.75;font-weight:600}
+.heart-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.fly-heart{
+  position:absolute;font-size:26px;
+  animation:heart-fly 1.3s var(--ease) forwards;
+}
+@keyframes heart-fly{
+  0%{opacity:0;transform:translateY(0) scale(.5)}
+  15%{opacity:1}
+  100%{opacity:0;transform:translateY(-160px) translateX(var(--hx,0)) scale(1.2) rotate(var(--hr,0deg))}
+}
+
+/* ── cart ─────────────────────────────────────────────── */
+.cart-list{display:grid;gap:10px}
+.cart-item{
+  display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:10px;overflow:hidden;
+  animation:card-in .4s var(--ease) backwards;
+}
+.cart-item.leaving{transition:all .32s var(--ease);opacity:0;transform:translateX(-40px) scale(.94)}
+.cart-item img{width:72px;height:72px;object-fit:cover;border-radius:var(--r-img)}
+.ci-name{font-size:13.5px;font-weight:800;line-height:1.25}
+.ci-opts{font-size:11px;color:var(--ink-3);font-weight:600;margin-top:3px;line-height:1.45}
+.ci-price{font-size:13.5px;font-weight:800;color:var(--brown);margin-top:5px}
+/* Side column: note/remove tucked top-right, a HORIZONTAL stepper at the
+   bottom — the old vertical +/qty/−/note/trash stack made every card ~190px
+   tall with the left half empty. */
+.ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;align-self:stretch}
+.ci-actions{display:flex;gap:2px}
+.ci-side .qty{flex-direction:row;padding:3px}
+/* 32px is the tap-target floor — the icons stay 16px, only the hit area grows */
+.ci-side .qty-btn{width:32px;height:32px}
+.ci-side .qty output{font-size:12.5px;min-width:0;padding:2px 0}
+.ci-note-btn,.ci-remove{color:var(--ink-3);width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+/* ── checkout order summary ── */
+.ck-items{background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px;display:grid;gap:11px;margin-bottom:14px}
+.ck-head{display:flex;align-items:center;justify-content:space-between}
+.ck-head h3{margin:0;font-size:14px;font-weight:800}
+.linkbtn{background:none;border:0;padding:4px 0;font-size:12.5px;font-weight:800;color:var(--brown);cursor:pointer}
+.ck-row{display:grid;grid-template-columns:40px 1fr auto auto;gap:10px;align-items:center}
+.ck-row img{width:40px;height:40px;object-fit:cover;border-radius:10px}
+.ck-mid{min-width:0}
+.ck-mid b{display:block;font-size:12.5px;font-weight:800;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-mid small{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck-qty{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.ck-price{font-size:12.5px;font-weight:800;color:var(--brown);text-align:end}
+.ck-price del{display:block;font-size:10.5px;color:var(--ink-3);font-weight:600}
+[dir="rtl"] :is(.ck-price,.ck-qty){direction:ltr;unicode-bidi:isolate;text-align:right}
+.ci-note-btn .ic,.ci-remove .ic{width:16px;height:16px}
+.ci-note-btn.has-note{color:var(--brown)}
+.ci-remove:active{color:var(--red)}
+.ci-note{grid-column:1/-1;padding-top:2px}
+.ci-note input{padding:9px 13px;font-size:12.5px;border-radius:12px;background:var(--beige);border-color:transparent}
+
+.cart-tools{display:grid;gap:16px;padding-top:18px}
+.cart-tools h3,.ck-block h3,.pref h3,.orders-block h3,.resv-block h3{font-size:14.5px;font-weight:800;margin-bottom:10px;letter-spacing:-.01em}
+
+.seg{display:flex;background:var(--beige);border-radius:var(--r-pill);padding:4px;gap:3px}
+.seg button{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 6px;border-radius:var(--r-pill);
+  font-size:12.5px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease);
+}
+.seg button .ic{width:16px;height:16px}
+.seg button.is-on{background:var(--brown);color:#fff;box-shadow:0 6px 14px -8px rgba(110,70,32,.7)}
+.seg.mini{padding:3px}
+.seg.mini button{padding:7px 13px;flex:none}
+
+.ot-fields{display:grid;gap:9px;padding-top:10px}
+.ot-fields:empty{display:none}
+.ot-hint{font-size:12px;color:var(--ink-3);font-weight:600;display:flex;align-items:center;gap:7px;padding:2px 4px}
+.ot-hint .ic{width:14px;height:14px;color:var(--green)}
+.addr-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:14px;padding:12px 13px;
+}
+.addr-row .loc-ic{width:34px;height:34px}
+.addr-row>div{flex:1;min-width:0}
+.addr-row b{display:block;font-size:13px;font-weight:800}
+.addr-row small{font-size:11px;color:var(--ink-3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+
+.schedule-row{display:flex;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
+.sched-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.when-time{width:auto;flex:1;padding:9px 13px;border-radius:var(--r-pill);font-size:13px}
+
+.coupon-field{display:flex;align-items:center;gap:9px;background:var(--paper);border:1.5px dashed var(--stroke-2);border-radius:var(--r-pill);padding:5px 6px 5px 15px}
+[dir="rtl"] .coupon-field{padding:5px 15px 5px 6px}
+.coupon-field .ic{color:var(--brown);flex:none}
+.coupon-field input{background:none;border:0;padding:8px 0;font-size:13px;font-weight:600}
+.coupon-field.is-applied{border-color:var(--green);border-style:solid}
+.coupon-msg{font-size:12px;font-weight:700;padding:7px 6px 0;color:var(--green)}
+.coupon-msg.err{color:var(--red)}
+
+.ordernote label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.ordernote textarea{resize:none;font-size:13px}
+
+.totals{background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);padding:15px;display:grid;gap:9px}
+.tr{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:600}
+.tr b{font-weight:700;font-variant-numeric:tabular-nums}
+.tr.disc{color:var(--green)}
+.tr.grand{border-top:1px dashed var(--stroke-2);padding-top:11px;margin-top:2px;color:var(--ink);font-size:14.5px}
+.tr.grand b{font-weight:900;font-size:17px;color:var(--brown)}
+.minorder{font-size:12.5px;font-weight:700;color:#9C6A12;display:flex;gap:7px;align-items:center;padding:0 4px}
+.waiter-row{display:flex;gap:10px}
+.waiter-row .ghost-cta{flex:1}
+
+/* ── checkout ─────────────────────────────────────────── */
+.ck-block{padding-top:16px}
+.field-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pm-list{display:grid;gap:9px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;
+  padding:12px 14px;transition:all var(--t-fast) var(--ease);text-align:start;
+}
+.pm.is-on{border-color:var(--brown);background:var(--brown-soft)}
+.pm-ic{width:40px;height:40px;flex:none;border-radius:12px;background:var(--beige);display:grid;place-items:center;color:var(--ink-2)}
+.pm.is-on .pm-ic{background:var(--brown);color:#fff}
+.pm b{flex:1;font-size:13.5px;font-weight:800}
+.pm small{display:block;font-weight:600;font-size:11px;color:var(--ink-3);margin-top:2px}
+.pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--stroke-2);display:grid;place-items:center;transition:all var(--t-fast)}
+.pm.is-on .pm-radio{border-color:var(--brown)}
+.pm.is-on .pm-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--brown)}
+.pm-logos{display:flex;gap:4px}
+.pm-logos span{font-size:8.5px;font-weight:800;letter-spacing:.02em;background:var(--beige);border-radius:4px;padding:3px 5px;color:var(--ink-2)}
+.cardform{display:grid;gap:9px;padding-top:10px;animation:card-in .35s var(--ease)}
+.tip-row{display:flex;gap:8px}
+.tip-row button{
+  flex:1;padding:11px 4px;border-radius:14px;
+  background:var(--paper);border:1.5px solid var(--stroke);
+  font-size:13px;font-weight:800;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.tip-row button:active{transform:scale(.93)}
+.tip-row button.is-on{border-color:var(--brown);color:var(--brown);background:var(--brown-soft)}
+.terms{display:flex;gap:10px;align-items:flex-start;padding:16px 2px 0;font-size:12.5px;font-weight:600;color:var(--ink-3);cursor:pointer}
+.terms input{width:17px;height:17px;accent-color:var(--brown);margin-top:1px}
+#checkoutTotals{margin-top:18px}
+
+/* ── confirmed ────────────────────────────────────────── */
+.view-center{justify-content:center}
+.confirm-wrap{position:relative;display:grid;place-items:center;text-align:center;padding:0 34px;gap:7px}
+.confirm-badge svg{width:120px;height:120px;overflow:visible}
+.confirm-badge circle{fill:var(--brown);animation:sp-pop .7s var(--ease-pop) .1s backwards}
+.confirm-badge .check{stroke:#fff;stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease) .6s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confirm-title{font-size:26px;font-weight:900;letter-spacing:-.02em;padding-top:8px}
+.confirm-sub{font-size:13px;color:var(--ink-3);font-weight:600;line-height:1.65}
+.confirm-eta{color:var(--ink-2);font-weight:800}
+.confirm-code{
+  font-size:12.5px;font-weight:800;color:var(--brown);
+  background:var(--brown-soft);border:1px dashed rgba(139,90,43,.45);
+  padding:8px 16px;border-radius:var(--r-pill);margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.confirm-pts{
+  font-size:12px;font-weight:800;color:#3A2200;
+  background:var(--gold);padding:6px 14px;border-radius:var(--r-pill);
+  animation:sp-pop .6s var(--ease-pop) .9s backwards;
+}
+.confirm-pts:empty{display:none}
+.confirm-actions{display:grid;gap:10px;width:100%;padding-top:22px;justify-items:center}
+.confirm-actions .cta{max-width:280px}
+/* Match the Track Order CTA's footprint — the bare ghost pill hugging its own
+   text next to a 280px primary read as an afterthought. */
+.confirm-actions .ghost-cta{width:100%;max-width:280px}
+.confirm-actions .ghost-cta .ic{width:17px;height:17px}
+.confirm-actions .ghost-cta:hover{background:var(--beige)}
+.confetti{position:absolute;inset:-40px 0 auto;height:340px;pointer-events:none;overflow:visible}
+.confetti i{
+  position:absolute;top:40%;left:50%;width:8px;height:12px;border-radius:2px;
+  opacity:0;transform-origin:center;
+  animation:pop-fly 1.25s var(--ease) var(--d,0s) forwards;
+  background:var(--c,#F5A623);rotate:var(--rz,0deg);
+}
+.confetti i.round{border-radius:50%;width:7px;height:7px}
+@keyframes pop-fly{
+  0%{opacity:0;translate:0 0;scale:.4}
+  12%{opacity:1}
+  100%{opacity:0;translate:var(--tx,0) var(--ty,-180px);scale:1;rotate:calc(var(--rz,0deg) + var(--spin,320deg))}
+}
+
+/* ── track ────────────────────────────────────────────── */
+.track-card{background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);padding:17px;display:grid;gap:16px}
+.track-top{display:flex;justify-content:space-between;align-items:center}
+.track-top b{font-size:16.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.tk-eta{text-align:end}
+.tk-eta b{color:var(--brown)}
+.courier{display:flex;align-items:center;gap:11px;background:var(--beige);border-radius:15px;padding:10px}
+.courier img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.courier>div{flex:1}
+.courier b{font-size:14px;font-weight:800}
+.timeline{list-style:none;display:grid;gap:0;padding:2px 4px}
+.tl{display:grid;grid-template-columns:26px 1fr;gap:12px;position:relative;padding-bottom:22px}
+.tl:last-child{padding-bottom:0}
+.tl-node{
+  width:22px;height:22px;border-radius:50%;z-index:2;
+  border:2.5px solid var(--beige-2);background:var(--paper);
+  display:grid;place-items:center;transition:all .4s var(--ease);
+}
+.tl-node svg{width:11px;height:11px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transform:scale(.3);transition:all .3s var(--ease-pop)}
+.tl-line{position:absolute;inset-inline-start:10px;top:22px;bottom:0;width:2.5px;background:var(--beige-2)}
+.tl-line::after{content:"";position:absolute;inset:0;background:var(--brown);transform:scaleY(0);transform-origin:top;transition:transform .6s var(--ease)}
+.tl.done .tl-node,.tl.now .tl-node{border-color:var(--brown);background:var(--brown)}
+.tl.done .tl-node svg{opacity:1;transform:none}
+.tl.done .tl-line::after{transform:none}
+.tl.now .tl-node{box-shadow:0 0 0 0 rgba(139,90,43,.45);animation:pulse 2s infinite}
+.tl-copy b{font-size:14px;font-weight:800;display:block;color:var(--ink-3);transition:color .3s}
+.tl.done .tl-copy b,.tl.now .tl-copy b{color:var(--ink)}
+.tl-copy small{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.rate-prompt{
+  margin-top:16px;background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);
+  padding:16px;text-align:center;font-size:13px;color:var(--ink-2);display:grid;gap:4px;justify-items:center;
+  animation:card-in .45s var(--ease);
+}
+.rate-prompt b{font-size:14.5px;color:var(--ink)}
+.rp-stars{display:flex;gap:8px;padding-top:10px}
+.rp-stars .wr-star{width:40px;height:40px}
+.rp-stars .wr-star svg{width:32px;height:32px}
+
+/* ── profile ──────────────────────────────────────────── */
+.me-card{display:flex;align-items:center;gap:13px;background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-card);padding:14px}
+.me-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.me-card>div{flex:1}
+.me-card b{font-size:16px;font-weight:800}
+.loyalty-card{
+  display:flex;align-items:center;justify-content:space-between;width:100%;
+  margin-top:12px;padding:16px 18px;border-radius:var(--r-card);
+  background:var(--brown-grad);color:#fff;text-align:start;
+  box-shadow:0 16px 30px -16px rgba(110,70,32,.7);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.loyalty-card:active{transform:scale(.98)}
+.loy-amt{font-size:23px;font-weight:900;font-variant-numeric:tabular-nums}
+.loy-amt small{font-size:13px;font-weight:700;opacity:.8}
+.loy-cta{padding:9px 16px;border-radius:var(--r-pill);background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);font-size:12.5px;font-weight:800}
+.pref{padding-top:22px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px}
+.pref-row>span{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.resv-block{padding-top:22px}
+.resv-row{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--stroke);border-radius:16px;padding:12px 14px}
+.resv-info{flex:1;font-size:12.5px;font-weight:700;color:var(--ink-2);line-height:1.45}
+.orders-block{padding-top:22px}
+.orders-list{display:grid;gap:9px}
+.order-row{
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;padding:12px 14px;
+  animation:card-in .4s var(--ease) backwards;text-align:start;width:100%;
+}
+.order-row .ic{color:var(--brown)}
+.order-row>div{flex:1;min-width:0}
+.order-row b{font-size:13px;font-weight:800;display:block}
+.order-row small{font-size:11px;color:var(--ink-3);font-weight:600}
+.order-status{font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);background:var(--brown-soft);color:var(--brown)}
+.orders-empty{font-size:13px;color:var(--ink-3);font-weight:600;padding:6px 2px}
+.wa-line{
+  display:flex;align-items:center;gap:11px;margin-top:22px;width:100%;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;
+  padding:14px 15px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:800;
+}
+.wa-line.slim{margin-top:12px;padding:11px 13px;font-size:12.5px}
+.wa-line .ic:first-child{color:var(--green)}
+.wa-line span:nth-child(2){flex:1;text-align:start}
+.demo-foot{text-align:center;font-size:11px;color:var(--ink-3);padding:26px 0 4px;opacity:.7}
+
+/* ── chat ─────────────────────────────────────────────── */
+.chat-msgs{display:grid;gap:9px;padding-top:4px}
+.msg{max-width:78%;padding:11px 14px;border-radius:18px;font-size:13px;font-weight:600;line-height:1.5;animation:card-in .3s var(--ease)}
+.msg.bot{background:var(--beige);color:var(--ink);justify-self:start;border-start-start-radius:6px}
+.msg.me{background:var(--brown);color:#fff;justify-self:end;border-start-end-radius:6px}
+.chat-chips{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px}
+.chat-chips button{
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--paper);border:1.5px solid var(--beige-2);
+  font-size:12.5px;font-weight:800;color:var(--brown);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.chat-chips button:active{transform:scale(.93)}
+.chat-bar{
+  flex:none;display:flex;gap:10px;align-items:center;
+  padding:10px 20px calc(104px + env(safe-area-inset-bottom));
+}
+.chat-bar input{border-radius:var(--r-pill);height:48px}
+.chat-send{
+  width:48px;height:48px;flex:none;border-radius:50%;
+  background:var(--brown);color:#fff;display:grid;place-items:center;
+  box-shadow:0 10px 22px -10px rgba(110,70,32,.7);
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.chat-send:active{transform:scale(.88)}
+
+/* ── tabbar ───────────────────────────────────────────── */
+.tabbar{
+  position:absolute;inset-inline:16px;bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:var(--z-nav);
+  display:flex;justify-content:space-around;align-items:center;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(18px);
+  border:1px solid var(--stroke);border-radius:26px;
+  padding:10px 8px 9px;
+  box-shadow:0 18px 40px -14px rgba(60,38,16,.35);
+  transition:transform .4s var(--ease),opacity .3s var(--ease);
+}
+.tabbar.is-hidden{transform:translateY(130%);opacity:0;pointer-events:none}
+.tab{
+  display:grid;justify-items:center;gap:4px;color:var(--ink-3);min-width:0;flex:1 1 0;
+  transition:color var(--t-fast),transform var(--t-fast) var(--ease-pop);
+}
+.tab .tab-label{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab:active{transform:scale(.9)}
+.tab .ic{width:22px;height:22px}
+.tab-label{font-size:9.5px;font-weight:800;letter-spacing:.02em}
+/* Cart moved out of the header; its live count now rides the cart tab. */
+.tab--cart .tab-ic{position:relative;display:grid;place-items:center}
+.tab--cart .badge{
+  position:absolute;top:-5px;inset-inline-end:-9px;
+  min-width:17px;height:17px;border-radius:var(--r-pill);
+  background:var(--brown);color:#fff;
+  font-size:10px;font-weight:800;font-style:normal;
+  display:grid;place-items:center;padding:0 4px;
+  outline:2px solid var(--paper);
+  transition:transform .25s var(--ease-pop);
+}
+.tab.is-on{color:var(--brown)}
+.tab.is-on .ic{stroke-width:2.1}
+
+/* ── sheets / scrim / toast ───────────────────────────── */
+.scrim{
+  position:absolute;inset:0;z-index:var(--z-scrim);
+  background:rgba(30,19,8,.45);
+  opacity:0;transition:opacity .3s var(--ease),backdrop-filter .3s var(--ease);
+}
+.scrim.is-open{opacity:1}
+.scrim.blur{backdrop-filter:blur(9px);background:rgba(30,19,8,.35)}
+.sheet{
+  position:absolute;inset-inline:0;bottom:0;z-index:var(--z-sheet);
+  background:var(--cream);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s var(--ease);
+  max-height:78%;overflow-y:auto;
+  box-shadow:0 -18px 50px -20px rgba(36,26,16,.4);
+}
+.sheet.is-open{transform:none}
+.sheet-grab{width:42px;height:5px;border-radius:var(--r-pill);background:var(--beige-2);margin:6px auto 16px}
+.sheet h2{font-size:18.5px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px;text-align:center}
+.sheet h4{font-size:11px;font-weight:800;color:var(--ink-3);letter-spacing:.07em;text-transform:uppercase;margin:14px 0 9px}
+.sheet-sub{font-size:13px;font-weight:600;color:var(--ink-2);margin:-6px 0 14px;text-align:center}
+.sheet-actions{display:flex;gap:10px;padding-top:20px}
+.sheet-actions .cta,.sheet-actions .ghost-cta{height:50px}
+
+.rm-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;padding:11px;
+}
+.rm-row img{width:58px;height:58px;border-radius:12px;object-fit:cover}
+.rm-row>div{flex:1;min-width:0}
+.rm-row b{display:block;font-size:13.5px;font-weight:800}
+.rm-price{color:var(--brown);font-size:13.5px;font-weight:800}
+
+.reward-list{display:grid;gap:8px}
+.reward-row{
+  display:flex;align-items:center;gap:12px;text-align:start;width:100%;
+  background:var(--paper);border:1.5px solid var(--stroke);border-radius:16px;padding:12px 14px;
+  transition:border-color var(--t-fast);
+}
+.reward-row.is-on{border-color:var(--brown)}
+.reward-row .emoji{font-size:22px;width:40px;height:40px;flex:none;border-radius:12px;background:var(--beige);display:grid;place-items:center;font-style:normal}
+.reward-row>div{flex:1}
+.reward-row b{display:block;font-size:13.5px;font-weight:800}
+.reward-row small{font-size:11px;color:var(--ink-3);font-weight:700}
+.reward-row .minibtn:disabled{opacity:.4}
+
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chiprow button{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:var(--r-pill);
+  background:var(--paper);border:1.5px solid var(--stroke);
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+  transition:all var(--t-fast) var(--ease-pop);
+}
+.chiprow button:active{transform:scale(.93)}
+.chiprow button.is-on{border-color:var(--brown);color:var(--brown);background:var(--brown-soft)}
+.chiprow button.full{opacity:.55;text-decoration:line-through}
+.chiprow button.full.is-on{border-color:var(--gold);color:#9C6A12;background:rgba(245,166,35,.12);text-decoration:none}
+.rs-guests{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rs-note{font-size:12px;font-weight:700;color:#9C6A12}
+
+.toast{
+  position:absolute;bottom:106px;left:50%;translate:-50% 16px;z-index:var(--z-toast);
+  background:var(--ink);color:var(--cream);font-size:13px;font-weight:700;
+  padding:11px 18px;border-radius:var(--r-pill);
+  box-shadow:0 14px 34px rgba(36,26,16,.4);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  transition:opacity .3s var(--ease),translate .3s var(--ease);
+  display:flex;align-items:center;gap:8px;max-width:88%;
+}
+.toast.is-on{opacity:1;translate:-50% 0;pointer-events:auto;cursor:pointer}
+.toast .ic{width:16px;height:16px;color:var(--gold)}
+
+/* fly-to-cart */
+.fly-layer{position:absolute;inset:0;z-index:var(--z-fly);pointer-events:none}
+.fly-img{
+  position:absolute;width:64px;height:64px;border-radius:50%;object-fit:cover;
+  box-shadow:0 10px 26px rgba(36,26,16,.45);
+  transition:all .75s cubic-bezier(.4,.1,.3,1);
+}
+
+/* hidden attribute must win over component display rules */
+[hidden]{display:none!important}
+
+/* keep numeric/price strings LTR inside RTL layout */
+[dir="rtl"] :is(.opt-price,.meta-chip,.fcard-price,.fcard-rate,.ci-price,.ci-was,.ci-unit,.p-total b,.tr b,.loy-amt,.confirm-code,.confirm-pts,#trackCode,#trackEta,.cta b,.rm-price,.wr-price,.prr-avg,.p-rate,.rv-score b,.rv-bar,.bcard-rate,.bcard-meta,.mpin .dist,.story-time,.so-row .price,#pRevCount){direction:ltr;unicode-bidi:isolate}
+/* .fcard-rate is absolutely positioned with inset-inline-start, which resolves
+   against the element's OWN direction — the forced ltr above turned "start"
+   into LEFT on an RTL page, parking the rating pill in the same corner as the
+   heart. Pin it to its mirrored corner explicitly. */
+[dir="rtl"] .fcard-rate{inset-inline-start:auto;left:auto;right:8px}
+[dir="rtl"] .story-time{inset-inline-end:auto;right:auto;left:12px}
+/* direction:ltr on a BLOCK element resets its text-align to left; on an RTL page
+   these must still hug the right edge next to their right-aligned neighbours. */
+[dir="rtl"] :is(.tr b,.p-total b,.cta b,.ci-price,.ci-was,.ci-unit){text-align:right}
+[dir="rtl"] .kb{direction:ltr}
+
+/* ── reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .confetti,.heart-layer{display:none}
+}
+
+/* ── real-theme additions (crumb rebuild) ─────────────── */
+.scan-strip{display:flex;align-items:center;gap:6px;margin:2px 0 14px;font-size:12.5px;color:var(--ink-2);font-weight:600}
+.scan-strip b{color:var(--brown)}
+.scan-strip .ic{color:var(--brown)}
+.order-row.link{width:100%;text-decoration:none;color:inherit}
+.ghost-line{display:block;text-align:center;margin:14px 0 4px;padding:12px;border-radius:14px;background:var(--paper);border:1px solid var(--stroke);color:var(--red);font-weight:700;font-size:14px;text-decoration:none}
+.card-note{font-size:13px;color:var(--ink-2);line-height:1.5;padding:12px 14px;background:var(--beige);border-radius:14px}
+.courier-face{width:48px;height:48px;flex:none;border-radius:50%;background:var(--beige);display:grid;place-items:center;color:var(--brown)}
+.courier-face .ic{width:26px;height:26px}
+.err-box{background:rgba(217,80,63,.1);color:var(--red);border:1px solid rgba(217,80,63,.25);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600}
+.loyalty-ok{margin-top:10px;text-align:center;color:var(--green);font-weight:700;font-size:13.5px}
+.sheet-done{display:grid;justify-items:center;gap:8px;text-align:center;padding:14px 0 6px}
+.sheet-done-emoji{font-size:40px}
+.sheet-done b{font-size:17px}
+.sheet-done p{color:var(--ink-2);font-size:13.5px;line-height:1.5}
+.sheet-form{display:grid;gap:6px}
+.sheet-form h4{margin-top:8px;font-size:13px;font-weight:700;color:var(--ink-2)}
+/* A3 · phone-OTP login boxes (scheme-safe via tokens; LTR digits in RTL) */
+.crumb .otp-boxes{display:flex;gap:8px;padding-top:2px}
+.crumb .otp-boxes input{flex:1 1 0;width:auto;min-width:0;padding:0;height:54px;text-align:center;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.crumb .otp-boxes input:focus{border-color:var(--ink)}
+[dir="rtl"] .crumb .otp-boxes{direction:ltr}
+.mpin-face{width:48px;height:48px;border-radius:50%;background:var(--paper);border:3px solid var(--paper);box-shadow:0 10px 22px -8px rgba(36,26,16,.45);display:grid;place-items:center;color:var(--brown);transition:border-color var(--t-fast)}
+.mpin.is-on .mpin-face{border-color:var(--brown);background:var(--brown);color:#fff}
+.mpin-face .ic{width:24px;height:24px}
+.rv-ava{width:38px;height:38px;flex:none;border-radius:50%;background:var(--beige);color:var(--brown);display:grid;place-items:center;font-weight:800;font-size:16px}
+
+/* ── account & track — customer pages ──────────────────── */
+.me-avatar{width:52px;height:52px;flex:none;border-radius:50%;background:var(--brown);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}
+.order-lines{display:grid;gap:8px}
+.order-lines .tr{align-items:flex-start;gap:10px}
+.order-lines .tr span small{display:block;font-size:11px;color:var(--ink-3);font-weight:600}
+.tk-eta .tk-amount{margin-top:5px;text-align:end}
+.track-card.stacked,.wa-line.stacked{margin-top:14px}
+.track-card.stacked-b{margin-bottom:12px}
+.waiter-row .ghost-cta.sm{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.imhere-msg{display:none;margin-top:2px;font-size:13.5px;font-weight:700;color:var(--green);text-align:center}
+.foot-center{display:grid;place-items:center;padding:18px 0 6px}
+.foot-center .minibtn,.empty .minibtn{text-decoration:none}
+.tl.cancelled .tl-node{border-color:var(--red);background:var(--red)}
+.tl.cancelled .tl-copy b{color:var(--red)}
+
+/* ── two-tier nav: secondary sub-category chips ────────── */
+.subchips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;margin-top:2px}
+.subgroup{display:flex;gap:8px}
+.subchip{
+  flex:none;display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:var(--r-pill);
+  background:var(--beige);color:var(--ink-2);
+  font-size:12.5px;font-weight:800;border:1.5px solid transparent;
+  transition:all var(--t-fast) var(--ease);white-space:nowrap;
+}
+.subchip.is-on{background:var(--brown);color:#fff}
+.subchip:active{transform:scale(.93)}
+.subchip-img{width:20px;height:20px;border-radius:50%;object-fit:cover;flex:none}
+.cat-tile[data-has-sub="1"] i::after{
+  content:"";position:absolute;bottom:2px;right:2px;width:8px;height:8px;
+  border-radius:50%;background:var(--gold);border:2px solid var(--cream);
+}
+.cat-tile[data-has-sub="1"] i{position:relative}
+
+/* ── dietary + spice filter row (search overlay) ───────── */
+.diet-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:4px 0 12px}
+.diet-row>button{
+  flex:none;display:inline-flex;align-items:center;gap:5px;
+  padding:8px 13px;border-radius:var(--r-pill);
+  background:var(--beige);color:var(--ink-2);
+  font-size:12.5px;font-weight:800;border:1.5px solid transparent;
+  transition:all var(--t-fast) var(--ease);
+}
+.diet-row>button.is-on{background:var(--brown);color:#fff}
+.diet-spice{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.diet-spice-lbl{font-size:11px;font-weight:800;color:var(--ink-3);letter-spacing:.03em}
+.diet-spice button{
+  flex:none;padding:7px 11px;border-radius:var(--r-pill);
+  background:var(--beige);color:var(--ink-2);font-size:12px;font-weight:800;
+  border:1.5px solid transparent;transition:all var(--t-fast) var(--ease);
+}
+.diet-spice button.is-on{background:var(--brown);color:#fff}
+
+/* ── modifier groups (product modal) ───────────────────── */
+.p-groups{display:grid;gap:16px}
+.p-groups:not(:empty){padding-top:18px}
+.opt-group{display:grid;gap:6px}
+.opt-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.opt-head b{font-size:14px;font-weight:800;color:var(--ink)}
+.opt-req{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--brown);background:var(--brown-soft);padding:3px 8px;border-radius:var(--r-pill)}
+.opt-req.optional{color:var(--ink-3);background:var(--beige)}
+.p-groups .opt-ctl:not(.box){border-radius:50%}
+
+/* ── nearest-branch Leaflet map ────────────────────────── */
+.nearest-branch-btn{
+  display:flex;align-items:center;gap:8px;width:100%;margin:10px 0 4px;
+  padding:12px 15px;border-radius:14px;background:var(--paper);
+  border:1px solid var(--stroke);color:var(--ink);font-size:13.5px;font-weight:800;
+}
+.nearest-branch-btn .loc-ic{width:30px;height:30px;flex:none;border-radius:50%;background:var(--beige);display:grid;place-items:center;color:var(--brown)}
+.sheet.sheet-tall{max-height:88vh;display:flex;flex-direction:column}
+.branchmap{width:100%;height:260px;border-radius:var(--r-img);overflow:hidden;background:var(--beige);margin-bottom:8px}
+.branchmap .leaflet-container{height:100%;width:100%;font-family:var(--font-ui)}
+.geo-attrib{font-size:10.5px;color:var(--ink-3);text-align:center;margin-bottom:10px}
+.branch-list{display:grid;gap:8px;overflow-y:auto}
+.branch-row{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  padding:11px 13px;border-radius:14px;background:var(--paper);
+  border:1px solid var(--stroke);color:inherit;
+}
+.branch-row .loc-ic{width:34px;height:34px;flex:none;border-radius:50%;background:var(--beige);display:grid;place-items:center;color:var(--brown)}
+.branch-row>div{flex:1;min-width:0}
+.branch-row b{display:block;font-size:13.5px;font-weight:800}
+.branch-row small{display:block;font-size:11px;color:var(--ink-3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.branch-dist{font-size:12px;font-weight:800;color:var(--brown);flex:none}
+
+/* ── stories rail + full-screen viewer ─────────────────── */
+/* the rail bleeds past .body-pad's 20px gutter so bubbles scroll edge-to-edge */
+.reel-rail{display:flex;gap:14px;overflow-x:auto;margin:2px -20px 12px;padding:2px 20px 4px;scrollbar-width:none}
+.reel-rail::-webkit-scrollbar{display:none}
+.reel-rail[hidden]{display:none}
+.reel-bubble{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;width:68px;transition:transform var(--t-fast) var(--ease-pop)}
+.reel-bubble:active{transform:scale(.92)}
+.reel-ring{width:60px;height:60px;border-radius:50%;padding:2.5px;background:var(--brown-grad);display:grid;place-items:center}
+.reel-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--cream)}
+.reel-bubble small{font-size:11px;font-weight:700;color:var(--ink-2);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reel-viewer{position:absolute;inset:0;z-index:var(--z-fly);background:#000;opacity:0;transition:opacity .3s var(--ease)}
+.reel-viewer.is-open{opacity:1}
+.reel-viewer[hidden]{display:none}
+.reel-progress{position:absolute;top:calc(10px + env(safe-area-inset-top));inset-inline:12px;z-index:3;display:flex;gap:5px}
+.reel-seg{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.28);overflow:hidden}
+.reel-seg i{display:block;height:100%;width:0;background:#fff;transition:width .05s linear}
+.reel-close{position:absolute;top:calc(24px + env(safe-area-inset-top));inset-inline-end:16px;z-index:4;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:grid;place-items:center}
+.reel-close .ic{width:20px;height:20px}
+.reel-stage{position:absolute;inset:0;display:flex;align-items:flex-end}
+.reel-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel-nav{position:absolute;top:0;bottom:0;width:35%;z-index:2;background:transparent;border:0}
+.reel-nav.prev{inset-inline-start:0}
+.reel-nav.next{inset-inline-end:0}
+.reel-foot{position:relative;z-index:3;width:100%;padding:24px 22px calc(30px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
+.reel-caption{color:#fff;font-size:17px;font-weight:800;line-height:1.35;margin-bottom:14px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.reel-cta{display:inline-block;padding:13px 24px;font-size:13px;text-decoration:none}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME-RESCUE (wave 3) — crumb fixes. Appended so the port above stays
+   readable; every block names the finding it closes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── CRUMB-F9 · the theme's typeface never applied ──────────────────────────
+   The shared layout ships `body{font-family:Roboto!important}`, which crumb's
+   own `body{font-family:var(--font-ui)}` can never beat. Declaring the family on
+   the theme root instead wins for every descendant (the !important only binds
+   `body` itself; `.app` carries its own declaration, so nothing inherits Roboto). */
+.app,
+.app input,.app textarea,.app select,.app button{font-family:var(--font-ui)}
+[dir="rtl"] .app,
+[dir="rtl"] .app input,[dir="rtl"] .app textarea,
+[dir="rtl"] .app select,[dir="rtl"] .app button{font-family:var(--font-ar)}
+
+/* ── CRUMB-F11 · iOS zoom-on-focus (ALL-F1) ─────────────────────────────────
+   Safari iOS force-zooms any focused field below 16px and never zooms back.
+   Keep the drawn size by scaling the box, not the text. */
+.app input,.app textarea,.app select{font-size:16px}
+.so-field input{font-size:16px}
+.ci-note input{font-size:16px;padding:8px 12px}
+.coupon-field input{font-size:16px}
+.ordernote textarea{font-size:16px}
+#chatInput,#exSearch,#rvSearch,#locInput,#soInput{font-size:16px}
+
+/* ── CRUMB-F12 · touch targets (ALL-F2) ─────────────────────────────────────
+   Controls that must stay visually small get a centred invisible hit box.
+   The fav heart + add button read best at 32px, so they take the ::after hit box
+   too (a 44px grown button dwarfed the thumbnail). .fcard-fav is already absolute,
+   so it needs no positioning ctx; .fcard-add does. */
+.fcard-fav,.fcard-add{width:32px;height:32px}
+.fcard-add{position:relative}
+:is(.fcard-fav,.fcard-add)::after{content:"";position:absolute;top:50%;left:50%;translate:-50% -50%;width:44px;height:44px}
+:is(.so-clear,.qty-btn,.rvc,.wr-star,.srail-btn,.diet-row button,.subchip,.tab,.chat-send,.seg button,.tip-row button,.chiprow button){position:relative}
+:is(.so-clear,.qty-btn,.rvc,.wr-star,.srail-btn,.diet-row button,.subchip,.chat-send,.tip-row button)::after{
+  content:"";position:absolute;top:50%;left:50%;translate:-50% -50%;
+  width:max(100%,44px);height:max(100%,44px);z-index:0;
+}
+
+/* ── CRUMB-F20 · store status strip ─────────────────────────────────────────
+   A customer could not tell whether the restaurant was open, or how long an
+   order takes, anywhere in the theme. */
+.store-strip{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin:0 0 14px;padding:11px 14px;
+  background:var(--paper);border:1px solid var(--stroke);border-radius:16px;
+  font-size:12.5px;font-weight:700;color:var(--ink-2);
+}
+.store-strip .ss-dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--green)}
+.store-strip.is-closed .ss-dot{background:var(--red)}
+.store-strip .ss-state{color:var(--green)}
+.store-strip.is-closed .ss-state{color:var(--red)}
+.store-strip .ss-sep{color:var(--ink-3)}
+.store-strip .ss-addr{color:var(--ink-3);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── F2 · brand / follow row, ported from crave (green accent → --brown) ────── */
+.brand-row{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.brand-info{flex:1;min-width:0}
+.brand-name{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.brand-followers{display:block;font-size:12px;color:var(--ink-3);margin-top:2px}
+/* verified = a filled gold seal + white check. */
+.verified-badge{display:inline-flex;align-items:center;vertical-align:middle;flex:none;line-height:0}
+.verified-badge .vb-seal{width:17px;height:17px;display:block}
+.verified-badge .vb-seal-fill{fill:var(--gold)}
+.verified-badge .vb-seal-check{fill:#fff}
+/* explicit sheet close (top corner); wired in JS (crumb closes via the scrim). */
+.sheet .sheet-x{position:absolute;inset-block-start:12px;inset-inline-end:14px;width:34px;height:34px;margin:0;border-radius:50%;border:0;background:var(--brown-soft);color:var(--brown);display:grid;place-items:center;cursor:pointer;z-index:2}
+.sheet .sheet-x .ic{width:18px;height:18px;fill:none;stroke:currentColor}
+.sheet .sheet-x:active{transform:scale(.9)}
+
+/* ── cover photo inside the brown head (brown → warm scrim over the photo,
+   keeps the rounded-bottom band) ── */
+.brown-head.has-cover{position:relative;overflow:hidden}
+.crumb-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.crumb-cover-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(165deg, rgba(90,62,36,.80), rgba(50,34,20,.72))}
+.brown-head.has-cover > *:not(.crumb-cover-img):not(.crumb-cover-scrim){position:relative;z-index:2}
+
+/* ── collapsing header ── */
+.cv-condensed{
+  position:absolute;inset-block-start:0;inset-inline:0;z-index:6;
+  display:flex;align-items:center;gap:10px;color:var(--ink);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;
+  background:var(--cream);box-shadow:0 6px 18px rgba(60,40,24,.14);
+  border-block-end:1px solid var(--brown-soft);
+  transform:translateY(-100%);opacity:0;pointer-events:none;
+  transition:transform .28s var(--ease,cubic-bezier(.32,.72,.24,1)),opacity .28s var(--ease,cubic-bezier(.32,.72,.24,1));
+}
+.cv-condensed.is-on{transform:none;opacity:1;pointer-events:auto}
+.cv-condensed-logo{width:32px;height:32px;border-radius:11px;overflow:hidden;flex:none;background:var(--brown-soft);display:grid;place-items:center}
+.cv-condensed-logo img{width:100%;height:100%;object-fit:cover}
+.cv-condensed-name{flex:1;min-width:0;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cv-condensed-actions{display:flex;gap:7px;flex:none}
+.cv-condensed-actions .cv-cbtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--brown-soft);color:var(--brown);border:0;cursor:pointer}
+.cv-condensed-actions .cv-cbtn .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+@media (prefers-reduced-motion:reduce){.cv-condensed{transition:none}}
+.followbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--r-pill);background:var(--brown);color:#fff;font-size:13px;font-weight:700;flex:none;transition:transform var(--t-fast) var(--ease-pop),background var(--t-fast)}
+.followbtn:active{transform:scale(.94);background:var(--brown-deep)}
+.followbtn .following-label{display:none}
+.followbtn.is-on{background:var(--beige);color:var(--ink-2);border:1.5px solid var(--stroke-2)}
+.followbtn.is-on .follow-label,.followbtn.is-on .ic{display:none}
+.followbtn.is-on .following-label{display:inline}
+
+/* ── CRUMB-F5 · the offer strip is now data-driven ──────────────────────────
+   (the hard-coded "Up to 40% off" banner is gone; this renders only when the
+   store actually has a public coupon) */
+.offer-strip{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:start;
+  margin:0 0 16px;padding:13px 15px;border-radius:18px;
+  background:var(--brown-soft);border:1px dashed var(--brown);color:var(--ink);
+}
+.offer-strip .ic{color:var(--brown)}
+.offer-strip b{display:block;font-size:13.5px;font-weight:800}
+.offer-strip small{display:block;font-size:12px;color:var(--ink-2);font-weight:600;margin-top:1px}
+.offer-strip code{
+  margin-inline-start:auto;flex:none;font-family:inherit;font-size:12.5px;font-weight:900;
+  letter-spacing:.06em;padding:6px 11px;border-radius:var(--r-pill);
+  background:var(--brown);color:#fff;
+}
+
+/* ── CRUMB-F1/F8 · tax line ────────────────────────────────────────────── */
+.tr.tax b{font-variant-numeric:tabular-nums}
+
+/* ── CRUMB-F7 · appearance control (Profile → Appearance) ──────────────── */
+.appearance-row .seg.mini{flex:none}
+
+/* ═══ CRUMB-F10 · real breakpoints ══════════════════════════════════════════
+   crumb had exactly one width-based media query in 70 KB, and it only set a
+   background colour, so 1280px desktop rendered a 520px phone strip in a black
+   void. The shell now grows, and the card grid becomes a real multi-column grid. */
+@media (min-width:700px){
+  .app{max-width:720px}
+  .fgrid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .cat-row{justify-content:center}
+  .body-pad,.view-scroll{padding-inline:26px}
+  .brown-head{padding-inline:26px}
+}
+@media (min-width:1024px){
+  .app{max-width:1040px;border-inline:1px solid var(--stroke)}
+  .fgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  /* reading/form surfaces stay a comfortable column instead of stretching */
+  .view[data-view="checkout"] .view-scroll > *,
+  .view[data-view="cart"] .view-scroll > *,
+  .view[data-view="product"] .p-body,
+  .view[data-view="review-new"] .view-scroll > *{max-width:760px;margin-inline:auto}
+  .view[data-view="product"] .p-hero{aspect-ratio:2.4}
+  .p-cta,.chat-bar{padding-inline:max(20px,calc((100% - 760px) / 2))}
+  .tabbar{max-width:620px;margin-inline:auto;inset-inline:0}
+  .toast{bottom:112px}
+}
+
+.crumb .home-order-types{margin-top:14px;margin-bottom:14px}
+.crumb .bh-icon-labeled{width:50px;border-radius:18px;display:flex;flex-direction:column;gap:1px;font-size:9px;font-weight:900;letter-spacing:.06em}
+.crumb .bh-icon-labeled .ic{width:18px;height:18px;margin-top:5px}
+.crumb .language-sheet-options{margin-top:18px}
+.crumb-banners{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:14px 0 18px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.crumb-banners::-webkit-scrollbar{display:none}
+/* flex-basis had a stray colon (`0 0:min(...)`), which voided the whole shorthand and
+   collapsed each slide to ~112px on a phone. One slide per screen, next one peeking. */
+.crumb-banner{position:relative;flex:0 0 88%;max-width:520px;min-height:168px;border-radius:24px;overflow:hidden;scroll-snap-align:start;color:#fff;background:var(--brown);text-decoration:none}
+.crumb-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.crumb-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(45,25,14,.84),rgba(45,25,14,.15))}
+.crumb-banner span{position:relative;z-index:1;min-height:168px;padding:22px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.crumb-banner small{font-weight:700}.crumb-banner b{font-size:clamp(20px,5.6vw,24px);line-height:1.15;max-width:15ch}.crumb-banner em{margin-top:14px;padding:8px 14px;border-radius:999px;background:#fff;color:var(--brown);font-style:normal;font-weight:800}
+/* Single banner shouldn't leave a peek gap — let it fill the row. */
+.crumb-banner:only-child{flex-basis:100%}
+.crumb .cat-row{gap:12px;padding:4px 2px 12px;scroll-padding-inline:2px}
+.crumb .cat-tile{width:84px;gap:9px}
+.crumb .cat-tile i{
+  width:78px;height:78px;border-radius:22px;overflow:hidden;
+  background:linear-gradient(145deg,var(--paper),var(--beige));
+  border:2px solid color-mix(in srgb,var(--brown) 12%,transparent);
+  box-shadow:0 10px 24px -14px rgba(87,52,29,.48);
+}
+.crumb .cat-tile i img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.crumb .cat-tile span{max-width:84px;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+.crumb .cat-tile.is-on i{background:var(--brown);border-color:var(--brown);box-shadow:0 10px 24px -12px rgba(87,52,29,.58)}
+.crumb [data-view="explore"] .view-scroll{padding:14px 20px 0;background:linear-gradient(180deg,var(--beige) 0, var(--cream) 240px)}
+.crumb [data-view="explore"] .page-head{padding:8px 2px 12px}
+.crumb .nearest-branch-btn{margin:0 0 18px;padding:15px 16px;border-radius:18px;box-shadow:0 10px 28px -20px rgba(87,52,29,.5)}
+.crumb .branch-cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;padding:0 0 calc(110px + env(safe-area-inset-bottom));margin:0;overflow:visible;
+}
+.crumb .bcard{
+  width:100%;min-height:142px;padding:20px;border-radius:22px;
+  border:1px solid color-mix(in srgb,var(--brown) 18%,transparent);
+  box-shadow:0 12px 30px -20px rgba(87,52,29,.48);text-align:start;
+  background:linear-gradient(145deg,var(--paper),color-mix(in srgb,var(--beige) 36%,var(--paper)));
+}
+.crumb .bcard.is-on{border-color:var(--brown);box-shadow:0 14px 34px -18px rgba(87,52,29,.58)}
+.crumb .bcard-top b{font-size:17px}
+.crumb .bcard-addr{font-size:12.5px;line-height:1.45;white-space:normal}
+.crumb .bcard-pick{margin-top:auto}
+.crumb #locGeoAttrib{margin:6px 0 16px}
+@media (min-width:1440px){
+  .app{max-width:1180px}
+}
+
+/* ═══ CRUMB-F7 · dark mode ══════════════════════════════════════════════════
+   A real token remap in crumb's own warm palette (dark roasted browns, not an
+   inverted white UI). Driven by prefers-color-scheme AND by the Appearance
+   control on the Profile tab; the choice is applied before first paint by the
+   inline bootstrap in _brand.blade.php, so there is no cream flash. */
+:root[data-crumb-theme="dark"]{
+  --cream:#17120C;
+  --paper:#211A12;
+  --beige:#2C231A;
+  --beige-2:#3A2F23;
+  --stroke:rgba(244,239,232,.10);
+  --stroke-2:rgba(244,239,232,.18);
+  --ink:#F4EFE8;
+  --ink-2:#C3B7A7;
+  --ink-3:#9A8D7E;
+}
+:root[data-crumb-theme="dark"] body{background:#0C0906}
+/* surfaces that were hard-coded translucent white */
+:root[data-crumb-theme="dark"] .tabbar{background:rgba(33,26,18,.92)}
+:root[data-crumb-theme="dark"] .fcard-fav{background:rgba(33,26,18,.92);color:var(--ink)}
+:root[data-crumb-theme="dark"] .fab{background:rgba(33,26,18,.72);color:var(--ink)}
+:root[data-crumb-theme="dark"] .round-btn{background:var(--paper);color:var(--ink)}
+:root[data-crumb-theme="dark"] .so-field.cream,
+:root[data-crumb-theme="dark"] .minibtn.cream{background:var(--beige);color:var(--ink)}
+/* "ink pills" invert: on a dark surface an --ink fill is light, so its label
+   must go dark rather than stay white */
+:root[data-crumb-theme="dark"] :is(.rvc.is-dark,.rvc.is-on){background:var(--ink);color:#17120C}
+:root[data-crumb-theme="dark"] .toast{background:var(--ink);color:#17120C}
+:root[data-crumb-theme="dark"] .toast .ic{color:#9C6A12}
+/* the explore map art is a light illustration — keep it legible */
+:root[data-crumb-theme="dark"] .map-art rect{fill:#241D15}
+:root[data-crumb-theme="dark"] .empty-art{opacity:.5}
+:root[data-crumb-theme="dark"] img.story-img,
+:root[data-crumb-theme="dark"] .p-hero img{filter:brightness(.94)}
+
+/* ── CRUMB-F25 · avatar fallback (the store logo 404s when none was uploaded) ── */
+.me-avatar{
+  position:relative;width:48px;height:48px;flex:none;border-radius:50%;
+  background:var(--brown-soft);color:var(--brown);
+  display:grid;place-items:center;font-size:19px;font-weight:900;overflow:hidden;
+}
+.me-avatar.sm{width:42px;height:42px;font-size:16px}
+.me-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ── CRUMB-F17 · social sign-in block ─────────────────────────────────────── */
+.social-block{margin:16px 0 4px}
+.social-block :is(a,button){min-height:48px}
+/* the review textarea sets its own size later in the sheet block */
+#wrText,#orderNote{font-size:16px}
+
+/* ── CRUMB-F10 follow-up · the wide-screen CTA bar must stay inside the shell ──
+   Padding-based centring on .p-cta made its button 760px starting at the app's
+   left inset, so its right edge fell outside the app's overflow:clip and the last
+   ~10% of the Checkout button hit-tested to <body>. Cap the row instead. */
+@media (min-width:1024px){
+  .p-cta,.chat-bar{padding-inline:20px}
+  .p-cta > *{max-width:none}
+  .p-cta{max-width:800px;margin-inline:auto;width:100%}
+}
+
+/* Keyboard focus rings (a11y). Only input :focus was styled — every button,
+   link, icon button, category tile, menu card, order-type option and nav tab
+   was invisible to keyboard users. One brand-brown ring for all (matching the
+   input focus colour); the outline follows each control's own radius, so round
+   icon buttons ring as circles. */
+.crumb a:focus-visible,
+.crumb button:focus-visible,
+.crumb [tabindex]:focus-visible,
+.crumb .cat-tile:focus-visible,
+.crumb .tab:focus-visible { outline:2px solid var(--brown); outline-offset:2px; }
+/* inputs already show a brown border on focus; suppress the ring to avoid a
+   double indicator. */
+.crumb input:focus-visible,
+.crumb textarea:focus-visible,
+.crumb select:focus-visible { outline:none; }
+
+/* ── cart line pricing (strike-through / qty×unit) ─────────────────────── */
+.ci-priceline{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:4px}
+.ci-was{font-size:11px;font-weight:600;color:var(--ink-3);text-decoration:line-through}
+.ci-unit{font-size:11px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.cart-item>img[data-open],.cart-item .ci-name[data-open]{cursor:pointer}
+
+/* ── cart + checkout sweep (ported from soiree) ───────────
+   The checkout summary is the last thing read before paying: rows were
+   11px apart with no rule and the ×n column jittered line to line, so it
+   scanned as loose text rather than a list. Dividers, a fixed tabular
+   quantity chip, and hit areas that clear the 44px floor on the controls
+   a thumb has to find on the way to paying. */
+.ck-head{gap:10px;padding:4px 0 2px}
+.ck-head :is(.ck-edit,.linkbtn){min-height:44px;display:inline-flex;align-items:center;padding:0 8px;margin-inline-end:-8px;flex:none}
+.ck-items{gap:0}
+.ck-row{grid-template-columns:40px minmax(0,1fr) auto auto;padding:9px 0}
+.ck-row + .ck-row{border-top:1px solid var(--stroke)}
+.ck-row--combo{grid-template-columns:minmax(0,1fr) auto auto;align-items:flex-start}
+.ck-qty{min-width:30px;text-align:center;font-variant-numeric:tabular-nums;background:var(--beige);border-radius:9px;padding:3px 6px}
+.ck-price{font-variant-numeric:tabular-nums;line-height:1.25}
+.linkbtn{min-height:44px;display:inline-flex;align-items:center}
+
+/* ── cart tap targets (ported from soiree) ────────────────
+   Controls keep their drawn size; a transparent ::after grows only the hit
+   area. Growth on each axis is capped at half the neighbour gap so no two
+   targets overlap — a thumb aiming for "note" must never hit "delete". */
+.ci-note-btn,.ci-remove{position:relative}
+.ci-note-btn::after,.ci-remove::after{content:"";position:absolute;inset:-4px -1px}
+
+/* ── tap floor (a11y, 44px) ───────────────────────────────
+   Measured on the live home page: these controls drew 25–43px against the
+   44px guideline. Text pills take a min-height (they already carry padding, so
+   nothing reflows); icon buttons keep their drawn size and grow a transparent
+   ::after instead, capped at half the neighbour gap so no two targets overlap. */
+select{min-height:44px}
+input[type=checkbox],input[type=radio]{inline-size:20px;block-size:20px}
+.tab,.minibtn.brown,.rvc,.seeall,.splash-skip,.bh-loc,.readmore{min-height:44px}
+.round-btn,.bh-icon,.fab,.fab.back{width:44px;height:44px}
+.so-clear{position:relative}
+.so-clear::after{content:"";position:absolute;inset:-5px}
+
+/* The theme's own order-type segments (delivery / pickup / dine-in) drew 33–41px
+   tall — the tallest-traffic choice on the page, and the last group under the
+   44px floor after the tap-floor pass. */
+.seg button{min-height:44px}
+
+/* ── T4 order-timeline change motion ──────────────────────────────
+   change-driven pops/flashes on the class flips updateUI performs;
+   the connector fill + checkmark are already transitioned. Neutralised
+   by the global prefers-reduced-motion guard above (no per-rule block). */
+@keyframes mbStepPop{0%{transform:scale(.55)}60%{transform:scale(1.14)}100%{transform:none}}
+@keyframes mbStepFlash{0%,100%{opacity:1}42%{opacity:.42}}
+@keyframes mbDone{0%{transform:scale(.82);opacity:.5}55%{transform:scale(1.16)}100%{transform:none;opacity:1}}
+.tl.done .tl-node{animation:mbStepPop .5s var(--ease-pop,ease)}
+.tl.now .tl-copy{animation:mbStepFlash .8s ease}
+.tl:last-child.done .tl-node{animation:mbDone .7s var(--ease-pop,ease)}
+
+/* ── MC-34 currency-estimate notice, crumb skin ─────────────────────────
+   Renders into the theme's own slot right under the topbar
+   (div.qc-cen-slot[data-mb-cur-mount] in the blade) — a normal in-flow
+   section: pushes content down, scrolls with the page, can never cover
+   the topbar or the bottom nav. Bakery beige chip. */
+#qc-cur-estimate{
+  margin:10px auto;width:max-content;max-width:min(92%,560px);
+  border-radius:999px;padding:8px 15px;font-size:11.5px;letter-spacing:.01em;
+  background:var(--beige);border:1px solid var(--beige-2);color:var(--brown);font-weight:600;
+}
+#qc-cur-estimate .qc-cen-ic{stroke:var(--brown)}
+
+/* ── notification-center panel — crumb skin: recolor the shared structure in
+   _partials/notif-bell (geometry + layout live in that partial's baseline).
+   Every var() carries a literal default so it renders even when the panel
+   sits outside this theme's token scope. */
+.mb-nb-card{--nb-surface:var(--cream,#FCFAF7);--nb-surface-2:var(--beige-2,#EAE0D2);--nb-line:var(--beige-2,#EAE0D2);--nb-ink:var(--ink,#241A10);--nb-muted:var(--ink-2,#6F6257);--nb-accent:var(--gold,#F5A623)}
+
+/* ═══ Lane B (B9) · dark-mode gap fixes on top of crumb's NATIVE dark palette
+   (:root[data-crumb-theme="dark"], CRUMB-F7). Two gaps:
+   1. caramel-as-INK: --brown (#8B5A2B) is only ~2.7:1 on the dark surfaces, so
+      every place it is used as text/icon ink lifts to the same-hue #D9A968
+      (≥7:1). Fills (followbtn, chips with white labels) keep the deep caramel.
+   2. the OTP keypad keys were hard-coded white. ═══ */
+:root[data-crumb-theme="dark"] .round-btn.beige,
+:root[data-crumb-theme="dark"] .bh-search-field .ic,
+:root[data-crumb-theme="dark"] .seeall,
+:root[data-crumb-theme="dark"] .cat-tile.is-on span,
+:root[data-crumb-theme="dark"] .fcard-price,
+:root[data-crumb-theme="dark"] .so-field .ic,
+:root[data-crumb-theme="dark"] .so-row .price,
+:root[data-crumb-theme="dark"] .bcard-addr .ic,
+:root[data-crumb-theme="dark"] .bcard-pick,
+:root[data-crumb-theme="dark"] .seller-act,
+:root[data-crumb-theme="dark"] .meta-chip .ic,
+:root[data-crumb-theme="dark"] .readmore,
+:root[data-crumb-theme="dark"] .opt.is-on .opt-price,
+:root[data-crumb-theme="dark"] .qty-btn,
+:root[data-crumb-theme="dark"] .prr-avg,
+:root[data-crumb-theme="dark"] .p-cart-jump,
+:root[data-crumb-theme="dark"] .wr-price,
+:root[data-crumb-theme="dark"] .wr-photo,
+:root[data-crumb-theme="dark"] .use-current,
+:root[data-crumb-theme="dark"] .loc-ic,
+:root[data-crumb-theme="dark"] .ci-price,
+:root[data-crumb-theme="dark"] .linkbtn,
+:root[data-crumb-theme="dark"] .ck-price,
+:root[data-crumb-theme="dark"] .ci-note-btn.has-note,
+:root[data-crumb-theme="dark"] .coupon-field .ic,
+:root[data-crumb-theme="dark"] .tr.grand b,
+:root[data-crumb-theme="dark"] .tip-row button.is-on,
+:root[data-crumb-theme="dark"] .confirm-code,
+:root[data-crumb-theme="dark"] .tk-eta b,
+:root[data-crumb-theme="dark"] .order-row .ic,
+:root[data-crumb-theme="dark"] .order-status,
+:root[data-crumb-theme="dark"] .chat-chips button,
+:root[data-crumb-theme="dark"] .tab.is-on,
+:root[data-crumb-theme="dark"] .rm-price,
+:root[data-crumb-theme="dark"] .chiprow button.is-on,
+:root[data-crumb-theme="dark"] .scan-strip b,
+:root[data-crumb-theme="dark"] .scan-strip .ic,
+:root[data-crumb-theme="dark"] .courier-face,
+:root[data-crumb-theme="dark"] .mpin-face,
+:root[data-crumb-theme="dark"] .rv-ava,
+:root[data-crumb-theme="dark"] .opt-req,
+:root[data-crumb-theme="dark"] .nearest-branch-btn .loc-ic,
+:root[data-crumb-theme="dark"] .branch-row .loc-ic,
+:root[data-crumb-theme="dark"] .branch-dist,
+:root[data-crumb-theme="dark"] .verified-badge,
+:root[data-crumb-theme="dark"] .verified-badge svg,
+:root[data-crumb-theme="dark"] .offer-strip .ic,
+:root[data-crumb-theme="dark"] #qc-cur-estimate,
+:root[data-crumb-theme="dark"] #qc-cur-estimate .qc-cen-ic{color:#D9A968}
+/* icon strokes follow the lifted ink */
+:root[data-crumb-theme="dark"] #qc-cur-estimate .qc-cen-ic{stroke:#D9A968}
+/* is-on states that paint the deep-caramel FILL keep their white label */
+:root[data-crumb-theme="dark"] .bcard.is-on .bcard-pick,
+:root[data-crumb-theme="dark"] .mpin.is-on .mpin-face{color:#fff}
+/* OTP keypad */
+:root[data-crumb-theme="dark"] .kb-key{background:var(--beige);box-shadow:0 1.5px 0 #0C0906}
+:root[data-crumb-theme="dark"] .kb-key:active{background:var(--beige-2)}
+:root[data-crumb-theme="dark"] .kb-key.shift.is-on{background:var(--ink);color:#17120C}
+
+/* topbar toggle icons (Lane B) — rides crumb's NATIVE appearance system
+   (data-crumb-theme on :root, #appearanceSeg, store key "appearance"):
+   light shows the moon (action = go dark), dark shows the sun */
+.crumb .mb-th-sun{display:none}
+:root[data-crumb-theme="dark"] .crumb .mb-th-sun{display:block}
+:root[data-crumb-theme="dark"] .crumb .mb-th-moon{display:none}
+
+/* store subtitle in the brand band (2-line clamp, muted) — folded in to match the concept + the crave/aurora themes */
+.brand-tagline{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:12px;line-height:1.42;color:var(--ink-3);margin-top:1px;word-break:break-word}
+
+/* ═══════════════════════════════════════════════════════════
+   Hotel guest layer — crumb skin  (copy-adapt of crave L0.6 reference)
+   ───────────────────────────────────────────────────────────
+   Chip slot: .brand-row#crumbBrandRow marks data-mb-hotel-chip-slot; the shared
+   partial mounts the room chip beside .followbtn#crumbFollowBtn. Maps the shared
+   --mbh-* token contract onto crumb's own scheme-aware tokens (paper/ink/brown/
+   stroke/r-card/r-pill/r-sheet) so re-ink holds on the light/dark flip (crumb's
+   caramel --brown is constant in both palettes; on-brown text stays #fff, always
+   readable). Only the hub paints an opaque surface (a modal legitimately does);
+   the chip + checkout controls stay translucent / borderless so they never fight
+   crumb's warm cream chrome. Scoped under .crumb (the .app.crumb#app root the hub
+   relocates into). Logical props for RTL.
+   ═══════════════════════════════════════════════════════════ */
+.crumb #mbHotelChip,
+.crumb #mbHotelOrderCtrls,
+.crumb #mbHotelBook,
+.crumb #mbHotelHub{
+  --mbh-surface:var(--paper);
+  --mbh-ink:var(--ink);
+  --mbh-muted:var(--ink-3);
+  --mbh-accent:var(--brown);
+  --mbh-on-accent:#fff;
+  --mbh-border:var(--stroke-2);
+  --mbh-radius:var(--r-card);
+  --mbh-font:var(--font-ui);
+}
+
+/* ── Room chip: a compact pill sitting with the follow button in the brand row ── */
+.crumb #mbHotelChip{
+  margin:0;padding:5px 11px;gap:7px;
+  background:var(--paper);border:1px solid var(--stroke-2);color:var(--ink-2);
+  border-radius:var(--r-pill);font-size:12.5px;font-weight:700;
+  transition:transform var(--t-fast) var(--ease-pop);
+}
+.crumb #mbHotelChip:active{transform:scale(.95)}
+.crumb #mbHotelChip .mb-hotel-roomchip__ic{color:var(--brown)}
+.crumb #mbHotelChip .mb-hotel-roomchip__guest{color:var(--ink-3)}
+
+/* ── Hub: crumb's own bottom sheet (paper surface, r-sheet corners, grab + x) ── */
+.crumb #mbHotelHubScrim{background:rgba(36,26,16,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+.crumb #mbHotelHub{
+  background:var(--paper);color:var(--ink);
+  border-start-start-radius:var(--r-sheet);border-start-end-radius:var(--r-sheet);
+  border-top:1px solid var(--stroke-2);box-shadow:none;
+}
+.crumb #mbHotelHub .mb-hotel-hub__grab{background:var(--stroke-2)}
+.crumb #mbHotelHub .mb-hotel-hub__title{font-size:18.5px;letter-spacing:-.015em}
+.crumb #mbHotelHub .mb-hotel-hub__x{
+  background:var(--beige);color:var(--ink-2);border-radius:50%;
+  width:34px;height:34px;font-size:1.15rem;opacity:1;
+}
+.crumb #mbHotelHub .mb-hotel-hub__x:active{transform:scale(.9)}
+.crumb #mbHotelHub .mb-hotel-hub__greet{color:var(--ink-3)}
+.crumb #mbHotelHub .mb-hotel-card{border-color:var(--stroke)}
+.crumb #mbHotelHub .mb-hotel-card summary,
+.crumb #mbHotelHub .mb-hotel-card__t{color:var(--ink)}
+.crumb #mbHotelHub .mb-hotel-info-link{color:var(--brown)}
+/* service form controls → crumb inputs / brown CTA */
+.crumb #mbHotelHub .mb-hotel-field{
+  background:var(--paper);border:1px solid var(--stroke-2);color:var(--ink);border-radius:var(--r-img);
+}
+.crumb #mbHotelHub .mb-hotel-btn{
+  background:var(--brown);color:#fff;border-radius:var(--r-pill);font-weight:800;
+}
+
+/* ── Order-flow controls in the checkout → crumb tender rows ── */
+.crumb #mbHotelOrderCtrls{margin:0}
+.crumb #mbHotelSched,
+.crumb #mbHotelCharge{
+  background:transparent;border:0;border-top:1px solid var(--stroke);
+  border-radius:0;margin:0;padding:16px 2px 0;color:var(--ink);
+}
+.crumb #mbHotelSched .mb-hotel-card__t{
+  font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:11px;
+}
+.crumb #mbHotelSched .mb-hotel-modes label{color:var(--ink-2);font-weight:600}
+.crumb #mbHotelSched input[type="radio"]{accent-color:var(--brown)}
+.crumb #mbHotelSched .mb-hotel-field{
+  background:var(--paper);border:1.5px solid var(--stroke-2);color:var(--ink);border-radius:var(--r-img);
+}
+.crumb #mbHotelSched .mb-hotel-note{color:var(--ink-3)}
+/* charge-to-room → a plain toggle row (drop the emoji chip) */
+.crumb #mbHotelCharge{display:flex;align-items:flex-start;gap:10px;font-size:12.5px}
+.crumb #mbHotelCharge .mb-hotel-greet__ic{display:none}
+.crumb #mbHotelCharge .mb-hotel-greet__room{color:var(--ink);font-weight:700}
+.crumb #mbHotelCharge .mb-hotel-greet__welcome{color:var(--ink-3)}
+.crumb #mbHotelCharge input[type="checkbox"]{accent-color:var(--brown)}
+
+/* B8 · store-review display — avg rating badge + approved review cards.
+   Dormant until the reviews module is enabled (self-gated in the blade);
+   scoped to .crumb, RTL-safe (logical props), scheme-flip via tokens. */
+.crumb .crumb-reviews{margin-block:12px 4px;display:flex;flex-direction:column;gap:10px;overflow:clip}
+.crumb .crumb-rating{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-weight:800;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-pill);padding-block:5px;padding-inline:12px}
+.crumb .crumb-rating-star{color:var(--gold)}
+.crumb .crumb-rating small{color:var(--ink-3);font-weight:600}
+.crumb .crumb-review-list{display:flex;flex-direction:column;gap:8px}
+.crumb .crumb-review{background:var(--paper);border:1px solid var(--stroke);border-radius:var(--r-img);padding-block:10px;padding-inline:12px}
+.crumb .crumb-review-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink)}
+.crumb .crumb-review-star{color:var(--gold);font-weight:700;white-space:nowrap}
+.crumb .crumb-review p{margin-block:4px 0;color:var(--ink-2);font-size:12.5px;line-height:1.5}
+@media (max-width:560px){.crumb .crumb-review p{font-size:12px}}
+
+/* -------------------------------------------------------------------
+   Syria wallet_transfer - payment-pending banner (Lane C)
+   Styles the shared store_templates/shared/payment-pending.blade.php
+   contract (.mb-paypending[data-state]) natively for crumb. Surface,
+   ink, border and radius come from crumb tokens so the banner re-inks
+   on a light/dark scheme flip; the per-state accent is mixed into those
+   tokens so it adapts too. Semantic status hues are fixed (amber = action
+   needed, blue = in review, green = paid) so a store's brand colour never
+   turns the "paid" banner non-green. RTL-safe (logical props only); fluid
+   gutters via clamp() cover 850-1180px desktop and <=560px mobile.
+   ------------------------------------------------------------------- */
+.crumb .mb-paypending{
+  --pp-surface:var(--paper,#ffffff);
+  --pp-ink:var(--ink,#241A10);
+  --pp-muted:var(--ink-2,#6F6257);
+  --pp-border:var(--stroke-2,rgba(36,26,16,.14));
+  --pp-accent:#f59e0b;
+  box-sizing:border-box;
+  margin-inline:0;
+  margin-block:clamp(12px,2.6vw,16px);
+  padding:clamp(12px,3.2vw,16px) clamp(14px,3.6vw,18px);
+  border:1px solid color-mix(in srgb,var(--pp-accent) 48%,var(--pp-border));
+  border-radius:var(--r-card,20px);
+  background:color-mix(in srgb,var(--pp-accent) 10%,var(--pp-surface));
+  color:var(--pp-ink);
+  opacity:1;
+  overflow-wrap:anywhere;
+}
+.crumb .mb-paypending-title{
+  display:flex;
+  align-items:center;
+  gap:.55ch;
+  margin-block-end:6px;
+  font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.1rem);
+  line-height:1.3;
+  color:color-mix(in srgb,var(--pp-accent) 58%,var(--pp-ink));
+}
+.crumb .mb-paypending-title::before{
+  content:"";
+  inline-size:.62em;
+  block-size:.62em;
+  flex:none;
+  border-radius:50%;
+  background:var(--pp-accent);
+  box-shadow:0 0 0 .18em color-mix(in srgb,var(--pp-accent) 26%,transparent);
+}
+.crumb .mb-paypending-txn{
+  display:inline-block;
+  max-width:100%;
+  margin-block:2px 6px;
+  padding:.3em .62em;
+  border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--pp-accent) 26%,var(--pp-border));
+  background:color-mix(in srgb,var(--pp-accent) 12%,var(--pp-surface));
+  color:var(--pp-ink);
+  font-variant-numeric:tabular-nums;
+  font-size:.92em;
+  overflow-wrap:anywhere;
+}
+.crumb .mb-paypending-txn:empty{display:none}
+.crumb .mb-paypending-txn bdi{font-weight:600;letter-spacing:.01em}
+.crumb .mb-paypending-hint{
+  margin:0;
+  font-size:.9em;
+  line-height:1.5;
+  color:var(--pp-muted);
+}
+.crumb .mb-paypending[data-state="awaiting-claim"]{--pp-accent:#f59e0b}
+.crumb .mb-paypending[data-state="claimed"]{--pp-accent:#3b82f6}
+.crumb .mb-paypending[data-state="confirmed"]{--pp-accent:#1fae6b}
+
+/* Share row is a <button> reusing .wa-line — reset the UA button box to match the anchor rows. */
+.wa-line.share-btn{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+
+/* ── Address map picker + clear-device-data (shared engines, crumb-skinned) ──
+   The picker lives in crumb's own .sheet.sheet-tall bottom sheet (same shell as
+   the nearest-branch map) with a dedicated scrim, driven by window.mbMapPicker;
+   controls mirror the theme's pin row (.use-current), solid pill (.cta) and card
+   rows (.wa-line). */
+.crumb-map-trigger .ic{color:var(--brown)}
+/* the picker sheet + its scrim sit just above the base scrim/sheet layer */
+.crumb-map-scrim{z-index:calc(var(--z-scrim) + 1)}
+.crumb-map-sheet{z-index:calc(var(--z-sheet) + 1)}
+.crumb-map-canvas{position:relative;flex:none;width:100%;height:min(52vh,360px);border-radius:var(--r-img);overflow:hidden;background:var(--beige);border:1px solid var(--stroke-2);margin-bottom:12px}
+.crumb-map-canvas .leaflet-container{width:100%;height:100%;font-family:var(--font-ui);background:var(--beige)}
+.crumb-map-preview{font-size:12.5px;font-weight:600;color:var(--ink-2);text-align:center;min-height:18px;margin:0 0 4px}
+/* centre pin the engine injects (.mb-map-pin) — crumb accent teardrop */
+.mb-map-pin{position:absolute;left:50%;top:50%;width:30px;height:38px;transform:translate(-50%,-100%);z-index:500;pointer-events:none;filter:drop-shadow(0 4px 8px rgba(36,26,16,.4))}
+.mb-map-pin::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%) rotate(45deg);width:26px;height:26px;border-radius:50% 50% 50% 0;background:var(--brown);border:2px solid var(--paper)}
+.mb-map-pin::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:var(--paper)}
+/* clear-saved-data row (mirrors .wa-line; trash reads muted, warms to danger) */
+.crumb-cleardata{width:100%;font-family:inherit;text-align:start;cursor:pointer;-webkit-appearance:none;appearance:none}
+.crumb-cleardata .ic:first-child{color:var(--ink-3)}
+.crumb-cleardata:active{transform:scale(.99)}
+.crumb-cleardata:hover .ic:first-child,.crumb-cleardata:hover span{color:var(--red)}
+.crumb-cleardata-hint{margin:8px 4px 0;font-size:11px;line-height:1.5;color:var(--ink-3);opacity:.85}

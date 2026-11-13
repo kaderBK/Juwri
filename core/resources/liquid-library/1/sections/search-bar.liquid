@@ -1,0 +1,37 @@
+{%- comment -%}
+  Search bar (library v1): one search field bound to the commerce runtime
+  (data-mb-search filters every catalogue card by name as the diner types;
+  categories left empty hide themselves). The placeholder follows the
+  store's vertical ("Search dishes" / "Search products") unless the owner
+  sets one. Nothing renders while the store has no items.
+{%- endcomment -%}
+{%- unless menu.is_empty -%}
+{%- liquid
+  assign placeholder = section.settings.placeholder | strip
+  if placeholder == ''
+    assign items_word = vocab.items | downcase
+    assign placeholder = 'Search :items' | t | replace: ':items', items_word
+  endif
+-%}
+<div class="mbs-search-bar{% if section.settings.sticky %} is-sticky{% endif %}" role="search">
+  <label class="mbs-search-bar__field">
+    <span class="mbs-search-bar__sr">{{ 'Search' | t }}</span>
+    {%- render 'icon', name: 'search', size: 20 -%}
+    <input class="mbs-search-bar__input" type="search" data-mb-search placeholder="{{ placeholder | escape }}" autocomplete="off" enterkeyhint="search">
+  </label>
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Search bar",
+  "group": "discover",
+  "verticals": ["all"],
+  "max_per_page": 1,
+  "settings": [
+    { "id": "placeholder", "type": "text", "label": "Placeholder (blank = automatic)", "default": "" },
+    { "id": "sticky", "type": "checkbox", "label": "Stick to the top while scrolling", "default": false }
+  ],
+  "presets": [{ "name": "Search bar" }]
+}
+{% endschema %}
