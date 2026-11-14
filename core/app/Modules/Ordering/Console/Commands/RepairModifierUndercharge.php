@@ -94,7 +94,7 @@ class RepairModifierUndercharge extends Command
             ->whereHas('order', fn ($q) => $q->where('store_id', $store))
             ->with(['order:id,store_id,created_at,payment_gateway']);
 
-        foreach ($query->cursor() as $item) {
+        foreach ($query->lazyById(200) as $item) {
             $order = $item->order;
             if (! $order || ! $this->inWindow($order)) {
                 continue;
