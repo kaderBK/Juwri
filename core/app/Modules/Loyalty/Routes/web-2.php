@@ -16,6 +16,8 @@ Route::middleware('auth:customer')->group(function () {
     Route::get('restaurant/{storeId}/google-wallet/gift-card/{giftCardId}/jwt', '\Juwri\Modules\Loyalty\Http\Controllers\User\GoogleWalletController@giftCardJwt')->name('publicView.googleWallet.giftCardJwt')->middleware('throttle:30,1,loyalty-restaurant-google-wallet-gift-card-jwt');
     // Notification-center inbox (logged-in diner) — scoped to the authed customer.
     Route::get('restaurant/{storeId}/notifications', '\Juwri\Modules\Ordering\Http\Controllers\User\CustomerNotificationController@index')->middleware('ratelimit:dashboard_poll')->name('publicView.notifications.index');
+    // The bell's badge count — a lightweight poll (the count only, no rows).
+    Route::get('restaurant/{storeId}/notifications/unread', '\Juwri\Modules\Ordering\Http\Controllers\User\CustomerNotificationController@unread')->middleware('ratelimit:dashboard_poll')->name('publicView.notifications.unread');
     Route::post('restaurant/{storeId}/notifications/read', '\Juwri\Modules\Ordering\Http\Controllers\User\CustomerNotificationController@markRead')->name('publicView.notifications.read')->middleware('throttle:30,1,loyalty-restaurant-notifications-read');
     // Order history (logged-in diner) — scoped to the authed customer + this store.
     Route::get('restaurant/{storeId}/my-orders', '\Juwri\Modules\Customers\Http\Controllers\User\CustomerOrderController@index')->middleware('ratelimit:dashboard_poll')->name('publicView.myOrders.index');

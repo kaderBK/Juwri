@@ -8,8 +8,10 @@ use App\Jobs\RunThemeLighthouseGate;
 use App\Models\MarketplaceMedia;
 use App\Models\Theme;
 use App\Models\ThemeVersion;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Modules\AppStore\Models\ThemePurchase;
@@ -33,13 +35,23 @@ class ThemeReviewController extends Controller
         $recent = ThemeVersion::with('theme')
             ->whereIn('status', ['published', 'rejected', 'delisted'])
             ->orderByDesc('updated_at')->limit(20)->get();
-        $themes = Theme::withCount('screenshots')->orderBy('name')->get();
+        // The same order the marketplace uses: a listing with a position,
+        // then the rest by rating. The page splits those two groups so a
+        // drag can move a listing between them without pinning the tail.
+        $themes = Theme::withCount('screenshots')
+            ->orderByRaw('sort_order IS NULL')
+            ->orderBy('sort_order')
+            ->orderByDesc('rating_avg')
+            ->orderBy('name')
+            ->get();
+        $orderedListings = $themes->whereNotNull('sort_order')->values();
+        $ratingListings = $themes->whereNull('sort_order')->values();
 
         // P6-243: recent paid licences, refundable from here.
         $purchases = ThemePurchase::with(['theme', 'user'])
             ->where('price_paid_minor', '>', 0)->orderByDesc('id')->limit(30)->get();
 
-        return view('admin.theme_reviews.index', compact('pending', 'recent', 'themes', 'purchases'));
+        return view('admin.theme_reviews.index', compact('pending', 'recent', 'themes', 'orderedListings', 'ratingListings', 'purchases'));
     }
 
     /* ---- stores P1-4: listing metadata + screenshots ---- */
@@ -61,14 +73,73 @@ class ThemeReviewController extends Controller
             'tagline' => ['nullable', 'string', 'max:140'],
             'support_url' => ['nullable', 'url', 'max:255'],
             'demo_notes' => ['nullable', 'string', 'max:255'],
+            'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
         ]);
 
-        // Listing edit ONLY — never touches status/price/version.
+        // Listing edit ONLY — never touches the price or a version's review.
         $theme->update($data);
+
+        /* Visibility: a listing is in the store when its own status is
+           'published' (the marketplace lists published themes only). Unchecking
+           delists it; re-checking republishes it. A theme with no PUBLISHED
+           version cannot be listed, so it stays as it is — the version is what
+           the review queue approves. */
+        if ($request->has('visible')) {
+            $visible = $request->boolean('visible');
+            $hasPublishedVersion = $theme->versions()->where('status', 'published')->exists();
+            if ($visible && $hasPublishedVersion) {
+                $theme->update(['status' => 'published']);
+            } elseif (! $visible && $theme->status === 'published') {
+                $theme->update(['status' => 'delisted']);
+            }
+        }
 
         app_alert_success(___('Listing updated.'));
 
         return redirect()->route('admin.theme-reviews.listing', $theme->id);
+    }
+
+    /**
+     * Drag-and-drop order for the store listings.
+     *
+     * `ordered` is the owner's sequence and is written as 1..n. `tail` is
+     * sent back to the rating order (sort_order null). A listing named in
+     * neither list is left as it is, so a partial post cannot pin the tail.
+     */
+    public function reorderListings(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'ordered' => ['present', 'array', 'max:500'],
+            'ordered.*' => ['integer'],
+            'tail' => ['present', 'array', 'max:500'],
+            'tail.*' => ['integer'],
+        ]);
+
+        $ordered = array_values(array_unique(array_map('intval', $data['ordered'])));
+        $tail = array_values(array_unique(array_map('intval', $data['tail'])));
+
+        if (array_intersect($ordered, $tail) !== []) {
+            abort(422);
+        }
+
+        $sent = array_merge($ordered, $tail);
+        if ($sent !== []) {
+            $known = Theme::whereIn('id', $sent)->pluck('id')->map(fn ($id) => (int) $id)->all();
+            if (array_diff($sent, $known) !== []) {
+                abort(422);
+            }
+        }
+
+        DB::transaction(function () use ($ordered, $tail) {
+            foreach ($ordered as $i => $id) {
+                Theme::where('id', $id)->update(['sort_order' => $i + 1]);
+            }
+            if ($tail !== []) {
+                Theme::whereIn('id', $tail)->update(['sort_order' => null]);
+            }
+        });
+
+        return response()->json(['success' => true, 'message' => ___('Updated Successfully')]);
     }
 
     public function uploadMedia(Request $request, int $theme)

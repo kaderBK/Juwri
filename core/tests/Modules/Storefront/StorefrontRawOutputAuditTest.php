@@ -32,6 +32,7 @@ class StorefrontRawOutputAuditTest extends TestCase
             '$shellStyles[\'base_css\']' => [1, 'constant CSS'],
             '$shellStyles[\'tokens_css\']' => [1, 'Tokens::css — names + values regex-validated'],
             '$shellStyles[\'tokens_dark_css\']' => [1, 'Tokens::css (dark block) — names + values regex-validated'],
+            '$shellStyles[\'dark_css\']' => [1, 'DarkTokens::css — token names and values regex-validated (no < ; } or quotes beyond colour/font tokens)'],
             '$shellStyles[\'sections_css\']' => [1, 'SectionRestyler::clean — no <, \\, comments; re-cleaned by Html::cleanPage, scoped'],
             '$body' => [1, 'Liquid theme render (marketplace-reviewed theme code; merchant values escaped by the engine); enforced nonce CSP on store hosts'],
         ],

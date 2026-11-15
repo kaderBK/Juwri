@@ -51,6 +51,41 @@
 }
 .mbs-product-grid__chip:focus-visible,
 .mbs-product-grid__select:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+/* The FACET panel button (size / colour / price). A pill like the chips,
+   because it is the same kind of control — it opens a panel of choices. */
+.mbs-product-grid__filters {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ts-gap-1, 6px);
+  min-block-size: 44px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .14);
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-background, #fff);
+  color: var(--tc-text, #111);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mbs-product-grid__filters.is-on { border-color: var(--tc-primary, #3fd463); color: var(--tc-primary, #3fd463); }
+/* How many filters are on. A `display` rule outranks the browser's own
+   [hidden] rule, so the hidden badge needs its own — otherwise it shows an
+   empty disc on every shop. */
+.mbs-product-grid__filters-badge {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 20px;
+  block-size: 20px;
+  padding-inline: 5px;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font-size: .7rem;
+  font-weight: 700;
+}
+.mbs-product-grid__filters-badge[hidden] { display: none; }
+.mbs-product-grid__filters:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
 .mbs-product-grid__group + .mbs-product-grid__group { margin-block-start: var(--ts-gap-4, 24px); }
 .mbs-product-grid__group[hidden] { display: none; }
 .mbs-product-grid__group-title { margin: 0 0 var(--ts-gap-2, 10px); font-size: 1.05rem; }

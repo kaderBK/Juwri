@@ -1,0 +1,97 @@
+/* runtime skin — the catalogue facet panel (size / colour / price).
+   The runtime renders this sheet itself: the store's facets arrive in the
+   config, and every item's variants carry the size and colour they stand
+   for. The panel is a bottom sheet — the customer's thumb is already there. */
+
+.mb-filters-mount { position: relative; z-index: 80; }
+.mb-facets {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  max-block-size: 85dvh;
+  border-start-start-radius: var(--tr-card, 16px);
+  border-start-end-radius: var(--tr-card, 16px);
+  background: var(--tc-background, #fff);
+  color: var(--tc-text, #111);
+  box-shadow: 0 -12px 40px rgba(var(--tc-overlay-rgb, 17, 17, 17), .22);
+  animation: mb-filters-rise .22s ease-out;
+}
+@keyframes mb-filters-rise { from { transform: translateY(12%); opacity: .6; } }
+
+.mb-facets__group { margin-block-end: var(--ts-gap-4, 24px); }
+.mb-facets__title {
+  margin: 0 0 var(--ts-gap-2, 10px);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--tc-text-muted, #6b7280);
+}
+
+/* the sizes: chips, multi-select */
+.mb-facets__chips { display: flex; flex-wrap: wrap; gap: var(--ts-gap-1, 6px); }
+.mb-facets__chip {
+  min-block-size: 40px;
+  padding-inline: var(--ts-gap-3, 16px);
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .14);
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-background, #fff);
+  color: var(--tc-text, #111);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mb-facets__chip.is-on {
+  border-color: var(--tc-primary, #3fd463);
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+}
+
+/* the colours: swatches, multi-select. The dot carries the real colour; the
+   ring says "chosen". */
+.mb-facets__swatches { display: flex; flex-wrap: wrap; gap: var(--ts-gap-2, 10px); }
+.mb-facets__swatch {
+  position: relative;
+  inline-size: 36px;
+  block-size: 36px;
+  flex: none;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.mb-facets__swatch span {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .18);
+}
+.mb-facets__swatch.is-on { border-color: var(--tc-text, #111); }
+.mb-facets__swatch:focus-visible,
+.mb-facets__chip:focus-visible,
+.mb-facets__range:focus-visible { outline: 2px solid var(--tc-primary, #3fd463); outline-offset: 2px; }
+
+/* the price: a maximum */
+.mb-facets__range { inline-size: 100%; accent-color: var(--tc-primary, #3fd463); }
+.mb-facets__rangevals {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: var(--ts-gap-1, 6px);
+  font-size: .8rem;
+  color: var(--tc-text-muted, #6b7280);
+}
+
+.mb-facets__foot { display: flex; align-items: center; gap: var(--ts-gap-2, 10px); }
+.mb-facets__foot .mb-ghost { flex: 0 0 auto; }
+.mb-facets__foot .mb-place { flex: 1 1 auto; inline-size: auto; }
+.mb-facets__count {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: .82rem;
+  color: var(--tc-text-muted, #6b7280);
+}

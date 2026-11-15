@@ -173,8 +173,18 @@
             <div class="price {{ $isFree ? 'free' : '' }}">{{ $isFree ? ___('Free') : price_symbol_format($theme->price) }}</div>
             @if($theme->tagline)<p class="muted" style="margin:6px 0 0;" dir="auto">{{ $theme->tagline }}</p>@endif
 
-            <a class="btn ghost block" href="{{ route('marketplace.preview', $theme->slug) }}" target="_blank" rel="noopener">
-                {{ $isBlade ? ___('View live demo') : ___('Live preview (demo store)') }}</a>
+            {{-- The LIVE DEMO: a real storefront owned by the showcase account
+                 that renders THIS theme (every listing has one — the Liquid
+                 themes' demos are the showcase clones), so the button always
+                 leads to a real shop rather than a synthetic render. The
+                 preview (the theme rendered against the demo dataset) stays
+                 as a second link for the Liquid themes. --}}
+            <a class="btn ghost block" href="{{ $demoUrl ?: route('marketplace.preview', $theme->slug) }}" target="_blank" rel="noopener">
+                {{ $demoUrl ? ___('View live demo') : ___('Live preview (demo store)') }}</a>
+            @if($demoUrl)
+                <a class="btn ghost block" href="{{ route('marketplace.preview', $theme->slug) }}" target="_blank" rel="noopener">
+                    {{ ___('Live preview (demo store)') }}</a>
+            @endif
 
             @auth
                 <div id="actions" data-entitled="{{ $entitled ? '1' : '0' }}"

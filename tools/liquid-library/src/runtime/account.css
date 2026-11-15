@@ -1,10 +1,211 @@
 /* SPDX-License-Identifier: AGPL-3.0-only */
 /* Copyright (c) JUWRI LTD */
 
-/* runtime skin — account: sign-in tabs, profile, saved addresses, orders */
+/* runtime skin — account: identity block, grouped cards, tappable rows */
+
 .mb-account { display: grid; gap: 12px; }
 .mb-account form { display: grid; gap: 8px; }
+/* A hidden form must STAY hidden: an author `display` rule outranks the
+   browser's own `[hidden]` rule, so a form that opens on demand needs its
+   own — otherwise the collapsed form is on screen anyway. */
+.mb-account form[hidden],
+.mb-addr-form[hidden] { display: none; }
 .mb-account-rich { padding-block-end: var(--ts-gap-2, 10px); }
+
+/* the identity block: who is signed in */
+.mb-acct-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--tr-card, 16px);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .10);
+}
+.mb-acct-hero__avatar {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--tc-primary, #3fd463);
+  color: var(--tc-on-primary, #fff);
+  font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif));
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.mb-acct-hero__txt { display: grid; gap: 2px; min-inline-size: 0; }
+.mb-acct-hero__txt b { font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mb-acct-hero__txt span {
+  font-size: .8rem;
+  color: var(--tc-text-muted, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* a grouped card */
+.mb-acct-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .10);
+  border-radius: var(--tr-card, 16px);
+  background: var(--tc-surface, #fff);
+}
+.mb-acct-card__label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--tc-text-muted, #6b7280);
+}
+
+/* The rewards card. The balance is set in the BODY face, not the display
+   one: the display face is for headings, and its figures are small enough to
+   read as a dot next to the tier. */
+.mb-acct-rewards { background: rgba(var(--tc-primary-rgb, 63, 212, 99), .08); }
+
+/* A balance is a figure in a line, not a heading on its own: the label, the
+   figure, the tier, the action — one row, so the card costs one line of the
+   sheet instead of four. */
+.mb-acct-balance {
+  font-family: var(--tf-body, system-ui, -apple-system, "Segoe UI", sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.mb-acct-tier {
+  padding: 2px 8px;
+  border-radius: var(--tr-pill, 999px);
+  background: rgba(var(--tc-primary-rgb, 63, 212, 99), .16);
+  color: var(--tc-primary-700, var(--tc-primary, #2fb150));
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+/* the balance cards lay out as one row */
+.mb-acct-rewards,
+.mb-acct-wallet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-block: 10px;
+}
+.mb-acct-rewards .mb-acct-card__label,
+.mb-acct-wallet .mb-acct-card__label { flex: none; }
+.mb-acct-rewards .mb-acct-btn,
+.mb-acct-wallet .mb-acct-btn { margin-inline-start: auto; }
+
+/* a profile summary: the facts, before the form */
+.mb-acct-summary { display: grid; gap: 2px; }
+.mb-acct-summary b { font-size: .95rem; }
+.mb-acct-summary span { font-size: .85rem; color: var(--tc-text-muted, #6b7280); }
+
+/* a form that opens on demand */
+.mb-acct-form { margin-block-start: 4px; }
+.mb-acct-btn + .mb-acct-form,
+.mb-acct-btn + .mb-addr-form { margin-block-start: 10px; }
+
+/* the notification inbox */
+.mb-acct-notifs { display: grid; gap: 8px; }
+.mb-acct-notif {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: var(--tr-control, 12px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .04);
+  color: inherit;
+  text-decoration: none;
+}
+.mb-acct-notif b { font-size: .88rem; }
+.mb-acct-notif span { font-size: .8rem; color: var(--tc-text-muted, #6b7280); }
+.mb-acct-notif.is-new { background: rgba(var(--tc-primary-rgb, 63, 212, 99), .10); }
+
+/* the icon in a row */
+.mb-acct-ico { inline-size: 20px; block-size: 20px; flex: none; }
+
+/* a small action button inside a card */
+.mb-acct-btn {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 38px;
+  padding-inline: 14px;
+  border: 1px solid rgba(var(--tc-text-rgb, 17, 17, 17), .14);
+  border-radius: var(--tr-pill, 999px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-acct-btn:hover { background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+
+/* the tappable rows */
+.mb-acct-rows { display: grid; gap: 2px; }
+.mb-acct-rowbtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  inline-size: 100%;
+  min-block-size: 48px;
+  padding-inline: 12px;
+  border: 0;
+  border-radius: var(--tr-control, 12px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: .92rem;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-acct-rowbtn:hover { background: rgba(var(--tc-text-rgb, 17, 17, 17), .05); }
+.mb-acct-rowbtn__ico { display: grid; place-items: center; flex: none; color: var(--tc-text-muted, #6b7280); }
+.mb-acct-rowbtn__txt { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mb-acct-rowbtn__val { flex: none; font-size: .82rem; color: var(--tc-text-muted, #6b7280); }
+.mb-acct-chev { flex: none; color: var(--tc-text-muted, #6b7280); }
+.mb-acct-danger { color: var(--tc-danger, #b42318); }
+.mb-acct-danger .mb-acct-rowbtn__ico { color: var(--tc-danger, #b42318); }
+
+/* the unread count on the notifications row */
+.mb-acct-badge {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 20px;
+  block-size: 20px;
+  padding-inline: 5px;
+  border-radius: var(--tr-pill, 999px);
+  background: var(--tc-danger, #b42318);
+  color: var(--tc-on-primary, #fff);
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+/* sign out */
+.mb-acct-signout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-block-size: 48px;
+  border: 1px solid var(--tc-danger, #b42318);
+  border-radius: var(--tr-control, 12px);
+  background: transparent;
+  color: var(--tc-danger, #b42318);
+  font: inherit;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mb-acct-signout:hover { background: rgba(var(--tc-danger-rgb, 180, 35, 24), .08); }
+
+/* the old bits the sheet no longer uses */
 .mb-acct-greet { margin: 0; color: var(--tc-text-muted, #6b7280); }
 .mb-acct-greet b { color: var(--tc-text, #111); }
 .mb-acct-tabs { display: flex; gap: 6px; }
@@ -52,6 +253,30 @@
 .mb-addr-def input { inline-size: 20px; block-size: 20px; margin: 0; accent-color: var(--tc-primary, #3fd463); }
 .mb-logout-btn { margin-block-start: 8px; border: 1px solid var(--tc-danger, #b42318); background: transparent; color: var(--tc-danger, #b42318); }
 .mb-logout-btn:hover { background: rgba(var(--tc-danger-rgb, 180, 35, 24), .08); }
+
+/* the account rows the platform's own retail storefront has */
+.mb-acct-linkrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  inline-size: 100%;
+  min-block-size: 44px;
+  padding-inline: 12px;
+  border: 0;
+  border-radius: var(--tr-control, 12px);
+  background: rgba(var(--tc-text-rgb, 17, 17, 17), .05);
+  color: inherit;
+  font: inherit;
+  font-size: .9rem;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-acct-linkrow b { font-weight: 700; }
+.mb-acct-track { display: grid; gap: 6px; }
+.mb-acct-track label { font-size: .9rem; font-weight: 600; }
+.mb-place--sm { flex: none; inline-size: auto; padding-inline: 14px; }
 
 /* fitment (car parts) selects the runtime adds to a [data-mb-fitment] form */
 .mb-fit-field { display: grid; gap: 4px; font-size: .85rem; font-weight: 600; }

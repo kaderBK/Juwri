@@ -219,6 +219,15 @@ class ItemDrop extends Drop
         return $this->rel('variants')->map(function ($v) use ($dimensions) {
             $parts = [];
             foreach ((array) ($v->options ?? []) as $groupId => $idx) {
+                // A clothing row stores the words themselves: {"Color":"White","Size":"S"}.
+                // A legacy row stores {variantOptionId: choiceIndex}.
+                if (is_string($groupId) && ! ctype_digit($groupId)) {
+                    if (is_scalar($idx) && (string) $idx !== '') {
+                        $parts[] = (string) $idx;
+                    }
+
+                    continue;
+                }
                 $group = $dimensions->get((int) $groupId);
                 $choices = $group ? (array) $group->options : [];
                 if (isset($choices[$idx])) {
@@ -233,6 +242,26 @@ class ItemDrop extends Drop
     public function has_variants(): bool
     {
         return count($this->variants()) > 0;
+    }
+
+    /**
+     * True when the item carries a variant matrix in the clothing shape —
+     * rows whose `options` are the axis words themselves ({"Size":"M",
+     * "Color":"Red"}). A legacy row ({variantOptionId: choiceIdx}) has no
+     * matrix, so its "Add" is a quick add rather than a pick-size/colour
+     * sheet. Same rule as CommerceRuntime::variantDims().
+     */
+    public function has_matrix(): bool
+    {
+        foreach ($this->rel('variants') as $variant) {
+            foreach ((array) ($variant->options ?? []) as $key => $value) {
+                if (is_string($key) && ! ctype_digit($key)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     #[Cache]

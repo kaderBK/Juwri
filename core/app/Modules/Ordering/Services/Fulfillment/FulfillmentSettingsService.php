@@ -88,6 +88,58 @@ class FulfillmentSettingsService
     }
 
     /**
+     * The order types the storefront may post for this store.
+     *
+     * The legacy food literals stay acceptable for EVERY store — an old
+     * cached runtime bundle (or a theme's own pinned copy) still posts them,
+     * and a restaurant must keep accepting exactly the four it always did.
+     * A goods/service store's own modes are added on top, so a clothing
+     * storefront can post 'ship'.
+     *
+     * @return list<string>
+     */
+    public function allowedOrderTypes(Store $store): array
+    {
+        return array_values(array_unique(array_merge(
+            ['on-table', 'takeaway', 'delivery', 'room_service'],
+            $this->offeredModes($store)
+        )));
+    }
+
+    /**
+     * The mode a posted order type really means for this store.
+     *
+     * A store whose vertical offers the posted mode gets it back unchanged.
+     * A goods store that receives a legacy food literal — an old cached
+     * runtime bundle, or the dashboard's legacy order-type form — gets the
+     * vertical's equivalent instead, so the order is still recorded in the
+     * store's own vocabulary ('in_store', 'ship') rather than as a
+     * 'takeaway'. A restaurant is never touched: its modes ARE the legacy
+     * literals.
+     */
+    public function resolveOrderType(Store $store, string $posted): string
+    {
+        if ($posted === '') {
+            return $posted;
+        }
+
+        $modes = $this->offeredModes($store);
+        if (in_array($posted, $modes, true)) {
+            return $posted;
+        }
+
+        $equivalent = [
+            'takeaway' => 'in_store',
+            'on-table' => 'in_store',
+            'room_service' => 'in_store',
+            'delivery' => 'ship',
+        ];
+        $target = $equivalent[$posted] ?? null;
+
+        return ($target !== null && in_array($target, $modes, true)) ? $target : $posted;
+    }
+
+    /**
      * Persist the owner's chosen subset. Silently drops anything outside the
      * vertical's ceiling (a tampered form field can never smuggle in a mode
      * the store isn't allowed) and returns the set that was actually saved.

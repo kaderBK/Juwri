@@ -21,6 +21,7 @@ use Juwri\Modules\Payments\Console\Commands\RegisterDisputeWebhooks;
 use Juwri\Modules\Payments\Console\Commands\RelayOutbox;
 use Juwri\Modules\Payments\Console\Commands\SendMarkers;
 use Juwri\Modules\Payments\Console\Commands\SettleHeldRenewal;
+use Juwri\Modules\Payments\Contracts\AbandonedCheckouts;
 use Juwri\Modules\Payments\Contracts\CustomerGateways;
 use Juwri\Modules\Payments\Contracts\Gateways;
 use Juwri\Modules\Payments\Contracts\GooglePlayBilling;
@@ -39,6 +40,7 @@ use Juwri\Modules\Payments\Mail\PaymentHealthAlertMail;
 use Juwri\Modules\Payments\Mail\WalletPurchaseReceiptMail;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Policies\Admin\TransactionPolicy;
+use Juwri\Modules\Payments\Services\AbandonedCheckout;
 use Juwri\Modules\Payments\Services\Gateways\Settlement;
 use Juwri\Modules\Payments\Services\InApp\GooglePlayHttp;
 use Juwri\Modules\Payments\Services\ManualStoreTransfers;
@@ -88,6 +90,7 @@ class PaymentsServiceProvider extends ServiceProvider
         $this->app->singleton(StoreCredits::class, StorePayments::class); // P1-13 13g
         $this->app->singleton(CustomerGateways::class, StoreCustomerGateways::class); // P1-23
         $this->app->singleton(StoreTransfers::class, ManualStoreTransfers::class); // P1-23 part 6
+        $this->app->singleton(AbandonedCheckouts::class, AbandonedCheckout::class); // BL-038 review
         $this->app->bind(WebhookDeduplication::class, WebhookDeduplicationApi::class);
         TenantJobs::classify(platform: [RelayOutboxJob::class, PaymentHealthAlertMail::class, WalletPurchaseReceiptMail::class]); // each outbox message carries its own ids
     }

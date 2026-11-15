@@ -83,7 +83,11 @@ class QtyAriaFocusTest extends TestCase
         $store = $this->makeStore('orbit');
         $res = $this->get(route('publicView', $store->slug));
         $res->assertOk();
-        $res->assertSeeHtml(':focus-visible{outline:2px solid var(--tc-primary');
+        // The ring is painted in the INK token: it is drawn on the page
+        // ground, two pixels outside the control, so it has to be the colour
+        // that contrasts with that ground — not the brand colour, which is
+        // chosen for the controls and never measured against the page.
+        $res->assertSeeHtml(':focus-visible{outline:2px solid var(--tc-text');
     }
 
     public function test_no_theme_ships_a_raw_glyph_stepper_label(): void

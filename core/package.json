@@ -10,6 +10,7 @@
         "test:js": "node --test tests/js/storefront/*.test.mjs tests/js/pos/*.test.mjs"
     },
     "devDependencies": {
+        "lighthouse": "^12.8.2",
         "playwright": "^1.63.0",
         "puppeteer": "^25.17.0"
     }

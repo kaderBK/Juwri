@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Juwri\Core\Money\Money;
+use Juwri\Core\Services\AlertDispatcher;
 use Juwri\Core\Support\StripeManagedPayments;
 use Juwri\Modules\Payments\Contracts\OrderPaymentHandler;
 use Juwri\Modules\Payments\Models\Transaction;
@@ -440,7 +441,7 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
     /**
      * Subscription checkout. The transaction's attributes ride along as metadata
      * (on the subscription, so every invoice carries them) and the pending row
-     * is removed: each paid invoice creates its own transaction.
+     * is kept as `recurring_setup` (its session id): each paid invoice creates its own transaction.
      */
     private function startSubscription(Transaction $transaction, string $secret): string
     {
@@ -449,6 +450,17 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         $currency = $this->currencyFor($transaction);
         $amount = $this->chargeableMinor($transaction, $currency);
         $productId = $this->productKey($transaction);
+
+        /* BL-038 O3: a promotion that ends is a Stripe coupon on a FULL-price plan, so renewals return to the full price
+           by themselves (before: the plan was created at the promotional price and renewed at it for ever). */
+        $split = RecurringPromotion::split($transaction);
+        $couponId = null;
+        if ($split !== null) {
+            $first = $amount;
+            $amount = GatewayRounding::chargeMinor($this->key(), $split['full'], $currency)
+                ?? throw new RuntimeException((string) GatewayCurrencies::refusal($this->key(), $transaction));
+            $couponId = $this->promotionCoupon($client, RecurringPromotion::stripeCouponParams($split, $amount - $first));
+        }
 
         $product = $client->get('/products/'.rawurlencode($productId));
         if ($product->status() === 404) {
@@ -482,6 +494,16 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         }
 
         $metadata = $this->metadata($transaction);
+        if ($split !== null) {
+            // Renewals are checked against the full-period amount once the promotion is over (invoicePaid), and the
+            // forever coupon is taken off after the last discounted invoice (endPromotionDiscount).
+            $metadata[RecurringPromotion::RECURRING_AMOUNT] = $split['full']->major();
+            $metadata[RecurringPromotion::PROMO_PERIODS] = (string) $split['periods'];
+        }
+        if (! empty($transaction->coupon)) {
+            // BL-038 review: the checkout's per-account reservation, confirmed by the first paid invoice.
+            $metadata[RecurringPromotion::PROMO_REF] = 'tx:'.$transaction->id;
+        }
         $session = $client->post('/checkout/sessions', StripeManagedPayments::session([
             'mode' => 'subscription',
             'payment_method_types' => ['card'],
@@ -489,12 +511,31 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             'subscription_data' => ['metadata' => $metadata],
             'metadata' => $metadata,
             'success_url' => route('ipn', 'stripe').'?payment_id={CHECKOUT_SESSION_ID}&pay_mode=recurring',
-            'cancel_url' => AccountPages::url(),
-        ], $managed))->throw()->json();
+            'cancel_url' => Settlement::cancelUrl($transaction), // BL-038: a plan's signed cancel link closes the checkout
+        ] + ($couponId !== null ? ['discounts' => [['coupon' => $couponId]]] : []), $managed))->throw()->json();
 
-        $transaction->delete();
+        /* BL-038 review: the row is kept as the subscription's set-up record holding the Checkout session id (before:
+           deleted), so a replaced or cancelled checkout can be closed (the session expired). Never settled itself:
+           each paid invoice creates its own transaction. */
+        $transaction->update(['status' => Transaction::STATUS_RECURRING_SETUP, 'payment_id' => (string) $session['id']]);
 
         return (string) $session['url'];
+    }
+
+    /**
+     * BL-038 O3: the Stripe coupon of a promotion split — retrieved, or created once (its id is derived from the split,
+     * so every checkout of the same promotion and price reuses it).
+     *
+     * @param  array<string, int|string>  $params
+     */
+    private function promotionCoupon(PendingRequest $client, array $params): string
+    {
+        $existing = $client->get('/coupons/'.rawurlencode((string) $params['id']));
+        if ($existing->status() !== 404) {
+            return (string) $existing->throw()->json('id');
+        }
+
+        return (string) $client->post('/coupons', $params)->throw()->json('id');
     }
 
     /** Add-ons have no product row (product_id 0), so they are keyed by add-on type. */
@@ -662,18 +703,17 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             return response()->json(['status' => 400], 400);
         }
 
-        /* BL-038 P1: a renewal must be for the amount the subscription was sold at — its plan price was created from
-           the checkout amount (startSubscription), which the metadata carries. Before: only the currency was compared,
-           so an invoice for any amount renewed the plan. Compared is the invoice's amount BEFORE customer balance and
-           tax ({@see self::invoiceMatchesPlan()}): a balance credit lowers amount_paid and exclusive Stripe Tax raises
-           it, both legitimately. A discount (a coupon added at Stripe), another price or currency is held: a review row
-           + platform alert, acknowledged (200) so Stripe stops retrying — released by hand with
+        /* BL-038 P1: a renewal must be for an amount the subscription was sold at — the first charge, or the full period
+           once a promotion is over (RecurringPromotion::expectedAmounts; its plan price was created from the checkout,
+           startSubscription, and the metadata carries both). Before: only the currency was compared, so an invoice for
+           any amount renewed the plan. Compared is the invoice's amount BEFORE customer balance and tax
+           ({@see self::invoiceMatchesPlan()}): a balance credit lowers amount_paid and exclusive Stripe Tax raises it,
+           both legitimately. A discount other than the subscription's own promotion coupon, another price or currency
+           is held: a review row + platform alert, acknowledged (200) so Stripe stops retrying — released by hand with
            `php artisan payments:settle-held-renewal <review transaction id>` once checked at Stripe. A subscription
            sold before its currency was carried is checked in the invoice's own currency. */
         $currency = $sold !== '' ? $sold : $paid;
-        $expected = $currency !== '' && is_numeric($metadata->amount ?? null)
-            ? Money::ofMajor((string) $metadata->amount, $currency) : null;
-        if (! $this->invoiceMatchesPlan($invoice, $expected, $currency)) {
+        if ($currency === '' || ! $this->invoiceMatchesPlan($invoice, $metadata, $currency)) {
             RenewalAmountHold::record('stripe', $metadata, (string) $invoice->id, is_scalar($subscription) ? (string) $subscription : null, [
                 'paid_minor' => is_numeric($invoice->amount_paid ?? null) ? (int) $invoice->amount_paid : null,
                 'total_excluding_tax' => is_numeric($invoice->total_excluding_tax ?? null) ? (int) $invoice->total_excluding_tax : null,
@@ -681,12 +721,14 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 'discount_minor' => self::invoiceDiscountMinor($invoice),
                 'collected_minor' => self::collectedForPlan($invoice),
                 'paid_currency' => $paid,
-                'expected_minor' => $expected !== null ? GatewayRounding::chargeMinor($this->key(), $expected, $currency) : null,
+                'expected_minor' => $currency === '' ? [] : $this->expectedInvoiceMinors($metadata, $currency),
                 'expected_currency' => $sold,
             ]);
 
             return response()->json(['message' => 'held for review', 'status' => 200], 200);
         }
+        // The settled transaction records the amount actually collected for the plan (the full period once a promotion is over).
+        $metadata = RecurringPromotion::settledMetadata($metadata, (int) (self::collectedForPlan($invoice) ?? 0), $this->key(), $currency);
         if ($sold === '') {
             $metadata = clone $metadata;
             $metadata->currency_code = $currency; // settled in the currency the invoice was checked (and paid) in
@@ -699,38 +741,58 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             if ($settled !== null) {
                 GatewayRounding::book($settled, 'stripe');
             }
+            $this->endPromotionDiscount($metadata, $invoice, is_scalar($subscription) ? (string) $subscription : '');
         }
 
         return $response;
     }
 
     /**
-     * BL-038 P1: whether a paid recurring invoice is for the plan amount the subscription was sold at. Stripe minor
-     * units. The amount compared is `total_excluding_tax` (after discounts, before tax and before the customer balance
-     * is applied), or `subtotal` (before discounts and balance) — `total` instead when the prices include their tax —
-     * else, an invoice carrying none of them, `amount_paid`. A discount on the invoice never matches (the plan price is
-     * already the agreed price). Matches the charge we set up (GatewayRounding: a 3-decimal currency rounded DOWN to
-     * Stripe's 10-fils step) — or, for a subscription set up before that decision, the same total rounded UP to the
-     * next step (they were rounded half-up then: at most one step over). No other tolerance.
+     * BL-038 P1: whether a paid recurring invoice is for an amount the subscription was sold at. Stripe minor units.
+     * Accepted are the charges we set up ({@see self::expectedInvoiceMinors()}: the first charge and, for a promotion
+     * that ends, the full period — a 3-decimal currency rounded DOWN to Stripe's 10-fils step) — or, for a subscription
+     * set up before that decision, the same totals rounded UP to the next step (they were rounded half-up then: at most
+     * one step over). No other tolerance.
+     *
+     * Without a promotion the amount compared is `total_excluding_tax` (after discounts, before tax and before the
+     * customer balance is applied), or `subtotal` (before discounts and balance) — `total` instead when the prices
+     * include their tax — else, an invoice carrying none of them, `amount_paid`; a discount on the invoice never
+     * matches (the plan price is already the agreed price). A promotion subscription (BL-038 O3: a full-price plan with
+     * its own coupon) is discounted by design, so only the amount AFTER discounts counts — `total_excluding_tax`
+     * (`total` with tax-inclusive prices), else `amount_paid`: any further discount shows there and is held.
      */
-    private function invoiceMatchesPlan(object $invoice, ?Money $expected, string $currency): bool
+    private function invoiceMatchesPlan(object $invoice, object $metadata, string $currency): bool
     {
-        $charge = $expected !== null ? GatewayRounding::chargeMinor($this->key(), $expected, $currency) : null;
-        if ($charge === null || self::invoiceDiscountMinor($invoice) > 0) {
+        $accepted = [];
+        foreach (RecurringPromotion::expectedAmounts($metadata, $currency) as $expected) {
+            $charge = GatewayRounding::chargeMinor($this->key(), $expected, $currency);
+            if ($charge === null) {
+                continue;
+            }
+            $accepted[] = $charge;
+            $quote = GatewayRounding::quote($this->key(), $expected, $currency);
+            if ($quote !== null) {
+                $accepted[] = $quote['charged_minor'] + $quote['step_minor'];
+            }
+        }
+        if ($accepted === []) {
             return false;
         }
-        $accepted = [$charge];
-        $quote = GatewayRounding::quote($this->key(), $expected, $currency);
-        if ($quote !== null) {
-            $accepted[] = $quote['charged_minor'] + $quote['step_minor'];
-        }
-        /* With tax-INCLUSIVE prices total_excluding_tax is below the price by that tax; `total` (after discounts, before
-           the customer balance) is then the price — a discount shows there too. Otherwise `subtotal` (before discounts:
-           a discount is caught by the total_discount_amounts check above). */
-        $second = self::hasInclusiveTax($invoice) ? ($invoice->total ?? null) : ($invoice->subtotal ?? null);
-        $amounts = array_values(array_filter([$invoice->total_excluding_tax ?? null, $second], 'is_numeric'));
-        if ($amounts === [] && is_numeric($invoice->amount_paid ?? null)) {
-            $amounts = [$invoice->amount_paid];
+        if (RecurringPromotion::recurringAmount($metadata) !== null) {
+            $after = self::hasInclusiveTax($invoice) ? ($invoice->total ?? null) : ($invoice->total_excluding_tax ?? null);
+            $amounts = is_numeric($after) ? [$after] : (is_numeric($invoice->amount_paid ?? null) ? [$invoice->amount_paid] : []);
+        } else {
+            if (self::invoiceDiscountMinor($invoice) > 0) {
+                return false;
+            }
+            /* With tax-INCLUSIVE prices total_excluding_tax is below the price by that tax; `total` (after discounts, before
+               the customer balance) is then the price — a discount shows there too. Otherwise `subtotal` (before discounts:
+               a discount is caught by the total_discount_amounts check above). */
+            $second = self::hasInclusiveTax($invoice) ? ($invoice->total ?? null) : ($invoice->subtotal ?? null);
+            $amounts = array_values(array_filter([$invoice->total_excluding_tax ?? null, $second], 'is_numeric'));
+            if ($amounts === [] && is_numeric($invoice->amount_paid ?? null)) {
+                $amounts = [$invoice->amount_paid];
+            }
         }
         foreach ($amounts as $amount) {
             if (in_array((int) $amount, $accepted, true)) {
@@ -778,6 +840,95 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         }
 
         return $total;
+    }
+
+    /**
+     * BL-038 review (High 2): a promotion of N periods is a `forever` coupon on the subscription (stripeCouponParams);
+     * once this paid invoice is the Nth — counted from Stripe's own paid invoices of the subscription, paged through
+     * `has_more` — the discount is removed, so the next invoice is the full period. Only while the invoice still carried
+     * a discount. Removal is `POST /v1/subscriptions/{id}` with `discounts=""` (Stripe: "pass an empty string to remove
+     * previously-defined discounts"), the documented way for a discount set through Checkout `discounts[]` — not
+     * `DELETE …/discount`, which documents only the legacy single `discount`. A failure (or no usable platform key) is
+     * logged and alerted, never refused: the payment itself is settled.
+     */
+    private function endPromotionDiscount(object $metadata, object $invoice, string $subscriptionId): void
+    {
+        $periods = (int) ($metadata->{RecurringPromotion::PROMO_PERIODS} ?? 0);
+        $discounted = ! empty($invoice->discount) || ! empty($invoice->discounts) || ! empty($invoice->total_discount_amounts);
+        if ($periods < 2 || $subscriptionId === '' || ! $discounted) {
+            return;
+        }
+        try {
+            $secret = trim((string) config('settings.stripe_secret_key', ''));
+            if ($secret === '' || ! GatewaySandbox::allowsKey('stripe', $secret)) {
+                throw new RuntimeException('no usable platform Stripe key');
+            }
+            $client = $this->client($secret);
+            $paid = 0;
+            $after = null;
+            for ($page = 0; $page < 50 && $paid < $periods; $page++) {
+                $list = $client->get('/invoices', array_filter(['subscription' => $subscriptionId, 'status' => 'paid', 'limit' => 100,
+                    'starting_after' => $after]))->throw()->json();
+                $data = is_array($list['data'] ?? null) ? $list['data'] : [];
+                $paid += count($data);
+                $after = $data !== [] ? (string) ($data[count($data) - 1]['id'] ?? '') : '';
+                if (empty($list['has_more']) || $after === '') {
+                    break;
+                }
+            }
+            if ($paid >= $periods) {
+                $client->post('/subscriptions/'.rawurlencode($subscriptionId), ['discounts' => ''])->throw();
+            }
+        } catch (\Throwable $e) {
+            Log::warning('[stripe] promotion discount not removed from '.$subscriptionId.': '.$e->getMessage());
+            AlertDispatcher::send('payments.promotion_discount', 'stripe: promotion discount not removed after its last period (subscription '.$subscriptionId.')');
+        }
+    }
+
+    /**
+     * BL-038 review: expire this transaction's open Checkout session (a replaced or cancelled checkout), so it can no
+     * longer be paid. True when the session is expired (now or before); false when Stripe refused (it may be paid).
+     */
+    public function expireSession(Transaction $transaction): bool
+    {
+        $id = (string) $transaction->payment_id;
+        if (! str_starts_with($id, 'cs_')) {
+            return true;
+        }
+        $secret = $this->secretFor($transaction);
+        if ($secret === '') {
+            return false;
+        }
+        try {
+            if ($this->client($secret)->post('/checkout/sessions/'.rawurlencode($id).'/expire')->successful()) {
+                return true;
+            }
+
+            return $this->client($secret)->get('/checkout/sessions/'.rawurlencode($id))->json('status') === 'expired';
+        } catch (\Throwable $e) {
+            Log::warning('[stripe] checkout session '.$id.' not expired: '.$e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * BL-038 P1: the Stripe minor amounts a recurring invoice of this subscription may be paid at — the plan amounts we
+     * set up (rounded down to Stripe's step for a 3-decimal currency, as startSubscription does).
+     *
+     * @return list<int>
+     */
+    private function expectedInvoiceMinors(object $metadata, string $currency): array
+    {
+        $out = [];
+        foreach (RecurringPromotion::expectedAmounts($metadata, $currency) as $money) {
+            $minor = GatewayRounding::chargeMinor($this->key(), $money, $currency);
+            if ($minor !== null) {
+                $out[] = $minor;
+            }
+        }
+
+        return array_values(array_unique($out));
     }
 
     /**

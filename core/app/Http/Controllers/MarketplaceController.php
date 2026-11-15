@@ -111,7 +111,13 @@ class MarketplaceController extends Controller
             'price_low' => $results->orderBy('price_minor')->orderBy('name'),
             'price_high' => $results->orderByDesc('price_minor')->orderBy('name'),
             'top_rated' => $results->orderByDesc('rating_avg')->orderByDesc('rating_count')->orderBy('name'),
-            default => $results->orderByDesc('rating_avg')->orderBy('name'), // featured
+            // The owner's own order first: a listing with a sort_order comes
+            // before one without, in the order they set. The rest keep the
+            // rating order after them (NULLs last).
+            default => $results->orderByRaw('sort_order IS NULL')
+                ->orderBy('sort_order')
+                ->orderByDesc('rating_avg')
+                ->orderBy('name'), // featured
         };
         $results = $results->get();
 

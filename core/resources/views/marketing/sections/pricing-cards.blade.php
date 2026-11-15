@@ -101,6 +101,12 @@
             $pcA = $plan->annual_price ?? 0;
             $pcSave = ($pcM > 0 && $pcA > 0) ? (int) round((1 - $pcA / ($pcM * 12)) * 100) : 0;
             $pcHref = (auth()->check() && Route::has('checkout.index') ? route('checkout.index') : route('register')).'?plan='.$plan->id;
+            $pcPromo = ($promoCards ?? [])[(string) ($plan->id ?? '')] ?? null;
+            $pcAnyPromo = ($pcAnyPromo ?? false) || $pcPromo !== null;
+            $pcMPrice = $pcPromo['prices']['monthly'] ?? $pcMoney($pcM);
+            $pcYPrice = $pcPromo['prices']['annual'] ?? $pcCycle($pcA, $pcM);
+            $pcLPrice = $pcPromo['prices']['lifetime'] ?? $pcCycle($plan->lifetime_price ?? 0, $pcM);
+            $pcSaveChip = $pcPromo['save_chip'] ?? null;
         @endphp
         <article class="pricing-card-b{{ $pcIsRec ? ' pricing-card-b--rec' : '' }}">
             @if ($pcIsRec)
@@ -108,8 +114,12 @@
             @endif
             <h3 class="pricing-card-b__name">{{ $pcText($plan, 'name') }}</h3>
             <p class="pricing-card-b__tagline">{{ \Illuminate\Support\Str::limit(strip_tags((string) $pcText($plan, 'description')), 60) }}</p>
+            @if ($pcPromo !== null)
+                <span class="pricing-card-b__promo" data-promo-badge data-monthly-badge="{{ $pcPromo['badges']['monthly'] }}" data-yearly-badge="{{ $pcPromo['badges']['yearly'] }}" data-lifetime-badge="{{ $pcPromo['badges']['lifetime'] }}" @if($pcPromo['badges']['monthly'] === '') hidden @endif>{{ $pcPromo['badges']['monthly'] }}</span>
+                <s class="pricing-card-b__was" data-promo-was data-monthly-was="{{ $pcPromo['was']['monthly'] }}" data-yearly-was="{{ $pcPromo['was']['yearly'] }}" data-lifetime-was="{{ $pcPromo['was']['lifetime'] }}" @if($pcPromo['was']['monthly'] === '') hidden @endif>{{ $pcPromo['was']['monthly'] }}</s>
+            @endif
             <div class="pricing-card-b__price">
-                <p class="pricing-card-b__amount" data-monthly-price="{{ $pcMoney($pcM) }}" data-yearly-price="{{ $pcCycle($pcA, $pcM) }}" data-lifetime-price="{{ $pcCycle($plan->lifetime_price ?? 0, $pcM) }}">{{ $pcMoney($pcM) }}</p>
+                <p class="pricing-card-b__amount" data-monthly-price="{{ $pcMPrice }}" data-yearly-price="{{ $pcYPrice }}" data-lifetime-price="{{ $pcLPrice }}">{{ $pcMPrice }}</p>
                 @if ($pcM > 0)
                     <p class="pricing-card-b__period" data-monthly-period="{{ ___('/mo') }}" data-yearly-period="{{ ___('/yr') }}" data-lifetime-period="{{ ___('one-time') }}">{{ ___('/mo') }}</p>
                 @endif
@@ -119,7 +129,9 @@
                 {{-- Pricing follow-ups: Chain is priced per branch (minimum branches billed). --}}
                 <p class="pricing-card-b__per-branch">{{ ___('Per branch, minimum :n branches', ['n' => max(1, (int) ($pcSettings['min_branches'] ?? 1))]) }}</p>
             @endif
-            @if ($pcSave > 0)
+            @if ($pcSaveChip !== null)
+                <span class="pricing-card-b__save" data-promo-save data-monthly-save="{{ $pcSaveChip['monthly'] }}" data-yearly-save="{{ $pcSaveChip['yearly'] }}" data-lifetime-save="{{ $pcSaveChip['lifetime'] }}" @if($pcSaveChip['monthly'] === '') hidden @endif>{{ $pcSaveChip['monthly'] }}</span>
+            @elseif ($pcSave > 0)
                 <span class="pricing-card-b__save">{{ ___('Save :n% with yearly billing', ['n' => $pcSave]) }}</span>
             @endif
             <ul class="pricing-card-b__feats">
@@ -131,6 +143,10 @@
         </article>
     @endforeach
 </div>
+
+@if ($pcAnyPromo ?? false)
+    @includeIf('billing::marketing.sections.promotion-toggle')
+@endif
 
 <p class="pricing-card-b__compare"><a href="{{ route('pricing').'#compare' }}">{{ ___('Compare all features') }}</a></p>
 

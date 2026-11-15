@@ -34,7 +34,11 @@
       {%- if item.is_sold_out -%}
         <span class="mbs-card-photo__out">{{ 'Sold out' | t }}</span>
       {%- elsif allow_order -%}
+        {%- if item.has_matrix -%}
+        <button type="button" class="mbs-card-photo__add" data-mb-open="{{ item.id }}" aria-label="{{ 'Add' | t }}: {{ item.name | escape }}"></button>
+        {%- else -%}
         <button type="button" class="mbs-card-photo__add" data-mb-add="{{ item.id }}" aria-label="{{ 'Add' | t }}: {{ item.name | escape }}"></button>
+        {%- endif -%}
       {%- endif -%}
     </div>
   </div>

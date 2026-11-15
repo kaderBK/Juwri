@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (c) JUWRI LTD */
+
+/* runtime skin — the header notification bell's panel (the platform's own
+   notification feed). It reuses the runtime's dialog + sheet chrome, so only
+   the parts the shared chrome does not cover live here. */
+.mb-bell[hidden] { display: none; }
+.mb-bell__card { max-inline-size: 480px; padding: 0; }
+.mb-bell__title { font-family: var(--tf-heading, var(--tf-body, system-ui, sans-serif)); font-size: 1.05rem; }
+.mb-bell__act { min-block-size: 36px; padding-inline: 12px; font-size: .82rem; }
+.mb-bell__list { padding: var(--ts-gap-3, 16px); }

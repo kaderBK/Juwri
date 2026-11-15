@@ -147,6 +147,8 @@ class CacheMarketingResponse
             // BL-036: the pricing pages show the plan catalogue — a saved or
             // deleted plan bumps the stamp, which orphans the cached body.
             $request->routeIs('pricing', 'home') ? 'pf'.MarketingPricingCache::version() : '',
+            // BL-038 O6: the promo offer bar renders on every cached guest marketing page.
+            'pm'.MarketingPricingCache::promotionsVersion(),
             // R15: reseller edits (brand, plan, page, blog post) bump that reseller's stamp.
             $resellerId > 0 ? 'rv'.MarketingPricingCache::resellerVersion($resellerId) : '',
         ]));

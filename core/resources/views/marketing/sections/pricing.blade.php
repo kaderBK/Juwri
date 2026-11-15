@@ -9,6 +9,7 @@
     $prLifetime = ($total_lifetime ?? collect($plans)->sum('lifetime_price')) > 0;
 @endphp
 <div class="mk-pricing">
+    @includeIf('billing::marketing.sections.promotion-banner')
     @if ($prAnnual || $prLifetime)
         <p class="mk-center">
             <span class="mk-cycle" role="group" aria-label="{{ ___('Billing period') }}">

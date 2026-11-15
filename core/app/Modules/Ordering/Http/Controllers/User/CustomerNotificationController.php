@@ -68,6 +68,22 @@ class CustomerNotificationController extends Controller
         return response()->json(['ok' => true, 'unread' => $this->unreadCount($customer->id)]);
     }
 
+    /**
+     * The bell's badge count — a LIGHTWEIGHT poll: no rows, just the number,
+     * so a storefront can keep the badge live without pulling the whole feed
+     * every minute. Scoped to the authenticated customer exactly like the
+     * feed above.
+     */
+    public function unread(Request $request): JsonResponse
+    {
+        $customer = Auth::guard('customer')->user();
+        if (! $customer) {
+            return response()->json(['unread' => 0], 401);
+        }
+
+        return response()->json(['unread' => $this->unreadCount($customer->id)]);
+    }
+
     private function unreadCount(int $customerId): int
     {
         return (int) CustomerNotification::where('customer_id', $customerId)->whereNull('read_at')->count();

@@ -30,6 +30,17 @@
         <form action="{{ route('admin.theme-reviews.listing.save', $theme->id) }}" method="post" class="ui-stack">@csrf
             <div class="ui-form-grid">
                 <div class="ui-field">
+                    <label class="ui-field__label" for="listing-visible">{{ ___('Visibility') }}</label>
+                    <div class="ui-field__control">
+                        <select name="visible" id="listing-visible">
+                            <option value="1" @selected($theme->status === 'published')>{{ ___('Visible') }}</option>
+                            <option value="0" @selected($theme->status !== 'published')>{{ ___('Hidden') }}</option>
+                        </select>
+                        <x-ui.icon name="chevron-down" size="16" class="ui-field__chevron" />
+                    </div>
+                </div>
+                <x-ui.field type="number" name="sort_order" :label="___('Position')" :value="old('sort_order', $theme->sort_order)" min="0" max="9999" :hint="___('Leave this empty and the listing follows the rating order. Drag listings on the reviews page to rearrange several at once.')" />
+                <div class="ui-field">
                     <label class="ui-field__label" for="listing-category">{{ ___('Category') }}</label>
                     <div class="ui-field__control">
                         <select name="category" id="listing-category">

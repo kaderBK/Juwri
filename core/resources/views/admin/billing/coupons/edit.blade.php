@@ -14,7 +14,12 @@
             <span class="ui-input-group__text">%</span>
         </div>
     </div>
-    @include('admin.billing.coupons._scope', ['coupon' => $coupon])
+    @if ($coupon->user_id === null && $coupon->reseller_id === null)
+        @includeIf('billing::admin.coupons._promotion-fields', ['coupon' => $coupon])
+    @endif
+    @if ($coupon->user_id !== null || $coupon->reseller_id !== null || ! \Illuminate\Support\Facades\View::exists('billing::admin.coupons._promotion-fields'))
+        @include('admin.billing.coupons._scope', ['coupon' => $coupon])
+    @endif
     <x-ui.field type="number" name="uses_limit" :label="___('Uses Limit').' *'" :value="$coupon->limit" min="1" placeholder="0" required />
     <x-ui.field type="datetime-local" name="expiry_at" :label="___('Expiry at').' *'" :value="\Carbon\Carbon::parse($coupon->expiry_at)->format('Y-m-d\TH:i')" required />
     <x-ui.field type="select" name="coupon_type" :label="___('Coupon Type')" :value="$coupon->coupon_type"

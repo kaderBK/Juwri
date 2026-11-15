@@ -6,9 +6,11 @@ namespace Juwri\Modules\Storefront\Storefront;
 
 use App\Models\Customer;
 use App\Services\CustomerWalletService;
+use App\Services\Verticals\FulfillmentRegistry;
 use App\Services\Verticals\VerticalRegistry;
 use Illuminate\Support\Collection;
 use Juwri\Core\Models\Store;
+use Juwri\Core\Support\PlanGate;
 use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Menu\Models\MenuVariant;
 use Juwri\Modules\Pharmacy\Services\Pharmacy\PharmacyComplianceService;
@@ -66,6 +68,7 @@ class CommerceRuntime
             : 0.0;
 
         $capabilities = $this->capabilities($store);
+        $items = $this->items($v, $capabilities);
 
         return [
             'storeId' => (int) $store->id,
@@ -85,6 +88,10 @@ class CommerceRuntime
                 'delivery' => (float) ($o->restaurant_delivery_charge ?? 0),
                 'minOrder' => (float) ($o->min_order_value ?? 0),
             ],
+            // The legacy three booleans — kept because a bundle older than
+            // `fulfillmentModes` (or a theme's own pinned copy) still reads
+            // them. `fulfillmentModes` below is the same answer in the store's
+            // OWN vocabulary, and is what the current bundles render.
             'orderTypes' => [
                 'onTable' => (bool) ($flags['on_table'] ?? false),
                 'takeaway' => (bool) ($flags['takeaway'] ?? false),
@@ -137,18 +144,111 @@ class CommerceRuntime
                 'otpRequest' => route('customer.otp.request', $store->id),
                 'otpVerify' => route('customer.otp.verify', $store->id),
                 'orderLookup' => route('store.orderLookup', $store->slug),
+                // The account sheet's own customer features: the live loyalty
+                // balance, the store credit and its top-up page, and the
+                // notification inbox. All three are the platform's own
+                // endpoints — the runtime had simply never called them.
+                'loyaltyBalance' => route('publicView.loyalty.balance', $store->id),
+                'walletBalance' => route('publicView.wallet.balance', $store->id),
+                'walletTopup' => route('publicView.wallet.topup', $store->id),
+                'notifications' => route('publicView.notifications.index', $store->id),
+                'notificationsRead' => route('publicView.notifications.read', $store->id),
+                // The header bell's badge — a lightweight poll (the count only).
+                'notificationsUnread' => route('publicView.notifications.unread', $store->id),
+                // The account sheet's "Track an order" box: the customer
+                // pastes a tracking link or the code, and the runtime swaps
+                // the TOKEN placeholder for it.
+                'orderTrack' => route('store.orderTrack', 'TOKEN'),
                 // Logged-in account: profile + addresses (order history rides
                 // the account payload). Delete URLs come per-address in it.
                 'account' => route('customer.account', $store->id),
                 'profile' => route('customer.profile.update', $store->id),
                 'addressStore' => route('customer.addresses.store', $store->id),
             ] + $this->v2Endpoints($store, $capabilities),
-            'items' => $this->items($v),
+            'items' => $items,
             'i18n' => $this->i18n(),
+
+            // The store's OWN fulfillment modes — the answer to "which order
+            // types does this shop offer?", in the shop's vocabulary. Added
+            // AFTER the v1 keys on purpose: the v1/v2 contract test pins the
+            // v1 key ORDER, because an old bundle reads that config by
+            // position.
+            'fulfillmentModes' => $this->fulfillmentModes($store, $flags),
+            // The catalogue facets — the sizes, the colours and the price
+            // range a customer can filter this shop by. Empty for a store
+            // whose vertical has no variant matrix (a restaurant has nothing
+            // to filter by, so the panel never appears).
+            'facets' => StorefrontFacets::summary($items),
             // Theme Studio B0.10 (additive — v1 ignores it): store vertical +
             // capabilities + the age-gate/OTC compliance the v2 runtime enforces.
             'store' => $this->store($store, $capabilities),
         ];
+    }
+
+    /**
+     * The fulfillment modes this storefront offers, in the store's OWN
+     * vocabulary — the segment the checkout draws above the form.
+     *
+     * A food store keeps the legacy trio exactly as it was: the
+     * `restaurant_*_order` flags still decide which of on-table / takeaway /
+     * delivery it offers, so nothing about a restaurant changes.
+     *
+     * A goods (or service) store speaks the vertical's own modes instead —
+     * ship / pickup_slot / in_store for retail — the same list the platform's
+     * own retail storefront (zevoa, shelf) offers, with the label the
+     * FulfillmentRegistry defines. A clothing order must never be recorded as
+     * a 'takeaway'.
+     *
+     * @param  array<string,mixed>  $flags
+     * @return list<array{value:string,label:string,needsAddress:bool,needsSlot:bool}>
+     */
+    protected function fulfillmentModes(object $store, array $flags): array
+    {
+        $type = $store->store_type ?? null;
+        $type = is_string($type) && $type !== '' ? $type : null;
+        $group = (string) app(VerticalRegistry::class)->capability($type, 'group', 'food');
+
+        if (! in_array($group, ['goods', 'services'], true) || ! $store instanceof Store) {
+            $legacy = [];
+            if ($flags['on_table'] ?? false) {
+                $legacy[] = ['value' => 'on-table', 'label' => ___('Dine-in'), 'needsAddress' => false, 'needsSlot' => false];
+            }
+            if ($flags['takeaway'] ?? false) {
+                $legacy[] = ['value' => 'takeaway', 'label' => ___('Takeaway'), 'needsAddress' => false, 'needsSlot' => false];
+            }
+            if ($flags['delivery'] ?? false) {
+                $legacy[] = ['value' => 'delivery', 'label' => ___('Delivery'), 'needsAddress' => true, 'needsSlot' => false];
+            }
+
+            return $legacy;
+        }
+
+        $registry = app(FulfillmentRegistry::class);
+        $available = $registry->modesFor($type);
+        $raw = store_options($store->id, 'fulfillment_enabled_modes');
+        $decoded = is_array($raw) ? $raw : (is_string($raw) ? json_decode($raw, true) : null);
+        $modes = is_array($decoded) ? array_values(array_intersect($available, $decoded)) : $available;
+        if (in_array('delivery', $modes, true) && ! PlanGate::storeAllows($store, PlanGate::DELIVERY)) {
+            $modes = array_values(array_diff($modes, ['delivery']));
+        }
+
+        $out = [];
+        foreach ($modes as $mode) {
+            if (! $registry->isValid($mode)) {
+                continue;
+            }
+            $out[] = [
+                'value' => $mode,
+                // 'ship' is parcel shipping to a shopper, so it reads as
+                // "Delivery" — the same relabel the platform's own retail
+                // storefront (zevoa) makes.
+                'label' => $mode === 'ship' ? ___('Delivery') : $registry->label($mode),
+                'needsAddress' => $registry->needsAddress($mode),
+                'needsSlot' => $registry->needsSlot($mode),
+            ];
+        }
+
+        return $out;
     }
 
     /**
@@ -212,6 +312,10 @@ class CommerceRuntime
             'type' => is_string($type) && $type !== '' ? $type : 'restaurant',
             'capabilities' => $capabilities,
             'ageGate' => $ageGate,
+            // The store's own contact details — the account sheet's
+            // "Help & support" row (tap to call) and the share title.
+            'name' => (string) ($store->title ?? ''),
+            'phone' => (string) ($store->phone ?? ''),
         ];
     }
 
@@ -239,8 +343,16 @@ class CommerceRuntime
         $strings = [
             'Add', 'Cart', 'Call waiter', 'Extras', 'Back', 'Sold out', 'You might also like',
             'Dine-in', 'Takeaway', 'Delivery', 'Your name', 'Table', 'Phone', 'Delivery address',
+            'Shipping address', 'In store', 'Pickup',
             'Coupon', 'Apply', 'Notes', 'Tip', 'None', 'Custom', 'Subtotal', 'Discount', 'Total',
             'Gift card code',
+            // The account sheet's rows + header bell — the same labels the
+            // first-party storefronts use for the same features.
+            'Rewards', 'Wallet', 'Help & support', 'Track an order',
+            'Order tracking link or code', 'Wishlist', 'Share this store',
+            'Continue shopping', 'Clear saved data on this device', 'Are you sure?',
+            'Add funds', 'Notifications', 'No notifications yet.', 'View rewards',
+            'Mark all read', 'Dark mode', 'Edit profile',
             'Place order', 'Clear cart', 'Select an order type.', 'Please enter your name.',
             'Please enter a delivery address.', 'Please sign in to order.', 'Something went wrong.',
             'Network error. Please try again.', 'Order confirmed', 'Your order has been placed successfully.',
@@ -262,6 +374,8 @@ class CommerceRuntime
             ':count parts fit your vehicle', 'No parts match your vehicle.', 'Fits your vehicle',
             // Theme Studio follow-ups: data-mb-share copy-link fallback.
             'Link copied', 'Could not copy the link',
+            // The catalogue facet panel (size / colour / price).
+            'Filters', 'Size', 'Colour', 'Price', 'Clear all', 'Show results', ':count items',
         ];
 
         $out = [];
@@ -305,11 +419,16 @@ class CommerceRuntime
      * absolute prices; extras + option-group choices are additive (the crave
      * contract). No DB work — reads only relations already loaded on the item.
      *
+     * @param  array<string,bool>  $capabilities
      * @return array<int,array<string,mixed>>
      */
-    protected function items(array $v): array
+    protected function items(array $v, array $capabilities = []): array
     {
         $storeId = $v['store']->id ?? null;
+        // The facet values (size / colour) only make sense for a shop with a
+        // variant matrix — a restaurant's "options" are additive groups, not
+        // a matrix, and there is nothing to filter by.
+        $variantFacets = (bool) ($capabilities['variant_goods'] ?? false);
         $out = [];
 
         foreach (($v['total_menus'] ?? []) as $m) {
@@ -332,7 +451,7 @@ class CommerceRuntime
                 foreach ($dims as $axis => $value) {
                     $axes[$axis][$value] = true;
                 }
-                $variants[] = [
+                $row = [
                     'id' => (int) $vr->id,
                     'label' => $parts !== [] ? implode(' · ', $parts) : 'Option',
                     'price' => (float) $vr->price,
@@ -341,6 +460,14 @@ class CommerceRuntime
                     'sku' => ($vr->sku ?? '') !== '' ? (string) $vr->sku : null,
                     'stock' => $vr->stock_qty !== null ? (int) $vr->stock_qty : null,
                 ];
+                if ($variantFacets) {
+                    // The facet values this cell stands for ("M", "Red") — the
+                    // catalogue filter reads them straight off the variant.
+                    foreach (StorefrontFacets::values($dims) as $facet => $value) {
+                        $row[$facet] = $value;
+                    }
+                }
+                $variants[] = $row;
             }
             // B0.10: a readable label for matrix-shaped variants (Lane A2
             // `{"Size":"M"}`), whose v1 `label` falls back to "Option".

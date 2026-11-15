@@ -4,9 +4,9 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\User\Concerns\FinalizesStorefrontOrders;
 use App\Http\Controllers\User\Concerns\HandlesStorefrontQrScan;
 use App\Http\Requests\StoreSettingsRules;
-use App\Mails\StoreOrderMail;
 use App\Models\Cuisine;
 use App\Models\Customer;
 use App\Models\MenuBanner;
@@ -39,9 +39,9 @@ use App\Services\StorefrontToggleMask;
 use App\Services\Theme\VerticalThemeSets;
 use App\Services\ThemeCustomizerService;
 use App\Services\ThemePurchaseService;
+use App\Services\Verticals\FulfillmentRegistry;
 use App\Services\Verticals\VerticalRegistry;
 use App\Services\WebhookService;
-use App\Services\WhatsApp\OrderMessage;
 use App\Storefront\StorefrontExtras;
 use App\Support\KioskContext;
 use App\Support\OrderCreatedWebhookPayload;
@@ -103,7 +103,6 @@ use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Menu\Models\MenuExtra;
 use Juwri\Modules\Menu\Models\MenuItemEvent;
 use Juwri\Modules\Menu\Models\MenuVariant;
-use Juwri\Modules\Menu\Models\MenuVariantOption;
 use Juwri\Modules\Menu\Services\Availability\MenuScheduleService;
 use Juwri\Modules\Menu\Services\Combos\ComboService;
 use Juwri\Modules\Menu\Services\MenuAdminService;
@@ -122,6 +121,7 @@ use Juwri\Modules\Ordering\Models\CustomerPushSubscription;
 use Juwri\Modules\Ordering\Models\OrderItemExtra;
 use Juwri\Modules\Ordering\Models\OrderVoiceNote;
 use Juwri\Modules\Ordering\Services\CustomerPushService;
+use Juwri\Modules\Ordering\Services\Fulfillment\FulfillmentSettingsService;
 use Juwri\Modules\Ordering\Services\Orders\EtaEstimator;
 use Juwri\Modules\Ordering\Services\Orders\NewOrderAlert;
 use Juwri\Modules\Ordering\Services\Orders\OrderPricing;
@@ -155,6 +155,7 @@ use Juwri\Modules\Tables\Services\TableMergeService;
 
 class StoreController extends Controller
 {
+    use FinalizesStorefrontOrders;
     use HandlesStorefrontQrScan;
     use ReportsValidationFailures;
     use ScopesToBranch;
@@ -1680,12 +1681,37 @@ class StoreController extends Controller
         // P3-06: at a kiosk the name is optional ("We'll call this name"), there is no phone and an eat-in order has no table
         // number — the order number is the identity. The kiosk context is the server-side session marker, never a request field.
         $kiosk = KioskContext::on((int) $store->id);
+
+        /* The order type, in the STORE's own vocabulary.
+           A restaurant posts the legacy literals and nothing changes. A goods
+           store posts its vertical's modes ('ship' / 'pickup_slot' /
+           'in_store'); a legacy literal that reaches a goods store (an old
+           cached runtime bundle, the dashboard's legacy form) is mapped onto
+           the vertical's equivalent, so a clothing order is never recorded as
+           a 'takeaway'. */
+        $fulfillment = app(FulfillmentSettingsService::class);
+        $postedType = (string) $request->get('ordering-type');
+        $orderType = $fulfillment->resolveOrderType($store, $postedType);
+        $needsAddress = $orderType === 'delivery'
+            || app(FulfillmentRegistry::class)->needsAddress($orderType);
+        $needsPhone = ! in_array($orderType, ['on-table', 'room_service'], true);
+
         $rules = self::CHECKOUT_RULES;
+        // A food store keeps its classic field-comparison rules (and their
+        // messages); a goods/service store resolves its own vocabulary, so the
+        // resolved mode drives each rule instead.
+        $isRestaurant = (string) app(VerticalRegistry::class)->capability($store->store_type ?? null, 'group', 'food') === 'food';
+        if (! $isRestaurant) {
+            $rules['ordering-type'] = ['required', 'in:'.implode(',', $fulfillment->allowedOrderTypes($store))];
+            $rules['table'] = [Rule::requiredIf($orderType === 'on-table'), 'nullable', 'string', 'max:120'];
+            $rules['phone-number'] = [Rule::requiredIf($needsPhone), 'nullable', 'string', 'max:25'];
+            $rules['address'] = [Rule::requiredIf($needsAddress), 'nullable', 'string', 'max:255'];
+        }
         if ($kiosk) {
             $rules['name'] = 'nullable|string|max:255';
             $rules['phone-number'] = 'nullable|string|max:25';
             $request->merge(['name' => trim((string) $request->input('name')) !== '' ? trim((string) $request->input('name')) : ___('Guest')]);
-            if ($request->get('ordering-type') === 'on-table' && trim((string) $request->input('table')) === '') {
+            if ($orderType === 'on-table' && trim((string) $request->input('table')) === '') {
                 $request->merge(['table' => ___('Kiosk')]);
             }
         }
@@ -1695,7 +1721,7 @@ class StoreController extends Controller
         }
 
         // Pricing follow-ups (PRICING.md §3): a delivery order needs a plan that includes delivery.
-        if ($request->get('ordering-type') === 'delivery' && ! PlanGate::storeAllows($store, PlanGate::DELIVERY)) {
+        if ($orderType === 'delivery' && ! PlanGate::storeAllows($store, PlanGate::DELIVERY)) {
             return response()->json(['success' => false, 'message' => PlanGate::customerMessage(PlanGate::DELIVERY)]);
         }
 
@@ -1716,7 +1742,7 @@ class StoreController extends Controller
         // on-table orders, which don't collect a phone number.
         if (CheckoutOtpController::gateEnabled($store->id)
             && ! $kiosk
-            && ! in_array($request->get('ordering-type'), ['on-table', 'room_service'], true)) {
+            && ! in_array($orderType, ['on-table', 'room_service'], true)) {
             $gatePhone = app(Sms::class)
                 ->normalizePhone((string) $request->get('phone-number'));
             if (! CheckoutOtpController::phoneIsVerified($gatePhone, (int) $store->id)) {
@@ -1850,7 +1876,7 @@ class StoreController extends Controller
                 $items,
                 $resolvedCombos,
                 $menusById,
-                (string) $request->get('ordering-type'),
+                $orderType,
                 $orderBranch?->id
             );
             if (($belowMin = OrderIntakeGate::belowMinimumMessage($store, $orderBranch, $subtotal)) !== null) {
@@ -1893,7 +1919,7 @@ class StoreController extends Controller
             return response()->json(['success' => false, 'message' => $e->validator->errors()->first()], 422);
         }
         $clientHash = $clientUuid ? ClientOrderId::fingerprint([
-            'type' => $request->get('ordering-type'),
+            'type' => $orderType,
             'items' => json_decode((string) $request->get('items'), true),
             'combos' => $postedCombos,
         ]) : null;
@@ -1908,11 +1934,14 @@ class StoreController extends Controller
 
         // P3-03 (REVIEW, Opus): an order sent from the offline queue is refused when any level switched the queue off,
         // when its type / payment may not queue or when it waited too long. Runs AFTER the replay answer above.
-        if (($queueRefusal = app(OfflineQueuePolicy::class)->refusal($store, $request, (string) $request->get('ordering-type'))) !== null) {
+        if (($queueRefusal = app(OfflineQueuePolicy::class)->refusal($store, $request, $orderType)) !== null) {
             return $queueRefusal;
         }
 
-        $orderingType = (string) $request->get('ordering-type');
+        // The mode the order is actually recorded in — the store's own
+        // vocabulary (a clothing order is a 'ship' / 'pickup_slot' /
+        // 'in_store', never a 'takeaway').
+        $orderingType = $orderType;
         $guestName = $request->get('name');
         $guestPhone = $request->get('phone-number');
         $guestMessage = $request->get('message');
@@ -2147,6 +2176,33 @@ class StoreController extends Controller
                 // options saved as empty strings must not reach float math (PHP 8 TypeError)
                 $delivery_charge = Branch::effectiveDeliveryFee((int) $store->id, $order->pricingBranch()); // P5-31
                 break;
+
+            default:
+                /* A goods / service mode — 'ship', 'pickup_slot', 'in_store'.
+                   The store's own vocabulary: the phone is still collected,
+                   and a shipping mode collects the address (plus the pin the
+                   customer dropped) exactly like a delivery order. There is
+                   no delivery charge: the platform's own goods checkout
+                   (GoodsOrderService) charges none either. */
+                $order->phone_number = $guestPhone;
+                $contactLines[] = $icon_phone.' '.$guestPhone;
+
+                if ($needsAddress) {
+                    $deliveryAddress = $request->get('address');
+                    $order->address = $deliveryAddress;
+                    [$deliveryLat, $deliveryLng] = storefront_delivery_coords($request->all());
+                    if ($deliveryLat !== null) {
+                        $order->delivery_lat = $deliveryLat;
+                        $order->delivery_lng = $deliveryLng;
+                    }
+                    $contactLines[] = $icon_address.' '.$deliveryAddress;
+                    if ($deliveryLat !== null && ($mapsUrl = order_delivery_maps_url($order))) {
+                        $contactLines[] = $icon_address.' '.$mapsUrl;
+                    }
+                }
+
+                $orderTypeLabel = app(FulfillmentRegistry::class)->label($orderingType);
+                break;
         }
         $taxx_charge = (float) (store_options($store->id, 'restaurant_taxx_charge', 0) ?: 0);
 
@@ -2215,10 +2271,19 @@ class StoreController extends Controller
             // A non-scalar is meaningless as a time → treat as ASAP (null).
             $scheduledRaw = $request->get('scheduled_at');
             $scheduledRaw = is_scalar($scheduledRaw) ? (string) $scheduledRaw : null;
+            /* The scheduler knows the legacy modes; a goods mode borrows its
+               closest one ('ship' → 'delivery', 'in_store' → 'takeaway') so a
+               scheduled goods order is checked against the store's own delivery
+               / collection slots. 'pickup_slot' is already a scheduling type. */
+            $schedulingType = match ($order->type) {
+                'ship' => 'delivery',
+                'in_store' => 'takeaway',
+                default => $order->type,
+            };
             $scheduledAt = $scheduling->validate(
                 $store->id,
                 $orderBranch,
-                $order->type,
+                $schedulingType,
                 $scheduledRaw
             );
             if ($scheduledAt) {
@@ -2325,7 +2390,15 @@ class StoreController extends Controller
                guard, so a partially-fulfillable order stays partially-fulfillable
                instead of hard-failing on the busiest endpoint. */
             // Bug batch 7 · 3/4: shared with the coupon pre-flight (applyCoupon), so a preview prices the same lines.
-            $unifiedLines = LegacyCartLines::lines($items, $store, $sfType, $droppedItems);
+            /* A PRODUCT is scoped by TIME, not by "dine-in only" — the food
+               concept does not apply to a goods order, and the platform's own
+               goods checkout (GoodsOrderService) does not scope by order type
+               either. So for a goods/service store the order-type scope is
+               skipped and only the item's time window applies; a restaurant
+               keeps the scope exactly as it was. */
+            $sfGroup = (string) app(VerticalRegistry::class)->capability($store->store_type ?? null, 'group', 'food');
+            $sfScopeType = in_array($sfGroup, ['goods', 'services'], true) ? null : $sfType;
+            $unifiedLines = LegacyCartLines::lines($items, $store, $sfScopeType, $droppedItems);
             if (! $unifiedLines && ! $resolvedCombos) {
                 return response()->json(['success' => false, 'message' => ___('Your cart is empty.')]);
             }
@@ -2416,7 +2489,7 @@ class StoreController extends Controller
                 // room_service keeps table_number = room->table_no, which create()
                 // nulls for a non-on-table type. (Read the request value, not the
                 // narrowed $order->type, whose annotated union omits room_service.)
-                'table_number' => $request->get('ordering-type') === 'room_service' ? $sfTableNumber : null,
+                'table_number' => $orderType === 'room_service' ? $sfTableNumber : null,
                 'status' => $sfStatusOverride,   // 'unpaid' (pay online) | pending-approval
                 'delivery_lat' => $sfDeliveryLat, // delivery pin (create() doesn't model it)
                 'delivery_lng' => $sfDeliveryLng,
@@ -2730,7 +2803,9 @@ class StoreController extends Controller
                        the order-type scope, all on the store's clock. Same resolver
                        the storefront rendered from, so a diner can never check out
                        something the menu just stopped offering. */
-                    if ($menu && ! MenuScheduleService::isAvailable($menu, null, $order->type)) {
+                    $legacyGroup = (string) app(VerticalRegistry::class)->capability($store->store_type ?? null, 'group', 'food');
+                    $legacyScopeType = in_array($legacyGroup, ['goods', 'services'], true) ? null : $order->type;
+                    if ($menu && ! MenuScheduleService::isAvailable($menu, null, $legacyScopeType)) {
                         // Skip items ordered outside their scheduled availability window
                         $droppedItems[] = (string) $menu->name;
 
@@ -3439,145 +3514,6 @@ class StoreController extends Controller
         $result['prep_eta'] = EtaEstimator::forOrder($order)?->toArray();
 
         return response()->json($result);
-    }
-
-    /**
-     * B8-P1: the subtotal the minimum-order gate compares against, priced the same
-     * way the order path will bill each line — the scheduled (or variant, which
-     * replaces the base) unit price plus its paid extras — so a happy-hour basket is
-     * judged on what it is actually charged, not its list price.
-     *
-     * @param  array<int, object>  $items
-     * @param  array<int, array{unit_price: float, quantity: int}>  $resolvedCombos
-     * @param  Collection<int, Menu>  $menusById
-     */
-    private function minimumOrderSubtotal(array $items, array $resolvedCombos, Collection $menusById, ?string $orderType, ?int $branchId): float
-    {
-        $subtotal = 0.0;
-        foreach ($items as $item) {
-            $menu = $menusById->get((int) ($item->id ?? 0));
-            if (! $menu) {
-                continue;
-            }
-            $qty = max(1, (int) ($item->quantity ?? 1));
-
-            // Variant price replaces the base price when a valid variant is chosen.
-            $chosenVariant = (isset($item->variants) && is_numeric($item->variants))
-                ? MenuVariant::where('menu_id', $menu->id)->find($item->variants)
-                : null;
-
-            /* PARITY-RUN T5: resolve the unit through the SAME snapshot the order
-               path persists (MenuScheduleService::snapshotFor). A schedule that
-               applies REPLACES the base/variant price, exactly as the bill charges;
-               extras are still added on top below. */
-            $snapshot = MenuScheduleService::snapshotFor($menu, $chosenVariant, $orderType, $branchId);
-            $unit = (float) $snapshot['unit_price'];
-
-            /* Paid extras add to the unit — but only the ones this item
-               actually offers. A bare find() here priced any extra id in the
-               payload, so a foreign extra could carry a basket over the
-               store's minimum, and (now that ordering drops those extras) the
-               subtotal checked here would not be the subtotal billed. */
-            $minAllowedExtras = $menu->resolved_extras->keyBy('id');
-            foreach ((array) ($item->extras ?? []) as $extra) {
-                $extraId = is_object($extra) ? ($extra->id ?? null) : $extra;
-                $me = $extraId ? $minAllowedExtras->get((int) $extraId) : null;
-                if ($me) {
-                    $unit += (float) $me->price;
-                }
-            }
-            $subtotal += $unit * $qty;
-        }
-
-        // T6: combos count toward the minimum — otherwise a store with a
-        // minimum silently refused every combos-only basket.
-        foreach ($resolvedCombos as $rc) {
-            $subtotal += (float) $rc['unit_price'] * (int) $rc['quantity'];
-        }
-
-        return $subtotal;
-    }
-
-    /**
-     * " (Large, Spicy)": one label per option group a variant points at, in the
-     * variant's own order; empty when none resolve. A group the owner has since
-     * deleted, or a pick the group no longer has, just adds nothing (it used to
-     * 500 the checkout, mirrored from OrderItem::variantTitle).
-     */
-    private function variantTitleSuffix(MenuVariant $variant): string
-    {
-        $labels = [];
-        foreach ((array) $variant->options as $groupId => $pick) {
-            $group = MenuVariantOption::query()->whereKey($groupId)->first();
-            if ($group === null) {
-                continue;
-            }
-            $choices = $group->getOriginal('options');
-            $choices = is_string($choices) ? json_decode($choices, true) : (array) $choices;
-            if (is_array($choices) && isset($choices[$pick])) {
-                $labels[] = $choices[$pick];
-            }
-        }
-
-        return $labels === [] ? '' : ' ('.implode(', ', $labels).')';
-    }
-
-    /**
-     * The owner's "new order" mail (settings template `new_order`), unless the
-     * store switched it off (`store_submit_order_notification`, on by
-     * default) or has no owner row.
-     *
-     * @param  array<string, mixed>  $details  the order fields StoreOrderMail merges
-     */
-    private function mailOwnerNewOrder(Store $store, array $details): void
-    {
-        $owner = $store->user;
-        if ($owner === null || ! store_options($store->id, 'store_submit_order_notification', 1)) {
-            return;
-        }
-
-        $owner->sendMail(new StoreOrderMail(['store_name' => $store->title] + $details));
-    }
-
-    /**
-     * The store's WhatsApp order template (OrderMessage::SHORTCODES) expanded
-     * with this order's values; `$values` is keyed by the tag name without braces.
-     *
-     * @param  array<string, mixed>  $values
-     */
-    private function whatsappOrderText(int $storeId, array $values): string
-    {
-        $tokens = [];
-        foreach ($values as $tag => $value) {
-            $tokens['{'.$tag.'}'] = $value;
-        }
-
-        return OrderMessage::build($storeId, $tokens);
-    }
-
-    /**
-     * The pending payment row a pay-online storefront order is settled through
-     * (PaymentController reads it by id). `user_id` holds the STORE id for
-     * order payments, and both amounts are what is still owed.
-     *
-     * @param  array<string, mixed>  $details  hand-off data the payment page reads back
-     */
-    private function orderPaymentTransaction(Store $store, Order $order, float $due, ?string $ip, array $details): Transaction
-    {
-        $label = sprintf('%s (#%s)', $store->title, $order->getKey());
-
-        return Transaction::create([
-            'product_name' => $label,
-            'transaction_description' => $label,
-            'product_id' => $order->getKey(),
-            'store_id' => $store->getKey(), // P1-04/P1-10: the store; user_id stays NULL (the diner is not a user)
-            'amount' => $due,
-            'base_amount' => $due,
-            'currency_code' => store_options($store->getKey(), 'currency_code'),
-            'transaction_method' => 'order',
-            'transaction_ip' => $ip,
-            'details' => $details,
-        ]);
     }
 
     /**

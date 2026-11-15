@@ -5,8 +5,8 @@
 namespace Juwri\Modules\Storefront\Storefront;
 
 use App\Http\Controllers\DeveloperDocsController;
-use Juwri\Modules\Storefront\Services\Rendering\LiquidEnvironmentFactory;
 use Illuminate\Support\Str;
+use Juwri\Modules\Storefront\Services\Rendering\LiquidEnvironmentFactory;
 use Keepsuit\Liquid\Filters\StandardFilters;
 
 /**
@@ -111,6 +111,7 @@ class ThemeLinter
         }
         if (($library = $theme->library()) && $theme->isSectioned()) {
             $featureBodies += $this->librarySectionBodies($library, $theme->templateJson(), $featureBodies);
+            $featureBodies += $this->librarySnippetBodies($library, $featureBodies);
         }
         $warnings = array_merge($warnings, $this->featureWiringWarnings($featureBodies));
 
@@ -238,6 +239,7 @@ class ThemeLinter
         }
         if ($library) {
             $featureBodies += $this->librarySectionBodies($library, $files['templates/index.json'] ?? null, $featureBodies);
+            $featureBodies += $this->librarySnippetBodies($library, $featureBodies);
         }
         $warnings = array_merge($warnings, $this->featureWiringWarnings($featureBodies));
 
@@ -653,6 +655,34 @@ class ThemeLinter
             if ($source !== null) {
                 $out["library/sections/{$type}.liquid"] = $this->stripSchemaBlocks($source);
             }
+        }
+
+        return $out;
+    }
+
+    /**
+     * The bodies of the LIBRARY's snippets.
+     *
+     * The advisory feature-wiring scan has to see them: the hooks it looks
+     * for — `data-mb-open` on a card, `data-mb-add` on its add button — live
+     * in the library's card snippet for every theme that uses the library's
+     * cards. Without them, every library-based theme is warned that its
+     * items "cannot be opened/deep-linked" and that "nothing can be added to
+     * the cart", while the library's card does exactly that. The library
+     * itself is linted on its own (not re-reported per theme).
+     *
+     * @param  array<string,string>  $themeBodies  rel path → body already collected
+     * @return array<string,string>
+     */
+    protected function librarySnippetBodies(SectionLibrary $library, array $themeBodies): array
+    {
+        $out = [];
+        foreach ($library->snippets() as $name => $source) {
+            // The theme's own snippet of the same name wins.
+            if (isset($themeBodies['snippets/'.$name.'.liquid'])) {
+                continue;
+            }
+            $out['library/snippets/'.$name.'.liquid'] = $this->stripSchemaBlocks((string) $source);
         }
 
         return $out;

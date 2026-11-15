@@ -93,9 +93,15 @@
         {%- if item.on_offer and from == false %} <s class="mbs-card-product__was"><bdi data-mb-money="{{ item.original_price }}">{{ item.original_price | money }}</bdi></s>{%- endif -%}
       </p>
       {%- if flags.allow_order -%}
-      <button type="button" class="mbs-card-product__add" data-mb-add="{{ item.id }}" aria-label="{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}"{% if out %} disabled{% endif %}>
+      {%- if item.has_matrix -%}
+      <button type="button" class="mbs-card-product__add" data-mb-open="{{ item.id }}" aria-label="{% if out %}{{ 'Out of stock' | t }}{% else %}{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}{% endif %}"{% if out %} disabled{% endif %}>
         {%- if out -%}{{ 'Out of stock' | t }}{%- else -%}{{ vocab.add_to_cart | escape }}{%- endif -%}
       </button>
+      {%- else -%}
+      <button type="button" class="mbs-card-product__add" data-mb-add="{{ item.id }}" aria-label="{% if out %}{{ 'Out of stock' | t }}{% else %}{{ vocab.add_to_cart | escape }}: {{ item.name | escape }}{% endif %}"{% if out %} disabled{% endif %}>
+        {%- if out -%}{{ 'Out of stock' | t }}{%- else -%}{{ vocab.add_to_cart | escape }}{%- endif -%}
+      </button>
+      {%- endif -%}
       {%- endif -%}
     </div>
   </div>

@@ -93,7 +93,7 @@ class StripeAdapterTest extends TestCase
         $this->assertNull($tx->fresh()->payment_id);
     }
 
-    public function test_initiate_recurring_creates_product_plan_and_drops_the_pending_row(): void
+    public function test_initiate_recurring_creates_product_plan_and_keeps_the_row_as_its_setup(): void
     {
         config(['settings.stripe_payment_mode' => 'recurring']);
         [, $tx] = $this->makePlanTransaction(9.0, 'USD', 'membership');
@@ -110,7 +110,8 @@ class StripeAdapterTest extends TestCase
         $response = StripeController::pay($tx);
 
         $this->assertSame('https://checkout.stripe.test/cs_sub_1', $response->getTargetUrl());
-        $this->assertNull(Transaction::find($tx->id));
+        // BL-038 review: kept (never settled itself) with its session id, so a replaced checkout can be expired.
+        $this->assertSame([Transaction::STATUS_RECURRING_SETUP, 'cs_sub_1'], [Transaction::find($tx->id)?->status, Transaction::find($tx->id)?->payment_id]);
         Http::assertSent(fn (ClientRequest $r) => $r->method() === 'POST' && str_ends_with($r->url(), '/products') && $r['id'] === '7');
         Http::assertSent(fn (ClientRequest $r) => $r->method() === 'POST' && str_ends_with($r->url(), '/plans')
             && $r['id'] === '7_MONTHLY_900_USD' && (int) $r['interval_count'] === 30 && $r['interval'] === 'day');

@@ -48,6 +48,8 @@
     {{ \Juwri\Core\Support\Hooks::first('owner.shell.plan-notices', $__user) }}
 @endif
 
+@includeIf('billing::owner.partials.platform-offer')
+
 @if ($__trialDays !== null)
     <x-ui.banner :tone="$__trialDays <= 2 ? 'danger' : 'warning'" class="ui-notice" data-trial-notice="{{ $__trialDays }}">
         <span>{{ $__trialDays === 0 ? ___('Your free trial has expired.') : ___(':days day(s) left in your free trial.', ['days' => $__trialDays]) }}</span>

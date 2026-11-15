@@ -302,7 +302,7 @@ class TransactionController extends Controller
     private function filtered(Request $request): Builder
     {
         $query = Transaction::query()->with(['user', 'store'])->orderByDesc('created_at')->orderByDesc('id')
-            // BL-038: settled merchant-of-record checkout rows are bookkeeping, not payments.
+            // BL-038/BL-039: checkout rows kept only as bookkeeping (subscription pending/set-up, settled MoR checkout, abandoned) are not payments.
             ->where(fn ($q) => $q->whereNull('status')->orWhereNotIn('status', Transaction::CHECKOUT_BOOKKEEPING));
 
         $status = $request->input('status');

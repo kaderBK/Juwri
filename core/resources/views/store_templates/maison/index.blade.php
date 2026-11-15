@@ -69,32 +69,9 @@
     // text so the same color name always renders the same swatch — rather
     // than a flat neutral dot, so a product's color rail always reads as
     // intentional even before real hex data exists per-variant.
-    $namedSwatchColors = [
-        'black' => '#111111', 'white' => '#ffffff', 'red' => '#d33333', 'blue' => '#2563eb',
-        'green' => '#16a34a', 'yellow' => '#eab308', 'orange' => '#f97316', 'purple' => '#9333ea',
-        'pink' => '#ec4899', 'brown' => '#8b5e3c', 'grey' => '#9ca3af', 'gray' => '#9ca3af',
-        'navy' => '#1e3a8a', 'beige' => '#e8dcc8', 'gold' => '#d4af37', 'silver' => '#c0c0c0',
-        'maroon' => '#7f1d1d', 'teal' => '#0d9488', 'cyan' => '#06b6d4', 'olive' => '#6b7a1a',
-        'khaki' => '#c3b091', 'cream' => '#f5f0dc', 'camel' => '#a9784e', 'terracotta' => '#a9503b',
-        'blush' => '#d9afae', 'charcoal' => '#3c3a38',
-    ];
-    $earthPalette = ['#A9784E', '#A9503B', '#6B7A4A', '#7C93A6', '#D9AFAE', '#3C3A38'];
-    $swatchColor = function (?string $label) use ($namedSwatchColors, $earthPalette): ?string {
-        if (! $label) {
-            return null;
-        }
-        $l = Str::lower($label);
-        if (preg_match('/#(?:[0-9a-f]{3}|[0-9a-f]{6})\b/i', $l, $m)) {
-            return $m[0];
-        }
-        foreach ($namedSwatchColors as $name => $hex) {
-            if (str_contains($l, $name)) {
-                return $hex;
-            }
-        }
-
-        return $earthPalette[crc32($l) % count($earthPalette)];
-    };
+    // The rule itself lives in Juwri\Modules\Storefront\Storefront\SwatchColor,
+    // so the Liquid runtime's catalogue filter paints the same color the same way.
+    $swatchColor = fn (?string $label): ?string => \Juwri\Modules\Storefront\Storefront\SwatchColor::for($label);
 
     // Best-effort axis reader for ONE variant: returns ['Color' => 'Red',
     // 'Size' => 'M', ...]. Handles both the matrix-generator axes shape

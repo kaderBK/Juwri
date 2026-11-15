@@ -59,7 +59,8 @@ class Transaction extends Model implements MinorMoneyModel
     /**
      * BL-038: a merchant-of-record checkout (Paddle, Lemon Squeezy) whose first payment settled and a gateway
      * subscription follows — the settlement wrote its own `success` row; this one stays findable for the renewals,
-     * which are bound to it by id (MorPaymentGuard). Never a payment itself.
+     * which are bound to it by id (MorPaymentGuard). Never a payment itself. Also (BL-039) the checkout row a PayPal
+     * subscription was sold from — its `custom_id` carries only a short local reference and renewals read from here.
      */
     public const STATUS_RECURRING_SETUP = 'recurring_setup';
 
@@ -69,12 +70,15 @@ class Transaction extends Model implements MinorMoneyModel
      */
     public const STATUS_CHECKOUT_SETTLED = 'checkout_settled';
 
+    /** BL-038 review: a pending checkout the buyer will not pay (replaced, failed to start, cancelled) — AbandonedCheckout. */
+    public const STATUS_ABANDONED = 'abandoned';
+
     /**
      * Statuses of a checkout row kept only as bookkeeping — never a payment, so never listed as one.
      *
      * @var list<string>
      */
-    public const CHECKOUT_BOOKKEEPING = [self::STATUS_RECURRING_PENDING, self::STATUS_RECURRING_SETUP, self::STATUS_CHECKOUT_SETTLED];
+    public const CHECKOUT_BOOKKEEPING = [self::STATUS_RECURRING_PENDING, self::STATUS_RECURRING_SETUP, self::STATUS_CHECKOUT_SETTLED, self::STATUS_ABANDONED];
 
     /** Merchant-of-record gateways: their checkout row carries the gateway's later events. */
     public const MOR_GATEWAYS = ['paddle', 'lemon_squeezy'];
@@ -292,18 +296,20 @@ class Transaction extends Model implements MinorMoneyModel
      * BL-038: a merchant-of-record settlement marks the account's checkout row it was sold from — `recurring_setup`
      * when a gateway subscription follows (`$recurring` null = judged from the row: monthly / yearly), else
      * `checkout_settled` — so the hourly cleanup keeps it for the gateway's later events. Only a row of that account
-     * still without a status. Called by the MoR gateway controllers right after a 200 settlement (and on a re-delivery
+     * still without a status, awaiting its first PayPal sale (`recurring_pending`), or `abandoned` (BL-038 review:
+     * money captured on a checkout already closed is settled, never refused; a charge paid one period at a time —
+     * details.one_time_only — is no subscription). Called by the MoR gateway controllers right after a 200 settlement (and on a re-delivery
      * of a settled payment) — not inside the settlement's DB transaction: a crash between the two leaves the row
      * unmarked until the next delivery of that payment, or the backfill migration (mark_settled_mor_checkouts).
      */
     public static function markCheckoutSettled(int $checkoutId, int|string|null $userId, ?bool $recurring = null): void
     {
-        $awaiting = fn ($q) => $q->whereNull('status')->orWhere('status', self::STATUS_RECURRING_PENDING);
+        $awaiting = fn ($q) => $q->whereNull('status')->orWhereIn('status', [self::STATUS_RECURRING_PENDING, self::STATUS_ABANDONED]);
         $checkout = static::query()->withoutGlobalScopes()->whereKey($checkoutId)->where($awaiting)->first();
         if ($checkout === null || (string) $checkout->user_id !== (string) $userId) {
             return;
         }
-        $recurring ??= in_array($checkout->frequency, ['MONTHLY', 'YEARLY'], true);
+        $recurring ??= in_array($checkout->frequency, ['MONTHLY', 'YEARLY'], true) && data_get($checkout->details, 'one_time_only') !== true;
         static::query()->withoutGlobalScopes()->whereKey($checkoutId)->where($awaiting)
             ->update(['status' => $recurring ? self::STATUS_RECURRING_SETUP : self::STATUS_CHECKOUT_SETTLED]);
     }

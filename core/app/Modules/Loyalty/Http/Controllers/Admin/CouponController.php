@@ -4,18 +4,20 @@
 
 namespace Juwri\Modules\Loyalty\Http\Controllers\Admin;
 
-use Juwri\Core\Http\Controllers\Admin\Concerns\AnswersAdminPanel;
-use Juwri\Core\Http\Controllers\Controller;
-use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponStoreRequest;
-use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponUpdateRequest;
-use Juwri\Core\Http\Requests\Admin\BulkDeleteRequest;
 use App\Models\Coupon;
-use Juwri\Core\Support\Admin\Cells;
-use Juwri\Core\Support\Admin\DataTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Juwri\Core\Http\Controllers\Admin\Concerns\AnswersAdminPanel;
+use Juwri\Core\Http\Controllers\Controller;
+use Juwri\Core\Http\Requests\Admin\BulkDeleteRequest;
 use Juwri\Core\Money\Currencies;
+use Juwri\Core\Support\Admin\Cells;
+use Juwri\Core\Support\Admin\DataTable;
+use Juwri\Core\Support\Hooks;
+use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponStoreRequest;
+use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponUpdateRequest;
 
 /**
  * Admin › Membership › Coupons: discount codes for plan purchases. Codes are
@@ -38,9 +40,11 @@ class CouponController extends Controller
         }
 
         $sortable = [0 => 'id', 1 => 'code', 2 => 'percentage_rate', 3 => 'used', 4 => 'limit', 5 => 'expiry_at', 6 => 'coupon_type'];
+        $query = Coupon::query();
+        Hooks::call('admin.coupons.query', $query);
 
         return DataTable::make($request, $sortable, ['id', 'code'])
-            ->respond(Coupon::query(), fn (Coupon $coupon) => [
+            ->respond($query, fn (Coupon $coupon) => [
                 Cells::text((string) $coupon->id),
                 Cells::html('<strong>'.e($coupon->code).'</strong>'),
                 // A fixed coupon is an amount of its currency (was shown as "5%").
@@ -65,7 +69,10 @@ class CouponController extends Controller
 
     public function store(CouponStoreRequest $request): JsonResponse
     {
-        Coupon::create($request->couponAttributes());
+        DB::transaction(function () use ($request): void {
+            $coupon = Coupon::create($request->couponAttributes());
+            Hooks::call('admin.coupons.saved', $coupon, $request);
+        });
 
         return $this->panelDone(___('Created Successfully'));
     }
@@ -77,12 +84,19 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon): View
     {
+        abort_if(Hooks::first('admin.coupons.editable', $coupon) === true, 404);
+
         return view('admin.billing.coupons.edit', ['coupon' => $coupon]);
     }
 
     public function update(CouponUpdateRequest $request, Coupon $coupon): JsonResponse
     {
-        $coupon->update($request->couponAttributes());
+        abort_if(Hooks::first('admin.coupons.editable', $coupon) === true, 404);
+
+        DB::transaction(function () use ($request, $coupon): void {
+            $coupon->update($request->couponAttributes());
+            Hooks::call('admin.coupons.saved', $coupon, $request);
+        });
 
         return $this->panelDone(___('Updated Successfully'));
     }
@@ -96,7 +110,14 @@ class CouponController extends Controller
     {
         $this->authorize('deleteAny', Coupon::class);
 
-        Coupon::query()->whereKey($request->ids())->delete();
+        $ids = $request->ids();
+        if (Hooks::has('admin.coupons.editable')) {
+            foreach (Coupon::query()->whereKey($ids)->get() as $coupon) {
+                abort_if(Hooks::first('admin.coupons.editable', $coupon) === true, 404);
+            }
+        }
+
+        Coupon::query()->whereKey($ids)->delete();
 
         return $this->panelDone(___('Deleted Successfully'));
     }

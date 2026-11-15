@@ -65,6 +65,26 @@
   function all(sel, ctx) { return Array.prototype.slice.call((ctx || doc).querySelectorAll(sel)); }
   // Translated UI string (keyed by the English source; falls back to English).
   function t(s) { return (CFG.i18n && CFG.i18n[s]) || s; }
+  /* The fulfillment modes this store offers, in its OWN vocabulary.
+     CFG.fulfillmentModes is the vertical's list (ship / pickup_slot /
+     in_store for a goods store, the legacy trio for a restaurant); the
+     legacy booleans are the fallback for a config written before it. */
+  function modes() {
+    if (Array.isArray(CFG.fulfillmentModes) && CFG.fulfillmentModes.length) return CFG.fulfillmentModes;
+    var ot = CFG.orderTypes || {}, out = [];
+    if (ot.onTable) out.push({ value: "on-table", label: t("Dine-in"), needsAddress: false, needsSlot: false });
+    if (ot.takeaway) out.push({ value: "takeaway", label: t("Takeaway"), needsAddress: false, needsSlot: false });
+    if (ot.delivery) out.push({ value: "delivery", label: t("Delivery"), needsAddress: true, needsSlot: false });
+    return out;
+  }
+  // The mode currently chosen (falls back to the first one the store offers).
+  function mode() {
+    var ms = modes();
+    for (var i = 0; i < ms.length; i++) { if (ms[i].value === orderType) return ms[i]; }
+    return ms[0] || { value: orderType || "", label: "", needsAddress: false, needsSlot: false };
+  }
+  // A goods store ships to an address; a restaurant delivers to one.
+  function addressLabel() { return mode().value === "ship" ? t("Shipping address") : t("Delivery address"); }
   // Translate a freshly-rendered subtree in place: leaf text, placeholders,
   // and aria-labels whose English matches an i18n key. Called after each
   // mount.innerHTML so the runtime UI speaks the diner's language.
@@ -432,11 +452,12 @@
   }
 
   function checkoutForm(T) {
-    var ot = CFG.orderTypes;
+    var ms = modes();
     var seg = "";
-    if (ot.onTable) seg += '<button type="button" data-mb-ot="on-table"' + (orderType === "on-table" ? ' class="is-on"' : "") + ">Dine-in</button>";
-    if (ot.takeaway) seg += '<button type="button" data-mb-ot="takeaway"' + (orderType === "takeaway" ? ' class="is-on"' : "") + ">Takeaway</button>";
-    if (ot.delivery) seg += '<button type="button" data-mb-ot="delivery"' + (orderType === "delivery" ? ' class="is-on"' : "") + ">Delivery</button>";
+    ms.forEach(function (m) {
+      seg += '<button type="button" data-mb-ot="' + esc(m.value) + '"' +
+        (orderType === m.value ? ' class="is-on"' : "") + ">" + esc(m.label) + "</button>";
+    });
 
     var h = '<form class="mb-checkout" data-mb-checkout-form>';
     h += '<div class="mb-ot-seg">' + seg + "</div>";
@@ -446,7 +467,7 @@
     } else {
       h += '<input class="mb-field" name="phone" placeholder="Phone">';
     }
-    if (orderType === "delivery") h += '<input class="mb-field" name="address" placeholder="Delivery address">';
+    if (mode().needsAddress) h += '<input class="mb-field" name="address" placeholder="' + esc(addressLabel()) + '">';
     if (CFG.flags.allowScheduling) h += '<input class="mb-field" type="datetime-local" name="scheduled_at">';
     if (CFG.flags.allowCoupons) h += '<div class="mb-coupon"><input class="mb-field" data-mb-coupon-input placeholder="Coupon"><button type="button" data-mb-coupon-apply>Apply</button></div>';
     if (CFG.flags.giftCards) h += '<div class="mb-giftcard"><input class="mb-field" data-mb-gift-card-input placeholder="Gift card code" aria-label="Gift card code"></div>';
@@ -557,7 +578,7 @@
     var name = (form.querySelector('[name="name"]') || {}).value;
     name = (name || "").trim() || CFG.flags.customerName || "";
     if (!name) return fail(t("Please enter your name."));
-    if (orderType === "delivery" && !((form.querySelector('[name="address"]') || {}).value || "").trim()) return fail(t("Please enter a delivery address."));
+    if (mode().needsAddress && !((form.querySelector('[name="address"]') || {}).value || "").trim()) return fail(t("Please enter a delivery address."));
     if (CFG.flags.authMode === "required" && !CFG.flags.isLoggedIn) return fail(t("Please sign in to order."));
 
     var payload = orderLines();
@@ -569,7 +590,7 @@
     fd.append("ordering-type", orderType);
     if (orderType === "on-table") fd.append("table", ((form.querySelector('[name="table"]') || {}).value) || "");
     else fd.append("phone-number", ((form.querySelector('[name="phone"]') || {}).value) || "");
-    if (orderType === "delivery") fd.append("address", ((form.querySelector('[name="address"]') || {}).value || "").trim());
+    if (mode().needsAddress) fd.append("address", ((form.querySelector('[name="address"]') || {}).value || "").trim());
     fd.append("pay_via", "pay_on_counter");
     fd.append("tip_amount", String(T.tip || 0));
     fd.append("message", ((form.querySelector('[name="message"]') || {}).value) || "");
@@ -653,6 +674,8 @@
       var name = (el.getAttribute("data-mb-name") || "").toLowerCase();
       if (name.indexOf(search) === -1) return false;
     }
+    // The catalogue facets (size / colour / price) — a variant-level rule.
+    if (!facetMatch(item(el.getAttribute("data-mb-item")))) return false;
     switch (filter) {
       case "vegan": return el.hasAttribute("data-mb-veg");
       case "halal": return el.hasAttribute("data-mb-halal");
@@ -686,6 +709,162 @@
     // Global empty state (P8-4) — shown when nothing matches the search/filter.
     var anyVisible = all("[data-mb-item]").some(function (el) { return !el.hidden; });
     all("[data-mb-empty]").forEach(function (el) { el.hidden = anyVisible; });
+  }
+
+  /* ----- catalogue facets: size / colour / price ------------------------- *
+   * The store's facets arrive in CFG.facets — the sizes on offer, the colours
+   * with their swatch, the price range — and every item's variants carry the
+   * size and colour they stand for. An item matches when ONE of its variants
+   * satisfies every chosen facet, so the panel never shows an item the
+   * customer cannot actually buy. A store with no facets (a restaurant) never
+   * shows the button at all.
+   */
+  var FACETS = CFG.facets || {};
+  var facetSel = { size: [], color: [] };
+  var facetPrice = null;   // the chosen maximum price (null = no limit)
+
+  function facetOn() {
+    return facetSel.size.length > 0 || facetSel.color.length > 0 || facetPrice !== null;
+  }
+  function facetCount() {
+    return facetSel.size.length + facetSel.color.length + (facetPrice !== null ? 1 : 0);
+  }
+  function facetMatch(it) {
+    if (!facetOn()) return true;
+    if (!it) return true;              // a card the runtime doesn't know: leave it be
+    var vs = it.variants || [];
+    if (!vs.length) {
+      // No variants: only a price limit can match it.
+      if (facetSel.size.length || facetSel.color.length) return false;
+      return facetPrice === null || Number(it.price || 0) <= facetPrice;
+    }
+    for (var i = 0; i < vs.length; i++) {
+      var v = vs[i];
+      if (facetSel.size.length && facetSel.size.indexOf(String(v.size)) === -1) continue;
+      if (facetSel.color.length && facetSel.color.indexOf(String(v.color)) === -1) continue;
+      if (facetPrice !== null && Number(v.price || 0) > facetPrice) continue;
+      return true;
+    }
+    return false;
+  }
+  function facetVisible() {
+    var n = 0;
+    all("[data-mb-item]").forEach(function (el) { if (!el.hidden) n++; });
+    return n;
+  }
+
+  var facetsMountEl = null, facetsOpener = null, facetsBound = false;
+  function facetsMount() {
+    var m = doc.querySelector("[data-mb-filters-mount]");
+    if (m) return m;
+    if (facetsMountEl) return facetsMountEl;
+    facetsMountEl = doc.createElement("div");
+    facetsMountEl.className = "mb-filters-mount";
+    facetsMountEl.setAttribute("data-mb-filters-mount", "");
+    doc.body.appendChild(facetsMountEl);
+    return facetsMountEl;
+  }
+
+  function facetsMarkup() {
+    var h = '<div class="mb-sheet mb-facets" role="dialog" aria-modal="true" aria-label="' + esc(t("Filters")) + '">';
+    h += '<header class="mb-sheet-head"><b>' + esc(t("Filters")) + "</b>" +
+      '<button type="button" class="mb-sheet-close" data-mb-facets-close aria-label="' + esc(t("Close")) + '">&times;</button></header>';
+    h += '<div class="mb-sheet-body">';
+    if ((FACETS.sizes || []).length) {
+      h += '<section class="mb-facets__group"><h3 class="mb-facets__title">' + esc(t("Size")) + '</h3>' +
+        '<div class="mb-facets__chips" role="group" aria-label="' + esc(t("Size")) + '">';
+      FACETS.sizes.forEach(function (s) {
+        var on = facetSel.size.indexOf(s) !== -1;
+        h += '<button type="button" class="mb-facets__chip' + (on ? " is-on" : "") + '" data-mb-facet="size" data-value="' + esc(s) + '" aria-pressed="' + (on ? "true" : "false") + '">' + esc(s) + "</button>";
+      });
+      h += "</div></section>";
+    }
+    if ((FACETS.colors || []).length) {
+      h += '<section class="mb-facets__group"><h3 class="mb-facets__title">' + esc(t("Colour")) + '</h3>' +
+        '<div class="mb-facets__swatches" role="group" aria-label="' + esc(t("Colour")) + '">';
+      FACETS.colors.forEach(function (c) {
+        var on = facetSel.color.indexOf(c.value) !== -1;
+        h += '<button type="button" class="mb-facets__swatch' + (on ? " is-on" : "") + '" data-mb-facet="color" data-value="' + esc(c.value) + '" aria-pressed="' + (on ? "true" : "false") + '" aria-label="' + esc(c.value) + '" title="' + esc(c.value) + '"><span style="background:' + esc(c.hex || "transparent") + '"></span></button>';
+      });
+      h += "</div></section>";
+    }
+    if (FACETS.priceMax !== undefined && FACETS.priceMax !== null && Number(FACETS.priceMax) > 0) {
+      var pmin = Number(FACETS.priceMin || 0), pmax = Number(FACETS.priceMax || 0);
+      var cur = facetPrice === null ? pmax : facetPrice;
+      h += '<section class="mb-facets__group"><h3 class="mb-facets__title">' + esc(t("Price")) + "</h3>";
+      h += '<input type="range" class="mb-facets__range" data-mb-facet-price min="' + pmin + '" max="' + pmax + '" step="1" value="' + cur + '" aria-label="' + esc(t("Price")) + '" aria-valuetext="' + esc(money(cur)) + '">';
+      h += '<div class="mb-facets__rangevals"><span>' + money(pmin) + '</span><span data-mb-facet-price-label>' + money(cur) + "</span></div>";
+      h += "</section>";
+    }
+    h += "</div>";
+    h += '<footer class="mb-sheet-foot mb-facets__foot">';
+    h += '<button type="button" class="mb-ghost" data-mb-facets-clear>' + esc(t("Clear all")) + "</button>";
+    h += '<span class="mb-facets__count" data-mb-facets-count aria-live="polite"></span>';
+    h += '<button type="button" class="mb-place" data-mb-facets-apply>' + esc(t("Show results")) + "</button>";
+    h += "</footer></div>";
+    return h;
+  }
+
+  function facetsCountUp() {
+    var label = t(":count items").replace(":count", String(facetVisible()));
+    all("[data-mb-facets-count]").forEach(function (el) { el.textContent = label; });
+    // The button carries how many filters are on — the customer must be able
+    // to see that a filter is doing something without opening the panel.
+    var n = facetCount();
+    all("[data-mb-filters-badge]").forEach(function (el) {
+      el.textContent = String(n);
+      el.hidden = !n;
+    });
+    all("[data-mb-filters-open]").forEach(function (el) {
+      el.setAttribute("aria-expanded", "false");
+      el.classList.toggle("is-on", n > 0);
+    });
+  }
+
+  function openFacets(opener) {
+    var mount = facetsMount();
+    mount.innerHTML = facetsMarkup();
+    translate(mount);
+    mount.hidden = false;
+    facetsOpener = opener || doc.activeElement;
+    facetsCountUp();
+    var first = mount.querySelector("button");
+    if (first) first.focus();
+    if (facetsBound) return;
+    facetsBound = true;
+    mount.addEventListener("keydown", function (ev) {
+      if (mount.hidden) return;
+      if (ev.key === "Escape") { closeFacets(); }
+    });
+  }
+
+  function closeFacets() {
+    var mount = doc.querySelector("[data-mb-filters-mount]");
+    if (!mount) return;
+    mount.hidden = true;
+    mount.innerHTML = "";
+    var back = facetsOpener; facetsOpener = null;
+    try { if (back && back.focus && doc.contains(back)) back.focus(); } catch (e) {}
+  }
+
+  function facetsReset() {
+    facetSel.size = [];
+    facetSel.color = [];
+    facetPrice = null;
+    var mount = doc.querySelector("[data-mb-filters-mount]");
+    if (mount) { mount.innerHTML = facetsMarkup(); translate(mount); }
+    applyCatalog();
+    facetsCountUp();
+  }
+
+  // The price slider: the customer drags it, the catalogue narrows live.
+  function onFacetPrice(input) {
+    facetPrice = Number(input.value);
+    var lbl = doc.querySelector("[data-mb-facet-price-label]");
+    if (lbl) lbl.textContent = money(facetPrice);
+    input.setAttribute("aria-valuetext", money(facetPrice));
+    applyCatalog();
+    facetsCountUp();
   }
 
   /* ----- favourites view (fix) ----------------------------------------- *
@@ -816,6 +995,349 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); });
   }
 
+  /* ----- the account sheet ------------------------------------------------ *
+   * The first-party storefronts give the customer an identity block, grouped
+   * cards and tappable rows; this sheet now does the same, and adds the three
+   * platform features the runtime never called: the wallet top-up, the
+   * notification inbox and the dark mode.
+   * ------------------------------------------------------------------- */
+
+  /* Inline icons — the Liquid side has an icon snippet, the runtime does not. */
+  var ACCT_ICONS = {
+    gift: '<path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+    wallet: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M16 14h2"/>',
+    bell: '<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>',
+    track: '<rect x="2" y="7" width="14" height="10" rx="2"/><path d="M16 10h4l2 3v4h-6z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+    heart: '<path d="M12 21s-7.5-4.6-10-9.1C.4 8.4 2 5 5.4 5c2 0 3.4 1 4.6 2.6C11.2 6 12.6 5 14.6 5 18 5 19.6 8.4 18 11.9 15.5 16.4 12 21 12 21Z"/>',
+    share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
+    moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>',
+    trash: '<path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
+    home: '<path d="M4 11l8-7 8 7M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9"/>',
+    out: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 12h9M16 8l3 4-3 4"/>'
+  };
+  function acctIcon(name, size) {
+    var d = ACCT_ICONS[name] || "";
+    if (!d) return "";
+    return '<svg class="mb-acct-ico" viewBox="0 0 24 24" width="' + (size || 20) + '" height="' + (size || 20) +
+      '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + "</svg>";
+  }
+  function acctChev() {
+    return '<svg class="mb-acct-chev" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  }
+  function acctRow(icon, label, attr, value) {
+    return '<button type="button" class="mb-acct-rowbtn" ' + attr + ">" +
+      '<span class="mb-acct-rowbtn__ico">' + acctIcon(icon) + "</span>" +
+      '<span class="mb-acct-rowbtn__txt">' + esc(label) + "</span>" +
+      (value ? '<span class="mb-acct-rowbtn__val">' + esc(value) + "</span>" : "") +
+      acctChev() + "</button>";
+  }
+  function acctCard(label, inner) {
+    return '<div class="mb-acct-card"><div class="mb-acct-card__label">' + esc(label) + "</div>" + inner + "</div>";
+  }
+
+  /* The rows every storefront's account has: the platform's own customer
+     features, reached the way the first-party templates reach them. */
+  function accountRows(opts) {
+    opts = opts || {};
+    var h = "";
+
+    /* The notification inbox — the platform's own feed, with its unread count. */
+    if (opts.notifications) {
+      h += acctRow("bell", t("Notifications"), 'data-mb-acct-notif data-mb-notif-toggle',
+        "");
+    }
+
+    /* Help & support — the store's phone, tap to call. */
+    if (CFG.store && CFG.store.phone) {
+      h += '<a class="mb-acct-rowbtn" href="tel:' + esc(String(CFG.store.phone).replace(/[^\d+]/g, "")) + '">' +
+        '<span class="mb-acct-rowbtn__ico">' + acctIcon("phone") + "</span>" +
+        '<span class="mb-acct-rowbtn__txt">' + t("Help & support") + "</span>" +
+        '<span class="mb-acct-rowbtn__val">' + esc(CFG.store.phone) + "</span>" + acctChev() + "</a>";
+    }
+
+    /* The wishlist — the favourites view the runtime already ships. */
+    h += acctRow("heart", t("Wishlist"), "data-mb-acct-favs");
+
+    /* Share this store — the runtime's own share (native sheet, else copy). */
+    h += '<button type="button" class="mb-acct-rowbtn" data-mb-share data-mb-share-title="' +
+      esc(CFG.store ? CFG.store.name : "") + '">' +
+      '<span class="mb-acct-rowbtn__ico">' + acctIcon("share") + "</span>" +
+      '<span class="mb-acct-rowbtn__txt">' + t("Share this store") + "</span>" + acctChev() + "</button>";
+
+    /* Dark mode — the theme paints the dark palette; the runtime only owns
+       the choice and keeps it on this device. */
+    h += acctRow("moon", t("Dark mode"), 'data-mb-acct-dark aria-pressed="' + (isDark() ? "true" : "false") + '"');
+
+    /* Privacy — wipe what this browser kept (the platform's own engine). */
+    h += acctRow("trash", t("Clear saved data on this device"), "data-mb-acct-clear mb-acct-danger");
+
+    /* Continue shopping — back to the page. */
+    h += acctRow("home", t("Continue shopping"), "data-mb-back");
+
+    return h;
+  }
+
+  /* The rewards card: the platform's own loyalty widget, opened from here.
+     The card disappears when the theme renders no widget. */
+  function afterAccountRender(mount) {
+    var card = mount.querySelector("[data-mb-rewards]");
+    if (card) {
+      if (doc.querySelector('[data-mbw-open="loyalty"]')) {
+        card.hidden = false;
+        loadRewards(card);
+      } else {
+        card.remove();
+      }
+    }
+    if (CFG.flags.isLoggedIn) {
+      loadWallet(mount);
+      loadNotifications(mount);
+    }
+  }
+
+  /* The live loyalty balance and tier, from the platform's own endpoint. */
+  function loadRewards(card) {
+    var url = CFG.endpoints.loyaltyBalance;
+    if (!url) return;
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) { card.remove(); return; }
+        var bal = card.querySelector("[data-mb-rewards-bal]");
+        if (bal) bal.textContent = String(d.balance != null ? d.balance : "0");
+        var tier = card.querySelector("[data-mb-rewards-tier]");
+        if (tier && d.tier) { tier.textContent = d.tier; tier.hidden = false; }
+      })
+      .catch(function () {});
+  }
+
+  /* The customer's store credit, and the route that tops it up. */
+  function loadWallet(mount) {
+    var url = CFG.endpoints.walletBalance;
+    if (!url) return;
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        var card = mount.querySelector("[data-mb-wallet]");
+        if (!card) return;
+        var bal = card.querySelector("[data-mb-wallet-bal]");
+        if (bal) bal.textContent = String(d.formatted != null ? d.formatted : d.balance);
+        card.hidden = false;
+      })
+      .catch(function () {});
+  }
+
+  /* The notification inbox — the platform's own feed. */
+  function loadNotifications(mount) {
+    var url = CFG.endpoints.notifications;
+    if (!url) return;
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        var badge = mount.querySelector("[data-mb-notif-count]");
+        if (badge) {
+          if (d.unread > 0) { badge.textContent = String(d.unread); badge.hidden = false; }
+          else badge.hidden = true;
+        }
+        var list = mount.querySelector("[data-mb-notif-list]");
+        if (!list) return;
+        list.innerHTML = "";
+        if (!d.notifications || !d.notifications.length) {
+          list.innerHTML = '<p class="mb-acct-empty">' + t("No notifications yet.") + "</p>";
+          return;
+        }
+        d.notifications.forEach(function (n) {
+          var item = doc.createElement("a");
+          item.className = "mb-acct-notif" + (n.read ? "" : " is-new");
+          item.href = n.url || "#";
+          item.innerHTML = "<b>" + esc(n.title || "") + "</b>" +
+            (n.body ? "<span>" + esc(n.body) + "</span>" : "");
+          list.appendChild(item);
+        });
+      })
+      .catch(function () {});
+  }
+
+  /* ----- the header bell ----------------------------------------------- *
+   * The platform's notification bell. The header renders the button (the
+   * library header, so EVERY Liquid theme gets it) and the server paints the
+   * unread count; the runtime owns the panel behind it — the same feed the
+   * account sheet lists, from the same endpoint, scoped to the same rows.
+   * A guest gets no bell (the endpoint would answer 401).
+   * ------------------------------------------------------------------- */
+  var notifEl = null;
+  var notifFocus = null;
+
+  function notifBadge(n) {
+    all("[data-mb-notif-count]").forEach(function (b) {
+      if (n > 0) { b.textContent = String(n); b.hidden = false; }
+      else b.hidden = true;
+    });
+  }
+
+  function notifPanel() {
+    if (notifEl && notifEl.parentNode) return notifEl;
+    var p = doc.createElement("div");
+    /* The panel reuses the runtime's own dialog + sheet chrome, so the bell
+       looks like the rest of the platform's overlays. */
+    p.className = "mb-dialog mb-bell";
+    p.setAttribute("data-mb-bell-panel", "");
+    p.setAttribute("role", "dialog");
+    p.setAttribute("aria-modal", "true");
+    p.setAttribute("aria-label", t("Notifications"));
+    p.hidden = true;
+    p.innerHTML =
+      '<div class="mb-dialog-card mb-bell__card">' +
+        '<div class="mb-sheet-head">' +
+          '<b class="mb-bell__title">' + esc(t("Notifications")) + "</b>" +
+          '<button type="button" class="mb-ghost mb-bell__act" data-mb-bell-read-all>' + esc(t("Mark all read")) + "</button>" +
+          '<button type="button" class="mb-sheet-close" data-mb-bell-close aria-label="' + esc(t("Close")) + '">&#10005;</button>' +
+        "</div>" +
+        '<div class="mb-acct-notifs mb-bell__list" data-mb-bell-list></div>' +
+      "</div>";
+    doc.body.appendChild(p);
+    notifEl = p;
+    return p;
+  }
+
+  function notifOpen(trigger) {
+    var p = notifPanel();
+    notifFocus = trigger || doc.activeElement;
+    p.hidden = false;
+    all("[data-mb-notifications]").forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
+    var x = p.querySelector("[data-mb-bell-close]");
+    if (x) x.focus();
+    notifLoad();
+  }
+
+  function notifClose() {
+    if (notifEl) notifEl.hidden = true;
+    all("[data-mb-notifications]").forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
+    if (notifFocus && notifFocus.focus) { try { notifFocus.focus(); } catch (e) {} }
+    notifFocus = null;
+  }
+
+  /* The feed — the platform's own rows, scoped to the signed-in diner. */
+  function notifLoad() {
+    var url = CFG.endpoints.notifications;
+    var p = notifEl;
+    if (!url || !p) return;
+    var list = p.querySelector("[data-mb-bell-list]");
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        notifBadge(d.unread || 0);
+        if (!list) return;
+        list.innerHTML = "";
+        if (!d.notifications || !d.notifications.length) {
+          list.innerHTML = '<p class="mb-acct-empty">' + esc(t("No notifications yet.")) + "</p>";
+          return;
+        }
+        d.notifications.forEach(function (n) {
+          var item = doc.createElement("a");
+          item.className = "mb-acct-notif" + (n.read ? "" : " is-new");
+          item.href = n.url || "#";
+          item.innerHTML = "<b>" + esc(n.title || "") + "</b>" +
+            (n.body ? "<span>" + esc(n.body) + "</span>" : "");
+          list.appendChild(item);
+        });
+      })
+      .catch(function () {});
+  }
+
+  /* Mark the whole inbox read — the platform's own endpoint, the same rows. */
+  function notifReadAll() {
+    var url = CFG.endpoints.notificationsRead;
+    if (!url) return;
+    acctPost(url, {}).then(function (r) {
+      if (!r.ok || !r.body || !r.body.ok) return;
+      notifBadge(0);
+      all(".mb-acct-notif.is-new").forEach(function (el) { el.classList.remove("is-new"); });
+      var btn = notifEl ? notifEl.querySelector("[data-mb-bell-read-all]") : null;
+      if (btn) btn.hidden = true;
+    }).catch(function () {});
+  }
+
+  /* The badge poll — the COUNT only, so it stays cheap on a busy storefront. */
+  function notifTick() {
+    var url = CFG.endpoints.notificationsUnread;
+    if (!url || !doc.querySelector("[data-mb-notifications]")) return;
+    if (doc.visibilityState && doc.visibilityState !== "visible") return;
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) notifBadge(d.unread || 0); })
+      .catch(function () {});
+  }
+
+  /* The bell keeps its badge live while the page is open (signed-in diners
+     only — a guest has no bell and no feed). */
+  function notifInit() {
+    if (!CFG.flags.isLoggedIn) return;
+    if (!doc.querySelector("[data-mb-notifications]")) return;
+    setInterval(notifTick, 60000);
+  }
+  if (doc.readyState !== "loading") notifInit();
+  else doc.addEventListener("DOMContentLoaded", notifInit);
+
+  /* Escape closes the panel; Tab stays inside it while it is open. */
+  doc.addEventListener("keydown", function (ev) {
+    if (!notifEl || notifEl.hidden) return;
+    if (ev.key === "Escape") { ev.preventDefault(); notifClose(); return; }
+    if (ev.key !== "Tab") return;
+    var f = all("a[href], button:not([disabled]), input, select, textarea", notifEl);
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (ev.shiftKey && doc.activeElement === first) { ev.preventDefault(); last.focus(); }
+    else if (!ev.shiftKey && doc.activeElement === last) { ev.preventDefault(); first.focus(); }
+  });
+
+  function showLoyaltyWidget() {
+    var btn = doc.querySelector('[data-mbw-open="loyalty"]');
+    if (btn) { btn.click(); return true; }
+    return false;
+  }
+
+  /* A tracking LINK carries the token; a bare code is the token. */
+  function trackOrderFromInput() {
+    var inp = doc.querySelector("#mbTrackInput");
+    var v = inp ? String(inp.value || "") : "";
+    v = v.trim();
+    if (!v) return;
+    var m = v.match(/track\/([A-Za-z0-9_-]+)/);
+    var token = m ? m[1] : v.replace(/[^A-Za-z0-9_-]/g, "");
+    if (!token) return;
+    var base = String(CFG.endpoints.orderTrack || "").replace(/TOKEN$/, "");
+    if (base) window.location.href = base + encodeURIComponent(token);
+  }
+
+  function clearDeviceData() {
+    if (!window.mbClearDeviceData) return;
+    window.mbClearDeviceData({
+      keys: [CART_KEY, FAV_KEY],
+      slug: CFG.restaurantSlug,
+      storeId: CFG.storeId,
+      confirm: t("Are you sure?"),
+      reload: true
+    });
+  }
+
+  /* Dark mode: the theme paints the dark palette behind [data-theme="dark"];
+     the runtime owns the choice and keeps it on this device. */
+  var THEME_KEY = "mb_theme";
+  function isDark() { try { return localStorage.getItem(THEME_KEY) === "dark"; } catch (e) { return false; } }
+  function applyTheme(dark) {
+    if (dark) doc.documentElement.setAttribute("data-theme", "dark");
+    else doc.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem(THEME_KEY, dark ? "dark" : "light"); } catch (e) {}
+    all("[data-mb-acct-dark]").forEach(function (el) { el.setAttribute("aria-pressed", dark ? "true" : "false"); });
+  }
+  function toggleTheme() { applyTheme(!isDark()); }
+
   function drawAccount(mount, orders) {
     var ep = CFG.endpoints;
     if (!ep || !ep.login) { mount.innerHTML = ""; return; }
@@ -827,7 +1349,9 @@
     h += '<p class="mb-err" data-mb-acct-err hidden></p>';
 
     if (loggedIn) {
-      h += '<p class="mb-acct-greet">Signed in as <b>' + esc(CFG.flags.customerName || "") + "</b></p>";
+      h += '<div class="mb-acct-hero"><span class="mb-acct-hero__avatar" aria-hidden="true">' +
+      esc(String(CFG.flags.customerName || "?").trim().charAt(0).toUpperCase()) + "</span>" +
+      '<span class="mb-acct-hero__txt"><b>' + esc(CFG.flags.customerName || "") + "</b></span></div>";
       h += '<button type="button" class="mb-place" data-mb-logout>Log out</button>';
     } else {
       h += '<div class="mb-acct-tabs" role="tablist">';
@@ -859,6 +1383,8 @@
       }
     }
 
+    h += '<div class="mb-acct-rows">' + accountRows() + "</div>";
+
     // Order history — guest lookup route, works for everyone.
     h += '<div class="mb-acct-orders"><p class="mb-opt-title">Your orders</p>';
     h += '<form data-mb-acct-lookup><div class="mb-acct-row">' +
@@ -873,7 +1399,7 @@
       h += "</ul>";
     }
     h += "</div></div>";
-    mount.innerHTML = h; translate(mount);
+    mount.innerHTML = h; translate(mount); afterAccountRender(mount);
   }
 
   function openAccount() {
@@ -982,48 +1508,97 @@
   function renderAccountRich(mount, d) {
     var c = d.customer || {};
     var h = '<div class="mb-account mb-account-rich">';
-    h += '<p class="mb-acct-greet">Signed in as <b>' + esc(c.name || "") + "</b></p>";
+
+    /* the identity block */
+    h += '<div class="mb-acct-hero"><span class="mb-acct-hero__avatar" aria-hidden="true">' +
+      esc(String(c.name || "?").trim().charAt(0).toUpperCase()) + "</span>" +
+      '<span class="mb-acct-hero__txt"><b>' + esc(c.name || "") + "</b>" +
+      (c.email ? "<span>" + esc(c.email) + "</span>" : "") + "</span></div>";
     h += '<p class="mb-err" data-mb-acct-err hidden></p>';
 
-    h += '<b class="mb-acct-sec">Profile</b>';
-    h += '<form data-mb-profile-form>' +
+    /* rewards — the platform's own loyalty widget, opened from this card.
+       One line: the label, the balance, the tier, the action. A balance on
+       its own line, under a heading, with nothing beside it, reads as an
+       empty box. */
+    h += '<div class="mb-acct-card mb-acct-rewards" data-mb-rewards hidden>' +
+      '<span class="mb-acct-card__label">' + t("Rewards") + "</span>" +
+      '<b class="mb-acct-balance" data-mb-rewards-bal>–</b>' +
+      '<span class="mb-acct-tier" data-mb-rewards-tier hidden></span>' +
+      '<button type="button" class="mb-acct-btn" data-mb-acct-rewards>' + t("View rewards") + "</button></div>";
+
+    /* wallet — the customer's store credit, and the route that tops it up */
+    h += '<div class="mb-acct-card mb-acct-wallet" data-mb-wallet hidden>' +
+      '<span class="mb-acct-card__label">' + t("Wallet") + "</span>" +
+      '<b class="mb-acct-balance" data-mb-wallet-bal>–</b>' +
+      '<a class="mb-acct-btn" href="' + esc(CFG.endpoints.walletTopup || "#") + '">' + t("Add funds") + "</a></div>";
+
+    /* profile — the summary is what the customer came to see; the form is a
+       form, so it opens when they ask for it instead of taking a screenful
+       of the account before the orders. */
+    h += acctCard(t("Profile"),
+      '<div class="mb-acct-summary"><b>' + esc(c.name || "") + "</b>" +
+      (c.email ? "<span>" + esc(c.email) + "</span>" : "") +
+      (c.phone ? "<span>" + esc(c.phone) + "</span>" : "") + "</div>" +
+      '<button type="button" class="mb-acct-btn" data-mb-acct-edit="profile">' + t("Edit profile") + "</button>" +
+      '<form data-mb-profile-form class="mb-acct-form" hidden>' +
       '<input class="mb-field" name="name" placeholder="Name" value="' + esc(c.name || "") + '">' +
       '<input class="mb-field" name="email" type="email" placeholder="Email" value="' + esc(c.email || "") + '">' +
       '<input class="mb-field" name="phone" placeholder="Phone" value="' + esc(c.phone || "") + '">' +
       '<input class="mb-field" name="birthday" type="date" value="' + esc(c.birthday || "") + '">' +
-      '<button type="submit" class="mb-place">Save profile</button></form>';
+      '<button type="submit" class="mb-place">Save profile</button></form>');
 
-    h += '<b class="mb-acct-sec">Saved addresses</b>';
-    h += '<ul class="mb-addr-list">';
+    /* addresses */
+    var addr = '<ul class="mb-addr-list">';
     (d.addresses || []).forEach(function (a) {
-      h += '<li class="mb-addr"><span>' + (a.label ? "<b>" + esc(a.label) + "</b> " : "") + esc(a.line) +
+      addr += '<li class="mb-addr"><span>' + (a.label ? "<b>" + esc(a.label) + "</b> " : "") + esc(a.line) +
         (a.city ? ", " + esc(a.city) : "") + (a.is_default ? ' <em class="mb-addr-default">Default</em>' : "") + "</span>" +
         '<button type="button" class="mb-addr-del" data-mb-address-del="' + esc(a.delete_url) + '" aria-label="Remove">&times;</button></li>';
     });
-    h += "</ul>";
-    h += '<form data-mb-address-form class="mb-addr-form">' +
+    addr += "</ul>";
+    addr += '<button type="button" class="mb-acct-btn" data-mb-acct-edit="address">' + t("Add address") + "</button>";
+    addr += '<form data-mb-address-form class="mb-addr-form" hidden>' +
       '<input class="mb-field" name="label" placeholder="Label (Home, Work)">' +
       '<input class="mb-field" name="line" placeholder="Address" required>' +
       '<input class="mb-field" name="city" placeholder="City">' +
       '<label class="mb-addr-def"><input type="checkbox" name="is_default"> Set as default</label>' +
       '<button type="submit" class="mb-ghost">Add address</button></form>';
+    h += acctCard(t("Saved addresses"), addr);
 
-    h += '<b class="mb-acct-sec">Your orders</b>';
+    /* orders */
+    var orders = "";
     acctNextBefore = d.next_before || null;
     if ((d.orders || []).length) {
-      h += '<ul class="mb-acct-order-list">';
+      orders = '<ul class="mb-acct-order-list">';
       d.orders.forEach(function (o) {
-        h += '<li class="mb-acct-order">' + orderAnchor(o) + "</li>";
+        orders += '<li class="mb-acct-order">' + orderAnchor(o) + "</li>";
       });
-      h += "</ul>";
-      if (acctNextBefore) h += '<button type="button" class="mb-ghost" data-mb-acct-older>' + t("Load more") + "</button>";
+      orders += "</ul>";
+      if (acctNextBefore) orders += '<button type="button" class="mb-ghost" data-mb-acct-older>' + t("Load more") + "</button>";
     } else {
-      h += '<p class="mb-acct-empty">No orders yet.</p>';
+      orders = '<p class="mb-acct-empty">' + t("No orders yet.") + "</p>";
     }
+    h += acctCard(t("Your orders"), orders);
 
-    h += '<button type="button" class="mb-place mb-logout-btn" data-mb-logout>Log out</button>';
+    /* the track-an-order box */
+    h += acctCard(t("Track an order"),
+      '<div class="mb-acct-row"><input class="mb-field" id="mbTrackInput" placeholder="' +
+      t("Order tracking link or code") + '">' +
+      '<button type="button" class="mb-place mb-place--sm" data-mb-acct-track>' + t("Track order") + "</button></div>");
+
+    /* the rows */
+    h += '<div class="mb-acct-rows">' + accountRows({ notifications: true }) + "</div>";
+
+    /* the notification inbox */
+    h += '<div class="mb-acct-card mb-acct-notifs" data-mb-notif-panel hidden>' +
+      '<div class="mb-acct-card__label">' + t("Notifications") + "</div>" +
+      '<div data-mb-notif-list></div></div>';
+
+    /* sign out */
+    h += '<button type="button" class="mb-acct-signout" data-mb-logout>' + acctIcon("out", 18) +
+      "<span>" + t("Log out") + "</span></button>";
+
     h += "</div>";
-    mount.innerHTML = h; translate(mount);
+    mount.innerHTML = h; translate(mount); afterAccountRender(mount);
   }
   function saveProfile(form) {
     acctErr("");
@@ -1166,6 +1741,25 @@
     var fav = t.closest("[data-mb-fav]"); if (fav) { ev.preventDefault(); var id = fav.getAttribute("data-mb-fav"); favs[id] = !favs[id]; saveFavs(); applyCatalog(); if (activeView === "favs") renderFavs(); return; }
     var open = t.closest("[data-mb-open]"); if (open) { ev.preventDefault(); openProduct(open.getAttribute("data-mb-open")); return; }
     var flt = t.closest("[data-mb-filter]"); if (flt) { filter = flt.getAttribute("data-mb-filter"); applyCatalog(); return; }
+    /* ----- the catalogue facets panel ---------------------------------- */
+    if (t.closest("[data-mb-filters-open]")) { ev.preventDefault(); openFacets(t.closest("[data-mb-filters-open]")); return; }
+    if (t.closest("[data-mb-facets-close]")) { closeFacets(); return; }
+    if (t.closest("[data-mb-facets-clear]")) { facetsReset(); return; }
+    if (t.closest("[data-mb-facets-apply]")) { closeFacets(); return; }
+    var fb = t.closest("[data-mb-facet]");
+    if (fb) {
+      var fkind = fb.getAttribute("data-mb-facet");
+      var flist = facetSel[fkind];
+      if (!flist) return;
+      var fval = fb.getAttribute("data-value");
+      var fi = flist.indexOf(fval);
+      if (fi === -1) flist.push(fval); else flist.splice(fi, 1);
+      fb.classList.toggle("is-on", fi === -1);
+      fb.setAttribute("aria-pressed", fi === -1 ? "true" : "false");
+      applyCatalog();
+      facetsCountUp();
+      return;
+    }
     /* The gift-card purchase form (a storefront section): the denominations
        fill the amount field. The theme ships no JS — the platform's runtime
        owns this, so every theme's gift-card form behaves the same way. */
@@ -1190,6 +1784,33 @@
       return;
     }
     if (t.closest("[data-mb-acct-close]")) { var am = doc.querySelector("[data-mb-account-mount]"); if (am) { am.hidden = true; am.innerHTML = ""; } return; }
+    if (t.closest("[data-mb-acct-track]")) { ev.preventDefault(); trackOrderFromInput(); return; }
+    if (t.closest("[data-mb-acct-favs]")) { ev.preventDefault(); var af = doc.querySelector("[data-mb-account-mount]"); if (af) { af.hidden = true; af.innerHTML = ""; } if (hasRouter && viewEl("favs")) showView("favs"); return; }
+    if (t.closest("[data-mb-acct-clear]")) { ev.preventDefault(); clearDeviceData(); return; }
+    if (t.closest("[data-mb-acct-dark]")) { ev.preventDefault(); toggleTheme(); return; }
+    if (t.closest("[data-mb-acct-edit]")) {
+      ev.preventDefault();
+      var key = t.closest("[data-mb-acct-edit]").getAttribute("data-mb-acct-edit");
+      var form = doc.querySelector(key === "address" ? "[data-mb-address-form]" : "[data-mb-profile-form]");
+      if (form) {
+        form.hidden = !form.hidden;
+        var first = form.querySelector("input,select,textarea");
+        if (first && !form.hidden) first.focus();
+      }
+      return;
+    }
+    if (t.closest("[data-mb-notifications]")) { ev.preventDefault(); notifOpen(t.closest("[data-mb-notifications]")); return; }
+    if (t.closest("[data-mb-bell-close]")) { ev.preventDefault(); notifClose(); return; }
+    if (t.closest("[data-mb-bell-read-all]")) { ev.preventDefault(); notifReadAll(); return; }
+    // A click on the dimmed backdrop (the panel itself, not the card) closes it.
+    if (t.classList && t.classList.contains("mb-bell")) { notifClose(); return; }
+    if (t.closest("[data-mb-notif-toggle]")) {
+      ev.preventDefault();
+      var np = doc.querySelector("[data-mb-notif-panel]");
+      if (np) { np.hidden = !np.hidden; if (!np.hidden) np.scrollIntoView({ block: "nearest" }); }
+      return;
+    }
+    if (t.closest("[data-mb-acct-rewards]")) { ev.preventDefault(); if (!showLoyaltyWidget()) { var rc = t.closest("[data-mb-rewards]"); if (rc) rc.remove(); } return; }
     var atab = t.closest("[data-mb-acct-tab]"); if (atab) { acctTab = atab.getAttribute("data-mb-acct-tab"); var m2 = doc.querySelector("[data-mb-account-mount]"); if (m2) drawAccount(m2); return; }
     if (t.closest("[data-mb-logout]")) { ev.preventDefault(); logout(); return; }
     var otp = t.closest("[data-mb-otp-request]"); if (otp) { ev.preventDefault(); var of = otp.closest("form"); if (of) requestOtp(of); return; }
@@ -1197,10 +1818,13 @@
     if (t.closest("[data-mb-acct-older]")) { ev.preventDefault(); loadOlderOrders(); return; }
   });
   doc.addEventListener("input", function (ev) {
-    if (ev.target.matches("[data-mb-search]")) { search = (ev.target.value || "").trim().toLowerCase(); applyCatalog(); }
+    if (ev.target.matches("[data-mb-search]")) { search = (ev.target.value || "").trim().toLowerCase(); applyCatalog(); return; }
+    // The price slider filters live while the customer drags it.
+    if (ev.target.matches("[data-mb-facet-price]")) { onFacetPrice(ev.target); }
   });
   doc.addEventListener("change", function (ev) {
     if (ev.target.matches("[data-mb-sort]")) { sortMode = ev.target.value || "featured"; applySort(); return; }
+    if (ev.target.matches("[data-mb-facet-price]")) { onFacetPrice(ev.target); return; }
     if (ev.target.matches("[data-mb-tip-custom]")) { var tv = parseFloat(ev.target.value); tipCustom = isNaN(tv) ? null : Math.max(0, tv); renderCart(); return; }
     if (ev.target.closest && ev.target.closest("[data-mb-product-mount]")) productRecalc();
   });
@@ -1248,7 +1872,15 @@
     all("[data-mb-tab]").forEach(function (b) { b.classList.toggle("is-on", b.getAttribute("data-mb-tab") === activeView); });
   }
 
-  function init() { syncBindings(); applyCatalog(); applySort(); initSliders(); initRouter(); initSplash(); }
+  function init() { syncBindings(); applyCatalog(); applySort(); initSliders(); initRouter(); initSplash();
+    if (isDark()) applyTheme(true);
+    // A store with nothing to filter by (a restaurant) shows no Filters button.
+    if (!(FACETS.sizes || []).length && !(FACETS.colors || []).length) {
+      all("[data-mb-filters-open]").forEach(function (el) { el.hidden = true; });
+    } else {
+      facetsCountUp();
+    }
+  }
   if (doc.readyState !== "loading") init();
   else doc.addEventListener("DOMContentLoaded", init);
   window.MBCommerce = { cart: function () { return cart; }, totals: totals, refresh: init };

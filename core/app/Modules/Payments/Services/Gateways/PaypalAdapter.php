@@ -33,8 +33,10 @@ use Symfony\Component\HttpFoundation\Response;
  * One-time: create an order (intent CAPTURE), send the buyer to its approve
  * link, capture on return (`ipn/paypal?pay_mode=one_time&token=<order id>`)
  * and settle when the capture is COMPLETED for the amount we asked.
- * Recurring: the transaction's attributes travel as the subscription's
- * `custom_id`; each `PAYMENT.SALE.COMPLETED` webhook re-reads the subscription
+ * Recurring: the subscription's `custom_id` is the checkout transaction's id (BL-039: PayPal allows 127 characters;
+ * the row is kept — `recurring_pending`, then `recurring_setup` once its first sale settles — and its attributes are read
+ * from it; older subscriptions carry them as a query
+ * string, still read); each `PAYMENT.SALE.COMPLETED` webhook re-reads the subscription
  * from PayPal (the body itself is never trusted for money) and settles through
  * CheckoutController::processWebhook. Every notification must pass PayPal's
  * verify-webhook-signature check with the configured webhook id
@@ -114,7 +116,8 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
 
             // J25-7: credit durable via the outbox, same answer to the buyer. Claimed: a webhook racing the return
             // settles it once.
-            return Settlement::settleForBuyer($transaction, 'paypal', $orderId, claim: true)
+            // BL-038 review: the money is captured — a checkout another tab abandoned meanwhile still settles.
+            return Settlement::settleForBuyer($transaction, 'paypal', $orderId, claim: true, orAbandoned: true)
                 ?? Settlement::completeForBuyer($transaction->fresh() ?? $transaction);
         } catch (\Throwable $e) {
             PaymentLog::settlementFailed('paypal', $e);
@@ -214,9 +217,17 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 return response()->json(['status' => 400], 400);
             }
 
-            return DB::transaction(function () use ($metadata, $sale, $subscriptionId, $checkout): Response {
+            // BL-038 O3: a full-price renewal after a promotion records the full amount, not the first charge.
+            $settled = array_to_object($metadata);
+            $full = RecurringPromotion::recurringAmount($metadata);
+            $total = data_get($held, 'amount.total');
+            if ($full !== null && is_numeric($total) && Money::decimal((string) $total)->isEqualTo(Money::decimal($full))) {
+                $settled->amount = $full;
+            }
+
+            return DB::transaction(function () use ($settled, $sale, $subscriptionId, $checkout): Response {
                 /** @var Response $response */
-                $response = Fulfilment::webhook('paypal', array_to_object($metadata), (string) $sale['id'], $subscriptionId);
+                $response = Fulfilment::webhook('paypal', $settled, (string) $sale['id'], $subscriptionId);
                 if ($checkout !== null && $response->getStatusCode() === 200) {
                     Transaction::markCheckoutSettled((int) $checkout->id, $checkout->user_id, recurring: true);
                 }
@@ -237,7 +248,13 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
      */
     private function orderNotified(string $orderId, bool $capture, ?int $storeId = null): Response
     {
-        $transaction = $orderId === '' ? null : Settlement::pending(['payment_id' => $orderId] + ($storeId !== null ? ['store_id' => $storeId] : []));
+        $where = ['payment_id' => $orderId] + ($storeId !== null ? ['store_id' => $storeId] : []);
+        $transaction = $orderId === '' ? null : Settlement::pending($where);
+        if ($transaction === null && ! $capture && $orderId !== '') {
+            // BL-038 review: a capture that completed on a checkout abandoned meanwhile (the buyer's return was lost) —
+            // the money is captured, so it settles. An approved order on an abandoned checkout is never captured.
+            $transaction = Transaction::query()->where('status', Transaction::STATUS_ABANDONED)->where($where)->first();
+        }
         // The store route settles only that store's own payments (paid into the store's app).
         $scoped = $transaction !== null && ($storeId === null || Settlement::usesStoreGateway($transaction));
         if ($transaction === null || ! $scoped || self::holdsCard($transaction)) {
@@ -251,7 +268,7 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             if (! $this->captureSettles($order, $transaction)) {
                 return $this->answer(200, 'not settled');
             }
-            Settlement::settle($transaction, 'paypal', $orderId, claim: true);
+            Settlement::settle($transaction, 'paypal', $orderId, claim: true, orAbandoned: true);
         } catch (\Throwable $e) {
             PaymentLog::settlementFailed('paypal', $e);
 
@@ -528,8 +545,15 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             return true;
         }
         $paid = data_get($held, 'amount.total');
+        if (! is_numeric($paid)) {
+            return false;
+        }
+        // BL-038 O3: once a promotion's TRIAL cycles are over, PayPal bills the full period (recurring_amount; an
+        // old-platform subscription carries it in its JSON details).
+        $full = RecurringPromotion::recurringAmount($metadata);
 
-        return is_numeric($paid) && Money::decimal((string) $paid)->isEqualTo(Money::decimal($sold));
+        return Money::decimal((string) $paid)->isEqualTo(Money::decimal($sold))
+            || ($full !== null && Money::decimal((string) $paid)->isEqualTo(Money::decimal($full)));
     }
 
     private function payMode(Transaction $transaction): string
@@ -640,23 +664,36 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             $product->throw();
         }
 
+        $frequency = ['interval_unit' => 'DAY', 'interval_count' => $checkout->frequency === 'MONTHLY' ? 30 : 365];
+        $cycles = [[
+            'frequency' => $frequency,
+            'tenure_type' => 'REGULAR',
+            'sequence' => 1,
+            'total_cycles' => 0,
+            'pricing_scheme' => ['fixed_price' => ['value' => $price, 'currency_code' => $currency]],
+        ]];
+        $planName = 'plan_'.$key.'_'.$checkout->frequency.'_'.$price.'_'.$currency;
+        /* BL-038 O3: a promotion that ends is a TRIAL cycle at the promotional price for the discounted periods, then
+           the REGULAR full-price cycle (before: one cycle at the promotional price, for ever). Renewals read the
+           full-period amount from the kept checkout row (resolveSubscriptionMetadata). */
+        $split = RecurringPromotion::split($checkout);
+        $fullPrice = $split !== null ? GatewayMinorUnits::gatewayMajorString($this->key(), $split['full'], $currency) : null;
+        if ($split !== null && $fullPrice !== null) {
+            $cycles = RecurringPromotion::paypalBillingCycles($split, $frequency, $price, $fullPrice);
+            $planName .= '_promo_'.$split['sig'];
+        }
+
         $plan = $client->post('/v1/billing/plans', [
             'product_id' => $productId,
-            'name' => 'plan_'.$key.'_'.$checkout->frequency.'_'.$price.'_'.$currency,
+            'name' => $planName,
             'status' => 'ACTIVE',
-            'billing_cycles' => [[
-                'frequency' => ['interval_unit' => 'DAY', 'interval_count' => $checkout->frequency === 'MONTHLY' ? 30 : 365],
-                'tenure_type' => 'REGULAR',
-                'sequence' => 1,
-                'total_cycles' => 0,
-                'pricing_scheme' => ['fixed_price' => ['value' => $price, 'currency_code' => $currency]],
-            ]],
+            'billing_cycles' => $cycles,
             'payment_preferences' => ['auto_bill_outstanding' => true, 'payment_failure_threshold' => 0],
         ])->throw()->json();
 
         $subscription = $client->post('/v1/billing/subscriptions', [
             'plan_id' => $plan['id'],
-            'custom_id' => (string) $checkout->id,
+            'custom_id' => (string) $checkout->id, // BL-039: the id only (PayPal: 127 characters); the row is kept
             'application_context' => [
                 'brand_name' => mb_substr((string) config('settings.site_title'), 0, 127),
                 'shipping_preference' => 'NO_SHIPPING',
@@ -721,6 +758,12 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         }
 
         $metadata = $this->metadata($checkout);
+        // BL-038 O3: a promotion subscription renews at the full period once its TRIAL cycles are over.
+        $split = RecurringPromotion::split($checkout);
+        $full = $split !== null ? GatewayMinorUnits::gatewayMajorString($this->key(), $split['full'], $this->currency($checkout)) : null;
+        if ($full !== null) {
+            $metadata[RecurringPromotion::RECURRING_AMOUNT] = $full;
+        }
 
         return $metadata === [] ? null : ['metadata' => $metadata, 'checkout' => $checkout];
     }

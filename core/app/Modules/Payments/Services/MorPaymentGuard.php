@@ -37,6 +37,9 @@ final class MorPaymentGuard
             return null;
         }
         $transaction = Transaction::find((int) $id);
+        /* BL-038 final check: any status — a settled checkout (recurring_setup / checkout_settled) carries its renewals,
+           and money captured on an abandoned one is never refused (the offer's per-account limit raises its own alert
+           and review entry when the use cannot be confirmed). */
         if ($transaction === null) {
             return null;
         }

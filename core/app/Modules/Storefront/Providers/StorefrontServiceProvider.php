@@ -45,6 +45,7 @@ use Juwri\Modules\Storefront\Database\Seeders\E2ePlatformV2Seeder;
 use Juwri\Modules\Storefront\Database\Seeders\E2ePosModifierDemoSeeder;
 use Juwri\Modules\Storefront\Database\Seeders\E2eStubGatewaySeeder;
 use Juwri\Modules\Storefront\Database\Seeders\KitDemoSeeder;
+use Juwri\Modules\Storefront\Database\Seeders\LiquidShowcaseSeeder;
 use Juwri\Modules\Storefront\Database\Seeders\MarketplaceThemeSeeder;
 use Juwri\Modules\Storefront\Database\Seeders\StorefrontShowcaseSeeder;
 use Juwri\Modules\Storefront\Database\Seeders\StudioStarterThemesSeeder;
@@ -74,7 +75,7 @@ class StorefrontServiceProvider extends ServiceProvider
         ModuleSeeders::register('Storefront', demo: [ThemePackDemoSeeder::class, KitDemoSeeder::class], optional: [DemoAccountsSeeder::class, DemoActivitySeeder::class, DemoCatalogSeeder::class, BladeShowcaseSeeder::class, BookDemoSeeder::class, E2ePlatformSeeder::class,
             // P1-13 13e: the E2E fixture seeders (Community features) that were registered by Platform.
             E2eAdminSeeder::class, E2eDarkFeatureEnableSeeder::class, E2eDispatchDemoSeeder::class, E2eKdsStationDemoSeeder::class, E2eLaneAFixturesSeeder::class, E2ePlatformV2Seeder::class, E2ePosModifierDemoSeeder::class, E2eStubGatewaySeeder::class, E2eLaneAJourneysSeeder::class, E2eLaneAStoreSeeder::class,
-            MarketplaceThemeSeeder::class, StorefrontShowcaseSeeder::class, StudioStarterThemesSeeder::class, ThemeShowcaseSeeder::class, ThemeStoreCatalogSeeder::class,
+            MarketplaceThemeSeeder::class, StorefrontShowcaseSeeder::class, StudioStarterThemesSeeder::class, ThemeShowcaseSeeder::class, ThemeStoreCatalogSeeder::class, LiquidShowcaseSeeder::class,
             // P1-13 13c-R: the vertical showcase (imports Hotel models; was Platform's, then ee Platform's in 13e).
             VerticalShowcaseSeeder::class]);
         ModuleRoutes::register('Storefront', __DIR__.'/../Routes');

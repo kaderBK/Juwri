@@ -19,7 +19,7 @@ class StorefrontRawOutputRatchetTest extends TestCase
 {
     // P3-13: 58 → 27 (the D11 premium themes: carely's 25 icons became an SVG sprite, glow's logo slot a partial,
     // aurelia's string @json, freshly's mode icons literal SVG; ember's hero stays, reviewed).
-    private const MAX_RAW_ECHOES = 28; // p5r: +1 reviewed json_ld() (P6-305 kit JSON-LD partial)
+    private const MAX_RAW_ECHOES = 29; // p5r: +1 reviewed json_ld() (P6-305 kit JSON-LD partial); +1 DarkTokens <style> in marketplace-shell
 
     public function test_the_storefront_raw_output_count_never_grows(): void
     {

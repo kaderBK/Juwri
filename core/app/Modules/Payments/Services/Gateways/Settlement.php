@@ -8,6 +8,8 @@ use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Juwri\Core\Models\Store;
 use Juwri\Modules\Payments\Contracts\OrderPaymentHandler;
 use Juwri\Modules\Payments\Contracts\Outbox;
@@ -96,14 +98,19 @@ final class Settlement
     /**
      * markPaid() as one conditional UPDATE: true only for the caller that moved
      * the row out of pending (a return racing a webhook settles once).
+     * $orAbandoned: also claim a row marked `abandoned` (BL-038 review) — for a gateway whose money is already captured
+     * when this runs (a PayPal capture that completed while another tab abandoned the checkout): captured money on a
+     * closed checkout is settled, never refused. Still once: `abandoned` is never a paid status.
      */
-    public static function claimPaid(Transaction $transaction, string $gateway, ?string $paymentId = null): bool
+    public static function claimPaid(Transaction $transaction, string $gateway, ?string $paymentId = null, bool $orAbandoned = false): bool
     {
         $changes = ['transaction_gatway' => $gateway, 'status' => Transaction::STATUS_SUCCESS];
         if ($paymentId !== null) {
             $changes['payment_id'] = $paymentId;
         }
-        $claimed = Transaction::query()->whereKey($transaction->getKey())->whereNull('status')->update($changes) === 1;
+        $claimed = Transaction::query()->whereKey($transaction->getKey())
+            ->where(fn ($q) => $orAbandoned ? $q->whereNull('status')->orWhere('status', Transaction::STATUS_ABANDONED) : $q->whereNull('status'))
+            ->update($changes) === 1;
         if ($claimed) {
             $transaction->refresh();
             GatewayRounding::book($transaction, $gateway);
@@ -159,11 +166,11 @@ final class Settlement
      * Throws when the inline credit did not complete, so the caller still logs/alerts and answers as before (the
      * message is kept and retried).
      */
-    public static function settle(Transaction $transaction, string $gateway, ?string $paymentId = null, bool $claim = false): bool
+    public static function settle(Transaction $transaction, string $gateway, ?string $paymentId = null, bool $claim = false, bool $orAbandoned = false): bool
     {
-        return self::settleClaimed($transaction, function () use ($transaction, $gateway, $paymentId, $claim): bool {
+        return self::settleClaimed($transaction, function () use ($transaction, $gateway, $paymentId, $claim, $orAbandoned): bool {
             if ($claim) {
-                return self::claimPaid($transaction, $gateway, $paymentId);
+                return self::claimPaid($transaction, $gateway, $paymentId, $orAbandoned);
             }
             self::markPaid($transaction, $gateway, $paymentId);
 
@@ -219,9 +226,9 @@ final class Settlement
      * answer completeForBuyer() gave — the order hand-off page, or a success notice + redirect. Null when $claim and
      * another confirmation already settled it (the caller answers as for "already handled").
      */
-    public static function settleForBuyer(Transaction $transaction, string $gateway, ?string $paymentId = null, string $routeAfter = 'subscription', bool $claim = false): ?Response
+    public static function settleForBuyer(Transaction $transaction, string $gateway, ?string $paymentId = null, string $routeAfter = 'subscription', bool $claim = false, bool $orAbandoned = false): ?Response
     {
-        if (! self::settle($transaction, $gateway, $paymentId, $claim)) {
+        if (! self::settle($transaction, $gateway, $paymentId, $claim, $orAbandoned)) {
             return null;
         }
         if (self::isOrder($transaction)) {
@@ -347,6 +354,9 @@ final class Settlement
             'addon' => AccountPages::url('addons.index'),
             'wallet_topup' => AccountPages::url('wallet.index'),
             'credit_pack' => AccountPages::url('credits.index'), // credit packs (PRICING.md §8)
+            // BL-038 review: a plan purchase cancelled at the gateway abandons its pending checkout (CheckoutCancelledController).
+            'membership' => Route::has('payments.checkout.cancelled') && (string) $transaction->getAttribute('public_id') !== ''
+                ? URL::temporarySignedRoute('payments.checkout.cancelled', now()->addDay(), ['transaction' => (string) $transaction->getAttribute('public_id')]) : AccountPages::url(),
             default => AccountPages::url(),
         };
     }
