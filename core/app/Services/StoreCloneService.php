@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Services\Theme\VerticalThemeSets;
 use Illuminate\Support\Facades\DB;
 use Juwri\Core\Models\Store;
+use Juwri\Core\Services\Tenancy\GlobalSlugService;
 use Juwri\Core\Services\Tenancy\StoreDataEngine;
 use Juwri\Core\Services\Tenancy\StoreDataRegistry;
 use Juwri\Core\Settings\StoreSettings;
@@ -71,7 +72,6 @@ class StoreCloneService
             $clone = $source->replicate();
             $clone->settings = null; // P1-07: rebuilt below from the filtered options (never the owner's connections)
             $clone->title = $source->title.' ('.___('Copy').')';
-            $clone->slug = null; // Let Sluggable auto-generate
             // Duplicate-as-a-different-vertical: override AFTER replicate() so
             // every other column still carries over from the source verbatim.
             if ($targetStoreType !== null) {
@@ -86,7 +86,11 @@ class StoreCloneService
             foreach ($declaration->values ?? [] as $column => $value) {
                 $clone->setAttribute($column, $value);
             }
-            $clone->save();
+            // BL-047: slug via the shared writer (global uniqueness + retry on the unique index).
+            GlobalSlugService::writeWithUniqueSlug((string) $clone->title, function (string $slug) use ($clone): void {
+                $clone->slug = $slug;
+                $clone->save();
+            });
 
             // P1-21: every other table the registry copies — the catalogue (brands, category tree, items, variant
             // matrix, modifier groups + modifiers + item attachments, combos, fitments), bio blocks, tables/rooms

@@ -28,7 +28,7 @@ class ControllerSizeGuardTest extends TestCase
      * three-line fix.
      */
     private const CEILINGS = [
-        'app/Http/Controllers/User/StoreController.php' => 4400,   // measured 4028 after the M15 extraction
+        'app/Http/Controllers/User/StoreController.php' => 4300,   // measured 4261 after the HandlesStorefrontQrScan extraction
         'app/Http/Controllers/Admin/UserController.php' => 4700,  // measured 4606 (C3 rewrote ~3,170 lines); drop once it shrinks
         'app/Http/Helpers/Helper.php' => 3380,                    // measured 3355 after the store-scoped money accessors (store_currency/store_tz/store_currency_pos/store_price_*) moved to StoreMoneyHelper.php (WI-M15-style split); composer autoload.files
     ];

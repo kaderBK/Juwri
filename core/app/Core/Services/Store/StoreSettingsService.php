@@ -475,14 +475,18 @@ class StoreSettingsService
         foreach (self::CORE_COLUMNS as $col) {
             $columns[$col] = $request->get($col);
         }
-        // Slug: keep the submitted slug, else derive one from the title.
-        $columns['slug'] = ! empty($request->slug)
-            ? $request->slug
-            : GlobalSlugService::createSlug(Store::class, 'slug', $request->title);
         // MCP-expansion P2-5: platform Catalog MCP opt-out (default visible).
         $columns['catalog_visible'] = $request->boolean('catalog_visible');
 
-        $this->applyCoreColumns($store, array_merge($columns, $images));
+        // Slug: keep the submitted slug, else derive one from the title with collision retry (BL-047).
+        GlobalSlugService::writeWithUniqueSlug(
+            (string) $request->title,
+            function (string $slug) use ($store, $columns, $images): void {
+                $columns['slug'] = $slug;
+                $this->applyCoreColumns($store, array_merge($columns, $images));
+            },
+            ! empty($request->slug) ? (string) $request->slug : null,
+        );
 
         // DIRECTORY L1 T1-1: sync the cuisine picks (already capped at 3 by the
         // validator). While the module is off the picker is hidden, so `cuisines`

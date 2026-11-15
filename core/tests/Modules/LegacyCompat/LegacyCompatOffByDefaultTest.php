@@ -210,9 +210,12 @@ class LegacyCompatOffByDefaultTest extends TestCase
     /** Off: nothing is wired: no storefront middleware, no RoomCharge decorator, no active flag. */
     public function test_nothing_is_wired_when_off(): void
     {
+        /** @var RoomCharge $roomCharge */
+        $roomCharge = app(RoomCharge::class);
+
         $this->assertFalse($this->app->bound(LegacyCompatServiceProvider::ACTIVE_FLAG));
         $this->assertNotContains(LegacyStorefrontEntry::class, $this->app->make(Router::class)->getMiddlewareGroups()['web'] ?? []);
-        $this->assertNotInstanceOf(LegacyRoomCharge::class, app(RoomCharge::class));
+        $this->assertNotInstanceOf(LegacyRoomCharge::class, $roomCharge);
     }
 
     /**

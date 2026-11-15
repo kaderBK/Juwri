@@ -18,14 +18,14 @@ class PostsSlugIndexTest extends TestCase
     public function test_posts_slug_index_exists(): void
     {
         $this->assertTrue(
-            Schema::hasIndex('stores', 'stores_slug_idx'),
-            'Expected stores_slug_idx on stores(slug) — the storefront slug lookup would otherwise full-scan.'
+            Schema::hasIndex('stores', 'stores_slug_unique'),
+            'Expected stores_slug_unique on stores(slug) — the storefront slug lookup would otherwise full-scan.'
         );
     }
 
     public function test_index_name_fits_mysql_cap_with_prefix(): void
     {
         // qrtest_ prefix (7) + name must stay under the MySQL 64-char identifier cap.
-        $this->assertLessThanOrEqual(64, strlen('qrtest_'.'stores_slug_idx'));
+        $this->assertLessThanOrEqual(64, strlen('qrtest_'.'stores_slug_unique'));
     }
 }

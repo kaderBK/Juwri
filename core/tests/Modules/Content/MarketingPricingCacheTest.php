@@ -76,6 +76,24 @@ class MarketingPricingCacheTest extends TestCase
         $this->assertSame($before, $after, 'a page that shows no plan must not be re-keyed');
     }
 
+    public function test_reseller_bump_re_keys_that_resellers_pages_only(): void
+    {
+        app()->instance('activeReseller', (object) ['id' => 42]);
+        try {
+            $request = $this->requestForRoute('home');
+            $before = $this->cacheKey($request);
+
+            MarketingPricingCache::bumpReseller(99);
+            $this->assertSame($before, $this->cacheKey($request), 'another reseller must not invalidate this host');
+
+            MarketingPricingCache::bumpReseller(42);
+            $after = $this->cacheKey($request);
+            $this->assertNotSame($before, $after, 'bumping this reseller re-keys its cached page');
+        } finally {
+            app()->forgetInstance('activeReseller');
+        }
+    }
+
     /** A request whose route carries the given name (the middleware keys on the route name). */
     private function requestForRoute(string $name): Request
     {

@@ -8,7 +8,7 @@ use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Models\MenuCategory;
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\StoreTable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +26,7 @@ use Juwri\Modules\LegacyCompat\Support\LegacyRoomTokenKeys;
 use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Payments\Models\LedgerAccount;
 use Juwri\Modules\Payments\Models\LedgerEntry;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\Support\TestPlans;
 use Tests\TestCase;
 
@@ -64,7 +65,7 @@ class LegacyRoomChargeFlowTest extends TestCase
         LegacyCompatServiceProvider::activate($this->app);
     }
 
-    /** @return array{Store, Model, Menu} */
+    /** @return array{Store, StoreTable, Menu} */
     private function hotel(): array
     {
         $plan = TestPlans::create([
@@ -82,6 +83,7 @@ class LegacyRoomChargeFlowTest extends TestCase
         StoreSettings::set($store->id, 'hotel_charge_room_token_required', '1');
         $cat = MenuCategory::create(['store_id' => $store->id, 'name' => 'Mains', 'active' => '1']);
         $item = Menu::create(['store_id' => $store->id, 'category_id' => $cat->id, 'name' => 'Club Sandwich', 'price' => self::PRICE, 'active' => '1']);
+        /** @var StoreTable $room */
         $room = $store->tables()->create([
             'table_no' => 101, 'key' => 'rk-'.Str::random(10), 'seats' => 2, 'area_type' => 'room', 'label' => 'Suite 101',
         ]);
@@ -89,7 +91,8 @@ class LegacyRoomChargeFlowTest extends TestCase
         return [$store, $room, $item];
     }
 
-    private function order(Store $store, Model $room, Menu $item): TestResponse
+    /** @return TestResponse<Response> */
+    private function order(Store $store, StoreTable $room, Menu $item): TestResponse
     {
         return $this->postJson(route(LegacyCompatRoutes::CORE_ORDER_ROUTE, [LegacyCompatRoutes::CORE_ORDER_ROUTE_PARAM => $store->id]), [
             'items' => json_encode([['id' => $item->id, 'quantity' => 1, 'variants' => '', 'extras' => []]]),
@@ -109,7 +112,7 @@ class LegacyRoomChargeFlowTest extends TestCase
         return $account ? round((float) LedgerEntry::where('ledger_account_id', $account->id)->sum(DB::raw(LedgerEntry::minorMoneySql('amount'))), 2) : 0.0;
     }
 
-    private function scan(Store $store, Model $room, string $token): void
+    private function scan(Store $store, StoreTable $room, string $token): void
     {
         $this->get('/'.$store->slug.'?table='.$room->getAttribute('key').'&rt='.$token)->assertOk()->assertSessionHas('hotel_room_token', $token);
     }

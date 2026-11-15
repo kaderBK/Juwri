@@ -48,6 +48,7 @@ class LegacyRoomTokenTest extends TestCase
 
     public function test_off_by_default_the_binding_is_untouched_and_old_key_tokens_fail(): void
     {
+        /** @var RoomCharge $charge */
         $charge = app(RoomCharge::class);
 
         $this->assertNotInstanceOf(LegacyRoomCharge::class, $charge);
@@ -173,6 +174,6 @@ class LegacyRoomTokenTest extends TestCase
             $this->assertNotNull(LegacyRoomTokenKeys::graceEndsAt(), $good);
         }
         config(['legacy_compat.room_token_legacy_until' => '2099-01-01']);
-        $this->assertSame('2099-01-01 00:00:00', LegacyRoomTokenKeys::graceEndsAt()?->format('Y-m-d H:i:s'));
+        $this->assertSame('2099-01-01 00:00:00', LegacyRoomTokenKeys::graceEndsAt()->format('Y-m-d H:i:s'));
     }
 }

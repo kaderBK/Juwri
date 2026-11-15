@@ -4,6 +4,7 @@
 
 namespace Juwri\Core\Console\Commands;
 
+use App\Exceptions\PartialPurgeException;
 use App\Services\Account\AccountDeletionService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -61,6 +62,10 @@ class PurgeDeletedAccountsCommand extends Command
                 } catch (\Throwable $e) {
                     $failures++;
                     $attempts++;
+                    if ($e instanceof PartialPurgeException) {
+                        // keep what the service saved (failed_stores, tables) next to the counter
+                        $report = array_merge($e->report, array_intersect_key($report, ['failed_attempts' => 1]));
+                    }
                     $report['failed_attempts'] = $attempts;
                     $report['last_error'] = mb_substr($e->getMessage(), 0, 500);
                     $final = $attempts >= self::MAX_ATTEMPTS;

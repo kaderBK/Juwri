@@ -316,20 +316,23 @@ class StudioController extends Controller
         $session->update(['user_id' => $user->id, 'status' => 'published']);
 
         $title = trim((string) $request->input('title')) ?: 'My Menu';
-        $store = Store::create([
-            'user_id' => $user->id,
-            'slug' => GlobalSlugService::createSlug(Store::class, 'slug', $title.'-'.Str::random(4)),
-            'color' => '#7c5cff',
-            'title' => $title,
-            'sub_title' => '',
-            'description' => '',
-            'main_image' => 'default.png',
-            'cover_image' => 'default.png',
-            'address' => '',
-            'phone' => '',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $store = GlobalSlugService::writeWithUniqueSlug(
+            $title.'-'.Str::random(4),
+            fn (string $slug): Store => Store::create([
+                'user_id' => $user->id,
+                'slug' => $slug,
+                'color' => '#7c5cff',
+                'title' => $title,
+                'sub_title' => '',
+                'description' => '',
+                'main_image' => 'default.png',
+                'cover_image' => 'default.png',
+                'address' => '',
+                'phone' => '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ])
+        );
 
         $this->persistDraft($store, $draft['categories']);
 
