@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 
 /* ===== end google-partner Lane B block ===== */
 
+// BL-038 review: the gateway's cancel link of a platform purchase — the pending checkout is abandoned (AbandonedCheckout).
+Route::get('checkout/cancelled/{transaction}', '\Juwri\Modules\Payments\Http\Controllers\User\CheckoutCancelledController@cancelled')->name('payments.checkout.cancelled');
+
 // P5-29: owner "Card terminals" page — set up the store's own SoftPOS account (Geidea / EdfaPay).
 Route::get('card-terminals', '\Juwri\Modules\Payments\Http\Controllers\User\SoftPosAccountsController@show')->name('softpos.index');
 // B11 disputes — owner chargeback list (superadmin-gated).

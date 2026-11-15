@@ -52,9 +52,11 @@ class ThemeDeveloperDocsTest extends TestCase
         $names = array_column($drops['CustomerDrop'], 'name');
         sort($names);
         // The reference documents EXACTLY the exposed surface: name + phone, plus
-        // the authed diner's OWN store-credit balance (P7-5a, account-bound D3).
+        // the authed diner's OWN store-credit balance (P7-5a, account-bound D3)
+        // and the count of their OWN unread notifications (the header bell's
+        // badge — a number over their own rows, never another diner's).
         // Still never id/email/tokens/etc.
-        $this->assertSame(['name', 'phone', 'store_credit', 'store_credit_formatted'], $names);
+        $this->assertSame(['name', 'notifications_unread', 'phone', 'store_credit', 'store_credit_formatted'], $names);
     }
 
     public function test_starter_zip_downloads_and_passes_the_package_validator(): void

@@ -106,35 +106,45 @@
         <div class="ui-card__head">
             <div>
                 <h2 class="ui-card__title">{{ ___('Store listings') }}</h2>
-                <p class="ui-text-2 ui-small">{{ ___('Each theme\'s Theme Store metadata — category, tagline and screenshot gallery.') }}</p>
+                <p class="ui-text-2 ui-small">{{ ___('Each theme\'s Theme Store metadata — category, tagline and screenshot gallery.') }} {{ ___('Drag to set the store order. Listings under “Then, by rating” stay in rating order until you drag them up. The number on a listing still sets its place.') }}</p>
             </div>
         </div>
         @if($themes->isEmpty())
             <x-ui.empty icon="sparkle" :title="___('No themes yet.')" />
         @else
+            <style nonce="{{ csp_nonce() }}">
+                .listing-pad td { height: .5rem; padding: 0; border: 0; }
+                .listing-row.is-dragging { opacity: .45; }
+                .listing-sort.is-drop-target { outline: 2px dashed var(--ui-accent, #0d6efd); outline-offset: -2px; }
+                .quick-reorder-icon { cursor: grab; display: inline-flex; align-items: center; }
+            </style>
             <div class="ui-table-wrap">
-                <table class="ui-table">
+                <table class="ui-table" id="listing-catalogue" data-action="{{ route('admin.theme-reviews.reorder') }}">
                     <thead><tr>
-                        <th>{{ ___('Theme') }}</th><th>{{ ___('Category') }}</th><th>{{ ___('Tagline') }}</th><th>{{ ___('Screenshots') }}</th><th class="ui-end">{{ ___('Actions') }}</th>
+                        <th style="width:2rem"></th>
+                        <th>{{ ___('Theme') }}</th>
+                        <th>{{ ___('Position') }}</th>
+                        <th>{{ ___('Category') }}</th>
+                        <th>{{ ___('Tagline') }}</th>
+                        <th>{{ ___('Screenshots') }}</th>
+                        <th class="ui-end">{{ ___('Actions') }}</th>
                     </tr></thead>
-                    <tbody>
-                    @foreach($themes as $t)
-                        <tr>
-                            <td data-primary data-label="{{ ___('Theme') }}"><span class="ui-strong">{{ $t->name }}</span> <code class="ui-mono ui-small">{{ $t->slug }}</code></td>
-                            <td data-label="{{ ___('Category') }}">
-                                @if($t->category)
-                                    <x-ui.tag tone="accent">{{ ___($t->category) }}</x-ui.tag>
-                                @else
-                                    <x-ui.tag tone="warning">{{ ___('uncategorized') }}</x-ui.tag>
-                                @endif
-                            </td>
-                            <td data-label="{{ ___('Tagline') }}" class="ui-text-2">{{ Str::limit($t->tagline, 60) ?: '—' }}</td>
-                            <td data-label="{{ ___('Screenshots') }}">{{ $t->screenshots_count }}</td>
-                            <td class="ui-end" data-label="">
-                                <x-ui.button variant="secondary" size="sm" icon="pencil" :href="route('admin.theme-reviews.listing', $t->id)">{{ ___('Edit listing') }}</x-ui.button>
-                            </td>
-                        </tr>
+                    <tbody id="listing-order" class="listing-sort">
+                    @foreach($orderedListings as $t)
+                        @include('admin.theme_reviews._listing_row', ['t' => $t])
                     @endforeach
+                        <tr class="listing-pad"><td colspan="7"></td></tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="ui-text-2 ui-small">{{ ___('Then, by rating') }}</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="listing-tail" class="listing-sort">
+                    @foreach($ratingListings as $t)
+                        @include('admin.theme_reviews._listing_row', ['t' => $t])
+                    @endforeach
+                        <tr class="listing-pad"><td colspan="7"></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -210,3 +220,107 @@
     </x-ui.sheet>
 @endforeach
 @endsection
+
+@push('scripts_at_bottom')
+    <script nonce="{{ csp_nonce() }}">
+        (function () {
+            var table = document.getElementById('listing-catalogue');
+            var orderBody = document.getElementById('listing-order');
+            var tailBody = document.getElementById('listing-tail');
+            if (!table || !orderBody || !tailBody) return;
+
+            var url = table.getAttribute('data-action');
+            var csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            var dragging = null;
+            var saving = false;
+            var again = false;
+
+            function ids(tbody) {
+                return Array.prototype.map.call(
+                    tbody.querySelectorAll(':scope > tr.listing-row'),
+                    function (row) { return Number(row.getAttribute('data-id')); }
+                );
+            }
+
+            function paint() {
+                Array.prototype.forEach.call(orderBody.querySelectorAll(':scope > tr.listing-row'), function (row, i) {
+                    var cell = row.querySelector('[data-pos]');
+                    if (cell) cell.textContent = String(i + 1);
+                });
+                Array.prototype.forEach.call(tailBody.querySelectorAll(':scope > tr.listing-row'), function (row) {
+                    var cell = row.querySelector('[data-pos]');
+                    if (cell) cell.textContent = '—';
+                });
+            }
+
+            function save() {
+                if (saving) { again = true; return; }
+                saving = true;
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrf,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ ordered: ids(orderBody), tail: ids(tailBody) })
+                }).then(function (res) {
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return res.json();
+                }).then(function (data) {
+                    paint();
+                    if (data && data.success && window.ownerUi && window.ownerUi.toast) {
+                        window.ownerUi.toast(data.message, { tone: 'success' });
+                    }
+                }).catch(function () {
+                    window.location.reload();
+                }).finally(function () {
+                    saving = false;
+                    if (again) { again = false; save(); }
+                });
+            }
+
+            [orderBody, tailBody].forEach(function (tbody) {
+                tbody.addEventListener('dragstart', function (e) {
+                    var row = e.target.closest('tr.listing-row');
+                    if (!row) return;
+                    dragging = row;
+                    row.classList.add('is-dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', row.getAttribute('data-id') || '');
+                });
+                tbody.addEventListener('dragend', function () {
+                    if (dragging) dragging.classList.remove('is-dragging');
+                    dragging = null;
+                    orderBody.classList.remove('is-drop-target');
+                    tailBody.classList.remove('is-drop-target');
+                });
+                tbody.addEventListener('dragover', function (e) {
+                    if (!dragging) return;
+                    e.preventDefault();
+                    tbody.classList.add('is-drop-target');
+                    var target = e.target.closest('tr.listing-row');
+                    var pad = tbody.querySelector(':scope > tr.listing-pad');
+                    if (target && target !== dragging && target.parentNode === tbody) {
+                        var rect = target.getBoundingClientRect();
+                        var after = (e.clientY - rect.top) > (rect.height / 2);
+                        tbody.insertBefore(dragging, after ? target.nextSibling : target);
+                    } else if (pad) {
+                        tbody.insertBefore(dragging, pad);
+                    }
+                });
+                tbody.addEventListener('dragleave', function (e) {
+                    if (!tbody.contains(e.relatedTarget)) {
+                        tbody.classList.remove('is-drop-target');
+                    }
+                });
+                tbody.addEventListener('drop', function (e) {
+                    if (!dragging) return;
+                    e.preventDefault();
+                    tbody.classList.remove('is-drop-target');
+                    save();
+                });
+            });
+        })();
+    </script>
+@endpush

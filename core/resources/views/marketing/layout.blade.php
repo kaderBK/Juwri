@@ -50,6 +50,7 @@
 
     <script src="{{ \Juwri\Core\Support\ViewHelpers::assetV('assets/owner-ui/layout.js') }}" defer></script>
     <script src="{{ \Juwri\Core\Support\ViewHelpers::assetV('assets/owner-ui/site.js') }}" defer></script>
+    @includeIf('billing::marketing.sections.promotion-offer-bar')
     @stack('scripts')
 </body>
 </html>

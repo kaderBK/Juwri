@@ -882,6 +882,50 @@ final class LegacyProdShapeFixture
         return $this;
     }
 
+    /**
+     * Later promotion tables: coupon terms (reseller, platform-plan and reseller-tier promotions) and the per-account
+     * use counter (synthetic shapes for the importer tests).
+     */
+    public function laterPromotions(): self
+    {
+        $schema = $this->db->getSchemaBuilder();
+        if (! $schema->hasTable('reseller_coupon_terms')) {
+            $schema->create('reseller_coupon_terms', static function (Blueprint $t): void {
+                $t->id();
+                $t->unsignedBigInteger('coupon_id');
+                $t->unsignedBigInteger('reseller_id')->nullable();
+                $t->json('plan_ids')->nullable();
+                $t->string('duration', 12)->default('once');
+                $t->unsignedSmallInteger('duration_months')->nullable();
+                $t->bigInteger('amount_off_minor')->nullable();
+                $t->char('currency_code', 3)->nullable();
+                $t->timestamps();
+                $t->json('gateway_refs')->nullable();
+                $t->string('target', 20)->default('reseller_plan');
+                $t->json('intervals')->nullable();
+                $t->timestamp('starts_at')->nullable();
+                $t->boolean('auto_apply')->default(false);
+                $t->boolean('new_accounts_only')->default(false);
+                $t->unsignedInteger('per_account_limit')->nullable();
+                $t->json('display')->nullable();
+                $t->smallInteger('priority')->default(0);
+            });
+        }
+        if (! $schema->hasTable('promotion_redemptions')) {
+            $schema->create('promotion_redemptions', static function (Blueprint $t): void {
+                $t->id();
+                $t->unsignedBigInteger('coupon_id');
+                $t->string('subject_type', 20);
+                $t->unsignedBigInteger('subject_id');
+                $t->unsignedInteger('seq');
+                $t->string('reference', 64)->nullable();
+                $t->timestamp('created_at')->nullable();
+            });
+        }
+
+        return $this;
+    }
+
     /** @param array<string, mixed> $attrs */
     public function roomType(int $id, int $storeId, array $attrs = []): int
     {

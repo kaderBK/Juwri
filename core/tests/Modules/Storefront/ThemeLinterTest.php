@@ -4,9 +4,10 @@
 
 namespace Tests\Modules\Storefront;
 
+use Illuminate\Support\Facades\File;
+use Juwri\Modules\Storefront\Storefront\MarketplaceTheme;
 use Juwri\Modules\Storefront\Storefront\MarketplaceThemeResolver;
 use Juwri\Modules\Storefront\Storefront\ThemeLinter;
-use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 /**
@@ -25,7 +26,7 @@ class ThemeLinterTest extends TestCase
     }
 
     /** @param array<string,string> $files rel path → content */
-    private function writeTheme(array $files): \Juwri\Modules\Storefront\Storefront\MarketplaceTheme
+    private function writeTheme(array $files): MarketplaceTheme
     {
         $dir = storage_path(self::BASE.'/1');
         File::deleteDirectory(storage_path(self::BASE));
@@ -101,7 +102,7 @@ class ThemeLinterTest extends TestCase
     {
         $theme = $this->writeTheme([
             'templates/index.json' => json_encode(['sections' => ['a' => ['type' => 'hero']], 'order' => ['a']]),
-            'sections/hero.liquid' => "{% assign ghost = 1 %}{% assign used = 2 %}<p>{{ used }}</p>",
+            'sections/hero.liquid' => '{% assign ghost = 1 %}{% assign used = 2 %}<p>{{ used }}</p>',
         ]);
 
         $report = new ThemeLinter()->lint($theme);
@@ -110,5 +111,46 @@ class ThemeLinterTest extends TestCase
         $warned = array_column($report['warnings'], 'message');
         $this->assertTrue((bool) preg_grep('/ghost/', $warned), 'ghost flagged');
         $this->assertFalse((bool) preg_grep("/'used'/", $warned), 'used var not flagged');
+    }
+
+    public function test_a_library_based_theme_is_not_warned_about_missing_card_hooks(): void
+    {
+        // The hooks the advisory scan looks for — data-mb-open on a card and
+        // data-mb-add on its add button — live in the LIBRARY's card snippet.
+        // The scan has to see the library's snippets, or every library-based
+        // theme is warned that its items "cannot be opened/deep-linked" and
+        // that "nothing can be added to the cart", while the library's card
+        // does exactly that.
+        $theme = $this->writeTheme([
+            'theme.json' => json_encode(['name' => 'Lint', 'slug' => 'linttest', 'version' => '1', 'library' => '1']),
+            'templates/index.json' => json_encode([
+                'sections' => ['rail' => ['type' => 'featured-rail']],
+                'order' => ['rail'],
+            ]),
+        ]);
+
+        $report = new ThemeLinter()->lint($theme);
+
+        $warnings = $this->rules($report, 'warnings');
+        $this->assertNotContains('item-deep-link-missing', $warnings,
+            "the library's card carries data-mb-open — the theme must not be warned");
+        $this->assertNotContains('cart-add-missing', $warnings,
+            "the library's card carries data-mb-add — the theme must not be warned");
+    }
+
+    public function test_the_wiring_warnings_still_fire_for_a_theme_without_card_hooks(): void
+    {
+        // The rule still bites: a theme that renders its own items with no
+        // data-mb-open and no data-mb-add is genuinely not a storefront.
+        $theme = $this->writeTheme([
+            'templates/index.json' => json_encode(['sections' => ['a' => ['type' => 'mine']], 'order' => ['a']]),
+            'sections/mine.liquid' => '{% for item in items %}<div>{{ item.name }}</div>{% endfor %}',
+        ]);
+
+        $report = new ThemeLinter()->lint($theme);
+
+        $warnings = $this->rules($report, 'warnings');
+        $this->assertContains('item-deep-link-missing', $warnings);
+        $this->assertContains('cart-add-missing', $warnings);
     }
 }

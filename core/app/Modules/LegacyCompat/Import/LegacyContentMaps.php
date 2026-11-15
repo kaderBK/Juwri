@@ -42,6 +42,8 @@ final class LegacyContentMaps
             self::optouts('whatsapp_optouts', 'whatsapp_optouts', TableMap::PLATFORM),
             self::accountDeletions(),
             self::coupons(),
+            self::couponTerms(),
+            self::promotionRedemptions(),
         ];
     }
 
@@ -236,6 +238,140 @@ final class LegacyContentMaps
         $out['code'] = $code;
 
         return $out;
+    }
+
+    /** Promotion targets of coupon terms (the offers engine). */
+    private const PROMO_TARGETS = ['platform_plan', 'reseller_plan', 'reseller_tier'];
+
+    /**
+     * Promotion terms of imported coupons (plans, intervals, window, automatic mode, new accounts, per-account limit,
+     * display text, priority). Kept only with their coupon and only when the issuer matches the target (a platform
+     * coupon for platform-plan and reseller-tier sales, the reseller's coupon for its own plans). Platform plan ids go
+     * through the plan map; a terms row whose plans do not all map (or that names reseller tiers or reseller plans, whose ids
+     * are not carried over) is kept switched off and limited to no plan, never widened to every plan — reported for review.
+     * Gateway coupon references are not carried: they name provider objects and are created again on first use.
+     */
+    public static function couponTerms(): TableMap
+    {
+        $same = ['duration', 'duration_months', 'amount_off_minor', 'currency_code', 'per_account_limit', 'priority'];
+
+        return new TableMap(
+            source: 'reseller_coupon_terms', target: 'reseller_coupon_terms', scope: TableMap::PLATFORM,
+            columns: array_combine($same, $same) + ['coupon_id' => 'coupon_id', 'target' => 'target'],
+            dates: ['starts_at' => 'starts_at'] + self::TIMESTAMPS,
+            bools: ['auto_apply' => 'auto_apply', 'new_accounts_only' => 'new_accounts_only'],
+            requiredRefs: ['coupon_id' => 'coupons'],
+            ignore: ['gateway_refs'],
+            uses: ['reseller_id', 'plan_ids', 'intervals', 'display'],
+            transform: static fn (array $out, array $row, ImportContext $ctx): array|string => self::couponTerm($out, $row, $ctx),
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $out
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>|string
+     */
+    private static function couponTerm(array $out, array $row, ImportContext $ctx): array|string
+    {
+        $id = (int) ($out['id'] ?? 0);
+        $target = (string) ($out['target'] ?? 'reseller_plan');
+        if (! in_array($target, self::PROMO_TARGETS, true)) {
+            return 'unknown promotion target';
+        }
+        $out['target'] = $target;
+        $resellerId = $ctx->target->table('coupons')->where('id', (int) $out['coupon_id'])->value('reseller_id');
+        $resellerId = $resellerId === null ? null : (int) $resellerId;
+        if (($target === 'reseller_plan') !== ($resellerId !== null)) {
+            return 'the coupon issuer does not match the promotion target';
+        }
+        $out['reseller_id'] = $resellerId;
+        if (! in_array($out['duration'] ?? null, ['once', 'repeating', 'forever'], true)) {
+            $out['duration'] = 'once';
+        }
+        $out['currency_code'] = ($out['currency_code'] ?? null) ? strtoupper((string) $out['currency_code']) : null;
+        foreach (['intervals', 'display'] as $json) {
+            $out[$json] = self::jsonOrNull($row[$json] ?? null, $json, $id, $ctx);
+        }
+
+        $plans = json_decode((string) ($row['plan_ids'] ?? ''), true);
+        $plans = is_array($plans) ? array_values(array_filter(array_map('intval', $plans), static fn (int $p): bool => $p > 0)) : [];
+        if ($plans === []) {
+            $out['plan_ids'] = null; // every plan of the target, as at the source
+
+            return $out;
+        }
+        if ($target === 'reseller_plan') {
+            /* BL-038 review: reseller plan ids are not proven to survive the reseller import with the same ids — kept
+               switched off for no plan (like tier ids), never applied to whatever plan holds the id here. */
+            $out['plan_ids'] = '[0]';
+            $out['auto_apply'] = false;
+            $ctx->report->conflict('reseller_coupon_terms: reseller plan ids are not carried over: kept switched off for no plan, review the offer', 'reseller_coupon_terms#'.$id);
+
+            return $out;
+        }
+        $mapped = [];
+        if ($target === 'platform_plan') {
+            foreach ($plans as $plan) {
+                $to = PlanMemberships::target((string) $plan, 'reseller_coupon_terms#'.$id, $ctx);
+                if ($to !== null) {
+                    $mapped[] = $to;
+                }
+            }
+        }
+        if ($target === 'reseller_tier' || count($mapped) !== count($plans)) {
+            $out['plan_ids'] = '[0]';
+            $out['auto_apply'] = false;
+            $ctx->report->conflict('reseller_coupon_terms: plans not all mapped to this install (reseller tiers or unmapped plans): kept switched off for no plan, review the offer', 'reseller_coupon_terms#'.$id);
+
+            return $out;
+        }
+        $out['plan_ids'] = (string) json_encode(array_values(array_unique($mapped)));
+
+        return $out;
+    }
+
+    /** A source JSON column as valid JSON text, or null (invalid JSON reported). */
+    private static function jsonOrNull(mixed $value, string $column, int $id, ImportContext $ctx): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        $decoded = json_decode((string) $value, true);
+        if (! is_array($decoded)) {
+            $ctx->report->conflict('reseller_coupon_terms.'.$column.': not valid JSON, set NULL', 'reseller_coupon_terms#'.$id);
+
+            return null;
+        }
+
+        return (string) json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Per-account uses of promotions (the per-account limit): a platform account's uses when that account was imported;
+     * a reseller's (tier sales) and a reseller customer's go with the reseller import.
+     */
+    public static function promotionRedemptions(): TableMap
+    {
+        return new TableMap(
+            source: 'promotion_redemptions', target: 'promotion_redemptions', scope: TableMap::PLATFORM,
+            columns: ['coupon_id' => 'coupon_id', 'subject_type' => 'subject_type', 'seq' => 'seq', 'reference' => 'reference'],
+            dates: ['created_at' => 'created_at'],
+            requiredRefs: ['coupon_id' => 'coupons'],
+            uses: ['subject_id'],
+            transform: static function (array $out, array $row, ImportContext $ctx): array|string {
+                $subject = (int) ($row['subject_id'] ?? 0);
+                $out['subject_id'] = $subject;
+                // A use imported from the source was paid there: confirmed, never handed back as a stale reservation.
+                $out['reference'] = isset($out['reference']) ? 'ok:'.mb_substr((string) $out['reference'], 0, 60) : null;
+
+                return match ((string) ($out['subject_type'] ?? '')) {
+                    'user' => $subject > 0 && $ctx->resolves('users', $subject) ? $out : 'promotion use of an account not imported',
+                    'reseller', 'reseller_customer' => 'promotion use of a reseller or its customer (imported with the reseller)',
+                    default => 'promotion use of an unknown subject',
+                };
+            },
+        );
     }
 
     /** Currency of the owner's first source store (the issuer's currency of an owner coupon), else the platform's. */

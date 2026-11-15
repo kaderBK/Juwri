@@ -5,9 +5,9 @@
 namespace Juwri\Modules\Storefront\Database\Seeders;
 
 use App\Models\Theme;
-use Juwri\Core\Database\Seeders\Concerns\RasterizesSvg;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
+use Juwri\Core\Database\Seeders\Concerns\RasterizesSvg;
 
 /**
  * Theme Store listing content for the two REAL installable Liquid themes that
@@ -33,9 +33,15 @@ class ThemeStoreCatalogSeeder extends Seeder
                 continue;
             }
 
+            /* The catalogue publishes every theme it knows — but it must not
+               resurrect one the owner DELISTED in the admin (the listing
+               editor's Visibility control). A delisted theme keeps its status;
+               the catalogue only fills in the copy, the price and the
+               category. */
+            $existing = Theme::query()->where('slug', $slug)->first();
             $theme = Theme::updateOrCreate(['slug' => $slug], [
                 'name' => $spec['name'],
-                'status' => 'published',
+                'status' => ($existing && $existing->status === 'delisted') ? 'delisted' : 'published',
                 'category' => $spec['category'],
                 'tagline' => $spec['tagline'],
                 'demo_notes' => $spec['demo_notes'],
@@ -43,16 +49,23 @@ class ThemeStoreCatalogSeeder extends Seeder
                 'seller_id' => null, // platform-owned
             ]);
 
-            $version = $theme->versions()->updateOrCreate(['semver' => $spec['semver']], [
-                'manifest' => [
-                    'name' => $spec['name'],
-                    'version' => $spec['semver'],
-                    'description' => trim($spec['description']),
-                ],
-                'checksum' => hash('sha256', $slug.'@'.$spec['semver']),
-                'status' => 'published',
-                'review_notes' => 'First-party reference theme',
-            ]);
+            /* A PUBLISHED version is immutable (ThemeVersion's own guard), so
+               the catalogue must not rewrite one — a re-seed that changed a
+               theme's copy would throw. Only a version that is not published
+               yet is refreshed. */
+            $version = $theme->versions()->firstWhere('semver', $spec['semver']);
+            if (! $version || $version->status !== 'published') {
+                $version = $theme->versions()->updateOrCreate(['semver' => $spec['semver']], [
+                    'manifest' => [
+                        'name' => $spec['name'],
+                        'version' => $spec['semver'],
+                        'description' => trim($spec['description']),
+                    ],
+                    'checksum' => hash('sha256', $slug.'@'.$spec['semver']),
+                    'status' => 'published',
+                    'review_notes' => 'First-party reference theme',
+                ]);
+            }
 
             // Publish the theme's static assets (css/js/fonts/images) to the
             // public dir the `theme_asset` filter reads (MarketplaceTheme::assetMap).

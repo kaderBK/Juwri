@@ -575,6 +575,22 @@
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
  },
+ "admin.offers.edit": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.offers.end": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.offers.redemptions": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.offers.update": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
  "admin.pages.builder": {
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
@@ -2747,6 +2763,10 @@
   "class": "signed",
   "why": "signed middleware"
  },
+ "payments.checkout.cancelled": {
+  "class": "signed",
+  "why": "hasValidSignature() in CheckoutCancelledController@cancelled; the transaction is only touched when the signed gateway link is valid and user_id matches the acting buyer"
+ },
  "pci.csp-report": {
   "class": "public-by-design",
   "why": "no login: path params are public slugs/ids, secret tokens or provider names; writes are store-scoped or token-checked"
@@ -3036,6 +3056,10 @@
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
  "publicView.notifications.read": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "publicView.notifications.unread": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },

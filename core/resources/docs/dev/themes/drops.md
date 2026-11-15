@@ -40,6 +40,7 @@ Properties listed are exactly what a template can touch; nothing else exists.
 
 ## CustomerDrop
 - `name` (?string)
+- `notifications_unread` (int)
 - `phone` (?string)
 - `store_credit` (float)
 - `store_credit_formatted` (string)
@@ -112,6 +113,7 @@ Properties listed are exactly what a template can touch; nothing else exists.
 - `discount_percent` (?int)
 - `expiry_date` (?string)
 - `extras` (array)
+- `has_matrix` (bool)
 - `has_variants` (bool)
 - `id` (int)
 - `image` (?string)

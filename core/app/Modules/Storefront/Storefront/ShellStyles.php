@@ -4,6 +4,7 @@
 
 namespace Juwri\Modules\Storefront\Storefront;
 
+use Juwri\Modules\Storefront\Services\Theme\DarkTokens;
 use Juwri\Modules\Storefront\Services\Theme\FontPairs;
 use Juwri\Modules\Storefront\Services\Theme\Tokens;
 use Juwri\Modules\Storefront\Services\ThemeStudio\SectionRestyler;
@@ -33,12 +34,12 @@ class ShellStyles
     /**
      * @param  array<string,mixed>  $storeSettings  the store's customizer values for this theme
      * @param  array<string,mixed>|null  $layout  the store layout being rendered (E2 section variants)
-     * @return array{base_css:string,tokens_css:string,tokens_dark_css:string,font_css:string,stylesheets:list<string>,sections_css:string}
+     * @return array{base_css:string,tokens_css:string,tokens_dark_css:string,dark_css:string,font_css:string,stylesheets:list<string>,sections_css:string}
      */
     public static function for(MarketplaceTheme $theme, array $storeSettings = [], ?array $layout = null): array
     {
         $template = 'mp:'.$theme->slug.'@'.$theme->version;
-        $out = ['base_css' => '', 'tokens_css' => '', 'tokens_dark_css' => '', 'font_css' => FontPairs::riyalFaceCss(), 'stylesheets' => [], 'sections_css' => ''];
+        $out = ['base_css' => '', 'tokens_css' => '', 'tokens_dark_css' => '', 'dark_css' => '', 'font_css' => FontPairs::riyalFaceCss(), 'stylesheets' => [], 'sections_css' => ''];
 
         // Library themes: default type stacks (the store's font pair, emitted in
         // tokens_css after this, overrides them) with the Riyal glyph face first —
@@ -69,6 +70,20 @@ class ShellStyles
             $out['tokens_css'] = Tokens::css(Tokens::forTemplate($template, $values));
             // P3-01: the auto-scheme media block (empty unless the theme declares dark support).
             $out['tokens_dark_css'] = Tokens::css(Tokens::darkBlock($template, $values));
+
+            // The platform's DARK token set: the colours this storefront paints
+            // when the diner picks dark mode, derived from the theme's own
+            // palette. Only for a theme built on the section library — that is
+            // where the tokens are consumed (a theme outside the library paints
+            // its own colours and is untouched by this).
+            //
+            // A theme that paints its OWN dark palette declares
+            // `"dark_tokens": false` in its theme.json and keeps it — the
+            // platform then emits nothing for it.
+            $ownDark = ($theme->manifest()['dark_tokens'] ?? true) === false;
+            if ($theme->library() !== null && ! $ownDark) {
+                $out['dark_css'] = DarkTokens::css(Tokens::resolve($template, $values, true));
+            }
 
             $pair = Tokens::resolve($template, ['fonts.pair' => $values['fonts.pair'] ?? null])['fonts.pair'] ?? null;
             $out['font_css'] .= FontPairs::fontFaceCss($pair);

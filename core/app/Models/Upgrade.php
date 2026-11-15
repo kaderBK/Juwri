@@ -21,6 +21,9 @@ class Upgrade extends Model
 
     public const STATUS_SUSPENDED = 'suspended';
 
+    /** BL-038 round 5: lapsed; a recurring one is kept a while for a late gateway renewal (Billing's hourly cleanup). */
+    public const STATUS_EXPIRED = 'expired';
+
     public $timestamps = false;
 
     public $primaryKey = 'upgrade_id';

@@ -70,6 +70,19 @@
         {%- if has_special -%}<button type="button" class="mbs-product-grid__chip" data-mb-filter="special">{{ 'Featured' | t }}</button>{%- endif -%}
         {%- if section.settings.show_wishlist -%}<button type="button" class="mbs-product-grid__chip" data-mb-filter="fav">{{ 'Wishlist' | t }}</button>{%- endif -%}
       </div>
+      {%- comment -%}
+        The FACET panel — size, colour, price. Only a shop with a variant
+        matrix has something to filter by, so the button is for goods
+        storefronts; the runtime hides it too when the store's own facets
+        turn out to be empty.
+      {%- endcomment -%}
+      {%- if vocab.group == 'goods' -%}
+      <button type="button" class="mbs-product-grid__filters" data-mb-filters-open aria-expanded="false">
+        {%- render 'icon', name: 'filter', size: 18 -%}
+        <span>{{ 'Filters' | t }}</span>
+        <span class="mbs-product-grid__filters-badge" data-mb-filters-badge hidden>0</span>
+      </button>
+      {%- endif -%}
       {%- endif -%}
       {%- if section.settings.show_sort -%}
       <label class="mbs-product-grid__sort">

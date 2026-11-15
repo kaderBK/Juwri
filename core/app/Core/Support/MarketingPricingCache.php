@@ -25,6 +25,9 @@ final class MarketingPricingCache
     /** The cache key holding the stamp. */
     public const KEY = 'marketing:pricing-version';
 
+    /** The cache key holding the active-promotions stamp. */
+    public const PROMOTIONS_CACHE_KEY = 'promotions:display-version';
+
     /**
      * The current stamp. A missing one (never set, or evicted by the store) is
      * seeded from the clock, so it never walks back to a stamp an older cached
@@ -39,6 +42,55 @@ final class MarketingPricingCache
     public static function resellerVersion(int $resellerId): int
     {
         return $resellerId > 0 ? self::readVersion(self::resellerKey($resellerId)) : 1;
+    }
+
+    /**
+     * Cache-busting stamp for active automatic promotions: changes when an
+     * auto-apply offer is saved/ended, or within a minute of a scheduled
+     * start/expiry time passing.
+     */
+    public static function promotionsVersion(): string
+    {
+        try {
+            return (string) Cache::remember(self::PROMOTIONS_CACHE_KEY, 60, static function (): string {
+                try {
+                    $rows = DB::table('reseller_coupon_terms as t')
+                        ->join('coupons as c', 'c.id', '=', 't.coupon_id')
+                        ->where('t.auto_apply', true)
+                        ->where(static fn ($q) => $q->whereNull('c.expiry_at')->orWhere('c.expiry_at', '>', now()))
+                        ->where(static fn ($q) => $q->whereNull('t.starts_at')->orWhere('t.starts_at', '<=', now()))
+                        ->orderBy('t.id')
+                        ->get(['t.id', 't.starts_at', 't.updated_at', 'c.expiry_at', 'c.updated_at as coupon_updated_at', 'c.used', 'c.limit']);
+
+                    $payload = $rows->map(static fn (object $r): string => implode(':', [
+                        (string) $r->id,
+                        (string) ($r->starts_at ?? ''),
+                        (string) ($r->expiry_at ?? ''),
+                        (string) ($r->updated_at ?? ''),
+                        (string) ($r->coupon_updated_at ?? ''),
+                        ((int) $r->limit > 0 && (int) $r->used >= (int) $r->limit) ? 'x' : '',
+                    ]))->implode(',');
+
+                    return substr(hash('sha256', $payload), 0, 12);
+                } catch (Throwable) {
+                    return 'none';
+                }
+            });
+        } catch (Throwable) {
+            return 'none';
+        }
+    }
+
+    /** Forget the cached promotions stamp after commit so the next request recomputes it. */
+    public static function bumpPromotions(): void
+    {
+        DB::afterCommit(static function (): void {
+            try {
+                Cache::forget(self::PROMOTIONS_CACHE_KEY);
+            } catch (Throwable) {
+                // Store unavailable mid-deploy; 60s TTL still bounds staleness.
+            }
+        });
     }
 
     /**

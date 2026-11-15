@@ -5,6 +5,7 @@
 namespace Juwri\Modules\Payments\Http\Controllers\User\PaymentMethods;
 
 use App\Models\Upgrade;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Core\Services\AlertDispatcher;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Services\GatewayCurrencies;
+use Juwri\Modules\Payments\Services\Gateways\RecurringPromotion;
 use Juwri\Modules\Payments\Services\MorPaymentGuard;
 use Juwri\Modules\Payments\Services\Webhooks\WebhookReceipts;
 use Juwri\Modules\Payments\Support\AccountPages;
@@ -84,19 +86,42 @@ class LemonSqueezyController extends Controller
             }
         }
 
-        $variant_id = in_array($transaction->frequency, ['MONTHLY', 'YEARLY'])
+        /* BL-038 O3: a promotion that ends is a Lemon Squeezy discount code on the FULL price, so renewals return to the
+           full price by themselves. */
+        $split = RecurringPromotion::split($transaction);
+        $discountCode = null;
+        if ($split !== null) {
+            $custom_price = GatewayMinorUnits::gatewayMinor('lemon_squeezy', $split['full'], $currency) ?? $custom_price;
+            $discountCode = self::promotionCode($split);
+            if ($discountCode === null) {
+                app_alert_error(___('Could not apply the offer at :gateway. Please try again.', ['gateway' => 'Lemon Squeezy']));
+
+                return back()->withInput();
+            }
+            $custom[RecurringPromotion::RECURRING_AMOUNT] = $split['full']->major();
+        }
+
+        /* A charge paid one period at a time (details.one_time_only: a per-branch quantity, or a promotion on a first
+           charge the gateway cannot split — BL-038 review) uses the one-time variant: a subscription would renew at
+           this first charge for ever. */
+        $variant_id = in_array($transaction->frequency, ['MONTHLY', 'YEARLY']) && data_get($transaction->details, 'one_time_only') !== true
             ? config('settings.lemon_squeezy_variant_id')
             : config('settings.lemon_squeezy_variant_id_onetime');
 
+        /* BL-038 review: a checkout lives 60 minutes (Lemon Squeezy cannot close one from outside), so a replaced or
+           cancelled checkout is provably closed once it expired (AbandonedCheckout). */
+        $expiresAt = now()->addMinutes(self::CHECKOUT_MINUTES)->utc();
         $body = [
             'data' => [
                 'type' => 'checkouts',
                 'attributes' => [
+                    'expires_at' => $expiresAt->toIso8601ZuluString(),
                     'custom_price' => $custom_price,
-                    'checkout_data' => [
+                    'checkout_data' => array_filter([
                         'email' => request()->user()->email ?? null,
                         'custom' => $custom,
-                    ],
+                        'discount_code' => $discountCode,
+                    ], fn ($v) => $v !== null),
                     'product_options' => [
                         'redirect_url' => route('ipn', 'lemon_squeezy'),
                         'name' => $title,
@@ -125,8 +150,10 @@ class LemonSqueezyController extends Controller
 
             if ($response->successful() && ! empty($url)) {
                 /* BL-038: the checkout row is a Lemon Squeezy checkout — the hourly cleanup keeps it (it may still be
-                   paid, and its renewals are bound to it) instead of deleting it after 3 hours. */
+                   paid, and its renewals are bound to it) and closes it once expired (AbandonedCheckout), instead of
+                   deleting it after 3 hours. */
                 $details = (array) ($transaction->details ?? []);
+                $details['lemon_expires_at'] = $expiresAt->toIso8601ZuluString();
                 $details['checkout_gateway'] = 'lemon_squeezy';
                 $transaction->update(['details' => $details]);
 
@@ -144,6 +171,86 @@ class LemonSqueezyController extends Controller
 
             return back()->withInput();
         }
+    }
+
+    /** How long a Lemon Squeezy checkout can be paid (BL-038 review: closable by expiry). */
+    private const CHECKOUT_MINUTES = 60;
+
+    /** How long a created (or found) promotion discount code is trusted before Lemon Squeezy is asked again. */
+    private const PROMO_CODE_TTL_HOURS = 24;
+
+    /**
+     * BL-038 O3: the Lemon Squeezy discount code of a promotion split (created once per split and store, then cached for
+     * a day), or null when Lemon Squeezy refused it (the buyer is told; nothing is charged). A create that fails because
+     * the code already exists (an earlier create whose answer was lost, an expired cache) accepts the store's existing
+     * discount when it is the same code with the same amount and duration (BL-038 review).
+     *
+     * @param  array{off_minor: int, periods: int, months_per_period: int, sig: string}  $split
+     */
+    private static function promotionCode(array $split): ?string
+    {
+        $storeId = (string) config('settings.lemon_squeezy_store_id');
+        $code = RecurringPromotion::lemonCode($split);
+        $key = 'promo:lemon:'.$storeId.':'.$code;
+        if (Cache::get($key)) {
+            return $code;
+        }
+        $attributes = RecurringPromotion::lemonDiscountAttributes($split);
+        $http = fn () => Http::withToken((string) config('settings.lemon_squeezy_api_key'))
+            ->withHeaders(['Accept' => 'application/vnd.api+json', 'Content-Type' => 'application/vnd.api+json']);
+        try {
+            $response = $http()->post('https://api.lemonsqueezy.com/v1/discounts', ['data' => [
+                'type' => 'discounts',
+                'attributes' => $attributes,
+                'relationships' => ['store' => ['data' => ['type' => 'stores', 'id' => $storeId]]],
+            ]]);
+            $ok = $response->successful() || self::existingDiscount($http(), $storeId, $attributes);
+        } catch (\Throwable $e) {
+            Log::warning('[lemon_squeezy] promotion discount not created: '.$e->getMessage());
+
+            return null;
+        }
+        if (! $ok) {
+            Log::warning('[lemon_squeezy] promotion discount not created ('.$response->status().')');
+
+            return null;
+        }
+        Cache::put($key, 1, now()->addHours(self::PROMO_CODE_TTL_HOURS));
+
+        return $code;
+    }
+
+    /**
+     * Whether the store already holds this promotion's discount code (GET /v1/discounts?filter[store_id]=…, every page —
+     * the API filters discounts by store only): the same code, amount, type and duration — anything else under the code
+     * is not ours to reuse.
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    private static function existingDiscount(PendingRequest $http, string $storeId, array $attributes): bool
+    {
+        for ($page = 1; $page <= 50; $page++) {
+            $found = (clone $http)->get('https://api.lemonsqueezy.com/v1/discounts', ['filter[store_id]' => $storeId, 'page[size]' => 100, 'page[number]' => $page]);
+            if (! $found->successful()) {
+                return false;
+            }
+            foreach ((array) $found->json('data') as $discount) {
+                $a = (array) ($discount['attributes'] ?? []);
+                if (strtoupper((string) ($a['code'] ?? '')) === strtoupper((string) $attributes['code'])
+                    && (int) ($a['amount'] ?? -1) === (int) $attributes['amount']
+                    && (string) ($a['amount_type'] ?? '') === (string) $attributes['amount_type']
+                    && (string) ($a['duration'] ?? '') === (string) $attributes['duration']
+                    && ($attributes['duration'] !== 'repeating' || (int) ($a['duration_in_months'] ?? 0) === (int) $attributes['duration_in_months'])
+                    && (string) ($a['status'] ?? 'published') !== 'draft') {
+                    return true;
+                }
+            }
+            if ($page >= (int) ($found->json('meta.page.lastPage') ?? 1)) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -386,7 +493,11 @@ class LemonSqueezyController extends Controller
                         return response()->json(['status' => 400], 400);
                     }
 
-                    $response = Fulfilment::webhook('lemon_squeezy', $customData, $payload->data->id ?? null, $subId);
+                    /* BL-038 O3: once a promotion is over the renewal is the full period (before Lemon's own tax): the
+                       settled payment records that amount, not the first charge. */
+                    $charged = is_object($attributes) && is_numeric($attributes->subtotal ?? null)
+                        ? (int) $attributes->subtotal - (int) ($attributes->discount_total ?? 0) : -1;
+                    $response = Fulfilment::webhook('lemon_squeezy', RecurringPromotion::settledMetadata($customData, $charged, 'lemon_squeezy'), $payload->data->id ?? null, $subId);
                     MorPaymentGuard::markSettled($response, $customData, true);
                     MorPaymentGuard::stampSubscription('lemon_squeezy', $payload->data->id ?? null, $subId);
 

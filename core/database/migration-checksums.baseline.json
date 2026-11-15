@@ -46,6 +46,7 @@
     "app/Modules/AppStore/Database/Migrations/2026_10_04_150000_add_suspension_notice_at_to_app_installations.php": "055c3fbf2b78199e21ab29ee87e06dd45388ce7a48ba19890bc9ec6b53bda1dc",
     "app/Modules/AppStore/Database/Migrations/2026_10_19_010100_add_refund_columns_to_theme_purchases.php": "41c667cf5179f93cae6de3fb56909ebf435427c2c8a4edf54bdc7207fea8b621",
     "app/Modules/AppStore/Database/Migrations/2026_10_19_170000_add_rejection_tracking_to_marketplace_reviews.php": "41976a60cf9c26a30e791344b2760e29c0d06971f3f72f65193b93e2d05c7d79",
+    "app/Modules/AppStore/Database/Migrations/2026_11_08_000000_add_sort_order_to_themes.php": "2ba8a4096f87a7f492e3d7a40e4b7937955105685308a8e0526adf49a25bd8a8",
     "app/Modules/Auth/Database/Migrations/2026_10_01_101000_create_auth_tables.php": "6457949915a5a1d0c1c033ec2126c27fe00c444e71c1a8163805aa2f84dcbfb6",
     "app/Modules/Auth/Database/Migrations/2026_10_27_100000_create_email_change_undos_table.php": "18a205978b5487fe2762ea5fad4b366fd2e533cb73bcb2c1814f7ceb390c49f0",
     "app/Modules/Auth/Database/Migrations/2026_10_27_100100_add_meta_to_email_change_undos.php": "27dd6d6520fa0b39a2c13f8daa421addec9a3ff3421b56a2b672982c000d5833",

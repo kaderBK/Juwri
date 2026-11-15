@@ -43,13 +43,25 @@
     </a>
     <div class="mbs-header__actions">
       {%- if show_switcher -%}
-        <button type="button" class="mbs-header__btn" data-mb-lang-open aria-haspopup="dialog" aria-label="{{ 'Language' | t }}">
+        <button type="button" class="mbs-header__btn" data-mb-lang-open aria-haspopup="dialog" aria-label="{{ 'Language' | t }}{% if localization.current %}: {{ localization.current.code | upcase | escape }}{% endif %}">
           {%- render 'icon', name: 'globe', size: 20 -%}
           {%- if localization.current -%}<span class="mbs-header__code">{{ localization.current.code | upcase | escape }}</span>{%- endif -%}
         </button>
       {%- endif -%}
       {%- if section.settings.show_account -%}
         <button type="button" class="mbs-header__btn" data-mb-account aria-label="{{ 'Account' | t }}">{%- render 'icon', name: 'user', size: 20 -%}</button>
+      {%- endif -%}
+      {%- comment -%}
+        The platform's notification bell. Rendered by the SERVER (the count is
+        the diner's own unread rows), so the badge is right on first paint and
+        a theme ships no JavaScript for it — the runtime owns the panel.
+      {%- endcomment -%}
+      {%- if section.settings.show_notifications and customer -%}
+        {%- assign bell_unread = customer.notifications_unread -%}
+        <button type="button" class="mbs-header__btn mbs-header__bell" data-mb-notifications aria-label="{{ 'Notifications' | t }}" aria-haspopup="dialog" aria-expanded="false">
+          {%- render 'icon', name: 'bell', size: 20 -%}
+          <span class="mbs-header__badge" data-mb-notif-count{% if bell_unread == 0 %} hidden{% endif %}>{{ bell_unread }}</span>
+        </button>
       {%- endif -%}
       {%- if section.settings.show_cart and flags.allow_order -%}
         <button type="button" class="mbs-header__btn mbs-header__cart" data-mb-open-cart aria-label="{{ 'Cart' | t }}">
@@ -165,6 +177,7 @@
     { "id": "show_tagline", "type": "checkbox", "label": "Show tagline", "default": true },
     { "id": "show_language", "type": "checkbox", "label": "Language / currency switcher", "default": true },
     { "id": "show_account", "type": "checkbox", "label": "Account button", "default": true },
+    { "id": "show_notifications", "type": "checkbox", "label": "Notification bell (signed-in diners)", "default": true },
     { "id": "show_cart", "type": "checkbox", "label": "Cart button", "default": true },
     { "id": "sticky", "type": "checkbox", "label": "Stick to the top while scrolling", "default": true },
     { "id": "host_runtime", "type": "checkbox", "label": "Host cart, account and language sheets (keep on)", "default": true }

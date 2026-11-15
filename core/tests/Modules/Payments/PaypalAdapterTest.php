@@ -194,6 +194,67 @@ class PaypalAdapterTest extends TestCase
         $this->assertNotSettled($order2, $tx2);
     }
 
+    private function completedOrder(string $orderId, string $value): array
+    {
+        return ['id' => $orderId, 'status' => 'COMPLETED',
+            'purchase_units' => [['payments' => ['captures' => [['id' => 'CAP-'.$orderId, 'status' => 'COMPLETED', 'amount' => ['value' => $value, 'currency_code' => 'USD']]]]]]];
+    }
+
+    /**
+     * O14 review fix 2: the buyer's return is capturing the order while a newer checkout in another tab abandons this
+     * one (PayPal counts as closed while nothing is captured). The money is captured: the row still settles.
+     */
+    public function test_a_capture_completing_after_another_tab_abandoned_the_checkout_still_settles(): void
+    {
+        $this->requiresEditionPackage('a wallet top-up credit');
+        [, $tx] = $this->makePlanTransaction(20.0, 'USD', 'wallet_topup');
+        $tx->update(['payment_id' => 'ORDER-AB']);
+        Http::fake(function (ClientRequest $request) use ($tx) {
+            if (str_ends_with($request->url(), '/v1/oauth2/token')) {
+                return Http::response(['access_token' => 'fake-token', 'expires_in' => 300]);
+            }
+            if ($request->method() === 'POST' && str_ends_with($request->url(), '/v2/checkout/orders/ORDER-AB/capture')) {
+                Transaction::query()->withoutGlobalScopes()->whereKey($tx->id)->update(['status' => Transaction::STATUS_ABANDONED]);
+
+                return Http::response($this->completedOrder('ORDER-AB', '20.00'));
+            }
+
+            return Http::response(['message' => 'unexpected'], 500);
+        });
+
+        $this->get(route('ipn', 'paypal').'?pay_mode=one_time&token=ORDER-AB&PayerID=FAKE')->assertRedirect();
+
+        $this->assertContains($tx->fresh()->status, [Transaction::STATUS_SUCCESS, Transaction::STATUS_CONSUMED], 'captured money is settled, never dropped');
+        $this->assertSame('paypal', $tx->fresh()->transaction_gatway);
+    }
+
+    /**
+     * O14 review fix 2: a signed PAYMENT.CAPTURE.COMPLETED for an abandoned checkout (the return was lost) settles it;
+     * an approved order on an abandoned checkout is never captured.
+     */
+    public function test_a_completed_capture_settles_an_abandoned_checkout_but_an_approved_one_is_not_captured(): void
+    {
+        $this->requiresEditionPackage('a wallet top-up credit');
+        config(['settings.paypal_webhook_id' => 'WH-ID-FAKE']);
+        [, $paid] = $this->makePlanTransaction(20.0, 'USD', 'wallet_topup');
+        $paid->forceFill(['payment_id' => 'ORDER-W1', 'status' => Transaction::STATUS_ABANDONED])->save();
+        [, $approved] = $this->makePlanTransaction(20.0, 'USD', 'wallet_topup');
+        $approved->forceFill(['payment_id' => 'ORDER-W2', 'status' => Transaction::STATUS_ABANDONED])->save();
+        $this->fakePaypal([
+            'POST /v1/notifications/verify-webhook-signature' => ['verification_status' => 'SUCCESS'],
+            'GET /v2/checkout/orders/ORDER-W1' => $this->completedOrder('ORDER-W1', '20.00'),
+            'POST /v2/checkout/orders/ORDER-W2/capture' => $this->completedOrder('ORDER-W2', '20.00'),
+        ]);
+
+        $this->postWebhook(json_encode(['id' => 'WH-AB1', 'event_type' => 'PAYMENT.CAPTURE.COMPLETED',
+            'resource' => ['id' => 'CAP-ORDER-W1', 'supplementary_data' => ['related_ids' => ['order_id' => 'ORDER-W1']]]]), $this->transmissionHeaders())->assertOk();
+        $this->assertContains($paid->fresh()->status, [Transaction::STATUS_SUCCESS, Transaction::STATUS_CONSUMED]);
+
+        $this->postWebhook(json_encode(['id' => 'WH-AB2', 'event_type' => 'CHECKOUT.ORDER.APPROVED', 'resource' => ['id' => 'ORDER-W2']]), $this->transmissionHeaders())->assertOk();
+        $this->assertSame(Transaction::STATUS_ABANDONED, $approved->fresh()->status);
+        Http::assertNotSent(fn (ClientRequest $r) => str_ends_with($r->url(), '/v2/checkout/orders/ORDER-W2/capture'));
+    }
+
     private function saleEvent(): string
     {
         return json_encode(['id' => 'WH-1', 'event_type' => 'PAYMENT.SALE.COMPLETED', 'resource' => ['id' => 'SALE-1', 'billing_agreement_id' => 'I-FAKE9']]);

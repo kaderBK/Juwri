@@ -98,7 +98,16 @@ class ThemeCustomizerService
      */
     private static function marketplaceSchema(string $template): array
     {
-        $theme = MarketplaceThemeResolver::resolve($template);
+        // The gate is relaxed on purpose: a schema is the customizer's SHAPE,
+        // not a storefront render, and the thing that needs a schema for an
+        // UNPUBLISHED version is the preview (and the Studio editor) — that
+        // is exactly the version a merchant is reviewing before it is
+        // published. With the gate on, the preview of a submitted version
+        // resolved no theme at all: no Design controls, and — because the
+        // token layer only emits a token the schema declares — no design
+        // tokens either, so the preview painted the platform's default
+        // palette instead of the theme's own.
+        $theme = MarketplaceThemeResolver::resolve($template, gate: false);
         if (! $theme) {
             return [];
         }

@@ -24,6 +24,7 @@ use Juwri\Core\Http\Middleware\EnsureFeatureEnabled;
 use Juwri\Core\Models\Branch;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
+use Juwri\Modules\Ordering\Models\CustomerNotification;
 use ReflectionMethod;
 use ReflectionNamedType;
 use Tests\Modules\Integrations\OwnerApiIdorCensusTest;
@@ -147,6 +148,7 @@ class CrossStoreIdorSweepTest extends TestCase
         'publicView.googleWallet.loyaltyJwt' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
         'publicView.notifications.index' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
         'publicView.notifications.read' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
+        'publicView.notifications.unread' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
         'publicView.myOrders.index' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
         'publicView.wallet.balance' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
         'publicView.wallet.topup' => 'customer route scoped to the logged-in customer; data keyed to that customer, not a tenant record',
@@ -234,6 +236,42 @@ class CrossStoreIdorSweepTest extends TestCase
 
         $this->assertSame('LEAK', $row['verdict'], json_encode($row, JSON_UNESCAPED_SLASHES) ?: '');
         $this->assertStringContainsString('deleted orders#', $row['why']);
+    }
+
+    public function test_customer_notifications_unread_is_scoped_to_acting_customer(): void
+    {
+        $this->deferForeignKeys();
+        $this->worlds['A'] = $this->world('A');
+        $this->worlds['B'] = $this->world('B');
+
+        $customerB = $this->worlds['B']['customer'];
+        $storeB = $this->worlds['B']['store'];
+        for ($i = 0; $i < 2; $i++) {
+            CustomerNotification::create([
+                'customer_id' => $customerB->getKey(),
+                'store_id' => $storeB->id,
+                'type' => 'order_status',
+                'title' => 'Ready',
+                'body' => 'Order ready',
+            ]);
+        }
+
+        // Guest cannot read store B's unread notification count.
+        $this->getJson(route('publicView.notifications.unread', $storeB->id))->assertUnauthorized();
+
+        // Store A's customer hitting store B's URL gets only their own unread count (0), never B's (2).
+        $this->actingAs($this->worlds['A']['customer'], 'customer')
+            ->getJson(route('publicView.notifications.unread', $storeB->id))
+            ->assertOk()
+            ->assertExactJson(['unread' => 0]);
+
+        // Positive control: store B's customer sees their own 2 unread notifications.
+        $this->app['auth']->forgetGuards();
+        $this->flushSession();
+        $this->actingAs($customerB, 'customer')
+            ->getJson(route('publicView.notifications.unread', $storeB->id))
+            ->assertOk()
+            ->assertExactJson(['unread' => 2]);
     }
 
     /**

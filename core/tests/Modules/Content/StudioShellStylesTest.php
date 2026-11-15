@@ -132,12 +132,24 @@ class StudioShellStylesTest extends TestCase
         $store = $this->store('pinned', [], ['colors.primary' => '#00ff00']);
 
         $public = $this->get(route('publicView', $store->slug).'?preview_theme=1')->assertOk()->getContent();
-        $this->assertStringNotContainsString('--tc-primary', $public, 'overrides only — nothing set, nothing emitted');
+        $this->assertStringNotContainsString('--tc-primary', $this->lightTokenBlocks($public), 'overrides only — nothing set, nothing emitted');
         $this->assertStringContainsString('unicode-range:U+20C1', $public, 'Riyal glyph face always present');
 
         $this->actingAs(User::find($store->user_id));
         $preview = $this->get(route('publicView', $store->slug).'?preview_theme=1')->assertOk()->getContent();
         $this->assertStringContainsString('--tc-primary:#00ff00', str_replace(' ', '', $preview), 'owner sees draft tokens');
+    }
+
+    /**
+     * The LIGHT token blocks of a page (the owner's overrides) — the platform's
+     * DARK set is a different thing (`:root[data-theme="dark"]`, the platform's
+     * own palette) and is deliberately not part of this.
+     */
+    private function lightTokenBlocks(string $html): string
+    {
+        preg_match_all('/:root\{([^}]*)\}/', $html, $m);
+
+        return implode('', $m[1] ?? []);
     }
 
     public function test_themes_outside_the_library_are_unchanged(): void
@@ -146,7 +158,7 @@ class StudioShellStylesTest extends TestCase
 
         $html = $this->get(route('publicView', $store->slug))->assertOk()->getContent();
 
-        $this->assertStringNotContainsString('--tc-primary', $html, 'no token schema → no token output');
+        $this->assertStringNotContainsString('--tc-primary:', $html, 'no token schema → no token output');
         $this->assertStringNotContainsString('liquid-library', $html);
         $this->assertStringContainsString('<p data-probe>plain</p>', $html);
     }

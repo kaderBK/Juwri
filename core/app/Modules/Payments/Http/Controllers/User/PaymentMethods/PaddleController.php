@@ -7,10 +7,12 @@ namespace Juwri\Modules\Payments\Http\Controllers\User\PaymentMethods;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Modules\Payments\Models\Transaction;
+use Juwri\Modules\Payments\Services\Gateways\RecurringPromotion;
 use Juwri\Modules\Payments\Services\MorPaymentGuard;
 use Juwri\Modules\Payments\Services\Webhooks\WebhookReceipts;
 use Juwri\Modules\Payments\Support\AccountPages;
@@ -49,11 +51,18 @@ class PaddleController extends Controller
     {
         $title = 'Payment for '.$transaction->product_name.' Plan ('.$transaction->frequency.')';
 
+        /* BL-038 O3: a promotion that ends is a Paddle flat discount on the FULL price, so renewals return to the full
+           price by themselves. */
+        $split = RecurringPromotion::split($transaction);
+
         /* Paddle Billing amounts are STRINGS in minor units. */
-        $amount = (string) self::minorUnits($transaction);
+        $amount = (string) ($split !== null ? $split['full']->minor() : self::minorUnits($transaction));
 
         /* The old Classic `passthrough` — round-trips back in webhook custom_data. */
         $metadata = $transaction->legacyAttributes();
+        if ($split !== null) {
+            $metadata[RecurringPromotion::RECURRING_AMOUNT] = $split['full']->major();
+        }
 
         $item = [
             'quantity' => 1,
@@ -71,20 +80,34 @@ class PaddleController extends Controller
             ],
         ];
 
-        /* MONTHLY/YEARLY → recurring billing cycle; LIFETIME/one_time → omit. */
-        if ($transaction->frequency == 'MONTHLY') {
+        /* MONTHLY/YEARLY → recurring billing cycle; LIFETIME/one_time → omit. A charge paid one period at a time
+           (details.one_time_only: a per-branch quantity, or a promotion on a first charge the gateway cannot split —
+           BL-038 review) is never a Paddle subscription: it would renew at this first charge for ever. */
+        $oneTimeOnly = data_get($transaction->details, 'one_time_only') === true;
+        if ($transaction->frequency == 'MONTHLY' && ! $oneTimeOnly) {
             $item['price']['billing_cycle'] = ['interval' => 'month', 'frequency' => 1];
-        } elseif ($transaction->frequency == 'YEARLY') {
+        } elseif ($transaction->frequency == 'YEARLY' && ! $oneTimeOnly) {
             $item['price']['billing_cycle'] = ['interval' => 'year', 'frequency' => 1];
+        }
+
+        $payload = [
+            'items' => [$item],
+            'custom_data' => $metadata,
+            'collection_mode' => 'automatic',
+        ];
+        if ($split !== null) {
+            $discountId = self::promotionDiscount($split);
+            if ($discountId === null) {
+                app_alert_error(___('Could not apply the offer at :gateway. Please try again.', ['gateway' => 'Paddle']));
+
+                return redirect()->back()->withInput();
+            }
+            $payload['discount_id'] = $discountId;
         }
 
         $response = Http::withToken(config('settings.paddle_api_key'))
             ->acceptJson()
-            ->post(self::apiBase().'/transactions', [
-                'items' => [$item],
-                'custom_data' => $metadata,
-                'collection_mode' => 'automatic',
-            ]);
+            ->post(self::apiBase().'/transactions', $payload);
 
         $checkout_url = $response->json('data.checkout.url');
 
@@ -166,6 +189,11 @@ class PaddleController extends Controller
 
                         return self::answer(400);
                     }
+
+                    /* BL-038 O3: once a promotion is over, Paddle charges the full period (before its own tax):
+                       that settled payment records the full amount, not the first charge. */
+                    $charged = is_numeric($totals->subtotal ?? null) ? (int) $totals->subtotal - (int) ($totals->discount ?? 0) : -1;
+                    $metadata = RecurringPromotion::settledMetadata($metadata, $charged, 'paddle');
 
                     /* processWebhook routes transaction_method=addon to
                        processAddonWebhook itself and stores the subscription as
@@ -266,6 +294,38 @@ class PaddleController extends Controller
         }
 
         return $transaction;
+    }
+
+    /**
+     * BL-038 O3: the Paddle discount id of a promotion split (created once per split and API account, then cached), or
+     * null when Paddle refused it (the buyer is told; nothing is charged).
+     *
+     * @param  array{off_minor: int, periods: int, currency: string, coupon_id: int, sig: string}  $split
+     */
+    private static function promotionDiscount(array $split): ?string
+    {
+        $apiKey = (string) config('settings.paddle_api_key');
+        $key = 'promo:paddle:'.substr(hash('sha256', self::apiBase().'|'.$apiKey), 0, 12).':'.$split['sig'];
+        $cached = Cache::get($key);
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+        try {
+            $response = Http::withToken($apiKey)->acceptJson()->post(self::apiBase().'/discounts', RecurringPromotion::paddleDiscountBody($split));
+        } catch (\Throwable $e) {
+            Log::warning('[paddle] promotion discount not created: '.$e->getMessage());
+
+            return null;
+        }
+        $id = (string) ($response->json('data.id') ?? '');
+        if (! $response->successful() || $id === '') {
+            Log::warning('[paddle] promotion discount not created ('.$response->status().')');
+
+            return null;
+        }
+        Cache::forever($key, $id);
+
+        return $id;
     }
 
     /** The transaction amount in Paddle minor units. */

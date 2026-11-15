@@ -14,6 +14,7 @@ use App\Services\CustomerWalletService;
 use App\Services\OrderStatusNotifier;
 use App\Services\PosService;
 use App\Services\StorefrontThemeService;
+use App\Services\Theme\VerticalThemeSets;
 use App\Services\Verticals\VerticalRegistry;
 use App\Services\WebhookFanout;
 use App\Support\SearchTerm;
@@ -875,9 +876,24 @@ trait ManagesOrders
         // Aurora stays the fallback for food-vertical templates (and for any
         // vertical whose shared track view is missing, so this never 404s).
         $theme = resolve_store_theme($postOptions->store_template ?? null, $store->store_type ?? null);
+        $themeSet = app(VerticalRegistry::class)->themeSet($store->store_type ?? null);
+        $verticalFallback = $themeSet === 'service' ? 'bookla' : ($themeSet !== 'food' ? 'shelf' : null);
+        /* The resolved template can belong to ANOTHER vertical. The usual case
+           is a store running a MARKETPLACE theme ('mp:blooms@1.2.8'): no
+           StorefrontThemeService knows that value, so the ADMIN's fallback
+           template — a food theme — is resolved instead, and its track page
+           would track a clothing order with the kitchen's words ("Preparing
+           your Food", "The chef is preparing your meal"). So when the
+           template's own theme set is not the store's set, the vertical's own
+           track view is used instead: the goods vocabulary for a goods store.
+           A store that runs its OWN goods template (zevoa, shelf, torque…)
+           keeps that template's track page — its set already matches. */
+        if ($verticalFallback !== null
+            && app(VerticalThemeSets::class)->setFor($theme) !== $themeSet
+            && view()->exists('store_templates.'.$verticalFallback.'.track')) {
+            $theme = $verticalFallback;
+        }
         if (! view()->exists('store_templates.'.$theme.'.track')) {
-            $themeSet = app(VerticalRegistry::class)->themeSet($store->store_type ?? null);
-            $verticalFallback = $themeSet === 'service' ? 'bookla' : ($themeSet !== 'food' ? 'shelf' : null);
             $theme = ($verticalFallback && view()->exists('store_templates.'.$verticalFallback.'.track'))
                 ? $verticalFallback
                 : 'aurora';

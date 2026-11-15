@@ -18,7 +18,10 @@
             <span class="ui-input-group__text">%</span>
         </div>
     </div>
-    @include('admin.billing.coupons._scope', ['coupon' => null])
+    @includeIf('billing::admin.coupons._promotion-fields', ['coupon' => null])
+    @if (! \Illuminate\Support\Facades\View::exists('billing::admin.coupons._promotion-fields'))
+        @include('admin.billing.coupons._scope', ['coupon' => null])
+    @endif
     <x-ui.field type="number" name="uses_limit" :label="___('Uses Limit').' *'" value="1" min="1" placeholder="0" required />
     <x-ui.field type="datetime-local" name="expiry_at" :label="___('Expiry at').' *'" required />
 </x-ui.panel>

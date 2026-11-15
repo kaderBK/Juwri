@@ -300,7 +300,11 @@ class MorMoneySafetyTest extends TestCase
         Carbon::setTestNow(now()->addDays(2));
         $this->artisan('cron:hourly')->assertExitCode(0);
         $this->assertNull($paddle->fresh());
-        $this->assertNull($lemon->fresh());
+        // O14 review fix 4: a Lemon Squeezy checkout with no recorded expiry may still be paid (it never expires at Lemon
+        // Squeezy): never purged — left for a person (close_gave_up) and alerted once.
+        $this->assertNotNull($lemon->fresh());
+        $this->assertNull($lemon->fresh()->status);
+        $this->assertTrue(data_get($lemon->fresh()->details, 'close_gave_up'));
     }
 
     // Review fixes (fix/mor-money review) --------------------------------------------------------------------------------

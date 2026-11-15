@@ -84,6 +84,7 @@
                     $item('admin.taxes.index', ___('Taxes'), 'fi-rr-bank'),
                     $item('admin.fiscal.compliance', ___('Fiscal Compliance'), 'fi-rr-check-circle', null, 'admin.fiscal.compliance'),
                     $item('admin.pharmacy-licences.index', ___('Pharmacy licences'), 'fi-rr-document', null, 'admin.pharmacy-licences.*'),
+                    $item('admin.offers.index', ___('Offers'), 'fi-rr-badge-percent', null, 'admin.offers.*'),
                     $item('admin.coupons.index', ___('Coupon Codes'), 'fi-rr-ticket'),
                     $item('admin.couponsWallets.overview', ___('Coupons & Wallets'), 'fi-rr-gift'),
                     $item('admin.gateways.index', ___('Payment Gateways'), 'fi-rr-credit-card', null, 'admin.gateways.*'),

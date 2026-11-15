@@ -472,7 +472,7 @@ class DashboardController extends Controller
         $transactions = collect();
         if (! $isStaffDashboard && $owner && class_exists(Transaction::class)) {
             $transactions = Transaction::where('user_id', $owner->id)
-                // BL-038: a settled merchant-of-record checkout row is bookkeeping, not a payment.
+                // BL-039 / BL-038: a kept subscription pending/set-up row, a settled MoR checkout and an abandoned one are not payments.
                 ->where(fn ($q) => $q->whereNull('status')->orWhereNotIn('status', Transaction::CHECKOUT_BOOKKEEPING))
                 ->latest()
                 ->limit(5)

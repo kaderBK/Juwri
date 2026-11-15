@@ -54,6 +54,7 @@ restaurant/{storeId}/google-wallet/loyalty-jwt  # JSON endpoint
 restaurant/{storeId}/loyalty/balance  # JSON endpoint
 restaurant/{storeId}/my-orders  # JSON endpoint
 restaurant/{storeId}/notifications  # JSON endpoint
+restaurant/{storeId}/notifications/unread  # JSON endpoint
 restaurant/{storeId}/wallet/balance  # JSON endpoint
 resume_historical_location  # empty HTML stub for the native app (no script, no content)
 rsl/billing/{subscription}  # redirect only (gateway / locale switch / legacy path / Passport OAuth hand-off, no consent view registered)
