@@ -20,6 +20,7 @@ use Juwri\Modules\Storefront\Storefront\Drops\CategoryDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\CustomerDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\FeaturesDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\FlagsDrop;
+use Juwri\Modules\Storefront\Storefront\Drops\GiftCardsDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\HoursDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\ItemDrop;
 use Juwri\Modules\Storefront\Storefront\Drops\LocalizationDrop;
@@ -93,6 +94,12 @@ class ThemeContext
             'social' => new SocialDrop($extras['social'] ?? []),
             'announcement' => ! empty($extras['announcement']) ? new AnnouncementDrop($extras['announcement']) : null,
             'features' => new FeaturesDrop($extras['features'] ?? []),
+            // The gift cards the store SELLS — the denominations, the payment
+            // methods and where to post the purchase. (The REDEEM side is the
+            // runtime's own: features.gift_cards draws the code field.)
+            'giftCards' => isset($v['store']) && $v['store'] instanceof Store
+                ? new GiftCardsDrop($v['store'])
+                : null,
             // Theme Studio follow-ups: brand + hide-branding for "Powered by".
             // Previews / demo renders get the real platform brand too.
             'platform' => new PlatformDrop(is_array($extras['platform'] ?? null)

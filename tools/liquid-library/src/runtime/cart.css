@@ -24,6 +24,8 @@
 .mb-ot-seg .is-on { background: var(--tc-background, #fff); }
 .mb-coupon { display: flex; gap: var(--ts-gap-1, 6px); }
 .mb-coupon .mb-field { flex: 1; }
+.mb-giftcard { display: grid; gap: var(--ts-gap-1, 6px); }
+.mb-giftcard .mb-field { inline-size: 100%; }
 .mb-tip { display: grid; gap: 6px; }
 .mb-tip-label { font-size: .9rem; font-weight: 700; }
 .mb-tip-opts { display: flex; flex-wrap: wrap; gap: var(--ts-gap-1, 6px); }

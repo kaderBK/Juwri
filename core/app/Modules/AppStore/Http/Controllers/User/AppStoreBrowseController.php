@@ -5,6 +5,8 @@
 namespace Juwri\Modules\AppStore\Http\Controllers\User;
 
 use App\Http\Controllers\MarketplaceController;
+use App\Models\AppInstallation;
+use App\Services\Theme\ThemeSets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Juwri\Core\Http\Controllers\Controller;
@@ -35,6 +37,10 @@ class AppStoreBrowseController extends Controller
     public function appShow(string $slug)
     {
         $data = app(AppStoreController::class)->show($slug)->getData();
+        // Reinstalls never get a second trial (AppInstallService), so only offer it
+        // to an owner who has never installed this app.
+        $data['trialEligible'] = isset($data['app']) && $data['app']->hasTrial()
+            && ! AppInstallation::where('app_id', $data['app']->id)->where('user_id', auth()->id())->exists();
 
         return view('owner.marketplace.app-show', $data + $this->topupContext());
     }
@@ -42,7 +48,17 @@ class AppStoreBrowseController extends Controller
     /** ST3: Theme Store browse inside the dashboard. */
     public function themes(Request $request)
     {
-        $data = app(MarketplaceController::class)->index($request)->getData();
+        // Scoped to the ACTIVE store's theme set: a clothing store is offered
+        // the retail themes (clothing, gifts) and never a restaurant's. With
+        // no active store yet the whole catalogue shows, same as the public
+        // marketplace. The set comes from the vertical registry, so every
+        // vertical — retail, service, hotel — gets its own family.
+        $active = dashboard_current_store();
+        $set = $active
+            ? app(ThemeSets::class)->forStoreType($active->store_type ?? null)
+            : null;
+
+        $data = app(MarketplaceController::class)->index($request, $set)->getData();
 
         return view('owner.marketplace.themes', $data);
     }

@@ -4,6 +4,8 @@
 
 namespace Juwri\Modules\Storefront\Storefront;
 
+use App\Services\Theme\ThemeSets;
+use Juwri\Modules\Storefront\Services\ThemeStudio\Recipes;
 use RuntimeException;
 use ZipArchive;
 
@@ -390,6 +392,31 @@ class ThemePackageValidator
         if (array_key_exists('commerce_runtime', $manifest)
             && ! in_array($manifest['commerce_runtime'], CommerceRuntime::VERSIONS, true)) {
             $issues[] = 'theme.json "commerce_runtime" must be one of: '.implode(', ', CommerceRuntime::VERSIONS).'.';
+        }
+
+        // The theme's VERTICAL — which store family the theme is offered to.
+        // Optional, but when it is there it must be a vertical the platform
+        // ships: a typo would otherwise file the theme into the default set
+        // and it would be offered to restaurants. An EMPTY value is not a
+        // declaration — it is simply absent.
+        if (array_key_exists('vertical', $manifest)) {
+            $vertical = $manifest['vertical'];
+            $themeSets = app(ThemeSets::class);
+            if (! is_string($vertical)
+                || (trim($vertical) !== '' && ! $themeSets->isValidManifestVertical($vertical))) {
+                $issues[] = 'theme.json "vertical" must be one of: '.implode(', ', $themeSets->validManifestVerticals()).'.';
+            }
+        }
+
+        // The RECIPE names a vertical too ("clothing/default" → clothing). It
+        // decides the starting layout, so a recipe that does not exist would
+        // leave the theme with no skeleton. Empty is "not declared".
+        if (array_key_exists('recipe', $manifest)) {
+            $recipe = $manifest['recipe'];
+            if (! is_string($recipe)
+                || (trim($recipe) !== '' && Recipes::find($recipe) === null)) {
+                $issues[] = 'theme.json "recipe" must be a recipe this platform ships (e.g. "clothing/default").';
+            }
         }
 
         return $issues;

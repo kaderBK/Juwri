@@ -844,6 +844,7 @@
     if (slotsWanted()) h += slotsMarkup();
     else if (CFG.flags.allowScheduling) h += '<input class="mb-field" type="datetime-local" name="scheduled_at">';
     if (CFG.flags.allowCoupons) h += '<div class="mb-coupon"><input class="mb-field" data-mb-coupon-input placeholder="Coupon"><button type="button" data-mb-coupon-apply>Apply</button></div>';
+    if (CFG.flags.giftCards) h += '<div class="mb-giftcard"><input class="mb-field" data-mb-gift-card-input placeholder="Gift card code" aria-label="Gift card code"></div>';
     h += '<textarea class="mb-field" name="message" placeholder="Notes"></textarea>';
 
     if (CFG.flags.allowTips) {
@@ -997,6 +998,8 @@
         if (res && res.success) {
           coupon = { code: res.label || code, coupon_type: res.coupon_type, percentage: res.percentage, discount: Number(res.discount) || 0, sig: sig };
           syncBindings();
+        } else {
+          toast(res && res.message ? res.message : "Invalid promo code.");
         }
       })
       .catch(function () {});
@@ -1043,6 +1046,13 @@
     if (slot.enabled && slot.value) fd.append("scheduled_at", slot.value);
     else if (sched && sched.value) fd.append("scheduled_at", sched.value);
     if (coupon) fd.append("coupon_code", coupon.code);
+    /* T2: the gift card is a TENDER, not a discount — it is redeemed against
+       the amount due when the order is created (OrderPricing), and the server
+       validates the code up front (StoreController@submitOrder). So there is no
+       apply button and no client-side price math here: the code travels with
+       the order and the server owns the money. */
+    var gcInput = form.querySelector("[data-mb-gift-card-input]");
+    if (gcInput && gcInput.value.trim()) fd.append("gift_card_code", gcInput.value.trim());
     var bid = new URLSearchParams(window.location.search).get("branch_id");
     if (bid) fd.append("branch_id", bid);
 
@@ -1754,6 +1764,18 @@
     var fav = t.closest("[data-mb-fav]"); if (fav) { ev.preventDefault(); var id = fav.getAttribute("data-mb-fav"); favs[id] = !favs[id]; saveFavs(); applyCatalog(); if (activeView === "favs") renderFavs(); return; }
     var open = t.closest("[data-mb-open]"); if (open) { ev.preventDefault(); openProduct(open.getAttribute("data-mb-open")); return; }
     var flt = t.closest("[data-mb-filter]"); if (flt) { filter = flt.getAttribute("data-mb-filter"); applyCatalog(); return; }
+    /* The gift-card purchase form (a storefront section): the denominations
+       fill the amount field. The theme ships no JS — the platform's runtime
+       owns this, so every theme's gift-card form behaves the same way. */
+    var gcp = ev.target.closest && ev.target.closest("[data-mb-gc-preset]");
+    if (gcp) {
+      var gci = doc.querySelector("[data-mb-gc-amount]");
+      if (gci) {
+        gci.value = gcp.getAttribute("data-mb-gc-preset");
+        all("[data-mb-gc-preset]").forEach(function (x) { x.classList.toggle("is-on", x === gcp); });
+      }
+      return;
+    }
     if (t.closest("[data-mb-layout-toggle]")) { ev.preventDefault(); toggleLayout(); return; }
     var lg = t.closest("[data-mb-set-lang]"); if (lg) { ev.preventDefault(); setLang(lg.getAttribute("data-mb-set-lang")); return; }
     var cur = t.closest("[data-mb-currency]"); if (cur) { ev.preventDefault(); setCurrency(cur.getAttribute("data-mb-currency")); langSheet(false); return; }

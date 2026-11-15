@@ -6,6 +6,7 @@ namespace Juwri\Modules\Storefront\Http\Controllers\Api\V1;
 
 use App\Models\MenuCategory;
 use App\Models\Order;
+use App\Services\PlanMenuVisibility;
 use App\Services\Storefront\StorefrontMenuCache;
 use App\Services\Verticals\FulfillmentRegistry;
 use App\Services\Verticals\VerticalRegistry;
@@ -76,6 +77,14 @@ class PublicController extends Controller
             // N+1: eager-load the relations resolved_variant_options / resolved_extras
             // read below, so each item resolves from memory, not 4 queries per item.
             ->with($eager)->get();
+
+        /* Plan caps on what this store PUBLISHES (read-side twin of the write
+           limit): a store that holds more than its plan covers — a menu built
+           during an unlimited trial, or written by a bulk path — keeps every
+           row, but only the rows the plan pays for are served. Nothing is
+           deleted, so an upgrade reveals the rest on the next request. */
+        [$items, $categories] = PlanMenuVisibility::applyFlat($items, $categories, $store->user);
+
         $byCategory = $items->groupBy('category_id');
 
         $rid = $store->id;

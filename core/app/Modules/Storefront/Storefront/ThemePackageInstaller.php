@@ -4,6 +4,7 @@
 
 namespace Juwri\Modules\Storefront\Storefront;
 
+use App\Models\Theme;
 use Illuminate\Support\Facades\File;
 use RuntimeException;
 use ZipArchive;
@@ -43,7 +44,7 @@ class ThemePackageInstaller
             throw new RuntimeException("Theme {$slug}@{$version} already exists — versions are immutable, ship a new version.");
         }
 
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($zipPath) !== true) {
             throw new RuntimeException('Could not open the theme zip file.');
         }
@@ -73,10 +74,15 @@ class ThemePackageInstaller
 
         // P2-6: index the version in the DB (files above are the content; the
         // DB is the ledger the review pipeline + resolver gate work from).
-        $themeRow = \App\Models\Theme::firstOrCreate(
+        $themeRow = Theme::firstOrCreate(
             ['slug' => $slug],
             ['name' => $manifest['name'], 'seller_id' => $sellerId, 'status' => 'draft'],
         );
+        // The theme set the manifest targets (clothing → retail). Recorded on
+        // the row so the catalogue can be filtered by it and the offerability
+        // rule enforced when a store applies the theme.
+        $themeRow->theme_set = Theme::setForManifest($manifest);
+        $themeRow->save();
         $themeRow->versions()->create([
             'semver' => $version,
             'manifest' => $manifest,

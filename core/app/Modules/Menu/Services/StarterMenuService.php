@@ -5,6 +5,7 @@
 namespace Juwri\Modules\Menu\Services;
 
 use App\Models\MenuCategory;
+use App\Services\PlanMenuVisibility;
 use Illuminate\Support\Facades\DB;
 use Juwri\Core\Models\Store;
 use Juwri\Modules\Menu\Models\Menu;
@@ -33,7 +34,7 @@ class StarterMenuService
      * when the store already has menus or the preset is unknown, so the caller can message
      * the owner without treating it as an error.
      *
-     * @return array{seeded: bool, reason?: string, categories: int, items: int}
+     * @return array{seeded: bool, reason?: string, categories: int, items: int, skipped?: int}
      */
     public function seed(Store $store, string $preset): array
     {
@@ -53,10 +54,26 @@ class StarterMenuService
 
         $categories = 0;
         $items = 0;
+        $skipped = 0;
 
-        DB::transaction(function () use ($store, $data, &$categories, &$items) {
+        /* The preset is a BULK write: it must land inside the owner's plan, or
+           a free plan would end up with 4 categories and 17 items — more than
+           the plan sells. Clamp to the owner's caps and report what was left
+           out (the controller tells the merchant, so the cap is never silent). */
+        $caps = PlanMenuVisibility::caps($store->user);
+        $categoryCap = $caps['category'];
+        $itemCap = $caps['item'];
+
+        DB::transaction(function () use ($store, $data, &$categories, &$items, &$skipped, $categoryCap, $itemCap) {
             $catPos = 1;
             foreach ($data['categories'] as $cat) {
+                if ($categoryCap !== null && $categories >= $categoryCap) {
+                    // Count what this category would have contributed.
+                    $skipped += count($cat['items'] ?? []);
+
+                    continue;
+                }
+
                 $category = MenuCategory::create([
                     'store_id' => $store->id,
                     'name' => (string) ($cat['name'] ?? ___('Menu')),
@@ -67,7 +84,16 @@ class StarterMenuService
                 $categories++;
 
                 $itemPos = 1;
+                $itemsInCategory = 0;
                 foreach (($cat['items'] ?? []) as $item) {
+                    // `menu_limit` is "max items per category" (the canonical
+                    // counter is per category), so each category gets its own cap.
+                    if ($itemCap !== null && $itemsInCategory >= $itemCap) {
+                        $skipped++;
+
+                        continue;
+                    }
+
                     Menu::create([
                         'store_id' => $store->id,
                         'category_id' => $category->id,
@@ -81,11 +107,17 @@ class StarterMenuService
                         'translations' => $this->itemTranslations($item),
                     ]);
                     $items++;
+                    $itemsInCategory++;
                 }
             }
         });
 
-        return ['seeded' => true, 'categories' => $categories, 'items' => $items];
+        return [
+            'seeded' => true,
+            'categories' => $categories,
+            'items' => $items,
+            'skipped' => $skipped,
+        ];
     }
 
     /**

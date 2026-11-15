@@ -183,6 +183,7 @@ final class PlatformSettingKeys
         'storefront_order_pipeline' => 'string',
         'storefront_order_pipeline_stores' => 'string',
         'stories_entry_default' => 'string',
+        'stripe_managed_payments' => 'bool',
         'stripe_payment_mode' => 'string',
         'stripe_publishable_key' => 'string',
         'stripe_secret_key' => 'string',

@@ -4,23 +4,23 @@
 
 namespace Juwri\Modules\Storefront\Http\Controllers\Admin;
 
-use Juwri\Core\Http\Controllers\Controller;
-use Juwri\Modules\Storefront\Http\Controllers\User\ThemeStudioAiController;
-use Juwri\Modules\Storefront\Models\AiThemeProposal;
 use App\Models\Theme;
-use Juwri\Modules\Storefront\Services\ThemeStudio\Ai\ProposalRenderer;
-use Juwri\Modules\Storefront\Services\ThemeStudio\Ai\StoreVars;
 use App\Services\ThemeStudio\AiThemeBuilder;
-use Juwri\Modules\Storefront\Services\ThemeStudio\LayoutDocument;
-use Juwri\Modules\Storefront\Services\ThemeStudio\Recipes;
 use App\Services\Verticals\VerticalRegistry;
-use Juwri\Modules\Storefront\Storefront\MarketplaceTheme;
-use Juwri\Modules\Storefront\Storefront\MarketplaceThemeResolver;
 use App\Storefront\ThemeSubmissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
+use Juwri\Core\Http\Controllers\Controller;
+use Juwri\Modules\Storefront\Http\Controllers\User\ThemeStudioAiController;
+use Juwri\Modules\Storefront\Models\AiThemeProposal;
+use Juwri\Modules\Storefront\Services\ThemeStudio\Ai\ProposalRenderer;
+use Juwri\Modules\Storefront\Services\ThemeStudio\Ai\StoreVars;
+use Juwri\Modules\Storefront\Services\ThemeStudio\LayoutDocument;
+use Juwri\Modules\Storefront\Services\ThemeStudio\Recipes;
+use Juwri\Modules\Storefront\Storefront\MarketplaceTheme;
+use Juwri\Modules\Storefront\Storefront\MarketplaceThemeResolver;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use ZipArchive;
 
@@ -181,7 +181,19 @@ class ThemeStudioAdminController extends Controller
     protected function package(array $p, MarketplaceTheme $base, string $slug, string $name, string $vertical): string
     {
         $recipe = Recipes::find((string) ($p['recipe_id'] ?? ''));
+        // The vertical the recipe belongs to ("restaurant/classic" →
+        // "restaurant"), for the manifest's vertical key.
+        $recipeVertical = $recipe !== null ? (string) ($recipe['vertical'] ?? '') : '';
+        if ($recipeVertical === '' && is_string($recipe['id'] ?? null) && str_contains((string) $recipe['id'], '/')) {
+            $recipeVertical = (string) explode('/', (string) $recipe['id'])[0];
+        }
         $baseManifest = $base->manifest();
+        // A base manifest may carry a SET name ('food') where a vertical is
+        // expected — only a real vertical is carried over.
+        $baseVertical = (string) ($baseManifest['vertical'] ?? '');
+        $manifestVertical = app(VerticalRegistry::class)->exists($baseVertical)
+            ? $baseVertical
+            : ($recipeVertical !== '' ? $recipeVertical : $vertical);
         $tokens = array_filter((array) ($p['tokens'] ?? []), 'is_string');
         if (is_string($p['font_pair'] ?? null) && $p['font_pair'] !== '') {
             $tokens['fonts.pair'] = $p['font_pair'];
@@ -198,7 +210,12 @@ class ThemeStudioAdminController extends Controller
             'library' => (string) ($base->library()->version ?? Recipes::DEFAULT_LIBRARY),
             'commerce_runtime' => 'v2',
             'category' => (string) ($baseManifest['category'] ?? $vertical),
-            'vertical' => (string) ($baseManifest['vertical'] ?? 'food'),
+            // The VERTICAL, not the set: the base manifest may carry a set
+            // name ('food') where a vertical is expected, and a manifest that
+            // names a vertical it does not have would be filed into the
+            // wrong theme set. The recipe knows its vertical; the request's
+            // vertical is validated against the registry.
+            'vertical' => $manifestVertical,
             'recipe' => (string) ($recipe['id'] ?? ($p['recipe_id'] ?? '')),
             'tokens' => $tokens,
         ];

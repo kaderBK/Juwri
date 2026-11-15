@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PreflightPhpController;
 use App\Http\Controllers\User;
+use App\Http\Controllers\User\MerchantCampaignUnsubscribeController;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Services\PlatformMetrics;
 use Illuminate\Http\Request;
@@ -888,6 +889,19 @@ LocalizedRoutes::group($middlewares, function () {
         Route::get('notifications/markasread', '\Juwri\Core\Http\Controllers\Admin\NotificationController@markAsRead')->name('notifications.markasread');
         Route::delete('notifications/deleteallread', '\Juwri\Core\Http\Controllers\Admin\NotificationController@deleteAllRead')->name('notifications.deleteallread');
 
+        Route::controller(Admin\MerchantCampaignController::class)->group(function () {
+            /* Bulk email campaigns to merchants. Same engine as the trial
+               reminders: batched, idempotent per campaign, opt-out aware and
+               logged. The report is the per-recipient log. */
+            Route::get('merchants/campaign', 'index')->name('merchants.campaign');
+            Route::get('merchants/campaign/merchants', 'merchants')->name('merchants.campaign.merchants');
+            Route::post('merchants/campaign/preview', 'preview')->name('merchants.campaign.preview');
+            Route::post('merchants/campaign/send', 'send')->name('merchants.campaign.send');
+            Route::post('merchants/campaign/cancel', 'cancel')->name('merchants.campaign.cancel');
+            Route::post('merchants/campaign/test', 'testSend')->name('merchants.campaign.test');
+            Route::get('merchants/campaign/report', 'report')->name('merchants.campaign.report');
+        });
+
         Route::controller(Admin\UserController::class)->group(function () {
             Route::post('users/delete', 'delete')->name('users.delete');
             Route::post('users/delete-filtered', 'deleteFiltered')->name('users.deleteFiltered');
@@ -1042,6 +1056,16 @@ LocalizedRoutes::group($middlewares, function () {
 /* Unsubscribe Route */
 Route::get('campaigns/unsubscribe/{customer}', [CampaignController::class, 'unsubscribeConfirm'])->middleware(AddCspHeaders::class)->name('campaigns.unsubscribe'); // P6-122b (storefront unsubscribe view); P6-222: GET only confirms
 Route::post('campaigns/unsubscribe/{customer}', [CampaignController::class, 'unsubscribe'])->middleware(['throttle:30,1,campaign-unsubscribe', AddCspHeaders::class])->name('campaigns.unsubscribe.do'); // P6-222: POST (form or RFC 8058 one-click) withdraws consent
+
+/* Opt-out from a merchant campaign email. OUTSIDE the auth group — it is
+   clicked from an inbox, often on a device with no session. The signed URL is
+   the authorisation; the id alone proves nothing. */
+Route::get('campaigns/merchant/unsubscribe/{user}', [MerchantCampaignUnsubscribeController::class, 'unsubscribeConfirm'])
+    ->middleware(['throttle:20,1,merchant-campaign-unsubscribe', AddCspHeaders::class])
+    ->name('campaigns.merchant.unsubscribe');
+Route::post('campaigns/merchant/unsubscribe/{user}', [MerchantCampaignUnsubscribeController::class, 'unsubscribe'])
+    ->middleware(['throttle:20,1,merchant-campaign-unsubscribe', AddCspHeaders::class])
+    ->name('campaigns.merchant.unsubscribe.do');
 
 /* WI-B4 (upsell-visibility): opt-out of trial reminder mail. Deliberately
    OUTSIDE the auth group — it is clicked from an inbox, often on a device with

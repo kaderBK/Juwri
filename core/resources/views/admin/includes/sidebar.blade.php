@@ -179,6 +179,7 @@
                     $item('admin.announcements.index', ___('Announcements'), 'fi-rr-megaphone'),
                     $item('admin.advertisements.index', ___('Advertisements'), 'fi-rr-flag', null, 'admin.advertisements.*'),
                     $item('admin.allergies.index', ___('Allergies'), 'fi-rr-tags'),
+                    $item('admin.merchants.campaign', ___('Email Campaign'), 'fi-rr-send', null, 'admin.merchants.campaign*'),
                 ])],
             ],
         ],

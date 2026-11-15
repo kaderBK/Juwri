@@ -29,6 +29,7 @@ use App\Services\KdsService;
 use App\Services\Loyalty\LoyaltyAccrual;
 use App\Services\OrderApiService;
 use App\Services\OrderIntakeGate;
+use App\Services\PlanMenuVisibility;
 use App\Services\PlatformMetrics;
 use App\Services\StoreCloneService;
 use App\Services\Storefront\LegacyCartLines;
@@ -475,7 +476,7 @@ class StoreController extends Controller
             'color' => 'required',
             'cover_image' => $upload,
             'main_image' => $upload,
-            'slug' => ['nullable', 'alpha_dash', new ReservedSlug, new PhishingSlug, new GloballyUnique('stores', 'slug')],
+            'slug' => ['nullable', 'alpha_dash', 'not_regex:/^[0-9]+$/', new ReservedSlug, new PhishingSlug, new GloballyUnique('stores', 'slug')],
             'title' => $needed(150),
             'sub_title' => $optional(255),
             'description' => $needed(),
@@ -902,6 +903,20 @@ class StoreController extends Controller
         if (empty($postOptions->menu_show_unavailable)) {
             $menus = $menus->filter(fn ($m) => $m->getAttribute('available_now') !== false)->values();
         }
+
+        /* Plan caps on what this store PUBLISHES. The write side refuses to add
+           past the plan limit, but a store can still hold more than it pays for
+           (a menu built during an unlimited trial, or written by a bulk path).
+           Only the rows the plan covers are published — nothing is deleted, so
+           an upgrade reveals the rest on the next request. */
+        [$menus, $publishedCategories] = PlanMenuVisibility::apply(
+            $menus,
+            $store->menu_categories,
+            $store->user
+        );
+        // The themes walk $store->menu_categories for the nav and the
+        // sections, so the capped set has to reach the relation.
+        $store->setRelation('menu_categories', $publishedCategories);
 
         $total_menus = $menus->keyBy('id')->all();
 

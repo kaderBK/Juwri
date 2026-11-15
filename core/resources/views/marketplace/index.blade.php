@@ -135,7 +135,7 @@
 <body>
 @include('apps.store._nav', ['asNavActive' => 'themes'])
 @php
-    $hasFilters = $q !== '' || $price !== '' || !empty($industry);
+    $hasFilters = $q !== '' || $price !== '' || !empty($industry) || $themeSet !== null;
 @endphp
 <div class="wrap">
     <header class="top">
@@ -149,7 +149,7 @@
              a bottom sheet opened from the "Filters" button; facets are batched and
              committed with "Show results" so the page doesn't reload on every tap. --}}
         @php
-            $activeFilters = ($price !== '' ? 1 : 0) + count($industry) + ((int) $minRating > 0 ? 1 : 0);
+            $activeFilters = ($price !== '' ? 1 : 0) + count($industry) + ((int) $minRating > 0 ? 1 : 0) + ($themeSet !== null ? 1 : 0);
         @endphp
         <div class="sheet-backdrop" data-close aria-hidden="true"></div>
         <aside class="rail" id="filterRail" aria-label="{{ ___('Filters') }}">
@@ -178,6 +178,21 @@
                     <input type="radio" name="price" value="paid" @checked($price === 'paid') @disabled($paidCount === 0) data-change="facetChanged" data-this>
                     <span>{{ ___('Paid') }}</span><span class="cnt">{{ $paidCount }}</span>
                 </label>
+            </div>
+
+            <div class="fgroup">
+                <div class="flabel">{{ ___('store_type') }}</div>
+                <label class="frow">
+                    <input type="radio" name="set" value="" @checked($themeSet === null) data-change="facetChanged" data-this>
+                    <span>{{ ___('Any') }}</span><span class="cnt">{{ array_sum($setCounts) }}</span>
+                </label>
+                @foreach($themeSets as $setKey => $setLabel)
+                    @php $sc = $setCounts[$setKey] ?? 0; @endphp
+                    <label class="frow {{ ($sc === 0 && $themeSet !== $setKey) ? 'disabled' : '' }}">
+                        <input type="radio" name="set" value="{{ $setKey }}" @checked($themeSet === $setKey) @disabled($sc === 0 && $themeSet !== $setKey) data-change="facetChanged" data-this>
+                        <span>{{ $setLabel }}</span><span class="cnt">{{ $sc }}</span>
+                    </label>
+                @endforeach
             </div>
 
             <div class="fgroup">
@@ -253,6 +268,8 @@
                     @endphp
                     <a class="card" href="{{ route('marketplace.show', $theme->slug) }}">
                         @if($theme->engine === 'blade')<span class="badge-builtin">{{ ___('Built-in') }}</span>@endif
+                        @php $setLabel = \App\Models\Theme::setLabel($theme->theme_set ?? 'food'); @endphp
+                        @if($setLabel)<span class="badge-builtin">{{ $setLabel }}</span>@endif
                         <div class="thumb {{ $psShot ? 'thumb--phone' : '' }}" @if(!$psShot && $shot) style="background-image:url('{{ $shot->url() }}')" @endif>
                             @if($psShot)
                                 <span class="iphone"><img src="{{ $psShot }}" alt="{{ $theme->name }}" loading="lazy" decoding="async" width="480" height="987"></span>

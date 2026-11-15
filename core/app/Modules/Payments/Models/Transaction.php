@@ -39,6 +39,9 @@ class Transaction extends Model implements MinorMoneyModel
 
     public const STATUS_PENDING = 'pending';
 
+    /** B1: a delayed payment the provider reported as failed (Stripe checkout.session.async_payment_failed) — never settles. */
+    public const STATUS_FAILED = 'failed';
+
     /** MC-02: terminal state for a settled order payment whose charge history is
      *  preserved as a billing_receipt instead of being deleted. */
     public const STATUS_CONSUMED = 'consumed';

@@ -33,6 +33,7 @@ class PreventRequestForgery extends Middleware
         'folio-metrics/*', // FP B8: anonymous flip-book page-view beacon (sendBeacon has no token)
         'dash/client-error', // dashboard client-error beacon (sendBeacon has no token; session rides the cookie)
         'campaigns/unsubscribe/*', // P6-222: RFC 8058 one-click POST from mail providers (signed URL, no session)
+        'campaigns/merchant/unsubscribe/*', // RFC 8058 one-click POST from mail providers (signed URL, no session)
         'auth/social/customer/apple/callback', // FEATURES-5 A1: Apple form_post callback (cross-site POST, no session token)
     ];
 }

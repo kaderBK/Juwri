@@ -78,7 +78,7 @@ class StoreSettingsRules
                 'color' => ['required'],
                 'cover_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:5120'],
                 'main_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:5120'],
-                'slug' => ['nullable', 'alpha_dash', new ReservedSlug, new PhishingSlug($store->slug), new GloballyUnique('stores', 'slug', $store->id)],
+                'slug' => ['nullable', 'alpha_dash', 'not_regex:/^[0-9]+$/', new ReservedSlug, new PhishingSlug($store->slug), new GloballyUnique('stores', 'slug', $store->id)],
                 'title' => ['required', 'string', 'max:150'],
                 'sub_title' => ['nullable', 'string', 'max:255'],
                 'description' => ['required', 'string'],

@@ -77,6 +77,13 @@ final class MailTemplateCatalog
                 self::code('{MANAGE_URL}', ___('Manage App URL')),
                 self::code('{UNSUBSCRIBE_URL}', ___('Unsubscribe URL')),
             ]),
+            // Bulk campaigns to the merchants themselves (admin -> merchant).
+            self::template('merchant-campaign', ___('Merchant Campaign'), 'merchant_campaign', [
+                self::code('{OWNER_NAME}', ___('Owner Name')),
+                self::code('{COUNTRY}', ___('Country')),
+                self::code('{PLAN}', ___('Plan')),
+                self::code('{UNSUBSCRIBE_URL}', ___('Unsubscribe URL')),
+            ]),
         ];
     }
 
