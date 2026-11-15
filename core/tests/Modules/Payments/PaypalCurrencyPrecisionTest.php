@@ -190,7 +190,7 @@ class PaypalCurrencyPrecisionTest extends TestCase
         PaypalController::pay($tx);
 
         $this->assertSame(['value' => '1500', 'currency_code' => 'HUF'], $this->planPriceSent()); // before: '1500.00'
-        $this->assertNull(Transaction::find($tx->id));
+        $this->assertSame('I-FAKE1', Transaction::find($tx->id)?->payment_id);
     }
 
     public function test_a_fractional_monthly_huf_add_on_is_refused(): void
@@ -241,7 +241,7 @@ class PaypalCurrencyPrecisionTest extends TestCase
         $this->fakePaypal([
             'POST /v1/notifications/verify-webhook-signature' => ['verification_status' => 'SUCCESS'],
             'GET /v1/payments/sale/SALE-1' => ['id' => 'SALE-1', 'state' => 'completed', 'billing_agreement_id' => 'I-1', 'amount' => ['total' => $total, 'currency' => 'HUF']],
-            'GET /v1/billing/subscriptions/I-1' => ['id' => 'I-1', 'custom_id' => http_build_query($metadata)],
+            'GET /v1/billing/subscriptions/I-1' => ['id' => 'I-1', 'create_time' => '2026-11-15T23:59:59Z', 'custom_id' => http_build_query($metadata)],
         ]);
         $event = json_encode(['id' => 'WH-1', 'event_type' => 'PAYMENT.SALE.COMPLETED', 'resource' => ['id' => 'SALE-1', 'billing_agreement_id' => 'I-1']]);
 

@@ -38,6 +38,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PayPal legacy subscription custom_id cutoff (BL-039)
+    |--------------------------------------------------------------------------
+    |
+    | Subscriptions created before this ISO-8601 timestamp may still carry the
+    | legacy URL-encoded query-string `custom_id`. Subscriptions created at or
+    | after it (or with missing/unparseable `create_time`) must carry a local
+    | checkout transaction id.
+    |
+    */
+    'paypal_legacy_custom_id_until' => env('PAYPAL_LEGACY_CUSTOM_ID_UNTIL', '2026-11-16T00:00:00Z'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Payments health watch (P6-93, `payments:watch`, every 5 minutes)
     |--------------------------------------------------------------------------
     |

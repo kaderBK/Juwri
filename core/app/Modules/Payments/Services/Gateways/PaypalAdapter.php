@@ -10,6 +10,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Juwri\Core\Money\Money;
@@ -186,12 +187,17 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 return response()->json(['status' => 400], 400);
             }
 
-            // The subscription as PayPal holds it — its custom_id is what we set at checkout.
+            // The subscription as PayPal holds it — its custom_id is either the local checkout transaction id
+            // (BL-039) or, for subscriptions created before that change, the legacy URL-encoded metadata string.
             $subscription = $client->get('/v1/billing/subscriptions/'.rawurlencode($subscriptionId))->throw()->json();
-            parse_str((string) ($subscription['custom_id'] ?? ''), $metadata);
-            if ($metadata === []) {
+            $resolved = $this->resolveSubscriptionMetadata((string) ($subscription['custom_id'] ?? ''), $subscriptionId, (array) $subscription);
+            if ($resolved === null) {
+                PaymentLog::webhookRejected('paypal', 'unknown or invalid subscription transaction', null, ['subscription' => $subscriptionId]);
+
                 return response()->json(['status' => 400], 400);
             }
+            $metadata = $resolved['metadata'];
+            $checkout = $resolved['checkout'];
             // The sale must be in the currency the subscription was sold in (the checkout transaction's).
             $sold = strtoupper(trim((string) ($metadata['currency_code'] ?? '')));
             $paid = strtoupper(trim((string) data_get($held, 'amount.currency', '')));
@@ -208,7 +214,15 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 return response()->json(['status' => 400], 400);
             }
 
-            return Fulfilment::webhook('paypal', array_to_object($metadata), (string) $sale['id'], $subscriptionId);
+            return DB::transaction(function () use ($metadata, $sale, $subscriptionId, $checkout): Response {
+                /** @var Response $response */
+                $response = Fulfilment::webhook('paypal', array_to_object($metadata), (string) $sale['id'], $subscriptionId);
+                if ($checkout !== null && $response->getStatusCode() === 200) {
+                    Transaction::markCheckoutSettled((int) $checkout->id, $checkout->user_id, recurring: true);
+                }
+
+                return $response;
+            });
         } catch (\Throwable $e) {
             PaymentLog::settlementFailed('paypal', $e);
 
@@ -586,27 +600,40 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
     }
 
     /**
-     * Recurring: product (created once) → billing plan → subscription. The pending
-     * transaction is removed; each completed sale creates its own through the webhook.
+     * Recurring: product (created once) → billing plan → subscription. The checkout
+     * transaction stays on the server (referenced by `custom_id`) and is marked
+     * `recurring_setup` once the first sale settles; each completed sale creates its own
+     * settled row through the webhook.
      *
      * @param  array{client_id:string, secret:string, sandbox:bool}  $credentials
      */
     private function startSubscription(Transaction $transaction, array $credentials): string
     {
-        $currency = $this->currency($transaction);
-        $price = $this->chargeablePrice($transaction, $currency);
+        // A second "pay" click on the same checkout row gets its own fresh row so the first
+        // subscription's `payment_id` stays intact if the buyer already approved it.
+        $checkout = $transaction;
+        if ($checkout->payment_id !== null) {
+            $checkout = $transaction->replicate(['public_id', 'payment_id', 'status', 'transaction_gatway']);
+            $checkout->status = null;
+            $checkout->payment_id = null;
+            $checkout->transaction_gatway = null;
+            $checkout->save();
+        }
+
+        $currency = $this->currency($checkout);
+        $price = $this->chargeablePrice($checkout, $currency);
         $client = $this->client($credentials);
-        $key = $transaction->transaction_method === 'addon'
-            ? 'addon_'.($transaction->details->type ?? 'x')
-            : (string) $transaction->product_id;
+        $key = $checkout->transaction_method === 'addon'
+            ? 'addon_'.($checkout->details->type ?? 'x')
+            : (string) $checkout->product_id;
         $productId = 'product_'.$key;
 
         $product = $client->get('/v1/catalogs/products/'.rawurlencode($productId));
         if ($product->status() === 404) {
             $client->post('/v1/catalogs/products', [
                 'id' => $productId,
-                'name' => (string) $transaction->product_name,
-                'description' => (string) $transaction->product_name,
+                'name' => (string) $checkout->product_name,
+                'description' => (string) $checkout->product_name,
                 'type' => 'SERVICE',
             ])->throw();
         } else {
@@ -615,10 +642,10 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
 
         $plan = $client->post('/v1/billing/plans', [
             'product_id' => $productId,
-            'name' => 'plan_'.$key.'_'.$transaction->frequency.'_'.$price.'_'.$currency,
+            'name' => 'plan_'.$key.'_'.$checkout->frequency.'_'.$price.'_'.$currency,
             'status' => 'ACTIVE',
             'billing_cycles' => [[
-                'frequency' => ['interval_unit' => 'DAY', 'interval_count' => $transaction->frequency === 'MONTHLY' ? 30 : 365],
+                'frequency' => ['interval_unit' => 'DAY', 'interval_count' => $checkout->frequency === 'MONTHLY' ? 30 : 365],
                 'tenure_type' => 'REGULAR',
                 'sequence' => 1,
                 'total_cycles' => 0,
@@ -629,7 +656,7 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
 
         $subscription = $client->post('/v1/billing/subscriptions', [
             'plan_id' => $plan['id'],
-            'custom_id' => http_build_query($this->metadata($transaction)),
+            'custom_id' => (string) $checkout->id,
             'application_context' => [
                 'brand_name' => mb_substr((string) config('settings.site_title'), 0, 127),
                 'shipping_preference' => 'NO_SHIPPING',
@@ -645,9 +672,73 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             throw new RuntimeException(___('Payment failed, check the credentials.'));
         }
 
-        $transaction->delete();
+        if (! empty($subscription['id'])) {
+            $checkout->update([
+                'payment_id' => (string) $subscription['id'],
+                'transaction_gatway' => $this->key(),
+                'status' => Transaction::STATUS_RECURRING_PENDING,
+            ]);
+        }
 
         return $approve;
+    }
+
+    /**
+     * Resolve checkout metadata from PayPal's `custom_id`: a local transaction id for
+     * subscriptions created after BL-039, or the legacy URL-encoded query string (`=` / `&`)
+     * for subscriptions created before `config('payments.paypal_legacy_custom_id_until')`.
+     *
+     * @param  array<string, mixed>  $subscription
+     * @return array{metadata: array<string, mixed>, checkout: ?Transaction}|null
+     */
+    private function resolveSubscriptionMetadata(string $customId, string $subscriptionId, array $subscription = []): ?array
+    {
+        if ($customId === '') {
+            return null;
+        }
+
+        if (str_contains($customId, '=') || str_contains($customId, '&')) {
+            if (! $this->isLegacySubscriptionBeforeCutoff($subscription)) {
+                return null;
+            }
+            parse_str($customId, $metadata);
+
+            return $metadata === [] ? null : ['metadata' => $metadata, 'checkout' => null];
+        }
+
+        if (! ctype_digit($customId)) {
+            return null;
+        }
+
+        $checkout = Transaction::query()->withoutGlobalScopes()->whereKey((int) $customId)->first();
+        if ($checkout === null
+            || $checkout->store_id !== null
+            || ! in_array($checkout->transaction_method, ['membership', 'addon'], true)
+            || ! in_array($checkout->status, [null, Transaction::STATUS_RECURRING_PENDING, Transaction::STATUS_RECURRING_SETUP], true)
+            || ($checkout->transaction_gatway !== null && $checkout->transaction_gatway !== $this->key())
+            || $checkout->payment_id !== $subscriptionId) {
+            return null;
+        }
+
+        $metadata = $this->metadata($checkout);
+
+        return $metadata === [] ? null : ['metadata' => $metadata, 'checkout' => $checkout];
+    }
+
+    /** @param array<string, mixed> $subscription */
+    private function isLegacySubscriptionBeforeCutoff(array $subscription): bool
+    {
+        $createTime = $subscription['create_time'] ?? null;
+        $cutoff = config('payments.paypal_legacy_custom_id_until');
+        if (! is_string($createTime) || trim($createTime) === '' || ! is_string($cutoff) || trim($cutoff) === '') {
+            return false;
+        }
+
+        try {
+            return CarbonImmutable::parse($createTime)->lt(CarbonImmutable::parse($cutoff));
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     /** @return array<string, string> */

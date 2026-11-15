@@ -47,6 +47,13 @@ class Transaction extends Model implements MinorMoneyModel
     public const STATUS_REVIEW = 'review';
 
     /**
+     * BL-039: a PayPal subscription checkout created on the gateway and awaiting its first
+     * `PAYMENT.SALE.COMPLETED` webhook. Kept by hourly housekeeping and hidden from user/admin
+     * payment lists until the first sale settles (which transitions it to `recurring_setup`).
+     */
+    public const STATUS_RECURRING_PENDING = 'recurring_pending';
+
+    /**
      * BL-038: a merchant-of-record checkout (Paddle, Lemon Squeezy) whose first payment settled and a gateway
      * subscription follows — the settlement wrote its own `success` row; this one stays findable for the renewals,
      * which are bound to it by id (MorPaymentGuard). Never a payment itself.
@@ -64,7 +71,7 @@ class Transaction extends Model implements MinorMoneyModel
      *
      * @var list<string>
      */
-    public const CHECKOUT_BOOKKEEPING = [self::STATUS_RECURRING_SETUP, self::STATUS_CHECKOUT_SETTLED];
+    public const CHECKOUT_BOOKKEEPING = [self::STATUS_RECURRING_PENDING, self::STATUS_RECURRING_SETUP, self::STATUS_CHECKOUT_SETTLED];
 
     /** Merchant-of-record gateways: their checkout row carries the gateway's later events. */
     public const MOR_GATEWAYS = ['paddle', 'lemon_squeezy'];
@@ -288,12 +295,13 @@ class Transaction extends Model implements MinorMoneyModel
      */
     public static function markCheckoutSettled(int $checkoutId, int|string|null $userId, ?bool $recurring = null): void
     {
-        $checkout = static::query()->withoutGlobalScopes()->whereKey($checkoutId)->whereNull('status')->first();
+        $awaiting = fn ($q) => $q->whereNull('status')->orWhere('status', self::STATUS_RECURRING_PENDING);
+        $checkout = static::query()->withoutGlobalScopes()->whereKey($checkoutId)->where($awaiting)->first();
         if ($checkout === null || (string) $checkout->user_id !== (string) $userId) {
             return;
         }
         $recurring ??= in_array($checkout->frequency, ['MONTHLY', 'YEARLY'], true);
-        static::query()->withoutGlobalScopes()->whereKey($checkoutId)->whereNull('status')
+        static::query()->withoutGlobalScopes()->whereKey($checkoutId)->where($awaiting)
             ->update(['status' => $recurring ? self::STATUS_RECURRING_SETUP : self::STATUS_CHECKOUT_SETTLED]);
     }
 }
