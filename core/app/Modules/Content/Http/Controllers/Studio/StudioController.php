@@ -5,6 +5,8 @@
 namespace Juwri\Modules\Content\Http\Controllers\Studio;
 
 use App\Models\MenuCategory;
+use App\Services\Entitlements;
+use App\Services\PlanMenuVisibility;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ use Juwri\Core\Models\Language;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Money\Money;
 use Juwri\Core\Services\Tenancy\GlobalSlugService;
+use Juwri\Core\Support\StripeManagedPayments;
 use Juwri\Modules\Ai\Contracts\AiLimitExceeded;
 use Juwri\Modules\Ai\Contracts\AiProviderFailure;
 use Juwri\Modules\Ai\Contracts\ImageGenerator;
@@ -312,6 +315,17 @@ class StudioController extends Controller
             return response()->json(['error' => $edition->message(), 'code' => 'store_limit'], 422);
         }
 
+        /* A publish creates a real store, so it consumes a store slot like any
+           other create — the same rule StoreController::cloneStore() and
+           StoreVerticalController::duplicateVertical() enforce. Without it a
+           free plan could publish (and keep) an unlimited number of stores,
+           and with them an unlimited number of menus. */
+        $storeLimit = effective_limit('restaurant', $user);
+        if (! Entitlements::isUnlimitedSentinel($storeLimit)
+            && Entitlements::usage($user, 'restaurant') >= $storeLimit) {
+            return response()->json(['error' => ___('Limit exceeded, please upgrade your membership.')], 422);
+        }
+
         // Migrate the guest session onto the account.
         $session->update(['user_id' => $user->id, 'status' => 'published']);
 
@@ -346,17 +360,39 @@ class StudioController extends Controller
     /** Write normalised draft categories + items to a restaurant's menu. */
     protected function persistDraft(Store $store, array $categories): void
     {
-        DB::transaction(function () use ($store, $categories) {
+        /* A draft publish is a BULK write: it must land inside the owner's plan
+           or a free plan ends up with a whole AI menu (dozens of categories and
+           items) the plan never paid for. Clamp to the owner's caps — the rows
+           that do not fit are simply not written. */
+        $caps = PlanMenuVisibility::caps($store->user);
+        $categoryCap = $caps['category'];
+        $itemCap = $caps['item'];
+
+        DB::transaction(function () use ($store, $categories, $categoryCap, $itemCap) {
             $catPos = 0;
+            $written = 0;
             foreach ($categories as $cat) {
+                if ($categoryCap !== null && $written >= $categoryCap) {
+                    break; // no room for more categories
+                }
+
                 $category = MenuCategory::create([
                     'store_id' => $store->id,
                     'name' => $cat['name'],
                     'active' => '1',
                     'position' => $catPos++,
                 ]);
+                $written++;
+
                 $pos = 0;
+                $itemsInCategory = 0;
                 foreach ($cat['items'] as $item) {
+                    // `menu_limit` is "max items per category" — the canonical
+                    // counter is per category, so each category gets its own cap.
+                    if ($itemCap !== null && $itemsInCategory >= $itemCap) {
+                        break;
+                    }
+
                     Menu::create([
                         'store_id' => $store->id,
                         'category_id' => $category->id,
@@ -366,6 +402,7 @@ class StudioController extends Controller
                         'position' => $pos++,
                         'active' => '1',
                     ]);
+                    $itemsInCategory++;
                 }
             }
         });
@@ -579,14 +616,17 @@ class StudioController extends Controller
 
         try {
             Stripe::setApiKey($key);
-            $checkout = Session::create([
+            $checkout = Session::create(StripeManagedPayments::session([
                 'mode' => 'payment',
                 'line_items' => [[
                     'quantity' => 1,
                     'price_data' => [
                         'currency' => $currency,
                         'unit_amount' => $unitAmount,
-                        'product_data' => ['name' => 'Menu Studio — '.$bundle['credits'].' credits ('.$bundle['name'].')'],
+                        'product_data' => StripeManagedPayments::product(
+                            ['name' => 'Menu Studio — '.$bundle['credits'].' credits ('.$bundle['name'].')'],
+                            StripeManagedPayments::TAX_AI_BUSINESS
+                        ),
                     ],
                 ]],
                 'metadata' => [
@@ -597,7 +637,7 @@ class StudioController extends Controller
                 ],
                 'success_url' => route('studio.app.shell').'?paid=1',
                 'cancel_url' => route('studio.app.shell').'?cancelled=1',
-            ]);
+            ]), StripeManagedPayments::requestOptions());
         } catch (\Throwable $e) {
             Log::warning('[studio] stripe checkout failed: '.$e->getMessage());
 

@@ -4,13 +4,16 @@
 
 namespace App\Services;
 
+use App\Models\MenuCategory;
 use App\Services\Theme\VerticalThemeSets;
 use Illuminate\Support\Facades\DB;
 use Juwri\Core\Models\Store;
+use Juwri\Core\Models\User;
 use Juwri\Core\Services\Tenancy\GlobalSlugService;
 use Juwri\Core\Services\Tenancy\StoreDataEngine;
 use Juwri\Core\Services\Tenancy\StoreDataRegistry;
 use Juwri\Core\Settings\StoreSettings;
+use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Menu\Models\ModifierGroup;
 use Juwri\Modules\Payments\Services\StorePaymentGateways;
 
@@ -95,8 +98,13 @@ class StoreCloneService
             // P1-21: every other table the registry copies — the catalogue (brands, category tree, items, variant
             // matrix, modifier groups + modifiers + item attachments, combos, fitments), bio blocks, tables/rooms
             // (fresh QR keys) and gateway rows without credentials — every reference remapped onto the copies.
+            // Clamp to the owner's plan BEFORE writing so over-cap rows (and their dependents) are never copied.
             $copied = app(StoreDataEngine::class)->duplicate(
-                $clone->getConnection(), (int) $source->id, (int) $clone->id, (int) $clone->account_id
+                $clone->getConnection(),
+                (int) $source->id,
+                (int) $clone->id,
+                (int) $clone->account_id,
+                $this->clampedSourceIds((int) $source->id, $source->user)
             );
             $counts = [
                 'categories' => $copied['categories'] ?? 0,
@@ -138,5 +146,65 @@ class StoreCloneService
         });
 
         return ['clone' => $clone, 'counts' => $counts];
+    }
+
+    /**
+     * Source category and item ids that fit within the owner's plan caps,
+     * computed before duplicate() writes so over-cap rows and their dependents
+     * are never inserted on the clone.
+     *
+     * @return array<string, list<int>>
+     */
+    private function clampedSourceIds(int $sourceId, ?User $owner): array
+    {
+        $caps = PlanMenuVisibility::caps($owner);
+        $categoryCap = $caps['category'];
+        $itemCap = $caps['item'];
+
+        if ($categoryCap === null && $itemCap === null) {
+            return [];
+        }
+
+        $onlyIds = [];
+        $keptCategorySet = null;
+
+        if ($categoryCap !== null) {
+            $allCategories = MenuCategory::where('store_id', $sourceId)
+                ->get(['id', 'parent', 'position']);
+
+            $keptCategoryIds = PlanMenuVisibility::orderedTree($allCategories)
+                ->take($categoryCap)
+                ->map(fn ($c) => (int) $c->id)
+                ->values()
+                ->all();
+
+            $onlyIds['categories'] = $keptCategoryIds;
+            $keptCategorySet = array_flip($keptCategoryIds);
+        }
+
+        $items = Menu::where('store_id', $sourceId)
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get(['id', 'category_id']);
+
+        $perCategory = [];
+        $keptItemIds = [];
+        foreach ($items as $item) {
+            $cid = (int) $item->category_id;
+            if ($keptCategorySet !== null && $cid > 0 && ! isset($keptCategorySet[$cid])) {
+                continue;
+            }
+            if ($itemCap !== null) {
+                $perCategory[$cid] = ($perCategory[$cid] ?? 0) + 1;
+                if ($perCategory[$cid] > $itemCap) {
+                    continue;
+                }
+            }
+            $keptItemIds[] = (int) $item->id;
+        }
+
+        $onlyIds['items'] = $keptItemIds;
+
+        return $onlyIds;
     }
 }

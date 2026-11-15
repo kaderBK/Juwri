@@ -102,6 +102,7 @@
                             <span class="ui-appstore__tagline">{{ \Illuminate\Support\Str::limit($app->tagline, 80) }}</span>
                             <span class="ui-appstore__meta">
                                 <x-ui.tag :tone="$app->isFreeBilling() ? 'success' : 'accent'">{{ $app->pricingSummary() }}</x-ui.tag>
+                                @if($app->hasTrial())<x-ui.tag tone="success">{{ ___(':days-day free trial', ['days' => (int) $app->trial_days]) }}</x-ui.tag>@endif
                                 @if((int) $app->rating_count > 0)
                                     <span class="ui-appstore__rating"><span class="ui-appstore__stars" aria-hidden="true">★</span> <span class="ui-ltr">{{ number_format($app->rating_avg, 1) }} ({{ $app->rating_count }})</span></span>
                                 @else

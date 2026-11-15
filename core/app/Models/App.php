@@ -6,9 +6,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Juwri\Core\Models\User;
 use Juwri\Core\Money\Concerns\HasMinorMoney;
 use Juwri\Core\Money\MinorMoneyModel;
-use Juwri\Core\Models\User;
 use Juwri\Modules\AppStore\Models\MarketplaceReview;
 
 /**
@@ -124,6 +124,12 @@ class App extends Model implements MinorMoneyModel
             'usage' => ___('Usage-based'),
             default => ___('Free'),
         };
+    }
+
+    /** A recurring paid app with a free trial (first install only, see AppInstallService). */
+    public function hasTrial(): bool
+    {
+        return $this->billing_type === 'recurring' && (int) $this->trial_days > 0 && (float) $this->price > 0;
     }
 
     public function isFreeBilling(): bool

@@ -142,16 +142,17 @@ final class StoreDataEngine
     /**
      * Copy every Copy table's rows of $sourceId onto $cloneId. Returns the number of rows copied per table.
      *
+     * @param  array<string, list<int>>  $onlyIds  optional table => source ids allow-list (clamps before writing)
      * @return array<string, int>
      */
-    public function duplicate(Connection $db, int $sourceId, int $cloneId, ?int $cloneAccountId): array
+    public function duplicate(Connection $db, int $sourceId, int $cloneId, ?int $cloneAccountId, array $onlyIds = []): array
     {
         /** @var array<string, array<int, int>> $maps table => source id => copy id */
         $maps = ['stores' => [$sourceId => $cloneId]];
         $counts = [];
 
         foreach ($this->copyOrder() as $table) {
-            $counts[$table->table] = $this->copyTable($db, $table, $sourceId, $cloneId, $cloneAccountId, $maps);
+            $counts[$table->table] = $this->copyTable($db, $table, $sourceId, $cloneId, $cloneAccountId, $maps, $onlyIds);
         }
 
         return $counts;
@@ -195,14 +196,18 @@ final class StoreDataEngine
         return array_values($ordered);
     }
 
-    /** @param  array<string, array<int, int>>  $maps */
-    private function copyTable(Connection $db, StoreTable $table, int $sourceId, int $cloneId, ?int $cloneAccountId, array &$maps): int
+    /**
+     * @param  array<string, array<int, int>>  $maps
+     * @param  array<string, list<int>>  $onlyIds
+     */
+    private function copyTable(Connection $db, StoreTable $table, int $sourceId, int $cloneId, ?int $cloneAccountId, array &$maps, array $onlyIds = []): int
     {
         $name = $table->table;
         $columns = $this->columns($db, $name);
         $maps[$name] = [];
         $selfRefs = [];
         $now = now();
+        $allowed = array_key_exists($name, $onlyIds) ? array_flip($onlyIds[$name]) : null;
 
         $query = $db->table($name)->where('store_id', $sourceId)->orderBy('id');
         if (isset($columns['deleted_at'])) {
@@ -212,6 +217,9 @@ final class StoreDataEngine
         foreach ($query->get() as $source) {
             $row = (array) $source;
             $oldId = (int) $row['id'];
+            if ($allowed !== null && ! isset($allowed[$oldId])) {
+                continue;
+            }
             unset($row['id']);
             $row['store_id'] = $cloneId;
             if (isset($columns['account_id'])) {

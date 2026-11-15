@@ -95,6 +95,11 @@ class CommerceRuntime
                 'allowPayment' => (bool) ($flags['payment'] ?? false),
                 'allowCallWaiter' => (bool) (($o->allow_call_waiter ?? false) && ($flags['on_table'] ?? false)),
                 'allowCoupons' => ((int) ($o->allow_coupons ?? 0)) === 1,
+                // T2: gift cards. The store's own toggle, already masked by
+                // StorefrontToggleMask on this read path, so an unentitled
+                // store never sees the field — the runtime only renders it and
+                // sends the code; the server validates and redeems it.
+                'giftCards' => ! empty($o->gift_cards_enabled),
                 // P7-5b: pay-with-credit offered only to a logged-in diner with a
                 // positive balance. submitOrder honours use_wallet regardless; this
                 // flag just gates the checkbox in the runtime UI.
@@ -235,6 +240,7 @@ class CommerceRuntime
             'Add', 'Cart', 'Call waiter', 'Extras', 'Back', 'Sold out', 'You might also like',
             'Dine-in', 'Takeaway', 'Delivery', 'Your name', 'Table', 'Phone', 'Delivery address',
             'Coupon', 'Apply', 'Notes', 'Tip', 'None', 'Custom', 'Subtotal', 'Discount', 'Total',
+            'Gift card code',
             'Place order', 'Clear cart', 'Select an order type.', 'Please enter your name.',
             'Please enter a delivery address.', 'Please sign in to order.', 'Something went wrong.',
             'Network error. Please try again.', 'Order confirmed', 'Your order has been placed successfully.',

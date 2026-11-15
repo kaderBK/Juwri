@@ -1695,6 +1695,14 @@
   "class": "signed",
   "why": "hasCorrectSignature() in CampaignController@unsubscribe (P6-222 POST / RFC 8058 one-click)"
  },
+ "campaigns.merchant.unsubscribe": {
+  "class": "signed",
+  "why": "hasValidSignature() in MerchantCampaignUnsubscribeController@unsubscribeConfirm (GET shows confirm page only)"
+ },
+ "campaigns.merchant.unsubscribe.do": {
+  "class": "signed",
+  "why": "hasValidSignature() in MerchantCampaignUnsubscribeController@unsubscribe (POST / RFC 8058 one-click)"
+ },
  "combos.destroy": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"

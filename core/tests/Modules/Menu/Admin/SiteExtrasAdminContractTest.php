@@ -4,15 +4,15 @@
 
 namespace Tests\Modules\Menu\Admin;
 
-use Juwri\Modules\Content\Models\Blog;
-use Juwri\Modules\Content\Models\BlogComment;
 use App\Models\Coupon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Juwri\Core\Settings\PlatformSettings;
-use Tests\TestCase;
+use Juwri\Modules\Content\Models\Blog;
+use Juwri\Modules\Content\Models\BlogComment;
 use Tests\Feature\Admin\InteractsWithAdminPanel;
+use Tests\TestCase;
 
 /**
  * WI-08 characterisation: plan coupons (Billing), blog comment moderation,
@@ -186,7 +186,7 @@ class SiteExtrasAdminContractTest extends TestCase
         $res = $this->actingAs($admin)->get(route('admin.mailtemplates.index'))->assertOk()->assertViewIs('admin.mailtemplates.index');
         $templates = collect($res->viewData('email_template'));
         $this->assertSame(
-            ['new-order', 'signup-details', 'create-account', 'forgot-pass', 'contact_us', 'feedback', 'app-trial'],
+            ['new-order', 'signup-details', 'create-account', 'forgot-pass', 'contact_us', 'feedback', 'app-trial', 'merchant-campaign'],
             $templates->pluck('id')->all()
         );
         $contact = $templates->firstWhere('id', 'contact_us');

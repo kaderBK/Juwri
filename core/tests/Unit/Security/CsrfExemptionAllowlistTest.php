@@ -30,6 +30,7 @@ class CsrfExemptionAllowlistTest extends TestCase
             'api/v1/*', 'docs/feedback', 'help-center/ask',
             'csp-report', 'csp-report/payment/*', 'folio-metrics/*', 'dash/client-error',
             'campaigns/unsubscribe/*', // P6-222: signed one-click unsubscribe (RFC 8058)
+            'campaigns/merchant/unsubscribe/*', // RFC 8058 one-click POST (signed URL, no session)
             'auth/social/customer/apple/callback',
         ], $except);
     }

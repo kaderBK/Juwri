@@ -81,6 +81,16 @@ Properties listed are exactly what a template can touch; nothing else exists.
 - `scheduling` (bool)
 - `takeaway` (bool)
 
+## GiftCardsDrop
+- `csrf` (string)
+- `currency` (string)
+- `enabled` (bool)
+- `gateways` (array)
+- `max` (float)
+- `min` (float)
+- `presets` (array)
+- `url` (string)
+
 ## HoursDrop
 - `closes_at` (?string)
 - `has_hours` (bool)

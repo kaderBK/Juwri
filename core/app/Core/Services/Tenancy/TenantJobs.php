@@ -4,6 +4,8 @@
 
 namespace Juwri\Core\Services\Tenancy;
 
+use App\Jobs\DispatchMerchantCampaign;
+use App\Mails\MerchantCampaignMail;
 use App\Mails\StoreOrderMail;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\Job;
@@ -43,6 +45,8 @@ final class TenantJobs
         UserDetails::class,                 // account e-mails (auth)
         ResetPassword::class,
         VerifyEmail::class,
+        DispatchMerchantCampaign::class,
+        MerchantCampaignMail::class,
     ];
 
     /** Queued classes that act for one store / account and restore the dispatcher's tenant. @var list<class-string> */

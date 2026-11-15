@@ -38,6 +38,7 @@
                 </div>
             </div>
             <p @class(['ui-appshow__price', 'is-free' => $app->isFreeBilling()])>{{ $app->pricingSummary() }}</p>
+            @if(!empty($trialEligible))<p class="ui-appshow__note"><strong>{{ ___('Free for :days days, then :price', ['days' => (int) $app->trial_days, 'price' => $app->pricingSummary()]) }}</strong></p>@endif
             @if($app->tagline)<p class="ui-appshow__tagline">{{ $app->tagline }}</p>@endif
 
             @if($installed)
@@ -70,9 +71,11 @@
                         <span x-show="installing">{{ ___('Installing…') }}</span>
                     </button>
                     <p class="ui-appshow__error" x-show="msg && !topup" x-text="msg"></p>
-                    @unless($app->isFreeBilling())
+                    @if(!empty($trialEligible))
+                        <p class="ui-appshow__note" x-show="!topup">{{ ___('Your wallet is charged when the trial ends. Uninstall before then and you pay nothing.') }}</p>
+                    @elseif(! $app->isFreeBilling())
                         <p class="ui-appshow__note" x-show="!topup">{{ ___('Paid app — charges apply per its pricing once installed.') }}</p>
-                    @endunless
+                    @endif
 
                     {{-- ST4 shortfall: fund the gap via the existing wallet top-up
                          gateway; the install auto-completes on payment success. --}}
@@ -96,7 +99,7 @@
                     </div>
                 </div>
                 <div x-show="done" x-cloak class="ui-appshow__done">
-                    <x-ui.banner tone="success">{{ ___('Installed') }}</x-ui.banner>
+                    <x-ui.banner tone="success">{{ !empty($trialEligible) ? ___('Installed — free trial until :date', ['date' => date_formating(now()->addDays((int) $app->trial_days))]) : ___('Installed') }}</x-ui.banner>
                     <x-ui.button variant="secondary" block :href="route('apps.page')">{{ ___('Manage in dashboard') }}</x-ui.button>
                 </div>
             @endif

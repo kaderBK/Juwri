@@ -165,7 +165,8 @@ class Store extends Model implements MinorMoneyModel
                 // A title with no letters or digits ("..", "!!") slugs to "" —
                 // every storefront link and the owner's edit page then 500.
                 // Same neutral slug as the phishing case.
-                if (! $store->exists && (trim((string) $store->slug) === '' || PhishingSlug::looksLikePhishing($store->slug))) {
+                // T1: an all-digit slug would bind as a store id on storefront routes.
+                if (! $store->exists && (trim((string) $store->slug) === '' || ctype_digit((string) $store->slug) || PhishingSlug::looksLikePhishing($store->slug))) {
                     do {
                         $slug = 'store-'.strtolower(Str::random(6));
                     } while (TenantContext::bypass(fn (): bool => self::where('slug', $slug)->exists())); // BL-043: across every account
@@ -274,16 +275,51 @@ class Store extends Model implements MinorMoneyModel
     }
 
     /**
-     * Implicit route binding by id: a non-numeric segment (a slug where an id belongs) is simply not found.
-     * PostgreSQL raises 22P02 (500) for `id = 'a-slug'` where MySQL and sqlite quietly match nothing (404).
+     * Implicit route binding by id or slug: numeric segments (< 19 digits)
+     * resolve by primary key; slugs resolve ONLY on public storefront routes
+     * so owner/dashboard/admin/API routes stay id-only.
+     * PostgreSQL raises 22P02 (500) for `id = 'a-slug'`, so the id branch is
+     * taken only for safe positive-integer-length digit strings.
      */
     public function resolveRouteBinding($value, $field = null)
     {
-        if ($field === null && (! ctype_digit((string) $value) || strlen((string) $value) >= 19)) {
-            return null;
+        if ($field !== null) {
+            return parent::resolveRouteBinding($value, $field);
         }
 
-        return parent::resolveRouteBinding($value, $field);
+        $str = (string) $value;
+        if (ctype_digit($str) && strlen($str) < 19) {
+            return $this->where($this->getKeyName(), $value)->first();
+        }
+
+        if ($this->allowsSlugRouteBinding()) {
+            return $this->where('slug', $str)->first();
+        }
+
+        return null;
+    }
+
+    /** Public storefront routes that accept `{store}` as a slug. */
+    private function allowsSlugRouteBinding(): bool
+    {
+        $route = request()->route();
+        if ($route === null) {
+            return false;
+        }
+
+        $uri = ltrim($route->uri(), '/');
+        if (str_starts_with($uri, '{locale}/')) {
+            $uri = substr($uri, strlen('{locale}/'));
+        }
+
+        // store.applyCoupon binds by numeric id only (SendOrderContractTest).
+        if ($uri === '{store}/coupon') {
+            return false;
+        }
+
+        return str_starts_with($uri, '{store}/')
+            || str_starts_with($uri, 'r/{store}/')
+            || str_starts_with($uri, 'auth/social/customer/{store}/');
     }
 
     /**

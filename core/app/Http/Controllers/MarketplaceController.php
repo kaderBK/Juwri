@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\StoreOption;
 use App\Models\Theme;
 use App\Models\ThemeVersion;
+use App\Services\Theme\ThemeSets;
 use App\Services\ThemePurchaseService;
 use App\Support\SearchTerm;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Juwri\Core\Models\Language;
 use Juwri\Core\Models\Store;
 use Juwri\Modules\AppStore\Http\Controllers\MarketplaceReviewController;
 use Juwri\Modules\Storefront\Services\Rendering\LiquidRenderer;
+use Juwri\Modules\Storefront\Services\ThemeStudio\Recipes;
 use Juwri\Modules\Storefront\Storefront\CommerceRuntime;
 use Juwri\Modules\Storefront\Storefront\DemoStorefront;
 use Juwri\Modules\Storefront\Storefront\MarketplaceThemeResolver;
@@ -33,7 +35,7 @@ use Juwri\Modules\Storefront\Storefront\ThemeSettingValues;
  */
 class MarketplaceController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, ?string $themeSet = null)
     {
         $industriesVocab = config('marketplace.theme_industries');
 
@@ -43,12 +45,35 @@ class MarketplaceController extends Controller
         $sort = (string) $request->query('sort', 'featured');
         $minRating = (int) $request->query('min_rating', 0);                  // 0=any | 2 | 3 | 4
 
+        // The theme SET (food | retail | service | hotel | …) scopes the
+        // catalogue to the stores it can actually serve. The public
+        // marketplace shows every theme by default and can be scoped with
+        // ?set=<set>; the owner dashboard's Theme Store passes the ACTIVE
+        // store's set, so a clothing store is offered clothing themes and
+        // never a restaurant's. null = no scoping.
+        $sets = app(ThemeSets::class);
+        $themeSet = $themeSet ?? $request->query('set');
+        $themeSet = is_string($themeSet) ? trim($themeSet) : '';
+        if ($themeSet !== '') {
+            // A set the platform does not know is a 404, not an empty
+            // catalogue: a typo in a shared link should say so.
+            abort_unless($sets->isKnown($themeSet), 404);
+        } else {
+            $themeSet = null;
+        }
+
+        $applySet = fn ($query) => $themeSet === null ? $query : $query->where('theme_set', $themeSet);
+
         // A fresh base builder each call: published themes that actually have a
         // published version, honouring the text search. Facets clone off this.
-        $base = fn () => Theme::query()
+        // The SET is applied on top of it (see $applySet), so the set facet can
+        // count every set and not only the selected one.
+        $baseQuery = fn () => Theme::query()
             ->where('status', 'published')
             ->whereHas('versions', fn ($v) => $v->where('status', 'published'))
             ->when(SearchTerm::clean($q) !== '', fn ($query) => SearchTerm::apply($query, ['name', 'tagline', 'slug'], $q));
+
+        $base = fn () => $applySet($baseQuery());
 
         $applyPrice = fn ($query) => match ($price) {
             'free' => $query->where('price_minor', '<=', 0), // P1-05: the sign is the same in minor units
@@ -68,6 +93,15 @@ class MarketplaceController extends Controller
         $freeCount = (int) $applyIndustry($base())->where('price_minor', '<=', 0)->count();
         $paidCount = (int) $applyIndustry($base())->where('price_minor', '>', 0)->count();
 
+        // The SET facet — how many themes each store family holds. It counts
+        // from the UNSET base, so every set shows its own number whatever is
+        // selected (a facet that ignores only its own selection).
+        $setCounts = [];
+        foreach ($sets->all() as $setKey => $setLabel) {
+            $setCounts[$setKey] = (int) $applyIndustry($applyPrice($baseQuery()))
+                ->where('theme_set', $setKey)->count();
+        }
+
         // The result set: base + both filters, sorted.
         $results = $applyIndustry($applyPrice($base()))
             ->when($minRating > 0, fn ($query) => $query->where('rating_avg', '>=', $minRating))
@@ -86,6 +120,8 @@ class MarketplaceController extends Controller
             'total' => $results->count(),
             'industries' => $industriesVocab,
             'industryCounts' => $industryCounts,
+            'themeSets' => $sets->all(),
+            'setCounts' => $setCounts,
             'freeCount' => $freeCount,
             'paidCount' => $paidCount,
             'q' => $q,
@@ -93,6 +129,7 @@ class MarketplaceController extends Controller
             'industry' => $industry,
             'sort' => $sort,
             'minRating' => $minRating,
+            'themeSet' => $themeSet,
             'siteName' => brand_title(),
         ]);
     }
@@ -219,6 +256,18 @@ class MarketplaceController extends Controller
             return response()->json(['ok' => true, 'template' => $tpl]);
         }
 
+        // The theme SET is the offerability rule: a retail theme (clothing)
+        // belongs to a retail store, a food theme to a restaurant. Same rule
+        // the Blade picker enforces in ThemeCustomizerController::setTemplate —
+        // a store cannot switch itself onto a theme from another vertical.
+        // A store that already runs THIS theme keeps it: a theme installed
+        // before the sets existed carries the default set, and locking its
+        // owner out of their own storefront would be the worse bug.
+        $currentTemplate = (string) StoreOption::getStoreOption($store->id, 'store_template', '');
+        if (! $theme->fitsStore($store->store_type ?? null, $currentTemplate)) {
+            abort(422, ___('This theme is for a different kind of store.'));
+        }
+
         StoreOption::updateStoreOption($store->id, 'store_template', 'mp:'.$theme->slug.'@'.$version->semver);
 
         return response()->json(['ok' => true, 'template' => 'mp:'.$theme->slug.'@'.$version->semver]);
@@ -264,7 +313,23 @@ class MarketplaceController extends Controller
         );
         abort_unless($mpTheme, 404);
 
-        $vars = DemoStorefront::vars();
+        // The preview dataset follows the THEME's own recipe vertical, not the
+        // restaurant default: a clothing theme (recipe clothing/default) has to
+        // preview against a GOODS store — Demo Market with tees, hoodies and a
+        // size × colour variant matrix — or the buyer sees a restaurant and
+        // concludes the theme is a food theme. Recipes::DEMO_DATASET maps the
+        // recipe's vertical to the dataset that exercises it (clothing → retail).
+        $recipeVertical = null;
+        $recipeId = (string) ($mpTheme->manifest()['recipe'] ?? '');
+        if ($recipeId !== '') {
+            $recipe = Recipes::find($recipeId);
+            $recipeVertical = is_array($recipe) ? (string) ($recipe['vertical'] ?? null) : null;
+        }
+        $dataset = $recipeVertical !== null
+            ? (Recipes::DEMO_DATASET[$recipeVertical] ?? 'restaurant')
+            : 'restaurant';
+
+        $vars = DemoStorefront::vars($dataset);
         $vars['settings'] = ThemeSettingValues::resolve($mpTheme); // B0.3: schema defaults
 
         // Theme Studio B0.4: ?lang=<code> previews any demo language (Arabic →

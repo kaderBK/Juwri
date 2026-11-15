@@ -5,6 +5,7 @@
 namespace Juwri\Modules\Storefront\Services\ViewModel;
 
 use App\Models\MenuCategory;
+use App\Services\PlanMenuVisibility;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Juwri\Core\Models\Store;
@@ -65,9 +66,15 @@ final class CatalogPresenter
      */
     public function catalog(Collection $items): array
     {
+        [$items, $publishedCategories] = PlanMenuVisibility::applyFlat(
+            $items,
+            $this->catalog->categories($this->store),
+            $this->store->user,
+        );
+
         $byCategory = $items->groupBy(fn (Menu $m) => (int) $m->category_id);
         $categories = [];
-        foreach ($this->catalog->categories($this->store) as $category) {
+        foreach ($publishedCategories as $category) {
             /** @var MenuCategory $category */
             $ids = ($byCategory[(int) $category->id] ?? collect())->map(fn (Menu $m) => (string) $m->public_id)->values()->all();
             if ($ids === [] || $category->public_id === null) {

@@ -43,6 +43,7 @@ class QueueRoutingServiceProvider extends ServiceProvider
         return [
             'App\\Jobs\\RunThemeLighthouseGate' => self::HEAVY,
             'App\\Jobs\\DeleteUsersJob' => self::HEAVY, // P6-119e bulk user delete
+            'App\\Jobs\\DispatchMerchantCampaign' => self::HEAVY,
             'Juwri\\Core\\Jobs\\GenerateStoreBackupJob' => self::HEAVY,
             'Juwri\\Core\\Jobs\\BuildAccountExportJob' => self::HEAVY, // P4-07 owner account export
             'Juwri\\Modules\\Content\\Jobs\\GenerateBlogPostJob' => $blog,

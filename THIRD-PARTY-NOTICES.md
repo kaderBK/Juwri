@@ -660,23 +660,24 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | @img/sharp-win32-arm64 | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later |
 | @img/sharp-win32-ia32 | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later |
 | @img/sharp-win32-x64 | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later |
-| @next/env | 15.5.29 | MIT |
-| @next/swc-darwin-arm64 | 15.5.29 | MIT |
-| @next/swc-darwin-x64 | 15.5.29 | MIT |
-| @next/swc-linux-arm64-gnu | 15.5.29 | MIT |
-| @next/swc-linux-arm64-musl | 15.5.29 | MIT |
-| @next/swc-linux-x64-gnu | 15.5.29 | MIT |
-| @next/swc-linux-x64-musl | 15.5.29 | MIT |
-| @next/swc-win32-arm64-msvc | 15.5.29 | MIT |
-| @next/swc-win32-x64-msvc | 15.5.29 | MIT |
-| @swc/helpers | 0.5.15 | Apache-2.0 |
+| @next/env | 16.4.6 | MIT |
+| @next/swc-darwin-arm64 | 16.4.6 | MIT |
+| @next/swc-darwin-x64 | 16.4.6 | MIT |
+| @next/swc-linux-arm64-gnu | 16.4.6 | MIT |
+| @next/swc-linux-arm64-musl | 16.4.6 | MIT |
+| @next/swc-linux-x64-gnu | 16.4.6 | MIT |
+| @next/swc-linux-x64-musl | 16.4.6 | MIT |
+| @next/swc-win32-arm64-msvc | 16.4.6 | MIT |
+| @next/swc-win32-x64-msvc | 16.4.6 | MIT |
+| @swc/helpers | 0.5.23 | Apache-2.0 |
+| baseline-browser-mapping | 2.11.37 | Apache-2.0 |
 | caniuse-lite | 1.0.30001826 | CC-BY-4.0 |
 | client-only | 0.0.1 | MIT |
 | detect-libc | 2.1.2 | Apache-2.0 |
 | nanoid | 3.3.20 | MIT |
-| next | 15.5.29 | MIT |
+| next | 16.4.6 | MIT |
 | picocolors | 1.1.1 | ISC |
-| postcss | 8.4.31 | MIT |
+| postcss | 8.5.23 | MIT |
 | react | 19.3.1 | MIT |
 | react-dom | 19.3.1 | MIT |
 | scheduler | 0.28.0 | MIT |
@@ -689,7 +690,24 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 
 | Package | Version | Licence |
 |---|---|---|
+| @babel/code-frame | 7.29.7 | MIT |
+| @babel/compat-data | 7.29.7 | MIT |
+| @babel/core | 7.29.13 | MIT |
+| @babel/generator | 7.29.14 | MIT |
+| @babel/helper-compilation-targets | 7.29.13 | MIT |
+| @babel/helper-globals | 7.29.7 | MIT |
+| @babel/helper-module-imports | 7.29.7 | MIT |
+| @babel/helper-module-transforms | 7.29.14 | MIT |
+| @babel/helper-string-parser | 7.29.14 | MIT |
+| @babel/helper-validator-identifier | 7.29.7 | MIT |
+| @babel/helper-validator-option | 7.29.7 | MIT |
+| @babel/helpers | 7.29.14 | MIT |
+| @babel/parser | 7.29.14 | MIT |
+| @babel/template | 7.29.7 | MIT |
+| @babel/traverse | 7.29.14 | MIT |
+| @babel/types | 7.29.14 | MIT |
 | @eslint-community/eslint-utils | 4.10.1 | MIT |
+| @eslint-community/eslint-utils | 4.9.1 | MIT |
 | @eslint-community/regexpp | 4.12.3 | MIT |
 | @eslint/config-array | 0.21.2 | Apache-2.0 |
 | @eslint/config-helpers | 0.4.2 | Apache-2.0 |
@@ -703,13 +721,17 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | @humanfs/types | 0.15.0 | Apache-2.0 |
 | @humanwhocodes/module-importer | 1.0.1 | Apache-2.0 |
 | @humanwhocodes/retry | 0.4.3 | Apache-2.0 |
-| @next/eslint-plugin-next | 15.5.29 | MIT |
+| @jridgewell/gen-mapping | 0.3.13 | MIT |
+| @jridgewell/remapping | 2.3.5 | MIT |
+| @jridgewell/resolve-uri | 3.1.3 | MIT |
+| @jridgewell/sourcemap-codec | 1.6.0 | MIT |
+| @jridgewell/trace-mapping | 0.3.31 | MIT |
+| @next/eslint-plugin-next | 16.4.6 | MIT |
 | @nodelib/fs.scandir | 2.1.5 | MIT |
 | @nodelib/fs.stat | 2.0.5 | MIT |
 | @nodelib/fs.walk | 1.2.8 | MIT |
 | @nolyfill/is-core-module | 1.0.39 | MIT |
 | @rtsao/scc | 1.1.0 | MIT |
-| @rushstack/eslint-patch | 1.16.1 | MIT |
 | @types/estree | 1.0.10 | MIT |
 | @types/json-schema | 7.0.15 | MIT |
 | @types/json5 | 0.0.29 | MIT |
@@ -768,6 +790,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | brace-expansion | 1.1.22 | MIT |
 | brace-expansion | 5.0.13 | MIT |
 | braces | 3.0.3 | MIT |
+| browserslist | 4.29.5 | MIT |
 | call-bind | 1.0.9 | MIT |
 | call-bind-apply-helpers | 1.0.2 | MIT |
 | call-bound | 1.0.4 | MIT |
@@ -776,6 +799,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | color-convert | 2.0.1 | MIT |
 | color-name | 1.1.4 | MIT |
 | concat-map | 0.0.1 | MIT |
+| convert-source-map | 2.0.0 | MIT |
 | cross-spawn | 7.0.6 | MIT |
 | damerau-levenshtein | 1.0.8 | BSD-2-Clause |
 | data-view-buffer | 1.0.2 | MIT |
@@ -788,6 +812,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | define-properties | 1.2.1 | MIT |
 | doctrine | 2.1.0 | Apache-2.0 |
 | dunder-proto | 1.0.1 | MIT |
+| electron-to-chromium | 1.5.486 | ISC |
 | emoji-regex | 9.2.2 | MIT |
 | es-abstract | 1.24.2 | MIT |
 | es-abstract-get | 1.0.0 | MIT |
@@ -798,16 +823,17 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | es-set-tostringtag | 2.1.0 | MIT |
 | es-shim-unscopables | 1.1.0 | MIT |
 | es-to-primitive | 1.3.4 | MIT |
+| escalade | 3.2.0 | MIT |
 | escape-string-regexp | 4.0.0 | MIT |
 | eslint | 9.39.5 | MIT |
-| eslint-config-next | 15.5.29 | MIT |
+| eslint-config-next | 16.4.6 | MIT |
 | eslint-import-resolver-node | 0.3.10 | MIT |
 | eslint-import-resolver-typescript | 3.10.1 | ISC |
 | eslint-module-utils | 2.14.0 | MIT |
 | eslint-plugin-import | 2.32.0 | MIT |
 | eslint-plugin-jsx-a11y | 6.10.2 | MIT |
 | eslint-plugin-react | 7.37.5 | MIT |
-| eslint-plugin-react-hooks | 5.2.0 | MIT |
+| eslint-plugin-react-hooks | 7.1.1 | MIT |
 | eslint-scope | 8.4.0 | BSD-2-Clause |
 | eslint-visitor-keys | 3.4.3 | Apache-2.0 |
 | eslint-visitor-keys | 4.2.1 | Apache-2.0 |
@@ -833,6 +859,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | function.prototype.name | 1.2.0 | MIT |
 | functions-have-names | 1.2.3 | MIT |
 | generator-function | 2.0.1 | MIT |
+| gensync | 1.0.0-beta.2 | MIT |
 | get-intrinsic | 1.3.0 | MIT |
 | get-proto | 1.0.1 | MIT |
 | get-symbol-description | 1.1.0 | MIT |
@@ -840,6 +867,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | glob-parent | 5.1.2 | ISC |
 | glob-parent | 6.0.2 | ISC |
 | globals | 14.0.0 | MIT |
+| globals | 16.4.0 | MIT |
 | globalthis | 1.0.4 | MIT |
 | gopd | 1.2.0 | MIT |
 | has-bigints | 1.1.0 | MIT |
@@ -849,6 +877,8 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | has-symbols | 1.1.0 | MIT |
 | has-tostringtag | 1.0.2 | MIT |
 | hasown | 2.0.4 | MIT |
+| hermes-estree | 0.25.1 | MIT |
+| hermes-parser | 0.25.1 | MIT |
 | ignore | 5.3.2 | MIT |
 | ignore | 7.0.14 | MIT |
 | import-fresh | 3.3.1 | MIT |
@@ -886,10 +916,12 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | iterator.prototype | 1.1.5 | MIT |
 | js-tokens | 4.0.0 | MIT |
 | js-yaml | 4.3.2 | MIT |
+| jsesc | 3.1.0 | MIT |
 | json-buffer | 3.0.1 | MIT |
 | json-schema-traverse | 0.4.1 | MIT |
 | json-stable-stringify-without-jsonify | 1.0.1 | MIT |
 | json5 | 1.0.2 | MIT |
+| json5 | 2.2.3 | MIT |
 | jsx-ast-utils | 3.3.5 | MIT |
 | keyv | 4.5.4 | MIT |
 | language-subtag-registry | 0.3.23 | CC0-1.0 |
@@ -898,6 +930,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | locate-path | 6.0.0 | MIT |
 | lodash.merge | 4.6.2 | MIT |
 | loose-envify | 1.4.0 | MIT |
+| lru-cache | 5.1.1 | ISC |
 | math-intrinsics | 1.1.0 | MIT |
 | merge2 | 1.4.1 | MIT |
 | micromatch | 4.0.8 | MIT |
@@ -908,6 +941,7 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | napi-postinstall | 0.3.8 | MIT |
 | natural-compare | 1.4.0 | MIT |
 | node-exports-info | 1.6.2 | MIT |
+| node-releases | 2.0.64 | MIT |
 | object-assign | 4.1.1 | MIT |
 | object-inspect | 1.13.4 | MIT |
 | object-keys | 1.1.1 | MIT |
@@ -975,8 +1009,10 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | typed-array-byte-offset | 1.0.5 | MIT |
 | typed-array-length | 1.0.8 | MIT |
 | typescript | 6.0.3 | Apache-2.0 |
+| typescript-eslint | 8.72.2 | MIT |
 | unbox-primitive | 1.1.0 | MIT |
 | unrs-resolver | 1.13.0 | MIT |
+| update-browserslist-db | 1.3.4 | MIT |
 | uri-js | 4.4.1 | BSD-2-Clause |
 | which | 2.0.2 | ISC |
 | which-boxed-primitive | 1.1.1 | MIT |
@@ -984,7 +1020,10 @@ GPL-3.0 with font exception; AE fonts: GPL-2.0) as unused data files; no juwri c
 | which-collection | 1.0.2 | MIT |
 | which-typed-array | 1.1.24 | MIT |
 | word-wrap | 1.2.5 | MIT |
+| yallist | 3.1.1 | ISC |
 | yocto-queue | 0.1.0 | MIT |
+| zod | 4.6.7 | MIT |
+| zod-validation-error | 4.0.2 | MIT |
 
 ## JavaScript packages (npm): tools/themes/conformance, runtime
 

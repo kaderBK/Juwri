@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Juwri\Core\Money\Money;
+use Juwri\Core\Support\StripeManagedPayments;
 use Juwri\Modules\Payments\Contracts\OrderPaymentHandler;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Services\Disputes\DisputeService;
@@ -92,6 +93,20 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         $sessionId = (string) $request->input('payment_id', '');
         $transaction = $sessionId === '' ? null : Settlement::pending(['payment_id' => $sessionId]);
         if ($transaction === null) {
+            $already = $sessionId === '' ? null : Transaction::query()
+                ->where('payment_id', $sessionId)
+                ->where('status', Transaction::STATUS_SUCCESS)
+                ->first();
+            if ($already !== null && ! Settlement::usesStoreGateway($already)) {
+                app_alert_success(___('Payment successful'));
+
+                return redirect()->to(AccountPages::url(match ($already->transaction_method) {
+                    'wallet_topup' => 'wallet.index',
+                    'credit_pack' => 'credits.index',
+                    default => 'subscription',
+                }));
+            }
+
             return Settlement::invalid();
         }
 
@@ -104,6 +119,10 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 return $this->authorised((array) $session, $transaction) || (string) $transaction->fresh()?->status === CardHolds::STATUS_AUTHORISED
                     ? response(app(OrderPaymentHandler::class)->buyerPage($transaction->fresh() ?? $transaction))
                     : Settlement::failed();
+            }
+
+            if (($session['status'] ?? null) === 'complete' && ($session['payment_status'] ?? null) === 'unpaid') {
+                return Settlement::confirmingForBuyer($transaction);
             }
 
             if (! $this->sessionSettles($session, $transaction)) {
@@ -165,8 +184,12 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 return $this->answer(200, 'dispute recorded');
             }
 
-            if ($type === 'checkout.session.completed' && is_array($object)) {
+            if (in_array($type, ['checkout.session.completed', 'checkout.session.async_payment_succeeded'], true) && is_array($object)) {
                 $this->sessionCompleted($object);
+            }
+
+            if ($type === 'checkout.session.async_payment_failed' && is_array($object)) {
+                $this->sessionFailed($object);
             }
 
             if ($type === 'payment_intent.succeeded' && is_array($object)) {
@@ -382,8 +405,9 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
     {
         $currency = $this->currencyFor($transaction);
         $title = Settlement::title($transaction);
+        $managed = ! Settlement::usesStoreGateway($transaction) && StripeManagedPayments::enabled();
 
-        $session = $this->client($secret)->post('/checkout/sessions', [
+        $payload = StripeManagedPayments::session([
             'mode' => 'payment',
             'payment_method_types' => ['card'],
             'client_reference_id' => (string) $transaction->id,
@@ -392,12 +416,21 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
                 'price_data' => [
                     'currency' => strtolower($currency),
                     'unit_amount' => $this->chargeableMinor($transaction, $currency),
-                    'product_data' => ['name' => $title, 'description' => $title],
+                    'product_data' => StripeManagedPayments::product(
+                        ['name' => $title, 'description' => $title],
+                        StripeManagedPayments::TAX_SAAS_BUSINESS,
+                        $managed,
+                    ),
                 ],
             ]],
             'success_url' => route('ipn', 'stripe').'?payment_id={CHECKOUT_SESSION_ID}&pay_mode=one_time',
             'cancel_url' => Settlement::cancelUrl($transaction),
-        ] + (self::holdsCard($transaction) ? ['payment_intent_data' => ['capture_method' => 'manual']] : []))->throw()->json();
+        ], $managed);
+
+        $session = $this->client($secret, $managed)
+            ->post('/checkout/sessions', $payload + (self::holdsCard($transaction) ? ['payment_intent_data' => ['capture_method' => 'manual']] : []))
+            ->throw()
+            ->json();
 
         $transaction->update(['payment_id' => $session['id']]);
 
@@ -411,16 +444,26 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
      */
     private function startSubscription(Transaction $transaction, string $secret): string
     {
-        $client = $this->client($secret);
+        $managed = ! Settlement::usesStoreGateway($transaction) && StripeManagedPayments::enabled();
+        $client = $this->client($secret, $managed);
         $currency = $this->currencyFor($transaction);
         $amount = $this->chargeableMinor($transaction, $currency);
         $productId = $this->productKey($transaction);
 
         $product = $client->get('/products/'.rawurlencode($productId));
         if ($product->status() === 404) {
-            $client->post('/products', ['id' => $productId, 'name' => (string) $transaction->product_name])->throw();
-        } elseif (($product->throw()->json('name')) !== $transaction->product_name) {
-            $client->post('/products/'.rawurlencode($productId), ['name' => (string) $transaction->product_name])->throw();
+            $client->post('/products', StripeManagedPayments::product([
+                'id' => $productId,
+                'name' => (string) $transaction->product_name,
+            ], StripeManagedPayments::TAX_SAAS_BUSINESS, $managed))->throw();
+        } else {
+            $existingProduct = $product->throw()->json();
+            $needsTax = $managed && ($existingProduct['tax_code'] ?? null) !== StripeManagedPayments::TAX_SAAS_BUSINESS;
+            if (($existingProduct['name'] ?? null) !== $transaction->product_name || $needsTax) {
+                $client->post('/products/'.rawurlencode($productId), StripeManagedPayments::product([
+                    'name' => (string) $transaction->product_name,
+                ], StripeManagedPayments::TAX_SAAS_BUSINESS, $managed))->throw();
+            }
         }
 
         $planId = $productId.'_'.$transaction->frequency.'_'.$amount.'_'.$currency;
@@ -439,7 +482,7 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         }
 
         $metadata = $this->metadata($transaction);
-        $session = $client->post('/checkout/sessions', [
+        $session = $client->post('/checkout/sessions', StripeManagedPayments::session([
             'mode' => 'subscription',
             'payment_method_types' => ['card'],
             'line_items' => [['price' => $planId, 'quantity' => 1]],
@@ -447,7 +490,7 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             'metadata' => $metadata,
             'success_url' => route('ipn', 'stripe').'?payment_id={CHECKOUT_SESSION_ID}&pay_mode=recurring',
             'cancel_url' => AccountPages::url(),
-        ])->throw()->json();
+        ], $managed))->throw()->json();
 
         $transaction->delete();
 
@@ -539,6 +582,26 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         } catch (\Throwable $e) {
             PaymentLog::settlementFailed('stripe', $e);
         }
+    }
+
+    /**
+     * Delayed payment method (e.g. bank debit) failed after the checkout session completed.
+     *
+     * @param  array<string, mixed>  $session
+     */
+    private function sessionFailed(array $session): void
+    {
+        if (($session['mode'] ?? null) !== 'payment' || empty($session['id'])) {
+            return;
+        }
+        $transaction = Settlement::pending(['payment_id' => (string) $session['id']]);
+        if ($transaction === null) {
+            return;
+        }
+        Transaction::query()
+            ->whereKey($transaction->getKey())
+            ->whereNull('status')
+            ->update(['status' => Transaction::STATUS_FAILED]);
     }
 
     /**
@@ -750,9 +813,13 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         return array_any($signatures, fn ($signature) => hash_equals($expected, $signature));
     }
 
-    private function client(string $secret): PendingRequest
+    private function client(string $secret, bool $managedPayments = false): PendingRequest
     {
-        return Http::baseUrl(self::API)->withToken($secret)->asForm()->acceptJson()->timeout(30);
+        $client = Http::baseUrl(self::API)->withToken($secret)->asForm()->acceptJson()->timeout(30);
+
+        return $managedPayments
+            ? $client->withHeaders(['Stripe-Version' => StripeManagedPayments::API_VERSION])
+            : $client;
     }
 
     private function answer(int $status, string $message): JsonResponse

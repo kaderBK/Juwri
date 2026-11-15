@@ -28,6 +28,7 @@ final class GatewaySettings
             'stripe_publishable_key',
             'stripe_secret_key',
             'stripe_webhook_secret',
+            'stripe_managed_payments',
         ],
         'wire_transfer' => [
             'company_bank_info',

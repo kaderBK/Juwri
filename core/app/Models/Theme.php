@@ -4,10 +4,11 @@
 
 namespace App\Models;
 
+use App\Services\Theme\ThemeSets;
 use Illuminate\Database\Eloquent\Model;
+use Juwri\Core\Models\User;
 use Juwri\Core\Money\Concerns\HasMinorMoney;
 use Juwri\Core\Money\MinorMoneyModel;
-use Juwri\Core\Models\User;
 use Juwri\Modules\AppStore\Models\MarketplaceReview;
 
 /**
@@ -48,6 +49,85 @@ class Theme extends Model implements MinorMoneyModel
     public function demoUrl(): ?string
     {
         return $this->demo_slug ? url('/'.$this->demo_slug) : null;
+    }
+
+    /**
+     * The theme set a manifest targets — the vertical family a store must be
+     * in for the theme to be offered to it.
+     *
+     * The vertical comes from the manifest's own `vertical` key, or from the
+     * recipe id it names ("clothing/default" → clothing), and the set from
+     * the vertical registry (config/verticals.php: clothing.themes = retail).
+     * A manifest with neither is a food theme — that is where every
+     * marketplace theme sat before the sets were registered.
+     *
+     * Any vertical works: a theme for a pharmacy, a hotel or a laundry
+     * store registers its own set the same way.
+     *
+     * @param  array<string,mixed>  $manifest
+     */
+    public static function setForManifest(array $manifest): string
+    {
+        $vertical = is_string($manifest['vertical'] ?? null) ? trim($manifest['vertical']) : '';
+        if ($vertical === '') {
+            $recipe = is_string($manifest['recipe'] ?? null) ? $manifest['recipe'] : '';
+            if (str_contains($recipe, '/')) {
+                $vertical = trim(explode('/', $recipe)[0]);
+            }
+        }
+        if ($vertical === '') {
+            return ThemeSets::DEFAULT;
+        }
+
+        return app(ThemeSets::class)->forVertical($vertical);
+    }
+
+    /**
+     * Is this theme offered to a store of the given vertical? The offerability
+     * rule: a retail theme is for retail stores, a food theme for restaurants.
+     *
+     * A store that ALREADY runs this theme keeps it (grandfathered): a theme
+     * installed before the sets existed carries the default set, and locking
+     * its owner out of their own storefront would be a worse bug than the
+     * mis-filed set. This guards a fresh switch only.
+     */
+    public function fitsStore(?string $storeType, ?string $currentTemplate = null): bool
+    {
+        if ($currentTemplate !== null && $this->runsOn($currentTemplate)) {
+            return true;
+        }
+
+        return (string) $this->theme_set === app(ThemeSets::class)->forStoreType($storeType);
+    }
+
+    /**
+     * Does this theme already run on the given template value?
+     *
+     * The template value is whatever the store's `store_template` option
+     * holds: a marketplace theme is "mp:<slug>@<version>", a Blade theme the
+     * plain slug.
+     */
+    public function runsOn(string $currentTemplate): bool
+    {
+        $current = trim($currentTemplate);
+        if ($current === '') {
+            return false;
+        }
+        if (str_starts_with($current, 'mp:')) {
+            $current = substr($current, 3);
+        }
+
+        return explode('@', $current)[0] === $this->slug;
+    }
+
+    /**
+     * A human label for a theme set, so a retail theme says "Retail" on the
+     * catalogue card instead of passing for a restaurant's. Null for the
+     * default set (food) — that one needs no badge.
+     */
+    public static function setLabel(?string $set): ?string
+    {
+        return app(ThemeSets::class)->label($set);
     }
 
     /**

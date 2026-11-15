@@ -17,6 +17,7 @@ use Juwri\Modules\Storefront\Database\Seeders\ThemeShowcaseSeeder;
 use Juwri\Modules\Storefront\Database\Seeders\VerticalShowcaseSeeder;
 use Juwri\Modules\Storefront\Services\ViewModel\OrderTypeKeys;
 use Juwri\Modules\Storefront\Services\ViewModel\ViewModelJson;
+use Tests\Support\TestPlans;
 use Tests\Support\ViewModelScenario;
 use Tests\TestCase;
 
@@ -77,7 +78,19 @@ class ViewModelGoldenTest extends TestCase
 
     private function golden(ViewModelScenario $s, bool $booking = false): void
     {
-        // The showcase demo account has no paid plan in a test database: grant ordering like a live demo has it.
+        // The showcase demo account has no paid plan in a test database: grant ordering and unlimited menu limits like a live demo has it.
+        if ($s->theme === 'table') {
+            $plan = TestPlans::create([
+                'name' => 'Demo', 'description' => 'Demo',
+                'monthly_price' => 1, 'annual_price' => 1, 'lifetime_price' => 1,
+                'settings' => [
+                    'restaurant_limit' => 999, 'category_limit' => 999, 'menu_limit' => 999,
+                    'allow_ordering' => 1,
+                ],
+                'status' => 1,
+            ]);
+            $s->store->user->update(['group_id' => (string) $plan->id]);
+        }
         EntitlementOverride::updateOrCreate(
             ['user_id' => $s->store->user_id, 'feature_key' => 'allow_ordering'],
             ['value' => '1', 'source_type' => 'admin']

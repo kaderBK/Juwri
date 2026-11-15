@@ -44,6 +44,7 @@ final class CoreStoreData extends StoreData
             // P1-23: legal document acceptances (contract evidence): exported with the account, kept when the owner
             // is anonymised, removed only by the hard erasure of the whole account.
             StoreTable::account('legal_acceptances'),
+            StoreTable::platform('merchant_campaign_sends', 'platform merchant email campaign send log; never exported or copied'),
             StoreTable::owned('oauth_access_tokens')->notExported(),
             StoreTable::owned('oauth_auth_codes')->notExported(),
             StoreTable::owned('oauth_clients')->notExported(),

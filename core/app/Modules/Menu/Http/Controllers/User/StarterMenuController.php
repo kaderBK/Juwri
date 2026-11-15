@@ -34,6 +34,16 @@ class StarterMenuController extends Controller
             return back()->with('starter_error', ___('This menu already has items, so the template was not added.'));
         }
 
+        // The preset is clamped to the owner's plan — say so rather than
+        // letting the merchant wonder why the template looks short. The
+        // warning banner reuses the existing plan-limits string, so it is
+        // translated like every other notice.
+        if (($result['skipped'] ?? 0) > 0) {
+            return back()
+                ->with('starter_success', ___('Your starter menu is ready — edit anything you like.'))
+                ->with('starter_error', ___('Limit exceeded, please upgrade your membership.'));
+        }
+
         return back()->with('starter_success', ___('Your starter menu is ready — edit anything you like.'));
     }
 }
