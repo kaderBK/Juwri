@@ -8,6 +8,7 @@ use App\Models\Upgrade;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Juwri\Core\Http\Controllers\Controller;
@@ -290,13 +291,28 @@ class LemonSqueezyController extends Controller
 
                     /* BL-038: the settled checkout row is marked, so the hourly cleanup keeps it for every
                        subscription_payment_success bound to it (before: deleted after 3 hours, each renewal refused). */
-                    $response = Fulfilment::webhook('lemon_squeezy', $customData, $payload->data->id ?? null, null);
-                    MorPaymentGuard::markSettled($response, $customData, null);
-                    // BL-038: subscription_created may have come first — stamp this payment with its subscription.
-                    $subscription = data_get(MorPaymentGuard::checkoutTransaction($customData)?->details, 'lemon_subscription_id');
-                    if ($response instanceof Response && $response->getStatusCode() === 200) {
-                        MorPaymentGuard::stampSubscription('lemon_squeezy', $payload->data->id ?? null, $subscription);
-                    }
+                    $orderId = (string) ($payload->data->id ?? '');
+                    /* BL-045 race: order_created and subscription_created can land within milliseconds. Both settle / park / pick up
+                       the subscription id for one order under the same lock and re-read state inside it, so the second one merges. */
+                    $response = self::withOrderLock($orderId, function () use ($customData, $payload, $orderId) {
+                        $response = Fulfilment::webhook('lemon_squeezy', $customData, $payload->data->id ?? null, null);
+                        MorPaymentGuard::markSettled($response, $customData, null);
+                        // BL-038 / BL-045: subscription_created may have come first — pick up the parked sub id once settled.
+                        $checkout = MorPaymentGuard::checkoutTransaction($customData);
+                        $parkedSub = $orderId !== '' ? Cache::pull("lemon_sub_for_order:{$orderId}") : null;
+                        $subscription = $parkedSub ?: data_get($checkout?->details, 'lemon_subscription_id');
+                        if ($response instanceof Response && $response->getStatusCode() === 200) {
+                            MorPaymentGuard::stampSubscription('lemon_squeezy', $payload->data->id ?? null, $subscription);
+                            $isAddon = ($customData->transaction_method ?? null) === 'addon'
+                                || data_get($checkout?->details, 'transaction_method') === 'addon';
+                            if ($subscription && ! $isAddon && $checkout?->user_id) {
+                                Upgrade::where('user_id', $checkout->user_id)
+                                    ->update(['unique_id' => 'lemon_squeezy###'.$subscription]);
+                            }
+                        }
+
+                        return $response;
+                    });
 
                     return self::settledOrAlerted($response, $payload->data->id ?? null);
 
@@ -309,18 +325,41 @@ class LemonSqueezyController extends Controller
                     $checkout = MorPaymentGuard::checkoutTransaction($customData);
                     $userId = $checkout?->user_id;
                     $subId = $payload->data->id ?? null;
+                    $orderId = (string) ($payload->data->attributes->order_id ?? '');
+                    $isAddon = ($customData->transaction_method ?? null) === 'addon'
+                        || data_get($checkout?->details, 'transaction_method') === 'addon';
 
-                    if ($userId && $subId) {
-                        Upgrade::where('user_id', $userId)
-                            ->update(['unique_id' => 'lemon_squeezy###'.$subId]);
-                        // BL-038: the first payment (its order) belongs to this subscription — renewals can be bound to it.
-                        MorPaymentGuard::stampSubscription('lemon_squeezy', $payload->data->attributes->order_id ?? null, $subId);
-                        // Also kept on the checkout row: when this arrives before order_created settled, that settlement
-                        // stamps its payment from here.
-                        $details = (array) json_decode((string) json_encode($checkout->details ?? []), true);
-                        $details['lemon_subscription_id'] = (string) $subId;
-                        $checkout->forceFill(['details' => $details])->save();
-                    }
+                    self::withOrderLock($orderId, function () use ($userId, $subId, $isAddon, $checkout, $orderId, $payload) {
+                        if ($userId && $subId) {
+                            // Re-read under the lock: order_created may have settled the row (status, details) since the read above.
+                            $checkout = $checkout->fresh() ?? $checkout;
+                            if (! $isAddon) {
+                                $checkoutSettled = in_array($checkout->status, [
+                                    Transaction::STATUS_SUCCESS,
+                                    Transaction::STATUS_RECURRING_SETUP,
+                                    Transaction::STATUS_CHECKOUT_SETTLED,
+                                ], true);
+                                $orderSettled = $checkoutSettled || ($orderId !== '' && Transaction::query()
+                                    ->where('transaction_gatway', 'lemon_squeezy')
+                                    ->where('payment_id', $orderId)
+                                    ->where('status', Transaction::STATUS_SUCCESS)
+                                    ->exists());
+                                if ($orderSettled) {
+                                    Upgrade::where('user_id', $userId)
+                                        ->update(['unique_id' => 'lemon_squeezy###'.$subId]);
+                                } elseif ($orderId !== '') {
+                                    Cache::put("lemon_sub_for_order:{$orderId}", (string) $subId, now()->addDays(7));
+                                }
+                            }
+                            // BL-038: the first payment (its order) belongs to this subscription — renewals can be bound to it.
+                            MorPaymentGuard::stampSubscription('lemon_squeezy', $payload->data->attributes->order_id ?? null, $subId);
+                            // Also kept on the checkout row: when this arrives before order_created settled, that settlement
+                            // stamps its payment from here.
+                            $details = (array) json_decode((string) json_encode($checkout->details ?? []), true);
+                            $details['lemon_subscription_id'] = (string) $subId;
+                            $checkout->forceFill(['details' => $details])->save();
+                        }
+                    });
 
                     return response()->json(['message' => 'subscription captured', 'status' => 200], 200);
 
@@ -395,5 +434,22 @@ class LemonSqueezyController extends Controller
                     return response()->json(['message' => 'ignored', 'status' => 200], 200);
             }
         }, fn () => response()->json(['message' => 'duplicate', 'status' => 200], 200));
+    }
+
+    /**
+     * Runs $fn under a per-order lock (BL-045 race fix). An empty order id has nothing to serialise on.
+     *
+     * @template T
+     *
+     * @param  \Closure(): T  $fn
+     * @return T
+     */
+    private static function withOrderLock(string $orderId, \Closure $fn): mixed
+    {
+        if ($orderId === '') {
+            return $fn();
+        }
+
+        return Cache::lock('lemon_order:'.$orderId, 30)->block(max(1, (int) config('settings.lemon_order_lock_wait_seconds', 10)), $fn);
     }
 }

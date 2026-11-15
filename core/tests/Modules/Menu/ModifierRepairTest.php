@@ -4,13 +4,13 @@
 
 namespace Tests\Modules\Menu;
 
-use Juwri\Modules\Menu\Models\Menu;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Juwri\Core\Models\Store;
-use Juwri\Core\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Juwri\Core\Models\Store;
+use Juwri\Core\Models\User;
+use Juwri\Modules\Menu\Models\Menu;
 use Tests\Support\TestPlans;
 use Tests\TestCase;
 
@@ -45,7 +45,11 @@ class ModifierRepairTest extends TestCase
         ]);
     }
 
-    /** A pre-fix line: picks in the note as text, options NULL. */
+    /**
+     * A pre-fix line: picks in the note as text, options NULL.
+     *
+     * @param  array<string, mixed>  $orderAttrs
+     */
     private function legacyOrder(string $note, int $qty = 1, array $orderAttrs = [], float $price = 10): Order
     {
         $order = Order::create(array_merge([
@@ -161,5 +165,29 @@ class ModifierRepairTest extends TestCase
 
         $this->assertIsArray($this->line($mine)->fresh()->options, 'the named store is repaired');
         $this->assertNull(OrderItem::where('order_id', $otherOrder->id)->first()->fresh()->options, 'another store is untouched');
+    }
+
+    public function test_report_totals_match_the_real_order_totals_including_tip_and_discount(): void
+    {
+        // Tip + discount feed Order::total; a restricted column load would drop them from the report.
+        $o = $this->legacyOrder('size: Large (+2.00)', qty: 2, orderAttrs: ['tip_amount' => 3, 'discount_amount' => 1], price: 10);
+        $untouched = $this->legacyOrder('plain note, no upcharge', qty: 1, price: 7);
+        $before = (float) $o->fresh()->total;
+        $untouchedTotal = (float) $untouched->fresh()->total;
+
+        $this->artisan('parity:modifier-repair', ['--store' => $this->store->id])
+            ->expectsOutputToContain(number_format($before, 2).' → '.number_format($before + 4.0, 2))
+            ->expectsOutputToContain('Total recovered  : 4.00')
+            ->assertExitCode(0);
+        $this->assertNull($this->line($o)->fresh()->options, 'dry run writes nothing');
+
+        $this->artisan('parity:modifier-repair', ['--store' => $this->store->id, '--commit' => true])
+            ->expectsOutputToContain(number_format($before, 2).' → '.number_format($before + 4.0, 2))
+            ->assertExitCode(0);
+
+        // The "after" the report promised is what the order really totals once written.
+        $this->assertEquals($before + 4.0, (float) $o->fresh()->total);
+        $this->assertEquals($untouchedTotal, (float) $untouched->fresh()->total);
+        $this->assertNull($this->line($untouched)->fresh()->options, 'unaffected order left alone');
     }
 }

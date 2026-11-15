@@ -187,6 +187,7 @@ class CitusReadinessGuardTest extends TestCase
         'storefront_tokens(token)',
         'stores(google_place_id)',
         'stores(public_id)',
+        'stores(slug)', // BL-047 (J77): store web addresses are globally unique by design
         'table_merge_members(group_id,table_id)',
         'table_sessions(token)',
         'team_channel_members(channel_id,staff_id)',

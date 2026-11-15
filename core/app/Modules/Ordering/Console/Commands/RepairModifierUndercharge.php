@@ -92,7 +92,15 @@ class RepairModifierUndercharge extends Command
             ->whereNull('options')
             ->whereLike('order_note', '%(+%')
             ->whereHas('order', fn ($q) => $q->where('store_id', $store))
-            ->with(['order:id,store_id,created_at,payment_gateway']);
+            // The FULL order row: the before/after totals in the report are derived from it
+            // (tip, discount, tax and offline columns all feed Order::total), so a restricted
+            // column list made them wrong. lazyById keeps the iteration memory-safe.
+            ->with('order');
+
+        /** @var array<int, array<int, array<int, array<string, mixed>>>> order id => [line id => snapshot] simulated so far */
+        $simulated = [];
+        /** @var array<int, array{before: float, after: float}> order id => real totals */
+        $orderTotals = [];
 
         foreach ($query->lazyById(200) as $item) {
             $order = $item->order;
@@ -114,13 +122,17 @@ class RepairModifierUndercharge extends Command
                 continue; // only free options on this line — nothing to recover
             }
 
-            $before = (float) $order->total;
+            // Real totals: now, and as they will be once every repaired line of this order is
+            // written (in memory only — nothing is saved here).
+            $simulated[$order->id][$item->id] = $snapshot;
+            $orderTotals[$order->id] ??= ['before' => (float) $order->total, 'after' => 0.0];
+            $orderTotals[$order->id]['after'] = $this->totalWithSnapshots($order, $simulated[$order->id]);
+
             $repaired[] = [
                 'order' => $order->id,
                 'line' => $item->id,
                 'qty' => (int) $item->quantity,
                 'recovered' => $unit * max(1, (int) $item->quantity),
-                'before' => $before,
                 'snapshot' => $snapshot,
                 'currency' => $item->minorMoneyCurrency(),
             ];
@@ -143,7 +155,7 @@ class RepairModifierUndercharge extends Command
             });
         }
 
-        $this->report($store, $repaired, $skipped, $commit, $touched);
+        $this->report($store, $repaired, $skipped, $commit, $touched, $orderTotals);
 
         // A skip is not a failure (it is reported for a human), but if EVERY
         // candidate was unparseable the operator should know the run did nothing.
@@ -187,6 +199,27 @@ class RepairModifierUndercharge extends Command
         return [array_values($groups), $unit, null];
     }
 
+    /**
+     * The order's total with the given reconstructed snapshots applied to their lines, in memory
+     * only. Goes through Order::total so tax, discount and fees are all accounted for.
+     *
+     * @param  array<int, array<int, array<string, mixed>>>  $snapshots  line id => snapshot
+     */
+    private function totalWithSnapshots(Order $order, array $snapshots): float
+    {
+        $copy = Order::query()->with(['items.menu', 'items.variant', 'items.itemExtras'])->find($order->id);
+        if (! $copy) {
+            return (float) $order->total;
+        }
+        foreach ($copy->items as $line) {
+            if (isset($snapshots[$line->id])) {
+                $line->options = LineOptionsSnapshot::toStorage($snapshots[$line->id], $line->minorMoneyCurrency());
+            }
+        }
+
+        return (float) $copy->total;
+    }
+
     private function inWindow(Order $order): bool
     {
         if (($since = $this->option('since')) && (string) $order->created_at < $since) {
@@ -204,7 +237,12 @@ class RepairModifierUndercharge extends Command
         return mb_strlen($v) > 40 ? mb_substr($v, 0, 39).'…' : $v;
     }
 
-    private function report(int $store, array $repaired, array $skipped, bool $commit, int $touched): void
+    /**
+     * @param  array<int, array<string, mixed>>  $repaired
+     * @param  array<int, array<string, mixed>>  $skipped
+     * @param  array<int, array{before: float, after: float}>  $orderTotals
+     */
+    private function report(int $store, array $repaired, array $skipped, bool $commit, int $touched, array $orderTotals = []): void
     {
         $ccy = (string) (store_options($store, 'currency_code') ?: '');
 
@@ -214,7 +252,7 @@ class RepairModifierUndercharge extends Command
                 $r['line'],
                 $r['qty'],
                 number_format($r['recovered'], 2),
-                number_format($r['before'], 2).' → '.number_format($r['before'] + $r['recovered'], 2),
+                number_format($orderTotals[$r['order']]['before'], 2).' → '.number_format($orderTotals[$r['order']]['after'], 2),
             ], array_slice($repaired, 0, 40));
             $this->table(['order', 'line', 'qty', 'recovered', 'total before → after'], $rows);
             if (count($repaired) > 40) {

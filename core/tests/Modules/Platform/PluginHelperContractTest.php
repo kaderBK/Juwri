@@ -54,10 +54,12 @@ class PluginHelperContractTest extends TestCase
         $this->assertSame('1.2', $alpha->version);
         $this->assertSame('v', $alpha->meta->k);   // nested manifest data becomes objects too
         $this->assertTrue($alpha->enabled);
-        foreach (glob(base_path('plugins/*'), GLOB_ONLYDIR) as $dir) {
-            if (is_file($dir.'/plugin.json') || is_file($dir.'/plugin.php')) {
-                $this->assertArrayHasKey(basename($dir), $installed);
-            }
+        // The plugins shipped in the repo. A glob of plugins/* is not safe here:
+        // parallel workers create and delete scratch folders there (wi09d*,
+        // manifesttest_<pid>, wi08test<pid>) between the call above and the
+        // check. Add new shipped plugins to this list.
+        foreach (['mediamanager', 'whatsapp-link', 'whatsapp-meta', 'whatsapp-twilio'] as $shipped) {
+            $this->assertArrayHasKey($shipped, $installed, "shipped plugin {$shipped} must be discovered");
         }
     }
 

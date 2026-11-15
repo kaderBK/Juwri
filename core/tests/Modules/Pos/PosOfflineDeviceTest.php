@@ -8,6 +8,7 @@ use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Models\StaffMember;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Juwri\Core\Models\User;
@@ -31,7 +32,10 @@ class PosOfflineDeviceTest extends TestCase
         $this->withoutMiddleware([Installed::class, PreventRequestForgery::class]);
     }
 
-    /** @return array{0: string, 1: string} device id, token */
+    /**
+     * @param  array<string, mixed>  $t
+     * @return array{0: string, 1: string} device id, token
+     */
     private function register(array $t, string $id = 'till-0001-abcdef'): array
     {
         $r = $this->asStaff($t['cashier'])->postJson(route('pos.offline.devices.register'), ['device_id' => $id, 'name' => 'Front till', 'platform' => 'web'])->assertCreated();
@@ -143,8 +147,8 @@ class PosOfflineDeviceTest extends TestCase
         [$b, $tb] = $this->register($t, 'till-bbbb-000002');
         $docA = $this->asStaff($t['cashier'])->withHeaders($this->h($a, $ta))->getJson(route('pos.offline.snapshot', ['branch' => $t['branch']->id]))->assertOk()->json();
         $docB = $this->asStaff($t['cashier'])->withHeaders($this->h($b, $tb))->getJson(route('pos.offline.snapshot', ['branch' => $t['branch']->id]))->assertOk()->json();
-        $va = collect($docA['device']['pin_verifiers'])->firstWhere('staff_id', $t['cashier']->id);
-        $vb = collect($docB['device']['pin_verifiers'])->firstWhere('staff_id', $t['cashier']->id);
+        $va = (array) collect((array) $docA['device']['pin_verifiers'])->firstWhere('staff_id', $t['cashier']->id);
+        $vb = (array) collect((array) $docB['device']['pin_verifiers'])->firstWhere('staff_id', $t['cashier']->id);
         $this->assertNotSame($va['verifier'], $vb['verifier'], 'a different pepper on every till');
         $this->assertSame($docA['hash'], $docB['hash'], 'the shared snapshot is the same; verifiers are outside the hash');
 
@@ -152,8 +156,11 @@ class PosOfflineDeviceTest extends TestCase
         $pepperA = (string) PosOfflineDevice::query()->where('device_id', $a)->first()->pepper;
         $this->assertSame($va['verifier'], hash_hmac('sha256', hash_pbkdf2('sha256', '4321', $va['salt'], $va['rounds'], 64), $pepperA));
         $this->assertNotSame($va['verifier'], hash_hmac('sha256', hash_pbkdf2('sha256', '1234', $va['salt'], $va['rounds'], 64), $pepperA));
+        $staffA = (array) collect((array) $docA['parts']['staff'])->firstWhere('id', $t['cashier']->id);
+        $this->assertSame(['id', 'name', 'permissions', 'pin_rev', 'role'], array_keys($staffA));
+        $this->assertSame(['staff_id', 'salt', 'rounds', 'verifier'], array_keys($va));
+        $this->assertNotContains('4321', Arr::dot($docA));
         $json = (string) json_encode($docA);
-        $this->assertStringNotContainsString('4321', $json);
         $this->assertStringNotContainsString((string) $t['cashier']->fresh()->pin_offline_kdf, $json, 'the verifier source never leaves the server');
         $this->assertNull($this->asStaff($t['cashier'])->getJson(route('pos.offline.snapshot', ['branch' => $t['branch']->id]))->json('device'), 'no till, no verifiers');
 

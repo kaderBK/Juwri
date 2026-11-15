@@ -4,6 +4,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\PartialPurgeException;
 use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Models\ActivityLog;
@@ -22,9 +23,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use Juwri\Core\Console\Commands\PurgeDeletedAccountsCommand;
 use Juwri\Core\Http\Middleware\Locale;
 use Juwri\Core\Models\AccountDeletion;
 use Juwri\Core\Models\Language;
+use Juwri\Core\Models\PlatformAlert;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Core\Support\OwnerApp;
@@ -494,23 +497,68 @@ class AccountDeletionTest extends TestCase
         $this->get('/'.$store->slug)->assertNotFound();
     }
 
+    /** Driver-neutral: make every UPDATE of the stores table fail (sqlite, mysql and pgsql alike). */
+    private function failStoreUpdates(): void
+    {
+        DB::listen(function ($query): void {
+            if (preg_match('/^\s*update\s+[`"]?stores[`"]?\s/i', $query->sql) === 1) {
+                throw new \RuntimeException('simulated store cleanup failure');
+            }
+        });
+    }
+
     public function test_a_failing_store_cleanup_still_anonymizes_the_owner_and_keeps_the_deletion_pending(): void
     {
         [$owner, $store] = $this->ownerWithData();
         $del = $this->deletionRow($owner, AccountDeletion::PENDING);
         $del->forceFill(['purge_after' => now()->subMinute()])->save();
-
-        DB::statement("CREATE TRIGGER fail_stores_update BEFORE UPDATE ON stores BEGIN SELECT RAISE(ABORT, 'simulated store cleanup failure'); END");
+        $this->failStoreUpdates();
 
         try {
-            $report = app(AccountDeletionService::class)->purge($del->fresh());
-        } finally {
-            DB::statement('DROP TRIGGER IF EXISTS fail_stores_update');
+            app(AccountDeletionService::class)->purge($del->fresh());
+            $this->fail('a partial purge must throw');
+        } catch (PartialPurgeException $e) {
+            $this->assertArrayHasKey($store->id, $e->report['failed_stores']);
         }
 
-        $this->assertArrayHasKey('failed_stores', $report);
+        $report = $del->fresh()->purge_report;
         $this->assertArrayHasKey($store->id, $report['failed_stores']);
         $this->assertSame(AccountDeletion::PENDING, $del->fresh()->status);
         $this->assertStringStartsWith('deleted+', (string) $owner->fresh()->email);
+    }
+
+    public function test_a_partial_purge_is_a_failed_attempt_with_an_alert_never_purged(): void
+    {
+        [$owner, $store] = $this->ownerWithData();
+        $del = $this->deletionRow($owner, AccountDeletion::PENDING);
+        $del->forceFill(['purge_after' => now()->subMinute()])->save();
+        $this->failStoreUpdates();
+
+        $this->artisan('accounts:purge-deleted')
+            ->doesntExpectOutputToContain('Purged account deletion')
+            ->expectsOutputToContain('Failed #'.$del->id.' (attempt 1/')
+            ->assertExitCode(1);
+
+        $fresh = $del->fresh();
+        $this->assertSame(AccountDeletion::PENDING, $fresh->status);
+        $this->assertSame(1, $fresh->purge_report['failed_attempts']);
+        $this->assertArrayHasKey($store->id, $fresh->purge_report['failed_stores']);
+        $this->assertSame(1, PlatformAlert::where('kind', 'account-deletion')->count());
+    }
+
+    public function test_a_partial_purge_stops_after_the_attempt_limit(): void
+    {
+        [$owner] = $this->ownerWithData();
+        $del = $this->deletionRow($owner, AccountDeletion::PENDING);
+        $del->forceFill(['purge_after' => now()->subMinute()])->save();
+        $this->failStoreUpdates();
+
+        for ($i = 1; $i <= PurgeDeletedAccountsCommand::MAX_ATTEMPTS; $i++) {
+            $this->artisan('accounts:purge-deleted')->assertExitCode(1);
+        }
+        $this->assertSame(AccountDeletion::FAILED, $del->fresh()->status);
+        $this->assertSame(PurgeDeletedAccountsCommand::MAX_ATTEMPTS, $del->fresh()->purge_report['failed_attempts']);
+
+        $this->artisan('accounts:purge-deleted')->assertExitCode(0); // no longer retried
     }
 }

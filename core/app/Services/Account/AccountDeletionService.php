@@ -4,6 +4,7 @@
 
 namespace App\Services\Account;
 
+use App\Exceptions\PartialPurgeException;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -386,7 +387,11 @@ class AccountDeletionService
 
     // ── purge (after the grace period) ──────────────────────────────────────
 
-    /** @return array<string, mixed> report */
+    /**
+     * @return array<string, mixed> report
+     *
+     * @throws PartialPurgeException when some stores could not be erased (the report is saved first)
+     */
     public function purge(AccountDeletion $deletion): array
     {
         if ($deletion->status !== AccountDeletion::PENDING || $deletion->purge_after->isFuture()) {
@@ -408,7 +413,8 @@ class AccountDeletionService
         if (($report['failed_stores'] ?? []) !== []) {
             $deletion->forceFill(['purge_report' => $report])->save();
 
-            return $report;
+            // A partial purge is a failure: the store's personal data is still live. The caller counts and alerts.
+            throw new PartialPurgeException($report);
         }
 
         $deletion->forceFill([

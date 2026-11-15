@@ -5,6 +5,7 @@
 namespace Juwri\Core\Support;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 /**
@@ -31,20 +32,13 @@ final class MarketingPricingCache
      */
     public static function version(): int
     {
-        try {
-            $version = Cache::get(self::KEY);
-            if (! is_numeric($version)) {
-                Cache::add(self::KEY, self::seed());
-                $version = Cache::get(self::KEY);
-            }
+        return self::readVersion(self::KEY);
+    }
 
-            return is_numeric($version) ? (int) $version : 1;
-        } catch (Throwable) {
-            // The cache store is unavailable (a deploy mid-flight, a locked
-            // Redis): fall back to the initial stamp — the key stays stable
-            // and the page is still served.
-            return 1;
-        }
+    /** Per-reseller content version stamp for reseller public pages (R15). */
+    public static function resellerVersion(int $resellerId): int
+    {
+        return $resellerId > 0 ? self::readVersion(self::resellerKey($resellerId)) : 1;
     }
 
     /**
@@ -60,9 +54,51 @@ final class MarketingPricingCache
      */
     public static function bump(): void
     {
+        self::bumpKey(self::KEY);
+    }
+
+    /**
+     * Bump the per-reseller content version stamp when a reseller, plan, page, or post changes (R15).
+     *
+     * Deferred to after commit: inside a transaction a rolled-back change never
+     * bumps, and a bump never lands before the new data is visible to readers.
+     * Outside a transaction the callback runs immediately.
+     */
+    public static function bumpReseller(int $resellerId): void
+    {
+        if ($resellerId > 0) {
+            DB::afterCommit(fn () => self::bumpKey(self::resellerKey($resellerId)));
+        }
+    }
+
+    private static function resellerKey(int $resellerId): string
+    {
+        return "marketing:reseller-{$resellerId}-version";
+    }
+
+    private static function readVersion(string $key): int
+    {
         try {
-            Cache::add(self::KEY, self::seed());
-            Cache::increment(self::KEY);
+            $version = Cache::get($key);
+            if (! is_numeric($version)) {
+                Cache::add($key, self::seed());
+                $version = Cache::get($key);
+            }
+
+            return is_numeric($version) ? (int) $version : 1;
+        } catch (Throwable) {
+            // The cache store is unavailable (a deploy mid-flight, a locked
+            // Redis): fall back to the initial stamp — the key stays stable
+            // and the page is still served.
+            return 1;
+        }
+    }
+
+    private static function bumpKey(string $key): void
+    {
+        try {
+            Cache::add($key, self::seed());
+            Cache::increment($key);
         } catch (Throwable) {
             // The cache store can be unavailable mid-deploy; the 12h TTL of the
             // marketing cache still applies, so the page recovers on its own.

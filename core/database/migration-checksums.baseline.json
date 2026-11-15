@@ -155,5 +155,6 @@
     "app/Modules/Auth/Database/Migrations/2026_10_27_100100_add_meta_to_email_change_undos.php": "27dd6d6520fa0b39a2c13f8daa421addec9a3ff3421b56a2b672982c000d5833",
     "app/Modules/Team/Database/Migrations/2026_10_27_110000_keep_existing_staff_access_on_new_role_defaults.php": "7f1391ad871ff187dd92ffbdf8fa04d8179e400817831fa12d133474f7f6f1ac",
     "app/Modules/Team/Database/Migrations/2026_10_27_110100_add_security_changed_at_to_staff_members.php": "7a4fb5d12030c50179309880671d082e68d38566b3d4de4d0a73bf35324b22c5",
-    "app/Core/Database/Migrations/2026_10_27_120000_add_deactivated_staff_ids_to_account_deletions.php": "2a875cfe861f57fdc803f134cd0904ef3489257e387b52b8206f39f001bd7b55"
+    "app/Core/Database/Migrations/2026_10_27_120000_add_deactivated_staff_ids_to_account_deletions.php": "2a875cfe861f57fdc803f134cd0904ef3489257e387b52b8206f39f001bd7b55",
+    "app/Core/Database/Migrations/2026_11_14_100000_make_stores_slug_unique.php": "ecd7f219735992db97cc83d2bcdaebf272c299f94f0db4a7c0efb0d6fa78039b"
 }

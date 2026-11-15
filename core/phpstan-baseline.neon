@@ -14689,18 +14689,6 @@ parameters:
 			path: app/Modules/Ordering/Console/Commands/RepairModifierUndercharge.php
 
 		-
-			message: '#^Method Juwri\\Modules\\Ordering\\Console\\Commands\\RepairModifierUndercharge\:\:report\(\) has parameter \$repaired with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Modules/Ordering/Console/Commands/RepairModifierUndercharge.php
-
-		-
-			message: '#^Method Juwri\\Modules\\Ordering\\Console\\Commands\\RepairModifierUndercharge\:\:report\(\) has parameter \$skipped with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Modules/Ordering/Console/Commands/RepairModifierUndercharge.php
-
-		-
 			message: '#^Method Juwri\\Modules\\Ordering\\Http\\Controllers\\Admin\\OrderAdminController\:\:index\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1

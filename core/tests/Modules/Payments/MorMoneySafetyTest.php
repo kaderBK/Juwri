@@ -453,10 +453,28 @@ class MorMoneySafetyTest extends TestCase
         $this->lemon('order_created', $first, 'order-a')->assertOk();
         $this->lemon('subscription_created', $first, 'sub-a', ['order_id' => 'order-a'])->assertOk();
         $this->assertSame('sub-a', data_get(Transaction::where('payment_id', 'order-a')->value('details'), 'subscription_id'));
+        $this->assertSame('lemon_squeezy###sub-a', DB::table('upgrades')->where('user_id', $first['user_id'])->value('unique_id'));
 
         [, $second] = $this->checkout(15.0);
         $this->lemon('subscription_created', $second, 'sub-b', ['order_id' => 'order-b'])->assertOk();
+        $this->assertNull(DB::table('upgrades')->where('user_id', $second['user_id'])->value('unique_id'));
         $this->lemon('order_created', $second, 'order-b')->assertOk();
         $this->assertSame('sub-b', data_get(Transaction::where('payment_id', 'order-b')->value('details'), 'subscription_id'));
+        $this->assertSame('lemon_squeezy###sub-b', DB::table('upgrades')->where('user_id', $second['user_id'])->value('unique_id'));
+    }
+
+    public function test_a_lemon_addon_subscription_created_does_not_overwrite_the_plan_unique_id(): void
+    {
+        $this->requiresEditionPackage('a platform plan settlement (Billing)');
+        [, $planCustom] = $this->checkout(15.0);
+        $this->lemon('order_created', $planCustom, 'order-plan')->assertOk();
+        $this->lemon('subscription_created', $planCustom, 'sub-plan', ['order_id' => 'order-plan'])->assertOk();
+        $this->assertSame('lemon_squeezy###sub-plan', DB::table('upgrades')->where('user_id', $planCustom['user_id'])->value('unique_id'));
+
+        $user = User::findOrFail((int) $planCustom['user_id']);
+        [, $addonCustom] = $this->checkout(5.0, 'MONTHLY', ['transaction_method' => 'addon'], $user);
+        $this->lemon('subscription_created', $addonCustom, 'sub-addon', ['order_id' => 'order-addon'])->assertOk();
+
+        $this->assertSame('lemon_squeezy###sub-plan', DB::table('upgrades')->where('user_id', $planCustom['user_id'])->value('unique_id'));
     }
 }

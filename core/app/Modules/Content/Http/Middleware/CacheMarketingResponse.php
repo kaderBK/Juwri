@@ -137,6 +137,8 @@ class CacheMarketingResponse
 
     private function key(Request $request): string
     {
+        $resellerId = app()->bound('activeReseller') ? (int) data_get(app('activeReseller'), 'id', 0) : 0;
+
         return 'mpc'.self::KEY_VERSION.':'.sha1(implode('|', [
             // P6-79: scheme + host + port (a trusted proxy's X-Forwarded-Proto/-Port change every absolute URL)
             FullPageCacheKey::origin($request),
@@ -145,6 +147,8 @@ class CacheMarketingResponse
             // BL-036: the pricing pages show the plan catalogue — a saved or
             // deleted plan bumps the stamp, which orphans the cached body.
             $request->routeIs('pricing', 'home') ? 'pf'.MarketingPricingCache::version() : '',
+            // R15: reseller edits (brand, plan, page, blog post) bump that reseller's stamp.
+            $resellerId > 0 ? 'rv'.MarketingPricingCache::resellerVersion($resellerId) : '',
         ]));
     }
 

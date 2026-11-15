@@ -84,7 +84,7 @@ class ScanAnalyticsTest extends TestCase
         return Store::create([
             'user_id' => $user->id,
             'title' => 'Pizza Paradise',
-            'slug' => 'pizza-paradise',
+            'slug' => 'pizza-paradise-'.$user->id,
             'color' => '#ff5500',
             'sub_title' => 'Test restaurant',
             'description' => 'Test description',
