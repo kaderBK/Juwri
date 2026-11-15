@@ -64,7 +64,7 @@ function worker({ server, windows = [] }) {
 
 const server = (u) => {
     if (u.pathname === '/pos') {
-        const id = u.searchParams.get('restaurant') || '7';
+        const id = u.searchParams.get('store') || '7';
         return new Response('<html>register ' + id + '</html>', { status: 200, headers: { 'X-Pos-Restaurant': id } });
     }
     if (u.pathname.startsWith('/assets/')) return new Response('/* ' + u.pathname + ' */', { status: 200 });
@@ -77,55 +77,55 @@ const server = (u) => {
 test('cold start: one online visit is enough for the register, the bare /pos and the menu offline', async () => {
     const sw = worker({ server });
     await sw.install(); await sw.activate();
-    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?restaurant=3', warm: [ORIGIN + '/pos/menu?restaurant=3', ORIGIN + '/assets/pos/pos-terminal.js?v=1'] })).ok, true);
+    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?store=3', warm: [ORIGIN + '/pos/menu?store=3', ORIGIN + '/assets/pos/pos-terminal.js?v=1'] })).ok, true);
     sw.offline();
     assert.match(await (await sw.get('/assets/pos/pos-terminal.js?v=1')).text(), /pos-terminal/, 'scripts the first visit loaded, versioned');
-    const reg = await sw.navigate('/pos?restaurant=3');
+    const reg = await sw.navigate('/pos?store=3');
     assert.equal(reg.status, 200);
     assert.match(await reg.text(), /register 3/);
     assert.match(await (await sw.navigate('/pos')).text(), /register 3/, 'bare /pos opens the store this till last had');
-    const menu = await sw.get('/pos/menu?restaurant=3');
+    const menu = await sw.get('/pos/menu?store=3');
     assert.equal((await menu.json()).categories[0].items[0].id, 9);
-    assert.equal((await sw.navigate('/pos?restaurant=4')).status, 503, 'never another store\'s register');
+    assert.equal((await sw.navigate('/pos?store=4')).status, 503, 'never another store\'s register');
 });
 
 test('a login redirect or error is never kept, and the page is told it is not ready', async () => {
     const sw = worker({ server: () => new Response('login', { status: 200 }) }); // no X-Pos-Restaurant: not a register
     await sw.install(); await sw.activate();
-    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?restaurant=3', warm: [ORIGIN + '/pos/menu?restaurant=3'] })).ok, false);
+    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?store=3', warm: [ORIGIN + '/pos/menu?store=3'] })).ok, false);
     sw.offline();
-    assert.equal((await sw.navigate('/pos?restaurant=3')).status, 503);
+    assert.equal((await sw.navigate('/pos?store=3')).status, 503);
 });
 
 test('other origins and non-register paths are ignored', async () => {
     const seen = [];
     const sw = worker({ server: (u) => { seen.push(u.toString()); return server(u); } });
     await sw.install(); await sw.activate();
-    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?restaurant=3', warm: ['https://evil.test/pos/menu', ORIGIN + '/admin/secret'] })).ok, true);
-    assert.deepEqual(seen, [ORIGIN + '/pos?restaurant=3']);
+    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?store=3', warm: ['https://evil.test/pos/menu', ORIGIN + '/admin/secret'] })).ok, true);
+    assert.deepEqual(seen, [ORIGIN + '/pos?store=3']);
 });
 
 test('activation keeps the shell of a register tab opened before the worker existed', async () => {
-    const sw = worker({ server, windows: [ORIGIN + '/pos?restaurant=5', ORIGIN + '/dashboard'] });
+    const sw = worker({ server, windows: [ORIGIN + '/pos?store=5', ORIGIN + '/dashboard'] });
     await sw.install(); await sw.activate();
     sw.offline();
-    assert.match(await (await sw.navigate('/pos?restaurant=5')).text(), /register 5/);
+    assert.match(await (await sw.navigate('/pos?store=5')).text(), /register 5/);
 });
 
 test('keys, tokens and till status are never cached: network only, and offline they fail (the till stays locked)', async () => {
     const sw = worker({ server });
     await sw.install(); await sw.activate();
-    for (const u of ['/pos/offline/devices/escrow?restaurant=3', '/pos/offline/devices/status?restaurant=3', '/pos/offline/snapshot?restaurant=3&branch=1', '/pos/offline/zatca/status?restaurant=3']) {
+    for (const u of ['/pos/offline/devices/escrow?store=3', '/pos/offline/devices/status?store=3', '/pos/offline/snapshot?store=3&branch=1', '/pos/offline/zatca/status?store=3']) {
         assert.equal(await sw.get(u), undefined, u + ' is not handled by the worker (the browser goes to the network)');
     }
-    await sw.get('/pos/print/config?restaurant=3'); // a no-store response
+    await sw.get('/pos/print/config?store=3'); // a no-store response
     // the page cannot get them cached through the warm-up either
-    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?restaurant=3', warm: [ORIGIN + '/pos/offline/devices/escrow?restaurant=3', ORIGIN + '/pos/menu?restaurant=3'] })).ok, true);
+    assert.equal((await sw.message({ type: 'pos-shell', url: ORIGIN + '/pos?store=3', warm: [ORIGIN + '/pos/offline/devices/escrow?store=3', ORIGIN + '/pos/menu?store=3'] })).ok, true);
     const cached = [...sw.store.values()].flatMap((m) => [...m.keys()]);
     assert.ok(cached.some((u) => u.includes('/pos/menu')), 'the menu is cached');
     assert.deepEqual(cached.filter((u) => u.includes('/pos/offline/') || u.includes('/pos/print/config')), [], 'no key, token, status or no-store response in any cache');
     sw.offline();
-    assert.equal(await sw.get('/pos/offline/devices/escrow?restaurant=3'), undefined, 'offline: nothing serves the escrow');
+    assert.equal(await sw.get('/pos/offline/devices/escrow?store=3'), undefined, 'offline: nothing serves the escrow');
 });
 
 test('the precache carries the offline pricing scripts and the cache is bumped to pos-v16', () => {
@@ -140,7 +140,7 @@ test('the offline page wraps its text in <html lang dir> and defaults to the cur
     const sw = worker({ server: () => new Response('login', { status: 200 }) }); // no shell kept → the "connect once" page
     await sw.install(); await sw.activate();
     sw.offline();
-    const page = await sw.navigate('/pos?restaurant=9');
+    const page = await sw.navigate('/pos?store=9');
     assert.equal(page.status, 503);
     const html = await page.text();
     assert.match(html, /^<!doctype html><html lang="en" dir="ltr">/);
@@ -158,7 +158,7 @@ test('the offline page follows Accept-Language (ar -> rtl Arabic text), else the
     const sw = worker({ server: () => new Response('login', { status: 200 }) });
     await sw.install(); await sw.activate();
     sw.offline();
-    const get = async (al) => (await (await sw.navigateWith('/pos?restaurant=9', al)).text());
+    const get = async (al) => (await (await sw.navigateWith('/pos?store=9', al)).text());
     const ar = await get('ar-SA,ar;q=0.9,en;q=0.5');
     assert.match(ar, /<html lang="ar" dir="rtl">/);
     assert.match(ar, /غير جاهز/);

@@ -102,6 +102,20 @@ class PaymentsWatchTest extends TestCase
         $this->assertSame([], $this->watch());
     }
 
+    public function test_paypal_recurring_pending_rows_do_not_trigger_stuck_alert(): void
+    {
+        foreach (range(1, 3) as $i) {
+            $this->tx([
+                'transaction_gatway' => 'paypal',
+                'status' => Transaction::STATUS_RECURRING_PENDING,
+                'payment_id' => 'I-PEND-'.$i,
+            ], 240);
+        }
+
+        $this->assertSame([], $this->watch());
+        $this->assertSame(0, $this->alerts());
+    }
+
     public function test_cooldown_sends_once_then_again_after_it_expires(): void
     {
         foreach (range(1, 3) as $i) {

@@ -36,6 +36,13 @@ class HourlyHousekeeping extends Command
             ->modelKeys();
         $stale->clone()->whereKeyNot($keep)->delete();
 
+        // BL-039: PayPal subscription checkouts awaiting their first sale are marked `recurring_pending`
+        // so the 3-hour purge spares them; drop them once the keep window expires if they never settled.
+        Transaction::query()
+            ->where('status', Transaction::STATUS_RECURRING_PENDING)
+            ->where('created_at', '<=', now()->subDays(self::MOR_KEEP_DAYS))
+            ->delete();
+
         Hooks::call('cron.hourly');
 
         return self::SUCCESS;

@@ -652,7 +652,7 @@ test('money A: offline the real register charges the snapshot total (incl. tip);
         coupon: { code: 'SAVE5', applied: { code: 'SAVE5', value: 5 }, checking: false, error: '' },
     });
     assert.equal(on.settleTotal(), on.payable() + 0.3, 'online: the original path, untouched');
-    assert.equal(PO.toMinor(on.settleTotal(), 2), 2865, '33.35 - 5 coupon + 0.30 tip');
+    assert.equal(PO.toMinor(on.settleTotal(), 2), 2790, '(29.00 - 5 coupon) * 1.15 tax + 0.30 tip');
 });
 
 test('money B: offline setTipPct is exact in minor units (half-up) for 2-, 3- and 0-decimal currencies', async () => {

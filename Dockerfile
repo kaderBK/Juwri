@@ -8,7 +8,8 @@
 #
 # No secrets are baked in: configuration is read from the container's environment at run time (docker/env.example lists
 # the keys, with no values). Build:  docker build -t juwri/app:local .
-ARG PHP_IMAGE=dunglas/frankenphp:1-php8.4
+# pinned 2026-11-15; refresh with the registry digest of 1-php8.4
+ARG PHP_IMAGE=dunglas/frankenphp:1-php8.4@sha256:8f0d509ad824fa86da88b55c5ea9f1605380f423ab55ec3a72864cc223491bfd
 
 # ---------------------------------------------------------------------------------------------------------------------
 FROM ${PHP_IMAGE} AS base
@@ -19,7 +20,8 @@ RUN install-php-extensions bcmath exif gd intl mbstring opcache pcntl pdo_mysql 
     && apt-get install -y --no-install-recommends curl procps unzip git mariadb-client postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# pinned 2026-11-15; refresh with the registry digest of 2
+COPY --from=composer:2@sha256:ca11f643d7791ebdd90a34fc20caf11380d434007ae539a9ea75cd9212e13dca /usr/bin/composer /usr/bin/composer
 
 # ---------------------------------------------------------------------------------------------------------------------
 FROM base AS vendor

@@ -117,7 +117,7 @@ class PaypalAdapterTest extends TestCase
         $this->assertNull($tx->fresh()->payment_id);
     }
 
-    public function test_initiate_recurring_creates_product_plan_subscription_and_drops_the_row(): void
+    public function test_initiate_recurring_creates_product_plan_subscription_and_keeps_checkout_row(): void
     {
         config(['settings.paypal_payment_mode' => 'recurring']);
         [, $tx] = $this->makePlanTransaction(9.0, 'USD', 'membership');
@@ -132,18 +132,16 @@ class PaypalAdapterTest extends TestCase
         $response = PaypalController::pay($tx);
 
         $this->assertSame('https://www.sandbox.paypal.test/webapps/billing/subscriptions?ba_token=BA-1', $response->getTargetUrl());
-        $this->assertNull(Transaction::find($tx->id));
+        $fresh = Transaction::find($tx->id);
+        $this->assertNotNull($fresh);
+        $this->assertSame('I-FAKE1', $fresh->payment_id);
         Http::assertSent(fn (ClientRequest $r) => str_ends_with($r->url(), '/v1/billing/plans')
             && $r['billing_cycles'][0]['frequency'] === ['interval_unit' => 'DAY', 'interval_count' => 365]
             && $r['billing_cycles'][0]['pricing_scheme']['fixed_price'] === ['value' => '9.00', 'currency_code' => 'USD']);
-        Http::assertSent(function (ClientRequest $r) {
-            if (! str_ends_with($r->url(), '/v1/billing/subscriptions')) {
-                return false;
-            }
-            parse_str($r['custom_id'], $meta);
-
-            return $r['plan_id'] === 'P-FAKE1' && $meta['transaction_method'] === 'membership' && $meta['product_id'] === '7';
-        });
+        Http::assertSent(fn (ClientRequest $r) => str_ends_with($r->url(), '/v1/billing/subscriptions')
+            && $r['plan_id'] === 'P-FAKE1'
+            && $r['custom_id'] === (string) $tx->id
+            && strlen((string) $r['custom_id']) <= 127);
     }
 
     public function test_return_completed_capture_settles_once(): void
@@ -236,7 +234,7 @@ class PaypalAdapterTest extends TestCase
         $this->fakePaypal([
             'POST /v1/notifications/verify-webhook-signature' => ['verification_status' => 'SUCCESS'],
             'GET /v1/payments/sale/SALE-1' => $this->heldSale(),
-            'GET /v1/billing/subscriptions/I-FAKE9' => ['id' => 'I-FAKE9', 'custom_id' => http_build_query(['user_id' => 999999, 'product_id' => 1, 'transaction_method' => 'membership'])],
+            'GET /v1/billing/subscriptions/I-FAKE9' => ['id' => 'I-FAKE9', 'create_time' => '2026-11-15T23:59:59Z', 'custom_id' => http_build_query(['user_id' => 999999, 'product_id' => 1, 'transaction_method' => 'membership'])],
         ]);
         $this->postWebhook($this->saleEvent(), $this->transmissionHeaders())->assertStatus(400)->assertJson(['status' => 400]);
         Http::assertSent(fn (ClientRequest $r) => str_ends_with($r->url(), '/verify-webhook-signature')
@@ -273,7 +271,7 @@ class PaypalAdapterTest extends TestCase
     public function test_a_signed_webhook_settles_only_a_sale_paypal_confirms(): void
     {
         config(['settings.paypal_webhook_id' => 'WH-ID-FAKE']);
-        $custom = ['id' => 'I-FAKE9', 'custom_id' => http_build_query(['user_id' => 999999, 'product_id' => 1, 'transaction_method' => 'membership'])];
+        $custom = ['id' => 'I-FAKE9', 'create_time' => '2026-11-15T23:59:59Z', 'custom_id' => http_build_query(['user_id' => 999999, 'product_id' => 1, 'transaction_method' => 'membership'])];
         $verified = ['POST /v1/notifications/verify-webhook-signature' => ['verification_status' => 'SUCCESS']];
 
         foreach ([
