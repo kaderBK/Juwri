@@ -790,10 +790,11 @@
     }
     if (FACETS.priceMax !== undefined && FACETS.priceMax !== null && Number(FACETS.priceMax) > 0) {
       var pmin = Number(FACETS.priceMin || 0), pmax = Number(FACETS.priceMax || 0);
-      var cur = facetPrice === null ? pmax : facetPrice;
+      var cur = facetPrice === null ? pmax : Math.min(pmax, Math.max(pmin, Number(facetPrice)));
+      if (!isFinite(cur)) cur = pmax;
       h += '<section class="mb-facets__group"><h3 class="mb-facets__title">' + esc(t("Price")) + "</h3>";
-      h += '<input type="range" class="mb-facets__range" data-mb-facet-price min="' + pmin + '" max="' + pmax + '" step="1" value="' + cur + '" aria-label="' + esc(t("Price")) + '" aria-valuetext="' + esc(money(cur)) + '">';
-      h += '<div class="mb-facets__rangevals"><span>' + money(pmin) + '</span><span data-mb-facet-price-label>' + money(cur) + "</span></div>";
+      h += '<input type="range" class="mb-facets__range" data-mb-facet-price min="' + esc(String(pmin)) + '" max="' + esc(String(pmax)) + '" step="1" value="' + esc(String(cur)) + '" aria-label="' + esc(t("Price")) + '" aria-valuetext="' + esc(String(money(cur))) + '">';
+      h += '<div class="mb-facets__rangevals"><span>' + esc(String(money(pmin))) + '</span><span data-mb-facet-price-label>' + esc(String(money(cur))) + "</span></div>";
       h += "</section>";
     }
     h += "</div>";
