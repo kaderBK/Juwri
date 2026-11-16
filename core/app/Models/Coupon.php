@@ -8,6 +8,7 @@ use Brick\Math\RoundingMode;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Juwri\Core\Contracts\Tenancy\ResellerContext;
 use Juwri\Core\Models\Concerns\BelongsToAccount;
 use Juwri\Core\Models\Store;
@@ -15,6 +16,7 @@ use Juwri\Core\Money\Concerns\HasMinorMoney;
 use Juwri\Core\Money\Currencies;
 use Juwri\Core\Money\MinorMoneyModel;
 use Juwri\Core\Money\Money;
+use Juwri\Modules\Loyalty\Models\CouponBatch;
 
 /**
  * P1-05: `min_order_amount` is stored as `min_order_amount_minor` (nullable) in the row's `currency_code` — the
@@ -328,9 +330,9 @@ class Coupon extends Model implements MinorMoneyModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Juwri\Modules\Loyalty\Models\CouponBatch, $this>
      */
-    public function batch(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function batch(): BelongsTo
     {
-        return $this->belongsTo(\Juwri\Modules\Loyalty\Models\CouponBatch::class, 'batch_id');
+        return $this->belongsTo(CouponBatch::class, 'batch_id');
     }
 
     /** Has the expiry moment passed? (A coupon without one is read as "now".) */
