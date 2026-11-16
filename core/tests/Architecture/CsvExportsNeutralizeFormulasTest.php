@@ -18,6 +18,7 @@ $allowlist = [
     'app/Modules/Menu/Console/Commands/MeasureModifierUndercharge.php' => 'artisan report to a local file for staff, ids and numbers only',
     'app/Modules/Messaging/Console/Commands/WhatsAppAuditNumbers.php' => 'artisan report to a local file for staff, not a download',
     'app/Modules/Media/Console/Commands/AuditMedia.php' => 'artisan report to a local file for staff, not a download',
+    'app/Modules/Loyalty/Services/CouponBulk.php' => 'own csvSafe() neutralizer (= + - @ tab CR) on every text cell; covered by CouponBulkTest',
     'app/Modules/Customers/Http/Controllers/Concerns/HandlesShopperPrivacy.php' => 'streams ShopperPrivacyService::writeOrdersCsv, which neutralizes every cell (csvCell)',
 ];
 

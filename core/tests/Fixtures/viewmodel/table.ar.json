@@ -49,7 +49,19 @@
                 "public_id": "{id:2}",
                 "name": "Crave House — Main",
                 "address": "King Fahd Rd, Riyadh"
-            }
+            },
+            "switchable": [
+                {
+                    "public_id": "{id:2}",
+                    "name": "Crave House — Main",
+                    "url": "/crave-demo?branch={id:2}"
+                },
+                {
+                    "public_id": "{id:3}",
+                    "name": "Main Branch",
+                    "url": "/crave-demo?branch={id:3}"
+                }
+            ]
         },
         "context": {
             "order_types": [
@@ -154,132 +166,131 @@
         "catalog": {
             "categories": [
                 {
-                    "id": "{id:3}",
+                    "id": "{id:4}",
                     "name": "المقبلات",
                     "image": {
                         "src": "{app}/storage/menu/{file:3}",
                         "alt": "المقبلات"
                     },
                     "item_ids": [
-                        "{id:4}",
                         "{id:5}",
                         "{id:6}",
                         "{id:7}",
                         "{id:8}",
-                        "{id:9}"
+                        "{id:9}",
+                        "{id:10}"
                     ],
                     "count": 6
                 },
                 {
-                    "id": "{id:10}",
+                    "id": "{id:11}",
                     "name": "برجر لحم",
                     "image": {
                         "src": "{app}/storage/menu/{file:1}",
                         "alt": "برجر لحم"
                     },
                     "item_ids": [
-                        "{id:11}",
                         "{id:12}",
                         "{id:13}",
                         "{id:14}",
                         "{id:15}",
-                        "{id:16}"
+                        "{id:16}",
+                        "{id:17}"
                     ],
                     "count": 6
                 },
                 {
-                    "id": "{id:17}",
+                    "id": "{id:18}",
                     "name": "دجاج وساندويتشات",
                     "image": {
                         "src": "{app}/storage/menu/{file:4}",
                         "alt": "دجاج وساندويتشات"
                     },
                     "item_ids": [
-                        "{id:18}",
                         "{id:19}",
                         "{id:20}",
                         "{id:21}",
                         "{id:22}",
                         "{id:23}",
-                        "{id:24}"
+                        "{id:24}",
+                        "{id:25}"
                     ],
                     "count": 7
                 },
                 {
-                    "id": "{id:25}",
+                    "id": "{id:26}",
                     "name": "كلاسيك",
                     "image": {
                         "src": "{app}/storage/menu/{file:5}",
                         "alt": "كلاسيك"
                     },
                     "item_ids": [
-                        "{id:26}",
                         "{id:27}",
                         "{id:28}",
-                        "{id:29}"
+                        "{id:29}",
+                        "{id:30}"
                     ],
                     "count": 4
                 },
                 {
-                    "id": "{id:30}",
+                    "id": "{id:31}",
                     "name": "التوقيعات",
                     "image": {
                         "src": "{app}/storage/menu/{file:6}",
                         "alt": "التوقيعات"
                     },
                     "item_ids": [
-                        "{id:31}",
                         "{id:32}",
                         "{id:33}",
-                        "{id:34}"
+                        "{id:34}",
+                        "{id:35}"
                     ],
                     "count": 4
                 },
                 {
-                    "id": "{id:35}",
+                    "id": "{id:36}",
                     "name": "مقليات وأجنحة",
                     "image": {
                         "src": "{app}/storage/menu/{file:7}",
                         "alt": "مقليات وأجنحة"
                     },
                     "item_ids": [
-                        "{id:36}",
                         "{id:37}",
                         "{id:38}",
                         "{id:39}",
                         "{id:40}",
                         "{id:41}",
                         "{id:42}",
-                        "{id:43}"
+                        "{id:43}",
+                        "{id:44}"
                     ],
                     "count": 8
                 },
                 {
-                    "id": "{id:44}",
+                    "id": "{id:45}",
                     "name": "من المشواة",
                     "image": {
                         "src": "{app}/storage/menu/{file:8}",
                         "alt": "من المشواة"
                     },
                     "item_ids": [
-                        "{id:45}",
                         "{id:46}",
                         "{id:47}",
                         "{id:48}",
                         "{id:49}",
-                        "{id:50}"
+                        "{id:50}",
+                        "{id:51}"
                     ],
                     "count": 6
                 },
                 {
-                    "id": "{id:51}",
+                    "id": "{id:52}",
                     "name": "باستا وأطباق",
                     "image": {
                         "src": "{app}/storage/menu/{file:9}",
                         "alt": "باستا وأطباق"
                     },
                     "item_ids": [
-                        "{id:52}",
                         "{id:53}",
                         "{id:54}",
                         "{id:55}",
@@ -287,38 +298,38 @@
                         "{id:57}",
                         "{id:58}",
                         "{id:59}",
-                        "{id:60}"
+                        "{id:60}",
+                        "{id:61}"
                     ],
                     "count": 9
                 },
                 {
-                    "id": "{id:61}",
+                    "id": "{id:62}",
                     "name": "سلطات وشوربات",
                     "image": {
                         "src": "{app}/storage/menu/{file:10}",
                         "alt": "سلطات وشوربات"
                     },
                     "item_ids": [
-                        "{id:62}",
                         "{id:63}",
                         "{id:64}",
                         "{id:65}",
                         "{id:66}",
                         "{id:67}",
                         "{id:68}",
-                        "{id:69}"
+                        "{id:69}",
+                        "{id:70}"
                     ],
                     "count": 8
                 },
                 {
-                    "id": "{id:70}",
+                    "id": "{id:71}",
                     "name": "فطور طوال اليوم",
                     "image": {
                         "src": "{app}/storage/menu/{file:11}",
                         "alt": "فطور طوال اليوم"
                     },
                     "item_ids": [
-                        "{id:71}",
                         "{id:72}",
                         "{id:73}",
                         "{id:74}",
@@ -327,37 +338,37 @@
                         "{id:77}",
                         "{id:78}",
                         "{id:79}",
-                        "{id:80}"
+                        "{id:80}",
+                        "{id:81}"
                     ],
                     "count": 10
                 },
                 {
-                    "id": "{id:81}",
+                    "id": "{id:82}",
                     "name": "كيك ومخبوزات",
                     "image": {
                         "src": "{app}/storage/menu/{file:12}",
                         "alt": "كيك ومخبوزات"
                     },
                     "item_ids": [
-                        "{id:82}",
                         "{id:83}",
                         "{id:84}",
                         "{id:85}",
                         "{id:86}",
                         "{id:87}",
-                        "{id:88}"
+                        "{id:88}",
+                        "{id:89}"
                     ],
                     "count": 7
                 },
                 {
-                    "id": "{id:89}",
+                    "id": "{id:90}",
                     "name": "مثلجات وسكريات",
                     "image": {
                         "src": "{app}/storage/menu/{file:13}",
                         "alt": "مثلجات وسكريات"
                     },
                     "item_ids": [
-                        "{id:90}",
                         "{id:91}",
                         "{id:92}",
                         "{id:93}",
@@ -365,37 +376,37 @@
                         "{id:95}",
                         "{id:96}",
                         "{id:97}",
-                        "{id:98}"
+                        "{id:98}",
+                        "{id:99}"
                     ],
                     "count": 9
                 },
                 {
-                    "id": "{id:99}",
+                    "id": "{id:100}",
                     "name": "ركن القهوة",
                     "image": {
                         "src": "{app}/storage/menu/{file:14}",
                         "alt": "ركن القهوة"
                     },
                     "item_ids": [
-                        "{id:100}",
                         "{id:101}",
                         "{id:102}",
                         "{id:103}",
                         "{id:104}",
                         "{id:105}",
-                        "{id:106}"
+                        "{id:106}",
+                        "{id:107}"
                     ],
                     "count": 7
                 },
                 {
-                    "id": "{id:107}",
+                    "id": "{id:108}",
                     "name": "ميلك شيك ومبردات",
                     "image": {
                         "src": "{app}/storage/menu/{file:15}",
                         "alt": "ميلك شيك ومبردات"
                     },
                     "item_ids": [
-                        "{id:108}",
                         "{id:109}",
                         "{id:110}",
                         "{id:111}",
@@ -407,16 +418,17 @@
                         "{id:117}",
                         "{id:118}",
                         "{id:119}",
-                        "{id:120}"
+                        "{id:120}",
+                        "{id:121}"
                     ],
                     "count": 13
                 }
             ],
             "items": {
-                "{id:4}": {
-                    "id": "{id:4}",
+                "{id:5}": {
+                    "id": "{id:5}",
                     "name": "ناتشوز غراندي",
-                    "url": "/crave-demo#item-{id:4}",
+                    "url": "/crave-demo#item-{id:5}",
                     "short": "رقائق تورتيا مع صوص الجبن والبيكو دي جالو والهالبينو.",
                     "image": {
                         "src": "{app}/storage/menu/{file:3}",
@@ -446,10 +458,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:11}": {
-                    "id": "{id:11}",
+                "{id:12}": {
+                    "id": "{id:12}",
                     "name": "كلاسيك ديلوكس",
-                    "url": "/crave-demo#item-{id:11}",
+                    "url": "/crave-demo#item-{id:12}",
                     "short": "لحم مشوي على الفحم مع خس وطماطم ومخلل ومايونيز البيت.",
                     "image": {
                         "src": "{app}/storage/menu/{file:1}",
@@ -479,10 +491,10 @@
                     "has_required_choices": true,
                     "calories": 540
                 },
-                "{id:18}": {
-                    "id": "{id:18}",
+                "{id:19}": {
+                    "id": "{id:19}",
                     "name": "برجر دجاج مقرمش",
-                    "url": "/crave-demo#item-{id:18}",
+                    "url": "/crave-demo#item-{id:19}",
                     "short": "دجاج مقرمش مع سلطة الملفوف وصوص المخلل في خبز بريوش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:4}",
@@ -516,10 +528,10 @@
                     "has_required_choices": true,
                     "calories": 610
                 },
-                "{id:26}": {
-                    "id": "{id:26}",
+                "{id:27}": {
+                    "id": "{id:27}",
                     "name": "مارغريتا",
-                    "url": "/crave-demo#item-{id:26}",
+                    "url": "/crave-demo#item-{id:27}",
                     "short": "طماطم سان مارزانو وموزاريلا وريحان وزيت زيتون.",
                     "image": {
                         "src": "{app}/storage/menu/{file:5}",
@@ -540,10 +552,10 @@
                     "has_required_choices": true,
                     "calories": 820
                 },
-                "{id:31}": {
-                    "id": "{id:31}",
+                "{id:32}": {
+                    "id": "{id:32}",
                     "name": "دجاج باربكيو رانش",
-                    "url": "/crave-demo#item-{id:31}",
+                    "url": "/crave-demo#item-{id:32}",
                     "short": "صوص باربكيو مدخن مع دجاج مشوي ورانش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:6}",
@@ -564,10 +576,10 @@
                     "has_required_choices": true,
                     "calories": 880
                 },
-                "{id:36}": {
-                    "id": "{id:36}",
+                "{id:37}": {
+                    "id": "{id:37}",
                     "name": "أجنحة كورية",
-                    "url": "/crave-demo#item-{id:36}",
+                    "url": "/crave-demo#item-{id:37}",
                     "short": "أجنحة مقلية مرتين بصوص الغوتشوجانغ والسمسم.",
                     "image": {
                         "src": "{app}/storage/menu/{file:7}",
@@ -592,10 +604,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:45}": {
-                    "id": "{id:45}",
+                "{id:46}": {
+                    "id": "{id:46}",
                     "name": "ريب آي مع بطاطس",
-                    "url": "/crave-demo#item-{id:45}",
+                    "url": "/crave-demo#item-{id:46}",
                     "short": "ريب آي ٣٠٠غ مع زبدة الأعشاب والبطاطس.",
                     "image": {
                         "src": "{app}/storage/menu/{file:16}",
@@ -616,10 +628,10 @@
                     "has_required_choices": false,
                     "calories": 980
                 },
-                "{id:52}": {
-                    "id": "{id:52}",
+                "{id:53}": {
+                    "id": "{id:53}",
                     "name": "كاربونارا",
-                    "url": "/crave-demo#item-{id:52}",
+                    "url": "/crave-demo#item-{id:53}",
                     "short": "صوص صفار البيض الحريري مع شرائح الديك الرومي وجبن البيكورينو.",
                     "image": {
                         "src": "{app}/storage/menu/{file:9}",
@@ -640,10 +652,10 @@
                     "has_required_choices": false,
                     "calories": 680
                 },
-                "{id:62}": {
-                    "id": "{id:62}",
+                "{id:63}": {
+                    "id": "{id:63}",
                     "name": "سيزر بالدجاج",
-                    "url": "/crave-demo#item-{id:62}",
+                    "url": "/crave-demo#item-{id:63}",
                     "short": "خس صغير مع دجاج مشوي وبارميزان وخبز محمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:10}",
@@ -664,10 +676,10 @@
                     "has_required_choices": false,
                     "calories": 480
                 },
-                "{id:71}": {
-                    "id": "{id:71}",
+                "{id:72}": {
+                    "id": "{id:72}",
                     "name": "بان كيك",
-                    "url": "/crave-demo#item-{id:71}",
+                    "url": "/crave-demo#item-{id:72}",
                     "short": "طبقات البان كيك مع شراب القيقب والتوت والموز.",
                     "image": {
                         "src": "{app}/storage/menu/{file:11}",
@@ -688,10 +700,10 @@
                     "has_required_choices": false,
                     "calories": 620
                 },
-                "{id:82}": {
-                    "id": "{id:82}",
+                "{id:83}": {
+                    "id": "{id:83}",
                     "name": "كيك الشوكولاتة",
-                    "url": "/crave-demo#item-{id:82}",
+                    "url": "/crave-demo#item-{id:83}",
                     "short": "أربع طبقات شوكولاتة داكنة مع الغاناش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:12}",
@@ -712,10 +724,10 @@
                     "has_required_choices": false,
                     "calories": 540
                 },
-                "{id:90}": {
-                    "id": "{id:90}",
+                "{id:91}": {
+                    "id": "{id:91}",
                     "name": "صنداي الكراميل",
-                    "url": "/crave-demo#item-{id:90}",
+                    "url": "/crave-demo#item-{id:91}",
                     "short": "آيس كريم مع كراميل مملح وجوز البقان المحمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:17}",
@@ -736,10 +748,10 @@
                     "has_required_choices": false,
                     "calories": 430
                 },
-                "{id:100}": {
-                    "id": "{id:100}",
+                "{id:101}": {
+                    "id": "{id:101}",
                     "name": "فلات وايت",
-                    "url": "/crave-demo#item-{id:100}",
+                    "url": "/crave-demo#item-{id:101}",
                     "short": "ريستريتو مزدوج مع رغوة حريرية.",
                     "image": {
                         "src": "{app}/storage/menu/{file:14}",
@@ -760,10 +772,10 @@
                     "has_required_choices": true,
                     "calories": 120
                 },
-                "{id:108}": {
-                    "id": "{id:108}",
+                "{id:109}": {
+                    "id": "{id:109}",
                     "name": "فريك شيك",
-                    "url": "/crave-demo#item-{id:108}",
+                    "url": "/crave-demo#item-{id:109}",
                     "short": "ميلك شيك شوكولاتة ضخم مع برج الكريمة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:15}",
@@ -784,10 +796,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:5}": {
-                    "id": "{id:5}",
+                "{id:6}": {
+                    "id": "{id:6}",
                     "name": "حلقات البصل المقرمشة",
-                    "url": "/crave-demo#item-{id:5}",
+                    "url": "/crave-demo#item-{id:6}",
                     "short": "حلقات بصل مقرمشة مع ملح البابريكا وصوص الرانش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:18}",
@@ -803,10 +815,10 @@
                     "has_required_choices": false,
                     "calories": 430
                 },
-                "{id:12}": {
-                    "id": "{id:12}",
+                "{id:13}": {
+                    "id": "{id:13}",
                     "name": "سماش مدخن",
-                    "url": "/crave-demo#item-{id:12}",
+                    "url": "/crave-demo#item-{id:13}",
                     "short": "قطعتا سماش مع بصل مكرمل وشيدر مدخن ومايو الزبدة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:19}",
@@ -840,10 +852,10 @@
                     "has_required_choices": true,
                     "calories": 680
                 },
-                "{id:19}": {
-                    "id": "{id:19}",
+                "{id:20}": {
+                    "id": "{id:20}",
                     "name": "ميلت الجبن",
-                    "url": "/crave-demo#item-{id:19}",
+                    "url": "/crave-demo#item-{id:20}",
                     "short": "لحم مشوي مع ثلاثة أجبان في خبز السمسم المحمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:20}",
@@ -859,10 +871,10 @@
                     "has_required_choices": true,
                     "calories": 700
                 },
-                "{id:27}": {
-                    "id": "{id:27}",
+                "{id:28}": {
+                    "id": "{id:28}",
                     "name": "دبل ببروني",
-                    "url": "/crave-demo#item-{id:27}",
+                    "url": "/crave-demo#item-{id:28}",
                     "short": "ببروني بقري وموزاريلا مع رشة عسل حار.",
                     "image": {
                         "src": "{app}/storage/menu/{file:21}",
@@ -887,10 +899,10 @@
                     "has_required_choices": true,
                     "calories": 940
                 },
-                "{id:32}": {
-                    "id": "{id:32}",
+                "{id:33}": {
+                    "id": "{id:33}",
                     "name": "جرجير وبارميزان",
-                    "url": "/crave-demo#item-{id:32}",
+                    "url": "/crave-demo#item-{id:33}",
                     "short": "جرجير طازج مع بارميزان مبشور وخل بلسمي.",
                     "image": {
                         "src": "{app}/storage/menu/{file:22}",
@@ -906,10 +918,10 @@
                     "has_required_choices": true,
                     "calories": 740
                 },
-                "{id:37}": {
-                    "id": "{id:37}",
+                "{id:38}": {
+                    "id": "{id:38}",
                     "name": "أجنحة مدخنة بالعسل",
-                    "url": "/crave-demo#item-{id:37}",
+                    "url": "/crave-demo#item-{id:38}",
                     "short": "أجنحة مدخنة بالعسل مع بصل مخلل وصوص أبيض.",
                     "image": {
                         "src": "{app}/storage/menu/{file:23}",
@@ -930,10 +942,10 @@
                     "has_required_choices": false,
                     "calories": 680
                 },
-                "{id:46}": {
-                    "id": "{id:46}",
+                "{id:47}": {
+                    "id": "{id:47}",
                     "name": "سيرلوين مقطع",
-                    "url": "/crave-demo#item-{id:46}",
+                    "url": "/crave-demo#item-{id:47}",
                     "short": "سيرلوين مشوي مع الهليون والجزر المحمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:24}",
@@ -949,10 +961,10 @@
                     "has_required_choices": false,
                     "calories": 760
                 },
-                "{id:53}": {
-                    "id": "{id:53}",
+                "{id:54}": {
+                    "id": "{id:54}",
                     "name": "بيني أرابياتا",
-                    "url": "/crave-demo#item-{id:53}",
+                    "url": "/crave-demo#item-{id:54}",
                     "short": "صوص طماطم حار مع الثوم والريحان.",
                     "image": {
                         "src": "{app}/storage/menu/{file:25}",
@@ -977,10 +989,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:63}": {
-                    "id": "{id:63}",
+                "{id:64}": {
+                    "id": "{id:64}",
                     "name": "سلطة الحديقة",
-                    "url": "/crave-demo#item-{id:63}",
+                    "url": "/crave-demo#item-{id:64}",
                     "short": "خضار ملونة مع أفوكادو وبذور وصوص الحمضيات.",
                     "image": {
                         "src": "{app}/storage/menu/{file:26}",
@@ -1001,10 +1013,10 @@
                     "has_required_choices": false,
                     "calories": 240
                 },
-                "{id:72}": {
-                    "id": "{id:72}",
+                "{id:73}": {
+                    "id": "{id:73}",
                     "name": "وافل ذهبي",
-                    "url": "/crave-demo#item-{id:72}",
+                    "url": "/crave-demo#item-{id:73}",
                     "short": "وافل بلجيكي مقرمش مع كومبوت التوت والزبدة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:27}",
@@ -1020,10 +1032,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:83}": {
-                    "id": "{id:83}",
+                "{id:84}": {
+                    "id": "{id:84}",
                     "name": "رد فلفت",
-                    "url": "/crave-demo#item-{id:83}",
+                    "url": "/crave-demo#item-{id:84}",
                     "short": "كيك أحمر مع كريمة الجبن والفراولة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:28}",
@@ -1039,10 +1051,10 @@
                     "has_required_choices": false,
                     "calories": 480
                 },
-                "{id:91}": {
-                    "id": "{id:91}",
+                "{id:92}": {
+                    "id": "{id:92}",
                     "name": "آيس كريم بالرشات",
-                    "url": "/crave-demo#item-{id:91}",
+                    "url": "/crave-demo#item-{id:92}",
                     "short": "ثلاث كرات في وعاء الوافل المزين بالرشات.",
                     "image": {
                         "src": "{app}/storage/menu/{file:13}",
@@ -1058,10 +1070,10 @@
                     "has_required_choices": false,
                     "calories": 480
                 },
-                "{id:101}": {
-                    "id": "{id:101}",
+                "{id:102}": {
+                    "id": "{id:102}",
                     "name": "كابتشينو",
-                    "url": "/crave-demo#item-{id:101}",
+                    "url": "/crave-demo#item-{id:102}",
                     "short": "إسبريسو مع حليب مبخر ورغوة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:29}",
@@ -1077,10 +1089,10 @@
                     "has_required_choices": true,
                     "calories": 130
                 },
-                "{id:109}": {
-                    "id": "{id:109}",
+                "{id:110}": {
+                    "id": "{id:110}",
                     "name": "شيك الكوكيز",
-                    "url": "/crave-demo#item-{id:109}",
+                    "url": "/crave-demo#item-{id:110}",
                     "short": "كوكيز مطحون مخفوق مع الكريمة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:30}",
@@ -1096,10 +1108,10 @@
                     "has_required_choices": false,
                     "calories": 640
                 },
-                "{id:6}": {
-                    "id": "{id:6}",
+                "{id:7}": {
+                    "id": "{id:7}",
                     "name": "بطاطس محملة",
-                    "url": "/crave-demo#item-{id:6}",
+                    "url": "/crave-demo#item-{id:7}",
                     "short": "بطاطس بقشرتها مع صوص الجبن وقطع اللحم المقدد.",
                     "image": {
                         "src": "{app}/storage/menu/{file:31}",
@@ -1129,10 +1141,10 @@
                     "has_required_choices": false,
                     "calories": 610
                 },
-                "{id:13}": {
-                    "id": "{id:13}",
+                "{id:14}": {
+                    "id": "{id:14}",
                     "name": "دبل ترابل",
-                    "url": "/crave-demo#item-{id:13}",
+                    "url": "/crave-demo#item-{id:14}",
                     "short": "لحم دبل وجبن دبل مع الصوص السري وخبز بريوش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:32}",
@@ -1148,10 +1160,10 @@
                     "has_required_choices": true,
                     "calories": 820
                 },
-                "{id:20}": {
-                    "id": "{id:20}",
+                "{id:21}": {
+                    "id": "{id:21}",
                     "name": "كومبو روت ٦٦",
-                    "url": "/crave-demo#item-{id:20}",
+                    "url": "/crave-demo#item-{id:21}",
                     "short": "تشيز برجر على طريقة المطاعم الأمريكية مع بطاطس مموجة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:33}",
@@ -1167,10 +1179,10 @@
                     "has_required_choices": false,
                     "calories": 920
                 },
-                "{id:28}": {
-                    "id": "{id:28}",
+                "{id:29}": {
+                    "id": "{id:29}",
                     "name": "نابولي على الحطب",
-                    "url": "/crave-demo#item-{id:28}",
+                    "url": "/crave-demo#item-{id:29}",
                     "short": "عجينة نابولية مع موزاريلا الجاموس والريحان.",
                     "image": {
                         "src": "{app}/storage/menu/{file:34}",
@@ -1186,10 +1198,10 @@
                     "has_required_choices": true,
                     "calories": 780
                 },
-                "{id:33}": {
-                    "id": "{id:33}",
+                "{id:34}": {
+                    "id": "{id:34}",
                     "name": "فيتا يونانية",
-                    "url": "/crave-demo#item-{id:33}",
+                    "url": "/crave-demo#item-{id:34}",
                     "short": "جبنة فيتا وزيتون كالاماتا وبصل أحمر وأوريغانو.",
                     "image": {
                         "src": "{app}/storage/menu/{file:35}",
@@ -1205,10 +1217,10 @@
                     "has_required_choices": true,
                     "calories": 800
                 },
-                "{id:38}": {
-                    "id": "{id:38}",
+                "{id:39}": {
+                    "id": "{id:39}",
                     "name": "أصابع الدجاج",
-                    "url": "/crave-demo#item-{id:38}",
+                    "url": "/crave-demo#item-{id:39}",
                     "short": "أصابع دجاج مقرمشة مع صوص العسل والخردل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:36}",
@@ -1224,10 +1236,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:47}": {
-                    "id": "{id:47}",
+                "{id:48}": {
+                    "id": "{id:48}",
                     "name": "أضلاع باربكيو",
-                    "url": "/crave-demo#item-{id:47}",
+                    "url": "/crave-demo#item-{id:48}",
                     "short": "أضلاع مدخنة ٨ ساعات مع صوص باربكيو وسلطة ملفوف.",
                     "image": {
                         "src": "{app}/storage/menu/{file:37}",
@@ -1243,10 +1255,10 @@
                     "has_required_choices": false,
                     "calories": 920
                 },
-                "{id:54}": {
-                    "id": "{id:54}",
+                "{id:55}": {
+                    "id": "{id:55}",
                     "name": "فيتوتشيني ألفريدو",
-                    "url": "/crave-demo#item-{id:54}",
+                    "url": "/crave-demo#item-{id:55}",
                     "short": "صوص البارميزان الكريمي مع الفلفل الأسود.",
                     "image": {
                         "src": "{app}/storage/menu/{file:38}",
@@ -1262,10 +1274,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:64}": {
-                    "id": "{id:64}",
+                "{id:65}": {
+                    "id": "{id:65}",
                     "name": "كيل وحمص",
-                    "url": "/crave-demo#item-{id:64}",
+                    "url": "/crave-demo#item-{id:65}",
                     "short": "كرنب أخضر مع حمص مقرمش وطحينة الليمون.",
                     "image": {
                         "src": "{app}/storage/menu/{file:39}",
@@ -1286,10 +1298,10 @@
                     "has_required_choices": false,
                     "calories": 300
                 },
-                "{id:73}": {
-                    "id": "{id:73}",
+                "{id:74}": {
+                    "id": "{id:74}",
                     "name": "توست الأفوكادو",
-                    "url": "/crave-demo#item-{id:73}",
+                    "url": "/crave-demo#item-{id:74}",
                     "short": "خبز محمص مع أفوكادو مهروس وبيض والدقة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:40}",
@@ -1305,10 +1317,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:84}": {
-                    "id": "{id:84}",
+                "{id:85}": {
+                    "id": "{id:85}",
                     "name": "تشيز كيك التوت",
-                    "url": "/crave-demo#item-{id:84}",
+                    "url": "/crave-demo#item-{id:85}",
                     "short": "تشيز كيك نيويورك مع كومبوت التوت الأزرق.",
                     "image": {
                         "src": "{app}/storage/menu/{file:41}",
@@ -1324,10 +1336,10 @@
                     "has_required_choices": false,
                     "calories": 520
                 },
-                "{id:92}": {
-                    "id": "{id:92}",
+                "{id:93}": {
+                    "id": "{id:93}",
                     "name": "كون كلاسيك",
-                    "url": "/crave-demo#item-{id:92}",
+                    "url": "/crave-demo#item-{id:93}",
                     "short": "كون وافل ملفوف يدوياً مع نكهة اليوم.",
                     "image": {
                         "src": "{app}/storage/menu/{file:42}",
@@ -1343,10 +1355,10 @@
                     "has_required_choices": false,
                     "calories": 260
                 },
-                "{id:102}": {
-                    "id": "{id:102}",
+                "{id:103}": {
+                    "id": "{id:103}",
                     "name": "إسبريسو",
-                    "url": "/crave-demo#item-{id:102}",
+                    "url": "/crave-demo#item-{id:103}",
                     "short": "جرعة مزدوجة من بن أحادي المصدر.",
                     "image": {
                         "src": "{app}/storage/menu/{file:43}",
@@ -1367,10 +1379,10 @@
                     "has_required_choices": false,
                     "calories": 10
                 },
-                "{id:110}": {
-                    "id": "{id:110}",
+                "{id:111}": {
+                    "id": "{id:111}",
                     "name": "شيك الفانيليا",
-                    "url": "/crave-demo#item-{id:110}",
+                    "url": "/crave-demo#item-{id:111}",
                     "short": "فانيليا كلاسيكية مع صوص الشوكولاتة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:44}",
@@ -1386,10 +1398,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:7}": {
-                    "id": "{id:7}",
+                "{id:8}": {
+                    "id": "{id:8}",
                     "name": "بطاطس الترافل بالبارميزان",
-                    "url": "/crave-demo#item-{id:7}",
+                    "url": "/crave-demo#item-{id:8}",
                     "short": "زيت الترافل وجبن البارميزان — الأكثر طلباً.",
                     "image": {
                         "src": "{app}/storage/menu/{file:45}",
@@ -1405,10 +1417,10 @@
                     "has_required_choices": false,
                     "calories": 480
                 },
-                "{id:14}": {
-                    "id": "{id:14}",
+                "{id:15}": {
+                    "id": "{id:15}",
                     "name": "ستاك اللحم المقدد",
-                    "url": "/crave-demo#item-{id:14}",
+                    "url": "/crave-demo#item-{id:15}",
                     "short": "لحم مقدد بقري مع بصل مقرمش وشيدر وصوص باربكيو، تقدم مع البطاطس.",
                     "image": {
                         "src": "{app}/storage/menu/{file:46}",
@@ -1424,10 +1436,10 @@
                     "has_required_choices": true,
                     "calories": 890
                 },
-                "{id:21}": {
-                    "id": "{id:21}",
+                "{id:22}": {
+                    "id": "{id:22}",
                     "name": "ساندويتش السلو المقرمش",
-                    "url": "/crave-demo#item-{id:21}",
+                    "url": "/crave-demo#item-{id:22}",
                     "short": "دجاج مقلي مع سلطة الملفوف البنفسجي ومايو الشيبوتلي.",
                     "image": {
                         "src": "{app}/storage/menu/{file:47}",
@@ -1448,10 +1460,10 @@
                     "has_required_choices": false,
                     "calories": 640
                 },
-                "{id:29}": {
-                    "id": "{id:29}",
+                "{id:30}": {
+                    "id": "{id:30}",
                     "name": "بيتزا الخضار",
-                    "url": "/crave-demo#item-{id:29}",
+                    "url": "/crave-demo#item-{id:30}",
                     "short": "فطر وطماطم كرزية وزيتون وإكليل الجبل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:48}",
@@ -1467,10 +1479,10 @@
                     "has_required_choices": true,
                     "calories": 720
                 },
-                "{id:34}": {
-                    "id": "{id:34}",
+                "{id:35}": {
+                    "id": "{id:35}",
                     "name": "سوبريم الحديقة",
-                    "url": "/crave-demo#item-{id:34}",
+                    "url": "/crave-demo#item-{id:35}",
                     "short": "خضار مشوية وفطر وريكوتا ورقائق الفلفل الحار.",
                     "image": {
                         "src": "{app}/storage/menu/{file:49}",
@@ -1491,10 +1503,10 @@
                     "has_required_choices": true,
                     "calories": 700
                 },
-                "{id:39}": {
-                    "id": "{id:39}",
+                "{id:40}": {
+                    "id": "{id:40}",
                     "name": "دجاج مقلي جنوبي",
-                    "url": "/crave-demo#item-{id:39}",
+                    "url": "/crave-demo#item-{id:40}",
                     "short": "دجاج منقوع ٢٤ ساعة ومقلي بخلطة ١١ بهار سرية.",
                     "image": {
                         "src": "{app}/storage/menu/{file:50}",
@@ -1519,10 +1531,10 @@
                     "has_required_choices": false,
                     "calories": 780
                 },
-                "{id:48}": {
-                    "id": "{id:48}",
+                "{id:49}": {
+                    "id": "{id:49}",
                     "name": "صحن البريسكت",
-                    "url": "/crave-demo#item-{id:48}",
+                    "url": "/crave-demo#item-{id:49}",
                     "short": "بريسكت مدخن ١٢ ساعة مع الأطراف المحروقة والمخلل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:51}",
@@ -1543,10 +1555,10 @@
                     "has_required_choices": false,
                     "calories": 840
                 },
-                "{id:55}": {
-                    "id": "{id:55}",
+                "{id:56}": {
+                    "id": "{id:56}",
                     "name": "باستا الروبيان",
-                    "url": "/crave-demo#item-{id:55}",
+                    "url": "/crave-demo#item-{id:56}",
                     "short": "روبيان بزبدة الثوم مع الطماطم الكرزية واللينغويني.",
                     "image": {
                         "src": "{app}/storage/menu/{file:52}",
@@ -1562,10 +1574,10 @@
                     "has_required_choices": false,
                     "calories": 640
                 },
-                "{id:65}": {
-                    "id": "{id:65}",
+                "{id:66}": {
+                    "id": "{id:66}",
                     "name": "شوربة الطماطم",
-                    "url": "/crave-demo#item-{id:65}",
+                    "url": "/crave-demo#item-{id:66}",
                     "short": "طماطم مشوية مع زيت الريحان وخبز محمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:53}",
@@ -1581,10 +1593,10 @@
                     "has_required_choices": false,
                     "calories": 260
                 },
-                "{id:74}": {
-                    "id": "{id:74}",
+                "{id:75}": {
+                    "id": "{id:75}",
                     "name": "بيض بينديكت",
-                    "url": "/crave-demo#item-{id:74}",
+                    "url": "/crave-demo#item-{id:75}",
                     "short": "بيض مسلوق مع سلمون مدخن وصوص الهولنديز.",
                     "image": {
                         "src": "{app}/storage/menu/{file:54}",
@@ -1600,10 +1612,10 @@
                     "has_required_choices": false,
                     "calories": 540
                 },
-                "{id:85}": {
-                    "id": "{id:85}",
+                "{id:86}": {
+                    "id": "{id:86}",
                     "name": "كيك اللافا",
-                    "url": "/crave-demo#item-{id:85}",
+                    "url": "/crave-demo#item-{id:86}",
                     "short": "قلب شوكولاتة سائل، يخبز عند الطلب.",
                     "image": {
                         "src": "{app}/storage/menu/{file:55}",
@@ -1619,10 +1631,10 @@
                     "has_required_choices": false,
                     "calories": 460
                 },
-                "{id:93}": {
-                    "id": "{id:93}",
+                "{id:94}": {
+                    "id": "{id:94}",
                     "name": "دونات مزجج",
-                    "url": "/crave-demo#item-{id:93}",
+                    "url": "/crave-demo#item-{id:94}",
                     "short": "دونات مع الشوكولاتة والرشات الملونة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:56}",
@@ -1638,10 +1650,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:103}": {
-                    "id": "{id:103}",
+                "{id:104}": {
+                    "id": "{id:104}",
                     "name": "لاتيه إسباني مثلج",
-                    "url": "/crave-demo#item-{id:103}",
+                    "url": "/crave-demo#item-{id:104}",
                     "short": "إسبريسو مزدوج مع حليب مكثف وثلج.",
                     "image": {
                         "src": "{app}/storage/menu/{file:57}",
@@ -1662,10 +1674,10 @@
                     "has_required_choices": true,
                     "calories": 190
                 },
-                "{id:111}": {
-                    "id": "{id:111}",
+                "{id:112}": {
+                    "id": "{id:112}",
                     "name": "ثلاثية الموكتيل",
-                    "url": "/crave-demo#item-{id:111}",
+                    "url": "/crave-demo#item-{id:112}",
                     "short": "ثلاثة موكتيلات: توت وحمضيات وباشن فروت.",
                     "image": {
                         "src": "{app}/storage/menu/{file:58}",
@@ -1686,10 +1698,10 @@
                     "has_required_choices": false,
                     "calories": 240
                 },
-                "{id:8}": {
-                    "id": "{id:8}",
+                "{id:9}": {
+                    "id": "{id:9}",
                     "name": "ماك آند تشيز",
-                    "url": "/crave-demo#item-{id:8}",
+                    "url": "/crave-demo#item-{id:9}",
                     "short": "معكرونة بثلاثة أنواع جبن مع فتات محمص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:59}",
@@ -1705,10 +1717,10 @@
                     "has_required_choices": false,
                     "calories": 640
                 },
-                "{id:15}": {
-                    "id": "{id:15}",
+                "{id:16}": {
+                    "id": "{id:16}",
                     "name": "ترافل غورميه",
-                    "url": "/crave-demo#item-{id:15}",
+                    "url": "/crave-demo#item-{id:16}",
                     "short": "لحم واغيو مع أيولي الترافل والجرجير والشيدر المعتق.",
                     "image": {
                         "src": "{app}/storage/menu/{file:60}",
@@ -1724,10 +1736,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:22}": {
-                    "id": "{id:22}",
+                "{id:23}": {
+                    "id": "{id:23}",
                     "name": "هوت دوغ نيويورك",
-                    "url": "/crave-demo#item-{id:22}",
+                    "url": "/crave-demo#item-{id:23}",
                     "short": "نقانق بقري مع بصل مقرمش وخردل وكاتشب.",
                     "image": {
                         "src": "{app}/storage/menu/{file:61}",
@@ -1743,10 +1755,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:40}": {
-                    "id": "{id:40}",
+                "{id:41}": {
+                    "id": "{id:41}",
                     "name": "سلة المقرمشات",
-                    "url": "/crave-demo#item-{id:40}",
+                    "url": "/crave-demo#item-{id:41}",
                     "short": "قطع دجاج مقرمشة مع رقائق الوافل وصوص الغريفي.",
                     "image": {
                         "src": "{app}/storage/menu/{file:62}",
@@ -1762,10 +1774,10 @@
                     "has_required_choices": false,
                     "calories": 860
                 },
-                "{id:49}": {
-                    "id": "{id:49}",
+                "{id:50}": {
+                    "id": "{id:50}",
                     "name": "صحن دجاج مشوي",
-                    "url": "/crave-demo#item-{id:49}",
+                    "url": "/crave-demo#item-{id:50}",
                     "short": "صدر دجاج متبل مع ذرة بالزبدة وبطاطس مهروسة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:63}",
@@ -1781,10 +1793,10 @@
                     "has_required_choices": false,
                     "calories": 560
                 },
-                "{id:56}": {
-                    "id": "{id:56}",
+                "{id:57}": {
+                    "id": "{id:57}",
                     "name": "سباغيتي الترافل",
-                    "url": "/crave-demo#item-{id:56}",
+                    "url": "/crave-demo#item-{id:57}",
                     "short": "مستحلب الفلفل الأسود مع زيت الترافل والبارميزان.",
                     "image": {
                         "src": "{app}/storage/menu/{file:64}",
@@ -1800,10 +1812,10 @@
                     "has_required_choices": false,
                     "calories": 620
                 },
-                "{id:66}": {
-                    "id": "{id:66}",
+                "{id:67}": {
+                    "id": "{id:67}",
                     "name": "شوربة الخضار",
-                    "url": "/crave-demo#item-{id:66}",
+                    "url": "/crave-demo#item-{id:67}",
                     "short": "خضار موسمية مع مرق الأعشاب.",
                     "image": {
                         "src": "{app}/storage/menu/{file:65}",
@@ -1824,10 +1836,10 @@
                     "has_required_choices": false,
                     "calories": 200
                 },
-                "{id:75}": {
-                    "id": "{id:75}",
+                "{id:76}": {
+                    "id": "{id:76}",
                     "name": "توست البيض",
-                    "url": "/crave-demo#item-{id:75}",
+                    "url": "/crave-demo#item-{id:76}",
                     "short": "بيض داخل خبز البريوش مع طماطم مشوية.",
                     "image": {
                         "src": "{app}/storage/menu/{file:66}",
@@ -1843,10 +1855,10 @@
                     "has_required_choices": false,
                     "calories": 380
                 },
-                "{id:86}": {
-                    "id": "{id:86}",
+                "{id:87}": {
+                    "id": "{id:87}",
                     "name": "تيراميسو",
-                    "url": "/crave-demo#item-{id:86}",
+                    "url": "/crave-demo#item-{id:87}",
                     "short": "طبقات الإسبريسو والماسكاربوني.",
                     "image": {
                         "src": "{app}/storage/menu/{file:67}",
@@ -1862,10 +1874,10 @@
                     "has_required_choices": false,
                     "calories": 440
                 },
-                "{id:94}": {
-                    "id": "{id:94}",
+                "{id:95}": {
+                    "id": "{id:95}",
                     "name": "كوكيز (٣)",
-                    "url": "/crave-demo#item-{id:94}",
+                    "url": "/crave-demo#item-{id:95}",
                     "short": "كوكيز طرية بقطع الشوكولاتة الداكنة وملح البحر.",
                     "image": {
                         "src": "{app}/storage/menu/{file:68}",
@@ -1881,10 +1893,10 @@
                     "has_required_choices": false,
                     "calories": 380
                 },
-                "{id:104}": {
-                    "id": "{id:104}",
+                "{id:105}": {
+                    "id": "{id:105}",
                     "name": "لاتيه آرت",
-                    "url": "/crave-demo#item-{id:104}",
+                    "url": "/crave-demo#item-{id:105}",
                     "short": "لاتيه بفن الرسم على بن مختص.",
                     "image": {
                         "src": "{app}/storage/menu/{file:69}",
@@ -1900,10 +1912,10 @@
                     "has_required_choices": false,
                     "calories": 150
                 },
-                "{id:112}": {
-                    "id": "{id:112}",
+                "{id:113}": {
+                    "id": "{id:113}",
                     "name": "فوار التوت الداكن",
-                    "url": "/crave-demo#item-{id:112}",
+                    "url": "/crave-demo#item-{id:113}",
                     "short": "توت أسود مع الليمون والصودا وشريحة البرتقال.",
                     "image": {
                         "src": "{app}/storage/menu/{file:70}",
@@ -1924,10 +1936,10 @@
                     "has_required_choices": false,
                     "calories": 140
                 },
-                "{id:9}": {
-                    "id": "{id:9}",
+                "{id:10}": {
+                    "id": "{id:10}",
                     "name": "ذرة مشوية",
-                    "url": "/crave-demo#item-{id:9}",
+                    "url": "/crave-demo#item-{id:10}",
                     "short": "ذرة مشوية مع زبدة الليمون الحار والجبن.",
                     "image": {
                         "src": "{app}/storage/menu/{file:71}",
@@ -1943,10 +1955,10 @@
                     "has_required_choices": false,
                     "calories": 260
                 },
-                "{id:16}": {
-                    "id": "{id:16}",
+                "{id:17}": {
+                    "id": "{id:17}",
                     "name": "كومبو اللهب",
-                    "url": "/crave-demo#item-{id:16}",
+                    "url": "/crave-demo#item-{id:17}",
                     "short": "برجر مشوي على اللهب مع بطاطس متبلة ومشروب بارد.",
                     "image": {
                         "src": "{app}/storage/menu/{file:72}",
@@ -1962,10 +1974,10 @@
                     "has_required_choices": true,
                     "calories": 980
                 },
-                "{id:23}": {
-                    "id": "{id:23}",
+                "{id:24}": {
+                    "id": "{id:24}",
                     "name": "كلوب هاوس",
-                    "url": "/crave-demo#item-{id:23}",
+                    "url": "/crave-demo#item-{id:24}",
                     "short": "كلوب ساندويتش ثلاثي الطبقات مع دجاج وبيض وبطاطس.",
                     "image": {
                         "src": "{app}/storage/menu/{file:73}",
@@ -1981,10 +1993,10 @@
                     "has_required_choices": false,
                     "calories": 760
                 },
-                "{id:41}": {
-                    "id": "{id:41}",
+                "{id:42}": {
+                    "id": "{id:42}",
                     "name": "صحن بروست",
-                    "url": "/crave-demo#item-{id:41}",
+                    "url": "/crave-demo#item-{id:42}",
                     "short": "بروست ذهبي مع الثوم والمخلل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:74}",
@@ -2000,10 +2012,10 @@
                     "has_required_choices": false,
                     "calories": 800
                 },
-                "{id:50}": {
-                    "id": "{id:50}",
+                "{id:51}": {
+                    "id": "{id:51}",
                     "name": "كباب مع بطاطس",
-                    "url": "/crave-demo#item-{id:50}",
+                    "url": "/crave-demo#item-{id:51}",
                     "short": "أسياخ لحم مشوية على الفحم مع طماطم وبطاطس.",
                     "image": {
                         "src": "{app}/storage/menu/{file:75}",
@@ -2019,10 +2031,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:57}": {
-                    "id": "{id:57}",
+                "{id:58}": {
+                    "id": "{id:58}",
                     "name": "بوكي السلمون",
-                    "url": "/crave-demo#item-{id:57}",
+                    "url": "/crave-demo#item-{id:58}",
                     "short": "أرز سوشي مع مكعبات السلمون والإدامامي والأفوكادو.",
                     "image": {
                         "src": "{app}/storage/menu/{file:76}",
@@ -2043,10 +2055,10 @@
                     "has_required_choices": false,
                     "calories": 520
                 },
-                "{id:67}": {
-                    "id": "{id:67}",
+                "{id:68}": {
+                    "id": "{id:68}",
                     "name": "شوربة اليقطين",
-                    "url": "/crave-demo#item-{id:67}",
+                    "url": "/crave-demo#item-{id:68}",
                     "short": "يقطين محمص مع بذور محمصة ونقاط زيت الفلفل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:77}",
@@ -2062,10 +2074,10 @@
                     "has_required_choices": false,
                     "calories": 240
                 },
-                "{id:76}": {
-                    "id": "{id:76}",
+                "{id:77}": {
+                    "id": "{id:77}",
                     "name": "شكشوكة",
-                    "url": "/crave-demo#item-{id:76}",
+                    "url": "/crave-demo#item-{id:77}",
                     "short": "صوص الطماطم والفلفل مع بيض مخبوز وخبز.",
                     "image": {
                         "src": "{app}/storage/menu/{file:78}",
@@ -2086,10 +2098,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:87}": {
-                    "id": "{id:87}",
+                "{id:88}": {
+                    "id": "{id:88}",
                     "name": "براوني",
-                    "url": "/crave-demo#item-{id:87}",
+                    "url": "/crave-demo#item-{id:88}",
                     "short": "براوني كثيف مع أنهار الشوكولاتة الذائبة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:79}",
@@ -2105,10 +2117,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:95}": {
-                    "id": "{id:95}",
+                "{id:96}": {
+                    "id": "{id:96}",
                     "name": "تشوروز",
-                    "url": "/crave-demo#item-{id:95}",
+                    "url": "/crave-demo#item-{id:96}",
                     "short": "تشوروز مقرمشة مع سكر القرفة وصوص الشوكولاتة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:80}",
@@ -2124,10 +2136,10 @@
                     "has_required_choices": false,
                     "calories": 440
                 },
-                "{id:105}": {
-                    "id": "{id:105}",
+                "{id:106}": {
+                    "id": "{id:106}",
                     "name": "فرنش برس",
-                    "url": "/crave-demo#item-{id:105}",
+                    "url": "/crave-demo#item-{id:106}",
                     "short": "إبريق قهوة منقوعة ببطء لشخصين.",
                     "image": {
                         "src": "{app}/storage/menu/{file:81}",
@@ -2148,10 +2160,10 @@
                     "has_required_choices": false,
                     "calories": 15
                 },
-                "{id:113}": {
-                    "id": "{id:113}",
+                "{id:114}": {
+                    "id": "{id:114}",
                     "name": "موهيتو",
-                    "url": "/crave-demo#item-{id:113}",
+                    "url": "/crave-demo#item-{id:114}",
                     "short": "نعناع مهروس مع الليمون والصودا.",
                     "image": {
                         "src": "{app}/storage/menu/{file:82}",
@@ -2176,10 +2188,10 @@
                     "has_required_choices": false,
                     "calories": 120
                 },
-                "{id:24}": {
-                    "id": "{id:24}",
+                "{id:25}": {
+                    "id": "{id:25}",
                     "name": "توست الجبن",
-                    "url": "/crave-demo#item-{id:24}",
+                    "url": "/crave-demo#item-{id:25}",
                     "short": "خبز محمص مع جبن ذائب وثلاثة صوصات.",
                     "image": {
                         "src": "{app}/storage/menu/{file:83}",
@@ -2195,10 +2207,10 @@
                     "has_required_choices": false,
                     "calories": 520
                 },
-                "{id:42}": {
-                    "id": "{id:42}",
+                "{id:43}": {
+                    "id": "{id:43}",
                     "name": "سمك وبطاطس",
-                    "url": "/crave-demo#item-{id:42}",
+                    "url": "/crave-demo#item-{id:43}",
                     "short": "فيليه سمك مقرمش مع بطاطس وصوص التارتار.",
                     "image": {
                         "src": "{app}/storage/menu/{file:84}",
@@ -2214,10 +2226,10 @@
                     "has_required_choices": false,
                     "calories": 720
                 },
-                "{id:58}": {
-                    "id": "{id:58}",
+                "{id:59}": {
+                    "id": "{id:59}",
                     "name": "طبق الحبوب",
-                    "url": "/crave-demo#item-{id:58}",
+                    "url": "/crave-demo#item-{id:59}",
                     "short": "كينوا مع خضار محمصة وبذور وطحينة الحمضيات.",
                     "image": {
                         "src": "{app}/storage/menu/{file:85}",
@@ -2238,10 +2250,10 @@
                     "has_required_choices": false,
                     "calories": 440
                 },
-                "{id:68}": {
-                    "id": "{id:68}",
+                "{id:69}": {
+                    "id": "{id:69}",
                     "name": "شوربة الديتوكس",
-                    "url": "/crave-demo#item-{id:68}",
+                    "url": "/crave-demo#item-{id:69}",
                     "short": "بروكلي وسبانخ مع كريمة جوز الهند والكزبرة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:86}",
@@ -2262,10 +2274,10 @@
                     "has_required_choices": false,
                     "calories": 220
                 },
-                "{id:77}": {
-                    "id": "{id:77}",
+                "{id:78}": {
+                    "id": "{id:78}",
                     "name": "فريتاتا",
-                    "url": "/crave-demo#item-{id:77}",
+                    "url": "/crave-demo#item-{id:78}",
                     "short": "أومليت مفتوح مع الجبن الذائب والأعشاب.",
                     "image": {
                         "src": "{app}/storage/menu/{file:87}",
@@ -2281,10 +2293,10 @@
                     "has_required_choices": false,
                     "calories": 400
                 },
-                "{id:88}": {
-                    "id": "{id:88}",
+                "{id:89}": {
+                    "id": "{id:89}",
                     "name": "فطيرة التوت",
-                    "url": "/crave-demo#item-{id:88}",
+                    "url": "/crave-demo#item-{id:89}",
                     "short": "عجينة الزبدة المشبكة مع حشوة التوت المشكل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:88}",
@@ -2300,10 +2312,10 @@
                     "has_required_choices": false,
                     "calories": 400
                 },
-                "{id:96}": {
-                    "id": "{id:96}",
+                "{id:97}": {
+                    "id": "{id:97}",
                     "name": "مافن التوت",
-                    "url": "/crave-demo#item-{id:96}",
+                    "url": "/crave-demo#item-{id:97}",
                     "short": "مافن بحشوة التوت الأزرق.",
                     "image": {
                         "src": "{app}/storage/menu/{file:89}",
@@ -2319,10 +2331,10 @@
                     "has_required_choices": false,
                     "calories": 340
                 },
-                "{id:106}": {
-                    "id": "{id:106}",
+                "{id:107}": {
+                    "id": "{id:107}",
                     "name": "ماتشا لاتيه",
-                    "url": "/crave-demo#item-{id:106}",
+                    "url": "/crave-demo#item-{id:107}",
                     "short": "ماتشا فاخرة مع حليب مبخر.",
                     "image": {
                         "src": "{app}/storage/menu/{file:90}",
@@ -2338,10 +2350,10 @@
                     "has_required_choices": true,
                     "calories": 160
                 },
-                "{id:114}": {
-                    "id": "{id:114}",
+                "{id:115}": {
+                    "id": "{id:115}",
                     "name": "ليمون بالنعناع",
-                    "url": "/crave-demo#item-{id:114}",
+                    "url": "/crave-demo#item-{id:115}",
                     "short": "ليمون مع نعناع مثلج.",
                     "image": {
                         "src": "{app}/storage/menu/{file:91}",
@@ -2362,10 +2374,10 @@
                     "has_required_choices": false,
                     "calories": 130
                 },
-                "{id:43}": {
-                    "id": "{id:43}",
+                "{id:44}": {
+                    "id": "{id:44}",
                     "name": "ماندو مومو (٦ قطع)",
-                    "url": "/crave-demo#item-{id:43}",
+                    "url": "/crave-demo#item-{id:44}",
                     "short": "زلابية دجاج على البخار مع صوص الصويا الحار.",
                     "image": {
                         "src": "{app}/storage/menu/{file:92}",
@@ -2386,10 +2398,10 @@
                     "has_required_choices": false,
                     "calories": 380
                 },
-                "{id:59}": {
-                    "id": "{id:59}",
+                "{id:60}": {
+                    "id": "{id:60}",
                     "name": "أرز مقلي",
-                    "url": "/crave-demo#item-{id:59}",
+                    "url": "/crave-demo#item-{id:60}",
                     "short": "أرز مقلي على النار العالية مع البيض والبصل الأخضر.",
                     "image": {
                         "src": "{app}/storage/menu/{file:93}",
@@ -2405,10 +2417,10 @@
                     "has_required_choices": false,
                     "calories": 520
                 },
-                "{id:69}": {
-                    "id": "{id:69}",
+                "{id:70}": {
+                    "id": "{id:70}",
                     "name": "شوربة النودلز",
-                    "url": "/crave-demo#item-{id:69}",
+                    "url": "/crave-demo#item-{id:70}",
                     "short": "نودلز مع مرق الخضار وزيت الفلفل المقرمش.",
                     "image": {
                         "src": "{app}/storage/menu/{file:94}",
@@ -2429,10 +2441,10 @@
                     "has_required_choices": false,
                     "calories": 380
                 },
-                "{id:78}": {
-                    "id": "{id:78}",
+                "{id:79}": {
+                    "id": "{id:79}",
                     "name": "لوح البرانش",
-                    "url": "/crave-demo#item-{id:78}",
+                    "url": "/crave-demo#item-{id:79}",
                     "short": "ثلاثية التوست: أفوكادو، موز وطحينة، طماطم وفيتا.",
                     "image": {
                         "src": "{app}/storage/menu/{file:95}",
@@ -2448,10 +2460,10 @@
                     "has_required_choices": false,
                     "calories": 520
                 },
-                "{id:97}": {
-                    "id": "{id:97}",
+                "{id:98}": {
+                    "id": "{id:98}",
                     "name": "كريب الموز",
-                    "url": "/crave-demo#item-{id:97}",
+                    "url": "/crave-demo#item-{id:98}",
                     "short": "كريب رقيق مع الموز وصوص الشوكولاتة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:96}",
@@ -2467,10 +2479,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:115}": {
-                    "id": "{id:115}",
+                "{id:116}": {
+                    "id": "{id:116}",
                     "name": "مبرد البطيخ",
-                    "url": "/crave-demo#item-{id:115}",
+                    "url": "/crave-demo#item-{id:116}",
                     "short": "بطيخ طازج مع الليمون.",
                     "image": {
                         "src": "{app}/storage/menu/{file:97}",
@@ -2491,10 +2503,10 @@
                     "has_required_choices": false,
                     "calories": 110
                 },
-                "{id:60}": {
-                    "id": "{id:60}",
+                "{id:61}": {
+                    "id": "{id:61}",
                     "name": "بيبيمباب",
-                    "url": "/crave-demo#item-{id:60}",
+                    "url": "/crave-demo#item-{id:61}",
                     "short": "أرز بالخضار المتبلة والبيض المقلي وصوص الغوتشوجانغ.",
                     "image": {
                         "src": "{app}/storage/menu/{file:98}",
@@ -2515,10 +2527,10 @@
                     "has_required_choices": false,
                     "calories": 580
                 },
-                "{id:79}": {
-                    "id": "{id:79}",
+                "{id:80}": {
+                    "id": "{id:80}",
                     "name": "كرواسون بالزبدة",
-                    "url": "/crave-demo#item-{id:79}",
+                    "url": "/crave-demo#item-{id:80}",
                     "short": "كرواسون هش بالزبدة يخبز طوال الصباح.",
                     "image": {
                         "src": "{app}/storage/menu/{file:99}",
@@ -2534,10 +2546,10 @@
                     "has_required_choices": false,
                     "calories": 280
                 },
-                "{id:98}": {
-                    "id": "{id:98}",
+                "{id:99}": {
+                    "id": "{id:99}",
                     "name": "بانا كوتا",
-                    "url": "/crave-demo#item-{id:98}",
+                    "url": "/crave-demo#item-{id:99}",
                     "short": "كريمة الفانيليا مع الفراولة المنقوعة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:100}",
@@ -2553,10 +2565,10 @@
                     "has_required_choices": false,
                     "calories": 320
                 },
-                "{id:116}": {
-                    "id": "{id:116}",
+                "{id:117}": {
+                    "id": "{id:117}",
                     "name": "عصير برتقال طازج",
-                    "url": "/crave-demo#item-{id:116}",
+                    "url": "/crave-demo#item-{id:117}",
                     "short": "يعصر عند الطلب بدون سكر مضاف.",
                     "image": {
                         "src": "{app}/storage/menu/{file:101}",
@@ -2577,10 +2589,10 @@
                     "has_required_choices": false,
                     "calories": 120
                 },
-                "{id:80}": {
-                    "id": "{id:80}",
+                "{id:81}": {
+                    "id": "{id:81}",
                     "name": "رول القرفة",
-                    "url": "/crave-demo#item-{id:80}",
+                    "url": "/crave-demo#item-{id:81}",
                     "short": "رول القرفة مع صوص الجبن الكريمي.",
                     "image": {
                         "src": "{app}/storage/menu/{file:102}",
@@ -2596,10 +2608,10 @@
                     "has_required_choices": false,
                     "calories": 420
                 },
-                "{id:117}": {
-                    "id": "{id:117}",
+                "{id:118}": {
+                    "id": "{id:118}",
                     "name": "العصير الأخضر",
-                    "url": "/crave-demo#item-{id:117}",
+                    "url": "/crave-demo#item-{id:118}",
                     "short": "كيوي وتفاح وسبانخ مع الزنجبيل.",
                     "image": {
                         "src": "{app}/storage/menu/{file:103}",
@@ -2620,10 +2632,10 @@
                     "has_required_choices": false,
                     "calories": 140
                 },
-                "{id:118}": {
-                    "id": "{id:118}",
+                "{id:119}": {
+                    "id": "{id:119}",
                     "name": "شاي مثلج",
-                    "url": "/crave-demo#item-{id:118}",
+                    "url": "/crave-demo#item-{id:119}",
                     "short": "شاي أسود منقوع بارد مع الليمون.",
                     "image": {
                         "src": "{app}/storage/menu/{file:104}",
@@ -2644,10 +2656,10 @@
                     "has_required_choices": false,
                     "calories": 60
                 },
-                "{id:119}": {
-                    "id": "{id:119}",
+                "{id:120}": {
+                    "id": "{id:120}",
                     "name": "كولا",
-                    "url": "/crave-demo#item-{id:119}",
+                    "url": "/crave-demo#item-{id:120}",
                     "short": "كولا باردة في زجاجة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:105}",
@@ -2668,10 +2680,10 @@
                     "has_required_choices": false,
                     "calories": 140
                 },
-                "{id:120}": {
-                    "id": "{id:120}",
+                "{id:121}": {
+                    "id": "{id:121}",
                     "name": "مياه غازية",
-                    "url": "/crave-demo#item-{id:120}",
+                    "url": "/crave-demo#item-{id:121}",
                     "short": "مياه غازية باردة.",
                     "image": {
                         "src": "{app}/storage/menu/{file:106}",
@@ -2697,14 +2709,14 @@
         },
         "features": {
             "featured": [
-                "{id:4}",
-                "{id:11}",
-                "{id:18}",
-                "{id:26}",
-                "{id:31}",
-                "{id:36}",
-                "{id:45}",
-                "{id:52}"
+                "{id:5}",
+                "{id:12}",
+                "{id:19}",
+                "{id:27}",
+                "{id:32}",
+                "{id:37}",
+                "{id:46}",
+                "{id:53}"
             ]
         },
         "customer": null,
@@ -2768,7 +2780,7 @@
             "page": {
                 "kind": "item",
                 "item": {
-                    "id": "{id:4}",
+                    "id": "{id:5}",
                     "name": "ناتشوز غراندي",
                     "description": "رقائق تورتيا مع صوص الجبن والبيكو دي جالو والهالبينو.",
                     "gallery": [
@@ -2800,7 +2812,7 @@
                     ],
                     "option_groups": [
                         {
-                            "id": "{id:121}",
+                            "id": "{id:122}",
                             "label": "الصوصات",
                             "kind": "checkbox",
                             "required": false,
@@ -2809,7 +2821,7 @@
                             "rule_label": "اختياري · اختر حتى 4",
                             "options": [
                                 {
-                                    "id": "{id:122}",
+                                    "id": "{id:123}",
                                     "label": "ثوم",
                                     "price_delta": {
                                         "minor": 200,
@@ -2818,7 +2830,7 @@
                                     }
                                 },
                                 {
-                                    "id": "{id:123}",
+                                    "id": "{id:124}",
                                     "label": "باربكيو",
                                     "price_delta": {
                                         "minor": 200,
@@ -2827,7 +2839,7 @@
                                     }
                                 },
                                 {
-                                    "id": "{id:124}",
+                                    "id": "{id:125}",
                                     "label": "رانش",
                                     "price_delta": {
                                         "minor": 200,
@@ -2836,7 +2848,7 @@
                                     }
                                 },
                                 {
-                                    "id": "{id:125}",
+                                    "id": "{id:126}",
                                     "label": "عسل حار",
                                     "price_delta": {
                                         "minor": 300,
@@ -2847,7 +2859,7 @@
                             ]
                         },
                         {
-                            "id": "{id:126}",
+                            "id": "{id:127}",
                             "label": "Add-ons library",
                             "kind": "checkbox",
                             "required": false,
@@ -2855,7 +2867,7 @@
                             "rule_label": "اختياري",
                             "options": [
                                 {
-                                    "id": "{id:127}",
+                                    "id": "{id:128}",
                                     "label": "هالبينو",
                                     "price_delta": {
                                         "minor": 200,
@@ -2864,7 +2876,7 @@
                                     }
                                 },
                                 {
-                                    "id": "{id:128}",
+                                    "id": "{id:129}",
                                     "label": "شريحة جبن",
                                     "price_delta": {
                                         "minor": 300,
@@ -2898,7 +2910,7 @@
                     "lines": [
                         {
                             "id": "ln_1",
-                            "item_id": "{id:4}",
+                            "item_id": "{id:5}",
                             "name": "ناتشوز غراندي",
                             "qty": 2,
                             "line_total": {
@@ -2914,7 +2926,7 @@
                         },
                         {
                             "id": "ln_2",
-                            "item_id": "{id:52}",
+                            "item_id": "{id:53}",
                             "name": "كاربونارا",
                             "qty": 1,
                             "line_total": {
@@ -2981,7 +2993,7 @@
                         "lines": [
                             {
                                 "id": "ln_1",
-                                "item_id": "{id:4}",
+                                "item_id": "{id:5}",
                                 "name": "ناتشوز غراندي",
                                 "qty": 2,
                                 "line_total": {
@@ -2997,7 +3009,7 @@
                             },
                             {
                                 "id": "ln_2",
-                                "item_id": "{id:52}",
+                                "item_id": "{id:53}",
                                 "name": "كاربونارا",
                                 "qty": 1,
                                 "line_total": {
@@ -3075,7 +3087,7 @@
                         "lines": [
                             {
                                 "id": "ln_1",
-                                "item_id": "{id:4}",
+                                "item_id": "{id:5}",
                                 "name": "ناتشوز غراندي",
                                 "qty": 2,
                                 "line_total": {
@@ -3091,7 +3103,7 @@
                             },
                             {
                                 "id": "ln_2",
-                                "item_id": "{id:52}",
+                                "item_id": "{id:53}",
                                 "name": "كاربونارا",
                                 "qty": 1,
                                 "line_total": {

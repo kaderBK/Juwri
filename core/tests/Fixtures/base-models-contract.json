@@ -658,7 +658,14 @@
         },
         "hidden": [],
         "sluggable": null,
-        "relations": []
+        "relations": {
+            "batch": {
+                "type": "BelongsTo",
+                "related": "Juwri\\Modules\\Loyalty\\Models\\CouponBatch",
+                "sql": "select * from \"coupon_batches\" where \"coupon_batches\".\"id\" is null",
+                "eager": []
+            }
+        }
     },
     "Juwri\\Modules\\Content\\Models\\BlogComment": {
         "table": "blog_comments",
