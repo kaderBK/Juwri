@@ -13,6 +13,10 @@ use Tests\TestCase;
  * wipes its value="1" to "" when the bound model starts undefined (edit: {}), so a ticked
  * box posted an empty value and $request->boolean() read false. Owner views bind such
  * checkboxes with :checked="expr" @change="expr = $event.target.checked" instead.
+ *
+ * Covers the value forms Alpine would blank: value="1", :value="1" and value="{{ 1 }}"
+ * (single or double quoted). Array-valued checkboxes (value="media", value="{{ $id }}")
+ * are legitimate x-model usage and are not flagged.
  */
 class CheckboxXModelValueLintTest extends TestCase
 {
@@ -24,9 +28,11 @@ class CheckboxXModelValueLintTest extends TestCase
             if (! str_ends_with($file->getFilename(), '.blade.php')) {
                 continue;
             }
-            preg_match_all('/<input[^>]*>/', (string) file_get_contents($file->getPathname()), $m);
+            preg_match_all('/<input\b[^>]*>/', (string) file_get_contents($file->getPathname()), $m);
             foreach ($m[0] as $tag) {
-                if (str_contains($tag, 'type="checkbox"') && str_contains($tag, 'value="1"') && str_contains($tag, 'x-model=')) {
+                $isCheckbox = preg_match('/\btype\s*=\s*(["\'])checkbox\1/', $tag) === 1;
+                $hasValueOne = preg_match('/\b:?value\s*=\s*(["\'])\s*(?:1|\{\{\s*1\s*\}\})\s*\1/', $tag) === 1;
+                if ($isCheckbox && $hasValueOne && str_contains($tag, 'x-model')) {
                     $bad[] = str_replace(resource_path(), '', $file->getPathname()).': '.preg_replace('/\s+/', ' ', $tag);
                 }
             }

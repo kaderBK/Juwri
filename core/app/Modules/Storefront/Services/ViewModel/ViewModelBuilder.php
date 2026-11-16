@@ -1025,7 +1025,7 @@ final class ViewModelBuilder
         }
         $out = ['current' => $current];
 
-        if (StoreSettings::bool((int) $store->id, 'allow_multi_branch_switch')) {
+        if (StoreSettings::bool((int) $store->id, 'allow_multi_branch_switch', true)) {
             $all = Branch::query()->where('store_id', $store->id)->where('active', true)->orderBy('position')->orderBy('id')->get();
             if ($all->count() > 1) {
                 $base = route('publicView', ['slug' => $store->slug], false);

@@ -416,6 +416,10 @@ class LemonSqueezyController extends Controller
                                 Upgrade::where('user_id', $checkout->user_id)
                                     ->update(['unique_id' => 'lemon_squeezy###'.$subscription]);
                             }
+                            // BL-061: a cancel / expiry parked while the sub id waited here applies now that it is stamped.
+                            if ($subscription && $orderId !== '') {
+                                self::applyParkedCancel($orderId, (string) $subscription);
+                            }
                         }
 
                         return $response;
@@ -523,13 +527,13 @@ class LemonSqueezyController extends Controller
                        period and keeps access until then — LS fires
                        `subscription_expired` separately when it actually runs out.
                        Expiring here forfeited paid time that was never refunded. */
-                    Fulfilment::morCancelAtPeriodEnd('lemon_squeezy', $payload->data->id ?? null);
+                    self::cancelOrPark('cancelled', $payload);
 
                     return response()->json(['message' => 'cancelled', 'status' => 200], 200);
 
                 case 'subscription_expired':
                     /* M3: the paid period has ended → expire the local sub. */
-                    Fulfilment::morCancel('lemon_squeezy', $payload->data->id ?? null);
+                    self::cancelOrPark('expired', $payload);
 
                     return response()->json(['message' => 'expired', 'status' => 200], 200);
 
@@ -545,6 +549,60 @@ class LemonSqueezyController extends Controller
                     return response()->json(['message' => 'ignored', 'status' => 200], 200);
             }
         }, fn () => response()->json(['message' => 'duplicate', 'status' => 200], 200));
+    }
+
+    /**
+     * BL-061: subscription_cancelled / subscription_expired. While subscription_created's id is still parked for its
+     * order (order_created has not settled), no Upgrade carries the id and the cancel would be lost: it is parked
+     * too (expired wins over cancelled) and applied by order_created. Otherwise it applies at once, as before.
+     *
+     * @param  'cancelled'|'expired'  $kind
+     */
+    private static function cancelOrPark(string $kind, mixed $payload): void
+    {
+        $subId = $payload->data->id ?? null;
+        $orderId = (string) ($payload->data->attributes->order_id ?? '');
+
+        self::withOrderLock($orderId, function () use ($kind, $subId, $orderId) {
+            if ($orderId !== '' && is_scalar($subId) && (string) $subId !== ''
+                && Cache::get("lemon_sub_for_order:{$orderId}") === (string) $subId) {
+                $key = "lemon_cancel_for_order:{$orderId}";
+                if ($kind === 'expired' || Cache::get($key) !== 'expired') {
+                    Cache::put($key, $kind, now()->addDays(7));
+                }
+
+                return;
+            }
+            self::applyCancel($kind, $subId);
+        });
+    }
+
+    /** BL-061: applies a cancel / expiry parked for $orderId to its now-stamped subscription (called under the order lock). */
+    private static function applyParkedCancel(string $orderId, string $subscription): void
+    {
+        $parked = Cache::pull("lemon_cancel_for_order:{$orderId}");
+        if ($parked !== 'cancelled' && $parked !== 'expired') {
+            return;
+        }
+        try {
+            self::applyCancel($parked, $subscription);
+        } catch (\Throwable $e) {
+            // Kept for the gateway's retry of order_created.
+            Cache::put("lemon_cancel_for_order:{$orderId}", $parked, now()->addDays(7));
+
+            throw $e;
+        }
+    }
+
+    /** @param  'cancelled'|'expired'  $kind */
+    private static function applyCancel(string $kind, mixed $subId): void
+    {
+        $subId = is_scalar($subId) ? (string) $subId : null;
+        if ($kind === 'expired') {
+            Fulfilment::morCancel('lemon_squeezy', $subId);
+        } else {
+            Fulfilment::morCancelAtPeriodEnd('lemon_squeezy', $subId);
+        }
     }
 
     /**

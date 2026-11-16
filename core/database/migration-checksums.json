@@ -88,6 +88,7 @@
     "app/Modules/Loyalty/Database/Migrations/2026_10_05_130100_add_account_id_to_coupons.php": "dada809e6be8a58fe26101d4fd3a17294c1d8060f2cd9d5449831e8054082c4d",
     "app/Modules/Loyalty/Database/Migrations/2026_10_18_120000_scope_coupon_code_unique_to_issuer.php": "d4fa333b96ff8feb8f896f802e5177550c7101620ad72024111a381c841c3aca",
     "app/Modules/Loyalty/Database/Migrations/2026_10_18_214500_add_delivery_retry_to_gift_cards.php": "b84d33e14733e768fa3ae8b9bbb500e06be91d29038eb3203c2b3378d60b7b53",
+    "app/Modules/Loyalty/Database/Migrations/2026_11_16_120000_create_coupon_batches_and_widen_coupon_code.php": "5b2e17b3acaa1cf5b79666f0215e22833a1d2d93b1ace06739417a9b60acc9e9",
     "app/Modules/Marketing/Database/Migrations/2026_10_01_129000_create_marketing_tables.php": "c177834483110b793b24a9ed85b982d49e0c3eab82b993ad336eb2a147f81d13",
     "app/Modules/Marketing/Database/Migrations/2026_10_01_829000_insert_marketing_reference_data.php": "a4a5298ed520c14b51c51fb6519e2e8e6dd1a1b6e8010c690a8a8bda36282c12",
     "app/Modules/Media/Database/Migrations/2026_10_01_105000_create_media_tables.php": "6589d5787928ad3bca629a44f8cce77fd3a52e120d9366e07d7679c2a693d9e1",

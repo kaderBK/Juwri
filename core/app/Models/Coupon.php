@@ -323,6 +323,16 @@ class Coupon extends Model implements MinorMoneyModel
         };
     }
 
+    /**
+     * Coupons C1: the generated batch this code belongs to (null for a hand-made coupon).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Juwri\Modules\Loyalty\Models\CouponBatch, $this>
+     */
+    public function batch(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\Juwri\Modules\Loyalty\Models\CouponBatch::class, 'batch_id');
+    }
+
     /** Has the expiry moment passed? (A coupon without one is read as "now".) */
     public function isExpiry(): bool
     {

@@ -49,7 +49,19 @@
                 "public_id": "{id:2}",
                 "name": "Northgate General Store — Main",
                 "address": "King Fahd Rd, Riyadh"
-            }
+            },
+            "switchable": [
+                {
+                    "public_id": "{id:2}",
+                    "name": "Northgate General Store — Main",
+                    "url": "/retail-demo?branch={id:2}"
+                },
+                {
+                    "public_id": "{id:3}",
+                    "name": "Main Branch",
+                    "url": "/retail-demo?branch={id:3}"
+                }
+            ]
         },
         "context": {
             "order_types": [
@@ -154,91 +166,91 @@
         "catalog": {
             "categories": [
                 {
-                    "id": "{id:3}",
+                    "id": "{id:4}",
                     "name": "الطازجة والألبان",
                     "item_ids": [
-                        "{id:4}",
                         "{id:5}",
                         "{id:6}",
                         "{id:7}",
                         "{id:8}",
-                        "{id:9}"
+                        "{id:9}",
+                        "{id:10}"
                     ],
                     "count": 6
                 },
                 {
-                    "id": "{id:10}",
+                    "id": "{id:11}",
                     "name": "المؤن والوجبات الخفيفة",
                     "item_ids": [
-                        "{id:11}",
                         "{id:12}",
                         "{id:13}",
                         "{id:14}",
-                        "{id:15}"
+                        "{id:15}",
+                        "{id:16}"
                     ],
                     "count": 5
                 },
                 {
-                    "id": "{id:16}",
+                    "id": "{id:17}",
                     "name": "المشروبات",
                     "item_ids": [
-                        "{id:17}",
                         "{id:18}",
                         "{id:19}",
-                        "{id:20}"
+                        "{id:20}",
+                        "{id:21}"
                     ],
                     "count": 4
                 },
                 {
-                    "id": "{id:21}",
+                    "id": "{id:22}",
                     "name": "المنزل والمطبخ",
                     "item_ids": [
-                        "{id:22}",
                         "{id:23}",
                         "{id:24}",
                         "{id:25}",
-                        "{id:26}"
+                        "{id:26}",
+                        "{id:27}"
                     ],
                     "count": 5
                 },
                 {
-                    "id": "{id:27}",
+                    "id": "{id:28}",
                     "name": "الإلكترونيات والأجهزة",
                     "item_ids": [
-                        "{id:28}",
                         "{id:29}",
                         "{id:30}",
-                        "{id:31}"
+                        "{id:31}",
+                        "{id:32}"
                     ],
                     "count": 4
                 },
                 {
-                    "id": "{id:32}",
+                    "id": "{id:33}",
                     "name": "الحدائق والهواء الطلق",
                     "item_ids": [
-                        "{id:33}",
                         "{id:34}",
                         "{id:35}",
-                        "{id:36}"
+                        "{id:36}",
+                        "{id:37}"
                     ],
                     "count": 4
                 },
                 {
-                    "id": "{id:37}",
+                    "id": "{id:38}",
                     "name": "المكتب والقرطاسية",
                     "item_ids": [
-                        "{id:38}",
                         "{id:39}",
-                        "{id:40}"
+                        "{id:40}",
+                        "{id:41}"
                     ],
                     "count": 3
                 }
             ],
             "items": {
-                "{id:4}": {
-                    "id": "{id:4}",
+                "{id:5}": {
+                    "id": "{id:5}",
                     "name": "موز (١ كجم)",
-                    "url": "/retail-demo?item={id:4}",
+                    "url": "/retail-demo?item={id:5}",
                     "short": "Naturally ripened bananas, sweet and ready to eat.",
                     "image": {
                         "src": "{app}/storage/menu/{file:2}",
@@ -268,10 +280,10 @@
                     "has_required_choices": false,
                     "brand": "Northgate Farms"
                 },
-                "{id:11}": {
-                    "id": "{id:11}",
+                "{id:12}": {
+                    "id": "{id:12}",
                     "name": "زيت زيتون بكر ممتاز ٥٠٠ مل",
-                    "url": "/retail-demo?item={id:11}",
+                    "url": "/retail-demo?item={id:12}",
                     "short": "Cold-pressed extra virgin olive oil, rich and fruity.",
                     "image": {
                         "src": "{app}/storage/menu/{file:3}",
@@ -297,10 +309,10 @@
                     "has_required_choices": false,
                     "brand": "Golden Harvest"
                 },
-                "{id:17}": {
-                    "id": "{id:17}",
+                "{id:18}": {
+                    "id": "{id:18}",
                     "name": "مياه غازية ١ لتر",
-                    "url": "/retail-demo?item={id:17}",
+                    "url": "/retail-demo?item={id:18}",
                     "short": "Naturally carbonated spring water, crisp and refreshing.",
                     "image": {
                         "src": "{app}/storage/menu/{file:4}",
@@ -326,10 +338,10 @@
                     "has_required_choices": false,
                     "brand": "Pure Springs"
                 },
-                "{id:22}": {
-                    "id": "{id:22}",
+                "{id:23}": {
+                    "id": "{id:23}",
                     "name": "طقم علب تخزين سيراميك",
-                    "url": "/retail-demo?item={id:22}",
+                    "url": "/retail-demo?item={id:23}",
                     "short": "Set of 3 airtight ceramic canisters for pantry staples, stackable lids.",
                     "image": {
                         "src": "{app}/storage/menu/{file:5}",
@@ -359,10 +371,10 @@
                     "has_required_choices": false,
                     "brand": "Norden Home"
                 },
-                "{id:28}": {
-                    "id": "{id:28}",
+                "{id:29}": {
+                    "id": "{id:29}",
                     "name": "سماعات أذن لاسلكية",
-                    "url": "/retail-demo?item={id:28}",
+                    "url": "/retail-demo?item={id:29}",
                     "short": "Bluetooth 5.3 earbuds, 28h total battery with case, IPX4.",
                     "image": {
                         "src": "{app}/storage/menu/{file:6}",
@@ -392,10 +404,10 @@
                     "has_required_choices": false,
                     "brand": "ByteForge Electronics"
                 },
-                "{id:33}": {
-                    "id": "{id:33}",
+                "{id:34}": {
+                    "id": "{id:34}",
                     "name": "زجاجة ماء معزولة ١ لتر",
-                    "url": "/retail-demo?item={id:33}",
+                    "url": "/retail-demo?item={id:34}",
                     "short": "Double-wall stainless steel, keeps drinks cold 24h / hot 12h.",
                     "image": {
                         "src": "{app}/storage/menu/{file:7}",
@@ -425,10 +437,10 @@
                     "has_required_choices": false,
                     "brand": "TrailPeak Outdoors"
                 },
-                "{id:38}": {
-                    "id": "{id:38}",
+                "{id:39}": {
+                    "id": "{id:39}",
                     "name": "دفتر جلدي مقاس A5",
-                    "url": "/retail-demo?item={id:38}",
+                    "url": "/retail-demo?item={id:39}",
                     "short": "Refillable faux-leather cover, 192 dotted pages.",
                     "image": {
                         "src": "{app}/storage/menu/{file:8}",
@@ -454,10 +466,10 @@
                     "has_required_choices": false,
                     "brand": "InkWell Office"
                 },
-                "{id:5}": {
-                    "id": "{id:5}",
+                "{id:6}": {
+                    "id": "{id:6}",
                     "name": "أفوكادو هاس (٤ حبات)",
-                    "url": "/retail-demo?item={id:5}",
+                    "url": "/retail-demo?item={id:6}",
                     "short": "Creamy Hass avocados, perfect for guacamole or toast.",
                     "image": {
                         "src": "{app}/storage/menu/{file:9}",
@@ -483,10 +495,10 @@
                     "has_required_choices": false,
                     "brand": "Northgate Farms"
                 },
-                "{id:12}": {
-                    "id": "{id:12}",
+                "{id:13}": {
+                    "id": "{id:13}",
                     "name": "مكرونة بيني ٥٠٠ جم",
-                    "url": "/retail-demo?item={id:12}",
+                    "url": "/retail-demo?item={id:13}",
                     "short": "Durum wheat semolina penne, cooks al dente in 11 minutes.",
                     "image": {
                         "src": "{app}/storage/menu/{file:10}",
@@ -512,10 +524,10 @@
                     "has_required_choices": false,
                     "brand": "Golden Harvest"
                 },
-                "{id:18}": {
-                    "id": "{id:18}",
+                "{id:19}": {
+                    "id": "{id:19}",
                     "name": "قهوة كولد برو ٣٥٠ مل",
-                    "url": "/retail-demo?item={id:18}",
+                    "url": "/retail-demo?item={id:19}",
                     "short": "Slow-steeped cold brew coffee, smooth and low-acid.",
                     "image": {
                         "src": "{app}/storage/menu/{file:11}",
@@ -541,10 +553,10 @@
                     "has_required_choices": false,
                     "brand": "Pure Springs"
                 },
-                "{id:23}": {
-                    "id": "{id:23}",
+                "{id:24}": {
+                    "id": "{id:24}",
                     "name": "لوح تقطيع خيزران",
-                    "url": "/retail-demo?item={id:23}",
+                    "url": "/retail-demo?item={id:24}",
                     "short": "Reversible bamboo board with juice groove, naturally antibacterial.",
                     "image": {
                         "src": "{app}/storage/menu/{file:12}",
@@ -570,10 +582,10 @@
                     "has_required_choices": false,
                     "brand": "Norden Home"
                 },
-                "{id:29}": {
-                    "id": "{id:29}",
+                "{id:30}": {
+                    "id": "{id:30}",
                     "name": "بطارية متنقلة سريعة الشحن ١٠٠٠٠ ملي أمبير",
-                    "url": "/retail-demo?item={id:29}",
+                    "url": "/retail-demo?item={id:30}",
                     "short": "20W USB-C fast charging, fits in a pocket, dual-port output.",
                     "image": {
                         "src": "{app}/storage/menu/{file:13}",
@@ -599,10 +611,10 @@
                     "has_required_choices": false,
                     "brand": "ByteForge Electronics"
                 },
-                "{id:34}": {
-                    "id": "{id:34}",
+                "{id:35}": {
+                    "id": "{id:35}",
                     "name": "كرسي تخييم قابل للطي",
-                    "url": "/retail-demo?item={id:34}",
+                    "url": "/retail-demo?item={id:35}",
                     "short": "Lightweight aluminum frame, carry bag included, 120kg rated.",
                     "image": {
                         "src": "{app}/storage/menu/{file:14}",
@@ -628,10 +640,10 @@
                     "has_required_choices": false,
                     "brand": "TrailPeak Outdoors"
                 },
-                "{id:39}": {
-                    "id": "{id:39}",
+                "{id:40}": {
+                    "id": "{id:40}",
                     "name": "طقم أقلام جل (١٢ قطعة)",
-                    "url": "/retail-demo?item={id:39}",
+                    "url": "/retail-demo?item={id:40}",
                     "short": "Smooth-writing gel pens in assorted colors.",
                     "image": {
                         "src": "{app}/storage/menu/{file:15}",
@@ -657,10 +669,10 @@
                     "has_required_choices": false,
                     "brand": "InkWell Office"
                 },
-                "{id:6}": {
-                    "id": "{id:6}",
+                "{id:7}": {
+                    "id": "{id:7}",
                     "name": "سبانخ بيبي عضوية ١٥٠ جم",
-                    "url": "/retail-demo?item={id:6}",
+                    "url": "/retail-demo?item={id:7}",
                     "short": "Pre-washed organic baby spinach leaves, ready for salads or cooking.",
                     "image": {
                         "src": "{app}/storage/menu/{file:16}",
@@ -676,10 +688,10 @@
                     "has_required_choices": false,
                     "brand": "Northgate Farms"
                 },
-                "{id:13}": {
-                    "id": "{id:13}",
+                "{id:14}": {
+                    "id": "{id:14}",
                     "name": "أرز بسمتي",
-                    "url": "/retail-demo?item={id:13}",
+                    "url": "/retail-demo?item={id:14}",
                     "short": "Aromatic long-grain basmati rice, aged for extra fluffiness.",
                     "image": {
                         "src": "{app}/storage/menu/{file:17}",
@@ -695,10 +707,10 @@
                     "has_required_choices": false,
                     "brand": "Golden Harvest"
                 },
-                "{id:19}": {
-                    "id": "{id:19}",
+                "{id:20}": {
+                    "id": "{id:20}",
                     "name": "عصير برتقال بدون لب ١ لتر",
-                    "url": "/retail-demo?item={id:19}",
+                    "url": "/retail-demo?item={id:20}",
                     "short": "100% pure-squeezed orange juice, no pulp.",
                     "image": {
                         "src": "{app}/storage/menu/{file:18}",
@@ -714,10 +726,10 @@
                     "has_required_choices": false,
                     "brand": "Pure Springs"
                 },
-                "{id:24}": {
-                    "id": "{id:24}",
+                "{id:25}": {
+                    "id": "{id:25}",
                     "name": "بطانية نوردیك",
-                    "url": "/retail-demo?item={id:24}",
+                    "url": "/retail-demo?item={id:25}",
                     "short": "Woven cotton-blend throw, 130x170cm, machine washable.",
                     "image": {
                         "src": "{app}/storage/menu/{file:19}",
@@ -733,10 +745,10 @@
                     "has_required_choices": false,
                     "brand": "Norden Home"
                 },
-                "{id:30}": {
-                    "id": "{id:30}",
+                "{id:31}": {
+                    "id": "{id:31}",
                     "name": "مكبر صوت بلوتوث ميني",
-                    "url": "/retail-demo?item={id:30}",
+                    "url": "/retail-demo?item={id:31}",
                     "short": "Palm-sized speaker, 12h playtime, splash resistant.",
                     "image": {
                         "src": "{app}/storage/menu/{file:20}",
@@ -752,10 +764,10 @@
                     "has_required_choices": false,
                     "brand": "ByteForge Electronics"
                 },
-                "{id:35}": {
-                    "id": "{id:35}",
+                "{id:36}": {
+                    "id": "{id:36}",
                     "name": "فانوس حديقة بالطاقة الشمسية",
-                    "url": "/retail-demo?item={id:35}",
+                    "url": "/retail-demo?item={id:36}",
                     "short": "Weatherproof solar-charging LED lantern, warm white glow.",
                     "image": {
                         "src": "{app}/storage/menu/{file:21}",
@@ -771,10 +783,10 @@
                     "has_required_choices": false,
                     "brand": "TrailPeak Outdoors"
                 },
-                "{id:40}": {
-                    "id": "{id:40}",
+                "{id:41}": {
+                    "id": "{id:41}",
                     "name": "منظم مكتب",
-                    "url": "/retail-demo?item={id:40}",
+                    "url": "/retail-demo?item={id:41}",
                     "short": "Multi-compartment mesh-steel organizer for pens, phone and cards.",
                     "image": {
                         "src": "{app}/storage/menu/{file:22}",
@@ -790,10 +802,10 @@
                     "has_required_choices": false,
                     "brand": "InkWell Office"
                 },
-                "{id:7}": {
-                    "id": "{id:7}",
+                "{id:8}": {
+                    "id": "{id:8}",
                     "name": "طماطم عنقودية (١ كجم)",
-                    "url": "/retail-demo?item={id:7}",
+                    "url": "/retail-demo?item={id:8}",
                     "short": "Juicy tomatoes ripened on the vine for full flavor.",
                     "image": {
                         "src": "{app}/storage/menu/{file:23}",
@@ -819,10 +831,10 @@
                     "has_required_choices": false,
                     "brand": "Northgate Farms"
                 },
-                "{id:14}": {
-                    "id": "{id:14}",
+                "{id:15}": {
+                    "id": "{id:15}",
                     "name": "زبدة الفول السوداني ٣٤٠ جم",
-                    "url": "/retail-demo?item={id:14}",
+                    "url": "/retail-demo?item={id:15}",
                     "short": "Smooth and creamy peanut butter, no added sugar.",
                     "image": {
                         "src": "{app}/storage/menu/{file:24}",
@@ -848,10 +860,10 @@
                     "has_required_choices": false,
                     "brand": "Golden Harvest"
                 },
-                "{id:20}": {
-                    "id": "{id:20}",
+                "{id:21}": {
+                    "id": "{id:21}",
                     "name": "أكياس شاي أخضر بالليمون (٢٠ كيس)",
-                    "url": "/retail-demo?item={id:20}",
+                    "url": "/retail-demo?item={id:21}",
                     "short": "Natural green tea with lemon, 20 individually wrapped bags.",
                     "image": {
                         "src": "{app}/storage/menu/{file:25}",
@@ -877,10 +889,10 @@
                     "has_required_choices": false,
                     "brand": "Pure Springs"
                 },
-                "{id:25}": {
-                    "id": "{id:25}",
+                "{id:26}": {
+                    "id": "{id:26}",
                     "name": "طقم أكواب حجرية (٤ قطع)",
-                    "url": "/retail-demo?item={id:25}",
+                    "url": "/retail-demo?item={id:26}",
                     "short": "Matte-glaze stoneware mugs, 350ml, dishwasher and microwave safe.",
                     "image": {
                         "src": "{app}/storage/menu/{file:26}",
@@ -906,10 +918,10 @@
                     "has_required_choices": false,
                     "brand": "Norden Home"
                 },
-                "{id:31}": {
-                    "id": "{id:31}",
+                "{id:32}": {
+                    "id": "{id:32}",
                     "name": "كابل شحن USB-C ٢ متر",
-                    "url": "/retail-demo?item={id:31}",
+                    "url": "/retail-demo?item={id:32}",
                     "short": "Braided USB-C charging cable, 2 meters, fast-charge compatible.",
                     "image": {
                         "src": "{app}/storage/menu/{file:27}",
@@ -935,10 +947,10 @@
                     "has_required_choices": false,
                     "brand": "ByteForge Electronics"
                 },
-                "{id:36}": {
-                    "id": "{id:36}",
+                "{id:37}": {
+                    "id": "{id:37}",
                     "name": "رأس رش لخرطوم الحديقة",
-                    "url": "/retail-demo?item={id:36}",
+                    "url": "/retail-demo?item={id:37}",
                     "short": "Adjustable 8-pattern hose nozzle sprayer for garden and car washing.",
                     "image": {
                         "src": "{app}/storage/menu/{file:28}",
@@ -964,10 +976,10 @@
                     "has_required_choices": false,
                     "brand": "TrailPeak Outdoors"
                 },
-                "{id:8}": {
-                    "id": "{id:8}",
+                "{id:9}": {
+                    "id": "{id:9}",
                     "name": "حليب كامل الدسم",
-                    "url": "/retail-demo?item={id:8}",
+                    "url": "/retail-demo?item={id:9}",
                     "short": "Fresh pasteurized whole milk, rich and creamy.",
                     "image": {
                         "src": "{app}/storage/menu/{file:29}",
@@ -997,10 +1009,10 @@
                     "has_required_choices": false,
                     "brand": "Northgate Farms"
                 },
-                "{id:15}": {
-                    "id": "{id:15}",
+                "{id:16}": {
+                    "id": "{id:16}",
                     "name": "رقائق بطاطس بملح البحر ١٥٠ جم",
-                    "url": "/retail-demo?item={id:15}",
+                    "url": "/retail-demo?item={id:16}",
                     "short": "Thick-cut kettle chips, cooked in small batches with sea salt.",
                     "image": {
                         "src": "{app}/storage/menu/{file:30}",
@@ -1030,10 +1042,10 @@
                     "has_required_choices": false,
                     "brand": "Golden Harvest"
                 },
-                "{id:26}": {
-                    "id": "{id:26}",
+                "{id:27}": {
+                    "id": "{id:27}",
                     "name": "مقلاة غير لاصقة ٢٨ سم",
-                    "url": "/retail-demo?item={id:26}",
+                    "url": "/retail-demo?item={id:27}",
                     "short": "Aluminum frying pan with durable non-stick coating, oven-safe to 180°C.",
                     "image": {
                         "src": "{app}/storage/menu/{file:31}",
@@ -1059,10 +1071,10 @@
                     "has_required_choices": false,
                     "brand": "Norden Home"
                 },
-                "{id:9}": {
-                    "id": "{id:9}",
+                "{id:10}": {
+                    "id": "{id:10}",
                     "name": "بيض بلدي (١٢ حبة)",
-                    "url": "/retail-demo?item={id:9}",
+                    "url": "/retail-demo?item={id:10}",
                     "short": "Free-range dozen eggs from pasture-raised hens.",
                     "image": {
                         "src": "{app}/storage/menu/{file:32}",
@@ -1083,12 +1095,12 @@
         },
         "features": {
             "featured": [
-                "{id:4}",
-                "{id:22}",
-                "{id:28}",
-                "{id:33}",
-                "{id:8}",
-                "{id:15}"
+                "{id:5}",
+                "{id:23}",
+                "{id:29}",
+                "{id:34}",
+                "{id:9}",
+                "{id:16}"
             ],
             "wishlist": true
         },
@@ -1156,7 +1168,7 @@
             "page": {
                 "kind": "item",
                 "item": {
-                    "id": "{id:4}",
+                    "id": "{id:5}",
                     "name": "موز (١ كجم)",
                     "brand": "Northgate Farms",
                     "description": "Naturally ripened bananas, sweet and ready to eat.",
@@ -1209,7 +1221,7 @@
                     "lines": [
                         {
                             "id": "ln_1",
-                            "item_id": "{id:4}",
+                            "item_id": "{id:5}",
                             "name": "موز (١ كجم)",
                             "qty": 1,
                             "line_total": {
@@ -1330,7 +1342,7 @@
                         "lines": [
                             {
                                 "id": "ln_1",
-                                "item_id": "{id:4}",
+                                "item_id": "{id:5}",
                                 "name": "موز (١ كجم)",
                                 "qty": 1,
                                 "line_total": {
@@ -1428,7 +1440,7 @@
                         "lines": [
                             {
                                 "id": "ln_1",
-                                "item_id": "{id:4}",
+                                "item_id": "{id:5}",
                                 "name": "موز (١ كجم)",
                                 "qty": 1,
                                 "line_total": {

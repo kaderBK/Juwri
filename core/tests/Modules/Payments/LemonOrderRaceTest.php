@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Juwri\Core\Models\User;
+use Juwri\Core\Support\Hooks;
+use Juwri\Modules\Payments\Contracts\TransactionFulfiller;
 use Juwri\Modules\Payments\Models\Transaction;
 use Tests\Support\MorWebhookFixtures;
 use Tests\Support\TestPlans;
@@ -160,5 +162,76 @@ class LemonOrderRaceTest extends TestCase
 
         $this->assertSame($before, [Transaction::count(), DB::table('upgrades')->where('user_id', $custom['user_id'])->value('unique_id'), $tx->fresh()->status]);
         $this->assertMerged($custom, 'order-r5', 'sub-r5');
+    }
+
+    /** @var list<array{0: string, 1: string, 2: ?string}> BL-061: MoR cancel hook calls (slot, gateway, subscription id) */
+    private static array $cancels = [];
+
+    private function spyOnCancels(): void
+    {
+        self::$cancels = [];
+        foreach ([TransactionFulfiller::MOR_CANCEL_AT_PERIOD_END_SLOT, TransactionFulfiller::MOR_CANCEL_SLOT] as $slot) {
+            Hooks::on($slot, 'test-bl061-spy', static function (string $gateway, ?string $id) use ($slot): void {
+                self::$cancels[] = [$slot, $gateway, $id];
+            });
+        }
+    }
+
+    public function test_a_cancel_while_the_subscription_is_parked_applies_once_order_created_settles(): void
+    {
+        $this->requiresEditionPackage('a platform plan settlement (Billing)');
+        $this->spyOnCancels();
+        [, $custom] = $this->checkout(15.0);
+        $this->lemon('subscription_created', $custom, 'sub-c1', ['order_id' => 'order-c1'])->assertOk();
+        $this->lemon('subscription_cancelled', $custom, 'sub-c1', ['order_id' => 'order-c1'])->assertOk()->assertJson(['message' => 'cancelled']);
+        $this->assertSame([], self::$cancels, 'parked, not applied to nothing');
+        $this->assertSame('cancelled', Cache::get('lemon_cancel_for_order:order-c1'));
+
+        $this->lemon('order_created', $custom, 'order-c1')->assertOk();
+        $this->assertMerged($custom, 'order-c1', 'sub-c1');
+        $this->assertSame([[TransactionFulfiller::MOR_CANCEL_AT_PERIOD_END_SLOT, 'lemon_squeezy', 'sub-c1']], self::$cancels);
+        $this->assertNull(Cache::get('lemon_cancel_for_order:order-c1'));
+    }
+
+    public function test_an_expiry_while_the_subscription_is_parked_applies_once_order_created_settles_and_wins_over_a_cancel(): void
+    {
+        $this->requiresEditionPackage('a platform plan settlement (Billing)');
+        $this->spyOnCancels();
+        [, $custom] = $this->checkout(15.0);
+        $this->lemon('subscription_created', $custom, 'sub-c2', ['order_id' => 'order-c2'])->assertOk();
+        $this->lemon('subscription_expired', $custom, 'sub-c2', ['order_id' => 'order-c2'])->assertOk()->assertJson(['message' => 'expired']);
+        $this->lemon('subscription_cancelled', $custom, 'sub-c2', ['order_id' => 'order-c2'])->assertOk();
+        $this->assertSame('expired', Cache::get('lemon_cancel_for_order:order-c2'));
+
+        $this->lemon('order_created', $custom, 'order-c2')->assertOk();
+        $this->assertSame([[TransactionFulfiller::MOR_CANCEL_SLOT, 'lemon_squeezy', 'sub-c2']], self::$cancels);
+    }
+
+    public function test_a_cancel_after_settlement_applies_at_once(): void
+    {
+        $this->requiresEditionPackage('a platform plan settlement (Billing)');
+        $this->spyOnCancels();
+        [, $custom] = $this->checkout(15.0);
+        $this->lemon('order_created', $custom, 'order-c3')->assertOk();
+        $this->lemon('subscription_created', $custom, 'sub-c3', ['order_id' => 'order-c3'])->assertOk();
+        $this->lemon('subscription_cancelled', $custom, 'sub-c3', ['order_id' => 'order-c3'])->assertOk();
+
+        $this->assertSame([[TransactionFulfiller::MOR_CANCEL_AT_PERIOD_END_SLOT, 'lemon_squeezy', 'sub-c3']], self::$cancels);
+        $this->assertNull(Cache::get('lemon_cancel_for_order:order-c3'));
+    }
+
+    public function test_a_cancel_of_another_subscription_than_the_parked_one_is_not_swallowed(): void
+    {
+        $this->spyOnCancels();
+        Cache::put('lemon_sub_for_order:order-c4', 'sub-other', now()->addDay());
+        $this->lemon('subscription_cancelled', [], 'sub-c4', ['order_id' => 'order-c4'])->assertOk();
+        $this->lemon('subscription_expired', [], 'sub-c4b', ['order_id' => 'order-c4'])->assertOk();
+
+        $this->assertSame([
+            [TransactionFulfiller::MOR_CANCEL_AT_PERIOD_END_SLOT, 'lemon_squeezy', 'sub-c4'],
+            [TransactionFulfiller::MOR_CANCEL_SLOT, 'lemon_squeezy', 'sub-c4b'],
+        ], self::$cancels);
+        $this->assertNull(Cache::get('lemon_cancel_for_order:order-c4'));
+        $this->assertSame('sub-other', Cache::get('lemon_sub_for_order:order-c4'));
     }
 }

@@ -18,6 +18,7 @@ final class LoyaltyStoreData extends StoreData
             StoreTable::data('coupon_redemptions'),
             // D-P1-21-15: account_id = the issuing owner's account (platform/reseller coupons: NULL, not tenant data).
             StoreTable::account('coupons'),
+            StoreTable::account('coupon_batches'),
             StoreTable::data('gift_cards'),
             StoreTable::data('loyalty_accounts'),
             StoreTable::data('loyalty_ledger_entries'),
