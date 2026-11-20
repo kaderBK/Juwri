@@ -153,6 +153,7 @@ final class PlatformSettingKeys
         'recaptcha_public_key' => 'string',
         'reseller_pages_max' => 'int',
         'reseller_blog_posts_max' => 'int',
+        'reseller_platform_fee_part_period' => 'string', // owner 11-20 (R12b SHOULD 6): 'prorate' (default) | 'full'
         'store_text_editor' => 'bool',
         'sendgrid_pass' => 'string',
         'show_blog_home' => 'bool',

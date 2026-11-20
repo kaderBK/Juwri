@@ -4,6 +4,7 @@
 
 namespace Tests\Modules\Platform\Admin;
 
+use App\Models\ActivityLog;
 use App\Support\PlatformSecrets;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -152,6 +153,34 @@ class SettingsAdminContractTest extends TestCase
         $this->assertSame('site-key', $this->option('recaptcha_public_key'));
         $this->assertSame(['chat_link' => 'https://tawk.example/x'], json_decode((string) $this->option('tawk_to'), true));
         $this->assertStringContainsString('NOCAPTCHA_SITEKEY="site-key"', (string) file_get_contents($this->envDir.'/.env'));
+    }
+
+    /**
+     * Owner 11-20 (R12b SHOULD 6): the reseller platform fee on a part month (invoicing stops mid-month) — pro rata by
+     * days used (default) or the full fee. Only the two values; every change is in the activity log.
+     */
+    public function test_reseller_part_month_platform_fee_setting(): void
+    {
+        $this->actingAs($this->admin())->get(route('admin.settings.index'))->assertOk()
+            ->assertSee('name="reseller_platform_fee_part_period"', false)
+            ->assertSee(___('Reseller platform fee for a part month'));
+        $this->assertSame('prorate', PlatformSettings::string('reseller_platform_fee_part_period', 'prorate'));
+
+        $this->assertPanelFails($this->save(['billing_settings' => 1, 'reseller_platform_fee_part_period' => 'double']));
+        $this->assertNull($this->option('reseller_platform_fee_part_period'));
+
+        $this->assertPanelOk($this->save(['billing_settings' => 1, 'reseller_platform_fee_part_period' => 'full']));
+        $this->assertSame('full', $this->option('reseller_platform_fee_part_period'));
+        $log = ActivityLog::where('action', 'settings.reseller_platform_fee_part_period')->sole();
+        // assertEquals: MySQL's JSON column reorders object keys (shorter first), so key order is not stable.
+        $this->assertEquals(['from' => 'prorate', 'to' => 'full'], $log->meta);
+        $this->assertNotNull($log->actor_user_id);
+
+        // Saving the card again without a change logs nothing more; switching back logs once.
+        $this->assertPanelOk($this->save(['billing_settings' => 1, 'reseller_platform_fee_part_period' => 'full']));
+        $this->assertPanelOk($this->save(['billing_settings' => 1, 'reseller_platform_fee_part_period' => 'prorate']));
+        $this->assertSame('prorate', $this->option('reseller_platform_fee_part_period'));
+        $this->assertSame(2, ActivityLog::where('action', 'settings.reseller_platform_fee_part_period')->count());
     }
 
     public function test_logo_section_keeps_existing_files(): void

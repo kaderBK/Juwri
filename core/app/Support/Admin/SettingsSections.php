@@ -65,7 +65,10 @@ final class SettingsSections
         'smtp_test' => [
             'email' => ['required', 'email'],
         ],
-        'billing_settings' => [],
+        'billing_settings' => [
+            // Owner 11-20 (R12b SHOULD 6): the reseller platform fee on a part month — by the days used, or in full.
+            'reseller_platform_fee_part_period' => 'nullable|in:prorate,full',
+        ],
         'social_logins_settings' => [],
         'blog_settings' => [],
         'testimonial_settings' => [],
