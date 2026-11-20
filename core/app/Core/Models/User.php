@@ -21,8 +21,8 @@ use Illuminate\Notifications\Notifiable;
 // is the first-party surface; Passport owns the third-party OAuth grant flow).
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Juwri\Core\Contracts\Billing\PlanCatalog;
 use Juwri\Core\Contracts\Auth\CustomerAuthMailer;
+use Juwri\Core\Contracts\Billing\PlanCatalog;
 use Juwri\Core\Mail\ResetPassword;
 use Juwri\Core\Mail\VerifyEmail;
 use Juwri\Core\Models\Concerns\NormalisesEmail;
