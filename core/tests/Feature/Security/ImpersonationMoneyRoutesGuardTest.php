@@ -7,6 +7,7 @@ use App\Http\Middleware\PreventRequestForgery;
 use App\Models\Theme;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
+use Juwri\Core\Editions\EditionPackages;
 use Juwri\Core\Models\User;
 use Juwri\Core\Support\ImpersonationRoutes;
 use Juwri\Modules\Payments\Services\WalletService;
@@ -58,17 +59,29 @@ dataset('read-only pages', [
     'marketplace.apply', // a theme switch, not money: decided on purpose (Opus review MUST 1)
 ]);
 
+// Community has no edition packages, so edition routes (wallet.*, addons.*, ...) are absent there: only the
+// full edition must have them registered.
 it('blocks the route while impersonating', function (string $name) {
-    expect(Route::has($name))->toBeTrue("route {$name} is not registered")
-        ->and(ImpersonationRoutes::blocks($name))->toBeTrue();
+    if (Route::has($name) || EditionPackages::all() !== []) {
+        expect(Route::has($name))->toBeTrue("route {$name} is not registered");
+    }
+
+    expect(ImpersonationRoutes::blocks($name))->toBeTrue();
 })->with('guarded money routes');
 
 it('keeps read-only pages reachable while impersonating', function (string $name) {
-    expect(Route::has($name))->toBeTrue("route {$name} is not registered")
-        ->and(ImpersonationRoutes::blocks($name))->toBeFalse();
+    if (Route::has($name) || EditionPackages::all() !== []) {
+        expect(Route::has($name))->toBeTrue("route {$name} is not registered");
+    }
+
+    expect(ImpersonationRoutes::blocks($name))->toBeFalse();
 })->with('read-only pages');
 
 it('refuses a wallet withdrawal inside an admin log-in-as session', function () {
+    if (! Route::has('wallet.withdraw')) {
+        $this->markTestSkipped('wallet.withdraw is an edition route; not registered in Community.');
+    }
+
     $customer = User::factory()->create();
 
     $this->actingAs($customer)
