@@ -41,6 +41,11 @@ class SettingsController extends Controller
         'brand_tile_image' => null,
     ];
 
+    /** Money settings whose every change goes to the activity log: name => default when unset. */
+    private const AUDITED = [
+        'reseller_platform_fee_part_period' => 'prorate', // owner 11-20 (R12b SHOULD 6)
+    ];
+
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -85,8 +90,20 @@ class SettingsController extends Controller
             $options['currency_sign'] = normalize_currency_sign((string) $options['currency_sign'], (string) ($options['currency_code'] ?? ''));
         }
 
+        $before = [];
+        foreach (array_intersect_key(self::AUDITED, $options) as $name => $default) {
+            $before[$name] = (string) (PlatformSettings::get($name) ?? $default);
+        }
+
         foreach ($options as $name => $value) {
             PlatformSettings::set($name, $value);
+        }
+
+        foreach ($before as $name => $from) {
+            $to = (string) ($options[$name] ?? self::AUDITED[$name]);
+            if ($to !== $from) {
+                log_activity('settings.'.$name, null, ['from' => $from, 'to' => $to]);
+            }
         }
 
         // Social sign-in and reCAPTCHA keys are also read from .env by their packages.

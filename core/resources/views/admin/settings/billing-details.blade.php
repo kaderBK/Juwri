@@ -9,6 +9,11 @@
                 <x-ui.switch name="auto_refunds_enabled" off="0" :checked="($settings->auto_refunds_enabled ?? '0') === '1'"
                              :label="___('Refund platform payments automatically')"
                              :description="___('When a platform payment is refunded, send the money back through the gateway that took it (Stripe, PayPal, Razorpay, Paystack). Off: refunds are tracked and completed in the gateway dashboard.')" />
+                {{-- Owner 11-20 (R12b SHOULD 6): the reseller platform fee when its invoicing stops mid-month. --}}
+                <x-ui.field type="select" name="reseller_platform_fee_part_period" :label="___('Reseller platform fee for a part month')"
+                            :value="($settings->reseller_platform_fee_part_period ?? '') === 'full' ? 'full' : 'prorate'"
+                            :options="['prorate' => ___('Pro rata (days used)'), 'full' => ___('Full fee')]"
+                            :help="___('When a reseller cancels and its invoicing stops in the middle of a month, charge the monthly platform fee for the days used only, or the full fee. Per-store pricing only.')" />
                 <x-ui.banner tone="info">{{ ___('These details will be used for the invoice.') }}</x-ui.banner>
                 <div class="ui-form-grid">
                     <x-ui.field name="invoice_nr_prefix" :label="___('Invoice Number Prefix')" :value="$settings->invoice_nr_prefix ?? 'INV-'" placeholder="{{ ___('Ex: INV-') }}" />
