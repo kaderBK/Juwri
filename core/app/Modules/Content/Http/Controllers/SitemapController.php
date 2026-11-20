@@ -34,10 +34,14 @@ class SitemapController extends Controller
             return $this->xml(SitemapService::buildXml(SitemapService::storeEntries($store)));
         }
 
-        // RESELLER-PAGES R6: on a reseller domain, serve THAT reseller's sitemap only.
+        // RESELLER-PAGES R6: on a reseller domain, serve THAT reseller's sitemap only (cached per host/generation).
         $reseller = app(ResellerContext::class)->forRequest();
         if ($reseller) {
-            return $this->xml(SitemapService::buildXml(app(ResellerSite::class)->sitemapEntries($reseller)));
+            return $this->xml(Cache::flexible(
+                SitemapHostCache::key('sitemap.reseller.'.$reseller->getKey()),
+                [self::TTL, self::TTL * 2],
+                fn () => SitemapService::buildXml(app(ResellerSite::class)->sitemapEntries($reseller))
+            ));
         }
 
         return $this->xml(SitemapService::buildIndexXml(array_values(array_filter([
@@ -53,16 +57,21 @@ class SitemapController extends Controller
 
     public function marketing()
     {
+        $this->abortOnResellerHost();
+
         return $this->xml(Cache::flexible(SitemapHostCache::key('sitemap.marketing'), [self::TTL, self::TTL * 2], fn () => SitemapService::buildXml(SitemapService::marketingEntries())));
     }
 
     public function blog()
     {
+        $this->abortOnResellerHost();
+
         return $this->xml(Cache::flexible(SitemapHostCache::key('sitemap.blog'), [self::TTL, self::TTL * 2], fn () => SitemapService::buildXml(SitemapService::blogEntries())));
     }
 
     public function stores(int $page = 1)
     {
+        $this->abortOnResellerHost();
         abort_if($page < 1 || $page > $this->restaurantPages(), 404);
 
         return $this->xml(Cache::flexible(SitemapHostCache::key('sitemap.restaurants.'.$page), [self::TTL, self::TTL * 2], fn () => SitemapService::buildXml(SitemapService::restaurantEntries($page))));
@@ -109,6 +118,7 @@ class SitemapController extends Controller
     /** DIRECTORY L1 T1-4: explore city/cuisine pages + indexable unclaimed listings. */
     public function directory()
     {
+        $this->abortOnResellerHost();
         // SitemapService::directoryEntries() checks the gate, but the CACHE
         // outlives the switch: a file built while the module was on kept
         // serving URLs that 404 after it was turned off. Refuse at the route
@@ -116,6 +126,11 @@ class SitemapController extends Controller
         abort_unless(app(Directory::class)->enabled(), 404);
 
         return $this->xml(Cache::flexible(SitemapHostCache::key('sitemap.directory.on'), [self::TTL, self::TTL * 2], fn () => SitemapService::buildXml(app(Directory::class)->sitemapEntries())));
+    }
+
+    private function abortOnResellerHost(): void
+    {
+        abort_if(app(ResellerContext::class)->forRequest() !== null, 404);
     }
 
     private function xml(string $body)

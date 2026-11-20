@@ -7,4 +7,5 @@ return [
     'password' => 'La contraseña proporcionada es incorrecta.',
     'case_duplicate' => 'Más de una cuenta usa esta dirección con distintas mayúsculas y minúsculas. Contacta con soporte para iniciar sesión.',
     'throttle' => 'Demasiados intentos de inicio de sesión. Por favor, inténtelo de nuevo en :seconds segundos.',
+    'reseller_handoff' => 'Tu cuenta se gestiona en este sitio. Inicia sesión aquí para continuar.',
 ];

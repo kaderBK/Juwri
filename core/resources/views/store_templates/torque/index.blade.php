@@ -1983,7 +1983,8 @@
     function toast(msg, icon) {
         var el = document.getElementById('tqToast');
         if (!el) { return; }
-        el.innerHTML = (icon ? svgIcon(icon) : '') + '<span>' + msg + '</span>';
+        el.innerHTML = (icon ? svgIcon(icon) : '') + '<span></span>';
+        el.lastChild.textContent = msg == null ? '' : String(msg);
         el.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(function () { el.classList.remove('show'); }, 1800);
@@ -2849,7 +2850,7 @@
                     if (data.tracking_url) { trackLink.href = data.tracking_url; trackLink.style.display = 'block'; }
                     else { trackLink.style.display = 'none'; }
                 } else {
-                    msg.innerHTML = '<div class="tq-msg tq-msg--error">' + ((data && data.message) || T.genericError) + '</div>';
+                    msg.innerHTML = '<div class="tq-msg tq-msg--error"></div>'; msg.firstChild.textContent = (data && data.message) || T.genericError;
                 }
             })
             .catch(function () {

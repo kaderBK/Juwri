@@ -56,6 +56,8 @@ return [
 
     // #62 referral bonus credits (granted to both referrer + referee).
     'referral_bonus' => (int) env('STUDIO_REFERRAL_BONUS', 5),
+    // w5 #8: most referrals one referrer (session or account) is credited for.
+    'referral_max_per_referrer' => (int) env('STUDIO_REFERRAL_MAX_PER_REFERRER', 20),
 
     // Welcome credits for a brand-new guest session (0 = off). Keep small if
     // enabled — clearing cookies mints a fresh session.

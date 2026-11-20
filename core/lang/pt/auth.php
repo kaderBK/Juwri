@@ -7,4 +7,5 @@ return [
     'password' => 'A senha informada está incorreta.',
     'case_duplicate' => 'Mais de uma conta usa este endereço com maiúsculas e minúsculas diferentes. Contacte o suporte para entrar.',
     'throttle' => 'Muitas tentativas de login. Tente novamente em :seconds segundos.',
+    'reseller_handoff' => 'A sua conta é gerida neste site. Inicie sessão aqui para continuar.',
 ];

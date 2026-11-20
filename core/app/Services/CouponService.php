@@ -71,6 +71,14 @@ class CouponService
             return ['ok' => false, 'message' => ___('Coupon code is invalid.')];
         }
 
+        // Security (AUDIT-money M-1): a wallet credit code (applies_to = wallet_topup) is spendable platform money, a
+        // plan / add-on coupon is only a discount. A plan coupon never redeems as wallet credit (its fixed value would
+        // become cash-like credit, ignoring its interval / first-period rules), and a credit code is not a plan discount.
+        $isCreditCode = (string) $coupon->applies_to === 'wallet_topup';
+        if ($surface !== 'food_order' && ($surface === 'wallet_topup') !== $isCreditCode) {
+            return ['ok' => false, 'message' => ___('Coupon code is invalid.')];
+        }
+
         if ($coupon->expiry_at && Carbon::parse($coupon->expiry_at)->isPast()) {
             return ['ok' => false, 'message' => ___('Coupon code is expired.')];
         }

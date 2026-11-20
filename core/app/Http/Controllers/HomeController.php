@@ -263,7 +263,7 @@ class HomeController extends Controller
         $senderName = $request->input('name');
         // Visitor-supplied fields are escaped: the mail body is HTML (upstream
         // c623b24e3). $extraTags arrive escaped from the callers.
-        $tags = ['{SITE_TITLE}' => config('settings.site_title'), '{SITE_URL}' => route('home'), '{NAME}' => e((string) $senderName), '{EMAIL}' => $sender]
+        $tags = ['{SITE_TITLE}' => config('settings.site_title'), '{SITE_URL}' => route('home'), '{NAME}' => e((string) $senderName), '{EMAIL}' => e((string) $sender)]
             + $extraTags
             + ['{MESSAGE}' => nl2br(e((string) $request->input('message')))];
 

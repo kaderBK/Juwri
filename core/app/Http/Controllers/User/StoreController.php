@@ -61,6 +61,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -3891,6 +3892,28 @@ class StoreController extends Controller
     }
 
     /**
+     * SEC-1120: the status-only page behind the guest lookup's Track link (signed route, checked by the `signed`
+     * middleware). It shows the order number, status and placed time — what the lookup already returned — and nothing
+     * else: no items, amounts, contact details, track token or actions.
+     */
+    public function orderStatusOnly(int $order): Response
+    {
+        $o = Order::findOrFail($order);
+        $store = Store::find($o->store_id);
+        abort_if(! $store, 404);
+
+        return response()
+            ->view('store_templates._partials.order-status-only', [
+                'store' => $store,
+                'orderId' => (int) $o->id,
+                'status' => (string) $o->status,
+                'placed' => $o->created_at?->format('d M Y H:i'),
+            ])
+            ->header('Cache-Control', 'private, no-store')
+            ->header('X-Robots-Tag', 'noindex');
+    }
+
+    /**
      * #22: Guest order history lookup by phone or email
      */
     public function guestOrderLookup(Request $request, $store)
@@ -3959,16 +3982,44 @@ class StoreController extends Controller
                 : ___('No orders found for that phone/email.')]);
         }
 
+        // AUDIT-authz #2: the track token is the order's bearer credential (track page,
+        // arrived, substitution, review). Hand it out only to a caller who proved
+        // control of the identifier: an SMS-OTP-verified phone this session, or the
+        // signed-in customer who owns the order. Anyone else still sees the status.
+        $normalized = app(Sms::class)->normalizePhone($id);
+        $phoneVerified = $normalized !== '' && CheckoutOtpController::phoneIsVerified($normalized, (int) $store->id);
+        $me = auth('customer')->user();
+        $myCustomerId = ($me && (int) $me->store_id === (int) $store->id) ? (int) $me->id : null;
+
         return response()->json([
             'success' => true,
-            'orders' => $orders->map(function ($o) use ($store) {
+            'verify_to_track' => ! $phoneVerified,
+            'orders' => $orders->map(function ($o) use ($store, $id, $customerIds, $phoneVerified, $myCustomerId) {
+                $proven = $phoneVerified || ($myCustomerId !== null && (int) $o->customer_id === $myCustomerId);
+                // Matched only by its sequential order number (not the phone/e-mail):
+                // without proof, show the status alone — no amount or line items.
+                $byNumberOnly = $o->phone_number !== $id && ! $customerIds->contains($o->customer_id);
+                // SEC-1120: without proof the Track link goes to a signed, short-lived status-only page — the same status
+                // this response already shows, never the bearer track token or its actions.
+                $statusOnlyUrl = URL::temporarySignedRoute('store.orderStatusOnly', now()->addDay(), ['order' => $o->id]);
+                if (! $proven && $byNumberOnly) {
+                    return [
+                        'id' => $o->id,
+                        'token' => null,
+                        'status' => $o->status,
+                        'date' => $o->created_at->format('d M Y H:i'),
+                        'track_url' => $statusOnlyUrl,
+                        'items' => [],
+                    ];
+                }
+
                 return [
                     'id' => $o->id,
-                    'token' => $o->track_token,
+                    'token' => $proven ? $o->track_token : null,
                     'total' => store_money_plain($o->total, $store->id), // MC-21: store sign + decimals (fils), position-aware
                     'status' => $o->status,
                     'date' => $o->created_at->format('d M Y H:i'),
-                    'track_url' => $o->track_token ? route('store.orderTrack', $o->track_token) : null,
+                    'track_url' => ($proven && $o->track_token) ? route('store.orderTrack', $o->track_token) : $statusOnlyUrl,
                     /* Line items, so a guest can actually reorder. This response carried
                        none, which is why guest reorder was dead in every theme: the
                        button had nothing to rebuild a cart from. Same shape the

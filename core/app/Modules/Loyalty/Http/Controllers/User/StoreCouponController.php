@@ -8,7 +8,11 @@ use App\Models\Coupon;
 use App\Models\Customer;
 use App\Support\StoreClock;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Exists;
 use Juwri\Core\Http\Controllers\Controller;
@@ -16,6 +20,8 @@ use Juwri\Core\Models\Store;
 use Juwri\Core\Models\TenantUsageDaily;
 use Juwri\Core\Support\PlanGate;
 use Juwri\Modules\Loyalty\Models\CouponRedemption;
+use Juwri\Modules\Loyalty\Services\CouponBulk;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StoreCouponController extends Controller
 {
@@ -24,12 +30,17 @@ class StoreCouponController extends Controller
         $this->activeTheme = active_theme();
     }
 
-    public function index()
+    public function index(?Request $request = null, ?CouponBulk $bulk = null): View
     {
+        $request ??= request();
+        $bulk ??= app(CouponBulk::class);
         $rn = 'stores.coupons.index';
-        $coupons = Coupon::where('user_id', auth()->id())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $filters = $this->filtersFrom($request);
+        $coupons = $bulk->query($this->scope(), $filters)
+            ->orderByDesc('coupons.id')
+            ->paginate(20)
+            ->withQueryString();
+        $batches = $bulk->batches($this->scope())->latest('id')->get();
 
         // C5: how many diners were refused an exhausted coupon today — a coupon
         // that ran out otherwise looks like "the discount silently stopped working".
@@ -40,7 +51,152 @@ class StoreCouponController extends Controller
 
         $storeTz = StoreClock::tz($this->storeId());
 
-        return view('owner.marketing.coupons.index', compact('coupons', 'rn', 'deniedToday', 'storeTz'));
+        return view('owner.marketing.coupons.index', compact('coupons', 'batches', 'filters', 'rn', 'deniedToday', 'storeTz'));
+    }
+
+    public function bulkCreate(): View
+    {
+        $rn = 'stores.coupons.bulk.create';
+
+        return view('owner.marketing.coupons.bulk-create', compact('rn'));
+    }
+
+    public function bulkConfirm(Request $request): View|RedirectResponse
+    {
+        if (! PlanGate::allows($request->user(), PlanGate::COUPONS)) {
+            return redirect()->route('stores.coupons.index')->withErrors(['plan' => PlanGate::upsell(PlanGate::COUPONS)]);
+        }
+
+        $data = $this->validateBulk($request);
+        $sampleRandom = str_repeat('X', $data['length']);
+        $sampleCode = ($data['prefix'] !== null ? $data['prefix'].'-' : '').$sampleRandom;
+        $currency = $this->issuerCurrency();
+        $rn = 'stores.coupons.bulk.confirm';
+
+        return view('owner.marketing.coupons.bulk-confirm', compact('data', 'sampleCode', 'currency', 'rn'));
+    }
+
+    public function bulkStore(Request $request, CouponBulk $bulk): RedirectResponse|JsonResponse
+    {
+        if (! PlanGate::allows($request->user(), PlanGate::COUPONS)) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => PlanGate::upsell(PlanGate::COUPONS)], 403);
+            }
+
+            return redirect()->route('stores.coupons.index')->withErrors(['plan' => PlanGate::upsell(PlanGate::COUPONS)]);
+        }
+
+        $data = $this->validateBulk($request);
+        $batch = $bulk->generate(
+            $this->scope(),
+            $data['settings'],
+            $data['count'],
+            $data['prefix'],
+            $data['length'],
+            $data['name'],
+        );
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'batch_id' => $batch->id,
+                'count' => $batch->count,
+                'message' => ___('Coupon batch generated successfully.'),
+            ]);
+        }
+
+        app_alert_success(___('Coupon batch generated successfully.'));
+
+        return redirect()
+            ->route('stores.coupons.batches.show', $batch->id)
+            ->with('success', ___('Coupon batch generated successfully.'));
+    }
+
+    public function batches(CouponBulk $bulk): View
+    {
+        $rn = 'stores.coupons.batches.index';
+        $batches = $bulk->batches($this->scope())
+            ->withCount('coupons')
+            ->latest('id')
+            ->paginate(25);
+
+        return view('owner.marketing.coupons.batches', compact('batches', 'rn'));
+    }
+
+    public function batchResult(int $batch, CouponBulk $bulk): View
+    {
+        $rn = 'stores.coupons.batches.show';
+        $batchModel = $bulk->batches($this->scope())->findOrFail($batch);
+        $coupons = $bulk->query($this->scope(), ['batch_id' => $batchModel->id])
+            ->orderBy('coupons.id')
+            ->paginate(50);
+        $storeTz = StoreClock::tz($this->storeId());
+
+        return view('owner.marketing.coupons.batch-result', [
+            'batch' => $batchModel,
+            'coupons' => $coupons,
+            'bulk' => $bulk,
+            'storeTz' => $storeTz,
+            'rn' => $rn,
+        ]);
+    }
+
+    public function bulkAction(Request $request, CouponBulk $bulk): JsonResponse|RedirectResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'action' => ['required', Rule::in(['delete_unused', 'expire_now', 'extend_expiry', 'set_limit'])],
+            'ids' => ['nullable', 'array'],
+            'ids.*' => ['integer', 'min:1'],
+            'apply_to_filtered' => ['nullable', 'boolean'],
+            'extend_to' => ['required_if:action,extend_expiry', 'nullable', 'date', 'after:now'],
+            'limit' => ['required_if:action,set_limit', 'nullable', 'integer', 'min:0'],
+        ], [
+            'extend_to.after' => ___('The new expiry must be in the future.'),
+        ])->validate();
+
+        $action = (string) $validated['action'];
+        $ids = array_values(array_unique(array_map('intval', $validated['ids'] ?? [])));
+        $applyFiltered = ! empty($validated['apply_to_filtered']);
+
+        if ($ids === [] && ! $applyFiltered) {
+            $message = ___('Select at least one coupon or apply to the filtered list.');
+
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => $message], 422)
+                : back()->with('error', $message);
+        }
+
+        $scope = $this->scope();
+        $query = $bulk->query($scope, $this->filtersFrom($request));
+        if ($ids !== []) {
+            $query->whereIn('coupons.id', $ids);
+        }
+
+        $message = match ($action) {
+            'delete_unused' => $this->formatDeleteUnused($bulk->deleteUnused($query, $scope)),
+            'expire_now' => ___('Expired :count coupons.', ['count' => $bulk->expireNow($query, $scope)]),
+            'extend_expiry' => ___('Extended expiry for :count coupons.', [
+                'count' => $bulk->extendExpiry($query, Carbon::parse((string) $validated['extend_to']), $scope),
+            ]),
+            'set_limit' => $this->formatSetLimit($bulk->setLimit($query, (int) $validated['limit'], $scope)),
+            default => abort(422),
+        };
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => $message]);
+        }
+
+        app_alert_success($message);
+
+        return back()->with('success', $message);
+    }
+
+    public function export(Request $request, CouponBulk $bulk): StreamedResponse
+    {
+        $scope = $this->scope();
+        $query = $bulk->query($scope, $this->filtersFrom($request));
+
+        return $bulk->exportCsv($query, 'store-coupons.csv', $scope);
     }
 
     public function create()
@@ -203,5 +359,109 @@ class StoreCouponController extends Controller
         app_alert_success(___('Coupon deleted.'));
 
         return redirect()->route('stores.coupons.index');
+    }
+
+    /** @return array{scope: 'store', user_id: int} */
+    private function scope(): array
+    {
+        return ['scope' => 'store', 'user_id' => (int) auth()->id()];
+    }
+
+    private function issuerCurrency(): string
+    {
+        return (new Coupon(['user_id' => auth()->id()]))->defaultMinorMoneyCurrency();
+    }
+
+    /**
+     * @return array{
+     *     name: string|null,
+     *     prefix: string|null,
+     *     count: int,
+     *     length: int,
+     *     expiry_date: string|null,
+     *     settings: array<string, mixed>
+     * }
+     */
+    private function validateBulk(Request $request): array
+    {
+        $couponType = $request->input('coupon_type', 'percentage') === 'fixed' ? 'fixed' : 'percentage';
+        $currency = $this->issuerCurrency();
+
+        $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:120'],
+            'prefix' => ['nullable', 'string', 'max:12', 'regex:/^[A-Za-z0-9]+$/'],
+            'count' => ['required', 'integer', 'min:1', 'max:'.CouponBulk::MAX_COUNT],
+            'length' => ['nullable', 'integer', 'min:6', 'max:12'],
+            'coupon_type' => ['required', Rule::in(['percentage', 'fixed'])],
+            'percentage' => ['required', ...Coupon::valueRules($couponType, $currency)],
+            'limit' => ['nullable', 'integer', 'min:0'],
+            'per_customer_limit' => ['nullable', 'integer', 'min:1'],
+            'expiry_at' => Coupon::expiryDateRules(StoreClock::tz($this->storeId())),
+        ], [
+            'prefix.regex' => ___('Prefix must contain only letters and numbers.'),
+        ]);
+
+        $prefix = isset($validated['prefix']) && trim((string) $validated['prefix']) !== ''
+            ? strtoupper(trim((string) $validated['prefix']))
+            : null;
+        $name = isset($validated['name']) && trim((string) $validated['name']) !== ''
+            ? trim((string) $validated['name'])
+            : null;
+        $expiryDate = ! empty($validated['expiry_at']) ? (string) $validated['expiry_at'] : null;
+
+        $settings = [
+            'coupon_type' => $couponType,
+            'percentage' => $validated['percentage'],
+            'limit' => empty($validated['limit']) ? 0 : (int) $validated['limit'],
+            'per_customer_limit' => $validated['per_customer_limit'] ?? null,
+        ];
+        if ($expiryDate !== null) {
+            $settings['expiry_at'] = $this->expiryMoment($expiryDate);
+        }
+
+        return [
+            'name' => $name,
+            'prefix' => $prefix,
+            'count' => (int) $validated['count'],
+            'length' => (int) ($validated['length'] ?? 8),
+            'expiry_date' => $expiryDate,
+            'settings' => $settings,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function filtersFrom(Request $request): array
+    {
+        $filters = [];
+        foreach (['status', 'batch_id', 'type', 'created_from', 'created_to', 'search'] as $key) {
+            $val = $request->input($key);
+            if (is_scalar($val) && trim((string) $val) !== '') {
+                $filters[$key] = $val;
+            }
+        }
+
+        if (isset($filters['status']) && ! in_array($filters['status'], CouponBulk::STATUSES, true)) {
+            unset($filters['status']);
+        }
+
+        return $filters;
+    }
+
+    /** @param  array{0: int, 1: int}  $result */
+    private function formatDeleteUnused(array $result): string
+    {
+        return ___('Deleted :deleted unused coupons (:kept used kept).', [
+            'deleted' => $result[0],
+            'kept' => $result[1],
+        ]);
+    }
+
+    /** @param  array{0: int, 1: int}  $result */
+    private function formatSetLimit(array $result): string
+    {
+        return ___('Updated limit for :updated coupons (:skipped skipped).', [
+            'updated' => $result[0],
+            'skipped' => $result[1],
+        ]);
     }
 }

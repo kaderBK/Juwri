@@ -7,6 +7,7 @@ namespace Tests\Modules\Payments\Bugs10;
 use App\Http\Middleware\EnsureStaffDashboardPermission;
 use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
+use App\Models\PartnerEarning;
 use App\Models\StoreOption;
 use App\Services\SellerPayoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -125,6 +126,11 @@ class WalletBalancePerCurrencyTest extends TestCase
     public function test_withdrawal_is_stamped_and_rejected_back_into_its_currency(): void
     {
         $u = $this->mixedWallet();
+        // AUDIT-money L-1: only earned money is withdrawable — the seed balances are sale earnings out of the holdback.
+        foreach (['USD' => 10, 'KWD' => 2.5] as $code => $net) {
+            PartnerEarning::create(['partner_id' => $u->id, 'source_type' => 'theme_sale', 'source_ref' => 'b10-earn-'.$code,
+                'gross' => $net, 'share' => 1.0, 'net' => $net, 'currency' => $code, 'status' => 'available', 'available_at' => now()->subDay()]);
+        }
         $w = SellerPayoutService::requestWithdrawal($u, 4);
         $this->assertSame('USD', $w->fresh()->currency_code);
         $this->assertSame(6.0, WalletService::balanceFor($u));

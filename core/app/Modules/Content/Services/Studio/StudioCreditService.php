@@ -4,12 +4,12 @@
 
 namespace Juwri\Modules\Content\Services\Studio;
 
-use Juwri\Modules\Content\Models\StudioCreditLedger;
-use Juwri\Modules\Content\Models\StudioSession;
-use Juwri\Core\Support\Sql;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Juwri\Core\Support\Sql;
+use Juwri\Modules\Content\Models\StudioCreditLedger;
+use Juwri\Modules\Content\Models\StudioSession;
 
 /**
  * Server-side credit ledger for the Menu Studio. Balance is derived from the
@@ -51,6 +51,20 @@ class StudioCreditService
             'ref' => $ref,
             'created_at' => now(),
         ]);
+    }
+
+    /**
+     * Ledger rows in this session's account scope whose ref equals $ref (or,
+     * with $prefix, starts with it). Used for referral dedupe and caps so an
+     * owner is judged across all their sessions, like credit()'s dedupe.
+     */
+    public function refCount(StudioSession $session, string $ref, bool $prefix = false): int
+    {
+        $query = $this->scopeFor($session);
+
+        return $prefix
+            ? $query->where('ref', 'like', $ref.'%')->count()
+            : $query->where('ref', $ref)->count();
     }
 
     /**

@@ -116,7 +116,7 @@
         </table>
         @if ($order->payment_method)
             <hr class="ui-print__rule">
-            <div>{{ ___('Paid') }}: {{ payment_method_label($order->payment_method) }}</div>
+            <div>{{ ___('Paid') }}: {{ $order->payment_method === 'coupon' ? ___('Paid by coupon') : payment_method_label($order->payment_method) }}</div>
             @if ($order->amount_tendered !== null)<div>{{ ___('Tendered') }}: {{ $money($order->amount_tendered) }}</div>@endif
             @if ($order->change_due !== null)<div>{{ ___('Change') }}: {{ $money($order->change_due) }}</div>@endif
         @endif

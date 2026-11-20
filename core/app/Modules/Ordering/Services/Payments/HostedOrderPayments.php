@@ -5,16 +5,17 @@
 namespace Juwri\Modules\Ordering\Services\Payments;
 
 use App\Models\Order;
-use App\Services\CustomerWalletService;
-use App\Services\GiftCardService;
 use App\Services\Loyalty\LoyaltyAccrual;
 use App\Services\PosService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Money\Money;
+use Juwri\Core\Services\AlertDispatcher;
 use Juwri\Core\Services\Tenancy\TenantContext;
 use Juwri\Modules\Ordering\Contracts\HostedPayments;
 use Juwri\Modules\Ordering\Http\Controllers\User\PaymentController;
+use Juwri\Modules\Ordering\Services\Orders\OrderCancellation;
 use Juwri\Modules\Payments\Models\Transaction;
 
 /**
@@ -33,6 +34,9 @@ use Juwri\Modules\Payments\Models\Transaction;
  */
 final class HostedOrderPayments implements HostedPayments
 {
+    /** ML-1120 delta NIT 3: the failed cancel try that raises the one admin alert (the sweep runs every minute). */
+    public const ALERT_AFTER_FAILURES = 3;
+
     public function storeCanTake(Store $store, float $total): bool
     {
         return PaymentController::hasStoreGateway($store, $total);
@@ -126,16 +130,28 @@ final class HostedOrderPayments implements HostedPayments
 
     private function cancelUnpaid(Order $order, bool $now, string $event): bool
     {
-        $cancelled = DB::transaction(function () use ($order, $now) {
-            $locked = Order::query()->whereKey($order->id)->lockForUpdate()->first();
-            if ($locked === null || $locked->payment_mode !== 'hosted' || $locked->status !== 'unpaid' || (int) $locked->is_paid === 1
-                || $locked->payment_expires_at === null || (! $now && $locked->payment_expires_at->isFuture())) {
-                return null;
-            }
-            $locked->forceFill(['status' => 'cancelled', 'cancelled_at' => now()])->save();
+        try {
+            $cancelled = DB::transaction(function () use ($order, $now) {
+                $locked = Order::query()->whereKey($order->id)->lockForUpdate()->first();
+                if ($locked === null || $locked->payment_mode !== 'hosted' || $locked->status !== 'unpaid' || (int) $locked->is_paid === 1
+                    || $locked->payment_expires_at === null || (! $now && $locked->payment_expires_at->isFuture())) {
+                    return null;
+                }
+                $locked->forceFill(['status' => 'cancelled', 'cancelled_at' => now()])->save();
+                // ML-1120 review SHOULD 2 (REVIEW, Opus: money): the tenders (gift card, store credit, platform wallet) go
+                // back in the cancel's own transaction, under the same order lock (reverseTenders nests as a savepoint).
+                // A late payment accepted right after the cancel commits therefore always sees them returned, so it can
+                // never place the order short; a failing reversal rolls the cancel back and the next sweep retries it.
+                OrderCancellation::reverseTenders($locked);
 
-            return $locked;
-        });
+                return $locked;
+            });
+        } catch (\Throwable $e) {
+            report($e);
+            $this->recordCancelFailure($order, $event, $e);
+
+            return false;
+        }
         if (! $cancelled instanceof Order) {
             return false;
         }
@@ -143,14 +159,30 @@ final class HostedOrderPayments implements HostedPayments
         // What the owner's cancel gives back (ManagesOrders::updateOrderStatus): stock, gift card, store credit and
         // loyalty points. Each primitive is idempotent and no-op when there is nothing to reverse.
         PosService::restoreOrderStock($cancelled);
-        GiftCardService::reverseRedemption($cancelled);
-        CustomerWalletService::reverseForOrder($cancelled);
         LoyaltyAccrual::reverseForOrder($cancelled);
         LoyaltyAccrual::restoreRedemptionForOrder($cancelled);
         log_activity($event, $cancelled, ['order_id' => $cancelled->id], (int) $cancelled->store_id);
         $order->refresh();
 
         return true;
+    }
+
+    /**
+     * ML-1120 delta NIT 3: a cancel whose tender return failed is logged with its try number (counted from the earlier
+     * failure rows of this order). On try {@see self::ALERT_AFTER_FAILURES} the platform admin gets one PlatformAlert:
+     * the order is still `unpaid` past its window and its tenders are still on it, so someone has to look. Only that one
+     * try alerts, so a sweep that keeps failing never repeats it.
+     */
+    private function recordCancelFailure(Order $order, string $event, \Throwable $e): void
+    {
+        $attempt = 1 + DB::table('activity_logs')->where('action', 'order.cancel_step_failed')
+            ->where('subject_type', $order->getMorphClass())->where('subject_id', $order->id)->pluck('meta')
+            ->filter(fn ($meta) => isset((is_string($meta) ? (array) json_decode($meta, true) : (array) $meta)['attempt']))->count();
+        log_activity('order.cancel_step_failed', $order, ['order_id' => $order->id, 'step' => 'tenders', 'event' => $event, 'attempt' => $attempt, 'message' => $e->getMessage()], (int) $order->store_id);
+        // >= with a once-per-order guard: two racing failures can both log the same try number (MN-1120 NIT).
+        if ($attempt >= self::ALERT_AFTER_FAILURES && Cache::add('order-cancel-alert:'.$order->id, 1, now()->addDay())) {
+            AlertDispatcher::send('order', sprintf('Order #%d (store %d): the unpaid order could not be cancelled %d times because its gift card / store credit / wallet could not be given back; it stays unpaid with its tenders until this is fixed.', $order->id, (int) $order->store_id, $attempt));
+        }
     }
 
     /** Cancel every hosted order whose window has ended unpaid (all stores; platform job). */

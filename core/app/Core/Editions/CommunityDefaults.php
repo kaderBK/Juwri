@@ -23,6 +23,7 @@ use Juwri\Core\Contracts\Editions\Edition;
 use Juwri\Core\Contracts\Editions\InstallLicenceProof;
 use Juwri\Core\Contracts\Editions\StoreLimitPolicy;
 use Juwri\Core\Contracts\Marketplace\Directory;
+use Juwri\Core\Contracts\Marketplace\PlatformWalletTender;
 use Juwri\Core\Contracts\Marketplace\ShopperBag;
 use Juwri\Core\Contracts\Tenancy\ResellerContext;
 use Juwri\Core\Contracts\Tenancy\ResellerSite;
@@ -37,6 +38,7 @@ use Juwri\Core\Editions\Community\NoHelpPillars;
 use Juwri\Core\Editions\Community\NoInstallLicence;
 use Juwri\Core\Editions\Community\NoPlanQuota;
 use Juwri\Core\Editions\Community\NoPlatformSite;
+use Juwri\Core\Editions\Community\NoPlatformWallet;
 use Juwri\Core\Editions\Community\NoPrepaidCredits;
 use Juwri\Core\Editions\Community\NoRequestMeter;
 use Juwri\Core\Editions\Community\NoResellers;
@@ -73,6 +75,7 @@ final class CommunityDefaults
         HelpPillars::class => NoHelpPillars::class,
         Directory::class => NoDirectory::class,
         ShopperBag::class => NoShopperBag::class,
+        PlatformWalletTender::class => NoPlatformWallet::class,
     ];
 
     public static function register(Application $app): void

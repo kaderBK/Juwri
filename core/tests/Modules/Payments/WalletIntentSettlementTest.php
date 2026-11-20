@@ -73,7 +73,7 @@ class WalletIntentSettlementTest extends TestCase
         StoreOption::updateStoreOption($store->id, 'currency_code', $currency);
         StoreOption::updateStoreOption($store->id, 'restaurant_stripe_publishable_key', 'pk_test_x');
         StoreOption::updateStoreOption($store->id, 'restaurant_stripe_secret_key', 'sk_test_x');
-        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'tip_amount' => $tip, 'currency_code' => $currency]);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'tip_amount' => $tip, 'currency_code' => $currency, 'track_token' => 'TOKSETTLE']);
 
         return [$store, $order];
     }
@@ -99,7 +99,7 @@ class WalletIntentSettlementTest extends TestCase
     {
         [$store, $order] = $this->order('KWD', 3.375);
 
-        $res = $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertOk();
+        $res = $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertOk();
         $this->assertSame(3370, $res->json('amount_minor')); // rounded DOWN to Stripe's step (before: 3380)
         $tx = Transaction::where('payment_id', 'pi_w1')->sole();
         $this->assertNull($tx->status);
@@ -129,7 +129,7 @@ class WalletIntentSettlementTest extends TestCase
         config(['payments.sandbox.enabled' => false]);
         [$store, $order] = $this->order('USD', 0.0);
 
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertStatus(503);
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertStatus(503);
         $this->assertSame([], self::$stripeCalls);
         $this->assertSame(0, Transaction::where('store_id', $store->id)->count());
     }
@@ -137,7 +137,7 @@ class WalletIntentSettlementTest extends TestCase
     public function test_a_wrong_amount_currency_transaction_or_status_never_settles(): void
     {
         [$store, $order] = $this->order('KWD', 3.375);
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertOk();
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertOk();
         $tx = Transaction::where('payment_id', 'pi_w1')->sole();
 
         $this->webhook($this->succeeded('pi_w1', 3380, 'kwd', $tx->id))->assertOk(); // more than we asked for
@@ -157,7 +157,7 @@ class WalletIntentSettlementTest extends TestCase
     public function test_a_two_decimal_order_is_charged_and_settled_exactly(): void
     {
         [$store, $order] = $this->order('USD', 12.5);
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertOk()->assertJsonPath('amount_minor', 1250);
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertOk()->assertJsonPath('amount_minor', 1250);
         $tx = Transaction::where('payment_id', 'pi_w1')->sole();
 
         $this->webhook($this->succeeded('pi_w1', 1249, 'usd', $tx->id))->assertOk();

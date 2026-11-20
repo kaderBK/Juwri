@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
+use Juwri\Modules\Payments\Models\Transaction;
 use Tests\TestCase;
 
 class WalletPaymentTest extends TestCase
@@ -75,19 +76,49 @@ class WalletPaymentTest extends TestCase
     public function test_intent_503_when_stripe_not_configured(): void
     {
         $store = $this->storeFixture(); // no secret key
-        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway']);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'track_token' => 'TOKW1']);
 
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => 'TOKW1'])
             ->assertStatus(503);
     }
 
     public function test_intent_409_when_already_paid(): void
     {
         $store = $this->storeFixture(['restaurant_stripe_secret_key' => 'sk_test_x']);
-        $order = Order::create(['store_id' => $store->id, 'status' => 'completed', 'type' => 'takeaway', 'is_paid' => 1]);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'completed', 'type' => 'takeaway', 'is_paid' => 1, 'track_token' => 'TOKW2']);
 
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => 'TOKW2'])
             ->assertStatus(409);
+    }
+
+    /** AUDIT-authz #3: a bare sequential order id is not enough — the diner's track token binds the intent. */
+    public function test_intent_needs_the_orders_track_token(): void
+    {
+        $store = $this->storeFixture(['restaurant_stripe_secret_key' => 'sk_live_x']);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'track_token' => 'TOKRIGHT']);
+
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertStatus(404);
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => 'TOKWRONG'])->assertStatus(404);
+        $this->assertSame(0, Transaction::where('product_id', $order->id)->count(), 'no transaction pre-created');
+    }
+
+    /** AUDIT-authz #3: a tokenless order (POS / channel) never opens a wallet intent. */
+    public function test_intent_refuses_an_order_without_a_track_token(): void
+    {
+        $store = $this->storeFixture(['restaurant_stripe_secret_key' => 'sk_live_x']);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway']);
+
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => ''])->assertStatus(404);
+    }
+
+    /** AUDIT-authz #3: a cancelled order can't be paid (same rule as PaymentController::payableStore). */
+    public function test_intent_410_for_a_cancelled_order(): void
+    {
+        $store = $this->storeFixture(['restaurant_stripe_secret_key' => 'sk_live_x']);
+        $order = Order::create(['store_id' => $store->id, 'status' => 'cancelled', 'type' => 'takeaway', 'track_token' => 'TOKCXL']);
+
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => 'TOKCXL'])->assertStatus(410);
+        $this->assertSame(0, Transaction::where('product_id', $order->id)->count());
     }
 
     public function test_apple_pay_domain_association_404_when_absent(): void

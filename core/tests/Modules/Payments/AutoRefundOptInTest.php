@@ -15,6 +15,7 @@ use Juwri\Modules\Payments\Models\PaymentGateway;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Services\Refunds\GatewayRefundService;
 use Tests\Support\GatewayTestHelpers;
+use Tests\Support\PricedOrderLine;
 use Tests\TestCase;
 
 /**
@@ -48,6 +49,7 @@ class AutoRefundOptInTest extends TestCase
         StoreOption::updateStoreOption($store->id, 'currency_code', 'USD');
         $order->forceFill(['is_paid' => 1, 'payment_gateway' => 'stripe', 'grand_total' => 30, 'subtotal' => 30, 'status' => 'completed'])->save();
         $tx->forceFill(['status' => Transaction::STATUS_CONSUMED, 'transaction_gatway' => 'stripe', 'payment_id' => 'cs_fake_r'.$tx->id])->save();
+        $order = PricedOrderLine::add($order, 30.0);
 
         return [Store::find($store->id)->user, $store, $order];
     }

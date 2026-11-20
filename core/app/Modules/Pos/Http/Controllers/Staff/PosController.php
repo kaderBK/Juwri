@@ -1519,7 +1519,8 @@ class PosController extends Controller
         $order = $this->ownOrder($orderId, $store);
 
         $data = $request->validate([
-            'method' => 'required|in:cash,card,online,other,charge_to_room',
+            // Coupons C6: 'coupon' = nothing to collect (PosService::settle checks the server amount due).
+            'method' => 'required|in:cash,card,online,other,charge_to_room,coupon',
             'tendered' => 'nullable|numeric|min:0',
             'tip' => 'nullable|numeric|min:0',
         ]);

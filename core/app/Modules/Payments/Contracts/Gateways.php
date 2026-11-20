@@ -87,11 +87,22 @@ interface Gateways
 
     /**
      * P3-09: capture `$minor` (transaction currency, ≤ the authorised amount) of an authorised card hold
-     * (CardHolds::capture). On success the transaction carries the captured amount and is pending again for settlement.
+     * (CardHolds::capture). On success the transaction carries the captured amount and is pending again for settlement;
+     * `captured_minor` is what was captured (a retry after an unknown outcome repeats the first request's amount).
      *
-     * @return array{ok: bool, reference: string|null, message: string|null}
+     * @return array{ok: bool, reference: string|null, message: string|null, captured_minor?: int}
      */
     public function captureHold(Transaction $transaction, int $minor): array;
+
+    /**
+     * grocery-nits2: settle a capture stuck in `capturing` after an unknown outcome, once an admin checked the payment
+     * with the provider (CardHolds::resolveCapture): captured (the stored request's amount) or not captured (back to
+     * `authorised`, a new request next time).
+     *
+     * @param  array<string, mixed>  $audit
+     * @return array{ok: bool, message: string|null, captured_minor: int}
+     */
+    public function resolveCapture(Transaction $transaction, bool $captured, ?string $reference, array $audit = []): array;
 
     /**
      * P3-09: release an authorised card hold (CardHolds::void).

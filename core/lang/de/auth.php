@@ -6,4 +6,5 @@
 'password' => 'Das angegebene Passwort ist falsch.',
 'throttle' => 'Zu viele Anmeldeversuche. Bitte versuche es in :seconds Sekunden erneut.',
 'case_duplicate' => 'Mehr als ein Konto verwendet diese Adresse mit unterschiedlicher Groß-/Kleinschreibung. Bitte wenden Sie sich an den Support, um sich anzumelden.',
+'reseller_handoff' => 'Ihr Konto wird auf dieser Website verwaltet. Bitte melden Sie sich hier an, um fortzufahren.',
 );

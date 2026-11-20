@@ -24,4 +24,8 @@
     <x-ui.field type="datetime-local" name="expiry_at" :label="___('Expiry at').' *'" :value="\Carbon\Carbon::parse($coupon->expiry_at)->format('Y-m-d\TH:i')" required />
     <x-ui.field type="select" name="coupon_type" :label="___('Coupon Type')" :value="$coupon->coupon_type"
         :options="['percentage' => ___('Percentage'), 'fixed' => ___('Fixed')]" />
+    {{-- C5: the full redemption log is its own page. --}}
+    <div class="ui-field">
+        <x-ui.button size="sm" variant="secondary" :href="route('admin.coupons.redemptions', $coupon->id)">{{ ___('View all redemptions') }}</x-ui.button>
+    </div>
 </x-ui.panel>

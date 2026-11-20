@@ -65,6 +65,7 @@ use Juwri\Modules\Auth\Http\Middleware\CheckUserIsBanned;
 use Juwri\Modules\Auth\Http\Middleware\RedirectIfAuthenticated;
 use Juwri\Modules\Auth\Http\Middleware\RequirePassword;
 use Juwri\Modules\Content\Http\Middleware\CacheMarketingResponse;
+use Juwri\Modules\Loyalty\Http\Middleware\CouponCheckThrottle;
 use Juwri\Modules\Marketing\Http\Middleware\CaptureGuestReferral;
 use Juwri\Modules\Pos\Http\Middleware\KioskLock;
 use Juwri\Modules\Storefront\Http\Middleware\CacheStorefrontResponse;
@@ -165,6 +166,8 @@ class Kernel extends HttpKernel
         'throttle' => ThrottleRequests::class,
         /* Abuse Guard: warn/enforce-aware named rate limiter (->middleware('ratelimit:ai')) */
         'ratelimit' => AbuseRateLimit::class,
+        /* Coupons C5: failed-check limiter on coupon validation (->middleware('coupon.check:pos')) */
+        'coupon.check' => CouponCheckThrottle::class,
         /* P6-74: per-store daily cost cap on public AI/SMS endpoints (->middleware('storecap:ai'|'storecap:sms')) */
         'storecap' => StoreDailyCap::class,
         /* Abuse Guard: per-merchant abuse-hold write freeze (public menus stay live) */

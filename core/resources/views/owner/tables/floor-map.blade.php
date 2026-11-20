@@ -382,10 +382,10 @@
         d.innerHTML = '<button type="button" class="fm-del" style="position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;border:0;background:#dc2626;color:#fff;cursor:pointer;line-height:1;">×</button>'
             + '<button type="button" class="fm-status-btn" style="position:absolute;top:-8px;left:-8px;width:20px;height:20px;border-radius:50%;border:0;background:#334155;color:#fff;cursor:pointer;line-height:1;">⚙</button>'
             + '<button type="button" class="fm-qr-btn" style="position:absolute;bottom:-8px;left:-8px;width:20px;height:20px;border-radius:50%;border:0;background:#0ea5e9;color:#fff;cursor:pointer;line-height:1;font-size:.55rem;font-weight:700;">QR</button>'
-            + '<strong>T' + t.table_no + '</strong><small class="fm-seats-label">' + t.seats + ' seats</small>'
+            + '<strong>T' + escTt(t.table_no) + '</strong><small class="fm-seats-label">' + escTt(t.seats) + ' seats</small>'
             + '<small class="fm-cap-label" style="font-size:.6rem;opacity:.7;min-height:.7rem;"></small>'
             + '<small class="fm-room-label" style="font-size:.6rem;opacity:.7;min-height:.7rem;"></small>'
-            + '<small class="fm-section-label" style="font-size:.62rem;opacity:.75;min-height:.7rem;">' + (t.section || '') + '</small>';
+            + '<small class="fm-section-label" style="font-size:.62rem;opacity:.75;min-height:.7rem;">' + escTt(t.section) + '</small>';
         return d;
     }
 

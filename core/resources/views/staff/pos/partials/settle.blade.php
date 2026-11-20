@@ -84,6 +84,13 @@
                 <span class="pos-tip-amt" x-show="tipAmount > 0" x-text="'+' + money(tipAmount)"></span>
             </div>
 
+            {{-- Coupons C6: the coupon covers everything — no tender to take. The server re-checks the amount due
+                 before recording it as paid by coupon (any tender on a 0 amount due is recorded as the coupon). --}}
+            <div class="pos-settle-free" x-show="coupon.applied && settleTotal() <= 0.001" x-cloak>
+                <p class="pos-settle-hint">{{ ___('Free with coupon — no payment needed') }}</p>
+                <button type="button" class="pos-settle-confirm" :disabled="sending" @click="confirmSettle('coupon')">{{ ___('Confirm free order') }}</button>
+            </div>
+
             <div class="pos-tabs">
                 <button type="button" :class="{on: settleTab === 'cash'}" @click="setSettleTab('cash')">{{ ___('Cash') }}</button>
                 <button type="button" :class="{on: settleTab === 'other'}" @click="setSettleTab('other')">{{ ___('Other modes') }}</button>

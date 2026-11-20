@@ -149,6 +149,8 @@ return [
     ],
     'Juwri\\Modules\\Pos\\Http\\Controllers\\Api\\V1\\StaffAppController' => [  // Pos
         'Juwri\\Modules\\Menu\\Services\\MenuAdminService',
+        // AUDIT-authz #1: the one staff order-status write shared with the staff PWA (follow-up: an Ordering contract).
+        'Juwri\\Modules\\Ordering\\Services\\Orders\\StaffOrderStatus',
         'Juwri\\Modules\\Team\\Http\\Middleware\\StaffTokenAuth',
     ],
     'Juwri\\Modules\\Pos\\Http\\Controllers\\Staff\\PosController' => [  // Pos

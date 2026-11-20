@@ -4,6 +4,11 @@
 
 namespace Juwri\Core\Services;
 
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
+
 /**
  * GAP-4: SSRF guard for outbound owner-supplied URLs (webhooks). A URL is safe
  * only when it is https AND every IP its host resolves to is a public address —
@@ -61,23 +66,92 @@ class SsrfGuard
      * isSafePublicUrl, so a validated public host cannot 30x the request onward to an
      * internal address (the classic redirect bypass of a host-only guard). Use as:
      *   Http::withOptions(['allow_redirects' => SsrfGuard::redirectGuard()])->get($url)
-     * Pair it with an isSafePublicUrl() check on the INITIAL url.
+     * Pair it with an isSafePublicUrl() check on the INITIAL url. With $pin (the
+     * vetted first hop), hops that leave that host:port are refused.
      *
+     * @param  array{host: string, port: int, ip: string}|null  $pin
      * @return array{max: int, strict: bool, referer: bool, protocols: list<string>, on_redirect: \Closure}
      */
-    public static function redirectGuard(int $max = 3): array
+    public static function redirectGuard(int $max = 3, ?array $pin = null): array
     {
         return [
             'max' => $max,
             'strict' => true,
             'referer' => false,
             'protocols' => ['https'], // consistent with the https-only isSafePublicUrl
-            'on_redirect' => function ($request, $response, $uri) {
+            'on_redirect' => function ($request, $response, $uri) use ($pin) {
                 if (! self::isSafePublicUrl((string) $uri)) {
                     throw new \RuntimeException('SSRF: redirect to a non-public host blocked');
                 }
+                // w5 #5: the request's CURLOPT_RESOLVE pin only covers the first
+                // host:port, so Guzzle may follow a hop only when it stays on that
+                // origin. Cross-host hops must go through send(), which pins each one.
+                if ($pin !== null && ! self::sameOrigin($pin, (string) $uri)) {
+                    throw new \RuntimeException('SSRF: cross-host redirect is not pinned; use SsrfGuard::send()');
+                }
             },
         ];
+    }
+
+    /**
+     * w5 #5: send a request to an untrusted URL and follow redirects MANUALLY,
+     * so every hop is vetted (https, every resolved IP public) and pinned to its
+     * own vetted IP via CURLOPT_RESOLVE, with at most $maxHops hops. 303 (and the
+     * GET it implies) drops the body; other codes keep method and body, like the
+     * strict Guzzle redirect config. Credential headers (Authorization, Cookie)
+     * are never carried to another origin: such a hop is refused.
+     *
+     * This is the ONLY supported way to follow redirects for an untrusted URL; redirectGuard() with a pin (same-origin
+     * hops) is kept for completeness but has no production caller. Each hop gets the PendingRequest's own timeout, so
+     * the worst-case total is ($maxHops + 1) x that timeout — keep the client timeout short.
+     *
+     * @param  array<string, mixed>  $options  PendingRequest::send() options (e.g. ['json' => [...]])
+     *
+     * @throws \RuntimeException when a hop is unsafe or there are too many hops
+     */
+    public static function send(PendingRequest $http, string $method, string $url, array $options = [], int $maxHops = 3): Response
+    {
+        $headers = array_change_key_case((array) ($http->getOptions()['headers'] ?? []), CASE_LOWER);
+        $hasCredentials = isset($headers['authorization']) || isset($headers['cookie']);
+        $first = null;
+
+        for ($hop = 0; ; $hop++) {
+            $pin = self::vet($url) ?? throw new \RuntimeException('SSRF: URL is not a safe public https endpoint');
+            $first ??= $pin;
+            if ($hasCredentials && ! self::sameOrigin($first, $url)) {
+                throw new \RuntimeException('SSRF: credentials are not sent to another origin on redirect');
+            }
+
+            $response = (clone $http)->withOptions([
+                'curl' => [CURLOPT_RESOLVE => [self::resolveEntry($pin)]],
+                'allow_redirects' => false,
+            ])->send($method, $url, $options);
+
+            $location = trim($response->header('Location'));
+            if ($location === '' || ! in_array($response->status(), [301, 302, 303, 307, 308], true)) {
+                return $response;
+            }
+            if ($hop >= $maxHops) {
+                throw new \RuntimeException('SSRF: too many redirects');
+            }
+            $url = (string) UriResolver::resolve(new Uri($url), new Uri($location));
+            if ($response->status() === 303) {
+                $method = 'GET';
+                $options = [];
+            }
+        }
+    }
+
+    /** @param  array{host: string, port: int, ip: string}  $pin */
+    private static function sameOrigin(array $pin, string $url): bool
+    {
+        $parts = parse_url($url);
+        if (! $parts || ($parts['scheme'] ?? '') !== 'https') {
+            return false;
+        }
+        $host = strtolower(rtrim(trim((string) ($parts['host'] ?? ''), '[]'), '.'));
+
+        return $host === strtolower(rtrim($pin['host'], '.')) && (int) ($parts['port'] ?? 443) === $pin['port'];
     }
 
     public static function isSafePublicUrl(string $url): bool
@@ -100,7 +174,9 @@ class SsrfGuard
 
     /**
      * Guzzle options for an owner-supplied URL: the vetted IP pinned via
-     * CURLOPT_RESOLVE, plus the redirect guard (or no redirects at all).
+     * CURLOPT_RESOLVE, plus the redirect guard (or no redirects at all). Only
+     * same-host:port hops are followed (they share the pin); for an untrusted URL
+     * that may redirect to another host use send(), which pins every hop.
      * Null when the URL is unsafe — callers must not send the request.
      *
      * @return array<string, mixed>|null
@@ -114,7 +190,7 @@ class SsrfGuard
 
         return [
             'curl' => [CURLOPT_RESOLVE => [self::resolveEntry($pin)]],
-            'allow_redirects' => $followRedirects ? self::redirectGuard() : false,
+            'allow_redirects' => $followRedirects ? self::redirectGuard(3, $pin) : false,
         ];
     }
 

@@ -78,5 +78,5 @@ export function createApi({ fetch = globalThis.fetch.bind(globalThis), csrf = cs
         return res.json();
     }
 
-    return { post, getJson, refreshCsrf };
+    return { post: store, getJson, refreshCsrf };
 }

@@ -7,13 +7,13 @@ namespace Tests\Modules\Core\Money;
 use App\Models\App;
 use App\Models\PartnerEarning;
 use App\Models\Theme;
-use Juwri\Modules\AppStore\Models\ThemePurchase;
-use Juwri\Core\Models\User;
 use App\Services\SellerPayoutService;
-use Juwri\Modules\Payments\Services\WalletService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Juwri\Core\Models\User;
 use Juwri\Core\Money\LegacyMoneyColumns;
+use Juwri\Modules\AppStore\Models\ThemePurchase;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -35,7 +35,7 @@ class AppStoreMinorMoneyTest extends TestCase
         $this->assertSame(['KWD', 12500], [$theme->currency_code, $theme->price_minor]);
 
         $seller = User::factory()->create();
-        WalletService::credit($seller, 20, 'seed');
+        SellerEarnings::seedMatured($seller, 20); // AUDIT-money L-1: only earned money is withdrawable
         $w = SellerPayoutService::requestWithdrawal($seller, 1.235, 'manual');
         $this->assertSame(['KWD', 1235, '1.24'], [$w->currency_code, $w->amount_minor, $w->fresh()->amount]);
         SellerPayoutService::creditSale($seller->id, 10, 'sale:1', 'theme sale: t');

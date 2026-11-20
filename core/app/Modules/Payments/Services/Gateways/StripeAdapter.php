@@ -281,10 +281,10 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
     }
 
     /** P3-09: capture part of a PaymentIntent authorised with `capture_method=manual`. */
-    public function capture(Transaction $transaction, Money $amount): array
+    public function capture(Transaction $transaction, Money $amount, string $idempotencyKey): array
     {
         try {
-            $intent = $this->client($this->secretFor($transaction))
+            $intent = $this->client($this->secretFor($transaction))->withHeaders(['Idempotency-Key' => $idempotencyKey])
                 ->post('/payment_intents/'.rawurlencode((string) $transaction->payment_id).'/capture', [
                     'amount_to_capture' => GatewayMinorUnits::fromMoney($amount),
                 ])->throw()->json();
@@ -293,9 +293,23 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             }
 
             return ['ok' => true, 'reference' => (string) ($intent['latest_charge'] ?? $intent['id'] ?? ''), 'message' => null];
+        } catch (ConnectionException $e) {
+            throw $e; // grocery-nits2: no answer (timeout): outcome unknown, the retry reuses the Idempotency-Key
+        } catch (RequestException $e) {
+            if (GatewayOutcome::unknown($e)) {
+                throw $e; // a 5xx / 429: Stripe replays the stored answer for the same key, so the retry is safe
+            }
+
+            return ['ok' => false, 'reference' => null, 'message' => $this->errorMessage($e)];
         } catch (\Throwable $e) {
             return ['ok' => false, 'reference' => null, 'message' => $this->errorMessage($e)];
         }
+    }
+
+    /** Stripe never captures a PaymentIntent twice, and the capture carries an Idempotency-Key. */
+    public function capturesIdempotently(): bool
+    {
+        return true;
     }
 
     /** P3-09: cancel an uncaptured PaymentIntent (the hold is released). */
@@ -582,7 +596,7 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         // The amount we asked Stripe for — the rounded-down step for a 3-decimal amount between steps (KWD 12.345 →
         // 12340, GatewayRounding); exact otherwise. before: the half-up 12350, so an over-charge settled.
         $expected = GatewayRounding::chargeMinor($this->key(), $transaction->money('amount'), $currency);
-        if ($expected === null || (isset($session['amount_total']) && (int) $session['amount_total'] !== $expected)) {
+        if ($expected === null || (isset($session['amount_total']) && ! in_array($expected, self::sessionPaidMinors($session), true))) {
             // before: `{$session['amount_total']}` here threw "undefined array key" when Stripe sent no amount_total
             Log::warning("[stripe] amount mismatch on transaction {$transaction->id}: paid ".(is_scalar($session['amount_total'] ?? null) ? $session['amount_total'] : '-').' expected '.($expected ?? '-'));
 
@@ -595,6 +609,30 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         }
 
         return true;
+    }
+
+    /**
+     * B1b: the amounts (minor units) a paid Checkout session may be checked against — its total and, when Stripe added
+     * tax on top (`total_details.amount_tax`), the total less that tax. Our prices are pre-tax: with Managed Payments
+     * Stripe is the seller and adds VAT / sales tax at checkout, so a 9.00 USD plan is paid as 10.35. Before: the total
+     * was compared with 9.00, every taxed purchase failed the check and the plan never activated. The tax figure comes
+     * from the same signed event or server-side retrieve as the total (never from the buyer), in the session's own
+     * currency; an underpayment still matches neither amount.
+     *
+     * @param  array<string, mixed>  $session
+     * @return list<int>
+     */
+    private static function sessionPaidMinors(array $session): array
+    {
+        $total = $session['amount_total'] ?? null;
+        if (! is_numeric($total)) {
+            return [];
+        }
+        $total = (int) $total;
+        $tax = $session['total_details']['amount_tax'] ?? null;
+        $tax = is_numeric($tax) ? (int) $tax : 0;
+
+        return $tax > 0 && $tax < $total ? [$total, $total - $tax] : [$total];
     }
 
     /**
@@ -689,6 +727,12 @@ class StripeAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
         $subscription = $invoice->subscription
             ?? $invoice->parent->subscription_details->subscription
             ?? null;
+
+        /* B1b: an invoice with no subscription is no renewal — Managed Payments issues one for every one-time Checkout
+           payment, which settles on checkout.session.completed. Acknowledged (before: 400, retried by Stripe for days). */
+        if (empty($subscription) && ! empty($invoice->id)) {
+            return $this->answer(200, 'not a subscription invoice');
+        }
 
         if (! is_object($metadata) || get_object_vars($metadata) === [] || empty($invoice->id)) {
             return response()->json(['status' => 400], 400);

@@ -116,6 +116,7 @@
     "app/Modules/Ordering/Database/Migrations/2026_10_19_120000_add_tax_pre_discount_to_orders.php": "59b054b4dc847fe83aebb674d32fb082bcc2ea6535f5326dbe35bb52365046e3",
     "app/Modules/Ordering/Database/Migrations/2026_10_19_130000_add_cart_recovery_checked_at_to_orders.php": "d24477f166c03fab127ef5c97ea5ebc3890d08ee33384101d29e215f8a1873dd",
     "app/Modules/Ordering/Database/Migrations/2026_10_26_180000_keep_order_lines_when_items_deleted.php": "b44de3a6c446e2565fe885b4f2c0e6846158c2d9c146b627dea61b448a96007c",
+    "app/Modules/Ordering/Database/Migrations/2026_11_20_120000_add_tender_return_columns_to_orders.php": "0ce3f75e30512a6633e64fc557931e3a20fae4be8a4ac475b85d663df806cdee",
     "app/Modules/Payments/Database/Migrations/2026_10_01_102000_create_payments_tables.php": "bed1ab56779a0264eaf90ce5b992a2b78caff5f4b8524ceedba8ff23e581ece2",
     "app/Modules/Payments/Database/Migrations/2026_10_01_102100_create_store_payment_gateways_table.php": "d9b2a795a3e214f06ab3968e6fb92822f609d35701ac0df3858e23526e70c8f9",
     "app/Modules/Payments/Database/Migrations/2026_10_01_111900_create_payment_ledger_tables.php": "504cde4e30bd42174cdb359170068ff10e29416105bb8eb9b5284c0c072d6104",

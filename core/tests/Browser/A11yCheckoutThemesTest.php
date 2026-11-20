@@ -42,8 +42,8 @@ uses(A11yCheckoutThemesBoot::class);
 /** @return array<string, array{retail?: bool, payment?: bool, before_pay?: array<int, string>, add: array<int, string>, cart: string, checkout: array<int, string>, name: string, phone: string, online: string, place: string}> */
 function a11yThemeJourneys(): array
 {
-    // aisle and basket are the retail (goods) themes: a retail store (tests/Support/AisleStore), a product opened from its
-    // card (the wide-leg trousers have one variant, so nothing needs choosing), pick up in store so no address is needed.
+    // aisle and basket are the retail (goods) themes: a retail store (tests/Support/AisleStore), wide-leg trousers opened from
+    // their card (both single Colour/Size options are preselected), pick up in store so no address is needed.
     $retail = [
         'retail' => true,
         'add' => ['a[href*="item=019ed8ab-d380"]', '[data-kit-add]'],
@@ -67,7 +67,8 @@ function a11yThemeJourneys(): array
 
     return [
         'aisle' => $retail,
-        'basket' => ['payment' => false] + $retail,
+        // basket's trousers card has its own "Add" button that opens the item sheet (the card link is not an ?item= URL there).
+        'basket' => ['payment' => false, 'add' => ['button[data-kit-open-item*="019ed8ab-d380"]', '[data-kit-add]']] + $retail,
         'brew' => ['payment' => false] + $brew,
         'feast' => [
             'add' => ['.ff-quick-add-btn'],
@@ -118,6 +119,48 @@ function a11yClick(object $page, string $selector): void
     $page->wait(0.5);
 }
 
+function a11yVisible(object $page, string $selector): bool
+{
+    $sel = json_encode($selector, JSON_THROW_ON_ERROR);
+    try {
+        return (bool) $page->script('() => { const el = document.querySelector('.$sel.'); '
+            .'return Boolean(el && !el.closest("[hidden]") && el.getClientRects().length > 0); }');
+    } catch (Throwable) {
+        return false;
+    }
+}
+
+function a11yWaitJuwri(object $page, int $attempts = 60): void
+{
+    for ($i = 0; $i < $attempts; $i++) {
+        try {
+            if ($page->script('() => Boolean(window.Juwri && window.Juwri.cart)')) {
+                return;
+            }
+        } catch (Throwable) {
+            // Mid-navigation execution context reset; retry on the next tick.
+        }
+        $page->wait(0.25);
+    }
+}
+
+function a11yWaitVisible(object $page, string $selector, int $attempts = 20): void
+{
+    $sel = json_encode($selector, JSON_THROW_ON_ERROR);
+    for ($i = 0; $i < $attempts; $i++) {
+        try {
+            $ready = $page->script('() => { const el = document.querySelector('.$sel.'); '
+                .'return Boolean(el && !el.closest("[hidden]") && el.getClientRects().length > 0); }');
+            if ($ready) {
+                return;
+            }
+        } catch (Throwable) {
+            // Mid-navigation execution context reset; retry on the next tick.
+        }
+        $page->wait(0.25);
+    }
+}
+
 /** @param  array<string, mixed>  $j */
 function a11yCartPage(string $theme, string $locale, array $j, bool $online): array
 {
@@ -141,8 +184,29 @@ function a11yCartPage(string $theme, string $locale, array $j, bool $online): ar
     // feast and plate open on a splash that fades out on its own; skip it so axe does not scan mid-fade colours.
     a11yClick($page, '#ff-splash-skip, #splashSkip');
     $page->wait(1);
+    // The storefront core publishes window.Juwri only after IndexedDB and the cart are up: an Add before that is silently lost.
+    a11yWaitJuwri($page);
     foreach ($j['add'] as $selector) {
+        if ($selector === '[data-kit-add]') {
+            a11yWaitJuwri($page); // aisle opens a new page for the product: wait for its own boot
+            a11yWaitVisible($page, $selector);
+            $page->assertVisible('[data-kit-add]');
+            // a required option (Colour, Size) with a single choice is not preselected: pick it, or Add only shows the "choose" error.
+            $page->script('() => { for (const g of document.querySelectorAll("[data-kit-group][data-required]")) { '
+                .'if (g.querySelector("input:checked")) continue; '
+                .'const i = [...g.querySelectorAll("input")].find((e) => !e.disabled && e.getAttribute("aria-disabled") !== "true"); '
+                .'if (i) i.click(); } }');
+            $page->wait(0.75);
+        }
         a11yClick($page, $selector);
+        if (str_contains($selector, '019ed8ab-d380')) {
+            // basket opens the item in an async sheet (?fragment=item) once the storefront script is up: re-click until it shows.
+            for ($try = 0; $try < 6 && ! a11yVisible($page, '[data-kit-add]'); $try++) {
+                $page->wait(0.75);
+                a11yClick($page, $selector);
+                $page->wait(0.75);
+            }
+        }
     }
 
     return [$page, $store];
@@ -181,6 +245,8 @@ foreach (['en', 'ar'] as $locale) {
                 $page->type(a11ySel($j['name']), $ar ? 'زائر المتصفح' : 'Browser Guest')
                     ->type(a11ySel($j['phone']), '5551234567');
                 foreach ($j['before_pay'] ?? [] as $selector) {
+                    a11yWaitVisible($page, $selector);
+                    $page->assertVisible($selector);
                     a11yClick($page, $selector);
                 }
                 a11yClick($page, $j['online']);

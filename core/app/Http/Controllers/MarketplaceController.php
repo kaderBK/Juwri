@@ -216,6 +216,7 @@ class MarketplaceController extends Controller
     public function buy(string $slug, ThemePurchaseService $purchases)
     {
         abort_unless(auth()->check(), 403);
+        abort_if(is_staff_dashboard(), 403); // SEC-1119 #1: owner only, even if the route loses its staff.dashboard fence
         $theme = Theme::where('status', 'published')->where('slug', $slug)->firstOrFail();
 
         try {
@@ -231,6 +232,7 @@ class MarketplaceController extends Controller
     public function apply(Request $request, string $slug)
     {
         abort_unless(auth()->check(), 403);
+        abort_if(is_staff_dashboard(), 403); // SEC-1119 #1: owner only, even if the route loses its staff.dashboard fence
         $request->validate(['store_id' => 'required|integer']);
 
         $theme = Theme::where('status', 'published')->where('slug', $slug)->firstOrFail();

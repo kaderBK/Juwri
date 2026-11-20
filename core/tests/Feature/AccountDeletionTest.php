@@ -510,6 +510,7 @@ class AccountDeletionTest extends TestCase
     public function test_a_failing_store_cleanup_still_anonymizes_the_owner_and_keeps_the_deletion_pending(): void
     {
         [$owner, $store] = $this->ownerWithData();
+        $owner->forceFill(['status' => 0])->save(); // a closed account (Pack C G07: purge skips an active one)
         $del = $this->deletionRow($owner, AccountDeletion::PENDING);
         $del->forceFill(['purge_after' => now()->subMinute()])->save();
         $this->failStoreUpdates();
@@ -530,6 +531,7 @@ class AccountDeletionTest extends TestCase
     public function test_a_partial_purge_is_a_failed_attempt_with_an_alert_never_purged(): void
     {
         [$owner, $store] = $this->ownerWithData();
+        $owner->forceFill(['status' => 0])->save(); // a closed account (Pack C G07: purge skips an active one)
         $del = $this->deletionRow($owner, AccountDeletion::PENDING);
         $del->forceFill(['purge_after' => now()->subMinute()])->save();
         $this->failStoreUpdates();
@@ -549,6 +551,7 @@ class AccountDeletionTest extends TestCase
     public function test_a_partial_purge_stops_after_the_attempt_limit(): void
     {
         [$owner] = $this->ownerWithData();
+        $owner->forceFill(['status' => 0])->save(); // a closed account (Pack C G07: purge skips an active one)
         $del = $this->deletionRow($owner, AccountDeletion::PENDING);
         $del->forceFill(['purge_after' => now()->subMinute()])->save();
         $this->failStoreUpdates();

@@ -879,6 +879,11 @@ class Order extends Model implements MinorMoneyModel
         }
 
         $money = $this->computeMoney();
+        // grocery-nits 5: every line removed at picking — nothing delivered, nothing charged (no delivery fee, tip or
+        // charge), on every later re-snapshot too (a discount, tip or type edit runs this through the updated hook).
+        if ($this->items->every(fn ($line) => $line->getAttribute('pick_status') === 'removed')) {
+            $money = ['subtotal' => 0.0, 'tax' => 0.0, 'grand' => 0.0] + $money;
+        }
 
         $dirty = false;
         // P1-05: compared in minor units of the order's currency (the stored precision).

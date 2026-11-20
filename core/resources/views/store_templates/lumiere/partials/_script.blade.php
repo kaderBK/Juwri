@@ -1561,7 +1561,7 @@
                         }
                         go('confirm');
                     } else {
-                        msg.innerHTML = '<div class="lm-msg lm-msg--error">' + ((data && data.message) || T.genericError) + '</div>';
+                        msg.innerHTML = '<div class="lm-msg lm-msg--error"></div>'; msg.firstChild.textContent = (data && data.message) || T.genericError;
                     }
                 })
                 .catch(function () {

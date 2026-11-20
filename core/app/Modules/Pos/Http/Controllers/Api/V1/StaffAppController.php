@@ -13,14 +13,17 @@ use App\Services\KdsService;
 use App\Services\SalesAnalyticsService;
 use App\Services\StaffTwoFactorService;
 use App\Services\WebhookService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Juwri\Core\Http\Controllers\Controller;
+use Juwri\Core\Models\Branch;
 use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Menu\Services\MenuAdminService;
 use Juwri\Modules\Messaging\Contracts\MobilePush;
 use Juwri\Modules\Messaging\Models\PushSubscription;
+use Juwri\Modules\Ordering\Services\Orders\StaffOrderStatus;
 use Juwri\Modules\Team\Http\Middleware\StaffTokenAuth;
 use Juwri\Modules\Team\Models\StaffToken;
 
@@ -66,11 +69,44 @@ class StaffAppController extends Controller
 
     // ── Orders (permission: orders) ────────────────────────────────────────────
 
+    /**
+     * AUDIT-authz #1: orders visible to this staff member — their store and, when
+     * they are pinned to a branch, that branch only.
+     *
+     * @return Builder<Order>
+     */
+    private function staffOrders(): Builder
+    {
+        return $this->inStaffBranch(Order::where('store_id', $this->staff()->store_id));
+    }
+
+    /**
+     * Same rule as {@see \Juwri\Core\Http\Controllers\Concerns\ScopesToBranch}: a branch-pinned staff member sees their
+     * branch; legacy NULL branch_id rows belong to the store's default (first) branch.
+     *
+     * @param  Builder<Order>  $query
+     * @return Builder<Order>
+     */
+    private function inStaffBranch(Builder $query): Builder
+    {
+        $s = $this->staff();
+        if (! $s->branch_id) {
+            return $query;
+        }
+        $branchId = (int) $s->branch_id;
+        $defaultId = (int) Branch::where('store_id', $s->store_id)->orderBy('id')->value('id');
+        if ($branchId === $defaultId) {
+            return $query->where(fn ($w) => $w->where('branch_id', $branchId)->orWhereNull('branch_id'));
+        }
+
+        return $query->where('branch_id', $branchId);
+    }
+
     public function orders(Request $request)
     {
         $this->require('orders');
 
-        $orders = Order::where('store_id', $this->staff()->store_id)
+        $orders = $this->staffOrders()
             ->when($request->query('status'), fn ($q, $s) => $q->where('status', $s))
             ->orderByDesc('created_at')
             ->orderByDesc('id')
@@ -82,12 +118,24 @@ class StaffAppController extends Controller
     public function updateOrderStatus(Request $request, int $orderId)
     {
         $this->require('orders');
-        $order = Order::where('store_id', $this->staff()->store_id)->findOrFail($orderId);
+        $order = $this->staffOrders()->findOrFail($orderId);
 
-        $status = $request->validate([
+        $data = $request->validate([
             'status' => 'required|in:new,preparing,ready,delivered,completed,cancelled',
-        ])['status'];
-        $order->update(['status' => $status]);
+            'client_op_id' => 'nullable|string|max:64',
+            'reason' => 'nullable|string|max:200',
+        ]);
+        $status = $data['status'];
+
+        // AUDIT-authz #1: same rules as the staff PWA — terminal cancel, pos_refund
+        // for a paid cancel, split shares, offline dedupe and the cancel reversal.
+        $response = StaffOrderStatus::apply(
+            $this->staff(), $order, $status,
+            (string) ($data['client_op_id'] ?? ''), trim((string) ($data['reason'] ?? '')), 'staff_api'
+        );
+        if ($response->getStatusCode() !== 200 || ($response->getData(true)['duplicate'] ?? false)) {
+            return $response;
+        }
 
         try {
             WebhookService::dispatch($this->staff()->owner_id, 'order.status_changed', [
@@ -98,7 +146,7 @@ class StaffAppController extends Controller
         } catch (\Throwable $e) {
         }
 
-        return response()->json(['id' => $order->id, 'status' => $status]);
+        return $response;
     }
 
     // ── KDS (permission: kds) ──────────────────────────────────────────────────
@@ -111,7 +159,8 @@ class StaffAppController extends Controller
         $stationId = $request->query('station_id') ?: $s->station_id;
 
         // P6-09 V-15: the same kitchen set as the web rail — no parked, unreleased, unpaid (pay-link) or voided orders.
-        $items = OrderItem::whereHas('order', fn ($q) => $q->where('store_id', $s->store_id)->live()->whereNull('held_at')
+        // AUDIT-authz #1: a branch-pinned staff member sees only their branch's tickets.
+        $items = OrderItem::whereHas('order', fn (Builder $q) => $this->inStaffBranch($q->where('store_id', $s->store_id))->live()->whereNull('held_at')
             ->where(fn ($w) => $w->whereNull('status')->orWhereNotIn('status', ['cancelled', 'unpaid'])))
             ->whereIn('status', ['queued', 'preparing', 'ready'])
             ->when($stationId, fn ($q, $st) => $q->where('station_id', $st))
@@ -277,9 +326,10 @@ class StaffAppController extends Controller
         return response()->json(['ok' => true, 'recovery_codes' => $codes]);
     }
 
+    /** SEC-1120 review SHOULD 3: an item of this staff member's store and, when they are pinned to a branch, that branch. */
     private function ownedItem(int $itemId): OrderItem
     {
-        return OrderItem::whereHas('order', fn ($q) => $q->where('store_id', $this->staff()->store_id))
+        return OrderItem::whereHas('order', fn (Builder $q) => $this->inStaffBranch($q->where('store_id', $this->staff()->store_id)))
             ->findOrFail($itemId);
     }
 }

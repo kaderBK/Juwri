@@ -65,11 +65,15 @@ class CustomerSocialLoginTest extends TestCase
 
     private function state(Store $store, string $provider): string
     {
-        // Bind a login-CSRF nonce to the session for GET providers (google/facebook),
-        // mirroring redirect(). Apple (form_post) is exempt in the controller, so the
-        // embedded nonce is simply ignored there.
+        // Bind a login-CSRF nonce to this browser, mirroring redirect(): the session
+        // for GET providers (google/facebook), a SameSite=None cookie for Apple,
+        // whose cross-site form_post carries no SameSite=Lax session cookie.
         $nonce = Str::random(40);
-        $this->withSession(['customer_social_nonce' => hash('sha256', $nonce)]);
+        if ($provider === 'apple') {
+            $this->withCookie('customer_social_apple_nonce', hash('sha256', $nonce));
+        } else {
+            $this->withSession(['customer_social_nonce' => hash('sha256', $nonce)]);
+        }
 
         return Crypt::encryptString(json_encode(['r' => $store->id, 'p' => $provider, 't' => time(), 'n' => $nonce]));
     }
@@ -328,6 +332,93 @@ class CustomerSocialLoginTest extends TestCase
             'oauth_uid' => 'apple-1',
             'name' => 'Tim Cook',
         ]);
+    }
+
+    private function appleKeys(): void
+    {
+        $this->platformKeys('apple', [
+            'client_id' => 'com.test.svc',
+            'team_id' => 'TEAM123',
+            'key_id' => 'KEY123',
+            'private_key' => $this->fakeP8(),
+        ]);
+    }
+
+    #[Test]
+    public function apple_callback_without_the_browser_nonce_cookie_is_rejected()
+    {
+        // Security review #11 (login CSRF): an attacker's own captured Apple state +
+        // code, auto-posted from a third-party page into a victim's browser, carries
+        // no nonce cookie from that browser → refused before any code exchange.
+        $store = $this->createRestaurant();
+        $this->appleKeys();
+        Socialite::shouldReceive('driver')->never();
+
+        $state = Crypt::encryptString(json_encode(['r' => $store->id, 'p' => 'apple', 't' => time(), 'n' => Str::random(40)]));
+        $this->post(route('customer.social.callback.post', 'apple'), ['state' => $state, 'code' => 'attacker-code'])
+            ->assertRedirect();
+
+        $this->assertFalse(auth('customer')->check());
+        $this->assertSame(0, Customer::where('store_id', $store->id)->count());
+    }
+
+    #[Test]
+    public function apple_callback_with_a_mismatched_nonce_cookie_is_rejected()
+    {
+        $store = $this->createRestaurant();
+        $this->appleKeys();
+        Socialite::shouldReceive('driver')->never();
+
+        $this->withCookie('customer_social_apple_nonce', hash('sha256', Str::random(40)));
+        $state = Crypt::encryptString(json_encode(['r' => $store->id, 'p' => 'apple', 't' => time(), 'n' => Str::random(40)]));
+        $this->post(route('customer.social.callback.post', 'apple'), ['state' => $state, 'code' => 'attacker-code'])
+            ->assertRedirect();
+
+        $this->assertFalse(auth('customer')->check());
+    }
+
+    #[Test]
+    public function apple_redirect_binds_the_state_nonce_to_a_same_site_none_cookie()
+    {
+        $store = $this->createRestaurant();
+        $this->appleKeys();
+
+        $captured = null;
+        $provider = Mockery::mock();
+        $provider->shouldReceive('stateless')->andReturnSelf();
+        $provider->shouldReceive('redirectUrl')->andReturnSelf();
+        $provider->shouldReceive('scopes')->andReturnSelf();
+        $provider->shouldReceive('with')->andReturnUsing(function (array $params) use (&$captured, $provider) {
+            $captured = $params['state'] ?? null;
+
+            return $provider;
+        });
+        $provider->shouldReceive('redirect')->andReturn(redirect()->away('https://appleid.apple.com/auth/authorize'));
+        Socialite::shouldReceive('driver')->with('apple')->andReturn($provider);
+
+        $res = $this->get(route('customer.social.redirect', [$store->id, 'apple']))->assertRedirect();
+
+        $cookie = collect($res->headers->getCookies())->first(fn ($c) => $c->getName() === 'customer_social_apple_nonce');
+        $this->assertNotNull($cookie, 'Apple redirect must set the nonce cookie');
+        $this->assertSame('none', $cookie->getSameSite());
+        $this->assertTrue($cookie->isSecure());
+        $this->assertTrue($cookie->isHttpOnly());
+
+        $state = json_decode(Crypt::decryptString((string) $captured), true);
+        $this->assertIsString($state['n'] ?? null);
+        $this->assertSame(hash('sha256', $state['n']), $this->cookieValue((string) $cookie->getValue()));
+    }
+
+    /** The plain value of an EncryptCookies-encrypted cookie (prefix stripped). */
+    private function cookieValue(string $value): string
+    {
+        try {
+            $plain = Crypt::decryptString($value);
+        } catch (\Throwable) {
+            return $value;
+        }
+
+        return str_contains($plain, '|') ? substr($plain, strpos($plain, '|') + 1) : $plain;
     }
 
     #[Test]

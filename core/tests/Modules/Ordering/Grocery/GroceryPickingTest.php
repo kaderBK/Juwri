@@ -5,8 +5,12 @@
 namespace Tests\Modules\Ordering\Grocery;
 
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Services\CustomerWalletService;
+use App\Services\PosService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Core\Money\Money;
@@ -170,6 +174,146 @@ class GroceryPickingTest extends TestCase
         $result = $this->picking()->finish($off);
         $this->assertSame(['refunded', 1300], [$result['outcome'], $result['refunded_minor']], 'switch off: only the removed line (API-31)');
         $this->assertSame(1, OrderAdjustment::query()->where('order_id', $off->id)->count());
+    }
+
+    /** grocery-snap: charged up front, the weighed difference refunded — the snapshot is the picked total, and the refund row is not subtracted twice. */
+    public function test_paid_up_front_snapshot_follows_the_pick_and_the_refund_cap_counts_the_picking_refund_once(): void
+    {
+        StoreSettings::set((int) $this->store->id, 'refunds_weighed_difference', true);
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        $this->picking()->weigh($order, (int) $this->tomatoLine($order)->id, 400);
+        $result = $this->picking()->finish($order);
+        $this->assertSame(['refunded', 177], [$result['outcome'], $result['refunded_minor']]);
+        $this->assertSame(4072, (int) $order->fresh()->grand_total_minor);
+
+        $owner = User::query()->findOrFail($this->store->user_id);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 40.73])->assertStatus(422);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 40.72])->assertOk();
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 0.01])->assertStatus(422);
+    }
+
+    /** grocery-snap: every line removed from a basket charged up front — the delivery fee left on the snapshot is not refundable. */
+    public function test_paid_up_front_all_removed_leaves_nothing_to_refund(): void
+    {
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        foreach ($order->items()->get() as $line) {
+            $this->picking()->remove($order, (int) $line->id);
+        }
+        $result = $this->picking()->finish($order);
+        $this->assertSame(['refunded', 4249], [$result['outcome'], $result['refunded_minor']]);
+
+        $owner = User::query()->findOrFail($this->store->user_id);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 0.01])->assertStatus(422);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToCredit', $order->id), ['amount' => 0.01])->assertStatus(422);
+    }
+
+    /** grocery-snap2 MUST: switch off, a cheaper replacement kept — the store kept the difference, so the owner can still refund the full charge. */
+    public function test_paid_up_front_with_the_difference_kept_the_full_charge_stays_refundable(): void
+    {
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        $bananas = (int) $this->lineFor($order, ApiFixtures::BANANAS)->id;
+        $this->picking()->propose($order, $bananas, 'Organic bananas', 1200, null, false);
+        $this->picking()->answer($order, $bananas, 'kept');
+        $this->picking()->weigh($order, (int) $this->tomatoLine($order)->id, 500);
+        $result = $this->picking()->finish($order);
+        $this->assertSame(['none', 0], [$result['outcome'], $result['refunded_minor']], 'switch off: the difference is kept');
+        $this->assertSame(1200 + 590 + 1400 + 900, (int) $order->fresh()->grand_total_minor);
+
+        $owner = User::query()->findOrFail($this->store->user_id);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 42.50])->assertStatus(422);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 42.49])->assertOk();
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 0.01])->assertStatus(422);
+    }
+
+    /** grocery-snap2 MUST + grocery-nits 4: every line removed from a basket paid partly by wallet — the card is refunded, the wallet part goes back to store credit by itself. */
+    public function test_paid_up_front_all_removed_with_a_wallet_tender_returns_the_wallet_part_to_credit(): void
+    {
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $customer = Customer::create(['name' => 'Noura', 'store_id' => $this->store->id, 'phone' => '+966551230077']);
+        $order->refresh()->forceFill(['wallet_applied' => 10.00, 'customer_id' => $order->customer_id ?: $customer->id])->saveQuietly();
+        $this->picking()->start($order);
+        foreach ($order->items()->get() as $line) {
+            $this->picking()->remove($order, (int) $line->id);
+        }
+        $result = $this->picking()->finish($order);
+        $this->assertSame(['refunded', 4249], [$result['outcome'], $result['refunded_minor']]);
+
+        $owner = User::query()->findOrFail($this->store->user_id);
+        $this->assertSame(10.0, CustomerWalletService::balanceFor(Customer::query()->findOrFail($order->fresh()->customer_id)), 'the wallet part is back');
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 0.01])->assertStatus(422);
+        $this->actingAs($owner)->postJson(route('stores.refundOrderToCredit', $order->id), ['amount' => 0.01])->assertStatus(422);
+    }
+
+    /** grocery-nits 5: a tip, discount or type change after every line was removed never brings the delivery fee back. */
+    public function test_all_removed_total_stays_zero_after_a_later_money_edit(): void
+    {
+        $order = $this->placeGroceryOrder('pay_later');
+        $this->picking()->start($order);
+        foreach ($order->items()->get() as $line) {
+            $this->picking()->remove($order, (int) $line->id);
+        }
+        $this->picking()->finish($order);
+        $order->refresh()->forceFill(['tip_amount_minor' => 500])->save();
+        $order->refresh();
+        $this->assertSame([0, 0, 0], [(int) $order->grand_total_minor, (int) $order->subtotal_minor, (int) $order->tax_total_minor]);
+    }
+
+    /** grocery-snap2 SHOULD 1: nothing delivered and nothing charged — the stored total is 0, not the delivery fee. */
+    public function test_all_removed_stores_a_zero_total(): void
+    {
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        foreach ($order->items()->get() as $line) {
+            $this->picking()->remove($order, (int) $line->id);
+        }
+        $this->picking()->finish($order);
+        $order->refresh();
+        $this->assertSame([0, 0, 0], [(int) $order->grand_total_minor, (int) $order->subtotal_minor, (int) $order->tax_total_minor]);
+    }
+
+    /** grocery-snap2 SHOULD 3: a register refund of a picked up-front order counts the picking refund once. */
+    public function test_register_refund_of_a_picked_up_front_order_counts_the_picking_refund_once(): void
+    {
+        StoreSettings::set((int) $this->store->id, 'refunds_weighed_difference', true);
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        $this->picking()->weigh($order, (int) $this->tomatoLine($order)->id, 400);
+        $this->assertSame(177, $this->picking()->finish($order)['refunded_minor']);
+
+        try {
+            PosService::refund($order->fresh(), null, 40.73, 'card', 'test');
+            $this->fail('above what is left of the charge');
+        } catch (ValidationException) {
+        }
+        $this->assertSame(40.72, (float) PosService::refund($order->fresh(), null, 40.72, 'card', 'test')->amount);
+    }
+
+    /** grocery-snap2 SHOULD 3: the item-mode register refund uses the same collected base. */
+    public function test_register_item_refund_of_a_picked_up_front_order_counts_the_picking_refund_once(): void
+    {
+        StoreSettings::set((int) $this->store->id, 'refunds_weighed_difference', true);
+        $order = $this->placeGroceryOrder();
+        $this->payUpFront($order);
+        $this->picking()->start($order);
+        $this->picking()->weigh($order, (int) $this->tomatoLine($order)->id, 400);
+        $this->picking()->finish($order);
+
+        $line = ['order_item_id' => (int) $this->lineFor($order, '019e8646-1380-7aeb-91aa-3627eb8ec48e')->id, 'qty' => 1];
+        try {
+            PosService::refundItems($order->fresh(), [$line + ['amount' => 40.73]], 'test', null, 'card');
+            $this->fail('above what is left of the charge');
+        } catch (ValidationException) {
+        }
+        $this->assertSame(40.72, (float) PosService::refundItems($order->fresh(), [$line + ['amount' => 40.72]], 'test', null, 'card')->amount);
     }
 
     public function test_ready_to_collect_message_for_a_slotted_collection_order_n3(): void

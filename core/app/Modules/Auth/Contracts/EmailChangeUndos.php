@@ -17,6 +17,15 @@ interface EmailChangeUndos
     /** Reseller email changes and reseller "login as" are refused this long after an undo of a reseller-made change. */
     public const RESELLER_BLOCK_SECONDS = 7 * 86400;
 
+    /** users.preferences key (UserSettings): unix time of the last reseller-made sign-in email change. */
+    public const RESELLER_EMAIL_CHANGED_OPTION = 'rsl_email_changed_at';
+
+    /** users.preferences key: sha256 of the lower-cased address a reseller last set as the sign-in email. */
+    public const RESELLER_EMAIL_SET_OPTION = 'rsl_email_set_hash';
+
+    /** Every reset link (reseller-sent AND the public forgot-password form) is withheld this long after a reseller email change. */
+    public const RESELLER_RESET_PAUSE_SECONDS = 86400;
+
     /**
      * Record a pending undo and return its absolute link, or null when there is nothing to
      * undo or it could not be stored (the notice then goes out without a link).

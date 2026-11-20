@@ -8,7 +8,7 @@ use Juwri\Modules\Integrations\Http\Controllers\Admin\SocialProvidersController;
 
 Route::name('admin.')
     ->prefix(admin_url())
-    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'demo', 'csp.dashboard'])
+    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'staff.dashboard', 'admin.session', 'demo', 'csp.dashboard']) // SEC-W2 #6: same fence as the main admin group
     ->group(function () {
         Route::get('social-providers', [SocialProvidersController::class, 'index'])
             ->name('social-providers.index');

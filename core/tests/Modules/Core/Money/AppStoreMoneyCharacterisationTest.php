@@ -7,17 +7,18 @@ namespace Tests\Modules\Core\Money;
 use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Models\App;
-use Juwri\Modules\AppStore\Models\AppUsageRecord;
 use App\Models\PartnerEarning;
 use App\Models\Theme;
-use Juwri\Modules\AppStore\Models\ThemePurchase;
-use Juwri\Core\Models\User;
-use Juwri\Modules\AppStore\Services\AppBillingService;
 use App\Services\AppInstallService;
 use App\Services\SellerPayoutService;
 use App\Services\ThemePurchaseService;
-use Juwri\Modules\Payments\Services\WalletService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Juwri\Core\Models\User;
+use Juwri\Modules\AppStore\Models\AppUsageRecord;
+use Juwri\Modules\AppStore\Models\ThemePurchase;
+use Juwri\Modules\AppStore\Services\AppBillingService;
+use Juwri\Modules\Payments\Services\WalletService;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -88,7 +89,8 @@ class AppStoreMoneyCharacterisationTest extends TestCase
 
     public function test_seller_withdrawals(): void
     {
-        $seller = $this->user(50);
+        $seller = $this->user();
+        SellerEarnings::seedMatured($seller, 50); // AUDIT-money L-1: only earned money is withdrawable
         $w = SellerPayoutService::requestWithdrawal($seller, 12.5, 'manual');
         $this->assertSame('12.50', $w->fresh()->amount);
         $this->assertSame('12.50', $w->fresh()->toArray()['amount']);

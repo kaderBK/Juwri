@@ -20,7 +20,15 @@ Route::controller('\Juwri\Modules\Loyalty\Http\Controllers\User\StoreCouponContr
     Route::get('/', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
     Route::post('/', 'store')->name('store');
+    Route::get('/bulk', 'bulkCreate')->name('bulk.create');
+    Route::post('/bulk/confirm', 'bulkConfirm')->middleware('throttle:30,1,stores-coupons-bulk-confirm')->name('bulk.confirm');
+    Route::post('/bulk', 'bulkStore')->middleware('throttle:30,1,stores-coupons-bulk-store')->name('bulk.store');
+    Route::get('/batches', 'batches')->name('batches.index');
+    Route::get('/batches/{batch}', 'batchResult')->whereNumber('batch')->name('batches.show');
+    Route::post('/bulk-action', 'bulkAction')->middleware('throttle:30,1,stores-coupons-bulk-action')->name('bulk.action');
+    Route::get('/export', 'export')->name('export');
     Route::get('/{coupon}/edit', 'edit')->name('edit');
+    Route::get('/{coupon}/redemptions', '\Juwri\Modules\Loyalty\Http\Controllers\User\StoreCouponRedemptionController@index')->name('redemptions'); // C5
     Route::put('/{coupon}', 'update')->name('update');
     Route::delete('/{coupon}', 'destroy')->name('destroy');
 });

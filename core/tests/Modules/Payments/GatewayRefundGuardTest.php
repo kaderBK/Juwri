@@ -32,6 +32,7 @@ use Juwri\Modules\Payments\Services\Refunds\GatewayRefundService;
 use Juwri\Modules\Payments\Services\Refunds\RefundGuard;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Support\GatewayTestHelpers;
+use Tests\Support\PricedOrderLine;
 use Tests\TestCase;
 
 /**
@@ -344,6 +345,7 @@ class GatewayRefundGuardTest extends TestCase
         StoreOption::updateStoreOption($store->id, 'auto_refunds_enabled', '1');
         $order->forceFill(['is_paid' => 1, 'payment_gateway' => 'stripe', 'grand_total' => 30, 'subtotal' => 30, 'status' => 'completed', 'currency_code' => 'USD'])->save();
         $tx->forceFill(['status' => Transaction::STATUS_CONSUMED, 'transaction_gatway' => 'stripe', 'payment_id' => 'pi_fake_e'])->save();
+        $order = PricedOrderLine::add($order, 30.0);
         $owner = $store->user;
 
         $this->actingAs($owner)->postJson(route('stores.refundOrderToOriginal', $order->id), ['amount' => 40])
@@ -366,6 +368,7 @@ class GatewayRefundGuardTest extends TestCase
         StoreOption::updateStoreOption($store->id, 'auto_refunds_enabled', '1');
         $order->forceFill(['is_paid' => 1, 'payment_gateway' => 'stripe', 'status' => 'completed', 'currency_code' => 'KWD'])->save();
         $tx->forceFill(['status' => Transaction::STATUS_CONSUMED, 'transaction_gatway' => 'stripe', 'payment_id' => 'pi_fake_k'])->save();
+        $order = PricedOrderLine::add($order, 5.0);
         StoreOption::updateStoreOption($store->id, 'currency_code', 'USD');
 
         // KWD has 3 decimals: 1.25 is kept exactly (not re-rounded to the store's new USD decimals) and sent as fils.

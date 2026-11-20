@@ -4,6 +4,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\WithdrawalRefusedException;
 use App\Models\PartnerEarning;
 use App\Models\SellerWithdrawal;
 use App\Support\Money\TenderAmount;
@@ -118,14 +119,41 @@ class SellerPayoutService
      * P6-231: the wallet balance minus sale credits still inside their 14-day holdback (`available_at` in the future,
      * not reversed) — a sale refunded or charged back in week 1 can still be clawed back. Pending withdrawals are
      * already debited from the wallet.
+     *
+     * Security (AUDIT-money L-1): only EARNED money is cash: the result is also capped at the matured sale earnings
+     * (not reversed / clawback-due) minus what was already withdrawn (pending or paid; a rejected request was credited
+     * back). Top-ups, promo codes, admin grants and other wallet credit stay spendable on the platform but are never
+     * withdrawable.
      */
     public static function availableBalance(User $seller, ?string $currency = null): float
     {
         $code = strtoupper((string) ($currency ?: app(Wallet::class)->currency()));
         $balance = Money::ofMajor((string) app(Wallet::class)->balanceFor($seller, $code), $code);
         $held = Money::ofMinor(self::heldMinor($seller, $code), $code);
+        $earned = Money::ofMinor(self::maturedEarnedMinor($seller, $code) - self::withdrawnMinor($seller, $code), $code);
 
-        return max(0.0, $balance->minus($held)->toFloat());
+        return max(0.0, min($balance->minus($held)->toFloat(), $earned->toFloat()));
+    }
+
+    /** AUDIT-money L-1: minor units of $code this seller earned from sales that are out of the holdback and still stand. */
+    private static function maturedEarnedMinor(User $seller, string $code): int
+    {
+        return (int) PartnerEarning::query()
+            ->where('partner_id', $seller->id)
+            ->where('currency', $code)
+            ->whereNotIn('status', ['reversed', 'clawback_due'])
+            ->where(fn ($q) => $q->whereNull('available_at')->orWhere('available_at', '<=', now()))
+            ->sum('net_minor');
+    }
+
+    /** AUDIT-money L-1: minor units of $code already drawn out (every request except a rejected, credited-back one). */
+    private static function withdrawnMinor(User $seller, string $code): int
+    {
+        return (int) SellerWithdrawal::query()
+            ->where('user_id', $seller->id)
+            ->where('currency_code', $code)
+            ->where('status', '!=', 'rejected')
+            ->sum('amount_minor');
     }
 
     /** P6-231: minor units of $code still in the holdback for this seller. */
@@ -241,7 +269,7 @@ class SellerPayoutService
      * an over-balance request throws before any row is committed.
      *
      * @throws \InvalidArgumentException on a non-positive amount
-     * @throws \RuntimeException on insufficient (withdrawable) balance
+     * @throws WithdrawalRefusedException on insufficient (withdrawable) balance
      */
     public static function requestWithdrawal(User $seller, float $amount, ?string $rail = null, ?string $currency = null): SellerWithdrawal
     {
@@ -260,7 +288,7 @@ class SellerPayoutService
             User::whereKey($seller->id)->lockForUpdate()->first();
             $available = static::availableBalance($seller, $currency);
             if ($amount > $available + 1e-9) {
-                throw new \RuntimeException("Withdrawal refused: {$available} {$currency} is withdrawable now (recent sales are held for 14 days).");
+                throw new WithdrawalRefusedException("Withdrawal refused:{$available} {$currency} is withdrawable now (only marketplace earnings past the 14-day hold; top-ups, referrals and other credit are spend-only).");
             }
 
             $withdrawal = SellerWithdrawal::create([

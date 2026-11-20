@@ -31,18 +31,21 @@
 
 <script nonce="{{ csp_nonce() }}">
 const FEED = '{{ route('stores.dispatch.map.feed') }}?store_id={{ $rid }}';
+// Feed strings (diner-typed address, driver names) are untrusted: escape every
+// one before it reaches innerHTML, so markup or Alpine x-* attributes stay text.
+function esc(s) { const e = document.createElement('span'); e.textContent = s == null ? '' : String(s); return e.innerHTML.replace(/"/g, '&quot;'); }
 async function refresh() {
     try {
         const r = await fetch(FEED, { headers: { 'Accept':'application/json' } });
         const d = await r.json();
         document.getElementById('drivers').innerHTML = (d.drivers||[]).map(x =>
-            `<div class="ui-dmap__driver"><span class="ui-dmap__dot${x.stale ? ' is-stale' : ''}" aria-hidden="true"></span><strong>${x.name}</strong> <span class="ui-dmap__gps ui-ltr">${x.lat ? '('+x.lat.toFixed(3)+', '+x.lng.toFixed(3)+')' : '{{ ___('no GPS') }}'}</span></div>`).join('') || '<p class="ui-dmap__none">{{ ___('No drivers.') }}</p>';
+            `<div class="ui-dmap__driver"><span class="ui-dmap__dot${x.stale ? ' is-stale' : ''}" aria-hidden="true"></span><strong>${esc(x.name)}</strong> <span class="ui-dmap__gps ui-ltr">${x.lat ? '('+Number(x.lat).toFixed(3)+', '+Number(x.lng).toFixed(3)+')' : '{{ ___('no GPS') }}'}</span></div>`).join('') || '<p class="ui-dmap__none">{{ ___('No drivers.') }}</p>';
         document.getElementById('unassigned').innerHTML = (d.unassigned||[]).map(o => {
             const sug = (o.suggestions||[]).map(s => {
                 const staleTag = s.stale ? ' <span class="ui-tag" data-tone="warning">{{ ___('GPS old') }}</span>' : '';
-                return `<form method="post" action="{{ url('dispatch') }}/${o.id}/assign?store_id={{ $rid }}">@csrf<input type="hidden" name="driver_id" value="${s.driver_id}"><button class="ui-btn ui-btn--secondary ui-btn--sm">${s.name}${s.distance_km!=null?' <span class="ui-ltr">('+s.distance_km.toFixed(1)+'km)</span>':''}${staleTag}</button></form>`;
+                return `<form method="post" action="{{ url('dispatch') }}/${esc(o.id)}/assign?store_id={{ $rid }}">@csrf<input type="hidden" name="driver_id" value="${esc(s.driver_id)}"><button class="ui-btn ui-btn--secondary ui-btn--sm">${esc(s.name)}${s.distance_km!=null?' <span class="ui-ltr">('+Number(s.distance_km).toFixed(1)+'km)</span>':''}${staleTag}</button></form>`;
             }).join('');
-            return `<div class="ui-dmap__order"><p class="ui-dmap__order-head"><strong class="ui-ltr">#${o.id}</strong> <span>${o.address||''}</span></p><div class="ui-dmap__sugs">${sug || '<span class="ui-dmap__none">{{ ___('no drivers') }}</span>'}</div></div>`;
+            return `<div class="ui-dmap__order"><p class="ui-dmap__order-head"><strong class="ui-ltr">#${esc(o.id)}</strong> <span>${esc(o.address)}</span></p><div class="ui-dmap__sugs">${sug || '<span class="ui-dmap__none">{{ ___('no drivers') }}</span>'}</div></div>`;
         }).join('') || '<p class="ui-dmap__none">{{ ___('None.') }}</p>';
     } catch(e) {}
 }

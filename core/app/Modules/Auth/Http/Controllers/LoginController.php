@@ -18,6 +18,7 @@ use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Core\Models\AccountDeletion;
 use Juwri\Core\Models\Language;
 use Juwri\Core\Models\User;
+use Juwri\Core\Support\Hooks;
 use Juwri\Core\Support\OwnerApp;
 use Juwri\Core\Support\SafeRedirect;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -95,6 +96,12 @@ class LoginController extends Controller
             return $response;
         }
 
+        // R4b: a reseller customer signing in on the platform host continues on their reseller's host (sign in there
+        // once; sessions are per host). The Reseller module (ee) answers the hook; Community has none.
+        if ($user instanceof User && is_string($handoff = Hooks::first('auth.login-handoff', $request, $user))) {
+            return redirect()->away($handoff);
+        }
+
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect()->intended(self::homeFor($user));
@@ -163,10 +170,30 @@ class LoginController extends Controller
             return admin_url().'/dashboard';
         }
 
+        if (($landing = self::landingFor($user)) !== null) {
+            return $landing;
+        }
+
         // Keep the language prefix the user signed in under: a bare
         // "dashboard" would resolve to the default locale and switch the
         // whole dashboard to another language.
         return LaravelLocalization::localizeUrl(RouteServiceProvider::USER);
+    }
+
+    /**
+     * R5: the post-sign-in default the Reseller module (ee) picks for a partner owner or team seat: the partner
+     * portal, or the portal / stores chooser. Null for everyone else and in Community (no hook). Callers pass it as
+     * the DEFAULT of redirect()->intended(), so an intended URL still wins. The answer is an app-internal URL
+     * built by the module (never request input).
+     */
+    public static function landingFor(?Authenticatable $user): ?string
+    {
+        if (! $user instanceof User || $user->isAdmin()) {
+            return null;
+        }
+        $landing = Hooks::first('auth.login-landing', $user);
+
+        return is_string($landing) && $landing !== '' ? $landing : null;
     }
 
     /**

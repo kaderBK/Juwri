@@ -6,14 +6,20 @@ namespace Tests\Modules\Storefront\Api;
 
 use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
+use App\Models\ActivityLog;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\StoreTable;
+use App\Services\CustomerWalletService;
 use App\Services\OrderApiService;
 use App\Services\Storefront\StorefrontMenuCache;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Juwri\Core\Contracts\Marketplace\PlatformWalletTender;
+use Juwri\Core\Editions\Community\NoPlatformWallet;
+use Juwri\Core\Models\PlatformAlert;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Settings\RefundSwitches;
 use Juwri\Core\Settings\StoreSettings;
@@ -293,6 +299,104 @@ class StorefrontApiOrdersTest extends TestCase
         $this->assertSame(0, (int) Menu::query()->where('public_id', ApiFixtures::TAWOOK)->value('stock_qty'), 'never -1');
         $this->assertNotNull($order->fresh()->stock_restored_at, 'nothing was taken for the late order');
         $this->orderStatus($track)->assertJsonPath('order.status', 'pending_approval');
+    }
+
+    /**
+     * money-last 1: the expiry cancel gave the store-credit part back, so the late card payment alone no longer covers
+     * the order. Accepting it never places the order short: it waits as pending_approval and the owner is told the gap.
+     */
+    public function test_a_late_payment_whose_tenders_were_returned_waits_for_the_owner(): void
+    {
+        $track = (string) $this->placed(['mode' => 'hosted', 'return_url' => 'https://saffron-house.example/back'])->assertCreated()->json('order.track_token');
+        $order = Order::query()->where('track_token', $track)->firstOrFail();
+        $customer = Customer::create(['name' => 'Noura', 'store_id' => $order->store_id, 'phone' => '+966551230090']);
+        $order->forceFill(['wallet_applied' => 5.00, 'customer_id' => $customer->id])->saveQuietly();
+        $tx = app(HostedOrderPayments::class)->transactionFor($order);
+        $tx->forceFill(['transaction_gatway' => 'stripe', 'amount' => (float) $tx->amount - 5.0])->save(); // the card part
+        $this->travel(16)->minutes();
+        $this->artisan('orders:expire-hosted-payments')->assertSuccessful();
+        $this->assertSame(5.0, CustomerWalletService::balanceFor($customer), 'the expiry cancel gave the store credit back');
+        ob_start();
+        PaymentController::paySuccess($tx->fresh());
+        ob_end_clean();
+
+        $this->assertSame('pending_approval', app(LatePayments::class)->accept($order->fresh()));
+        $this->assertSame(Order::STATUS_PENDING_APPROVAL, $order->fresh()->status);
+        $logged = ActivityLog::query()->where('action', 'order.late_tenders_returned')->get();
+        $this->assertCount(1, $logged);
+        $this->assertSame(5.0, (float) $logged[0]->meta['short']);
+    }
+
+    /**
+     * ML-1120 review SHOULD 2: the expiry cancel returns the tenders inside its own transaction. When the return fails
+     * the cancel rolls back (the order stays unpaid with its tenders, so a late payment can never be placed while they
+     * are given back after it), the failure is logged, and the next sweep cancels and returns them.
+     */
+    public function test_a_failing_tender_return_rolls_the_expiry_cancel_back_and_the_next_sweep_retries(): void
+    {
+        $track = (string) $this->placed(['mode' => 'hosted', 'return_url' => 'https://saffron-house.example/back'])->assertCreated()->json('order.track_token');
+        $order = Order::query()->where('track_token', $track)->firstOrFail();
+        $customer = Customer::create(['name' => 'Noura', 'store_id' => $order->store_id, 'phone' => '+966551230091']);
+        $order->forceFill(['wallet_applied' => 5.00, 'customer_id' => $customer->id])->saveQuietly();
+        $this->app->instance(PlatformWalletTender::class, new class implements PlatformWalletTender
+        {
+            public function returnPart(Order $order, float $amount, string $key): bool
+            {
+                return false;
+            }
+
+            public function reverseOrder(Order $order, float $keep = 0.0): float
+            {
+                throw new \RuntimeException('wallet service down');
+            }
+        });
+        $this->travel(16)->minutes();
+
+        $this->assertFalse(app(HostedOrderPayments::class)->expire($order->fresh()));
+        $this->assertSame('unpaid', $order->fresh()->status, 'the cancel rolled back with the failed return');
+        $this->assertEqualsWithDelta(5.0, (float) $order->fresh()->wallet_applied, 0.001);
+        $this->assertEqualsWithDelta(0.0, CustomerWalletService::balanceFor($customer), 0.001, 'all tenders or none');
+        $this->assertSame('tenders', ActivityLog::query()->where('action', 'order.cancel_step_failed')->firstOrFail()->meta['step']);
+
+        $this->app->instance(PlatformWalletTender::class, new NoPlatformWallet);
+        $this->artisan('orders:expire-hosted-payments')->assertSuccessful();
+        $this->assertSame('cancelled', $order->fresh()->status);
+        $this->assertEqualsWithDelta(5.0, CustomerWalletService::balanceFor($customer->fresh()), 0.001, 'the retry gave the store credit back');
+        $this->assertSame(500, (int) $order->fresh()->getAttribute('tenders_returned_minor'));
+    }
+
+    /**
+     * ML-1120 delta NIT 3: an expiry cancel whose tender return keeps failing is counted per order, and on the third
+     * failed try the platform admin gets one alert (the existing PlatformAlert channel) — not one per sweep.
+     */
+    public function test_an_expiry_cancel_that_keeps_failing_alerts_the_admin_once(): void
+    {
+        $track = (string) $this->placed(['mode' => 'hosted', 'return_url' => 'https://saffron-house.example/back'])->assertCreated()->json('order.track_token');
+        $order = Order::query()->where('track_token', $track)->firstOrFail();
+        $customer = Customer::create(['name' => 'Noura', 'store_id' => $order->store_id, 'phone' => '+966551230092']);
+        $order->forceFill(['wallet_applied' => 5.00, 'customer_id' => $customer->id])->saveQuietly();
+        $this->app->instance(PlatformWalletTender::class, new class implements PlatformWalletTender
+        {
+            public function returnPart(Order $order, float $amount, string $key): bool
+            {
+                return false;
+            }
+
+            public function reverseOrder(Order $order, float $keep = 0.0): float
+            {
+                throw new \RuntimeException('wallet service down');
+            }
+        });
+        $this->travel(16)->minutes();
+
+        foreach (range(1, 5) as $sweep) {
+            $this->assertFalse(app(HostedOrderPayments::class)->expire($order->fresh()));
+            $this->assertSame($sweep >= 3 ? 1 : 0, PlatformAlert::query()->where('kind', 'order')->count(), "after sweep {$sweep}");
+        }
+        $this->assertSame([1, 2, 3, 4, 5], ActivityLog::query()->where('action', 'order.cancel_step_failed')->orderBy('id')->get()
+            ->map(fn ($row) => (int) $row->meta['attempt'])->all());
+        $this->assertStringContainsString('#'.$order->id, (string) PlatformAlert::query()->where('kind', 'order')->value('message'));
+        $this->assertSame('unpaid', $order->fresh()->status);
     }
 
     public function test_a_late_payment_never_revives_the_order_and_the_owner_accepts_or_refunds_it(): void

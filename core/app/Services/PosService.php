@@ -20,6 +20,9 @@ use Juwri\Modules\Menu\Models\MenuVariant;
 use Juwri\Modules\Menu\Services\Combos\ComboService;
 use Juwri\Modules\Ordering\Models\OrderAdjustment;
 use Juwri\Modules\Ordering\Models\OrderRefundItem;
+use Juwri\Modules\Ordering\Services\Orders\OrderCancellation;
+use Juwri\Modules\Ordering\Services\Orders\OrderTenders;
+use Juwri\Modules\Ordering\Services\Payments\CardHoldOrders;
 use Juwri\Modules\Ordering\Services\Tax\TaxByRate;
 use Juwri\Modules\Ordering\Services\Tax\TaxSnapshot;
 use Juwri\Modules\Pos\Services\Printing\PrintDispatcher;
@@ -88,6 +91,22 @@ class PosService
                the store credit / gift card / platform wallet already applied at order
                creation — not on the gross total (re-read after any tip change). */
             $due = (float) $order->amount_due;
+
+            /* Coupons C6: a couponed order with nothing left to collect (amount due 0 in the store's minor units,
+               computed server-side after tip, wallet and gift card) is paid by the coupon — recorded as such whatever
+               tender button was pressed, so the Z-report never shows a 0 "cash" sale. 'coupon' is refused while
+               anything is still owed. The coupon slot itself was claimed atomically when it was applied. */
+            $dueMinor = Money::minorFromMajor((string) max(0.0, $due), store_currency((int) $order->store_id));
+            $paidByCoupon = $order->coupon_id !== null && $dueMinor <= 0;
+            if ($method === 'coupon' && ! $paidByCoupon) {
+                throw ValidationException::withMessages([
+                    'method' => ___('This order still has an amount due — take payment.'),
+                ]);
+            }
+            if ($paidByCoupon && $method !== 'charge_to_room') {
+                $method = 'coupon';
+                $tendered = null;
+            }
 
             $order->payment_method = $method;
             if ($method === 'cash') {
@@ -556,8 +575,7 @@ class PosService
                 // re-credit any gift-card tender the diner paid with, and forfeit loyalty
                 // points earned at placement. Both are idempotent + no-op when there is
                 // nothing to reverse, so a later cancel can't double-credit.
-                GiftCardService::reverseRedemption($order);
-                CustomerWalletService::reverseForOrder($order);
+                OrderCancellation::reverseTenders($order); // gift card, store credit, platform wallet (money-tail 4, money-last 2)
                 LoyaltyAccrual::reverseForOrder($order);
                 // Full reversal → also give back the points the diner REDEEMED on it.
                 LoyaltyAccrual::restoreRedemptionForOrder($order);
@@ -646,6 +664,24 @@ class PosService
         }
     }
 
+    /**
+     * grocery-snap2: the money a refund is capped against, before refunds: the amount due (total − stored-value
+     * tenders), except for a picked grocery order paid online, where picking lowered the live total and its refunds are
+     * refund rows too — there it is what the gateway collected, so those refunds are subtracted once.
+     *
+     * money-last2 (REVIEW, Opus: money): not `amount_due` itself: once a void, cancel or full refund gave the tenders back
+     * (their columns go to 0) the amount due grows back to the gross total, so a second till refund paid the returned
+     * tenders out as cash. OrderTenders keeps every tender the order was paid with out of it.
+     */
+    private static function collectedForRefund(Order $order): float
+    {
+        $collected = app(CardHoldOrders::class)->collectedMinor($order);
+
+        return $collected !== null
+            ? Money::majorFromMinor($collected, strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id))))
+            : OrderTenders::refundBaseLessEveryRefund($order, (float) $order->total);
+    }
+
     /** Refund money on a paid order — records the money out (counts against the drawer if cash). */
     public static function refund(Order $order, ?StaffMember $staff, float $amount, string $method, string $reason, ?string $idempotencyKey = null): OrderAdjustment
     {
@@ -697,7 +733,7 @@ class PosService
             // an order paid partly by gift card / store credit be refunded that non-cash portion
             // as cash — a payout beyond what the store ever received. For a tender-free order
             // amount_due == total, so this is a no-op there.
-            $refundable = Money::round((float) $order->amount_due - $already, $dec);
+            $refundable = Money::round(self::collectedForRefund($order) - $already, $dec);
             if ($amount > $refundable) {
                 throw ValidationException::withMessages([
                     'amount' => ___('Refund exceeds the remaining refundable amount')." ({$refundable}).",
@@ -765,7 +801,8 @@ class PosService
     /** P6-240: cumulative refunded cash / collected cash, 0..1 (1 when nothing was collected). */
     private static function refundedShare(Order $order): float
     {
-        $collected = (float) $order->amount_due;
+        // ML-1120 review NIT 1: what was collected, not `amount_due` (it grows back once the tenders are returned)
+        $collected = self::collectedForRefund($order);
         if ($collected <= 0) {
             return 1.0;
         }
@@ -790,8 +827,7 @@ class PosService
             return; // still a partial cash refund — tenders stay put
         }
         try {
-            GiftCardService::reverseRedemption($order);
-            CustomerWalletService::reverseForOrder($order);
+            OrderCancellation::reverseTenders($order); // gift card, store credit, platform wallet (money-tail 4, money-last 2)
             // A full refund reverses the reward discount too → restore the redeemed points.
             LoyaltyAccrual::restoreRedemptionForOrder($order);
         } catch (\Throwable $e) {
@@ -897,7 +933,7 @@ class PosService
             // net of store-credit/gift-card tenders) minus everything already refunded.
             $already = (float) OrderAdjustment::where('order_id', $order->id)
                 ->where('type', 'refund')->sum(DB::raw(OrderAdjustment::minorMoneySql('amount')));
-            $refundable = Money::round((float) $order->amount_due - $already, $dec);
+            $refundable = Money::round(self::collectedForRefund($order) - $already, $dec);
             if ($sum > $refundable) {
                 throw ValidationException::withMessages([
                     'lines' => ___('Refund exceeds the remaining refundable amount')." ({$refundable}).",

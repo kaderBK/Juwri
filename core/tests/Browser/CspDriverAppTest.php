@@ -138,16 +138,18 @@ it('accepts an offer, walks the delivery steps and uploads the proof photo', fun
 
     $page->click('#offers .accept');
     CspProbe::until($page, fn () => (int) $order->fresh()->driver_id === $driver->id && $order->fresh()->delivery_status === 'assigned', 'accepting the offer assigned the order');
+    CspProbe::until($page, fn () => $page->script("() => document.querySelector('#scr-order .step.next')?.dataset.args") === '["picked_up"]', 'the Picked up step rendered');
 
     $page->click('#scr-order .step.next'); // Picked up
     CspProbe::until($page, fn () => $order->fresh()->delivery_status === 'picked_up', 'status moved to picked_up');
+    CspProbe::until($page, fn () => $page->script("() => document.querySelector('#scr-order .step.next')?.dataset.args") === '["out_for_delivery"]', 'the En route step rendered');
     $page->click('#scr-order .step.next'); // En route
     CspProbe::until($page, fn () => $order->fresh()->delivery_status === 'out_for_delivery', 'status moved to out_for_delivery');
+    CspProbe::until($page, fn () => $page->script("() => document.querySelector('#scr-order .step.next')?.dataset.args") === '["delivered"]', 'the Delivered step rendered');
 
     $page->click('#scr-order .step.next'); // Delivered: refused until the proof is in
-    $page->wait(1);
+    CspProbe::until($page, fn () => $page->script("() => document.getElementById('proof')?.style.display") === 'block', 'the proof panel opened');
     expect($order->fresh()->delivery_status)->toBe('out_for_delivery');
-    expect($page->script("() => document.getElementById('proof').style.display"))->toBe('block', 'the proof panel opened');
 
     $png = sys_get_temp_dir().'/pod-'.Str::random(6).'.png';
     File::put($png, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='));

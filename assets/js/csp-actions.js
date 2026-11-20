@@ -21,12 +21,36 @@
 (function () {
     'use strict';
 
+    // fix-xss M1: only these page handlers are reachable from markup. A free-form window lookup let injected
+    // markup call eval / Function / fetch / location.assign / open (the dashboard CSP allows 'unsafe-eval').
+    // A new data-act / data-change / data-input / data-search handler must be added here
+    // (tests/Architecture/CspActionsAllowlistTest fails on a name the markup uses that is missing).
+    var ALLOWED = [
+        // order hub, staff PWA, POS, kitchen
+        'accept', 'reject', 'advance', 'requestBill', 'transferOrder', 'toggle', 'playVoice', 'addItem', 'floorTap',
+        'kdsStep', 'toggleTask', 'wAck', 'wOpenAdd', 'wFire', 'wSplit', 'wMerge', 'wAddItem', 'logCheck', 'logIncident',
+        // driver PWAs
+        'saveToken', 'switchTab', 'claim', 'setStatus', 'requestOtp', 'verifyOtp', 'showStep', 'setShift', 'go', 'logout',
+        'acceptOffer', 'rejectOffer', 'openOrderById', 'sendPin', 'sendPhoto', 'markFailed',
+        // dispatch
+        'reassign', 'unassign', 'redispatch',
+        // marketplace, app store, feedback, partner portal
+        'facetChanged', 'submitBrowse', 'pickShot', 'pick', 'billingToggle', 'mkCityPicker.open',
+        // helpers defined below
+        'clickById', 'historyBackOr', 'openFromDataset'
+    ];
+    var ALLOW = Object.create(null);
+    for (var a = 0; a < ALLOWED.length; a++) ALLOW[ALLOWED[a]] = true;
+
     function call(attr, el, e) {
         var name = el.getAttribute(attr);
-        if (!name) return;
-        // dotted names (window.mkCityPicker.open) keep their receiver
+        if (!name || !Object.prototype.hasOwnProperty.call(ALLOW, name)) return;
+        // dotted names (window.mkCityPicker.open) keep their receiver; own properties only
         var parts = name.split('.'), owner = window, fn = window;
-        for (var i = 0; i < parts.length && fn; i++) { owner = fn; fn = fn[parts[i]]; }
+        for (var i = 0; i < parts.length && fn; i++) {
+            if (!Object.prototype.hasOwnProperty.call(fn, parts[i])) return;
+            owner = fn; fn = fn[parts[i]];
+        }
         if (typeof fn !== 'function') return;
         var args = [];
         try { args = el.dataset.args ? JSON.parse(el.dataset.args) : []; } catch (x) { args = []; }
@@ -64,8 +88,12 @@
     window.submitBrowse = function () { var f = document.getElementById('browse'); if (f) f.submit(); };
     window.clickById = function (id) { var el = document.getElementById(id); if (el) el.click(); };
 
-    window.historyBackOr = function (url) { if (history.length > 1) history.back(); else location.assign(url); };
-    window.openFromDataset = function (el, key) { window.open(el.dataset[key], '_blank', 'noopener'); };
+    // fix-xss M1: markup-supplied URLs are followed only when they resolve to http(s) (no javascript:/data:).
+    function safeUrl(url) {
+        try { var u = new URL(String(url), location.href); return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : null; } catch (x) { return null; }
+    }
+    window.historyBackOr = function (url) { if (history.length > 1) { history.back(); return; } var u = safeUrl(url); if (u) location.assign(u); };
+    window.openFromDataset = function (el, key) { var u = safeUrl(el && el.dataset ? el.dataset[key] : ''); if (u) window.open(u, '_blank', 'noopener'); };
 
     // <form data-confirm="Are you sure?"> replaces onsubmit="return confirm(...)"
     document.addEventListener('submit', function (e) {

@@ -133,6 +133,8 @@
                             @endforeach
                         </ul>
                     @endif
+                    {{-- C5: every channel (orders, POS, slots), paginated. --}}
+                    <div class="ui-card__foot"><x-ui.button :href="route('stores.coupons.redemptions', $coupon)" variant="secondary">{{ ___('View all redemptions') }}</x-ui.button></div>
                 </section>
             @endisset
 

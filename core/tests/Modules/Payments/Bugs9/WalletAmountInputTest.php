@@ -20,6 +20,7 @@ use Juwri\Core\Money\AmountInput;
 use Juwri\Modules\Payments\Models\PaymentGateway;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Services\WalletService;
+use Tests\Support\SellerEarnings;
 use Tests\Support\UniquePhone;
 use Tests\TestCase;
 
@@ -59,7 +60,7 @@ class WalletAmountInputTest extends TestCase
     private function seller(float $balance): User
     {
         $u = User::factory()->create(['status' => 1, 'email_verified_at' => now(), 'group_id' => 'free', 'user_type' => 'user']);
-        WalletService::credit($u, $balance, 'seed', 'seed:'.$u->id);
+        SellerEarnings::seedMatured($u, $balance); // L-1: only earned money is withdrawable
 
         return $u;
     }

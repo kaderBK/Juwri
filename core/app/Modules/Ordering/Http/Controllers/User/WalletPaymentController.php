@@ -59,11 +59,20 @@ class WalletPaymentController extends Controller
 
         $orderId = (int) $request->input('order_id');
         $order = Order::where('store_id', $store->id)->find($orderId);
-        if (! $order) {
+        // AUDIT-authz #3: the order id is sequential, so it is not proof the caller is
+        // this order's diner. The intent is bound to the order's track token (the same
+        // bearer credential as the track page); a wrong/missing token looks like no order.
+        $token = (string) $request->input('track_token', '');
+        if (! $order || $token === '' || ! is_string($order->track_token) || $order->track_token === ''
+            || ! hash_equals($order->track_token, $token)) {
             return response()->json(['error' => 'Order not found.'], 404);
         }
         if ((int) ($order->is_paid ?? 0) === 1) {
             return response()->json(['error' => 'Order already paid.'], 409);
+        }
+        // Same rule as PaymentController::payableStore(): a cancelled order is never charged.
+        if (in_array((string) $order->status, PaymentController::CLOSED_ORDER_STATUSES, true)) {
+            return response()->json(['error' => 'This order was cancelled and can no longer be paid.'], 410);
         }
 
         $opts = store_options($store->id);

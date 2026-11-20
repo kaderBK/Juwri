@@ -105,6 +105,7 @@
                     $item('admin.resellers.funnel', ___('Partner Funnel'), 'fi-rr-chart-pie', null, 'admin.resellers.funnel'),
                     $item('admin.resellers.partnerOps', ___('Partner Ops'), 'fi-rr-settings-sliders', null, 'admin.resellers.partnerOps'),
                     $item('admin.resellers.report', ___('Reseller Report'), 'fi-rr-stats', null, 'admin.resellers.report'),
+                    $item('admin.resellers.adjustments', ___('Subscription adjustments'), 'fi-rr-calendar-clock', null, 'admin.resellers.adjustments*'),
                     $item('admin.locked-templates.index', ___('Page Templates'), 'fi-rr-layout-fluid', null, 'admin.locked-templates.*'),
                 ])],
             ],

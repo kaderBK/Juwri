@@ -13,7 +13,7 @@ use Juwri\Modules\Ai\Http\Controllers\Admin\AiProvidersController;
  */
 Route::name('admin.')
     ->prefix(admin_url())
-    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'demo', 'csp.dashboard'])
+    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'staff.dashboard', 'admin.session', 'demo', 'csp.dashboard']) // SEC-W2 #6: same fence as the main admin group
     ->group(function () {
         Route::get('ai-providers', [AiProvidersController::class, 'index'])
             ->name('ai-providers.index');

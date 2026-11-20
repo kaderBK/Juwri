@@ -4,13 +4,7 @@
 
 namespace Juwri\Modules\Auth\Http\Controllers;
 
-use Juwri\Core\Http\Controllers\Controller;
-use Juwri\Core\Models\LegalAcceptance;
-use Juwri\Core\Models\User;
-use Juwri\Modules\Auth\Events\CredentialsChanged;
-use Juwri\Core\Services\Tenancy\TenantContext;
 use Illuminate\Database\Eloquent\Collection;
-use Juwri\Modules\Auth\Services\TwoFactorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\RateLimiter;
+use Juwri\Core\Http\Controllers\Controller;
+use Juwri\Core\Models\LegalAcceptance;
+use Juwri\Core\Models\User;
+use Juwri\Core\Services\Tenancy\TenantContext;
+use Juwri\Core\Support\Hooks;
+use Juwri\Modules\Auth\Events\CredentialsChanged;
+use Juwri\Modules\Auth\Services\TwoFactorService;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
@@ -231,7 +232,12 @@ class TwoFactorController extends Controller
 
         // Keep the locale prefix chosen at login; a bare dashboard URL would
         // resolve to the prefix-less default locale and flip the language.
-        $response = redirect()->intended(LaravelLocalization::localizeUrl('dashboard'));
+        // R4b: a reseller customer on the platform host continues on their reseller's host (same hand-off as the
+        // password-only sign-in; answered by the Reseller module, none in Community).
+        $handoff = Hooks::first('auth.login-handoff', $request, $user);
+        $response = is_string($handoff)
+            ? redirect()->away($handoff)
+            : redirect()->intended(LoginController::landingFor($user) ?? LaravelLocalization::localizeUrl('dashboard')); // R5: partner portal / chooser
 
         // Optional: remember THIS device so it can skip the challenge for a while.
         if ($request->boolean('remember_device')) {

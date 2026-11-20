@@ -12,6 +12,11 @@
 
 @section('content')
 
+{{-- R4b: arrived from a sign-in on the platform host (sessions are per host, so sign in here once). --}}
+@if (request()->query('from') === 'platform')
+    <p class="ui-auth__notice" role="status" data-reseller-login-handoff>{{ __('auth.reseller_handoff') }}</p>
+@endif
+
 @include('auth.partials.social')
 
 <form method="POST" action="{{ route('login') }}" class="ui-auth__form">

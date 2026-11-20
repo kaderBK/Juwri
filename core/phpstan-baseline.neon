@@ -11983,12 +11983,6 @@ parameters:
 			path: app/Modules/Loyalty/Http/Controllers/User/StoreCouponController.php
 
 		-
-			message: '#^Method Juwri\\Modules\\Loyalty\\Http\\Controllers\\User\\StoreCouponController\:\:index\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: app/Modules/Loyalty/Http/Controllers/User/StoreCouponController.php
-
-		-
 			message: '#^Method Juwri\\Modules\\Loyalty\\Http\\Controllers\\User\\StoreCouponController\:\:store\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
@@ -15339,12 +15333,6 @@ parameters:
 		-
 			message: '#^Class Juwri\\Modules\\Payments\\Models\\Transaction uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
 			identifier: missingType.generics
-			count: 1
-			path: app/Modules/Payments/Models/Transaction.php
-
-		-
-			message: '#^Parameter \#1 \$string of function str_pad expects string, int\<1, max\> given\.$#'
-			identifier: argument.type
 			count: 1
 			path: app/Modules/Payments/Models/Transaction.php
 

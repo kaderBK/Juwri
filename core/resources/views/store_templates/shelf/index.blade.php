@@ -1312,7 +1312,7 @@
                     saveCart();
                     renderCart();
                 } else {
-                    msg.innerHTML = '<div class="sh-msg sh-msg--error">' + ((data && data.message) || T.genericError) + '</div>';
+                    msg.innerHTML = '<div class="sh-msg sh-msg--error"></div>'; msg.firstChild.textContent = (data && data.message) || T.genericError;
                 }
             })
             .catch(function () {

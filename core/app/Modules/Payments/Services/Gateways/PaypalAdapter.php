@@ -359,7 +359,7 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
     }
 
     /** P3-09: capture part of the order's authorisation (final capture: the rest of the hold is released). */
-    public function capture(Transaction $transaction, Money $amount): array
+    public function capture(Transaction $transaction, Money $amount, string $idempotencyKey): array
     {
         $authorization = (string) data_get($transaction->details, 'paypal_authorization_id', '');
         $value = GatewayMinorUnits::gatewayMajorString($this->key(), $amount);
@@ -367,7 +367,8 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             return ['ok' => false, 'reference' => null, 'message' => 'No PayPal authorisation to capture.'];
         }
         try {
-            $capture = $this->client($this->credentials($transaction))
+            // grocery-nits 3: PayPal-Request-Id makes a retry after a timeout return the first capture, never a second
+            $capture = $this->client($this->credentials($transaction))->withHeaders(['PayPal-Request-Id' => $idempotencyKey])
                 ->post('/v2/payments/authorizations/'.rawurlencode($authorization).'/capture', [
                     'amount' => ['value' => $value, 'currency_code' => $amount->currency()],
                     'final_capture' => true,
@@ -379,9 +380,21 @@ class PaypalAdapter implements AuthorisesPayments, GatewayAdapter, StoreWebhooks
             return ['ok' => true, 'reference' => (string) ($capture['id'] ?? ''), 'message' => null];
         } catch (ConnectionException $e) {
             throw $e;
+        } catch (RequestException $e) {
+            if (GatewayOutcome::unknown($e)) {
+                throw $e; // grocery-nits2: a 5xx / 429 is an unknown outcome; PayPal replays it per PayPal-Request-Id
+            }
+
+            return ['ok' => false, 'reference' => null, 'message' => $this->errorMessage($e)];
         } catch (\Throwable $e) {
             return ['ok' => false, 'reference' => null, 'message' => $this->errorMessage($e)];
         }
+    }
+
+    /** grocery-nits 3: captures carry PayPal-Request-Id, and a final capture closes the authorisation. */
+    public function capturesIdempotently(): bool
+    {
+        return true;
     }
 
     /** P3-09: void the order's authorisation (nothing charged). */

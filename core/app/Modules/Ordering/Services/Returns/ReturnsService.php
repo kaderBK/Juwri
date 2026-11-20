@@ -23,6 +23,7 @@ use Juwri\Modules\Menu\Models\MenuVariant;
 use Juwri\Modules\Ordering\Contracts\Returns;
 use Juwri\Modules\Ordering\Models\OrderAdjustment;
 use Juwri\Modules\Ordering\Models\ReturnRequest;
+use Juwri\Modules\Ordering\Services\Orders\OrderTenders;
 use Juwri\Modules\Payments\Contracts\Gateways;
 
 /**
@@ -324,10 +325,13 @@ class ReturnsService implements Returns
         return strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id)));
     }
 
-    /** What is left to refund on the order: what was collected minus every refund row so far (minor units). */
+    /**
+     * What is left to refund on the order: what was collected minus every refund row so far (minor units). money-last2:
+     * collected by the original payment (OrderTenders), not `amount_due`, which grows back once the tenders are returned.
+     */
     private function refundableMinor(Order $order, string $currency): int
     {
-        $due = Money::minorFromMajor((float) $order->amount_due, $currency);
+        $due = Money::minorFromMajor(OrderTenders::refundBaseLessEveryRefund($order, (float) $order->total), $currency);
         $already = Money::minorFromMajor((float) OrderAdjustment::query()->where('order_id', $order->id)->where('type', 'refund')
             ->sum(DB::raw(OrderAdjustment::minorMoneySql('amount'))), $currency);
         if ($order->refund_method && $already === 0) {

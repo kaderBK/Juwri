@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -30,6 +31,9 @@ use Laravel\Socialite\Facades\Socialite;
  */
 class CustomerSocialAuthController extends Controller
 {
+    /** Holds sha256(nonce) for Apple's cross-site form_post callback (login-CSRF). */
+    private const APPLE_NONCE_COOKIE = 'customer_social_apple_nonce';
+
     public function __construct(private SocialCredentials $resolver) {}
 
     /**
@@ -52,23 +56,24 @@ class CustomerSocialAuthController extends Controller
         // a top-level GET to the platform host, so the OAuth leg must run on the
         // platform host — a custom-domain storefront hops there first, and the final
         // result is still delivered back to the store's own origin by the bounce.
-        // Apple returns via a cross-site form_post (POST) where no session cookie is
-        // sent, so it keeps the stateless encrypted-state check (its `state` is still
-        // app-key-encrypted + time-boxed).
-        $useNonce = $provider !== 'apple';
+        // Apple returns via a cross-site form_post (POST) where the SameSite=Lax
+        // session cookie is not sent, so its nonce is bound to a dedicated
+        // SameSite=None; Secure; HttpOnly cookie scoped to the Apple callback path
+        // instead (a cross-site top-level POST does carry SameSite=None cookies).
         $platformHost = strtolower((string) parse_url((string) config('app.url'), PHP_URL_HOST));
-        if ($useNonce && strtolower($request->getHost()) !== $platformHost) {
+        if (strtolower($request->getHost()) !== $platformHost) {
             return redirect()->away(rtrim((string) config('app.url'), '/')
                 .route('customer.social.redirect', [$store->id, $provider], false));
         }
 
-        $statePayload = ['r' => $store->id, 'p' => $provider, 't' => time()];
-        if ($useNonce) {
-            $nonce = Str::random(40);
+        $nonce = Str::random(40);
+        $nonceCookie = null;
+        if ($provider === 'apple') {
+            $nonceCookie = cookie(self::APPLE_NONCE_COOKIE, hash('sha256', $nonce), 15, $this->appleNoncePath(), null, true, true, false, 'none');
+        } else {
             $request->session()->put('customer_social_nonce', hash('sha256', $nonce));
-            $statePayload['n'] = $nonce;
         }
-        $state = Crypt::encryptString(json_encode($statePayload));
+        $state = Crypt::encryptString(json_encode(['r' => $store->id, 'p' => $provider, 't' => time(), 'n' => $nonce]));
 
         $driver = Socialite::driver($provider)->stateless()->redirectUrl($callback);
 
@@ -77,7 +82,12 @@ class CustomerSocialAuthController extends Controller
             $driver->scopes(['name', 'email']);
         }
 
-        return $driver->with(['state' => $state])->redirect();
+        $response = $driver->with(['state' => $state])->redirect();
+        if ($nonceCookie !== null) {
+            $response->headers->setCookie($nonceCookie);
+        }
+
+        return $response;
     }
 
     /**
@@ -93,9 +103,10 @@ class CustomerSocialAuthController extends Controller
         }
 
         // Login-CSRF: the state's nonce must match the one bound to THIS browser's
-        // session at redirect() (single-use). Apple's cross-site form_post carries no
-        // session cookie, so it is exempt (see redirect()).
-        if ($provider !== 'apple' && ! $this->consumeStateNonce($request)) {
+        // session at redirect() (single-use) — for Apple, to this browser's
+        // SameSite=None nonce cookie (see redirect()).
+        $nonceOk = $provider === 'apple' ? $this->consumeAppleNonce($request) : $this->consumeStateNonce($request);
+        if (! $nonceOk) {
             return $this->fail($request, null, ___('Sign-in session expired, please try again.'));
         }
 
@@ -344,6 +355,27 @@ class CustomerSocialAuthController extends Controller
         if (! $expected) {
             return false;
         }
+
+        return $this->stateNonceMatches($request, (string) $expected);
+    }
+
+    /**
+     * Apple variant of consumeStateNonce(): the expected hash lives in the
+     * SameSite=None nonce cookie set at redirect(). The cookie is cleared on every
+     * attempt so a state can't be replayed; a cross-site post from an attacker's
+     * page carries the victim's cookie (or none), never the attacker's nonce.
+     */
+    protected function consumeAppleNonce(Request $request): bool
+    {
+        $expected = (string) $request->cookie(self::APPLE_NONCE_COOKIE, '');
+        Cookie::queue(Cookie::forget(self::APPLE_NONCE_COOKIE, $this->appleNoncePath()));
+
+        return $expected !== '' && $this->stateNonceMatches($request, $expected);
+    }
+
+    /** Whether the `n` inside the encrypted state hashes to the expected value. */
+    protected function stateNonceMatches(Request $request, string $expected): bool
+    {
         try {
             $data = json_decode(Crypt::decryptString((string) $request->input('state')), true);
         } catch (\Throwable $e) {
@@ -351,7 +383,13 @@ class CustomerSocialAuthController extends Controller
         }
         $nonce = is_array($data) ? (string) ($data['n'] ?? '') : '';
 
-        return $nonce !== '' && hash_equals((string) $expected, hash('sha256', $nonce));
+        return $nonce !== '' && hash_equals($expected, hash('sha256', $nonce));
+    }
+
+    /** Cookie path for the Apple nonce: only the Apple callback ever receives it. */
+    protected function appleNoncePath(): string
+    {
+        return route('customer.social.callback', 'apple', false);
     }
 
     protected function restaurantFromState($state): ?int

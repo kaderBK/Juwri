@@ -7,9 +7,11 @@ namespace Tests\Modules\Loyalty;
 use App\Models\Customer;
 use App\Models\LoyaltyAccount;
 use App\Models\LoyaltyProgram;
+use App\Models\Order;
 use App\Models\StoreOption;
 use App\Services\GiftCardService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
@@ -132,6 +134,33 @@ class GoogleWalletSyncTest extends TestCase
                 && $job->subjectId === (int) $card->id;
         });
         // issueManual + adjust = 2 dispatches for this card.
+        Queue::assertPushed(SyncGoogleWalletPass::class, 2);
+    }
+
+    /**
+     * ML-1120 review NIT 5: a gift-card reversal inside an outer transaction (OrderCancellation::reverseTenders) queues
+     * the pass sync only once that transaction commits: a rollback leaves the pass alone.
+     */
+    public function test_gift_card_reversal_syncs_the_pass_only_after_the_outer_commit(): void
+    {
+        Queue::fake();
+        $this->enableCreds();
+        $store = $this->store(true);
+        $card = GiftCardService::issueManual($store->id, 25.0);
+        Queue::assertPushed(SyncGoogleWalletPass::class, 1);
+        $order = Order::create(['store_id' => $store->id, 'type' => 'takeaway', 'status' => 'completed', 'is_paid' => 1, 'payment_method' => 'cash']);
+        $order->forceFill(['gift_card_id' => $card->id, 'gift_card_applied' => 10.0])->save();
+
+        try {
+            DB::transaction(function () use ($order) {
+                $this->assertGreaterThan(0, GiftCardService::reverseRedemption($order->fresh()));
+                throw new \RuntimeException('a later step failed');
+            });
+        } catch (\RuntimeException) {
+        }
+        Queue::assertPushed(SyncGoogleWalletPass::class, 1); // rolled back: no sync
+
+        GiftCardService::reverseRedemption($order->fresh());
         Queue::assertPushed(SyncGoogleWalletPass::class, 2);
     }
 

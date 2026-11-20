@@ -36,6 +36,7 @@ final class CookieRegistry
         'xsrf' => ['name' => 'XSRF-TOKEN', 'pattern' => '^XSRF-TOKEN$', 'category' => 'essential', 'purpose' => 'csrf', 'minutes' => 0, 'party' => 'first'],
         'remember' => ['name' => 'remember_web_*', 'pattern' => '^remember_web_[0-9a-f]+$', 'category' => 'essential', 'purpose' => 'remember', 'minutes' => 576000, 'party' => 'first'],
         'two_factor' => ['name' => '2fa_remember', 'pattern' => '^2fa_remember$', 'category' => 'essential', 'purpose' => 'two_factor', 'minutes' => 60 * 24 * 30, 'party' => 'first'],
+        'apple_nonce' => ['name' => 'customer_social_apple_nonce', 'pattern' => '^customer_social_apple_nonce$', 'category' => 'essential', 'purpose' => 'social_login', 'minutes' => 15, 'party' => 'first'], // Sign in with Apple replay guard (CustomerSocialAuthController)
         'consent' => ['name' => CookieConsent::COOKIE, 'pattern' => '^site_consent$', 'category' => 'essential', 'purpose' => 'consent', 'minutes' => 60 * 24 * CookieConsent::DAYS, 'party' => 'first'],
         'lang_code' => ['name' => 'Quick_user_lang_code', 'pattern' => '^Quick_user_lang_code$', 'category' => 'essential', 'purpose' => 'language', 'minutes' => self::YEAR, 'party' => 'first'],
         'lang_name' => ['name' => 'Quick_user_lang', 'pattern' => '^Quick_user_lang$', 'category' => 'essential', 'purpose' => 'language', 'minutes' => self::YEAR, 'party' => 'first'],

@@ -27,7 +27,7 @@ use Juwri\Modules\Messaging\Services\MobilePush\MobilePushService;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
- * Owner mobile app (Capacitor shell) API — rev/mobile-app/IMPLEMENTATION-SPEC.md.
+ * Owner mobile app (Hotwire Native shell) API — rev/mobile-app/IMPLEMENTATION-SPEC.md.
  *
  * The shell renders the live dashboard in a WebView. This controller is the
  * small native layer around it:
@@ -63,7 +63,6 @@ class OwnerAppController extends Controller
 
     // ── public ────────────────────────────────────────────────────────────────
 
-    /** Version gate + the links the native login screen shows. No auth. */
     /** Hotwire Native path configuration for the app shell (spec §3.4 / S1). */
     public function pathConfiguration(string $platform): JsonResponse
     {
@@ -74,6 +73,7 @@ class OwnerAppController extends Controller
         ], JSON_UNESCAPED_SLASHES);
     }
 
+    /** Version gate + the links the native login screen shows. No auth. */
     public function config(Request $request): JsonResponse
     {
         $version = (string) $request->query('version', '');

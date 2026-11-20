@@ -20,15 +20,25 @@ final class ImpersonationRoutes
         'settings.editProfile',   // email + password change
         'settings.editBilling',   // payment methods
         'subscription.cancel',
+        'reseller-subscription.cancel', // R13c: a reseller customer's own cancel of their reseller subscription
         'checkout.index',
         'checkout.submit',        // the plan checkout POST (named so it can be guarded)
         'wallet.topup.pay',       // platform money: wallet top-up, add-on / credit-pack purchase
+        'wallet.withdraw', 'wallet.redeem', // sec-w1 #2: cash-out debits the wallet; promo redeem mutates it
         'addons.pay',
+        'addons.trial', 'addons.cancel', // sec-w1 #7: consumes the one-time trial / cancels a paid add-on
+        'subscription.scheduleSwitch', 'subscription.cancelSwitch', 'subscription.renewNow', // sec-w1 #7: plan changes, wallet debit
+        'partner.sandbox', 'partner.reviews.reply', // sec-w1 #10: creates a Store / replies as the customer
         'credits.pay',
         'payment.pay',
+        // SEC-1119 review MUST 1: theme / app purchases debit the wallet. marketplace.apply stays open on purpose: it
+        // switches the storefront theme (the impersonator's support job), it moves no money.
+        'marketplace.buy', 'apps.install',
         '2fa.show', '2fa.enable', '2fa.confirm', '2fa.disable',
         '2fa.recovery', '2fa.recovery.regenerate',
         'reseller.customers.impersonate', // nested impersonation
+        'verification.verify', 'verification.resend', // R7b: an impersonator must not verify a reseller-set email
+        'social.connect', 'social.disconnect', 'social.callback', // R7b: nor link its own social identity to the account
     ];
 
     /**
@@ -43,7 +53,12 @@ final class ImpersonationRoutes
         'storefront.token.',    // per-restaurant public storefront API tokens
         'passkeys.',            // P1-19: adding/renaming/removing/confirming the account's passkeys
         'staff.passkeys.',      // P1-19b: staff passkeys (owner revoke + staff self-service)
+        'passport.',            // R7b: OAuth approve/deny/refresh must not mint tokens for the customer
+        'partner.apps.',        // R7b: an impersonator must not create/rotate its own OAuth clients
+        'partner.themes.',      // sec-w1 #10: theme listing submit/edit/screenshots
+        'wallet.stripe.',       // sec-w1 #2: Stripe Express payout onboarding (connect + the syncing return leg)
         'reseller-access.',     // reseller rework v2: the store's consent to support login / its reseller's access — the store's own decision
+        'user.store.',          // SEC-1119 review MUST 1: in-dashboard store buy/install (wallet debit), buy-card + topup (gateway charge)
     ];
 
     /**
@@ -53,6 +68,8 @@ final class ImpersonationRoutes
     private const GUARDED_EXCEPT = [
         'transfer.index',
         'reseller-access.index',
+        'user.store.apps', 'user.store.apps.show',     // browse-only store pages (GET)
+        'user.store.themes', 'user.store.themes.show',
     ];
 
     /** Is this route name off-limits while impersonating? */

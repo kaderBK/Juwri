@@ -162,8 +162,9 @@ class AccountDeletionService
         $this->attempt('platform subscription', fn () => $this->cancelAtGateway($user));
 
         $this->attempt('reseller subscription', function () use ($user) {
-            // Hosted (Paddle/Lemon) subscriptions are cancelled by the customer at the gateway; locally the
-            // customer is gone either way (Reseller module, ee — P1-13 extension point).
+            // Pack C G08: ended at the reseller's gateway too (Stripe / Paddle / Lemon Squeezy); a refused
+            // gateway cancel is flagged for the reseller, never claimed canceled (Reseller module, ee — P1-13
+            // extension point).
             app(ResellerContext::class)->cancelCustomerSubscriptions($user);
         });
 
@@ -399,6 +400,13 @@ class AccountDeletionService
         }
 
         $user = User::find($deletion->user_id);
+        // Pack C G07 (defence in depth): an account someone reactivated outside the restore
+        // flow is never wiped — leave the request pending for a human to resolve.
+        if ($user && (int) $user->status !== 0) {
+            Log::warning('[account-deletion] purge skipped: account is active again', ['deletion' => $deletion->id, 'user' => $user->id]);
+
+            return ['skipped' => true, 'reason' => 'account_active'];
+        }
         $report = ['stores' => [], 'tables' => []];
 
         // P6-244: never erase an account the gateway is still billing — the cancel is retried first.

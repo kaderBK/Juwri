@@ -13,6 +13,7 @@ use Juwri\Modules\AppStore\Models\SellerStripeAccount;
 use Juwri\Modules\Payments\Models\WalletTransaction;
 use Juwri\Modules\Payments\Services\Payouts\StripeConnectGateway;
 use Juwri\Modules\Payments\Services\WalletService;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -29,7 +30,7 @@ class SellerWithdrawalSafetyTest extends TestCase
     {
         $seller = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
         if ($balance > 0) {
-            WalletService::credit($seller, $balance, 'seed', 'seed:'.$seller->id);
+            SellerEarnings::seedMatured($seller, $balance); // L-1: only earned money is withdrawable
         }
 
         return $seller;
@@ -180,6 +181,29 @@ class SellerWithdrawalSafetyTest extends TestCase
         $this->assertEqualsWithDelta(40.00, SellerPayoutService::availableBalance($seller), 0.001);
         $this->expectException(\RuntimeException::class);
         SellerPayoutService::requestWithdrawal($seller, 40.01);
+    }
+
+    /** AUDIT-money L-1: top-ups, promo codes and admin grants are spendable credit, never cash. */
+    public function test_unearned_wallet_credit_is_not_withdrawable(): void
+    {
+        $user = $this->seller();
+        WalletService::credit($user, 100.00, 'Wallet top-up', 'topup:1');
+        WalletService::credit($user, 20.00, 'Promo credit X', 'promo:1:'.$user->id);
+
+        $this->assertEqualsWithDelta(0.0, SellerPayoutService::availableBalance($user), 0.001);
+        try {
+            SellerPayoutService::requestWithdrawal($user, 50.00);
+            $this->fail('unearned credit must not be withdrawable');
+        } catch (\RuntimeException $e) {
+        }
+        $this->assertSame(0, SellerWithdrawal::where('user_id', $user->id)->count());
+
+        // Earned money stays withdrawable, but only up to what was earned minus what was already drawn.
+        SellerEarnings::seedMatured($user, 30.00);
+        $this->assertEqualsWithDelta(30.0, SellerPayoutService::availableBalance($user), 0.001);
+        SellerPayoutService::requestWithdrawal($user, 30.00);
+        $this->assertEqualsWithDelta(0.0, SellerPayoutService::availableBalance($user), 0.001);
+        $this->assertEqualsWithDelta(120.0, WalletService::balanceFor($user), 0.001, 'unearned credit still spendable');
     }
 
     public function test_refunded_sale_is_reversed_and_never_withdrawable(): void

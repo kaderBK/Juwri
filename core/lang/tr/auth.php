@@ -7,4 +7,5 @@ return [
     'password' => 'Girilen şifre yanlış.',
     'case_duplicate' => 'Bu adresi farklı büyük/küçük harflerle kullanan birden fazla hesap var. Giriş yapmak için lütfen destekle iletişime geçin.',
     'throttle' => 'Çok fazla giriş denemesi yapıldı. Lütfen :seconds saniye sonra tekrar deneyin.',
+    'reseller_handoff' => 'Hesabınız bu sitede yönetiliyor. Devam etmek için lütfen buradan giriş yapın.',
 ];

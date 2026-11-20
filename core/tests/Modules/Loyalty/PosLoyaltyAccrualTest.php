@@ -21,6 +21,7 @@ use Juwri\Core\Models\User;
 use Juwri\Modules\Customers\Mail\LoyaltyPointsClawedBack;
 use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Messaging\Contracts\Sms;
+use Juwri\Modules\Ordering\Services\Orders\OrderCancellation;
 use Tests\Support\TestPlans;
 use Tests\Support\UniquePhone;
 use Tests\TestCase;
@@ -190,6 +191,28 @@ class PosLoyaltyAccrualTest extends TestCase
         $this->assertSame(0, (int) LoyaltyAccount::forCustomer($customer->id, $r->id)->balance, 'refund reverses the earn');
         $acctId = LoyaltyAccount::forCustomer($customer->id, $r->id)->id;
         $this->assertDatabaseHas('loyalty_ledger_entries', ['loyalty_account_id' => $acctId, 'type' => 'adjustment', 'delta' => -3]);
+    }
+
+    /**
+     * ML-1120 review NIT 1: the refunded share is measured against what the till collected, not `amount_due`, which
+     * grows back to the gross total once the stored-value tenders were given back (cancel, void, full refund). Half
+     * the cash refunded forfeits half the points, also after the tenders went back.
+     */
+    public function test_refunded_share_after_the_tenders_were_returned_uses_the_collected_cash(): void
+    {
+        [$r, $item, $staff] = $this->scenario('points', 100); // 1 point per unit of money
+        $customer = $this->customer($r);
+        $order = $this->posOrder($r, $item, $staff, $customer->id); // total 30
+        $order->forceFill(['wallet_applied' => 10.0])->save(); // 10 store credit, 20 cash
+        PosService::settle($order->fresh(), 'cash', 20.0);
+        $earned = (int) LoyaltyAccount::forCustomer($customer->id, $r->id)->balance;
+        $this->assertGreaterThan(0, $earned);
+        $this->assertSame(0, $earned % 2);
+
+        OrderCancellation::reverseTenders($order->fresh()); // the store credit goes back, amount_due grows to 30
+        PosService::refund($order->fresh(), $staff, 10.0, 'cash', 'half the cash');
+
+        $this->assertSame($earned / 2, (int) LoyaltyAccount::forCustomer($customer->id, $r->id)->balance, 'half the collected cash refunded forfeits half the points');
     }
 
     public function test_partial_refunds_claw_back_the_refunded_share_once(): void

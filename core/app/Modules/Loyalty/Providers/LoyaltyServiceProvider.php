@@ -11,9 +11,11 @@ use Juwri\Core\Support\ModuleRoutes;
 use Juwri\Modules\Loyalty\Console\Commands\DeliverScheduledGiftCards;
 use Juwri\Modules\Loyalty\Console\Commands\LoyaltyExpirePoints;
 use Juwri\Modules\Loyalty\Console\Commands\WinBackOffers;
+use Juwri\Modules\Loyalty\Contracts\CouponRedemptionLog as CouponRedemptionLogContract;
 use Juwri\Modules\Loyalty\Contracts\GoogleWalletPassIds;
 use Juwri\Modules\Loyalty\Jobs\SyncGoogleWalletPass;
 use Juwri\Modules\Loyalty\Mail\GiftCardMail;
+use Juwri\Modules\Loyalty\Services\CouponRedemptionLog;
 use Juwri\Modules\Loyalty\Services\GoogleWallet\DefaultGoogleWalletPassIds;
 
 /**
@@ -27,6 +29,7 @@ class LoyaltyServiceProvider extends ServiceProvider
         ModuleRoutes::register('Loyalty', __DIR__.'/../Routes');
         TenantJobs::classify(tenant: [SyncGoogleWalletPass::class, GiftCardMail::class]);
         $this->app->bind(GoogleWalletPassIds::class, DefaultGoogleWalletPassIds::class);
+        $this->app->bind(CouponRedemptionLogContract::class, CouponRedemptionLog::class);
     }
 
     public function boot(): void

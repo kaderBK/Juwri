@@ -984,7 +984,7 @@
                     saveCart();
                     renderCart();
                 } else {
-                    msg.innerHTML = '<div class="bk-msg bk-msg--error">' + ((data && data.message) || T.genericError) + '</div>';
+                    msg.innerHTML = '<div class="bk-msg bk-msg--error"></div>'; msg.firstChild.textContent = (data && data.message) || T.genericError;
                 }
             })
             .catch(function () {

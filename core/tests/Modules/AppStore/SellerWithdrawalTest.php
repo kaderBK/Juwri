@@ -4,11 +4,15 @@
 
 namespace Tests\Modules\AppStore;
 
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\Installed;
+use App\Http\Middleware\PreventRequestForgery;
 use App\Models\SellerWithdrawal;
-use Juwri\Core\Models\User;
 use App\Services\SellerPayoutService;
-use Juwri\Modules\Payments\Services\WalletService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Juwri\Core\Models\User;
+use Juwri\Modules\Payments\Services\WalletService;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -24,7 +28,7 @@ class SellerWithdrawalTest extends TestCase
     {
         $seller = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
         if ($balance > 0) {
-            WalletService::credit($seller, $balance, 'seed', 'seed:'.$seller->id);
+            SellerEarnings::seedMatured($seller, $balance); // L-1: only earned money is withdrawable
         }
 
         return $seller;
@@ -120,7 +124,7 @@ class SellerWithdrawalTest extends TestCase
             $this->assertNotNull($route, "route $name exists");
             $mw = $route->gatherMiddleware();
             $gated = in_array('admin', $mw, true)
-                || in_array(\App\Http\Middleware\AdminMiddleware::class, $mw, true);
+                || in_array(AdminMiddleware::class, $mw, true);
             $this->assertTrue($gated, "$name must be superadmin-gated (has: ".implode(',', $mw).')');
         }
     }
@@ -129,8 +133,8 @@ class SellerWithdrawalTest extends TestCase
     {
         $this->requiresEditionPackage('an edition package route or view');
         $this->withoutMiddleware([
-            \App\Http\Middleware\Installed::class,
-            \App\Http\Middleware\PreventRequestForgery::class,
+            Installed::class,
+            PreventRequestForgery::class,
         ]);
         $seller = $this->seller(50.00);
 

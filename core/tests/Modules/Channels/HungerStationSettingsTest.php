@@ -54,4 +54,25 @@ class HungerStationSettingsTest extends TestCase
         $o2 = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
         $this->actingAs($o2)->postJson(route('hungerstation.connect', $r->id), ['client_id' => 'x', 'client_secret' => 'y'])->assertStatus(404);
     }
+
+    /** AUDIT-tenancy U1: the inbound webhook routes by hs_vendor_id, so one vendor id may map to one branch only. */
+    public function test_a_vendor_id_mapped_by_another_tenant_cannot_be_claimed(): void
+    {
+        $victim = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
+        $victimBranch = Branch::where('store_id', $this->storeFixture($victim)->id)->first();
+        $victimBranch->update(['hs_vendor_id' => 'VICTIM1']);
+
+        $attacker = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
+        $store = $this->storeFixture($attacker);
+        $branch = Branch::where('store_id', $store->id)->first();
+
+        $this->actingAs($attacker)->postJson(route('hungerstation.mapBranch', $store->id), ['branch_id' => $branch->id, 'hs_vendor_id' => 'VICTIM1'])
+            ->assertStatus(422)->assertJsonValidationErrors('hs_vendor_id');
+        $this->assertNull($branch->fresh()->hs_vendor_id);
+        $this->assertSame(1, Branch::where('hs_vendor_id', 'VICTIM1')->count());
+
+        // re-saving the branch's own vendor id still works
+        $this->actingAs($victim)->postJson(route('hungerstation.mapBranch', $victimBranch->store_id), ['branch_id' => $victimBranch->id, 'hs_vendor_id' => 'VICTIM1', 'hs_chain_id' => 'C2'])->assertOk();
+        $this->assertSame('C2', $victimBranch->fresh()->hs_chain_id);
+    }
 }

@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => 'Protège les formulaires contre la falsification de requêtes intersites.',
     'purpose.remember' => 'Vous garde connecté sur cet appareil lorsque vous choisissez « Se souvenir de moi ».',
     'purpose.two_factor' => 'Mémorise cet appareil après la connexion en deux étapes, si vous le demandez.',
+    'purpose.social_login' => 'Vérifie qu’une réponse « Se connecter avec Apple » correspond à la connexion que vous avez lancée.',
     'purpose.consent' => 'Mémorise vos choix en matière de cookies.',
     'purpose.language' => 'Mémorise la langue que vous avez choisie.',
     'purpose.language_prompt' => 'Mémorise que vous avez fermé la suggestion de langue.',
