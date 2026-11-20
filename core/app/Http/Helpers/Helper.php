@@ -1929,7 +1929,7 @@ function store_public_qr_url($store, ?string $tableKey = null, ?string $src = nu
 {
     $slug = is_object($store) ? $store->slug : (string) $store;
 
-    $url = route('publicView', $slug).'?qr-id='.urlencode(app_xor_encrypt($slug, 'qr-scan'));
+    $url = reseller_store_url(route('publicView', $slug), $store).'?qr-id='.urlencode(app_xor_encrypt($slug, 'qr-scan')); // R4b: reseller host
     if ($src !== null && $src !== '') {
         $url .= '&src='.urlencode(mb_substr($src, 0, 64));
     }
@@ -2728,7 +2728,9 @@ function effective_limit(string $type, $user = null): int
     } catch (Throwable $e) {
         // plan unreadable → fall through to the service (may still have a snapshot)
     }
-    if ($raw !== null && (int) $raw > 999) {
+    if ($raw !== null && (int) $raw > 999
+        // R14a (G6): a reseller plan cap on this key (an edition lane) wins over the legacy >999 shortcut.
+        && (Entitlements::planTrace($user, $type.'_limit')['lane'] ?? null) !== 'reseller_plan') {
         return 999; // legacy >999 collision semantics preserved during transition
     }
 

@@ -25,7 +25,6 @@ use Juwri\Core\Support\StripeManagedPayments;
 use Juwri\Modules\Ai\Contracts\AiLimitExceeded;
 use Juwri\Modules\Ai\Contracts\AiProviderFailure;
 use Juwri\Modules\Ai\Contracts\ImageGenerator;
-use Juwri\Modules\Content\Models\StudioCreditLedger;
 use Juwri\Modules\Content\Models\StudioSession;
 use Juwri\Modules\Content\Services\Studio\InsufficientCreditsException;
 use Juwri\Modules\Content\Services\Studio\StudioCreditService;
@@ -730,22 +729,56 @@ class StudioController extends Controller
     public function applyReferral(Request $request)
     {
         $data = $request->validate(['code' => 'required|string|max:64']);
+
+        // w5 #8: never mint a session here. A cookie-less guest call used to get a
+        // fresh referee every time, so repeated calls farmed referrer credits.
+        if (auth()->id() === null) {
+            $token = $request->cookie(self::GUEST_COOKIE);
+            $live = is_string($token) && $token !== '' ? StudioSession::where('guest_token', $token)->first() : null;
+            if (! $live || $live->isExpired()) {
+                return response()->json(['error' => 'Open the Studio first, then apply the referral code.'], 422);
+            }
+        }
         $referee = $this->resolveSession($request);
         $referrer = StudioSession::where('share_token', $data['code'])->first();
 
-        if (! $referrer || $referrer->id === $referee->id) {
+        // SEC-1119 NIT 4: also no referring yourself from a second session of your own account.
+        $sameAccount = $referrer && $referrer->user_id !== null && $referee->user_id !== null
+            && (int) $referrer->user_id === (int) $referee->user_id;
+        if (! $referrer || $referrer->id === $referee->id || $sameAccount) {
             return response()->json(['error' => 'That referral code is not valid.'], 422);
-        }
-        $alreadyRedeemed = StudioCreditLedger::where('studio_session_id', $referee->id)
-            ->where('ref', 'referral')->exists();
-        if ($alreadyRedeemed) {
-            return response()->json(['error' => 'You have already used a referral code.'], 422);
         }
 
         $credits = app(StudioCreditService::class);
         $bonus = (int) config('studio.referral_bonus', 5);
-        $credits->credit($referee, $bonus, 'referral', 'referral');                 // once per referee
-        $credits->credit($referrer, $bonus, 'referral', 'referral-'.$referee->id);  // per distinct referee
+        $cap = (int) config('studio.referral_max_per_referrer', 20);
+
+        // w5 #8: check + credit under row locks so concurrent calls cannot both
+        // pass the once-per-referee / cap checks. Dedupe and cap are account-wide
+        // for owned sessions (refCount uses the credit service's owner scope).
+        $outcome = DB::transaction(function () use ($credits, $referee, $referrer, $bonus, $cap): string {
+            StudioSession::whereKey([$referee->id, $referrer->id])->lockForUpdate()->get();
+            $userIds = array_values(array_filter([$referee->user_id, $referrer->user_id]));
+            if ($userIds !== []) {
+                DB::table('users')->whereIn('id', $userIds)->lockForUpdate()->get();
+            }
+            if ($credits->refCount($referee, 'referral') > 0) {
+                return 'used';
+            }
+            if ($credits->refCount($referrer, 'referral-', true) >= $cap) {
+                return 'cap';
+            }
+            $credits->credit($referee, $bonus, 'referral', 'referral');                 // once per referee
+            $credits->credit($referrer, $bonus, 'referral', 'referral-'.$referee->id);  // per distinct referee
+
+            return 'ok';
+        });
+        if ($outcome === 'used') {
+            return response()->json(['error' => 'You have already used a referral code.'], 422);
+        }
+        if ($outcome === 'cap') {
+            return response()->json(['error' => 'That referral code is no longer available.'], 422);
+        }
 
         return response()
             ->json(['success' => true, 'balance' => $credits->balance($referee)])

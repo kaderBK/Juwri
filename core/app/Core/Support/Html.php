@@ -122,6 +122,11 @@ class Html
         // back after serialise.
         $styles = [];
         $styleSeq = 0;
+        // Placeholder tokens carry a per-call random salt: the splice below is a
+        // plain string replace over the serialised HTML, so a token the author can
+        // predict (typed into an attribute or text) would get the raw <style>
+        // markup spliced there and break out of the attribute quote.
+        $styleSalt = bin2hex(random_bytes(12));
         // Storefront + dashboard CSP are nonce-based for style-src (no unsafe-inline
         // for <style> elements), so a kept <style> MUST carry the live request nonce
         // or the browser blocks it under enforce. cleanPage is the echo choke point,
@@ -166,7 +171,7 @@ class Html
                 if ($media !== '' && ! preg_match('#^[a-z0-9 ,():/.\-]+$#i', $media)) {
                     $media = '';
                 }
-                $token = "\u{FFFC}mbstyle{$styleSeq}\u{FFFC}";
+                $token = "\u{FFFC}mbstyle{$styleSalt}x{$styleSeq}\u{FFFC}";
                 $styleSeq++;
                 $styles[$token] = '<style'.$nonceAttr.($media !== '' ? ' media="'.htmlspecialchars($media, ENT_QUOTES).'"' : '').'>'.$safe.'</style>';
                 if ($el->parentNode) {
@@ -290,7 +295,8 @@ class Html
         if ($host === '') {
             return false;
         }
-        return array_any(self::IFRAME_HOSTS, fn($allowed) => $host === $allowed || str_ends_with($host, '.'.$allowed));
+
+        return array_any(self::IFRAME_HOSTS, fn ($allowed) => $host === $allowed || str_ends_with($host, '.'.$allowed));
     }
 
     /** True when a URL attribute value carries an executable/opaque scheme. */
@@ -517,7 +523,7 @@ class Html
                 continue;
             }
             if (preg_match_all('/url\(\s*([\'"]?)([^\'")]+)\1\s*\)/i', $value, $m)) {
-                $bad = array_any($m[2], fn($u) => self::hasDangerousUri(trim($u)));
+                $bad = array_any($m[2], fn ($u) => self::hasDangerousUri(trim($u)));
                 if ($bad) {
                     continue;
                 }

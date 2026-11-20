@@ -33,7 +33,9 @@ one payment attempt. Key columns:
 - `details`, `coupon`, `billing` are cast to `object`.
 
 `ensureInvoiceNumber()` atomically assigns a sequential `INV-<year>-<seq>`
-number under a `lockForUpdate()` transaction.
+number under a `lockForUpdate()` transaction: the highest number already issued
+for the prefix and year (platform-wide, outside the tenant scope) plus one,
+retried on a unique-index race (`nextInvoiceNumber()`).
 
 ## Two choke points
 

@@ -18,6 +18,7 @@ use Juwri\Modules\Ordering\Console\Commands\OrdersSoftLimitNotify;
 use Juwri\Modules\Ordering\Console\Commands\PruneOrphanVoiceNotes;
 use Juwri\Modules\Ordering\Console\Commands\ReleaseScheduledOrders;
 use Juwri\Modules\Ordering\Console\Commands\RepairModifierUndercharge;
+use Juwri\Modules\Ordering\Console\Commands\ResolveStuckCapture;
 use Juwri\Modules\Ordering\Console\Commands\SnapshotOrderTotals;
 use Juwri\Modules\Ordering\Contracts\CheckoutPhoneGate;
 use Juwri\Modules\Ordering\Contracts\DeliverySlotBook;
@@ -181,7 +182,7 @@ class OrderingServiceProvider extends ServiceProvider
             $this->commands([
                 BackfillOrderCurrencyCodes::class, OrdersSoftLimitNotify::class, PruneOrphanVoiceNotes::class,
                 ReleaseScheduledOrders::class, RepairModifierUndercharge::class, SnapshotOrderTotals::class,
-                ExpireHostedPayments::class,
+                ExpireHostedPayments::class, ResolveStuckCapture::class,
             ]);
         }
     }

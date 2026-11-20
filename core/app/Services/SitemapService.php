@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 use Juwri\Core\Contracts\Billing\PlanCatalog;
 use Juwri\Core\Contracts\Content\PlatformSite;
 use Juwri\Core\Models\Store;
+use Juwri\Core\Models\User;
+use Juwri\Core\Services\Tenancy\TenantContext;
 use Juwri\Core\Settings\StoreSettings;
 use Juwri\Modules\Content\Models\Blog;
 use Juwri\Modules\Content\Services\CompareDefs;
@@ -220,7 +222,7 @@ class SitemapService
             return [];
         }
         $resolver = app(StoreAddressResolver::class);
-        $base = $resolver->baseUrl($store);
+        $base = reseller_store_url($resolver->baseUrl($store), $store);
         $entries = [['loc' => $base, 'image' => asset('storage/store/logo/'.$store->main_image)]];
         if (! in_array('ship', (array) config('verticals.types.'.($store->store_type ?? '').'.fulfillment', []), true)) {
             return $entries; // a food item is a sheet of the store page, not a page of its own
@@ -291,10 +293,11 @@ class SitemapService
                 if (count($entries) >= $take) {
                     return false;
                 }
-                // P6-306: the page's canonical is the store's PRIMARY address (custom domain / subdomain), so that is
-                // what the sitemap lists; the path form of a store that has a domain is only an alternate page.
+                // P6-306: the page's canonical is the store's PRIMARY address (custom domain / subdomain / reseller host),
+                // so that is what the sitemap lists; the path form of a store that has a domain is only an alternate page.
+                $loc = reseller_store_url($resolver->baseUrl($store), $store);
                 $entry = [
-                    'loc' => $resolver->baseUrl($store),
+                    'loc' => $loc,
                     'image' => asset('storage/store/logo/'.$store->main_image),
                 ];
                 if (config('settings.include_language_code')) {
@@ -305,6 +308,52 @@ class SitemapService
                 }
                 $entries[] = $entry;
             }
+        });
+
+        return $entries;
+    }
+
+    /**
+     * R6: sitemap entries for active stores owned by customers of $resellerId.
+     *
+     * @return array<int, array{loc: string, image?: string, alternates?: array<string,string>}>
+     */
+    public static function resellerStoreEntries(int $resellerId): array
+    {
+        if ($resellerId <= 0) {
+            return [];
+        }
+
+        $ownerIds = TenantContext::bypass(
+            fn () => User::query()->where('reseller_id', $resellerId)->where('status', 1)->pluck('id')->all()
+        );
+        if ($ownerIds === []) {
+            return [];
+        }
+
+        $redirected = collect(StoreSettings::storeIdsWhere('external_redirect_enabled', fn ($v) => $v === '1'))->flip();
+        $withMenu = Menu::where('active', '1')->whereNull('deleted_at')->distinct()->pluck('store_id')->flip();
+        $resolver = app(StoreAddressResolver::class);
+        $entries = [];
+
+        TenantContext::bypass(function () use ($ownerIds, $redirected, $withMenu, $resolver, &$entries) {
+            static::sitemapStoreQuery()->whereIn('user_id', $ownerIds)->with('user')->chunkById(500, function ($stores) use ($redirected, $withMenu, $resolver, &$entries) {
+                $resolver->primeBatch($stores->pluck('id')->all());
+                foreach ($stores as $store) {
+                    if ($redirected->has($store->id) || ! $withMenu->has($store->id)) {
+                        continue;
+                    }
+                    $loc = reseller_store_url($resolver->baseUrl($store), $store);
+                    $entry = [
+                        'loc' => $loc,
+                        'image' => asset('storage/store/logo/'.$store->main_image),
+                    ];
+                    if (config('settings.include_language_code')) {
+                        $entry['alternates'] = static::alternatesForStore($store->id, $loc);
+                    }
+                    $entries[] = $entry;
+                }
+            });
         });
 
         return $entries;

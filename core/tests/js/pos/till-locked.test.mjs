@@ -74,12 +74,17 @@ test('once a PIN opens the store, an offline sale is queued encrypted', async ()
     const s = new TS.Store(b, { pinRounds: 1000 });
     await s.openWithEscrow(Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('base64'));
     reg.tillStore = s;
-    reg.payload = () => ({ client_order_id: 'k2', items: [] });
+    // money-tail 5: the marker has '-', which base64 ciphertext (btoa) never holds; a bare 'k2' was found inside the
+    // random ciphertext now and then, failing the "encrypted" check by chance
+    const marker = 'plain-k2-sale';
+    reg.payload = () => ({ client_order_id: marker, items: [] });
     reg.reset = () => {};
     await reg.submit(false);
     assert.equal(calls.fetch, 1);
     assert.equal(b.s.outbox.size, 1);
-    assert.ok(!JSON.stringify([...b.s.outbox.values()]).includes('k2'), 'encrypted');
+    const [row] = [...b.s.outbox.values()];
+    assert.match(row.box.ct, /^[A-Za-z0-9+/=]+$/, 'the sale is base64 ciphertext');
+    assert.ok(!JSON.stringify(row).includes(marker), 'encrypted');
 });
 
 test('a till restarted offline stays locked (no escrow from the network, none from any cache) and refuses a sale', async () => {

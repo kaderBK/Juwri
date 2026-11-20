@@ -81,24 +81,30 @@ async function load() {
     document.getElementById('list').innerHTML = rows.length ? rows.map(card).join('') : '<p class="muted">{{ ___('Nothing here right now.') }}</p>';
 }
 
+// SEC-1119 (#4 driver sink): the address and phone are typed by a public diner — escape every feed string before
+// innerHTML (CSP blocks inline script, but injected markup could still add data-act buttons csp-actions.js dispatches).
+function esc(s) { const e = document.createElement('span'); e.textContent = s == null ? '' : String(s); return e.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
 function card(o) {
-    const addr = encodeURIComponent(o.address || '');
-    const cash = (o.payment_method === 'cash' || o.payment_gateway === 'cash') ? (o.amount_due ?? o.total ?? 0) : 0;
+    const addr = esc(encodeURIComponent(o.address || ''));
+    const id = Number(o.id) || 0;
+    const cashRaw = (o.payment_method === 'cash' || o.payment_gateway === 'cash') ? (o.amount_due ?? o.total ?? 0) : 0;
+    const cash = Number(cashRaw) || 0;
     let actions = '';
     if (TAB==='open') {
-        actions = `<button data-act="claim" data-args='[${o.id}]'>{{ ___('Claim') }}</button>`;
+        actions = `<button data-act="claim" data-args='[${id}]'>{{ ___('Claim') }}</button>`;
     } else {
         actions = `
-            <button data-act="setStatus" data-args='[${o.id},"picked_up"]'>{{ ___('Picked up') }}</button>
-            <button data-act="setStatus" data-args='[${o.id},"out_for_delivery"]'>{{ ___('En route') }}</button>
-            <button data-act="setStatus" data-args='[${o.id},"delivered"]'>{{ ___('Delivered') }}</button>`;
+            <button data-act="setStatus" data-args='[${id},"picked_up"]'>{{ ___('Picked up') }}</button>
+            <button data-act="setStatus" data-args='[${id},"out_for_delivery"]'>{{ ___('En route') }}</button>
+            <button data-act="setStatus" data-args='[${id},"delivered"]'>{{ ___('Delivered') }}</button>`;
     }
     return `<div class="card">
-        <div><strong>#${o.id}</strong> · <span class="muted">${o.delivery_status || ''}</span></div>
-        <div class="addr">${o.address || ''}</div>
-        ${cash>0 ? `<div class="cash">{{ ___('Collect') }} ${cash}</div>` : ''}
+        <div><strong>#${id}</strong> · <span class="muted">${esc(o.delivery_status)}</span></div>
+        <div class="addr">${esc(o.address)}</div>
+        ${cash>0 ? `<div class="cash">{{ ___('Collect') }} ${esc(cashRaw)}</div>` : ''}
         <a class="btn ghost" href="https://maps.google.com/?q=${addr}" target="_blank">{{ ___('Map') }}</a>
-        ${o.phone_number ? `<a class="btn ghost" href="tel:${o.phone_number}">{{ ___('Call') }}</a>`:''}
+        ${o.phone_number ? `<a class="btn ghost" href="tel:${esc(encodeURIComponent(o.phone_number))}">{{ ___('Call') }}</a>`:''}
         ${actions}
     </div>`;
 }

@@ -170,6 +170,11 @@ final class PublicApi implements Gateways, Ledger, Wallet
         return app(CardHolds::class)->capture($transaction, $minor);
     }
 
+    public function resolveCapture(Transaction $transaction, bool $captured, ?string $reference, array $audit = []): array
+    {
+        return app(CardHolds::class)->resolveCapture($transaction, $captured, $reference, $audit);
+    }
+
     public function voidHold(Transaction $transaction): array
     {
         return app(CardHolds::class)->void($transaction);

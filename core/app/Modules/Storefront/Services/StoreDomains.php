@@ -87,6 +87,10 @@ final class StoreDomains
         if (HostMap::isReservedLabel($label)) {
             return 'reserved';
         }
+        // R4a: a reseller's {subdomain}.{base} address may sit on the same host (another tenant's host).
+        if (app(ResellerContext::class)->holdsDomain($label.'.'.HostMap::storefrontHost())) {
+            return 'taken';
+        }
         if (TenantContext::bypass(fn (): bool => StoreDomain::query()->withoutGlobalScopes()->where('host', $label.'.'.HostMap::storefrontHost())->exists())) {
             return 'taken';
         }

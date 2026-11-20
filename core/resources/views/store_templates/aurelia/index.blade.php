@@ -2681,7 +2681,7 @@
                     saveLocalBooking({ code: data.code || '', redirect: data.redirect || null, room: booking.room.name, checkIn: booking.checkIn, checkOut: booking.checkOut });
                     renderConfirm('real', data.code || '', null, data.redirect || null);
                 } else {
-                    errBox.innerHTML = '<div class="au-msg au-msg--error">' + ((data && data.message) || T.bookingFailed) + '</div>';
+                    errBox.innerHTML = '<div class="au-msg au-msg--error"></div>'; errBox.firstChild.textContent = (data && data.message) || T.bookingFailed;
                 }
             })
             .catch(function () {
@@ -3531,7 +3531,7 @@
                     msg.innerHTML = '<div class="au-msg au-msg--ok">' + @json(___('Order placed! Thank you.')) + '</div>';
                     renderCart();
                 } else {
-                    msg.innerHTML = '<div class="au-msg au-msg--error">' + ((data && data.message) || T.genericError) + '</div>';
+                    msg.innerHTML = '<div class="au-msg au-msg--error"></div>'; msg.firstChild.textContent = (data && data.message) || T.genericError;
                 }
             })
             .catch(function () { msg.innerHTML = '<div class="au-msg au-msg--error">' + T.genericError + '</div>'; });

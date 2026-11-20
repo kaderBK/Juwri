@@ -5,12 +5,13 @@
 namespace Tests\Modules\Core\Money;
 
 use App\Http\Middleware\Installed;
-use Juwri\Modules\Payments\Models\LedgerEntry;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Juwri\Core\Models\User;
+use Juwri\Modules\Payments\Models\LedgerEntry;
 use Juwri\Modules\Payments\Models\WalletTransaction;
 use Juwri\Modules\Payments\Services\LedgerService;
 use Juwri\Modules\Payments\Services\WalletService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -78,12 +79,15 @@ class WalletMoneyCharacterisationTest extends TestCase
         WalletService::credit($me, 20, 'wallet top-up', 'topup-1');
         WalletService::debit($me, 5, 'payout sale: refund', 'neg-1'); // a negative row never counts as earned
 
-        $overview = $this->actingAs($me)->get(route('partner.overview'))->assertOk();
-        $this->assertEqualsWithDelta(95.0, (float) $overview->viewData('balance'), 0.00001);
-        $this->assertEqualsWithDelta(80.0, (float) $overview->viewData('earned'), 0.00001);
-
         $earnings = $this->actingAs($me)->get(route('partner.earnings'))->assertOk();
         $this->assertEqualsWithDelta(80.0, (float) $earnings->viewData('earned'), 0.00001, 'pre-ledger fallback: wallet sale rows');
         $this->assertCount(2, $earnings->viewData('sales'));
+        $this->assertEqualsWithDelta(0.0, (float) $earnings->viewData('balance'), 0.00001, 'L-1: nothing matured, nothing withdrawable');
+
+        // AUDIT-money L-1: withdrawable = min(wallet - held, matured earned - withdrawn); 95 matured, wallet now 190.
+        SellerEarnings::seedMatured($me, 95);
+        $overview = $this->actingAs($me)->get(route('partner.overview'))->assertOk();
+        $this->assertEqualsWithDelta(95.0, (float) $overview->viewData('balance'), 0.00001);
+        $this->assertEqualsWithDelta(80.0, (float) $overview->viewData('earned'), 0.00001);
     }
 }

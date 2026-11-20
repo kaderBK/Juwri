@@ -4,13 +4,15 @@
 {{--
     #23 Apple/Google Pay — Stripe Payment Request Button.
     Include after an order is placed, passing the restaurant slug and order id:
-        @include('partials.wallet-button', ['walletRestaurant' => $store->slug, 'walletOrderId' => $order->id])
+        @include('partials.wallet-button', ['walletRestaurant' => $store->slug, 'walletOrderId' => $order->id, 'walletTrackToken' => $order->track_token])
+    The track token binds the PaymentIntent to this order's diner (AUDIT-authz #3).
     Renders nothing unless the device supports a wallet AND the restaurant has
     Stripe configured. Falls back silently to the normal payment flow otherwise.
 --}}
 @php($walletRestaurant = $walletRestaurant ?? null)
 @php($walletOrderId = $walletOrderId ?? null)
-@if($walletRestaurant && $walletOrderId)
+@php($walletTrackToken = $walletTrackToken ?? null)
+@if($walletRestaurant && $walletOrderId && $walletTrackToken)
 <div id="wallet-pay" style="display:none;margin:12px 0"></div>
 <script src="https://js.stripe.com/v3/"></script>
 <script nonce="{{ csp_nonce() }}">
@@ -25,7 +27,7 @@
         const intentRes = await fetch(@json(url($walletRestaurant.'/wallet/intent')), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': @json(csrf_token()) },
-            body: JSON.stringify({ order_id: @json($walletOrderId) })
+            body: JSON.stringify({ order_id: @json($walletOrderId), track_token: @json($walletTrackToken) })
         });
         if (!intentRes.ok) return;
         const intent = await intentRes.json();

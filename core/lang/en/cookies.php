@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => 'Protects forms against cross-site request forgery.',
     'purpose.remember' => 'Keeps you signed in on this device when you choose "Remember me".',
     'purpose.two_factor' => 'Remembers this device after two-step sign-in, when you ask it to.',
+    'purpose.social_login' => 'Checks that a "Sign in with Apple" reply belongs to the sign-in you started.',
     'purpose.consent' => 'Remembers your cookie choices.',
     'purpose.language' => 'Remembers the language you chose.',
     'purpose.language_prompt' => 'Remembers that you closed the language suggestion.',

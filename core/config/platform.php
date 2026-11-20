@@ -180,4 +180,10 @@ return [
         'hours_kuwait' => (int) env('BREACH_NOTICE_HOURS_KUWAIT', 24),
         'bcc' => env('BREACH_NOTICE_BCC', ''),
     ],
+
+    /*
+    | R4a: every reseller's site also answers on {subdomain}.{base} (one label). Empty = the host of
+    | APP_URL. Needs wildcard DNS + a certificate for *.{base}.
+    */
+    'reseller_subdomain_base' => env('RESELLER_SUBDOMAIN_BASE'),
 ];

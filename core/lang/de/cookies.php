@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => 'Schützt Formulare vor Cross-Site-Request-Forgery.',
     'purpose.remember' => 'Hält Sie auf diesem Gerät angemeldet, wenn Sie „Angemeldet bleiben“ wählen.',
     'purpose.two_factor' => 'Merkt sich dieses Gerät nach der Anmeldung in zwei Schritten, wenn Sie das wünschen.',
+    'purpose.social_login' => 'Prüft, ob eine Antwort von „Mit Apple anmelden“ zu der von Ihnen gestarteten Anmeldung gehört.',
     'purpose.consent' => 'Speichert Ihre Cookie-Einstellungen.',
     'purpose.language' => 'Merkt sich die gewählte Sprache.',
     'purpose.language_prompt' => 'Merkt sich, dass Sie den Sprachvorschlag geschlossen haben.',

@@ -529,7 +529,9 @@
 
                 // The closing head/body/html tags below are escaped on purpose: a literal one inside this inline script makes tools that
                 // inject before the LAST closing head tag of a page (dev browser-log scripts) break the markup and print this code.
-                win.document.write('<html><head><title>' + this.drawerTitle + '</title><style nonce="{{ csp_nonce() }}">body{font-family:monospace;font-size:12px;width:280px;margin:0;padding:12px;color:CanvasText}h3,p{text-align:center;margin:4px 0}table{width:100%;border-collapse:collapse}td,th{padding:4px;text-align:start;border-bottom:1px dashed currentColor}</style><\/head><body><h3>' + config.restaurantName + '</h3><p>' + (config.restaurantAddress || '') + '</p>' + this.drawerHtml + '<p>' + config.thanksText + '</p><\/body><\/html>');
+                // fix-xss L3: store title / address are owner-typed text; the Js::from config only makes them safe as JS literals, so escape for HTML.
+                var pe = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+                win.document.write('<html><head><title>' + pe(this.drawerTitle) + '</title><style nonce="{{ csp_nonce() }}">body{font-family:monospace;font-size:12px;width:280px;margin:0;padding:12px;color:CanvasText}h3,p{text-align:center;margin:4px 0}table{width:100%;border-collapse:collapse}td,th{padding:4px;text-align:start;border-bottom:1px dashed currentColor}</style><\/head><body><h3>' + pe(config.restaurantName) + '</h3><p>' + pe(config.restaurantAddress) + '</p>' + this.drawerHtml + '<p>' + pe(config.thanksText) + '</p><\/body><\/html>');
                 win.document.close();
                 win.focus();
                 setTimeout(function () {

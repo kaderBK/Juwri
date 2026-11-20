@@ -17,6 +17,7 @@ use Juwri\Core\Editions\EditionPackages;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Core\Services\SsrfGuard;
+use Juwri\Core\Support\RequestEpoch;
 use Laravel\Passport\Passport;
 use Livewire\Features\SupportAutoInjectedAssets\SupportAutoInjectedAssets;
 use PDO;
@@ -55,6 +56,11 @@ abstract class TestCase extends BaseTestCase
                 $pdo->exec('PRAGMA foreign_keys = ON');
             }
         }
+
+        /* A new unit of work per test, BEFORE the app boots: PHP recycles the old app's object id, so every memo keyed by
+           RequestEpoch::id() (PlatformFeatures' Pennant definitions: a stale one left `fiscalization` undefined = off, and
+           PdfEngineTest's receipt lost its QR in some full-suite orders) must not match the new app. */
+        RequestEpoch::bump();
 
         parent::setUp();
 

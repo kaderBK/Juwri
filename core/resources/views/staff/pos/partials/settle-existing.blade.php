@@ -21,6 +21,12 @@
             </div>
             <p class="pos-mini-err" x-show="extSettle.couponErr" x-cloak x-text="extSettle.couponErr"></p>
 
+            {{-- Coupons C6: the coupon covers everything — no tender to take. The server re-checks the amount due. --}}
+            <div class="pos-settle-free" x-show="extSettle.couponApplied && extTotal() <= 0.001" x-cloak>
+                <p class="pos-settle-hint">{{ ___('Free with coupon — no payment needed') }}</p>
+                <button type="button" class="pos-settle-confirm" :disabled="extSettle.busy" @click="setExtMethod('coupon'); confirmExtSettle()">{{ ___('Confirm free order') }}</button>
+            </div>
+
             {{-- payment method --}}
             <div class="pos-tabs">
                 <button type="button" :class="{on: extSettle.method === 'cash'}" @click="setExtMethod('cash')">{{ ___('Cash') }}</button>

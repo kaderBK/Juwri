@@ -4,13 +4,13 @@
 
 namespace Juwri\Modules\Ai\Services\Drivers;
 
+use Illuminate\Support\Facades\Http;
 use Juwri\Core\Services\SsrfGuard;
 use Juwri\Modules\Ai\Services\AiImageResult;
 use Juwri\Modules\Ai\Services\AiProviderException;
 use Juwri\Modules\Ai\Services\AiProviderInterface;
 use Juwri\Modules\Ai\Services\AiResult;
 use Juwri\Modules\Ai\Services\TranscriptionResult;
-use Illuminate\Support\Facades\Http;
 
 /**
  * Driver for any OpenAI-compatible /chat/completions endpoint.
@@ -19,9 +19,7 @@ use Illuminate\Support\Facades\Http;
  */
 class OpenAiCompatibleProvider implements AiProviderInterface
 {
-    public function __construct(protected string $name, protected array $config)
-    {
-    }
+    public function __construct(protected string $name, protected array $config) {}
 
     public function name(): string
     {
@@ -30,7 +28,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
 
     public function isConfigured(): bool
     {
-        return !empty($this->config['api_key']);
+        return ! empty($this->config['api_key']);
     }
 
     public function supportsVision(): bool
@@ -40,7 +38,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
 
     public function chat(array $messages, array $options = []): AiResult
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             throw new AiProviderException("Provider [{$this->name}] has no API key configured.", $this->name, false);
         }
 
@@ -51,13 +49,13 @@ class OpenAiCompatibleProvider implements AiProviderInterface
         // Floor the token budget for thinking models whose reasoning would
         // otherwise starve the visible answer.
         $maxTokens = (int) ($options['max_tokens'] ?? 0);
-        $floor     = (int) ($this->config['min_output_tokens'] ?? 0);
+        $floor = (int) ($this->config['min_output_tokens'] ?? 0);
         if ($floor > 0) {
             $maxTokens = max($maxTokens, $floor);
         }
 
         // Request strict JSON where the provider supports it.
-        $providerOptions = (!empty($options['json']) && ($this->config['supports_json'] ?? false))
+        $providerOptions = (! empty($options['json']) && ($this->config['supports_json'] ?? false))
             ? ['response_format' => ['type' => 'json_object']]
             : [];
 
@@ -78,23 +76,23 @@ class OpenAiCompatibleProvider implements AiProviderInterface
     public function supportsImageGeneration(): bool
     {
         return (bool) ($this->config['supports_image_generation'] ?? false)
-            && !empty($this->config['api_key']);
+            && ! empty($this->config['api_key']);
     }
 
     public function generateImage(string $prompt, array $options = []): AiImageResult
     {
-        if (!$this->supportsImageGeneration()) {
+        if (! $this->supportsImageGeneration()) {
             throw new AiProviderException("Provider [{$this->name}] cannot generate images.", $this->name, false);
         }
 
         $model = $options['model'] ?? $this->config['image_model'] ?? 'gpt-image-1';
-        $size  = $options['size'] ?? '1024x1024';
+        $size = $options['size'] ?? '1024x1024';
 
         $payload = [
-            'model'  => $model,
+            'model' => $model,
             'prompt' => $prompt,
-            'n'      => 1,
-            'size'   => $size,
+            'n' => 1,
+            'size' => $size,
         ];
 
         $base = rtrim($this->config['base_url'], '/');
@@ -104,16 +102,16 @@ class OpenAiCompatibleProvider implements AiProviderInterface
                 ->withToken($this->config['api_key'])
                 ->acceptJson()
                 ->asJson()
-                ->post($base . '/images/generations', $payload);
+                ->post($base.'/images/generations', $payload);
         } catch (\Throwable $e) {
             throw new AiProviderException("Provider [{$this->name}] image connection error: {$e->getMessage()}", $this->name, true, $e);
         }
 
         if ($response->failed()) {
-            $status    = $response->status();
+            $status = $response->status();
             $retryable = $status === 429 || $status >= 500;
             throw new AiProviderException(
-                "Provider [{$this->name}] image HTTP {$status}: " . $response->body(),
+                "Provider [{$this->name}] image HTTP {$status}: ".$response->body(),
                 $this->name,
                 $retryable
             );
@@ -128,12 +126,14 @@ class OpenAiCompatibleProvider implements AiProviderInterface
             if ($bytes === false || $bytes === '') {
                 throw new AiProviderException("Provider [{$this->name}] returned undecodable image data.", $this->name, true);
             }
+
             return new AiImageResult($bytes, 'image/png', $this->name, (string) $model);
         }
 
         $url = data_get($data, 'data.0.url');
         if (is_string($url) && $url !== '') {
             [$bytes, $mime] = $this->fetchProviderImage($url);
+
             return new AiImageResult($bytes, $mime, $this->name, (string) $model);
         }
 
@@ -153,24 +153,26 @@ class OpenAiCompatibleProvider implements AiProviderInterface
      */
     private function fetchProviderImage(string $url): array
     {
-        $guard = SsrfGuard::pinnedOptions($url);
-        if ($guard === null) {
+        if (! SsrfGuard::isSafePublicUrl($url)) {
             throw new AiProviderException("Provider [{$this->name}] returned an image URL that is not a public https address.", $this->name, false);
         }
         $max = self::IMAGE_FETCH_MAX_BYTES;
-        $guard['on_headers'] = function ($response) use ($max): void {
-            if ((int) $response->getHeaderLine('Content-Length') > $max) {
-                throw new \RuntimeException('image too large');
-            }
-        };
-        $guard['progress'] = function ($total, $downloaded) use ($max): void {
-            if ($downloaded > $max) {
-                throw new \RuntimeException('image too large');
-            }
-        };
+        $limits = [
+            'on_headers' => function ($response) use ($max): void {
+                if ((int) $response->getHeaderLine('Content-Length') > $max) {
+                    throw new \RuntimeException('image too large');
+                }
+            },
+            'progress' => function ($total, $downloaded) use ($max): void {
+                if ($downloaded > $max) {
+                    throw new \RuntimeException('image too large');
+                }
+            },
+        ];
 
         try {
-            $img = Http::timeout(min(30, (int) config('ai.timeout', 60)))->connectTimeout(5)->withOptions($guard)->get($url);
+            // w5 #5: every redirect hop vetted and pinned to its own IP.
+            $img = SsrfGuard::send(Http::timeout(min(30, (int) config('ai.timeout', 60)))->connectTimeout(5)->withOptions($limits), 'GET', $url);
         } catch (\Throwable $e) {
             throw new AiProviderException("Provider [{$this->name}] image fetch error: {$e->getMessage()}", $this->name, true, $e);
         }
@@ -203,12 +205,12 @@ class OpenAiCompatibleProvider implements AiProviderInterface
     public function supportsTranscription(): bool
     {
         return (bool) ($this->config['supports_transcription'] ?? false)
-            && !empty($this->config['api_key']);
+            && ! empty($this->config['api_key']);
     }
 
     public function transcribe(string $audioPath, array $options = []): TranscriptionResult
     {
-        if (!$this->supportsTranscription()) {
+        if (! $this->supportsTranscription()) {
             throw new AiProviderException("Provider [{$this->name}] cannot transcribe audio.", $this->name, false);
         }
 
@@ -216,7 +218,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
         // driver call can never post an oversized/foreign blob upstream.
         self::assertTranscribableFile($audioPath, $options, $this->name);
 
-        $model    = $options['model'] ?? $this->config['transcription_model'] ?? 'whisper-1';
+        $model = $options['model'] ?? $this->config['transcription_model'] ?? 'whisper-1';
         $filename = (string) ($options['filename'] ?? basename($audioPath));
 
         $bytes = @file_get_contents($audioPath);
@@ -229,7 +231,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
             // verbose_json carries language + duration (both OpenAI and Groq).
             'response_format' => 'verbose_json',
         ];
-        if (!empty($options['language'])) {
+        if (! empty($options['language'])) {
             $fields['language'] = (string) $options['language'];
         }
 
@@ -240,16 +242,16 @@ class OpenAiCompatibleProvider implements AiProviderInterface
                 ->withToken($this->config['api_key'])
                 ->acceptJson()
                 ->attach('file', $bytes, $filename)
-                ->post($base . '/audio/transcriptions', $fields);
+                ->post($base.'/audio/transcriptions', $fields);
         } catch (\Throwable $e) {
             throw new AiProviderException("Provider [{$this->name}] transcription connection error: {$e->getMessage()}", $this->name, true, $e);
         }
 
         if ($response->failed()) {
-            $status    = $response->status();
+            $status = $response->status();
             $retryable = $status === 429 || $status >= 500;
             throw new AiProviderException(
-                "Provider [{$this->name}] transcription HTTP {$status}: " . $response->body(),
+                "Provider [{$this->name}] transcription HTTP {$status}: ".$response->body(),
                 $this->name,
                 $retryable
             );
@@ -258,7 +260,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
         $data = $response->json();
         $text = data_get($data, 'text');
 
-        if (!is_string($text)) {
+        if (! is_string($text)) {
             throw new AiProviderException("Provider [{$this->name}] returned no transcription.", $this->name, true);
         }
 
@@ -283,7 +285,7 @@ class OpenAiCompatibleProvider implements AiProviderInterface
      */
     public static function assertTranscribableFile(string $audioPath, array $options = [], string $providerName = 'transcribe'): void
     {
-        if (!is_file($audioPath)) {
+        if (! is_file($audioPath)) {
             throw new AiProviderException("Provider [{$providerName}] audio file not found.", $providerName, false);
         }
 
@@ -295,8 +297,8 @@ class OpenAiCompatibleProvider implements AiProviderInterface
         // Extension allowlist — taken from the upload name when supplied (temp
         // uploads have meaningless .tmp paths), else from the path itself.
         $name = (string) ($options['filename'] ?? basename($audioPath));
-        $ext  = strtolower((string) pathinfo($name, PATHINFO_EXTENSION));
-        if (!in_array($ext, self::TRANSCRIBE_EXTENSIONS, true)) {
+        $ext = strtolower((string) pathinfo($name, PATHINFO_EXTENSION));
+        if (! in_array($ext, self::TRANSCRIBE_EXTENSIONS, true)) {
             throw new AiProviderException("Provider [{$providerName}] audio format .{$ext} is not supported.", $providerName, false);
         }
     }

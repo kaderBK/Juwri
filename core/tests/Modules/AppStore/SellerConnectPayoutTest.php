@@ -14,6 +14,7 @@ use Juwri\Modules\AppStore\Models\SellerStripeAccount;
 use Juwri\Modules\Payments\Services\Payouts\StripeConnectGateway;
 use Juwri\Modules\Payments\Services\WalletService;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Support\SellerEarnings;
 use Tests\TestCase;
 
 /**
@@ -67,7 +68,7 @@ class SellerConnectPayoutTest extends TestCase
     private function seller(float $balance): User
     {
         $seller = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
-        WalletService::credit($seller, $balance, 'seed', 'seed:'.$seller->id);
+        SellerEarnings::seedMatured($seller, $balance); // L-1: only earned money is withdrawable
 
         return $seller;
     }
@@ -140,7 +141,7 @@ class SellerConnectPayoutTest extends TestCase
         $this->bindFakeGateway('tr_MU');
         // P6-232: the transfer is in the withdrawal's currency, so the seller holds (and withdraws) that currency.
         $seller = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
-        WalletService::creditBack($seller, 2000.00, strtoupper($currency), 'seed', 'seed:'.$seller->id);
+        SellerEarnings::seedMatured($seller, 2000.00, $currency);
         SellerStripeAccount::create(['user_id' => $seller->id, 'stripe_account_id' => 'acct_mu', 'details_submitted' => true]);
 
         $w = SellerPayoutService::requestWithdrawal($seller, $amount, null, $currency);
@@ -156,7 +157,7 @@ class SellerConnectPayoutTest extends TestCase
         config(['platform.marketplace.payout_rail' => 'stripe_connect', 'platform.marketplace.payout_currency' => 'usd']);
         $this->bindFakeGateway('tr_SAR');
         $seller = User::factory()->create(['status' => 1, 'email_verified_at' => now()]);
-        WalletService::creditBack($seller, 500.00, 'SAR', 'seed', 'seed:sar:'.$seller->id);
+        SellerEarnings::seedMatured($seller, 500.00, 'SAR');
         SellerStripeAccount::create(['user_id' => $seller->id, 'stripe_account_id' => 'acct_sar', 'details_submitted' => true]);
 
         $w = SellerPayoutService::requestWithdrawal($seller, 375.50, null, 'SAR');

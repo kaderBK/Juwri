@@ -9,13 +9,17 @@ use App\Services\FeatureAccess;
 use App\Support\StoreClock;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Juwri\Core\Http\Hosts\HostMap;
 use Juwri\Core\Models\Branch;
 use Juwri\Core\Models\BranchHourException;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Services\Store\StoreStatus;
+use Juwri\Core\Services\Tenancy\TenantContext;
 use Juwri\Core\Settings\PlatformSettings;
 use Juwri\Core\Settings\StoreSettings;
+use Juwri\Core\Support\Hooks;
+use Juwri\Modules\Storefront\Models\StoreDomain;
 use Juwri\Modules\Storefront\Services\StoreAddressResolver;
 use Juwri\Modules\Storefront\Services\StorePath;
 
@@ -234,11 +238,13 @@ if (! function_exists('store_accepts_orders_now')) {
                     // and accepting right now (StoreStatus::for-style), not just the first.
                     $anyOpen = false;
                     foreach ($structuredBranches as $b) {
-                        if (empty($b->hours)) {
-                            continue;
-                        }
                         if (! (bool) ($b->accepting_orders ?? true)) {
                             continue;
+                        }
+                        if (empty($b->hours)) {
+                            // No weekly hours → always open (matches Branch::isOpenNow / StoreStatus::for).
+                            $anyOpen = true;
+                            break;
                         }
                         $bWeek = OpeningHoursService::fromHoursJson($b->hours);
                         if ($bWeek === null) {
@@ -676,7 +682,85 @@ if (! function_exists('effective_public_url')) {
             return url('/');
         }
 
-        return store_url(is_object($store) ? $store : $slug);
+        // R4b: a reseller customer's store without its own verified address lives on the reseller host.
+        return reseller_store_url(store_url(is_object($store) ? $store : $slug), is_object($store) ? $store : $slug);
+    }
+}
+
+if (! function_exists('reseller_store_host')) {
+    /**
+     * R4b: the reseller host a store's public links belong on, or null — a platform store, an inactive reseller, a
+     * reseller without a usable host, or a store with its own address (a verified store domain, or a row a migrated
+     * install imported, J60), which always wins. The host comes from the DB only, through the Reseller module's
+     * `storefront.reseller-host` hook (Community: no hook, always null).
+     *
+     * @param  Store|string  $store  Store model (preferred) or a raw slug string.
+     */
+    function reseller_store_host($store): ?string
+    {
+        if (! Hooks::has('storefront.reseller-host')) {
+            return null;
+        }
+        try {
+            $model = $store instanceof Store ? $store
+                : TenantContext::bypass(fn () => Store::query()->where('slug', (string) $store)->first(['id', 'user_id', 'slug']));
+            if (! $model instanceof Store || ! $model->id) {
+                return null;
+            }
+            $host = Hooks::first('storefront.reseller-host', $model);
+            if (! is_string($host) || $host === '') {
+                return null;
+            }
+            // Only a positive Schema::hasTable answer is memoised (a table never disappears mid-process).
+            static $hasDomainsTable = false;
+            $ownAddress = TenantContext::bypass(function () use ($model, &$hasDomainsTable): bool {
+                if (! $hasDomainsTable && ! ($hasDomainsTable = Schema::hasTable('store_domains'))) {
+                    return false;
+                }
+                foreach (StoreDomain::query()->withoutGlobalScopes()->where('store_id', $model->id)->get(['id', 'verified_at']) as $row) {
+                    if ($row->verified_at !== null || HostMap::isImportedDomain((int) $row->id)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            return $ownAddress ? null : $host;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+}
+
+if (! function_exists('reseller_store_url')) {
+    /**
+     * R4b: swap ONLY scheme + host of a platform-host store URL (built with route() / url() / store_url()) for the
+     * store owner's reseller host; path, query and fragment are kept. Unchanged for platform stores and for a URL
+     * that is not on a platform host (a store's own domain).
+     *
+     * @param  Store|string  $store  Store model (preferred) or a raw slug string.
+     */
+    function reseller_store_url(string $url, $store): string
+    {
+        $parts = parse_url($url);
+        if ($parts === false || ! isset($parts['host'])) {
+            return $url;
+        }
+        $urlHost = strtolower((string) $parts['host']);
+        $bare = str_starts_with($urlHost, 'www.') ? substr($urlHost, 4) : $urlHost;
+        if (! in_array($urlHost, HostMap::platformHosts(), true) && ! in_array($bare, HostMap::platformHosts(), true)) {
+            return $url;
+        }
+        $host = reseller_store_host($store);
+        if ($host === null) {
+            return $url;
+        }
+
+        return 'https://'.$host
+            .($parts['path'] ?? '/')
+            .(isset($parts['query']) ? '?'.$parts['query'] : '')
+            .(isset($parts['fragment']) ? '#'.$parts['fragment'] : '');
     }
 }
 

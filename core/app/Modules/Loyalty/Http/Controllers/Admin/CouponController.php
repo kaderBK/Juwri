@@ -18,6 +18,7 @@ use Juwri\Core\Support\Admin\DataTable;
 use Juwri\Core\Support\Hooks;
 use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponStoreRequest;
 use Juwri\Modules\Loyalty\Http\Requests\Admin\CouponUpdateRequest;
+use Juwri\Modules\Loyalty\Services\CouponBulk;
 
 /**
  * Admin › Membership › Coupons: discount codes for plan purchases. Codes are
@@ -33,14 +34,29 @@ class CouponController extends Controller
         $this->authorizeResource(Coupon::class, 'coupon');
     }
 
-    public function index(Request $request): View|JsonResponse
+    public function index(Request $request, CouponBulk $bulk): View|JsonResponse
     {
         if (! $request->ajax()) {
-            return view('admin.billing.coupons.index');
+            return view('admin.billing.coupons.index', [
+                'batches' => $bulk->batches(['scope' => 'platform'])
+                    ->latest('id')
+                    ->get(['id', 'name', 'prefix', 'count']),
+            ]);
         }
 
         $sortable = [0 => 'id', 1 => 'code', 2 => 'percentage_rate', 3 => 'used', 4 => 'limit', 5 => 'expiry_at', 6 => 'coupon_type'];
-        $query = Coupon::query();
+        $filters = [];
+        foreach (['status', 'batch_id', 'type', 'applies_interval', 'created_from', 'created_to', 'search'] as $key) {
+            $val = $request->input($key);
+            if (is_scalar($val) && trim((string) $val) !== '') {
+                $filters[$key] = $val;
+            }
+        }
+        if (isset($filters['status']) && ! in_array($filters['status'], CouponBulk::STATUSES, true)) {
+            unset($filters['status']);
+        }
+
+        $query = $bulk->query(['scope' => 'platform'], $filters);
         Hooks::call('admin.coupons.query', $query);
 
         return DataTable::make($request, $sortable, ['id', 'code'])
@@ -111,13 +127,14 @@ class CouponController extends Controller
         $this->authorize('deleteAny', Coupon::class);
 
         $ids = $request->ids();
+        $scoped = Coupon::query()->whereNull('user_id')->whereNull('reseller_id')->whereKey($ids);
         if (Hooks::has('admin.coupons.editable')) {
-            foreach (Coupon::query()->whereKey($ids)->get() as $coupon) {
+            foreach ((clone $scoped)->get() as $coupon) {
                 abort_if(Hooks::first('admin.coupons.editable', $coupon) === true, 404);
             }
         }
 
-        Coupon::query()->whereKey($ids)->delete();
+        $scoped->delete();
 
         return $this->panelDone(___('Deleted Successfully'));
     }

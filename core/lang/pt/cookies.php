@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => 'Protege os formulários contra a falsificação de pedidos entre sites.',
     'purpose.remember' => 'Mantém a sua sessão iniciada neste dispositivo quando escolhe "Lembrar-me".',
     'purpose.two_factor' => 'Lembra este dispositivo após o início de sessão em dois passos, quando o pede.',
+    'purpose.social_login' => 'Verifica que uma resposta de «Iniciar sessão com a Apple» pertence ao início de sessão que começou.',
     'purpose.consent' => 'Lembra as suas escolhas de cookies.',
     'purpose.language' => 'Lembra o idioma que escolheu.',
     'purpose.language_prompt' => 'Lembra que fechou a sugestão de idioma.',

@@ -10,7 +10,7 @@ use Juwri\Core\Http\Controllers\Admin\StoreController;
 // Superadmin: toggle a restaurant's "Official store ✓" verified badge.
 Route::name('admin.')
     ->prefix(admin_url())
-    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'csp.dashboard'])
+    ->middleware(['installed', 'checkUserIsBanned', 'localize', 'localizationRedirect', 'locale.remember', 'admin', 'staff.dashboard', 'admin.session', 'csp.dashboard']) // SEC-W2 #6: same fence as the main admin group
     ->group(function () {
         Route::post('stores/{id}/verified', [StoreController::class, 'toggleVerified'])
             ->name('stores.verified.toggle');

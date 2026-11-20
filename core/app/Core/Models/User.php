@@ -21,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
 // is the first-party surface; Passport owns the third-party OAuth grant flow).
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Juwri\Core\Contracts\Auth\CustomerAuthMailer;
 use Juwri\Core\Contracts\Billing\PlanCatalog;
 use Juwri\Core\Mail\ResetPassword;
 use Juwri\Core\Mail\VerifyEmail;
@@ -209,6 +210,9 @@ class User extends Authenticatable implements HasLocalePreference, MinorMoneyMod
     /** Laravel's reset hook: our own settings-template mail instead of the framework notification. */
     public function sendPasswordResetNotification($token)
     {
+        if (app()->bound(CustomerAuthMailer::class) && app(CustomerAuthMailer::class)->passwordReset($this, (string) $token)) {
+            return; // an edition (reseller) sent its own branded mail
+        }
         $this->sendMail(new ResetPassword($this, $token));
     }
 
@@ -233,6 +237,9 @@ class User extends Authenticatable implements HasLocalePreference, MinorMoneyMod
     /** Laravel's verify-email hook, via our own settings-template mail. */
     public function sendEmailVerificationNotification()
     {
+        if (app()->bound(CustomerAuthMailer::class) && app(CustomerAuthMailer::class)->verifyEmail($this)) {
+            return;
+        }
         $this->sendMail(new VerifyEmail($this));
     }
 

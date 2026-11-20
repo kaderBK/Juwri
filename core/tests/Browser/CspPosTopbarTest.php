@@ -65,7 +65,7 @@ it('switches register store from the store selector', function () {
     // the store <select> is the one whose Alpine @change sends the browser to /pos?store=
     $page->script("() => { document.querySelectorAll('.topbar select').forEach(s => { if ((s.getAttribute('@change') || '').includes('location.href')) s.id = 'pos-store-switch'; }); return true; }");
     $page->select('#pos-store-switch', (string) $second->id);
-    CspProbe::until($page, fn () => str_contains($page->url(), 'restaurant='.$second->id), 'the register reloaded for the other store');
+    CspProbe::until($page, fn () => str_contains($page->url(), 'store='.$second->id), 'the register reloaded for the other store');
     CspProbe::assertClean($page, checkHeader: false);
 });
 

@@ -4,10 +4,6 @@
 
 namespace Juwri\Modules\Payments\Services\Refunds;
 
-use Juwri\Modules\Payments\Models\Transaction;
-use Juwri\Modules\Payments\Services\GatewayCurrencies;
-use Juwri\Modules\Payments\Services\GatewayRounding;
-use Juwri\Modules\Payments\Services\Gateways\Settlement;
 use Brick\Math\BigDecimal;
 use Brick\Math\Exception\RoundingNecessaryException;
 use Illuminate\Http\Client\ConnectionException;
@@ -16,6 +12,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Juwri\Core\Money\Currencies;
 use Juwri\Core\Money\Money;
+use Juwri\Modules\Payments\Models\Transaction;
+use Juwri\Modules\Payments\Services\GatewayCurrencies;
+use Juwri\Modules\Payments\Services\GatewayRounding;
+use Juwri\Modules\Payments\Services\Gateways\Settlement;
 
 /**
  * Bug batch 6 — every gateway refund goes through here before (and after) the provider is called.
@@ -48,13 +48,53 @@ use Juwri\Core\Money\Money;
 final class RefundGuard
 {
     /**
+     * money-last NIT 6: the container key holding the purpose of the refunds run inside {@see forPurpose()} (unbound =
+     * no purpose given). A container instance, not a class static: it dies with the application (tests, Octane).
+     */
+    private const PURPOSE = 'juwri.refund_guard.purpose';
+
+    /**
+     * money-last NIT 6 (REVIEW, Opus: money): run $call with every reservation it makes tagged with $purpose (e.g. a
+     * gift-card payout's ref). A retry after an unknown outcome reuses only a pending entry of the SAME purpose, so two
+     * different payouts of an identical amount on one payment are two refunds, never one answered twice. Untagged
+     * calls keep the old matching (an untagged retry reuses an untagged entry only).
+     *
+     * @template T
+     *
+     * @param  callable(): T  $call
+     * @return T
+     */
+    public static function forPurpose(string $purpose, callable $call): mixed
+    {
+        $previous = self::purpose();
+        app()->instance(self::PURPOSE, $purpose);
+        try {
+            return $call();
+        } finally {
+            if ($previous === null) {
+                app()->forgetInstance(self::PURPOSE);
+            } else {
+                app()->instance(self::PURPOSE, $previous);
+            }
+        }
+    }
+
+    /** The purpose set by the enclosing {@see forPurpose()}, or null. */
+    private static function purpose(): ?string
+    {
+        $purpose = app()->bound(self::PURPOSE) ? app(self::PURPOSE) : null;
+
+        return is_string($purpose) ? $purpose : null;
+    }
+
+    /**
      * Refund $amount of $transaction through $send, guarded as described above.
      *
      * @param  float  $amount  major units, in $currency (null = the transaction's own currency)
      * @param  int  $wireDecimals  how many decimals the gateway's refund amount carries for this currency
      * @param  bool  $tenFils  the gateway's minor units for 3-decimal currencies must be a multiple of 10 (Stripe rule)
      * @param  callable(Money, string): array{ok:bool, reference:?string, message:?string}  $send  the provider call;
-     *                                                                                          2nd arg = idempotency key (the ledger entry id)
+     *                                                                                             2nd arg = idempotency key (the ledger entry id)
      * @param  bool  $idempotent  the provider honours the key: a retry after an unknown outcome reuses the pending entry
      * @return array{ok:bool, reference:?string, message:?string, refused?:true}
      */
@@ -192,7 +232,7 @@ final class RefundGuard
             $details['gateway_refunds'][] = [
                 'id' => $id, 'gateway' => $gateway, 'amount_minor' => $money->minor(), 'currency' => $currency,
                 'status' => 'pending', 'reference' => null, 'at' => now()->toIso8601String(),
-            ];
+            ] + (self::purpose() !== null ? ['purpose' => self::purpose()] : []);
             $details['refunded_minor'] = self::ledgerTotal($details, $currency);
             $row->forceFill(['details' => $details])->save();
             $transaction->setRawAttributes($row->getAttributes(), true);
@@ -221,7 +261,8 @@ final class RefundGuard
         foreach ((array) (self::details($transaction)['gateway_refunds'] ?? []) as $entry) {
             if (is_array($entry) && ($entry['status'] ?? null) === 'pending' && ! empty($entry['unknown'])
                 && ($entry['gateway'] ?? null) === $gateway && (int) ($entry['amount_minor'] ?? -1) === $minor
-                && strtoupper((string) ($entry['currency'] ?? '')) === $own && is_string($entry['id'] ?? null)) {
+                && strtoupper((string) ($entry['currency'] ?? '')) === $own && is_string($entry['id'] ?? null)
+                && ($entry['purpose'] ?? null) === self::purpose()) {
                 return [$entry['id'], Money::ofMinor($minor, $own)];
             }
         }

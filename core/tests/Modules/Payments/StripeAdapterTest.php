@@ -201,7 +201,7 @@ class StripeAdapterTest extends TestCase
         $this->postWebhook($noAmount, $this->signed($noAmount))->assertOk()->assertJson(['message' => 'held for review']);
         $this->assertSame(Transaction::STATUS_REVIEW, Transaction::query()->where('payment_id', 'review:in_fake_3')->value('status'));
 
-        $empty = json_encode(['type' => 'invoice.paid', 'data' => ['object' => ['id' => 'in_fake_2', 'metadata' => []]]]);
+        $empty = json_encode(['type' => 'invoice.paid', 'data' => ['object' => ['id' => 'in_fake_2', 'subscription' => 'sub_fake_1', 'metadata' => []]]]);
         $this->postWebhook($empty, $this->signed($empty))->assertStatus(400);
     }
 

@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => '保护表单免受跨站请求伪造攻击。',
     'purpose.remember' => '当您选择“记住我”时，让您在此设备上保持登录。',
     'purpose.two_factor' => '在您要求时，于两步登录后记住此设备。',
+    'purpose.social_login' => '核对“通过 Apple 登录”的回应是否属于您发起的那次登录。',
     'purpose.consent' => '记住您的 Cookie 选择。',
     'purpose.language' => '记住您选择的语言。',
     'purpose.language_prompt' => '记住您已关闭语言建议。',

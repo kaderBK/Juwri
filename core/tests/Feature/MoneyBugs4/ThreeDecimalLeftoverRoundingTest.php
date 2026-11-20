@@ -119,6 +119,7 @@ class ThreeDecimalLeftoverRoundingTest extends TestCase
             $this->assertDoesNotMatchRegularExpression('/(?<![\w>:])round\([^;]*,\s*2\)/', $src, $file.' still rounds money to 2 decimals');
         }
         $refund = (string) file_get_contents(base_path('app/Modules/Ordering/Http/Controllers/User/Concerns/ManagesOrders.php'));
-        $this->assertStringContainsString("money_round((float) (\$request->input('amount') ?: \$order->total), money_decimals(\$currency))", $refund);
+        // SEC-1120: the default refund amount is now the capped refundable base, still rounded to the currency's decimals.
+        $this->assertStringContainsString("money_round((float) (\$request->input('amount') ?: \$this->creditRefundCapBase(\$order)), money_decimals(\$currency))", $refund);
     }
 }

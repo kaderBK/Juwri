@@ -179,6 +179,10 @@
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
  },
+ "admin.coupons.batches.show": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
  "admin.coupons.destroy": {
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
@@ -186,6 +190,10 @@
  "admin.coupons.edit": {
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
+ },
+ "admin.coupons.redemptions": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only (C5 redemption log, CouponPolicy update)"
  },
  "admin.coupons.show": {
   "class": "policy",
@@ -776,6 +784,58 @@
   "why": "admin middleware: platform superadmin only"
  },
  "admin.resellers.approveDomain": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.coupon": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.couponRemove": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.generate": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.invoiceCreditNote": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only; invoice looked up inside the reseller (404 for another reseller's invoice)"
+ },
+ "admin.resellers.billing.invoiceMarkPaid": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only; invoice looked up inside the reseller (404 for another reseller's invoice)"
+ },
+ "admin.resellers.billing.invoiceResend": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only; invoice looked up inside the reseller (404 for another reseller's invoice)"
+ },
+ "admin.resellers.billing.invoiceVoid": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only; invoice looked up inside the reseller (404 for another reseller's invoice)"
+ },
+ "admin.resellers.billing.nextInvoice": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.status": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.tier": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.trialEnd": {
+  "class": "policy",
+  "why": "admin middleware: platform superadmin only"
+ },
+ "admin.resellers.billing.windDownCancel": {
   "class": "policy",
   "why": "admin middleware: platform superadmin only"
  },
@@ -2472,12 +2532,12 @@
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
  "marketplace.apply": {
-  "class": "public-by-design",
-  "why": "no login: path params are public slugs/ids, secret tokens or provider names; writes are store-scoped or token-checked"
+  "class": "scoped-binding",
+  "why": "auth + staff.dashboard (SEC-1119 #1): the slug is a public published theme; the store is looked up where user_id = auth id, so another owner's store 404s"
  },
  "marketplace.buy": {
-  "class": "public-by-design",
-  "why": "no login: path params are public slugs/ids, secret tokens or provider names; writes are store-scoped or token-checked"
+  "class": "scoped-binding",
+  "why": "auth + staff.dashboard (SEC-1119 #1): the slug is a public published theme; the licence is bought for and debited from the signed-in owner only"
  },
  "marketplace.preview": {
   "class": "public-by-design",
@@ -3223,9 +3283,17 @@
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "reseller.coupons.batches.csv": {
+  "class": "scoped-binding",
+  "why": "authenticated + reseller.can:account.manage; batch resolved by issuer_scope=reseller and reseller_id of the portal reseller, another reseller's batch id is a 404 (ee ResellerCouponBulkTest)"
+ },
  "reseller.coupons.delete": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.coupons.redemptions": {
+  "class": "scoped-binding",
+  "why": "authenticated; coupon resolved by reseller_id of the portal reseller, another reseller's id is a 404 (ee CouponRedemptionResellerTest)"
  },
  "reseller.coupons.update": {
   "class": "scoped-binding",
@@ -3259,6 +3327,10 @@
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "reseller.customers.email": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
  "reseller.customers.fund": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
@@ -3267,11 +3339,39 @@
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "reseller.customers.markVerified": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.customers.notes.delete": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.customers.notes.store": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.customers.passwordReset": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.customers.profile": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
  "reseller.customers.suspend": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "reseller.customers.tags": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
  "reseller.customers.unsuspend": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.customers.verification": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
@@ -3627,9 +3727,17 @@
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "reseller.subscriptions.extendPeriod": {
+  "class": "scoped-binding",
+  "why": "authenticated; SubscriptionController::sub() fences the subscription to the acting reseller (404 otherwise); R10 AdjustmentTest"
+ },
  "reseller.subscriptions.extendTrial": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "reseller.subscriptions.offlinePayment": {
+  "class": "scoped-binding",
+  "why": "authenticated; SubscriptionController::sub() fences the subscription to the acting reseller (404 otherwise); R10 AdjustmentTest"
  },
  "reseller.subscriptions.pause": {
   "class": "scoped-binding",
@@ -3734,6 +3842,10 @@
  "store.orderReviewFunnel": {
   "class": "public-by-design",
   "why": "no login: path params are public slugs/ids, secret tokens or provider names; writes are store-scoped or token-checked"
+ },
+ "store.orderStatusOnly": {
+  "class": "signed",
+  "why": "signed middleware"
  },
  "store.orderTrack": {
   "class": "public-by-design",
@@ -3859,6 +3971,10 @@
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
  },
+ "stores.coupons.batches.show": {
+  "class": "scoped-binding",
+  "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
  "stores.coupons.destroy": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
@@ -3866,6 +3982,10 @@
  "stores.coupons.edit": {
   "class": "scoped-binding",
   "why": "authenticated; controller scopes lookups to the acting owner/staff/customer (CrossStoreIdorSweepTest: 0 leaks)"
+ },
+ "stores.coupons.redemptions": {
+  "class": "scoped-binding",
+  "why": "authenticated; coupon must belong to the signed-in owner, another account's id is a 404 (CouponRedemptionLogTest)"
  },
  "stores.coupons.update": {
   "class": "scoped-binding",

@@ -160,7 +160,7 @@ it('sets branch delivery overrides in the owner UI and the storefront honours th
 
     // (The below-minimum refusal is covered by the feature tests; here the basket is raised above it.)
     $page->click('#cvPlaceOrder')
-        ->wait(2)
+        ->assertPathBeginsWith('/order/track/')
         ->assertNoJavaScriptErrors();
 
     $order = Order::where('store_id', $store->id)->latest('id')->first();

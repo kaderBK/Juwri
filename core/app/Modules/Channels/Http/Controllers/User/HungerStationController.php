@@ -5,6 +5,7 @@
 namespace Juwri\Modules\Channels\Http\Controllers\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Core\Models\Branch;
 use Juwri\Core\Models\Credential;
@@ -62,6 +63,9 @@ class HungerStationController extends Controller
         $this->own($storeId);
         $d = $request->validate(['branch_id' => 'required|integer', 'hs_vendor_id' => 'required|string|max:64', 'hs_chain_id' => 'nullable|string|max:64']);
         $branch = Branch::where('id', $d['branch_id'])->where('store_id', $storeId)->firstOrFail();
+        // AUDIT-tenancy U1: inbound webhooks resolve the branch by hs_vendor_id, so a vendor id held by another branch
+        // (any tenant) must not be claimed — it would reroute that tenant's orders here.
+        $request->validate(['hs_vendor_id' => [Rule::unique('branches', 'hs_vendor_id')->ignore($branch->id)]]);
         $branch->update(['hs_vendor_id' => $d['hs_vendor_id'], 'hs_chain_id' => $d['hs_chain_id'] ?? null]);
 
         return response()->json(['ok' => true]);

@@ -144,7 +144,8 @@ class SocialLoginController extends Controller
 
             Auth::login($owner);
 
-            return redirect()->intended(RouteServiceProvider::USER);
+            // R5: partner owners / team seats land on the partner portal or the chooser (intended URL still wins).
+            return redirect()->intended(LoginController::landingFor($owner) ?? RouteServiceProvider::USER);
         } catch (Exception $e) {
             report($e);
             app_alert_error(___('Sign-in with this provider failed. Please try again.'));

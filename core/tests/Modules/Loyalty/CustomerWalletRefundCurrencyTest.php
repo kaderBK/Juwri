@@ -15,6 +15,7 @@ use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Core\Settings\StoreSettings;
 use Juwri\Modules\Payments\Models\LedgerAccount;
+use Tests\Support\PricedOrderLine;
 use Tests\Support\UniquePhone;
 use Tests\TestCase;
 
@@ -49,10 +50,12 @@ class CustomerWalletRefundCurrencyTest extends TestCase
 
     private function order(Store $r, Customer $customer, string $currency): Order
     {
-        return Order::create([
+        $order = Order::create([
             'store_id' => $r->id, 'customer_id' => $customer->id, 'type' => 'takeaway',
             'status' => 'completed', 'currency_code' => $currency,
         ]);
+
+        return PricedOrderLine::add($order, 1000.0); // SEC-1119: an order with no priced lines has nothing to refund
     }
 
     public function test_same_currency_refund_credits_the_order_currency_wallet(): void

@@ -4,7 +4,6 @@
 
 namespace Juwri\Modules\Agents\Services\Telephony;
 
-
 /** T6: telephony provider registry. */
 class TelephonyRegistry
 {
@@ -18,7 +17,13 @@ class TelephonyRegistry
 
     public static function get(string $key): ?TelephonyProvider
     {
+        // AUDIT-authz #5: the fake provider's verifyWebhook() is always true, so it
+        // only exists in local/testing — never a live, unsigned webhook in production.
+        if ($key === 'fake' && ! app()->environment('local', 'testing')) {
+            return null;
+        }
         self::boot();
+
         return self::$providers[$key] ?? null;
     }
 
@@ -27,10 +32,10 @@ class TelephonyRegistry
         foreach ([
             'twilio' => TwilioTelephonyProvider::class,
             'telnyx' => TelnyxTelephonyProvider::class,
-            'fake'   => FakeTelephonyProvider::class,
+            'fake' => FakeTelephonyProvider::class,
         ] as $key => $class) {
-            if (!isset(self::$providers[$key]) && class_exists($class)) {
-                self::$providers[$key] = new $class();
+            if (! isset(self::$providers[$key]) && class_exists($class)) {
+                self::$providers[$key] = new $class;
             }
         }
     }

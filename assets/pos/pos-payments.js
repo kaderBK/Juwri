@@ -100,13 +100,13 @@ window.PosModules.payments = {
     // ── Settle an EXISTING server-side order (external/online or held detail) ──
     // The cart-based settle screen places a NEW order; these orders already exist,
     // so this compact modal POSTs straight to pos.orders.settle for the given id.
-    extSettle: { open: false, id: null, total: 0, label: '', method: 'cash', tenderStr: '', tip: 0, busy: false, coupon: '', couponBusy: false, couponErr: '' },
+    extSettle: { open: false, id: null, total: 0, label: '', method: 'cash', tenderStr: '', tip: 0, busy: false, coupon: '', couponBusy: false, couponErr: '', couponApplied: false },
     openExtSettle(o) {
         if (!o || !o.id) return;
         this.extSettle = {
             open: true, id: o.id, total: Number(o.total) || 0,
             label: '#' + o.id, method: 'cash', tenderStr: '', tip: 0, busy: false,
-            coupon: '', couponBusy: false, couponErr: '',
+            coupon: '', couponBusy: false, couponErr: '', couponApplied: false,
         };
     },
     // Apply a coupon to THIS existing order; the returned total already reflects it.
@@ -119,6 +119,7 @@ window.PosModules.payments = {
         if (r.ok && r.data && r.data.total != null) {
             this.extSettle.total = Number(r.data.total) || 0;   // payable drops by the discount
             this.extSettle.coupon = '';
+            this.extSettle.couponApplied = true;   // Coupons C6: a 0 total shows "Free with coupon"
             this.showToast((window.PosBoot.i18n || {}).couponApplied || 'Coupon applied.', 'success');
         } else {
             this.extSettle.couponErr = (r.data && r.data.message) || (window.PosBoot.i18n || {}).couponInvalid || 'Invalid coupon.';

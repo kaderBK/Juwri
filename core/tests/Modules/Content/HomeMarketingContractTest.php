@@ -143,6 +143,22 @@ class HomeMarketingContractTest extends TestCase
             ]);
     }
 
+    /** fix-xss L1: an RFC-valid quoted local part can carry markup; {EMAIL} is escaped like every other visitor tag. */
+    public function test_contact_escapes_the_sender_email_tag(): void
+    {
+        Mail::fake();
+        config([
+            'settings.contact_email' => 'support@example.test', 'settings.site_title' => 'Juwri',
+            'settings.email_sub_contact' => 'C {NAME}', 'settings.email_message_contact' => 'M {EMAIL}',
+        ]);
+        $email = '"<a href=https://phish.example>x</a>"@example.com';
+
+        $this->from(route('contact'))->post(route('contact.send'), ['name' => 'Ann', 'email' => $email, 'subject' => 'Hi', 'message' => 'Body'])
+            ->assertRedirect(route('contact'))->assertSessionHasNoErrors();
+
+        Mail::assertQueued(SupportMessage::class, fn (SupportMessage $m) => $m->shortCodes['{EMAIL}'] === e($email));
+    }
+
     public function test_newsletter_signup_and_language_switch(): void
     {
         $this->postJson(route('newsletter'), ['email' => 'news@example.com'])->assertOk()->assertExactJson(['success' => true]);

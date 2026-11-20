@@ -106,7 +106,19 @@ final class LatePayments
                 return null;
             }
             $locked->loadMissing('items');
-            $free = $this->slotFree($locked) && $this->stockFree($locked);
+            // money-last 1 (REVIEW, Opus: money): the expiry cancel gave the stored-value tenders back (gift card, store
+            // credit, platform wallet), so the late gateway payment no longer covers the order. Never re-apply them here
+            // (the balance may be spent by now): the order waits as `pending_approval` for the owner, who is told the gap.
+            $currency = strtoupper((string) ($locked->currency_code ?: store_currency((int) $locked->store_id)));
+            $shortMinor = Money::minorFromMajor((float) $locked->amount_due, $currency) - (int) $locked->late_payment_minor;
+            if ($shortMinor > 0) {
+                log_activity('order.late_tenders_returned', $locked, [
+                    'order_id' => $locked->id, 'short' => Money::majorFromMinor($shortMinor, $currency),
+                    'received' => Money::majorFromMinor((int) $locked->late_payment_minor, $currency),
+                    'message' => ___('This late payment does not cover the order: its gift card, store credit or wallet part was given back when the order expired. Collect :amount or refund the payment.', ['amount' => Money::majorFromMinor($shortMinor, $currency)]),
+                ], (int) $locked->store_id);
+            }
+            $free = $shortMinor <= 0 && $this->slotFree($locked) && $this->stockFree($locked);
             // P3-09 (API-27): a grocery order's delivery / collection slot is taken again (a seat, under the capacity guard)
             $free = $free && app(DeliverySlotBook::class)->retakeForOrder($locked);
             // P6-103: stockFree() is only a read — a shopper can take the last unit between it and here. The

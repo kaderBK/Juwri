@@ -34,6 +34,7 @@ return [
     'stores.convert' => 'controller-scope',
     'stores.coupons.destroy' => 'controller-scope',
     'stores.coupons.edit' => 'controller-scope',
+    'stores.coupons.redemptions' => 'controller-scope', // C5: abort_if the coupon is not the signed-in owner's (404)
     'stores.coupons.update' => 'controller-scope',
     'stores.deleteCategory' => 'controller-scope',
     'stores.deleteImageMenuItem' => 'controller-scope',

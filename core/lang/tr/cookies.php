@@ -32,6 +32,7 @@ return [
     'purpose.csrf' => 'Formları siteler arası istek sahteciliğine karşı korur.',
     'purpose.remember' => '"Beni hatırla"yı seçtiğinizde bu cihazda oturumunuzu açık tutar.',
     'purpose.two_factor' => 'İstediğinizde, iki adımlı girişten sonra bu cihazı hatırlar.',
+    'purpose.social_login' => '"Apple ile giriş yap" yanıtının sizin başlattığınız girişe ait olduğunu doğrular.',
     'purpose.consent' => 'Çerez tercihlerinizi hatırlar.',
     'purpose.language' => 'Seçtiğiniz dili hatırlar.',
     'purpose.language_prompt' => 'Dil önerisini kapattığınızı hatırlar.',

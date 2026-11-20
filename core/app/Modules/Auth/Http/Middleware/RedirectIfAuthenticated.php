@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Juwri\Modules\Auth\Http\Controllers\LoginController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,7 +21,8 @@ class RedirectIfAuthenticated
     {
         foreach ($guards ?: [null] as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::USER);
+                // R5: a partner owner / team seat goes to the partner portal or the chooser (Reseller module hook).
+                return redirect(LoginController::landingFor(Auth::guard($guard)->user()) ?? RouteServiceProvider::USER);
             }
         }
 

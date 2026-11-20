@@ -21,11 +21,19 @@ use Juwri\Modules\Payments\Models\Transaction;
 interface AuthorisesPayments
 {
     /**
-     * Capture `$amount` (≤ the authorised amount, in the transaction's currency) of the authorised hold.
+     * Capture `$amount` (≤ the authorised amount, in the transaction's currency) of the authorised hold. The
+     * `$idempotencyKey` is the same for a retry after an unknown outcome (a timeout), so the provider answers the retry
+     * with the first capture instead of capturing again.
      *
      * @return array{ok: bool, reference: string|null, message: string|null}
      */
-    public function capture(Transaction $transaction, Money $amount): array;
+    public function capture(Transaction $transaction, Money $amount, string $idempotencyKey): array;
+
+    /**
+     * Whether a capture retried with the same idempotency key is safe (the provider never captures twice). When it
+     * is not, a capture with an unknown outcome is never retried automatically: it waits for a manual check.
+     */
+    public function capturesIdempotently(): bool;
 
     /**
      * Release the authorised hold without capturing anything.

@@ -657,6 +657,8 @@ LocalizedRoutes::group($middlewares, function () {
     Route::get('order/{order}/voice-note-signed', '\Juwri\Modules\Ordering\Http\Controllers\User\VoiceNoteController@signedStream')->middleware(['signed', 'throttle:public-check'])->name('voiceNote.signedStream');
     // T1: bookable scheduling slots for the checkout picker (ASAP/schedule-for-later).
     Route::get('{store}/schedule-slots', 'User\StoreController@scheduleSlots')->middleware('throttle:public-check')->name('store.scheduleSlots');
+    // SEC-1120: status-only page a guest reaches from the order lookup without proving the phone (signed link, no track token).
+    Route::get('order/{order}/status', 'User\StoreController@orderStatusOnly')->whereNumber('order')->middleware(['signed', 'throttle:public-poll'])->name('store.orderStatusOnly');
     Route::get('order/track/{token}', 'User\StoreController@trackOrder')->middleware(['throttle:public-poll', KioskStorefrontShell::class, MarkAnonymousPage::class.':own'])->name('store.orderTrack');
     // T5 curbside "I'm here" arrival ping (token-scoped).
     // FIX-2 F2-3: `feature:curbside` cannot stay here — once the key is plan_gated
@@ -691,7 +693,7 @@ LocalizedRoutes::group($middlewares, function () {
     Route::post('{store}/review', 'User\StoreController@submitMenuReview')->middleware(['throttle:public-check', 'ratelimit:public-write'])->name('store.submitReview');
     // #62: NPS feedback
     Route::post('{store}/nps', 'User\StoreController@submitNps')->middleware(['throttle:public-check', 'ratelimit:public-write'])->name('store.submitNps');
-    Route::post('{store}/coupon', 'User\StoreController@applyCoupon')->middleware('throttle:public-check')->name('store.applyCoupon');
+    Route::post('{store}/coupon', 'User\StoreController@applyCoupon')->middleware(['throttle:public-check', 'coupon.check:storefront'])->name('store.applyCoupon');
     // P3-02: the server quote of a storefront cart (view model `endpoints.quote`).
     Route::post('{store}/quote', '\Juwri\Modules\Storefront\Http\Controllers\StorefrontQuoteController')->middleware('throttle:public-check')->name('store.quote');
     // P3-11: the server quote of a booking selection (the `book` theme on the booking engine).
@@ -965,6 +967,19 @@ LocalizedRoutes::group($middlewares, function () {
 
         ModuleRoutes::slot('Billing/web-6');
 
+        Route::prefix('coupons')->name('coupons.')->group(function () {
+            $bulk = '\Juwri\Modules\Loyalty\Http\Controllers\Admin\CouponBulkController';
+            Route::get('bulk', "$bulk@bulkCreate")->name('bulk.create');
+            Route::post('bulk/confirm', "$bulk@bulkConfirm")->middleware('throttle:30,1,admin-coupons-bulk-confirm')->name('bulk.confirm');
+            Route::post('bulk', "$bulk@bulkStore")->middleware('throttle:30,1,admin-coupons-bulk-store')->name('bulk.store');
+            Route::get('batches', "$bulk@batches")->name('batches.index');
+            Route::get('batches/{batch}', "$bulk@batchResult")->whereNumber('batch')->name('batches.show');
+            Route::post('bulk-action', "$bulk@bulkAction")->middleware('throttle:30,1,admin-coupons-bulk-action')->name('bulk.action');
+            Route::get('export', "$bulk@export")->name('export');
+            // C5: paginated redemption log of one coupon (read-only).
+            Route::get('{coupon}/redemptions', '\Juwri\Modules\Loyalty\Http\Controllers\Admin\CouponRedemptionController@index')->whereNumber('coupon')->name('redemptions');
+        });
+
         Route::resource('coupons', Admin\CouponController::class);
         Route::post('coupons.delete', [Admin\CouponController::class, 'delete'])->name('coupons.delete');
 
@@ -1132,8 +1147,10 @@ Route::get('marketplace', 'MarketplaceController@index')->middleware(['app.local
 Route::get('marketplace/lang/{code}', 'MarketplaceController@setLocale')->name('store.lang')->where('code', '[a-z]{2}');
 Route::get('marketplace/{slug}', 'MarketplaceController@show')->middleware(['app.locale', 'csp.app'])->name('marketplace.show')->where('slug', '[a-z0-9\-]+');
 Route::get('marketplace/{slug}/preview', 'MarketplaceController@preview')->middleware(AddCspHeaders::class)->name('marketplace.preview')->where('slug', '[a-z0-9\-]+');
-Route::post('marketplace/{slug}/buy', 'MarketplaceController@buy')->name('marketplace.buy')->middleware('throttle:20,1,marketplace-buy')->where('slug', '[a-z0-9\-]+');
-Route::post('marketplace/{slug}/apply', 'MarketplaceController@apply')->name('marketplace.apply')->middleware('throttle:10,1,marketplace-apply')->where('slug', '[a-z0-9\-]+');
+// SEC-W2 #1: owner-only — a staff session signs the web guard in as the owner, so
+// auth()->check() alone let any staff role spend the owner's wallet / switch the theme.
+Route::post('marketplace/{slug}/buy', 'MarketplaceController@buy')->name('marketplace.buy')->middleware(['auth', 'staff.dashboard', 'throttle:20,1,marketplace-buy'])->where('slug', '[a-z0-9\-]+');
+Route::post('marketplace/{slug}/apply', 'MarketplaceController@apply')->name('marketplace.apply')->middleware(['auth', 'staff.dashboard', 'throttle:10,1,marketplace-apply'])->where('slug', '[a-z0-9\-]+');
 // stores P3-1: theme review write (eligibility server-checked; pending until moderated)
 Route::post('marketplace/{slug}/review', 'MarketplaceReviewController@storeTheme')->middleware(['auth', 'staff.dashboard'])->name('marketplace.review')->where('slug', '[a-z0-9\-]+'); // owner-only: staff session = owner web guard
 

@@ -26,23 +26,8 @@ final class PdfDocument
      */
     public static function make(string|array $format, array $margins, string $title, bool $rtl = false, bool $autoPageBreak = true): TCPDF
     {
-        // Never let document text call TCPDF methods through <tcpdf> tags (user-controlled names reach the HTML).
-        // The bundled config file would define it unguarded, so skip every external TCPDF config file (the package
-        // defaults in tcpdf_autoconfig.php apply; a host's /etc/tcpdf_config.php must not turn this on).
-        defined('K_TCPDF_EXTERNAL_CONFIG') || define('K_TCPDF_EXTERNAL_CONFIG', true);
-        defined('K_TCPDF_CALLS_IN_HTML') || define('K_TCPDF_CALLS_IN_HTML', false);
-        // A TCPDF error must throw (a 500 the app logs), never die() with a 200 or kill a queue worker.
-        defined('K_TCPDF_THROW_EXCEPTION_ERROR') || define('K_TCPDF_THROW_EXCEPTION_ERROR', true);
-
-        // TCPDF reads its cache path from this constant; define it before the first instance so a read-only
-        // system temp dir (shared hosting) is never used.
-        if (! defined('K_PATH_CACHE')) {
-            $cache = storage_path('app/tcpdf');
-            if (! is_dir($cache)) {
-                @mkdir($cache, 0775, true);
-            }
-            define('K_PATH_CACHE', rtrim($cache, '/').'/');
-        }
+        self::defineEngineConstants();
+        self::defineCachePath();
 
         $pdf = new TCPDF('P', 'mm', $format, true, 'UTF-8', false);
         $pdf->SetCreator('Juwri');
@@ -60,6 +45,37 @@ final class PdfDocument
         $pdf->setHtmlVSpace([]);
 
         return $pdf;
+    }
+
+    /**
+     * Defines the TCPDF config constants. Must run before TCPDF's own autoconfig is loaded (it defines the same
+     * constants with its defaults, and a define() after that is silently ignored). It is therefore also called when
+     * composer loads app/Http/Helpers/CspHelper.php (before any test or request code runs), not only from
+     * {@see make()}: anything that autoloads TCPDF first (a Pest arch() scan, a reflection pass) can no longer turn a
+     * TCPDF error back into die().
+     */
+    public static function defineEngineConstants(): void
+    {
+        // Never let document text call TCPDF methods through <tcpdf> tags (user-controlled names reach the HTML).
+        // The bundled config file would define it unguarded, so skip every external TCPDF config file (the package
+        // defaults in tcpdf_autoconfig.php apply; a host's /etc/tcpdf_config.php must not turn this on).
+        defined('K_TCPDF_EXTERNAL_CONFIG') || define('K_TCPDF_EXTERNAL_CONFIG', true);
+        defined('K_TCPDF_CALLS_IN_HTML') || define('K_TCPDF_CALLS_IN_HTML', false);
+        // A TCPDF error must throw (a 500 the app logs), never die() with a 200 or kill a queue worker.
+        defined('K_TCPDF_THROW_EXCEPTION_ERROR') || define('K_TCPDF_THROW_EXCEPTION_ERROR', true);
+    }
+
+    private static function defineCachePath(): void
+    {
+        // TCPDF reads its cache path from this constant; define it before the first instance so a read-only
+        // system temp dir (shared hosting) is never used.
+        if (! defined('K_PATH_CACHE')) {
+            $cache = storage_path('app/tcpdf');
+            if (! is_dir($cache)) {
+                @mkdir($cache, 0775, true);
+            }
+            define('K_PATH_CACHE', rtrim($cache, '/').'/');
+        }
     }
 
     /** Smallest module a phone camera reads reliably on a printed receipt or invoice, in mm. */

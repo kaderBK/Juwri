@@ -110,10 +110,9 @@ class StockImageService implements StockImages
             return;
         }
         try {
-            Http::timeout(10)
-                ->withHeaders(['Authorization' => 'Client-ID '.$creds['access_key']])
-                ->withOptions(SsrfGuard::pinnedOptions($downloadLocation) ?? throw new \RuntimeException('SSRF: URL is not a safe public https endpoint'))
-                ->get($downloadLocation);
+            // Every hop vetted + pinned; the key is never sent to another origin (w5 #5).
+            SsrfGuard::send(Http::timeout(10)
+                ->withHeaders(['Authorization' => 'Client-ID '.$creds['access_key']]), 'GET', $downloadLocation);
         } catch (\Throwable $e) {
             Log::info('[StockImage] unsplash download-trigger failed: '.$e->getMessage());
         }

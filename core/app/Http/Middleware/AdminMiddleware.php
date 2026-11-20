@@ -4,11 +4,11 @@
 
 namespace App\Http\Middleware;
 
-use Juwri\Core\Models\User;
-use Juwri\Modules\Auth\Support\PasskeySession;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Juwri\Core\Models\User;
+use Juwri\Modules\Auth\Support\PasskeySession;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -28,6 +28,10 @@ class AdminMiddleware
         if (! $user instanceof User || ! $user->isAdmin()) {
             return redirect()->route('login');
         }
+
+        // SEC-1119 (#6, defence in depth): a staff dashboard session signs the web guard in AS THE OWNER, so a superadmin
+        // owner's staff would pass the check above. Refuse here too, so an admin group without staff.dashboard is covered.
+        abort_if(is_staff_dashboard(), 403);
 
         if (config('auth.force_2fa_admin') && ! PasskeySession::hasStrongSignIn($user)) {
             return redirect()->route('2fa.show')

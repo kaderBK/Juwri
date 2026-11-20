@@ -189,6 +189,13 @@ final class GroceryPicking
      */
     public function finish(Order $order): ?array
     {
+        // grocery-snap2: a capture refused after the lines were settled leaves the order picked with its hold still
+        // authorised; finishing again retries the capture (settleFinal claims the hold, so a race captures once).
+        $current = Order::query()->where('store_id', $order->store_id)->whereKey($order->id)->first(['id', 'picking_status', 'hold_status']);
+        if ($current !== null && $current->picking_status === self::STATUS_PICKED && $current->hold_status === 'authorised') {
+            return $this->settle($order, 0);
+        }
+
         $removedMinor = $this->locked($order, function (Order $locked) {
             $removed = 0;
             $preference = $this->preferenceAnswer($locked);
@@ -204,11 +211,22 @@ final class GroceryPicking
                 }
             }
             $locked->forceFill(['picking_status' => self::STATUS_PICKED, 'picked_at' => now()])->save();
+            $this->snapshot($locked);
             log_activity('order.picked', $locked, ['order_id' => $locked->id], (int) $locked->store_id);
 
             return $removed;
         });
 
+        return $this->settle($order, $removedMinor);
+    }
+
+    /**
+     * Settle the money of a picked order and tell the shopper.
+     *
+     * @return Outcome|null
+     */
+    private function settle(Order $order, int $removedMinor): ?array
+    {
         $result = $this->holds->settleFinal($order->refresh(), $removedMinor);
         if ($result !== null) {
             if ($result['outcome'] === 'captured' && $result['released_minor'] > 0) {
@@ -229,8 +247,10 @@ final class GroceryPicking
             if ($line->pick_status === 'removed') {
                 throw new GroceryPickingException(___('This item was already removed.'));
             }
-            $minor = $this->estimateMinor($locked, $line);
+            // grocery-snap2: what was charged for the line (weighed or replacement price), not the line as ordered
+            $minor = $line->final_minor !== null ? (int) $line->final_minor : $this->estimateMinor($locked, $line);
             $line->forceFill(['final_minor' => 0, 'pick_status' => 'removed', 'picked_at' => now()])->save();
+            $this->snapshot($locked);
 
             return [$minor, $line];
         }, picking: false, picked: true);
@@ -242,6 +262,18 @@ final class GroceryPicking
         }
 
         return $refunded;
+    }
+
+    /**
+     * grocery-snap: the stored totals (subtotal / tax_total / grand_total, read by reports, receipts and the refund caps)
+     * follow the picked lines, under the same lock. Only at the end of picking (and for a line removed after it): while
+     * picking is open the lines are still moving and the money is not settled yet.
+     */
+    private function snapshot(Order $locked): void
+    {
+        $locked->unsetRelation('items');
+        // every line removed: snapshotTotals() itself stores 0 (grocery-nits 5), so a later re-snapshot keeps it
+        $locked->snapshotTotals();
     }
 
     private function applyAnswer(OrderItem $line, string $answer): void

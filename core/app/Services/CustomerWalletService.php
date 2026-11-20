@@ -309,6 +309,27 @@ class CustomerWalletService
     }
 
     /**
+     * grocery-nits2 (REVIEW, Opus: money): give back PART of an order's store-credit tender (the caller lowers
+     * `wallet_applied` by `$amount` under the order lock, in the same transaction). Like reverseForOrder it posts the
+     * ledger legs directly, NOT via credit(): it is money the customer already spent, so the customer_wallet
+     * issuance gate must never block it. `$ref` must be unique per return (the ledger drops a repeated ref), e.g.
+     * `tender-excess:order:{id}:{new wallet_applied minor}`.
+     */
+    public static function returnTender(Customer $customer, float $amount, int $orderId, string $ref): void
+    {
+        if ($amount <= 0) {
+            return;
+        }
+        $account = static::accountFor($customer);
+        $clearing = app(Ledger::class)->accountFor('platform', 0, 'platform', $account->currency);
+        $reason = ___('Refund for order #:id', ['id' => $orderId]);
+        app(Ledger::class)->post([
+            ['account' => $clearing, 'amount' => -$amount, 'allow_negative' => true, 'ref' => 'cw:'.$ref.':clr', 'reason' => $reason],
+            ['account' => $account, 'amount' => $amount, 'ref' => 'cw:'.$ref.':cust', 'reason' => $reason, 'meta' => ['customer_id' => $customer->id, 'store_id' => $customer->store_id]],
+        ], null, $reason);
+    }
+
+    /**
      * Reverse the store-credit tender when an order is cancelled/voided — the inverse
      * of applyToOrder. Returns the wallet_applied amount to the customer's balance and
      * clears the order's tender, so a diner who paid with store credit keeps that value
@@ -317,8 +338,9 @@ class CustomerWalletService
      * Posts the ledger legs DIRECTLY, NOT via credit(): credit() gates on the
      * customer_wallet ISSUANCE entitlement and would throw on a downgraded store —
      * but returning money the customer already spent must never be blocked. Idempotent
-     * per order via a fixed `cw:refund:order:{id}` ref (distinct from applyToOrder's
-     * `cw:order-credit:{id}`) plus the tender zeroed under lock, so a repeated cancel is
+     * per order via a fixed `cw:tender-reversal:order:{id}` ref (distinct from applyToOrder's
+     * `cw:order-credit:{id}`, and — AUDIT-money L-2 — from refundToCredit's `cw:refund:order:{id}`, which
+     * used to collide with it and silently drop one of the two credits) plus the tender zeroed under lock, so a repeated cancel is
      * a no-op. The platform clearing leg absorbs the credit (allow_negative). Returns
      * the amount re-credited; 0 when the order carried no store-credit tender.
      */
@@ -346,8 +368,8 @@ class CustomerWalletService
             $clearing = app(Ledger::class)->accountFor('platform', 0, 'platform', $account->currency);
             $reason = ___('Refund for order #:id', ['id' => $order->id]);
             app(Ledger::class)->post([
-                ['account' => $clearing, 'amount' => -$applied, 'allow_negative' => true, 'ref' => 'cw:refund:order:'.$order->id.':clr', 'reason' => $reason],
-                ['account' => $account, 'amount' => $applied, 'ref' => 'cw:refund:order:'.$order->id.':cust', 'reason' => $reason, 'meta' => ['customer_id' => $customer->id, 'store_id' => $customer->store_id]],
+                ['account' => $clearing, 'amount' => -$applied, 'allow_negative' => true, 'ref' => 'cw:tender-reversal:order:'.$order->id.':clr', 'reason' => $reason],
+                ['account' => $account, 'amount' => $applied, 'ref' => 'cw:tender-reversal:order:'.$order->id.':cust', 'reason' => $reason, 'meta' => ['customer_id' => $customer->id, 'store_id' => $customer->store_id]],
             ], null, $reason);
 
             // Clear the tender so amount_due no longer counts it and a re-run early-returns.

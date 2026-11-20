@@ -11,7 +11,7 @@ use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 
 /**
- * Owner mobile app (Capacitor shell) — the server-side knowledge the shell needs:
+ * Owner mobile app (Hotwire Native shell) — the server-side knowledge the shell needs:
  * is this request coming from the app, is the app new enough, and which native
  * tabs should a given store get.
  *

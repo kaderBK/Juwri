@@ -100,10 +100,9 @@ class MediaCopyService implements MediaCopier
         }
 
         try {
-            $response = Http::timeout(20)
-                ->withHeaders(['User-Agent' => 'Mozilla/5.0 (compatible; JuwriMedia/1.0)'])
-                ->withOptions(SsrfGuard::pinnedOptions($url) ?? throw new \RuntimeException('SSRF: URL is not a safe public https endpoint'))
-                ->get($url);
+            // Every redirect hop is vetted and pinned to its own IP (w5 #5).
+            $response = SsrfGuard::send(Http::timeout(20)
+                ->withHeaders(['User-Agent' => 'Mozilla/5.0 (compatible; JuwriMedia/1.0)']), 'GET', $url);
         } catch (\Throwable $e) {
             Log::warning('[MediaCopy] download error: '.$e->getMessage(), ['url' => $url]);
             throw new MediaCopyException(___('Could not download this image. The host may block hotlinking — try another image.'));

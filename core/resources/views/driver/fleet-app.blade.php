@@ -264,8 +264,8 @@ function renderOffers(rows) {
                  <span class="countdown" data-exp="${esc(o.expires_at)}"></span></div>
             <div class="addr">${esc(o.store || '')} → ${esc(o.address || '')}</div>
             <div class="money">${esc(o.total ?? '')}</div>
-            <button class="accept" data-act="acceptOffer" data-args='[${o.id}]'>${I18N.accept}</button>
-            <button class="reject" data-act="rejectOffer" data-args='[${o.id}]'>${I18N.reject}</button>
+            <button class="accept" data-act="acceptOffer" data-args='[${Number(o.id) || 0}]'>${I18N.accept}</button>
+            <button class="reject" data-act="rejectOffer" data-args='[${Number(o.id) || 0}]'>${I18N.reject}</button>
         </div>`).join('') || `<p class="muted" style="padding-inline:4px">${I18N.noOffers}</p>`;
     tickCountdowns();
 }
@@ -286,9 +286,9 @@ async function rejectOffer(id) { await api('/offers/' + id + '/reject', { method
 function renderActive(rows) {
     $('active').innerHTML = rows.map(o => `
         <div class="card">
-            <div><strong>#${o.id}</strong> · <span class="muted">${esc(o.delivery_status || '')}</span></div>
+            <div><strong>#${Number(o.id) || 0}</strong> · <span class="muted">${esc(o.delivery_status || '')}</span></div>
             <div class="addr">${esc(o.address || '')}</div>
-            <button class="primary" data-act="openOrderById" data-args='[${o.id}]'>${I18N.open}</button>
+            <button class="primary" data-act="openOrderById" data-args='[${Number(o.id) || 0}]'>${I18N.open}</button>
         </div>`).join('');
 }
 async function openOrderById(id) {
@@ -314,11 +314,11 @@ function openOrder(o) {
         return `<div class="step">${label}</div>`;
     }).join('');
     const items = (o.items || []).map(it =>
-        `<div class="muted">${it.quantity}× ${esc(it.name || '')}</div>`).join('');
+        `<div class="muted">${Number(it.quantity) || 0}× ${esc(it.name || '')}</div>`).join('');
     $('scr-order').innerHTML = `
         <button data-act="go" data-args='["home"]'>← ${I18N.back}</button>
         <div class="card">
-            <div><strong>#${o.id}</strong> · <span class="muted">${esc(o.delivery_status || '')}</span></div>
+            <div><strong>#${Number(o.id) || 0}</strong> · <span class="muted">${esc(o.delivery_status || '')}</span></div>
             <div class="addr">${esc(o.address || '')}</div>
             ${items}
             <div class="money">${I18N.total} ${esc(o.total ?? '')}</div>
@@ -383,13 +383,13 @@ async function loadEarnings() {
     const j = await r.json();
     const rows = (j.data || []).map(d => `
         <div class="card">
-            <div><strong>${esc(d.date)}</strong> · <span class="muted">${d.deliveries} ${I18N.earnToday}</span></div>
+            <div><strong>${esc(d.date)}</strong> · <span class="muted">${Number(d.deliveries) || 0} ${I18N.earnToday}</span></div>
             <div class="money">${esc(d.total)}</div>
             ${d.tips > 0 ? `<div class="muted">${I18N.tips}: ${esc(d.tips)}</div>` : ''}
         </div>`).join('');
     $('scr-earnings').innerHTML = `
         <div class="card">
-            <div class="muted">${(j.summary || {}).deliveries || 0} ${I18N.earnToday}</div>
+            <div class="muted">${Number((j.summary || {}).deliveries) || 0} ${I18N.earnToday}</div>
             <div class="money">${esc((j.summary || {}).total ?? 0)}</div>
         </div>` + (rows || `<p class="muted">${I18N.noEarnings}</p>`);
 }

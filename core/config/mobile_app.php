@@ -4,7 +4,7 @@
 
 /*
  |--------------------------------------------------------------------------
- | Owner mobile app (Capacitor shell)
+ | Owner mobile app (Hotwire Native shell)
  |--------------------------------------------------------------------------
  | Everything the native shell reads from the server. The app itself renders
  | the live dashboard in a WebView, so a server deploy IS an app release —

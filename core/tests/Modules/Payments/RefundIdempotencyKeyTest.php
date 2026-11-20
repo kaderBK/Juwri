@@ -159,6 +159,23 @@ class RefundIdempotencyKeyTest extends TestCase
         $this->assertSame(1000, RefundGuard::refundedMinor($tx->fresh()));
     }
 
+    /** money-last NIT 6: two payouts of the same amount with different purposes are two refunds, not one reused. */
+    public function test_a_retry_reuses_only_an_unknown_entry_of_the_same_purpose(): void
+    {
+        $tx = $this->tx('stripe', 30.0);
+        $ok = fn () => ['ok' => true, 'reference' => 'r', 'message' => null];
+        RefundGuard::forPurpose('gc:excess:1', fn () => RefundGuard::run($tx, 10.0, null, 'stripe', 2, fn () => throw new ConnectionException('timed out'), false, true));
+
+        $other = RefundGuard::forPurpose('gc:refund:1', fn () => RefundGuard::run($tx->fresh(), 10.0, null, 'stripe', 2, $ok, false, true));
+        $this->assertTrue($other['ok']);
+        $this->assertSame(['pending', 'ok'], array_column($this->ledger($tx), 'status'), 'the second payout is its own refund');
+
+        $retry = RefundGuard::forPurpose('gc:excess:1', fn () => RefundGuard::run($tx->fresh(), 10.0, null, 'stripe', 2, $ok, false, true));
+        $this->assertTrue($retry['ok']);
+        $this->assertSame(['ok', 'ok'], array_column($this->ledger($tx), 'status'), 'the first payout retried under its own entry');
+        $this->assertSame(2000, RefundGuard::refundedMinor($tx->fresh()));
+    }
+
     public function test_a_gateway_without_idempotency_never_reuses_an_unknown_entry(): void
     {
         $tx = $this->tx('stripe', 15.0);

@@ -11,7 +11,6 @@ use App\Models\StoreTable;
 use App\Services\FeatureAccess;
 use App\Services\KdsService;
 use App\Services\OrderApiService;
-use App\Services\OrderStatusNotifier;
 use App\Support\StoreClock;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -38,11 +37,10 @@ use Juwri\Modules\Messaging\Contracts\MessageQueue;
 use Juwri\Modules\Messaging\Models\PushSubscription;
 use Juwri\Modules\Messaging\Services\MobilePush\MobilePushService;
 use Juwri\Modules\Ordering\Enums\OrderStatus;
-use Juwri\Modules\Ordering\Services\Orders\OrderCancellation;
+use Juwri\Modules\Ordering\Services\Orders\StaffOrderStatus;
 use Juwri\Modules\Pos\Services\Waiter\WaiterService;
 use Juwri\Modules\Tables\Models\WaiterCall;
 use Juwri\Modules\Team\Models\StaffMessage;
-use Juwri\Modules\Team\Models\StaffSyncedOp;
 
 /**
  * #100: Staff mobile PWA. Same-origin app served under /staff-app, authenticated
@@ -821,6 +819,7 @@ class StaffAppController extends Controller
         abort_unless($staff, 401);
 
         $branches = Branch::where('store_id', $staff->store_id)
+            ->when($staff->branch_id, fn ($q) => $q->whereKey((int) $staff->branch_id))
             ->orderBy('id')->get(['id', 'name']);
 
         return response()->json([
@@ -833,10 +832,16 @@ class StaffAppController extends Controller
      * SP11 #49: resolve which branch to scope data to. A ?branch= that belongs to the
      * staff's restaurant wins (a foreign branch id is rejected 404 — no cross-branch
      * reach); otherwise the staff member's own branch_id; else null (whole restaurant).
+     * SEC-1119: a branch-pinned staff member always gets their own branch; any other ?branch= is rejected 404.
      */
     private function resolveBranchId(Request $request, $staff): ?int
     {
         $requested = $request->integer('branch');
+        if ($staff->branch_id) {
+            abort_if($requested && $requested !== (int) $staff->branch_id, 404);
+
+            return (int) $staff->branch_id;
+        }
         if ($requested) {
             $ok = Branch::where('id', $requested)->where('store_id', $staff->store_id)->exists();
             abort_unless($ok, 404);
@@ -844,7 +849,7 @@ class StaffAppController extends Controller
             return $requested;
         }
 
-        return $staff->branch_id ? (int) $staff->branch_id : null;
+        return null;
     }
 
     // SP11 #49: the branch-scoping rule lives in the ScopesToBranch trait (shared with
@@ -908,71 +913,13 @@ class StaffAppController extends Controller
             'client_op_id' => 'nullable|string|max:64', // SP2: offline outbox dedupe key
             'reason' => 'nullable|string|max:200', // SP3 #13: reject reason (audit only)
         ]);
-        $status = $data['status'];
-        $reason = trim((string) ($data['reason'] ?? ''));
 
-        // SP2: a replayed offline op (same client_op_id) applies exactly once — no
-        // duplicate status write, SMS, or activity log on reconnect. P6-206: the key is
-        // per store (two stores' devices may mint the same id).
-        $opId = (string) ($data['client_op_id'] ?? '');
-        if ($opId !== '' && StaffSyncedOp::where('store_id', $order->store_id)->where('op_id', $opId)->exists()) {
-            return response()->json(['id' => $order->id, 'status' => $order->status, 'duplicate' => true]);
-        }
-
-        // P6-207: cancelled is terminal — stock and tender already went back.
-        if (OrderCancellation::blocksTransition($order, $status)) {
-            return response()->json(['error' => ___('A cancelled order cannot be changed.')], 422);
-        }
-        if ($status === 'cancelled' && $order->status !== 'cancelled') {
-            // P6-206: cancelling a PAID order gives money back — same gate as POS refund.
-            if ((bool) $order->is_paid && ! $staff->hasPermission('pos_refund')) {
-                return response()->json(['error' => ___('Manager permission required.')], 403);
-            }
-            // P6-205: paid split shares must be refunded / settled first (as the dashboard).
-            if (OrderCancellation::hasPaidSplitShares($order)) {
-                return response()->json(['error' => ___('This bill already has paid split shares — refund those or finish settling it before cancelling.')], 422);
-            }
-        }
-
-        if ($opId !== '') {
-            StaffSyncedOp::create([
-                'op_id' => $opId, 'order_id' => $order->id,
-                'store_id' => $order->store_id, 'status' => $status, 'created_at' => now(),
-            ]);
-        }
-
-        $order->status = $status;
-        foreach (['preparing' => 'preparing_at', 'ready' => 'ready_at', 'completed' => 'completed_at', 'cancelled' => 'cancelled_at'] as $s => $col) {
-            if ($status === $s) {
-                $order->{$col} = now();
-            }
-        }
-        $order->save();
-
-        // P6-205: the shared cancel routine — stock, folio, gift card, wallet, loyalty
-        // (each idempotent, so a retried cancel never double-credits).
-        if ($status === 'cancelled') {
-            OrderCancellation::reverse($order);
-        }
-
-        log_activity('order.status', $order, array_filter([
-            'status' => $status,
-            'order_id' => $order->id,
-            'via' => 'staff_pwa',
-            'reason' => $reason !== '' ? $reason : null,
-        ], fn ($v) => $v !== null), $order->store_id);
-
-        // Reuse the customer status SMS hook (owner opt-in). Routed through
-        // OrderStatusNotifier so the same locale handling, template resolution,
-        // and per (order, status) idempotency is shared with the owner dashboard
-        // (ManagesOrders::updateOrderStatus) and the KDS (KdsController::bump /
-        // KdsService::syncOrderStatus). P6-213: the locale wrap + status-word
-        // translation still happen INSIDE the notifier, exactly as before —
-        // computing them before the closure would bind them to the current staff
-        // locale (English "ready") and an Arabic order would ship the English word.
-        OrderStatusNotifier::notify($order, $status);
-
-        return response()->json(['id' => $order->id, 'status' => $status]);
+        // AUDIT-authz #1: one shared write for the PWA and the staff-token API (dedupe,
+        // terminal state, pos_refund on a paid cancel, split shares, reversal, SMS).
+        return StaffOrderStatus::apply(
+            $staff, $order, $data['status'],
+            (string) ($data['client_op_id'] ?? ''), trim((string) ($data['reason'] ?? '')), 'staff_pwa'
+        );
     }
 
     /** SP6: clock in (one open shift at a time; PIN session + optional GPS/selfie). */

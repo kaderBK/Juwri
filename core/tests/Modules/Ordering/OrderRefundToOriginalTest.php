@@ -8,9 +8,11 @@ use App\Http\Middleware\Installed;
 use App\Http\Middleware\PreventRequestForgery;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
+use Juwri\Modules\Menu\Models\Menu;
 use Juwri\Modules\Payments\Models\Transaction;
 use Juwri\Modules\Payments\Services\Refunds\GatewayRefundService;
 use Tests\Support\UniquePhone;
@@ -42,11 +44,16 @@ class OrderRefundToOriginalTest extends TestCase
 
     private function paidOrder(Store $r, ?Customer $c = null): Order
     {
-        return Order::create([
+        $order = Order::create([
             'store_id' => $r->id, 'customer_id' => $c?->id, 'type' => 'takeaway',
             'status' => 'completed', 'is_paid' => 1, 'grand_total' => 30, 'subtotal' => 30,
             'refund_request_status' => 'requested',
         ]);
+        // SEC-1119: the refundable amount derives from the lines (an order with none has nothing to refund).
+        $menu = Menu::create(['store_id' => $r->id, 'name' => 'X', 'price' => 30, 'active' => '1']);
+        OrderItem::create(['order_id' => $order->id, 'item_id' => $menu->id, 'quantity' => 1, 'variation' => 0]);
+
+        return $order->fresh();
     }
 
     public function test_owner_refunds_to_original_marks_settled_and_method(): void

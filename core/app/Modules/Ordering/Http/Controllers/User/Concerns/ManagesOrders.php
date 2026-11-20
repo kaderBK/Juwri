@@ -43,6 +43,8 @@ use Juwri\Modules\Ordering\Http\Controllers\User\PaymentController;
 use Juwri\Modules\Ordering\Models\OrderAdjustment;
 use Juwri\Modules\Ordering\Services\Orders\EtaEstimator;
 use Juwri\Modules\Ordering\Services\Orders\OrderCancellation;
+use Juwri\Modules\Ordering\Services\Orders\OrderTenders;
+use Juwri\Modules\Ordering\Services\Payments\CardHoldOrders;
 use Juwri\Modules\Payments\Contracts\Gateways;
 use Juwri\Modules\Payments\Contracts\Ledger;
 use Juwri\Modules\Payments\Contracts\StoreTransfers;
@@ -129,6 +131,9 @@ trait ManagesOrders
 
     /** Refund-request views of the orders screen (`?refunds=`). */
     private const ORDER_REFUND_FILTERS = ['requested', 'approved', 'rejected'];
+
+    /** The refund-row method of an owner refund to store credit (SEC-1120 delta NIT 1: distinct from a register `other`). */
+    private const STORE_CREDIT_REFUND = 'store_credit';
 
     /** Statuses the orders screen can filter on (`?status=`); anything else is ignored. */
     private const ORDER_STATUS_FILTERS = ['pending', 'accepted', 'preparing', 'ready', 'completed', 'cancelled', 'on_delivery', 'delivered'];
@@ -454,7 +459,7 @@ trait ManagesOrders
         // The order's OWN currency (stamped at checkout; the store's when unstamped) — not the
         // store's current currency, which may have changed since the order was paid.
         $currency = strtoupper((string) ($order->currencyCode() ?: app(Ledger::class)->defaultCurrency()));
-        $amount = money_round((float) ($request->input('amount') ?: $order->total), money_decimals($currency)); // P6-208: Money::round, not PHP round
+        $amount = money_round((float) ($request->input('amount') ?: $this->creditRefundCapBase($order)), money_decimals($currency)); // P6-208: Money::round, not PHP round
         if ($amount <= 0) {
             return response()->json(['success' => false, 'message' => ___('Nothing to refund.')], 422);
         }
@@ -463,30 +468,31 @@ trait ManagesOrders
            customer_wallet entitlement. Dark today (no change); once V0 flips, a
            non-entitled store gets a clear message and refunds via the gateway
            instead — money is never trapped, and no 500. */
-        // An order with no known amount due (no priced lines) has nothing to cap a refund against: it keeps the old
-        // rule of one credit per order. A priced order records one refund row per refund (its id keys the credit and the
-        // journal), so a second PARTIAL refund is credited and booked too, capped by what is left to refund; a replay
-        // (same idempotency key) is neither.
-        $capped = (float) $order->amount_due > 0;
+        // Store credit can give back every tender of the order (card, cash AND the stored value it used), so the cap is
+        // the order total minus every refund so far. SEC-1119 review SHOULD 2/4: not the amount due (that left the wallet
+        // part of a mixed-tender order unrefundable), and an order with no priced lines (total 0) refunds nothing — it
+        // used to credit any amount once, a free mint of store credit. One refund row per refund (its id keys the credit
+        // and the journal), so a second PARTIAL refund is credited and booked too; a replay (same idempotency key) is not.
+        if ($this->creditRefundCapBase($order) <= 0) {
+            return response()->json(['success' => false, 'message' => ___('Nothing to refund.')], 422);
+        }
 
         try {
             // ONE transaction: lock the order row, then the replay lookup, the cap check (sum of refunds so far) and the
             // refund row insert, so two refunds of one order cannot both pass the cap. The credit and the journal are keyed
             // by the row's id; a failed credit rolls the row back with it.
-            $outcome = $capped
-                ? DB::transaction(function () use ($order, $amount, $customer, $currency, $request) {
-                    $locked = Order::whereKey($order->id)->lockForUpdate()->first() ?? $order;
-                    if ($this->replayedRefund($locked, $request)) {
-                        return response()->json(['success' => true, 'replayed' => true]);
-                    }
-                    if ($refusal = $this->refundCapRefusal($locked, $amount)) {
-                        return $refusal;
-                    }
-                    $adjustment = $this->recordOwnerRefund($locked, $amount, 'other', $request);
+            $outcome = DB::transaction(function () use ($order, $amount, $customer, $currency, $request) {
+                $locked = Order::whereKey($order->id)->lockForUpdate()->first() ?? $order;
+                if ($this->replayedRefund($locked, $request)) {
+                    return response()->json(['success' => true, 'replayed' => true]);
+                }
+                if ($refusal = $this->refundCapRefusal($locked, $amount, $this->creditRefundCapBase($locked))) {
+                    return $refusal;
+                }
+                $adjustment = $this->recordOwnerRefund($locked, $amount, self::STORE_CREDIT_REFUND, $request);
 
-                    return CustomerWalletService::refundToCredit($customer, $amount, (int) $order->id, auth()->id(), $currency, 'adj:'.$adjustment->id);
-                })
-                : CustomerWalletService::refundToCredit($customer, $amount, (int) $order->id, auth()->id(), $currency);
+                return CustomerWalletService::refundToCredit($customer, $amount, (int) $order->id, auth()->id(), $currency, 'adj:'.$adjustment->id);
+            });
             if ($outcome instanceof JsonResponse) {
                 return $outcome;
             }
@@ -586,7 +592,7 @@ trait ManagesOrders
                 'amount' => (string) $input, 'currency' => $currency,
             ])], 422);
         }
-        $amount = Money::round((float) ($input ?: $order->total), $exponent);
+        $amount = Money::round((float) ($input ?: $this->originalRefundCapBase($order)), $exponent);
         if ($amount <= 0) {
             return response()->json(['success' => false, 'message' => ___('Nothing to refund.')], 422);
         }
@@ -596,21 +602,21 @@ trait ManagesOrders
         // neither both pass the cap nor both reach the provider; a refusal before any provider call (`refused`) records
         // nothing, exactly as before. A provider that cannot refund automatically is a tracked manual refund and is recorded
         // (the code's existing way of handling "no live driver"); an exception from the provider rolls the whole thing back.
-        $capped = (float) $order->amount_due > 0;
-        if (! $capped && $order->refund_request_status === 'approved' && $order->refund_method) {
-            // no known amount due: the old rule, one settled refund per order
-            return response()->json(['success' => false, 'message' => ___('This order has already been refunded.')], 422);
+        // The original tender is what a gateway or the till collected: the amount due. SEC-1119 review SHOULD 3/4: when
+        // nothing was collected (100% stored value, or no priced lines) there is no original payment to refund — it used
+        // to accept up to the total (or, at total 0, any amount once).
+        if ($this->originalRefundCapBase($order) <= 0) {
+            return response()->json(['success' => false, 'message' => $this->creditRefundCapBase($order) > 0
+                ? ___('This order was paid with store credit or a gift card, so there is no card or cash payment to refund. Refund it to store credit instead.')
+                : ___('Nothing to refund.')], 422);
         }
-        $outcome = DB::transaction(function () use ($order, $amount, $request, $capped) {
+        $outcome = DB::transaction(function () use ($order, $amount, $request) {
             $locked = Order::whereKey($order->id)->lockForUpdate()->first() ?? $order;
             if ($this->replayedRefund($locked, $request)) {
                 return response()->json(['success' => true, 'replayed' => true]);
             }
-            if ($capped && ($refusal = $this->refundCapRefusal($locked, $amount))) {
+            if ($refusal = $this->refundCapRefusal($locked, $amount, $this->creditRefundCapBase($locked), $this->originalRefundCapBase($locked))) {
                 return $refusal;
-            }
-            if (! $capped && $locked->refund_request_status === 'approved' && $locked->refund_method) {
-                return response()->json(['success' => false, 'message' => ___('This order has already been refunded.')], 422);
             }
 
             $result = app(Gateways::class)->refundOrder($locked, $amount);
@@ -656,21 +662,41 @@ trait ManagesOrders
             'automatic' => $result['automatic'],
         ]);
 
+        // money-last NIT 4 (REVIEW, Opus: money): unlike the till (PosService::restoreTendersIfFullyRefunded, which has no
+        // other way to give them back), a full refund to the original payment does NOT give the stored-value tenders
+        // back by itself: they stay on the order, inside the store-credit cap, so a later refund to store credit cannot
+        // pay them a second time. They come back by a refund to store credit or a cancel (OrderCancellation::reverseTenders,
+        // which never returns a part already refunded to store credit). The owner is told what is left.
+        $fresh = $order->fresh() ?? $order;
+        $tendersLeft = 0.0;
+        if ($this->refundCapRefusal($fresh, Money::majorFromMinor(1, $currency), $this->creditRefundCapBase($fresh), $this->originalRefundCapBase($fresh)) !== null) {
+            // the card / cash part is used up: what is left to refund to store credit, at most the tenders
+            $already = (float) OrderAdjustment::where('order_id', $fresh->id)->where('type', 'refund')->sum(DB::raw(OrderAdjustment::minorMoneySql('amount')));
+            $tenders = (float) ($fresh->wallet_applied ?? 0) + (float) ($fresh->gift_card_applied ?? 0) + (float) ($fresh->mk_wallet_applied ?? 0);
+            $tendersLeft = max(0.0, Money::round(min($tenders, $this->creditRefundCapBase($fresh) - $already), $exponent));
+        }
+        $message = (string) ($result['automatic'] ? ___('Refund sent to the original payment method.') : $result['message']);
+        if ($tendersLeft > 0) {
+            $message = trim($message.' '.___('The store credit, gift card or wallet part (:amount) is still on the order: refund it to store credit or cancel the order to give it back.', ['amount' => $tendersLeft]));
+        }
+
         return response()->json([
             'success' => true,
             'automatic' => $result['automatic'],
-            'message' => $result['automatic']
-                ? ___('Refund sent to the original payment method.')
-                : $result['message'],
+            'message' => $message,
+            'tenders_left' => $tendersLeft,
         ]);
     }
 
     /**
-     * Refuse a refund above what is left to refund: what was collected (amount due) minus every refund already recorded
-     * on the order (owner refunds and register refunds share the one ledger of OrderAdjustment rows). An order refunded
-     * before refunds were recorded as rows (refund method set, no rows) counts as fully refunded.
+     * Refuse a refund above what is left to refund: the order total minus every refund already recorded on the order
+     * (owner refunds and register refunds share the one ledger of OrderAdjustment rows). A refund to the original tender
+     * ($due given) is also capped at the amount due minus the earlier refunds to a tender (card, cash, online): SEC-1120
+     * review SHOULD 1, a store-credit refund (method `store_credit`) of the wallet part does not use up the card part; a
+     * register refund recorded as `other` can be a real payout, so it does (delta NIT 1). An order
+     * refunded before refunds were recorded as rows (refund method set, no rows) counts as fully refunded.
      */
-    private function refundCapRefusal(Order $order, float $amount): ?JsonResponse
+    private function refundCapRefusal(Order $order, float $amount, float $total, ?float $due = null): ?JsonResponse
     {
         $dec = money_decimals(strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id))));
         $rows = OrderAdjustment::where('order_id', $order->id)->where('type', 'refund');
@@ -678,7 +704,11 @@ trait ManagesOrders
         if ($order->refund_method && ! (clone $rows)->exists()) {
             return response()->json(['success' => false, 'message' => ___('This order has already been refunded.')], 422);
         }
-        $refundable = Money::round((float) $order->amount_due - $already, $dec);
+        $refundable = Money::round($total - $already, $dec);
+        if ($due !== null) {
+            $toTender = (float) (clone $rows)->where('method', '!=', self::STORE_CREDIT_REFUND)->sum(DB::raw(OrderAdjustment::minorMoneySql('amount')));
+            $refundable = min($refundable, Money::round($due - $toTender, $dec));
+        }
         if ($amount > $refundable) {
             return response()->json(['success' => false, 'message' => $refundable <= 0
                 ? ___('This order has already been refunded.')
@@ -686,6 +716,53 @@ trait ManagesOrders
         }
 
         return null;
+    }
+
+    /**
+     * What a refund to store credit is capped against: the order total (every tender, stored value included). Security
+     * review #12: a 100% stored-value order has amount due 0 and used to skip the cap, so any amount could be refunded.
+     */
+    private function creditRefundCapBase(Order $order): float
+    {
+        // SEC-1120 review SHOULD 2: the stored snapshot (what was charged), not the total re-worked from the lines — a
+        // line whose menu item was deleted re-totals to 0. An order never snapshotted falls back to the line total.
+        $stored = $order->getAttribute('grand_total_minor');
+        // money-last2 (REVIEW, Opus: money): less the tenders a cancel, void or full till refund already gave back
+        // (OrderTenders), so a refund of any kind can never pay that part a second time.
+        $base = OrderTenders::lessReturned($order, max(0.0, $stored !== null ? (float) $order->grand_total : (float) $order->total));
+
+        // grocery-snap2: finished picking re-snapshots the total to the picked amount, but the cap is what was collected:
+        // the gateway charge plus the stored-value tenders still paid (on the order, or kept against a refund to store
+        // credit). The refunds picking made are refund rows that refundCapRefusal subtracts once; a difference the store
+        // kept (D7 switch off) stays refundable.
+        $collected = app(CardHoldOrders::class)->collectedMinor($order);
+        if ($collected !== null) {
+            $currency = strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id)));
+            $base = max(0.0, Money::round(Money::majorFromMinor($collected, $currency) + OrderTenders::stillPaid($order), money_decimals($currency)));
+        }
+
+        // SEC-1120 delta SHOULD 1: a card-hold order (grocery) settles for the final amount, which can be less than the
+        // hold, and no refund row records the part released, so once the hold is settled (captured, or voided = 0) the
+        // cap is what was captured plus the stored-value tenders.
+        $captured = $order->getAttribute('captured_minor');
+        if ($captured !== null && in_array((string) $order->getAttribute('hold_status'), ['captured', 'voided'], true)) {
+            $currency = strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id)));
+            $collected = Money::round(Money::majorFromMinor((int) $captured, $currency) + OrderTenders::stillPaid($order), money_decimals($currency));
+            $base = min($base, max(0.0, $collected));
+        }
+
+        return $base;
+    }
+
+    /**
+     * What the gateway or the till collected: the refundable total minus the stored-value tenders still paid (on the
+     * order, or kept against a refund to store credit). The returned ones are already out of the total (money-last2).
+     */
+    private function originalRefundCapBase(Order $order): float
+    {
+        $dec = money_decimals(strtoupper((string) ($order->currency_code ?: store_currency((int) $order->store_id))));
+
+        return max(0.0, Money::round($this->creditRefundCapBase($order) - OrderTenders::stillPaid($order), $dec));
     }
 
     /** The refund row of an earlier request with the same `idempotency_key`, if the caller sent one. */
@@ -757,6 +834,9 @@ trait ManagesOrders
             return response()->json(['success' => false, 'message' => ___('This bill already has paid split shares — refund those or finish settling it before cancelling.')], 422);
         }
 
+        // ML-1120 review NIT 6: cancelling an order that is already cancelled only retries the reversal steps; it keeps
+        // the first cancelled_at and is logged as a retry, not as a new status change.
+        $recancel = $status === 'cancelled' && $order->status === 'cancelled';
         $order->status = $status;
 
         // R1a: stamp the matching timestamp off the typed status (tolerant of any
@@ -765,7 +845,7 @@ trait ManagesOrders
             OrderStatus::Preparing => $order->preparing_at = now(),
             OrderStatus::Ready => $order->ready_at = now(),
             OrderStatus::Completed => $order->completed_at = now(),
-            OrderStatus::Cancelled => $order->cancelled_at = now(),
+            OrderStatus::Cancelled => $order->cancelled_at = $recancel && $order->cancelled_at !== null ? $order->cancelled_at : now(),
             default => null,
         };
 
@@ -778,7 +858,7 @@ trait ManagesOrders
             OrderCancellation::reverse($order);
         }
 
-        log_activity('order.status', $order, ['status' => $status, 'order_id' => $order->id], $order->store_id);
+        log_activity($recancel ? 'order.cancel_retried' : 'order.status', $order, ['status' => $status, 'order_id' => $order->id], $order->store_id);
 
         /* #104 / P6-292: customer-facing status SMS + WhatsApp (owner opt-in via
            'customer_status_sms' / 'customer_status_whatsapp'; transactional).

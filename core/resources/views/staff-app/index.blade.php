@@ -399,7 +399,7 @@
                 toast(okMsg); poll();
             } catch(e){ toast('Network error'); }
         }
-        function advance(e, id, status){ e.stopPropagation(); post(id, { status }, 'Order #'+id+' → '+status); }
+        function advance(e, id, status){ e.stopPropagation(); store(id, { status }, 'Order #'+id+' → '+status); }
         async function transferOrder(e, id){
             e.stopPropagation();
             const table = prompt('Move order #'+id+' to which table?');
@@ -423,12 +423,12 @@
                 toast('Bill requested for #'+id); poll();
             } catch(e){ toast('Network error'); }
         }
-        function accept(e, id){ e.stopPropagation(); post(id, { status:'preparing' }, 'Order #'+id+' accepted'); }
+        function accept(e, id){ e.stopPropagation(); store(id, { status:'preparing' }, 'Order #'+id+' accepted'); }
         function reject(e, id){
             e.stopPropagation();
             const reason = prompt('Reject order #'+id+' — reason?');
             if (reason === null) return; // cancelled
-            post(id, { status:'cancelled', reason }, 'Order #'+id+' rejected');
+            store(id, { status:'cancelled', reason }, 'Order #'+id+' rejected');
         }
 
         // filter chips

@@ -19,5 +19,6 @@ return [
     'password' => 'The provided password is incorrect.',
     'case_duplicate' => 'More than one account uses this address with different letter case. Please contact support to sign in.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'reseller_handoff' => 'Your account is managed on this site. Please sign in here to continue.',
 
 ];

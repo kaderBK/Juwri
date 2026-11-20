@@ -43,6 +43,9 @@ Edit `.env`:
   (`touch /absolute/path/juwri.sqlite`).
 - Mail: `MAIL_MAILER=smtp` with `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`
   (`deploy/EMAIL.md`). The sample file points at a local test mail server that does not exist on a new machine.
+- Plain `http://` is only for a trial on this machine (`http://localhost` or `http://127.0.0.1:<port>`). With
+  `APP_ENV=production` the session cookie is marked secure, so sign-in over `http://` on any other address silently fails: use
+  HTTPS for a real site, or set `SESSION_SECURE_COOKIE=false` for an http-only trial.
 - `QUEUE_CONNECTION=database` is the default and needs nothing else.
 
 Never commit `.env` and keep `APP_KEY` backed up: stored credentials are encrypted with it.
@@ -75,8 +78,9 @@ e-mail you signed up with:
 php artisan tinker --execute="DB::table('users')->where('email', 'you@example.com')->update(['user_type' => 'admin']);"
 ```
 
-Sign in again. `APP_URL/admin` is the platform admin area; `APP_URL/dashboard` is your own store dashboard, where you
-create your first store (`APP_URL/stores/create`). For a production site turn on two-factor sign-in for staff
+Sign in again if the admin link does not show. `APP_URL/admin` is the platform admin area; `APP_URL/dashboard` is your own store dashboard, where you
+create your first store (`APP_URL/stores/create`: title, address, description, a main image, a cover image and a colour are
+required; the store page is then `APP_URL/<slug>`). For a production site turn on two-factor sign-in for staff
 (`deploy/PROD-HARDENING-CHECKLIST.md`).
 
 ## 7. Queue worker and scheduler
@@ -124,3 +128,6 @@ touch database/juwri.sqlite   # set DB_CONNECTION=sqlite and DB_DATABASE=<absolu
 php artisan migrate --seed
 php artisan serve
 ```
+
+If you serve from the repository root instead (`php -S 127.0.0.1:8099 -t . router.php`, preview only), `APP_URL` must be that
+exact address.

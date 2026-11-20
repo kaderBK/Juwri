@@ -136,6 +136,19 @@ class CustomerWalletSpendTest extends TestCase
         $this->assertEqualsWithDelta(20.0, CustomerWalletService::balanceFor($customer->fresh()), 0.001, 'not credited twice');
     }
 
+    /** AUDIT-money L-2: a keyless refund-to-credit and the tender reversal of one order are two credits, not one ref. */
+    public function test_refund_to_credit_then_cancel_returns_both_amounts(): void
+    {
+        [$order, $customer] = $this->orderWithCredit(20.00); // total 30, credit 20
+        CustomerWalletService::applyToOrder($customer, $order, 20.00); // wallet_applied 20, balance 0
+
+        CustomerWalletService::refundToCredit($customer->fresh(), 5.00, (int) $order->id);
+        $back = CustomerWalletService::reverseForOrder($order->fresh());
+
+        $this->assertEqualsWithDelta(20.0, $back, 0.001);
+        $this->assertEqualsWithDelta(25.0, CustomerWalletService::balanceFor($customer->fresh()), 0.001, 'refund 5 + tender 20');
+    }
+
     public function test_reverse_for_order_is_a_noop_without_a_wallet_tender(): void
     {
         [$order, $customer] = $this->orderWithCredit(20.00); // credit funded but never applied

@@ -14,7 +14,9 @@ use Juwri\Core\Http\Middleware\SyncDashboardStore;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Modules\Menu\Models\Menu;
+use Juwri\Modules\Ordering\Models\OrderAdjustment;
 use Tests\Modules\Platform\PlatformE2eTestCase;
+use Tests\Support\PricedOrderLine;
 
 /**
  * B5 — Orders hub (the seam Lane B's `platform/b-orders.js` drives end-to-end
@@ -125,7 +127,7 @@ class B5OrdersHubTest extends PlatformE2eTestCase
         $html = $this->actingAs($this->owner)->get(route('stores.orders', ['store' => $this->store->id]))->assertOk()->getContent();
 
         $this->assertSame(1, substr_count(strtolower($html), '</head>'), 'only the layout may close the head');
-        $this->assertStringContainsString("<\\/head><body><h3>' + config.restaurantName", $html);
+        $this->assertStringContainsString("<\\/head><body><h3>' + pe(config.restaurantName)", $html);
     }
 
     public function test_orders_hub_filter_by_status(): void
@@ -234,6 +236,7 @@ class B5OrdersHubTest extends PlatformE2eTestCase
             'grand_total' => 100,
             'customer_id' => $customer->id,
         ]);
+        $order = PricedOrderLine::add($order, 100.0); // SEC-1119: an order with no priced lines has nothing to refund
 
         // POST /order/{order}/refund-credit → restaurants.refundOrderToCredit
         $response = $this->actingAs($this->owner)->post(
@@ -252,9 +255,10 @@ class B5OrdersHubTest extends PlatformE2eTestCase
         $this->assertNotNull($order->id);
 
         $account = CustomerWalletService::accountFor($customer);
+        $adjustment = OrderAdjustment::where('order_id', $order->id)->where('type', 'refund')->sole(); // the refund row keys the credit
         $this->assertDatabaseHas('ledger_entries', [
             'ledger_account_id' => $account->id,
-            'ref' => 'cw:refund:order:'.$order->id.':cust',
+            'ref' => 'cw:refund:order:'.$order->id.':adj:'.$adjustment->id.':cust',
             'amount_minor' => 5000, // P1-05: minor units (USD)
         ]);
         $this->assertEquals(50.0, CustomerWalletService::balanceFor($customer));

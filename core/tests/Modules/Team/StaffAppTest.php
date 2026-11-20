@@ -522,6 +522,30 @@ class StaffAppTest extends TestCase
         $this->assertSame($b->id, $this->actingAs($staff, 'staff')->getJson('/staff-app/branches')->assertOk()->json('active'));
     }
 
+    /** SEC-1119: a staff member pinned to branch A cannot read branch B's live orders via ?branch=B. */
+    public function test_pinned_staff_cannot_switch_to_another_branch(): void
+    {
+        [$owner, $store] = $this->makeRestaurant();
+        $default = Branch::where('store_id', $store->id)->orderBy('id')->firstOrFail();
+        $downtown = Branch::create(['store_id' => $store->id, 'name' => 'Downtown']);
+        $staff = $this->makeStaff($owner, $store, 'manager');
+        $staff->update(['branch_id' => $downtown->id]);
+
+        Order::create(['store_id' => $store->id, 'branch_id' => $default->id, 'status' => 'new', 'type' => 'takeaway']);
+        Order::create(['store_id' => $store->id, 'branch_id' => $downtown->id, 'status' => 'new', 'type' => 'takeaway']);
+
+        $this->actingAs($staff, 'staff')->getJson('/staff-app/orders?branch='.$default->id)->assertStatus(404);
+        $this->actingAs($staff, 'staff')->getJson('/staff-app/branches?branch='.$default->id)->assertStatus(404);
+
+        $own = $this->actingAs($staff, 'staff')->getJson('/staff-app/orders?branch='.$downtown->id)->assertOk()->json('orders');
+        $this->assertCount(1, $own);
+        $this->assertCount(1, $this->actingAs($staff, 'staff')->getJson('/staff-app/orders')->assertOk()->json('orders'));
+
+        // The switcher only offers the pinned branch.
+        $names = array_column($this->actingAs($staff, 'staff')->getJson('/staff-app/branches')->assertOk()->json('branches'), 'name');
+        $this->assertSame(['Downtown'], $names);
+    }
+
     /** SP9 #41: any staff can post to the thread; it's tenant-scoped on read. */
     public function test_staff_can_post_and_read_messages_scoped(): void
     {

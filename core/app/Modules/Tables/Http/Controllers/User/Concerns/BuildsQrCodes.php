@@ -64,7 +64,7 @@ trait BuildsQrCodes
         $options = store_options($store->id);
 
         if ($request->filled('branch_id')) {
-            $url = route('publicView', $store->slug).'?branch_id='.(int) $request->get('branch_id');
+            $url = reseller_store_url(route('publicView', $store->slug), $store).'?branch_id='.(int) $request->get('branch_id'); // R4b: reseller host
         } else {
             // Must be byte-identical to what the "Copy link" buttons copy.
             $url = store_public_qr_url(

@@ -46,6 +46,13 @@ class TrustHosts extends Middleware
         // resolver (unknown = 404). Deeper names are not trusted.
         array_push($hosts, ...HostMap::storefrontAliasPatterns());
 
+        // R4a: reseller sites on {subdomain}.{base} — ONE label under RESELLER_SUBDOMAIN_BASE (empty = the APP_URL
+        // host, already trusted above). Which reseller (if any) is decided by the reseller resolver.
+        $resellerBase = (string) preg_replace('/^www\./', '', HostMap::hostOf((string) config('platform.reseller_subdomain_base')));
+        if ($resellerBase !== '') {
+            $hosts[] = '^[a-z0-9-]+\.'.preg_quote($resellerBase).'$';
+        }
+
         foreach ($this->verifiedCustomDomains() as $domain) {
             // Symfony treats each pattern as a regex; anchor an exact match.
             $hosts[] = '^'.preg_quote($domain).'$';

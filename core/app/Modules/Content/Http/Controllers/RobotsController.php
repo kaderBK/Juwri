@@ -5,6 +5,7 @@
 namespace Juwri\Modules\Content\Http\Controllers;
 
 use Illuminate\Http\Response;
+use Juwri\Core\Contracts\Tenancy\ResellerContext;
 use Juwri\Core\Http\Controllers\Controller;
 use Juwri\Core\Http\Hosts\HostMap;
 
@@ -37,12 +38,15 @@ class RobotsController extends Controller
         return response($body, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }
 
-    /** P6-307: on a store's own address the sitemap is that host's (it lists that store only). */
+    /** P6-307 / R8c: on a store or reseller host, the sitemap is that host's own. */
     private static function sitemapUrl(): string
     {
         $onStoreHost = (int) request()->attributes->get(HostMap::STORE_ATTRIBUTE, 0) > 0;
+        $onResellerHost = app(ResellerContext::class)->forRequest() !== null;
 
-        return $onStoreHost ? request()->getSchemeAndHttpHost().'/sitemap.xml' : route('sitemap');
+        return ($onStoreHost || $onResellerHost)
+            ? request()->getSchemeAndHttpHost().'/sitemap.xml'
+            : route('sitemap');
     }
 
     public static function noindex(): bool

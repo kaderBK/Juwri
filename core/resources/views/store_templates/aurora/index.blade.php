@@ -2013,16 +2013,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({ identifier: val })
             }).then(function (r) { return r.json(); }).then(function (data) {
                 if (!data.success) {
-                    resultsDiv.innerHTML = '<p style="color:var(--au-muted);font-size:13px;">' + (data.message || '') + '</p>';
+                    resultsDiv.innerHTML = '<p style="color:var(--au-muted);font-size:13px;"></p>';
+                    resultsDiv.firstChild.textContent = (data && data.message) || '';
                     return;
                 }
+                var lkEsc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
                 var html = '<div style="display:flex;flex-direction:column;gap:8px;">';
                 data.orders.forEach(function (o) {
-                    html += '<a href="' + o.track_url + '" target="_blank" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--au-glass);border-radius:10px;text-decoration:none;color:inherit;gap:8px;">';
-                    html += '<span style="font-size:13px;">#' + o.id + ' · ' + o.date + '</span>';
+                    var track = /^(https?:\/\/|\/)/i.test(String(o.track_url || '')) ? o.track_url : '#';
+                    html += '<a href="' + lkEsc(track) + '" target="_blank" rel="noopener" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--au-glass);border-radius:10px;text-decoration:none;color:inherit;gap:8px;">';
+                    html += '<span style="font-size:13px;">#' + lkEsc(o.id) + ' · ' + lkEsc(o.date) + '</span>';
                     html += '<span style="display:flex;gap:6px;align-items:center;">';
-                    html += '<span style="font-size:12px;background:var(--au-glass-hi);padding:2px 8px;border-radius:6px;">' + o.status + '</span>';
-                    html += '<b>' + o.total + '</b>';
+                    html += '<span style="font-size:12px;background:var(--au-glass-hi);padding:2px 8px;border-radius:6px;">' + lkEsc(o.status) + '</span>';
+                    html += '<b>' + lkEsc(o.total) + '</b>';
                     html += '</span></a>';
                 });
                 html += '</div>';

@@ -67,7 +67,7 @@ class WalletPaySheetCurrencyTest extends TestCase
 
     private function order(Store $store, array $attrs = []): Order
     {
-        return Order::create(array_merge(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'tip_amount' => 3.375], $attrs));
+        return Order::create(array_merge(['store_id' => $store->id, 'status' => 'new', 'type' => 'takeaway', 'tip_amount' => 3.375, 'track_token' => 'TOKSHEET'], $attrs));
     }
 
     public function test_config_reports_the_orders_currency_not_the_stores_current_one(): void
@@ -91,7 +91,7 @@ class WalletPaySheetCurrencyTest extends TestCase
         $store = $this->store('KWD');
         $order = $this->order($store, ['currency_code' => 'KWD', 'tip_amount' => 3.375]);
 
-        $res = $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertOk();
+        $res = $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertOk();
 
         // Stripe: 3-decimal minor in tens — owner decision 2026-10-01: rounded DOWN, never up (before: 3380, half-up).
         $this->assertSame(3370, (int) self::$stripeCalls[0]['amount']);
@@ -105,14 +105,14 @@ class WalletPaySheetCurrencyTest extends TestCase
         $store = $this->store('USD');
         $order = $this->order($store, ['currency_code' => 'USD', 'tip_amount' => 20, 'gift_card_applied' => 5]);
 
-        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id])->assertOk();
+        $this->postJson("/{$store->slug}/wallet/intent", ['order_id' => $order->id, 'track_token' => $order->track_token])->assertOk();
 
         $this->assertSame(1500, (int) self::$stripeCalls[0]['amount']); // before: 2000 (the total, ignoring the 5.00 gift card)
     }
 
     public function test_the_sheet_uses_the_intents_minor_amount(): void
     {
-        $html = view('partials.wallet-button', ['walletRestaurant' => 'r', 'walletOrderId' => 1])->render();
+        $html = view('partials.wallet-button', ['walletRestaurant' => 'r', 'walletOrderId' => 1, 'walletTrackToken' => 'TOKSHEET'])->render();
 
         $this->assertStringContainsString('amount: intent.amount_minor', $html);
         $this->assertStringNotContainsString('intent.amount * 100', $html);           // before: Math.round(intent.amount * 100)

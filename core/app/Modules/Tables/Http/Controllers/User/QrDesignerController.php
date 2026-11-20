@@ -349,7 +349,7 @@ class QrDesignerController extends Controller
         if ($request->get('target') === 'branch' && $id) {
             $branch = Branch::where('store_id', $store->id)->findOrFail($id);
 
-            return [route('publicView', $store->slug).'?branch_id='.$branch->id, (string) $branch->name];
+            return [reseller_store_url(route('publicView', $store->slug), $store).'?branch_id='.$branch->id, (string) $branch->name]; // R4b: reseller host
         }
 
         // biolink-tpl lane-d (T2-1): a bio-page QR is only a valid target while

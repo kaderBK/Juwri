@@ -38,7 +38,7 @@ Route::middleware(['auth:staff,web', 'csp.app'])->group(function () {
     Route::get('pos/terminal/accounts', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@terminalAccounts')->middleware('cache.headers:private;no_store')->name('pos.terminal.accounts'); // owner only
     Route::post('pos/terminal/accounts', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@terminalAccountSave')->middleware('throttle:10,1,pos-terminal-account')->name('pos.terminal.accounts.save'); // owner only
     Route::get('pos/combos', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@combos')->name('pos.combos'); // T6: combo tiles (server-priced)
-    Route::post('pos/coupon-check', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@couponCheck')->name('pos.coupon.check'); // T1-3: read-only coupon validation
+    Route::post('pos/coupon-check', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@couponCheck')->middleware('coupon.check:pos')->name('pos.coupon.check'); // T1-3: read-only coupon validation
     Route::get('pos/customers', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@customers')->name('pos.customers'); // T2-1: customer search
     Route::get('pos/tables', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@tables')->name('pos.tables'); // T3-1: table floor state
     Route::post('pos/customers', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@storeCustomer')->name('pos.customers.store'); // T2-3: inline create
@@ -52,7 +52,7 @@ Route::middleware(['auth:staff,web', 'csp.app'])->group(function () {
     Route::post('pos/orders/{id}/items', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@addItems')->name('pos.orders.addItems'); // add products to an open order
     Route::get('pos/orders/{id}/cart', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@orderCart')->name('pos.orders.cart'); // load an order into the cart (edit)
     Route::post('pos/orders/{id}/replace', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@replaceItems')->name('pos.orders.replace'); // replace all lines (edit)
-    Route::post('pos/orders/{id}/coupon', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@applyCoupon')->name('pos.orders.coupon'); // settle-time coupon on an existing order
+    Route::post('pos/orders/{id}/coupon', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@applyCoupon')->middleware('coupon.check:pos')->name('pos.orders.coupon'); // settle-time coupon on an existing order
     Route::post('pos/orders/{id}/settle', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@settle')->name('pos.orders.settle');
     Route::post('pos/orders/{id}/hold', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@hold')->name('pos.orders.hold');
     Route::post('pos/orders/{id}/resume', '\Juwri\Modules\Pos\Http\Controllers\Staff\PosController@resume')->name('pos.orders.resume');

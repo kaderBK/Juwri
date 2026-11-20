@@ -81,4 +81,5 @@ studio/templates  # JSON endpoint
 {slug}/kiosk-pass  # JSON endpoint
 {slug}/kiosk/loyalty/me  # JSON endpoint
 {slug}/manifest.json  # non-HTML file (xml/json/txt/js/manifest/zip/image)
+partners/subdomain-check  # JSON availability check for the partner signup form (R5), not HTML
 robots.txt  # plain-text crawler rules (P6-248), not HTML

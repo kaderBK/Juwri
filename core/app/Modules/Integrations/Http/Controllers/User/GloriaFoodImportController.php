@@ -112,11 +112,10 @@ class GloriaFoodImportController extends Controller
         }
 
         try {
-            // Guard already validated the initial host; also re-validate each redirect
-            // hop so a public host can't 30x the fetch onward to an internal address.
-            $body = Http::timeout(10)
-                ->withOptions(SsrfGuard::pinnedOptions($data['widget_url']) ?? throw new \RuntimeException('SSRF: URL is not a safe public https endpoint'))
-                ->get($data['widget_url'])->body();
+            // Guard already validated the initial host; every redirect hop is also
+            // vetted and pinned to its own IP so a public host can't 30x the fetch
+            // onward to an internal address (w5 #5).
+            $body = SsrfGuard::send(Http::timeout(10), 'GET', $data['widget_url'])->body();
             $json = $this->extractWidgetJson($body);
         } catch (\Throwable $e) {
             $json = null;

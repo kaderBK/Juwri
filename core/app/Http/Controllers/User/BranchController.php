@@ -315,7 +315,7 @@ class BranchController extends Controller
         $branches = Branch::where('store_id', $store->id)->orderBy('position')->get();
 
         $branches->each(function ($b) use ($store) {
-            $b->deep_link = route('publicView', $store->slug).'?branch_id='.$b->id;
+            $b->deep_link = reseller_store_url(route('publicView', $store->slug), $store).'?branch_id='.$b->id; // R4b: reseller host
         });
 
         return view('owner.branches.qr', compact('store', 'branches'));

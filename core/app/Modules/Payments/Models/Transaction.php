@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Juwri\Core\Models\Concerns\BelongsToAccount;
+use Juwri\Core\Models\Scopes\AccountScope;
 use Juwri\Core\Models\Store;
 use Juwri\Core\Models\User;
 use Juwri\Core\Money\Concerns\HasMinorMoney;
@@ -260,26 +262,52 @@ class Transaction extends Model implements MinorMoneyModel
             return $this->invoice_number;
         }
 
-        return \DB::transaction(function () {
-            // Re-fetch with lock to avoid concurrent duplicates
-            $tx = static::lockForUpdate()->find($this->id);
-            if ($tx->invoice_number) {
-                return $tx->invoice_number;
+        // Two downloads can pick the same next number at once; the unique index
+        // rejects the loser, so try again with a fresh read.
+        for ($attempt = 1; ; $attempt++) {
+            try {
+                return \DB::transaction(function () {
+                    // Re-fetch with lock to avoid concurrent duplicates
+                    $tx = static::lockForUpdate()->find($this->id);
+                    if ($tx->invoice_number) {
+                        return $this->invoice_number = $tx->invoice_number;
+                    }
+
+                    $number = static::nextInvoiceNumber();
+                    $tx->update(['invoice_number' => $number]);
+                    $this->invoice_number = $number;
+
+                    return $number;
+                });
+            } catch (UniqueConstraintViolationException $e) {
+                if ($attempt >= 5) {
+                    throw $e;
+                }
             }
+        }
+    }
 
-            $prefix = config('settings.invoice_nr_prefix', 'INV-');
-            $year = date('Y');
-            // Count all invoices in this year to determine sequence
-            $seq = static::whereYear('created_at', $year)
-                ->whereNotNull('invoice_number')
-                ->count() + 1;
-            $number = $prefix.$year.'-'.str_pad($seq, 5, '0', STR_PAD_LEFT);
+    /**
+     * Next number in this year's series: highest number already issued with the same prefix and year, plus one.
+     * Counting rows instead reused taken numbers (an older transaction invoiced this year, deleted rows, reseller
+     * "R-…" numbers). The unique index on invoice_number is platform-wide, so the series is read across all
+     * accounts (never through the tenant scope, or one account would reuse another account's number).
+     */
+    public static function nextInvoiceNumber(): string
+    {
+        $prefix = (string) config('settings.invoice_nr_prefix', 'INV-');
+        $series = $prefix.date('Y').'-';
+        $like = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $series).'%';
 
-            $tx->update(['invoice_number' => $number]);
-            $this->invoice_number = $number;
+        $max = static::query()->withoutGlobalScope(AccountScope::class)
+            ->where('invoice_number', 'like', $like)
+            ->pluck('invoice_number')
+            ->map(fn ($number) => substr((string) $number, strlen($series)))
+            ->filter(fn ($suffix) => ctype_digit($suffix))
+            ->map(fn ($suffix) => (int) $suffix)
+            ->max() ?? 0;
 
-            return $number;
-        });
+        return $series.str_pad((string) ($max + 1), 5, '0', STR_PAD_LEFT);
     }
 
     /**

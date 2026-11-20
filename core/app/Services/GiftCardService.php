@@ -248,6 +248,42 @@ class GiftCardService
     }
 
     /**
+     * grocery-nits2 (REVIEW, Opus: money): give back PART of an order's gift-card tender to that card (the caller
+     * lowers `gift_card_applied` by `$amount` under the order lock, in the same transaction): merchant → card, the
+     * inverse of the redeem transfer, like reverseRedemption. `$ref` must be unique per return (the ledger drops a
+     * repeated ref). Returns false, moving nothing, when the order has no card of its store: the caller keeps that
+     * part on the order for the owner. A card that can no longer be spent (voided or expired) gets nothing back; the
+     * part is paid out instead (original payment, else store credit, else logged as owed) under `$ref`, after commit.
+     */
+    public static function returnToCard(Order $order, float $amount, string $ref): bool
+    {
+        $cardId = (int) ($order->gift_card_id ?? 0);
+        if ($cardId <= 0 || $amount <= 0) {
+            return false;
+        }
+        $card = GiftCard::whereKey($cardId)->lockForUpdate()->first();
+        if (! $card || (int) $card->store_id !== (int) $order->store_id) {
+            return false;
+        }
+        if ($card->status !== 'active' || $card->isExpired()) {
+            // money-tail 3: a card that can no longer be spent pays the part out like reverseRedemption (original
+            // payment, else store credit, else logged as owed), after commit, once per `$ref`
+            log_activity('giftcard.refund_started', $order, [
+                'order_id' => $order->id, 'gift_card_id' => $card->id, 'amount' => $amount, 'reason' => 'tender_excess',
+                'card_status' => $card->isExpired() ? 'expired' : $card->status,
+            ], (int) $order->store_id);
+            self::payOutAfterCommit((int) $order->id, (int) $card->id, $amount, $ref);
+
+            return true;
+        }
+        $ownerId = (int) Store::where('id', $order->store_id)->value('user_id');
+        $merchant = app(Ledger::class)->accountFor('merchant', $ownerId, 'merchant', $card->currency);
+        LedgerService::transfer($merchant, $card->ledgerAccount(), $amount, $ref, 'gift_card.refund', true);
+
+        return true;
+    }
+
+    /**
      * Re-credit a gift card when its order is reversed (owner cancel / POS void). The
      * mirror of applyToOrder: it moves the redeemed amount back from the merchant to
      * the card and clears the order's gift-card tender, so a customer who paid with a
@@ -322,22 +358,7 @@ class GiftCardService
         });
 
         if ($payout !== null) {
-            $p = $payout;
-            // After our own commit. Inside a caller's transaction it waits for that commit (never runs on a
-            // rollback); with no transaction open, afterCommit runs it at once.
-            DB::afterCommit(function () use ($p) {
-                try {
-                    self::refundUnspendable($p['order_id'], $p['card_id'], $p['amount']);
-                } catch (\Throwable $e) {
-                    // Never lose it silently: the owner sees what is still owed and pays it by hand.
-                    report($e);
-                    $o = Order::find($p['order_id']);
-                    log_activity('giftcard.refund_due', $o, [
-                        'order_id' => $p['order_id'], 'gift_card_id' => $p['card_id'], 'amount' => $p['amount'],
-                        'message' => ___('Refund the guest :amount by hand: the gift card cannot be used any more and the automatic refund failed.', ['amount' => $p['amount']]),
-                    ], $o !== null ? (int) $o->store_id : null);
-                }
-            });
+            self::payOutAfterCommit($payout['order_id'], $payout['card_id'], $payout['amount']);
 
             return 0.0;
         }
@@ -348,6 +369,27 @@ class GiftCardService
         }
 
         return $credited;
+    }
+
+    /**
+     * Pays gift-card value off a card that can no longer be spent ({@see refundUnspendable}) after our own commit:
+     * inside a caller's transaction it waits for that commit (never runs on a rollback); with no transaction open it
+     * runs at once. A failure is never lost silently: the owner sees what is still owed (`giftcard.refund_due`).
+     */
+    private static function payOutAfterCommit(int $orderId, int $cardId, float $amount, ?string $ref = null): void
+    {
+        DB::afterCommit(function () use ($orderId, $cardId, $amount, $ref) {
+            try {
+                self::refundUnspendable($orderId, $cardId, $amount, $ref);
+            } catch (\Throwable $e) {
+                report($e);
+                $o = Order::find($orderId);
+                log_activity('giftcard.refund_due', $o, [
+                    'order_id' => $orderId, 'gift_card_id' => $cardId, 'amount' => $amount,
+                    'message' => ___('Refund the guest :amount by hand: the gift card cannot be used any more and the automatic refund failed.', ['amount' => $amount]),
+                ], $o !== null ? (int) $o->store_id : null);
+            }
+        });
     }
 
     /**
@@ -368,7 +410,7 @@ class GiftCardService
      *
      * @return array{route: string, amount: float, message: ?string}
      */
-    public static function refundUnspendable(int $orderId, int $cardId, float $amount): array
+    public static function refundUnspendable(int $orderId, int $cardId, float $amount, ?string $ref = null): array
     {
         $order = Order::findOrFail($orderId);
         $card = GiftCard::findOrFail($cardId);
@@ -377,7 +419,8 @@ class GiftCardService
         $exp = Currencies::exponent($currency);
         $amountMinor = Money::minorFromMajor($amount, $currency);
         $base = ['order_id' => $orderId, 'gift_card_id' => $cardId];
-        $ref = 'gc:refund:order:'.$orderId.':card:'.$cardId;
+        // money-tail 3: a tender-excess payout has its own ref, so a later cancel's payout of the rest is not `already_done`
+        $ref ??= 'gc:refund:order:'.$orderId.':card:'.$cardId;
         if (LedgerEntry::query()->where('ref', $ref.':out:from')->exists()) {
             return ['route' => 'already_done', 'amount' => 0.0, 'message' => null]; // paid out before: never twice
         }
@@ -419,7 +462,8 @@ class GiftCardService
                 return $result('already_refunded', 0, ___('The gift card purchase was already refunded, so nothing more is paid back.'));
             }
 
-            $sent = app(Gateways::class)->refundStorePayment($tx, Money::majorFromMinor($refundable, $currency), $currency);
+            // money-last NIT 6: tagged with this payout's ref, so a retry reuses only this payout's unknown refund
+            $sent = RefundGuard::forPurpose($ref, fn () => app(Gateways::class)->refundStorePayment($tx, Money::majorFromMinor($refundable, $currency), $currency));
             if (! empty($sent['automatic'])) {
                 return $result('refunded_to_payment', $refundable, null);
             }
@@ -473,7 +517,7 @@ class GiftCardService
 
         $store = Store::find($card->store_id);
         $restaurantName = $store->title ?? config('settings.site_title', '');
-        $storeUrl = $store ? url('/'.$store->slug) : null;
+        $storeUrl = $store ? effective_public_url($store) : null; // R4b: verified store domain, else the reseller host
         // P6-265: the tick/job has no request locale; mail in the store's default language.
         $mailLocale = $store ? ((string) (store_options((int) $store->id)->default_language ?? '') ?: (string) config('app.locale')) : (string) config('app.locale');
 
@@ -704,16 +748,22 @@ class GiftCardService
      * store toggled google_wallet on. Fully self-guarded: a wallet failure must never
      * break the gift-card money path. The job re-reads live balance (idempotent), so
      * dispatching right after the mutation is safe.
+     *
+     * ML-1120 review NIT 5: after the outermost commit (at once when no transaction is open). A reversal nests inside
+     * OrderCancellation::reverseTenders' transaction; a later rollback there must not leave a pass showing a balance
+     * that never happened.
      */
     private static function syncGoogleWallet(int $storeId, int $cardId): void
     {
-        try {
-            if (GoogleWalletService::enabledForStore($storeId)) {
-                SyncGoogleWalletPass::dispatch('giftcard', $storeId, $cardId);
+        DB::afterCommit(function () use ($storeId, $cardId) {
+            try {
+                if (GoogleWalletService::enabledForStore($storeId)) {
+                    SyncGoogleWalletPass::dispatch('giftcard', $storeId, $cardId);
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Google Wallet gift-card sync dispatch failed: '.$e->getMessage());
             }
-        } catch (\Throwable $e) {
-            Log::warning('Google Wallet gift-card sync dispatch failed: '.$e->getMessage());
-        }
+        });
     }
 
     /**
